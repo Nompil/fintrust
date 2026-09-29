@@ -2,27 +2,19 @@
 
 ## 1. POPIA Classification
 
-FinTrust handles transaction-level data that may include personal information such as:
-- customer names,
-- account identifiers,
-- transaction dates,
-- merchant and location details,
-- payment channel and transaction metadata.
+FinTrust handles transaction-level data linked to identifiable customers. In the current schema, `customers.full_name` and `customers.id_number` are direct identifiers. `customer_id`, `accounts.account_id`, transaction dates, amounts, merchant names, currency, and cross-border indicators are linkable financial information and must be protected as personal information in this context. The current schema does not collect card numbers or payment credentials.
 
 These fields must be treated as personal and sensitive operational data. Access is restricted to authorised compliance and fraud teams. Storage and retention should be aligned to a formal policy that enforces access control, least privilege, and auditability.
 
 ## 2. Data Quality Framework
 
-The ingestion layer validates each transaction before it is persisted. Validation checks include:
-- required fields present,
-- positive numeric amount,
-- valid transaction type,
-- valid channel type,
-- supported currency,
-- minimum account ID length,
-- standard risk scoring inputs.
+The ingestion layer validates each transaction before it is persisted. Checks include:
+- required `account_id`, `amount`, `tx_date`, and `tx_type` fields;
+- a valid account UUID, parseable ISO-8601 timestamp, and finite positive decimal amount;
+- a transaction type and currency from the allowlists enforced by the SQL schema;
+- referential integrity to an existing account, enforced by the database.
 
-Records that fail validation should be quarantined, rejected, or routed to a manual review queue. This prevents bad data from contaminating the financial ledger and supports operational trust.
+Invalid rows are written to the S3 `quarantine/` prefix with source row and reason; other valid rows in the file continue. Database integrity violations are isolated row-by-row. Infrastructure failures (for example, RDS unavailable) fail the invocation so Lambda can retry and eventually send the event to the ingest DLQ.
 
 ## 3. Data Lifecycle Policy
 
@@ -40,15 +32,15 @@ Records that fail validation should be quarantined, rejected, or routed to a man
 
 ## 4. Migration Strategy
 
-The legacy flat-file platform can be migrated using AWS Application Migration Service. The best classification is either Rehost or Replatform, depending on the level of change required. Rehost is the safer default if the goal is to move the existing system quickly with minimal redesign. Replatform is more suitable if the organisation wants to modernise key components as part of the migration. The key justification is that it reduces migration risk while allowing the bank to move toward an event-driven, more secure target architecture.
+Chosen 7R classification: **Replatform**. FinTrust preserves the existing transaction workflow while replacing the flat-file landing and manual ETL path with S3, managed PostgreSQL, and validated Lambda processing. AWS Application Migration Service can move any supporting legacy application servers that must be retained during transition; AWS DataSync is the more suitable service for transferring files from NAS to S3. This phased approach modernises the data path without requiring a big-bang rewrite.
 
 ## 5. Risk Register
 
 | Risk | Probability | Impact | Control |
 |---|---|---|---|
-| Data leakage through excessive access | Medium | High | IAM least-privilege roles and audit logging |
-| Invalid data entering the ledger | Medium | High | Input validation and quarantine workflow |
-| Non-compliance with retention or data handling obligations | Low to Medium | High | Lifecycle policy, access controls, and governance review |
+| Exposure of direct identifiers or linked transaction data | Medium | High | Amazon S3 Block Public Access, scoped IAM policies, and AWS CloudTrail audit events |
+| Invalid or incomplete transaction records corrupting reports | Medium | High | AWS Lambda row validation/quarantine and PostgreSQL CHECK/foreign-key constraints |
+| Records retained beyond the approved period | Low to Medium | High | Amazon S3 Lifecycle configuration plus a documented retention review |
 
 ## 6. Governance Summary
 

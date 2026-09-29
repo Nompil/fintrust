@@ -2,7 +2,7 @@
 
 ## Implementation Status
 
-The diagram below is the capstone target architecture. The current Week 13 Day 1-2 implementation covers the raw S3 bucket, S3-triggered ingest Lambda, PostgreSQL load, and DynamoDB table setup. The SQS FIFO scoring path, API Gateway, SES alerting, EventBridge reporting, and deployed CloudWatch dashboard remain later implementation/deployment work. Present these as planned components until each is actually running.
+The diagram below is the capstone target architecture. The repository now includes Day 1-3 provisioning/application code for S3 ingest, PostgreSQL loading, an ingest DLQ and CloudWatch alarms, plus local read-only API routes. The Week 13 Day 2/3 exercise uses direct S3-to-Lambda-to-RDS ingestion; SQS FIFO scoring is a later capstone evolution. The score writer, SES alerting, EventBridge reporting, and deployed API Gateway/dashboard still need implementation or AWS deployment. Treat a component as live only after the AWS resource and end-to-end behavior have been verified.
 
 ## 1. System Context
 
@@ -14,9 +14,11 @@ FinTrust Bank SA processes incoming transaction records from legacy systems and 
 flowchart LR
     A[Legacy / CSV source] --> B[S3 Raw Bucket]
     B --> C[Ingest Lambda]
-    C --> D[SQS FIFO Queue]
-    D --> E[Score Lambda]
-    E --> F[(RDS PostgreSQL Ledger)]
+    C --> F[(RDS PostgreSQL Ledger)]
+    C --> Q[Quarantine Prefix]
+    C -. failure after retries .-> X[SQS Ingest DLQ]
+    C --> D[SQS FIFO Queue - later phase]
+    D --> E[Score Lambda - later phase]
     E --> G[(DynamoDB Event Store)]
     E --> H[SES Alert]
     I[API Gateway] --> J[Query Lambda]
@@ -58,7 +60,7 @@ flowchart LR
 
 ### API Gateway
 - The compliance team can query transactions and insights through a secure interface.
-- API keys and usage policies support controlled access.
+- The Day 4 design uses AWS_IAM authorization for data routes; the health endpoint exposes status only.
 
 ### SES
 - High-risk transactions trigger alerts without requiring broad operational monitoring.
@@ -76,9 +78,9 @@ flowchart LR
 
 ## 5. Failure Handling
 
-- The ingest path validates data before storing it.
-- Failed records can be quarantined or rejected.
-- The queue provides asynchronous retry and resilience.
+- The current ingest path validates rows before storing them; invalid rows go to S3 quarantine.
+- Invocation-level failures are retried and then sent to the configured SQS dead-letter queue.
+- The FIFO scoring queue is part of the later end-to-end capstone architecture, not the current Day 3 direct-load path.
 - Risk events and transaction metadata remain recoverable through logs and data retention.
 
 ## 6. Presentation Narrative

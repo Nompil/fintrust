@@ -4,7 +4,7 @@ A capstone project for a cloud-native transaction insights and risk monitoring s
 
 ## Current Build Status
 
-The repository currently implements the Week 13 Day 1-2 foundation: S3 bucket/IAM/SSM infrastructure scripts, a PostgreSQL schema and seed set, a DynamoDB risk-score table script, and an S3-triggered CSV validation/load handler. The Day 2 exercise writes validated rows directly from the ingest Lambda to PostgreSQL; the later SQS scoring, API, alert, reporting, and deployed CloudWatch dashboard are target architecture items and are not yet implemented or deployed.
+The repository currently includes the Week 13 Day 1-3 foundation and Day 4-5 design/tests: S3/IAM/SSM/DLQ/CloudWatch provisioning scripts, a PostgreSQL schema and seed set, a DynamoDB risk-score table, an S3-triggered CSV ETL handler, and local read-only API routes. The Day 2/3 ingest path writes valid rows directly from the Lambda to PostgreSQL. API Gateway/IAM route configuration, the separate SQS FIFO scoring path, risk-score writer, SES alerting, EventBridge reporting, live PostgreSQL checks, and deployment evidence remain to be completed or deployed.
 
 ## Business Outcome
 
@@ -51,6 +51,7 @@ fintrust/
   alert.py
   query.py
   report.py
+  api.py
 
 sql/
   schema.sql
@@ -66,11 +67,16 @@ infrastructure/
   iam/
   ssm/
   dynamodb/
+  sqs/
+  monitoring/
 
 tests/
   conftest.py
   test_validators.py
   test_score.py
+  test_ingest.py
+  test_api.py
+  data_quality/
 
 .github/
   workflows/
@@ -78,6 +84,7 @@ tests/
 
 docs/
   presentation_notes.md
+  day3_resilience.md
 
 samples/
   transactions_day2.csv
@@ -122,8 +129,11 @@ When speaking to stakeholders:
 python -m venv .venv
 .\.venv\Scripts\activate
 pip install -r requirements.txt
+Copy-Item .env.example .env
 python -m pytest -q
 ```
+
+Set local database and AWS values in `.env` for your machine; `.env` is ignored by Git. The PostgreSQL constraint tests skip unless `FINTRUST_TEST_DATABASE_URL` points to a disposable test database. Run the local API with `python -m fintrust.api` and use `http://127.0.0.1:5000/v1/health`.
 
 ## Notes
 

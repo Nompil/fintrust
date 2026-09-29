@@ -1,86 +1,61 @@
 # FinTrust API Design
 
-## 1. Overview
+## Overview
 
-The API exposes transaction and insight endpoints for compliance and fraud analysts. It is intentionally small, secure, and aligned with the capstone's operational model.
+The Week 13 Day 3 API implementation is a Flask application in `fintrust/api.py`, with data access in `fintrust/query.py`. It can run locally and is adapted for Lambda/API Gateway by `aws-wsgi`. Routes are versioned under `/v1`.
 
-## 2. Endpoints
+## Routes
 
-### GET /transactions
-Purpose: return recent transaction data for one account or for the system overall.
+| Method and path | Authentication at API Gateway | Purpose |
+|---|---|---|
+| `GET /v1/health` | No authorizer; operational check only | Checks PostgreSQL connectivity and returns `200`/`503`. It exposes no transaction data. |
+| `GET /v1/transactions` | `AWS_IAM` | Reads recent transactions for the required account ID, with optional date range and bounded result count. |
+| `GET /v1/insights` | `AWS_IAM` | Reads the account/date risk-score item from DynamoDB. |
 
-Parameters:
-- account_id (optional)
-- limit (optional, default 50)
+### `GET /v1/transactions`
 
-Example response:
-```json
-{
-  "transactions": [
-    {
-      "transaction_id": "TXN-001",
-      "account_id": "ACC-1001",
-      "amount": "25000.00",
-      "transaction_type": "debit",
-      "risk_score": 65,
-      "channel": "mobile"
-    }
-  ]
-}
-```
+Query parameters:
 
-### GET /insights
-Purpose: return risk summaries and trends by account.
-
-Parameters:
-- account_id (optional)
+- `account_id` (required UUID)
+- `from` (optional ISO-8601 date or timestamp)
+- `to` (optional ISO-8601 date or timestamp)
+- `limit` (optional integer; defaults to 50 and is capped at 500)
 
 Example response:
+
 ```json
 {
-  "insights": [
+  "status": "ok",
+  "data": [
     {
-      "account_id": "ACC-1001",
-      "total_transactions": 25,
-      "avg_risk": 42.3
+      "tx_id": "a6e7b46f-cd0c-5cfc-9bdc-9de0ff391f7a",
+      "account_id": "20000000-0000-4000-8000-000000000001",
+      "amount": "250.00",
+      "currency": "ZAR",
+      "tx_date": "2026-09-28T09:15:00+00:00",
+      "tx_type": "debit"
     }
-  ]
+  ],
+  "meta": {"count": 1, "limit": 50}
 }
 ```
 
-### POST /upload
-Purpose: accept an upload event for processing.
+Missing/invalid account IDs, malformed timestamps, or an invalid limit return `400`. Database failures return a JSON `503` response.
 
-Request body:
-```json
-{
-  "bucket": "fintrust-raw",
-  "key": "transactions/2026-09.csv"
-}
-```
+### `GET /v1/insights`
 
-Response:
-```json
-{
-  "status": "accepted",
-  "message": "upload queued for processing"
-}
-```
+Query parameters:
 
-### POST /flag
-Purpose: manually flag a high-risk account or transaction for investigation.
+- `account_id` (required UUID)
+- `date` (optional `YYYY-MM-DD`; defaults to today)
 
-### POST /resolve
-Purpose: mark a risk as reviewed or resolved.
+The DynamoDB key is `{account_id, score_date}`. The response omits the internal TTL attribute. Missing scores return `404`; DynamoDB service failures return `503`.
 
-## 3. Authentication and Security
+## Security
 
-- API key-based authentication is used.
-- Access should be restricted to authorised fraud and compliance users.
-- Sensitive fields should not be exposed broadly without role-based constraints.
+- Configure API Gateway methods with the `AWS_IAM` authorizer for transaction and insight data. The Flask app itself does not implement authentication; local development must not be exposed publicly.
+- Keep `/v1/health` limited to status information.
+- The API Lambda role should have read-only database and DynamoDB permissions. It must not receive `dynamodb:PutItem` or database write privileges.
+- Database credentials are loaded from local environment settings during development and SSM Parameter Store in Lambda.
 
-## 4. Response Patterns
-
-- Use JSON responses for all API operations.
-- Return explicit status and error messages.
-- Ensure all requests are logged for auditability.
+The API is implemented locally; API Gateway routes, authorizers, and deployed Lambda integration still need AWS configuration and evidence.

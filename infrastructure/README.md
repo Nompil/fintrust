@@ -1,4 +1,4 @@
-# Week 13 Days 1-2 Infrastructure and Data Layer
+# Week 13 Days 1-3 Infrastructure and Data Layer
 
 These scripts create AWS resources when explicitly run. Do not run them until the AWS account, region, cost controls, and credentials have been checked. No deployment is performed by the project tests.
 
@@ -28,6 +28,16 @@ The bucket script enables versioning, blocks public access, and moves objects un
 4. Use `samples/transactions_day2.csv` as a local test fixture. Its account UUIDs correspond to the deterministic account IDs in `sql/seed.sql`; the negative amount and unsupported currency should be quarantined.
 5. Upload a test CSV to `s3://<bucket>/raw/` only after deploying the Lambda and configuring its S3 trigger.
 
+## Day 3: DLQ, Monitoring, and Read API
+
+1. After the ingest Lambda exists and its role has been updated with `sqs:SendMessage` permission on the intended DLQ ARN, run `python infrastructure/sqs/configure_ingest_dlq.py`.
+2. Run `python infrastructure/monitoring/configure_ingest_monitoring.py` to create the quarantine-rate metric filter and DLQ/quarantine alarms.
+3. For local API development, copy `.env.example` to `.env`, configure a local database and DynamoDB endpoint/table, install dependencies, and run `python -m fintrust.api`.
+4. Configure API Gateway routes separately: `GET /v1/transactions` and `GET /v1/insights` use AWS_IAM authorization; `GET /v1/health` returns status only.
+5. To recover DLQ events after fixing the dependency, inspect the message and logs, then run `python infrastructure/sqs/replay_ingest_dlq.py`. It deletes a DLQ message only after Lambda accepts the asynchronous invocation.
+
+Large CSVs must be split before upload or orchestrated with Step Functions; the current implementation reads each CSV into memory and should not be used for unbounded file sizes.
+
 ## Verification checkpoints
 
 - Inspect bucket versioning, public access block, and lifecycle configuration in the AWS console.
@@ -37,6 +47,9 @@ The bucket script enables versioning, blocks public access, and moves objects un
 - Confirm PostgreSQL CHECK constraints reject invalid amount/currency/type values.
 - Confirm `idx_tx_account_date` appears in `EXPLAIN ANALYZE` when the table has enough representative rows.
 - Confirm `risk_scores` is `ACTIVE`; write/read an item with `account_id`, `score_date`, and a TTL timestamp.
+- Confirm the Lambda async retry count is two, the ingest DLQ receives failed events, and the DLQ alarm fires.
+- Confirm the metric filter emits `FilesOverQuarantineThreshold` when a file's quarantine rate exceeds 5%.
+- Run `python -m pytest tests/data_quality/test_constraints.py -q` against a disposable PostgreSQL database.
 - Run `python -m pytest -q` for the local validation suite. Tests do not create AWS resources.
 
 ## Important design boundary
