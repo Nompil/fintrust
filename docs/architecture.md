@@ -1,0 +1,92 @@
+# FinTrust Cloud Architecture
+
+## Implementation Status
+
+The diagram below is the capstone target architecture. The current Week 13 Day 1-2 implementation covers the raw S3 bucket, S3-triggered ingest Lambda, PostgreSQL load, and DynamoDB table setup. The SQS FIFO scoring path, API Gateway, SES alerting, EventBridge reporting, and deployed CloudWatch dashboard remain later implementation/deployment work. Present these as planned components until each is actually running.
+
+## 1. System Context
+
+FinTrust Bank SA processes incoming transaction records from legacy systems and external sources, validates them for business correctness, and scores each transaction for risk. The platform is designed to detect unusual activity, protect sensitive financial data, and support compliance reporting for fraud and risk teams.
+
+## 2. Target Architecture
+
+```mermaid
+flowchart LR
+    A[Legacy / CSV source] --> B[S3 Raw Bucket]
+    B --> C[Ingest Lambda]
+    C --> D[SQS FIFO Queue]
+    D --> E[Score Lambda]
+    E --> F[(RDS PostgreSQL Ledger)]
+    E --> G[(DynamoDB Event Store)]
+    E --> H[SES Alert]
+    I[API Gateway] --> J[Query Lambda]
+    J --> F
+    J --> G
+    K[EventBridge Scheduler] --> L[Report Lambda]
+    L --> M[S3 Reporting Bucket]
+
+    N[Compliance Team] --> I
+    O[Risk Team] --> H
+    P[Executive Users] --> M
+```
+
+## 3. Design Rationale
+
+### S3
+- Raw transaction uploads enter through S3.
+- This is a low-friction ingestion point for CSV files from legacy banking systems.
+- It also supports quarantine and audit-friendly storage patterns.
+
+### Lambda
+- Lambda functions handle validation, scoring, API queries, and scheduled reporting.
+- They are serverless and scale to transaction volume without a dedicated fleet.
+- Each function has a single purpose and clear permissions.
+
+### SQS FIFO
+- SQS decouples ingestion from scoring.
+- FIFO preserves transaction order by account.
+- It supports retries and dead-letter paths when processing fails.
+
+### RDS PostgreSQL
+- The relational ledger supports financial records, account associations, and analytics queries.
+- Normalised tables make reconciliation and reporting easier.
+- The financial data model is suitable for compliance and audit needs.
+
+### DynamoDB
+- DynamoDB stores event metadata, risk information, and fast lookup records.
+- It complements the ledger with a low-latency operational view.
+
+### API Gateway
+- The compliance team can query transactions and insights through a secure interface.
+- API keys and usage policies support controlled access.
+
+### SES
+- High-risk transactions trigger alerts without requiring broad operational monitoring.
+
+### EventBridge + report Lambda
+- Monthly reporting is automated and scheduled.
+- Management receives summary output without manual extraction work.
+
+## 4. Security and Free Tier Considerations
+
+- RDS is restricted to private network access.
+- Lambda execution roles are least-privilege.
+- No NAT Gateway is used, to avoid unnecessary cost.
+- The design stays within the capstone's Free Tier assumptions and keeps the architecture cost-conscious.
+
+## 5. Failure Handling
+
+- The ingest path validates data before storing it.
+- Failed records can be quarantined or rejected.
+- The queue provides asynchronous retry and resilience.
+- Risk events and transaction metadata remain recoverable through logs and data retention.
+
+## 6. Presentation Narrative
+
+When presenting, explain the architecture as a business control loop:
+
+1. Data enters the bank.
+2. It is checked for quality and risk.
+3. It is processed asynchronously.
+4. The business receives alerts and insights.
+5. Monthly reporting supports executive decision-making.
