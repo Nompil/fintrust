@@ -83,8 +83,23 @@ tests/
     ci.yml
 
 docs/
-  presentation_notes.md
+  architecture.md
+  erd.md
+  api_design.md
+  data_governance.md
+  iam_role_matrix.md
   day3_resilience.md
+  rubric_checklist.md
+
+project-reference/
+  HANDOFF.md
+  README.md
+  component_guide.md
+  completed_work.md
+  remaining_work.md
+  local_software_setup.md
+  live_demo_script.md
+  presentation_notes.md
 
 samples/
   transactions_day2.csv
