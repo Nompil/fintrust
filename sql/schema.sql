@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS accounts (
 
 CREATE TABLE IF NOT EXISTS transactions (
     tx_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    account_id UUID NOT NULL REFERENCES accounts(account_id),
+    account_id UUID NOT NULL REFERENCES accounts(account_id) ON DELETE RESTRICT,
     amount NUMERIC(15, 2) NOT NULL CHECK (amount > 0),
     currency CHAR(3) NOT NULL DEFAULT 'ZAR'
         CHECK (currency IN ('ZAR', 'USD', 'EUR', 'GBP', 'KES')),
