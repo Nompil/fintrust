@@ -1,5 +1,7 @@
 boto3==1.43.104
 botocore==1.43.104
+aws-wsgi==0.2.7
+Flask==3.1.3
 moto==5.2.3
 psycopg2-binary==2.9.13
 pytest==9.1.1

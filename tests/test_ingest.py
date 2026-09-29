@@ -52,6 +52,11 @@ def test_process_csv_loads_good_rows_and_quarantines_bad_rows(monkeypatch):
 
     counts = ingest.process_csv("fintrust-ingest-dev", "raw/demo.csv", csv_text)
 
-    assert counts == {"rows_received": 2, "rows_valid": 1, "rows_quarantined": 1}
+    assert counts == {
+        "rows_received": 2,
+        "rows_valid": 1,
+        "rows_quarantined": 1,
+        "quarantine_rate_percent": 50.0,
+    }
     assert len(captured["rows"]) == 1
     assert captured["quarantine"]["Key"] == "quarantine/demo.csv.jsonl"

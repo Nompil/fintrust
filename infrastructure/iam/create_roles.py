@@ -67,7 +67,11 @@ def create_roles() -> None:
     bucket = os.getenv("FINTRUST_INGEST_BUCKET", "fintrust-ingest-dev")
     table = os.getenv("FINTRUST_DDB_TABLE", "risk_scores")
     queue_arn = os.getenv("FINTRUST_SCORE_QUEUE_ARN", f"arn:aws:sqs:{REGION}:{ACCOUNT_ID}:fintrust-score.fifo")
-    params_arn = f"arn:aws:ssm:{REGION}:{ACCOUNT_ID}:parameter/fintrust/dev/*"
+    ingest_dlq_arn = os.getenv("FINTRUST_INGEST_DLQ_ARN", f"arn:aws:sqs:{REGION}:{ACCOUNT_ID}:fintrust-ingest-dlq")
+    params_arns = [
+        f"arn:aws:ssm:{REGION}:{ACCOUNT_ID}:parameter/fintrust/dev/db_{name}"
+        for name in ("host", "name", "user", "password")
+    ]
     table_arn = f"arn:aws:dynamodb:{REGION}:{ACCOUNT_ID}:table/{table}"
 
     roles = [
@@ -77,7 +81,8 @@ def create_roles() -> None:
             [
                 {"Effect": "Allow", "Action": ["s3:GetObject", "s3:PutObject"],
                  "Resource": [f"arn:aws:s3:::{bucket}/raw/*", f"arn:aws:s3:::{bucket}/quarantine/*"]},
-                {"Effect": "Allow", "Action": ["ssm:GetParameter"], "Resource": params_arn},
+                {"Effect": "Allow", "Action": ["ssm:GetParameter"], "Resource": params_arns},
+                {"Effect": "Allow", "Action": ["sqs:SendMessage"], "Resource": ingest_dlq_arn},
             ],
         ),
         (
@@ -86,7 +91,7 @@ def create_roles() -> None:
             [
                 {"Effect": "Allow", "Action": ["sqs:ReceiveMessage", "sqs:DeleteMessage", "sqs:GetQueueAttributes"], "Resource": queue_arn},
                 {"Effect": "Allow", "Action": ["dynamodb:PutItem", "dynamodb:GetItem", "dynamodb:Query"], "Resource": table_arn},
-                {"Effect": "Allow", "Action": ["ssm:GetParameter"], "Resource": params_arn},
+                {"Effect": "Allow", "Action": ["ssm:GetParameter"], "Resource": params_arns},
             ],
         ),
         (
@@ -102,7 +107,7 @@ def create_roles() -> None:
             "fintrust-query",
             [
                 {"Effect": "Allow", "Action": ["dynamodb:GetItem", "dynamodb:Query"], "Resource": table_arn},
-                {"Effect": "Allow", "Action": ["ssm:GetParameter"], "Resource": params_arn},
+                {"Effect": "Allow", "Action": ["ssm:GetParameter"], "Resource": params_arns},
             ],
         ),
         (
@@ -111,7 +116,7 @@ def create_roles() -> None:
             [
                 {"Effect": "Allow", "Action": ["s3:PutObject"],
                  "Resource": f"arn:aws:s3:::{os.getenv('FINTRUST_REPORT_BUCKET', bucket)}/reports/*"},
-                {"Effect": "Allow", "Action": ["ssm:GetParameter"], "Resource": params_arn},
+                {"Effect": "Allow", "Action": ["ssm:GetParameter"], "Resource": params_arns},
             ],
         ),
     ]

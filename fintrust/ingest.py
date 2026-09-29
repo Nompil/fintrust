@@ -101,7 +101,7 @@ def _load_rows(rows: list[tuple[Any, ...]]) -> list[tuple[Any, ...]]:
     except (psycopg2.OperationalError, psycopg2.InterfaceError):
         connection.rollback()
         raise
-    except psycopg2.Error:
+    except psycopg2.IntegrityError:
         connection.rollback()
         with connection.cursor() as cursor:
             for index, values in enumerate(rows):
@@ -110,11 +110,14 @@ def _load_rows(rows: list[tuple[Any, ...]]) -> list[tuple[Any, ...]]:
                 try:
                     cursor.execute(INSERT_TRANSACTION, values)
                     cursor.execute(f"RELEASE SAVEPOINT {savepoint}")
-                except Exception as exc:
+                except psycopg2.IntegrityError as exc:
                     cursor.execute(f"ROLLBACK TO SAVEPOINT {savepoint}")
                     cursor.execute(f"RELEASE SAVEPOINT {savepoint}")
                     failed_rows.append((values, str(exc)))
             connection.commit()
+    except psycopg2.Error:
+        connection.rollback()
+        raise
     except Exception:
         connection.rollback()
         raise
@@ -164,10 +167,14 @@ def process_csv(
         body = "".join(json.dumps(item, default=str) + "\n" for item in quarantine_rows)
         s3.put_object(Bucket=bucket, Key=quarantine_key, Body=body.encode("utf-8"))
 
+    quarantine_rate_percent = round(
+        len(quarantine_rows) / rows_received * 100, 2
+    ) if rows_received else 0
     return {
         "rows_received": rows_received,
         "rows_valid": len(valid_rows) - len(failed_rows),
         "rows_quarantined": len(quarantine_rows),
+        "quarantine_rate_percent": quarantine_rate_percent,
     }
 
 
@@ -181,15 +188,25 @@ def lambda_handler(event, context):
     request = {"Bucket": bucket, "Key": key}
     if version_id:
         request["VersionId"] = version_id
-    response = s3.get_object(**request)
-    raw_text = response["Body"].read().decode("utf-8-sig")
-    source_identity = f"{bucket}:{key}:{version_id or 'unversioned'}"
-    counts = process_csv(bucket, key, raw_text, source_identity)
-    duration_ms = round((perf_counter() - started) * 1000, 2)
-    logger.info(json.dumps({
-        "event": "ingest_complete",
-        "s3_key": key,
-        **counts,
-        "duration_ms": duration_ms,
-    }))
-    return {"statusCode": 200, **counts}
+    try:
+        response = s3.get_object(**request)
+        raw_text = response["Body"].read().decode("utf-8-sig")
+        source_identity = f"{bucket}:{key}:{version_id or 'unversioned'}"
+        counts = process_csv(bucket, key, raw_text, source_identity)
+        duration_ms = round((perf_counter() - started) * 1000, 2)
+        logger.info(json.dumps({
+            "event": "ingest_complete",
+            "bucket": bucket,
+            "s3_key": key,
+            **counts,
+            "duration_ms": duration_ms,
+        }))
+        return {"statusCode": 200, **counts}
+    except Exception as error:
+        logger.exception(json.dumps({
+            "event": "ingest_failed",
+            "bucket": bucket,
+            "s3_key": key,
+            "error_type": type(error).__name__,
+        }))
+        raise

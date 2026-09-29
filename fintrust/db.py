@@ -26,6 +26,9 @@ def run_query(query: str, params: tuple[Any, ...] = ()) -> list[dict[str, Any]]:
             columns = [desc[0] for desc in cursor.description] if cursor.description else []
             rows = cursor.fetchall()
             return [dict(zip(columns, row)) for row in rows]
+    except Exception:
+        conn.rollback()
+        raise
     finally:
         conn.close()
 

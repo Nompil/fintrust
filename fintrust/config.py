@@ -3,6 +3,10 @@ from functools import lru_cache
 from typing import Any
 
 import boto3
+from dotenv import load_dotenv
+
+if not os.getenv("AWS_EXECUTION_ENV"):
+    load_dotenv()
 
 AWS_REGION = os.getenv("AWS_REGION", "af-south-1")
 ssm = boto3.client("ssm", region_name=AWS_REGION)
