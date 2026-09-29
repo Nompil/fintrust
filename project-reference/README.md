@@ -4,7 +4,7 @@ Use this folder for project status, local setup, and stakeholder presentation re
 
 ## Project status
 
-- [AI/work-session handoff](HANDOFF.md): self-contained current state, verified evidence, next step, and continuation rules.
+- [Project handoff](HANDOFF.md): current state, verified evidence, next steps, and continuation notes.
 - [Component guide](component_guide.md): responsibilities, live data flow, failure behavior, and implementation status.
 - [Completed work](completed_work.md): implementation and local verification evidence to date.
 - [Remaining work](remaining_work.md): unimplemented, undeployed, and submission-evidence tasks through 15 October.

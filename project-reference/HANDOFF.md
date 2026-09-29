@@ -2,7 +2,7 @@
 
 **Last updated:** 29 September 2026  
 **Target submission:** 15 October 2026  
-**Purpose:** Start here in a new chat, AI tool, or work session. This document is intended to preserve project context if previous chat history is unavailable.
+**Purpose:** Start here when resuming work after a break or in a new work session. This document preserves project context independently of chat history.
 
 ## Start Here
 
@@ -120,10 +120,10 @@ After the full suite, continue with a learning exercise: trace one valid row and
 - `sql/` schema, seed, and analytical artifacts
 - `tests/` local unit tests and opt-in PostgreSQL integration tests
 
-## Continuation Rules for Another Assistant
+## Continuation Notes
 
 - Read current file contents before editing. The user may edit or format files between sessions.
-- Preserve uncommitted user/assistant work; do not reset, checkout, or discard changes.
+- Preserve all uncommitted work, including user edits; do not reset, checkout, or discard changes.
 - Work one component at a time: explain its purpose, trace its inputs/outputs, implement/test, then teach back what the result means.
 - Run the narrow relevant test immediately after each code change; run the full suite at logical milestones.
 - Keep the user informed about what is locally tested versus AWS-deployed.
