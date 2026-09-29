@@ -91,7 +91,7 @@ def test_invalid_kyc_status_rejected_by_check_constraint(database_connection):
 def test_account_with_transactions_cannot_be_deleted(database_connection):
     assert_database_rejects(
         database_connection,
-        psycopg2.errors.ForeignKeyViolation,
+        psycopg2.errors.RestrictViolation,
         "DELETE FROM accounts WHERE account_id = %s",
         ("20000000-0000-4000-8000-000000000001",),
     )
