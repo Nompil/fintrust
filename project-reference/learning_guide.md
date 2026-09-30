@@ -307,3 +307,38 @@ The formal reference is [the system design](../docs/system_design.md), with a [P
 Business explanation: validation reduces manual checking, database relationships protect consistency, and source references help trace records. Benefits such as savings or fraud reduction still require measurement. Risk signals support human review; they do not move money or certify compliance.
 
 Project target recorded in earlier planning: 15 October 2026; the supplied brief specifies end of Week 14 with presentations in Week 16. Use your facilitator's confirmed deadline.
+
+## 9. Open the PDF documents
+
+The files in `output/pdf` are normal PDFs. Text such as `%PDF`, `obj`, `stream` or `/Type/Page` means the editor is displaying the file format instead of rendering the document.
+
+1. In VS Code, right-click the PDF in Explorer and choose **Reveal in File Explorer**.
+2. In Windows File Explorer, right-click the file and choose **Open with > Microsoft Edge** (or an installed PDF reader).
+3. If a PDF preview extension is already installed in VS Code, **Reopen Editor With** can select that viewer. A text editor cannot display PDF pages by itself.
+
+Both PDFs were opened and every page rendered during verification: 16 system-document pages and three architecture/ERD pages. Neither required parser repair. Avoid editing the internal PDF text; content changes belong in the Markdown/design source and generators.
+
+## 10. AWS implementation order
+
+The current target is the Day 1-3 foundation, not every service in the final-capstone diagram. Local tests simulate AWS; they do not establish that these resources exist in an AWS account.
+
+| Order | Implementation | Simple explanation | Evidence before moving on |
+|---|---|---|---|
+| 1 | Account plan, credit expiry/balance, region, MFA, scoped deployment identity and budget notifications | Check the spending arrangement and who can make changes | Account/region confirmed; estimated costs reviewed; credentials kept private |
+| 2 | VPC, private subnets, database/Lambda security groups and service-access routes | Put the database behind locked doors | Database is not publicly accessible; PostgreSQL accepts traffic only from the intended application security group |
+| 3 | S3 intake bucket, separate access-log bucket, versioning, public-access block, retention and required customer-managed KMS configuration | Store original files safely and record access | Bucket policies, encryption, logging and lifecycle settings verified |
+| 4 | RDS PostgreSQL, schema, synthetic seed data, restricted SQL roles and SSM SecureString configuration | Create the cloud transaction ledger and protected settings | Connection and SQL checks succeed through an approved private access path |
+| 5 | DynamoDB risk_scores, account/date keys and TTL | Create the fast daily-score lookup | A labelled test item can be written and read; TTL configuration is enabled |
+| 6 | Ingestion Lambda, scoped role and S3 raw/*.csv notification | Check incoming files and separate invalid rows | Mixed-validity file produces accepted rows and quarantine records; replay does not duplicate the same source version |
+| 7 | SQS ingestion DLQ, retry configuration and CloudWatch logs/metrics/alarms | Keep failed work visible and recoverable | Controlled dependency failure reaches the DLQ; alarm and replay demonstrated |
+| 8 | Flask API Lambda and API Gateway read routes with authorization | Give the dashboard a controlled way to request data | Health, transaction pagination, insights, denied access and error responses verified; latency measured |
+
+Private Lambda access to S3 and DynamoDB can use gateway endpoints. SSM and any other SDK calls need their own reviewed connectivity path; S3/DynamoDB endpoints alone do not provide general AWS API access. NAT gateways and interface endpoints can add costs. The current provisioning scripts do not yet close all encryption, logging and network gaps and are not a complete one-command deployment.
+
+The first cloud demonstration should follow one file: upload to S3, inspect Lambda logs, verify accepted rows in RDS, inspect rejected rows in quarantine, and retrieve transactions through the authorized API. The DynamoDB insight remains a labelled test item until the score writer is connected.
+
+After that foundation, implement the final FIFO/scoring pipeline, score persistence, SES alerts, EventBridge monthly reporting, production upload/flag/resolve endpoints, frontend hosting with real sign-in, tracing and deployed CI/CD evidence. Replace direct ingestion deliberately when introducing the FIFO writer; avoid two independent writers processing the same file.
+
+The private RDS deployment also needs an approved way to apply SQL and troubleshoot connections. Opening PostgreSQL to the public internet is not the solution. A temporary controlled access method must be included in the network and cost review.
+
+Customer-managed KMS keys have a recurring charge; credits may cover eligible usage but do not make a service inherently free. Account eligibility and service availability need confirmation before provisioning. Current references: [AWS Free Tier FAQ](https://aws.amazon.com/free/free-tier-faqs/), [KMS pricing](https://aws.amazon.com/kms/pricing/) and [VPC pricing](https://aws.amazon.com/vpc/pricing/).

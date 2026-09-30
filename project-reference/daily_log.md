@@ -165,3 +165,7 @@ The learner confirmed setup/check succeeded: fintrust_local connects as fintrust
 - Added chart scale labels and an accessible data-table alternative, plain-language upload results, connection error guidance and a collapsible explanation of demonstration scores.
 - The local demonstration remains without authentication. Secure identity and account-level authorization are required before online use with real customer information; no cosmetic login is presented as security.
 - Verification: 52 tests passed including PostgreSQL integration checks. No browser automation surface is available in this environment; visual and keyboard acceptance remain pending in the learner's browser.
+
+## 2026-09-30 - PDF verification and AWS implementation sequence
+
+Both existing PDFs opened without parser repair and all 19 pages rendered. The reported issue was a text-editor view of PDF internals, not document corruption. PDF bytes were preserved. Added PDF viewing instructions and a staged AWS foundation/evidence checklist to the learning guide. Updated stale requirement statuses for file bounds and local API/database tests. No AWS resources were provisioned.

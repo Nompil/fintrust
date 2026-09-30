@@ -12,10 +12,10 @@ FinTrust receives a CSV of bank transactions, checks each row, saves valid recor
 |---|---|---|---|
 | 1 AM | Explain compute choice; AWS architecture; S3 versioning, customer-managed KMS encryption, access logs and retention; scoped roles | Architecture and IAM documents; editable diagrams | KMS/key policy, access-log bucket, network design and deployed evidence |
 | 1 PM | Provision S3, roles, SSM parameters and filtered S3 trigger | `infrastructure/s3`, `iam`, `ssm` | Run against the approved account after closing security/network gaps |
-| 2 AM | Validate CSV, transform types, insert valid rows, quarantine invalid rows | `fintrust/ingest.py`; ingest/regression tests | Real S3-to-RDS demonstration; supported file-size limit |
+| 2 AM | Validate CSV, transform types, insert valid rows, quarantine invalid rows | `fintrust/ingest.py`; ingest/regression tests | Real S3-to-RDS demonstration; 1 MiB/5,000-row bounds implemented locally |
 | 2 PM | Customers/accounts/transactions schema, constraints, indexes, view; DynamoDB account/date key and TTL | `sql/`; DynamoDB script and helper tests | Local database tests passed; index plan evidence and deployed table/TTL verification remain |
 | 3 AM | Row isolation, retries, DLQ, JSON counts and duration; quarantine-rate and DLQ alarms | Ingest code; SQS and monitoring scripts | Trigger actual failure, alarm, replay and duplicate-safety evidence |
-| 3 PM | Health check; paginated transaction reads; account/date insights; 400/404 responses | Flask API and tests; `limit`/`offset` pagination | Live database/API tests; measured insights latency below the lesson's 50 ms target |
+| 3 PM | Health check; paginated transaction reads; account/date insights; 400/404 responses | Flask API and tests; `limit`/`offset` pagination | Local database/API tests pass; deployed API evidence and measured insights latency below the lesson's 50 ms target remain |
 
 Code present, local test passed, AWS deployed, and end-to-end demonstrated are four different states. None implies the next.
 
