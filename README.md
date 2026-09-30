@@ -1,155 +1,50 @@
-# FinTrust Bank SA - Transaction Insights and Risk Monitoring System
+# FinTrust: Transaction Insights and Risk Monitoring
 
-A capstone project for a cloud-native transaction insights and risk monitoring system for a South African fintech bank.
+FinTrust checks transaction CSV files, stores valid rows, and provides a read API for reviewers. This repository covers the Week 13 Day 1-3 foundation of the Praesignis capstone. Automated risk scoring, alerts and monthly reports are later milestones.
 
-## Current Build Status
+## Start here
 
-The repository currently includes the Week 13 Day 1-3 foundation and Day 4-5 design/tests: S3/IAM/SSM/DLQ/CloudWatch provisioning scripts, a PostgreSQL schema and seed set, a DynamoDB risk-score table, an S3-triggered CSV ETL handler, and local read-only API routes. The Day 2/3 ingest path writes valid rows directly from the Lambda to PostgreSQL. API Gateway/IAM route configuration, the separate SQS FIFO scoring path, risk-score writer, SES alerting, EventBridge reporting, live PostgreSQL checks, and deployment evidence remain to be completed or deployed.
+- [Complete system documentation](output/pdf/fintrust_system_documentation.pdf)
+- [System design source and SDLC record](docs/system_design.md)
+- [What is required and what is still missing](project-reference/requirements_day1_day3.md)
+- [Step-by-step learning guide](project-reference/learning_guide.md)
+- [Architecture and ERD PDF](output/pdf/fintrust_architecture_and_erd.pdf)
+- [Editable draw.io diagrams](docs/diagrams/fintrust.drawio)
+- [Current status and next steps](project-reference/upcoming_features.md)
 
-## Business Outcome
+## Current implementation
 
-FinTrust needs a system that can:
-- ingest transaction data from legacy sources,
-- validate and risk-score each transaction,
-- store an auditable ledger and event log,
-- surface compliance insights through a secure API,
-- alert the risk team when a transaction exceeds policy thresholds,
-- produce monthly executive reporting.
+The ingest handler reads CSV objects, validates rows, inserts valid records into PostgreSQL and writes rejected rows to S3 quarantine. Retries of the same source object version use the same transaction IDs. Infrastructure scripts configure S3, IAM, SSM, DynamoDB, an ingest DLQ and CloudWatch alarms.
 
-The solution is built around the AWS Free Tier and follows the FinTrust capstone brief: a serverless ingestion path, SQL-backed ledger, NoSQL event log, API access for analysts, and automated reporting.
+The Flask API implements health, transactions, insights, accounts and overview endpoints. The dashboard at `/` displays activity charts, currency totals, a filtered ledger and local CSV intake. Transaction queries support date filters and `limit`/`offset` pagination. Insights read a pre-existing DynamoDB item keyed by account and date; the automated score writer is not connected.
 
-## Architecture Summary
+These are repository implementations, not proof of deployment. See the [review](project-reference/requirements_day1_day3.md) for security gaps, prototype modules and evidence still required. No deployed end-to-end result or zero-cost claim is made.
 
-```mermaid
-flowchart LR
-    A[Legacy CSV Upload] --> B[S3 Raw Bucket]
-    B --> C[Ingest Lambda]
-    C --> D[SQS FIFO Queue]
-    D --> E[Risk Scoring Lambda]
-    E --> F[(RDS PostgreSQL Ledger)]
-    E --> G[(DynamoDB Event Store)]
-    E --> H[SES Alert]
-    I[API Gateway] --> J[Query Lambda]
-    J --> F
-    J --> G
-    K[EventBridge] --> L[Report Lambda]
-    L --> M[S3 Reporting Bucket]
+## Run locally (PowerShell)
+
+```powershell
+py tools/local.py test
+py tools/local.py setup
+py tools/local.py check
+py tools/local.py test --database
+py tools/local.py ingest
+py tools/local.py serve
 ```
 
-## Folder Structure
+Run these one at a time. Setup prompts for your local PostgreSQL administrator password without displaying it; the password is never stored. The generated application credentials go into ignored `.env`. Practice uses `fintrust_local`; tests use `fintrust_local_test`. AWS services are simulated in the local exercises.
 
-```text
-fintrust/
-  __init__.py
-  config.py
-  db.py
-  dynamo.py
-  models.py
-  validators.py
-  ingest.py
-  score.py
-  alert.py
-  query.py
-  report.py
-  api.py
+The [learning guide](project-reference/learning_guide.md) explains each command, expected output, browser URL and troubleshooting step. Dependencies are installed on this machine; a fresh environment needs `py -m pip install -r requirements.txt` first. Use `py` if the `python` command points to the Windows Store alias.
 
-sql/
-  schema.sql
-  seed.sql
-  risk_report.sql
-  monthly_summary.sql
-  views.sql
-  procedure.sql
+## Repository map
 
-infrastructure/
-  README.md
-  s3/
-  iam/
-  ssm/
-  dynamodb/
-  sqs/
-  monitoring/
+| Folder | Contents |
+|---|---|
+| `fintrust/` | Application code and clearly identified later-stage prototypes |
+| `sql/` | Schema, synthetic seed data, views, reports and stored function |
+| `infrastructure/` | AWS setup scripts; not a complete deployed stack |
+| `tests/` | Unit, mocked AWS and opt-in PostgreSQL tests |
+| `docs/` | Technical submission documents and diagrams |
+| `project-reference/` | Four working references: requirements, learning, progress and upcoming work |
+| `samples/` | Synthetic transaction CSV |
 
-tests/
-  conftest.py
-  test_validators.py
-  test_score.py
-  test_ingest.py
-  test_api.py
-  data_quality/
-
-.github/
-  workflows/
-    ci.yml
-
-docs/
-  architecture.md
-  erd.md
-  api_design.md
-  data_governance.md
-  iam_role_matrix.md
-  day3_resilience.md
-  rubric_checklist.md
-
-project-reference/
-  HANDOFF.md
-  README.md
-  component_guide.md
-  completed_work.md
-  remaining_work.md
-  local_software_setup.md
-  live_demo_script.md
-  presentation_notes.md
-
-samples/
-  transactions_day2.csv
-```
-
-## Core Principles
-
-1. Least privilege first: Lambda execution roles are minimal and purpose-specific.
-2. Data quality before storage: validation happens before persistence.
-3. Event-driven processing: ingestion is decoupled from scoring and alerting.
-4. Compliance by design: POPIA-conscious data handling and retention logic are part of the design.
-5. Operational trust: logs, metrics, and alerts are included in the architecture.
-
-## Deployment Story
-
-This solution is intended to be explained as a business-grade financial controls platform:
-- raw transaction files land in S3,
-- validation confirms format and business rules,
-- risk scoring calculates a transaction risk profile,
-- suspicious events are reviewed by compliance teams,
-- management receives monthly trend analysis.
-
-## How to Present It Confidently
-
-When speaking to stakeholders:
-- describe the business problem before the architecture,
-- explain why each AWS service was chosen,
-- connect every technical decision to a business outcome,
-- be ready to answer what happens when a transaction fails validation or when a Lambda errors,
-- show the security and compliance logic, not just the happy path.
-
-## Suggested Presentation Narrative
-
-- Problem: FinTrust needs a faster, safer way to detect risk in high-volume banking transactions.
-- Solution: Serverless event-driven analytics and risk-monitoring pipeline.
-- Why this works: real-time validation, asynchronous processing, governance controls, auditable events.
-- Business value: reduced fraud exposure, lower manual review burden, improved compliance posture.
-
-## Quick Start
-
-```bash
-python -m venv .venv
-.\.venv\Scripts\activate
-pip install -r requirements.txt
-Copy-Item .env.example .env
-python -m pytest -q
-```
-
-Set local database and AWS values in `.env` for your machine; `.env` is ignored by Git. The PostgreSQL constraint tests skip unless `FINTRUST_TEST_DATABASE_URL` points to a disposable test database. Run the local API with `python -m fintrust.api` and use `http://127.0.0.1:5000/v1/health`.
-
-## Notes
-
-AWS infrastructure scripts create real account resources when explicitly run. Review `infrastructure/README.md` and AWS costs/permissions before running them. Local tests use Moto and do not deploy AWS resources.
+The [documentation index](project-reference/README.md) links each topic once. The business aim is to reduce manual checking and make rejected data traceable; effectiveness and financial savings have not been measured.

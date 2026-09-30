@@ -1,11 +1,5 @@
 def send_alert(account_id: str, score: int, risk_level: str) -> dict:
-    return {
-        "account_id": account_id,
-        "score": score,
-        "risk_level": risk_level,
-        "status": "email_dispatched",
-        "recipient": "compliance@fintrust.example",
-    }
+    raise NotImplementedError("SES alert delivery is a later capstone milestone")
 
 
 def lambda_handler(event, context):

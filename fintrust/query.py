@@ -12,6 +12,7 @@ def get_transactions(
     from_dt: datetime | None = None,
     to_dt: datetime | None = None,
     limit: int = 50,
+    offset: int = 0,
 ) -> list[dict[str, Any]]:
     account_id = str(UUID(account_id))
     clauses = ["account_id = %s"]
@@ -23,13 +24,14 @@ def get_transactions(
         clauses.append("tx_date <= %s")
         params.append(to_dt)
     params.append(max(1, min(limit, 500)))
+    params.append(offset)
     sql = f"""
         SELECT tx_id::text, account_id::text, amount::text, currency,
                merchant, tx_date, tx_type, cross_border
         FROM transactions
         WHERE {' AND '.join(clauses)}
-        ORDER BY tx_date DESC
-        LIMIT %s
+        ORDER BY tx_date DESC, tx_id DESC
+        LIMIT %s OFFSET %s
     """
     return run_query(sql, tuple(params))
 
@@ -51,3 +53,14 @@ def parse_datetime(value: str) -> datetime:
     if parsed.tzinfo is None:
         parsed = parsed.replace(tzinfo=timezone.utc)
     return parsed
+
+
+def get_accounts() -> list[dict[str, Any]]:
+    return run_query("SELECT account_id::text, account_type, status FROM accounts ORDER BY account_id")
+
+
+def get_overview() -> dict:
+    counts = run_query("SELECT count(*) AS transactions, count(DISTINCT account_id) AS active_accounts, count(*) FILTER (WHERE cross_border) AS cross_border FROM transactions")[0]
+    totals = run_query("SELECT currency, count(*) AS transactions, sum(amount)::text AS gross_amount FROM transactions GROUP BY currency ORDER BY currency")
+    trend = run_query("SELECT (tx_date AT TIME ZONE 'UTC')::date::text AS day, count(*) AS transactions FROM transactions GROUP BY 1 ORDER BY 1")
+    return {"counts": counts, "totals_by_currency": totals, "daily_transactions": trend}

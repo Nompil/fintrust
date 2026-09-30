@@ -1,94 +1,27 @@
-# FinTrust Cloud Architecture
+# Architecture
 
-## Implementation Status
+The diagrams use official AWS service icons. Open the [three-page PDF](../output/pdf/fintrust_architecture_and_erd.pdf) for presentation or the [draw.io source](diagrams/fintrust.drawio) to edit them.
 
-The diagram below is the capstone target architecture. The repository now includes Day 1-3 provisioning/application code for S3 ingest, PostgreSQL loading, an ingest DLQ and CloudWatch alarms, plus local read-only API routes. The Week 13 Day 2/3 exercise uses direct S3-to-Lambda-to-RDS ingestion; SQS FIFO scoring is a later capstone evolution. The score writer, SES alerting, EventBridge reporting, and deployed API Gateway/dashboard still need implementation or AWS deployment. Treat a component as live only after the AWS resource and end-to-end behavior have been verified.
+## Current Day 1-3 flow
 
-## 1. System Context
+![Day 1-3 architecture](diagrams/architecture_day1_day3.svg)
 
-FinTrust Bank SA processes incoming transaction records from legacy systems and external sources, validates them for business correctness, and scores each transaction for risk. The platform is designed to detect unusual activity, protect sensitive financial data, and support compliance reporting for fraud and risk teams.
+The S3 event handler validates each file, writes good rows directly to PostgreSQL, and quarantines bad rows in S3. Infrastructure scripts describe the asynchronous ingest DLQ and monitoring setup. The local read API queries PostgreSQL transactions and preloaded DynamoDB scores. Deployment has not been verified.
 
-## 2. Target Architecture
+## Final target
 
-```mermaid
-flowchart LR
-    A[Legacy / CSV source] --> B[S3 Raw Bucket]
-    B --> C[Ingest Lambda]
-    C --> F[(RDS PostgreSQL Ledger)]
-    C --> Q[Quarantine Prefix]
-    C -. failure after retries .-> X[SQS Ingest DLQ]
-    C --> D[SQS FIFO Queue - later phase]
-    D --> E[Score Lambda - later phase]
-    E --> G[(DynamoDB Event Store)]
-    E --> H[SES Alert]
-    I[API Gateway] --> J[Query Lambda]
-    J --> F
-    J --> G
-    K[EventBridge Scheduler] --> L[Report Lambda]
-    L --> M[S3 Reporting Bucket]
+![Final target architecture](diagrams/architecture_target.svg)
 
-    N[Compliance Team] --> I
-    O[Risk Team] --> H
-    P[Executive Users] --> M
-```
+The final brief adds a per-account FIFO queue, scoring and persistence, SES alerts, API Gateway, and scheduled reports. When that pipeline is implemented, replace the direct ingest write deliberately; avoid two independent ledger writers. The standard ingest DLQ and a FIFO scoring DLQ serve different failure paths.
 
-## 3. Design Rationale
+## Decisions and deployment boundaries
 
-### S3
-- Raw transaction uploads enter through S3.
-- This is a low-friction ingestion point for CSV files from legacy banking systems.
-- It also supports quarantine and audit-friendly storage patterns.
+Lambda suits short event-triggered tasks. PostgreSQL supplies relationships and constraints; DynamoDB supplies the account/date score lookup. S3 retains source files and quarantine evidence. Service separation makes failures easier to diagnose, but each boundary needs retry and duplicate-handling tests.
 
-### Lambda
-- Lambda functions handle validation, scoring, API queries, and scheduled reporting.
-- They are serverless and scale to transaction volume without a dedicated fleet.
-- Each function has a single purpose and clear permissions.
+RDS must be private. Lambda functions accessing it need VPC attachment and a security group path to port 5432. These same functions also need connectivity to S3, SSM, DynamoDB and any other AWS APIs they call. Omitting a NAT Gateway does not provide that connectivity automatically. Endpoint selection, endpoint policies, Lambda VPC permissions, DNS and cost must be resolved before deployment. The diagrams show intended placement, not provisioned networking.
 
-### SQS FIFO
-- SQS decouples ingestion from scoring.
-- FIFO preserves transaction order by account.
-- It supports retries and dead-letter paths when processing fails.
+Customer-managed KMS encryption, access logging to a separate bucket, SQL users/grants, and deployed security evidence remain incomplete. The current database helper opens a fresh connection for each call; connection reuse and concurrency limits still need work.
 
-### RDS PostgreSQL
-- The relational ledger supports financial records, account associations, and analytics queries.
-- Normalised tables make reconciliation and reporting easier.
-- The financial data model is suitable for compliance and audit needs.
+Cost eligibility depends on the training account and configured services. Budget evidence must replace assumptions from the course's Free Tier table. Large files currently load into memory and need a documented limit or a chunked workflow.
 
-### DynamoDB
-- DynamoDB stores event metadata, risk information, and fast lookup records.
-- It complements the ledger with a low-latency operational view.
-
-### API Gateway
-- The compliance team can query transactions and insights through a secure interface.
-- The Day 4 design uses AWS_IAM authorization for data routes; the health endpoint exposes status only.
-
-### SES
-- High-risk transactions trigger alerts without requiring broad operational monitoring.
-
-### EventBridge + report Lambda
-- Monthly reporting is automated and scheduled.
-- Management receives summary output without manual extraction work.
-
-## 4. Security and Free Tier Considerations
-
-- RDS is restricted to private network access.
-- Lambda execution roles are least-privilege.
-- No NAT Gateway is used, to avoid unnecessary cost.
-- The design stays within the capstone's Free Tier assumptions and keeps the architecture cost-conscious.
-
-## 5. Failure Handling
-
-- The current ingest path validates rows before storing them; invalid rows go to S3 quarantine.
-- Invocation-level failures are retried and then sent to the configured SQS dead-letter queue.
-- The FIFO scoring queue is part of the later end-to-end capstone architecture, not the current Day 3 direct-load path.
-- Risk events and transaction metadata remain recoverable through logs and data retention.
-
-## 6. Presentation Narrative
-
-When presenting, explain the architecture as a business control loop:
-
-1. Data enters the bank.
-2. It is checked for quality and risk.
-3. It is processed asynchronously.
-4. The business receives alerts and insights.
-5. Monthly reporting supports executive decision-making.
+Source: [AWS architecture icons](https://aws.amazon.com/architecture/icons/), July 2026 release. Asset attribution and rebuild instructions: [diagram README](diagrams/README.md).

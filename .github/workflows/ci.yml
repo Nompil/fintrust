@@ -1,4 +1,6 @@
 name: FinTrust CI
+permissions:
+  contents: read
 
 on:
   push:
@@ -26,7 +28,15 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run pytest
-        run: pytest -q
+        run: pytest -q --ignore=tests/data_quality --junitxml=test-results/unit.xml
+
+      - name: Preserve unit test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-results
+          path: test-results/unit.xml
+          retention-days: 7
 
   integration:
     if: github.ref == 'refs/heads/develop'
@@ -62,4 +72,12 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run PostgreSQL constraint integration tests
-        run: pytest tests/data_quality/test_constraints.py -q
+        run: pytest tests/data_quality/test_constraints.py -q --junitxml=test-results/postgres.xml
+
+      - name: Preserve database test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: postgres-test-results
+          path: test-results/postgres.xml
+          retention-days: 7

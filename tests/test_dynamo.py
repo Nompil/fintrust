@@ -27,7 +27,7 @@ def test_risk_scores_put_get_and_query(monkeypatch):
     )
     monkeypatch.setattr(dynamo, "dynamodb", resource)
     item = {
-        "account_id": "acc-test-001",
+        "account_id": "20000000-0000-4000-8000-000000000001",
         "score_date": "2026-09-28",
         "risk_score": 75,
         "ttl": 1790553600,
@@ -36,6 +36,6 @@ def test_risk_scores_put_get_and_query(monkeypatch):
     assert dynamo.put_item("risk_scores", item) == item
     assert dynamo.get_item(
         "risk_scores",
-        {"account_id": "acc-test-001", "score_date": "2026-09-28"},
+        {"account_id": "20000000-0000-4000-8000-000000000001", "score_date": "2026-09-28"},
     ) == item
-    assert dynamo.query_by_account("risk_scores", "acc-test-001") == [item]
+    assert dynamo.query_by_account("risk_scores", "20000000-0000-4000-8000-000000000001") == [item]

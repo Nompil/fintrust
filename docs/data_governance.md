@@ -18,17 +18,17 @@ Invalid rows are written to the S3 `quarantine/` prefix with source row and reas
 
 ## 3. Data Lifecycle Policy
 
-### Hot data
-- RDS PostgreSQL: retained for approximately 12 months
-- Used for active operational review and recent financial reporting
+These are course design assumptions, not a legal retention determination or proof of compliance.
 
-### Warm data
-- S3 analytical storage: retained for up to 3 years
-- Suitable for trend analysis and operational history
+| Data | Intended retention | Current implementation |
+|---|---|---|
+| Raw S3 objects | Standard for 90 days, then Glacier; expire current version at day 2555 | Lifecycle script exists; not verified in AWS |
+| Noncurrent S3 versions | Transition after 90 noncurrent days; expire after 2555 noncurrent days | This can extend total retention beyond seven years from original creation; review before deployment |
+| DynamoDB daily scores | 90-day TTL for operational lookup | Table TTL setup exists; score writer is not connected |
+| CloudWatch application logs | 30 days | IAM setup script configures log retention |
+| RDS ledger, quarantine and reports | Formal periods and deletion/archive procedures still required | No complete purge/archive workflow |
 
-### Cold archive
-- S3 Glacier or equivalent archival tier: retained for up to 7 years
-- Consistent with regulatory or compliance retention requirements
+Retention must be approved for each data class, including backups and versions. Encryption and access controls are separate requirements; lifecycle rules alone do not establish compliance.
 
 ## 4. Migration Strategy
 
@@ -42,6 +42,6 @@ Chosen 7R classification: **Replatform**. FinTrust preserves the existing transa
 | Invalid or incomplete transaction records corrupting reports | Medium | High | AWS Lambda row validation/quarantine and PostgreSQL CHECK/foreign-key constraints |
 | Records retained beyond the approved period | Low to Medium | High | Amazon S3 Lifecycle configuration plus a documented retention review |
 
-## 6. Governance Summary
+## 6. Evidence still required
 
-The project embeds governance as a design concern rather than a final document. Access is controlled, sensitive data is classified, records are validated before storage, retention periods are defined, and alerts support operational accountability.
+Verify deployed access controls, encryption, audit logs, retention and deletion behavior. Risk controls above are design commitments; this repository is not evidence of legal compliance.

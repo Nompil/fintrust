@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900">
+<rect x="0" y="0" width="1440" height="900" fill="#f8fafc" stroke="#f8fafc"/>
+<rect x="0" y="0" width="1440" height="112" fill="#182c45" stroke="#182c45"/>
+<text x="40" y="48" font-family="Arial" font-size="28" fill="#ffffff" font-weight="700">03 / PostgreSQL entity relationship diagram</text>
+<text x="40" y="81" font-family="Arial" font-size="16" fill="#c9d9e7" font-weight="400">Schema: sql/schema.sql  |  All attributes shown  |  PK primary key, FK foreign key, UK unique  |  ? nullable; others NOT NULL</text>
+<rect x="40" y="160" width="390" height="175" fill="#ffffff" stroke="#cbd5e1"/>
+<rect x="40" y="160" width="390" height="40" fill="#182c45" stroke="#182c45"/>
+<text x="54" y="187" font-family="Arial" font-size="19" fill="#ffffff" font-weight="700">customers</text>
+<text x="54" y="222" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">PK  customer_id : UUID</text>
+<text x="54" y="248" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">full_name : VARCHAR(150)</text>
+<text x="54" y="274" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">UK  id_number : VARCHAR(20)</text>
+<text x="54" y="300" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">kyc_status : VARCHAR(20)</text>
+<text x="54" y="326" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">created_at : TIMESTAMPTZ</text>
+<rect x="525" y="160" width="390" height="201" fill="#ffffff" stroke="#cbd5e1"/>
+<rect x="525" y="160" width="390" height="40" fill="#182c45" stroke="#182c45"/>
+<text x="539" y="187" font-family="Arial" font-size="19" fill="#ffffff" font-weight="700">accounts</text>
+<text x="539" y="222" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">PK  account_id : UUID</text>
+<text x="539" y="248" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">FK  customer_id : UUID</text>
+<text x="539" y="274" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">account_type : VARCHAR(30)</text>
+<text x="539" y="300" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">balance : NUMERIC(15,2)</text>
+<text x="539" y="326" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">status : VARCHAR(20)</text>
+<text x="539" y="352" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">opened_at : TIMESTAMPTZ</text>
+<rect x="1010" y="160" width="390" height="279" fill="#ffffff" stroke="#cbd5e1"/>
+<rect x="1010" y="160" width="390" height="40" fill="#182c45" stroke="#182c45"/>
+<text x="1024" y="187" font-family="Arial" font-size="19" fill="#ffffff" font-weight="700">transactions</text>
+<text x="1024" y="222" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">PK  tx_id : UUID</text>
+<text x="1024" y="248" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">FK  account_id : UUID</text>
+<text x="1024" y="274" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">amount : NUMERIC(15,2)</text>
+<text x="1024" y="300" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">currency : CHAR(3)</text>
+<text x="1024" y="326" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">merchant : VARCHAR(200) ?</text>
+<text x="1024" y="352" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">tx_date : TIMESTAMPTZ</text>
+<text x="1024" y="378" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">tx_type : VARCHAR(30)</text>
+<text x="1024" y="404" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">cross_border : BOOLEAN</text>
+<text x="1024" y="430" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">raw_file : VARCHAR(200)</text>
+<rect x="525" y="520" width="390" height="175" fill="#ffffff" stroke="#cbd5e1"/>
+<rect x="525" y="520" width="390" height="40" fill="#182c45" stroke="#182c45"/>
+<text x="539" y="547" font-family="Arial" font-size="19" fill="#ffffff" font-weight="700">risk_events</text>
+<text x="539" y="582" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">PK  risk_event_id : BIGSERIAL</text>
+<text x="539" y="608" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">FK  tx_id : UUID</text>
+<text x="539" y="634" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">risk_score : INTEGER</text>
+<text x="539" y="660" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">reason : VARCHAR(255)</text>
+<text x="539" y="686" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">created_at : TIMESTAMPTZ</text>
+<rect x="40" y="520" width="390" height="175" fill="#ffffff" stroke="#cbd5e1"/>
+<rect x="40" y="520" width="390" height="40" fill="#182c45" stroke="#182c45"/>
+<text x="54" y="547" font-family="Arial" font-size="19" fill="#ffffff" font-weight="700">alerts</text>
+<text x="54" y="582" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">PK  alert_id : BIGSERIAL</text>
+<text x="54" y="608" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">FK  risk_event_id : BIGINT</text>
+<text x="54" y="634" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">severity : VARCHAR(20)</text>
+<text x="54" y="660" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">message : TEXT</text>
+<text x="54" y="686" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">sent_at : TIMESTAMPTZ</text>
+<polyline points="430,240 525,240" fill="none" stroke="#537086" stroke-width="1.6"/>
+<text x="440" y="231" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">1</text>
+<text x="487" y="231" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">0..*</text>
+<polyline points="915,240 1010,240" fill="none" stroke="#537086" stroke-width="1.6"/>
+<text x="925" y="231" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">1</text>
+<text x="972" y="231" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">0..*</text>
+<polyline points="1205,439 1205,601 915,601" fill="none" stroke="#537086" stroke-width="1.6"/>
+<text x="1220" y="471" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">1</text>
+<text x="927" y="591" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">0..*</text>
+<polyline points="525,601 430,601" fill="none" stroke="#537086" stroke-width="1.6"/>
+<text x="503" y="591" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">1</text>
+<text x="441" y="591" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">0..*</text>
+<text x="990" y="670" font-family="Arial" font-size="16" fill="#182c45" font-weight="700">DynamoDB is a separate store</text>
+<text x="990" y="698" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">risk_scores: account_id + score_date</text>
+<text x="990" y="724" font-family="Arial" font-size="14" fill="#182c45" font-weight="400">No relational FK enforced across stores</text>
+<text x="40" y="786" font-family="Arial" font-size="15" fill="#182c45" font-weight="400">Constraints: amount &gt; 0; risk_score 0-100; KYC, account type, currency and transaction type allowlists.</text>
+<text x="40" y="812" font-family="Arial" font-size="15" fill="#182c45" font-weight="400">Customer/account deletes are restricted. Each child has exactly one parent; a parent may have zero or many children.</text>
+<text x="40" y="866" font-family="Arial" font-size="13" fill="#182c45" font-weight="400">FINTRUST  |  30 September 2026  |  Synthetic data only</text>
+<text x="1220" y="866" font-family="Arial" font-size="13" fill="#182c45" font-weight="400">DESIGN  /  03</text></svg>

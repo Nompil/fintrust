@@ -20,3 +20,8 @@ dist/
 *.pfx
 *.tfstate
 .aws-sam/
+
+# Local document render checks
+tmp/
+output/local/
+test-results/

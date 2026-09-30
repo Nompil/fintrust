@@ -1,5 +1,7 @@
 # FinTrust Entity Relationship Diagram
 
+Presentation exports: [ERD SVG](diagrams/erd.svg), [editable draw.io](diagrams/fintrust.drawio), and [PDF, page 3](../output/pdf/fintrust_architecture_and_erd.pdf).
+
 This ERD matches `sql/schema.sql`. UUIDs identify business entities; transaction amounts use fixed-precision numeric types; the foreign keys preserve ledger history.
 
 ```mermaid

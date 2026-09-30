@@ -1,0 +1,3 @@
+# Preserve document and image bytes across Windows/Linux checkouts.
+*.pdf binary
+*.png binary

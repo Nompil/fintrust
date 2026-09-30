@@ -59,4 +59,5 @@ def test_process_csv_loads_good_rows_and_quarantines_bad_rows(monkeypatch):
         "quarantine_rate_percent": 50.0,
     }
     assert len(captured["rows"]) == 1
-    assert captured["quarantine"]["Key"] == "quarantine/demo.csv.jsonl"
+    assert captured["quarantine"]["Key"].startswith("quarantine/")
+    assert captured["quarantine"]["Key"].endswith(".jsonl")

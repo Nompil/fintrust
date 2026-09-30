@@ -2,11 +2,11 @@
 
 ## 1. Role Design
 
-The system uses least-privilege execution roles for each Lambda function. This keeps the solution safer and easier to defend during architecture review.
+The scripts define separate execution roles. This matrix describes code, not verified deployed permissions. KMS permissions/key policies and Lambda VPC permissions are still missing.
 
 | Lambda Function | Purpose | Current script permissions | Notes |
 |---|---|---|---|
-| Ingest Lambda | Read, validate, and persist CSV rows | S3 `GetObject` on `raw/*`; S3 `PutObject` on `quarantine/*`; SSM `GetParameter` on the four DB parameters; SQS `SendMessage` on the ingest DLQ; scoped CloudWatch Logs writes | The current Day 3 implementation writes directly to RDS. The SQS FIFO scoring path is a later phase. |
+| Ingest Lambda | Read, validate, and persist CSV rows | S3 `GetObject`/`GetObjectVersion` on `raw/*`; S3 `PutObject` on `quarantine/*`; SSM `GetParameter` on the four DB parameters; SQS `SendMessage` on the ingest DLQ; scoped CloudWatch Logs writes | The current Day 3 implementation writes directly to RDS. The SQS FIFO scoring path is a later phase. |
 | Score Lambda | Evaluate transaction risk | SQS receive/delete/attributes on the configured scoring queue; DynamoDB read/write on `risk_scores`; scoped SSM and Logs | The scoring function is not yet implemented. |
 | Alert Lambda | Email compliance users | SES send actions on account SES identities; scoped Logs | SES sandbox and verified recipients still need setup. |
 | Query Lambda | Read transactions and insights | DynamoDB `GetItem`/`Query`; scoped SSM and Logs | The local API is read-only. PostgreSQL access is currently credential-based; least-privilege SQL grants and deployed API Gateway AWS_IAM policies still need verification. |
@@ -17,7 +17,7 @@ The system uses least-privilege execution roles for each Lambda function. This k
 - No wildcard * actions in production roles.
 - S3, SQS, DynamoDB, SSM, SES, and log permissions are scoped to named resources where supported.
 - Bucket-specific and table-specific access is enforced.
-- The database is not public.
+- Deployment requirement: the database must not be public.
 
 The current SSM design uses a shared application database credential. Separate read/write PostgreSQL roles should be created and granted only the SQL privileges each Lambda needs before production-style deployment. IAM permissions alone do not make a PostgreSQL user read-only.
 

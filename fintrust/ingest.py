@@ -3,8 +3,7 @@ import io
 import json
 import logging
 import uuid
-from datetime import datetime, timezone
-from decimal import Decimal, InvalidOperation
+from decimal import Decimal
 from time import perf_counter
 from typing import Any
 from urllib.parse import unquote_plus
@@ -13,13 +12,14 @@ import boto3
 import psycopg2
 
 from .db import get_connection
+from .validators import REQUIRED_COLUMNS, validate_row, parse_transaction_date
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 s3 = boto3.client("s3")
+MAX_FILE_BYTES = 1024 * 1024
+MAX_FILE_ROWS = 5000
 
-REQUIRED_COLUMNS = {"account_id", "amount", "tx_date", "tx_type"}
-ALLOWED_CURRENCIES = {"ZAR", "USD", "EUR", "GBP", "KES"}
 INSERT_TRANSACTION = """
     INSERT INTO transactions
         (tx_id, account_id, amount, currency, merchant, tx_date, tx_type, cross_border, raw_file)
@@ -28,59 +28,20 @@ INSERT_TRANSACTION = """
 """
 
 
-def validate_row(row: dict[str, str]) -> str | None:
-    missing = [column for column in REQUIRED_COLUMNS if not row.get(column, "").strip()]
-    if missing:
-        return f"missing required field(s): {', '.join(sorted(missing))}"
-
-    try:
-        amount = Decimal(row["amount"])
-    except (InvalidOperation, ValueError):
-        return "amount must be numeric"
-    if not amount.is_finite() or amount <= 0:
-        return "amount must be greater than zero"
-
-    currency = row.get("currency", "ZAR").strip().upper() or "ZAR"
-    if currency not in ALLOWED_CURRENCIES:
-        return f"unsupported currency: {currency}"
-
-    if row["tx_type"].strip().lower() not in {"debit", "credit", "transfer", "fee"}:
-        return "unsupported tx_type"
-
-    try:
-        parse_transaction_date(row["tx_date"])
-    except ValueError:
-        return "tx_date must be a valid ISO-8601 date or timestamp"
-
-    try:
-        uuid.UUID(row["account_id"].strip())
-    except ValueError:
-        return "account_id must be a UUID present in the accounts table"
-
-    return None
-
-
-def parse_transaction_date(value: str) -> datetime:
-    parsed = datetime.fromisoformat(value.strip().replace("Z", "+00:00"))
-    if parsed.tzinfo is None:
-        parsed = parsed.replace(tzinfo=timezone.utc)
-    return parsed
-
-
 def transform_row(
     row: dict[str, str],
     raw_file: str,
     source_row: int = 1,
     source_identity: str | None = None,
 ) -> tuple[Any, ...]:
-    currency = row.get("currency", "ZAR").strip().upper() or "ZAR"
-    country = row.get("country", "ZA").strip().upper() or "ZA"
+    currency = (row.get("currency") or "ZAR").strip().upper() or "ZAR"
+    country = (row.get("country") or "ZA").strip().upper() or "ZA"
     return (
         str(uuid.uuid5(uuid.NAMESPACE_URL, f"fintrust:{source_identity or raw_file}:{source_row}")),
         str(uuid.UUID(row["account_id"].strip())),
         Decimal(row["amount"]),
         currency,
-        row.get("merchant", "").strip() or None,
+        (row.get("merchant") or "").strip() or None,
         parse_transaction_date(row["tx_date"]),
         row["tx_type"].strip().lower(),
         country != "ZA",
@@ -101,20 +62,24 @@ def _load_rows(rows: list[tuple[Any, ...]]) -> list[tuple[Any, ...]]:
     except (psycopg2.OperationalError, psycopg2.InterfaceError):
         connection.rollback()
         raise
-    except psycopg2.IntegrityError:
+    except (psycopg2.IntegrityError, psycopg2.DataError):
         connection.rollback()
-        with connection.cursor() as cursor:
-            for index, values in enumerate(rows):
-                savepoint = f"row_{index}"
-                cursor.execute(f"SAVEPOINT {savepoint}")
-                try:
-                    cursor.execute(INSERT_TRANSACTION, values)
-                    cursor.execute(f"RELEASE SAVEPOINT {savepoint}")
-                except psycopg2.IntegrityError as exc:
-                    cursor.execute(f"ROLLBACK TO SAVEPOINT {savepoint}")
-                    cursor.execute(f"RELEASE SAVEPOINT {savepoint}")
-                    failed_rows.append((values, str(exc)))
-            connection.commit()
+        try:
+            with connection.cursor() as cursor:
+                for index, values in enumerate(rows):
+                    savepoint = f"row_{index}"
+                    cursor.execute(f"SAVEPOINT {savepoint}")
+                    try:
+                        cursor.execute(INSERT_TRANSACTION, values)
+                        cursor.execute(f"RELEASE SAVEPOINT {savepoint}")
+                    except (psycopg2.IntegrityError, psycopg2.DataError) as exc:
+                        cursor.execute(f"ROLLBACK TO SAVEPOINT {savepoint}")
+                        cursor.execute(f"RELEASE SAVEPOINT {savepoint}")
+                        failed_rows.append((values, type(exc).__name__))
+                connection.commit()
+        except Exception:
+            connection.rollback()
+            raise
     except psycopg2.Error:
         connection.rollback()
         raise
@@ -132,7 +97,11 @@ def process_csv(
     raw_text: str,
     source_identity: str | None = None,
 ) -> dict[str, int]:
+    if len(raw_text.encode("utf-8")) > MAX_FILE_BYTES:
+        raise ValueError("CSV exceeds the 1 MiB file limit")
     reader = csv.DictReader(io.StringIO(raw_text))
+    if reader.fieldnames and len(reader.fieldnames) != len(set(reader.fieldnames)):
+        raise ValueError("CSV contains duplicate column names")
     headers = set(reader.fieldnames or [])
     missing_headers = sorted(REQUIRED_COLUMNS - headers)
     if missing_headers:
@@ -141,9 +110,12 @@ def process_csv(
     valid_rows: list[tuple[Any, ...]] = []
     quarantine_rows: list[dict[str, Any]] = []
     source_rows: dict[str, dict[str, str]] = {}
+    source_lines: dict[str, int] = {}
     rows_received = 0
     for row_number, row in enumerate(reader, start=2):
         rows_received += 1
+        if rows_received > MAX_FILE_ROWS:
+            raise ValueError("CSV exceeds the 5000-row limit; no rows from this file were loaded")
         error = validate_row(row)
         if error:
             quarantine_rows.append({"source_row": row_number, "error": error, "record": row})
@@ -151,11 +123,12 @@ def process_csv(
         values = transform_row(row, key, row_number, source_identity)
         valid_rows.append(values)
         source_rows[values[0]] = row
+        source_lines[values[0]] = row_number
 
     failed_rows = _load_rows(valid_rows)
     for values, error in failed_rows:
         quarantine_rows.append({
-            "source_row": None,
+            "source_row": source_lines.get(values[0]),
             "error": f"database constraint rejected row: {error}",
             "tx_id": values[0],
             "account_id": values[1],
@@ -163,7 +136,8 @@ def process_csv(
         })
 
     if quarantine_rows:
-        quarantine_key = f"quarantine/{key.rsplit('/', 1)[-1]}.jsonl"
+        source_id = uuid.uuid5(uuid.NAMESPACE_URL, source_identity or f"{bucket}:{key}")
+        quarantine_key = f"quarantine/{source_id}.jsonl"
         body = "".join(json.dumps(item, default=str) + "\n" for item in quarantine_rows)
         s3.put_object(Bucket=bucket, Key=quarantine_key, Body=body.encode("utf-8"))
 
@@ -178,19 +152,25 @@ def process_csv(
     }
 
 
-def lambda_handler(event, context):
+def _process_record(record):
     started = perf_counter()
-    record = event["Records"][0]
     bucket = record["s3"]["bucket"]["name"]
     key = unquote_plus(record["s3"]["object"]["key"])
     encoded_version_id = record["s3"]["object"].get("versionId")
-    version_id = unquote_plus(encoded_version_id) if encoded_version_id else None
+    version_id = encoded_version_id
     request = {"Bucket": bucket, "Key": key}
     if version_id:
         request["VersionId"] = version_id
     try:
         response = s3.get_object(**request)
-        raw_text = response["Body"].read().decode("utf-8-sig")
+        body = response["Body"]
+        try:
+            raw_bytes = body.read(MAX_FILE_BYTES + 1)
+        finally:
+            body.close()
+        if len(raw_bytes) > MAX_FILE_BYTES:
+            raise ValueError("CSV exceeds the 1 MiB file limit")
+        raw_text = raw_bytes.decode("utf-8-sig")
         source_identity = f"{bucket}:{key}:{version_id or 'unversioned'}"
         counts = process_csv(bucket, key, raw_text, source_identity)
         duration_ms = round((perf_counter() - started) * 1000, 2)
@@ -210,3 +190,13 @@ def lambda_handler(event, context):
             "error_type": type(error).__name__,
         }))
         raise
+
+
+def lambda_handler(event, context):
+    records = event.get("Records", [])
+    if not records:
+        raise ValueError("S3 event must contain at least one record")
+    results = [_process_record(record) for record in records]
+    if len(results) == 1:
+        return results[0]
+    return {"statusCode": 200, "files_processed": len(results), "results": results}

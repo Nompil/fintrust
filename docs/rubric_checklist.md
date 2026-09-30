@@ -1,5 +1,9 @@
 # FinTrust Capstone Submission Checklist
 
+The eight numbered criteria total 100 points: Cloud 20, SQL 15, Python 15, Testing 10, Governance 10, Documentation 10, Technical demo 10, Business presentation 10. The source's 70/30 section headings conflict with this 80/20 split.
+
+Current milestone coverage and evidence gaps: [requirements review](../project-reference/requirements_day1_day3.md).
+
 ## 1. Build and portfolio deliverables
 
 The following items should be present in the repository before Week 14 submission:
@@ -57,7 +61,7 @@ The following items should be present in the repository before Week 14 submissio
 
 ## 3. Presentation readiness
 
-Before the live demo, ensure you can explain:
+The live demonstration covers:
 
 1. Business problem and stakeholder value
 2. Why each AWS service was selected
@@ -68,7 +72,7 @@ Before the live demo, ensure you can explain:
 
 ## 4. Suggested evidence pack
 
-Collect these screenshots before submission:
+Required submission screenshots:
 - Lambda list
 - RDS instance summary
 - API Gateway stage
@@ -76,6 +80,6 @@ Collect these screenshots before submission:
 - GitHub Actions green run
 - Postman or curl result for GET /transactions and POST /upload
 
-## 5. Final presentation note
+## 5. Presentation evidence
 
-The system is not only a technical build; it is a business control platform. The key to a strong presentation is to explain the system in terms of risk reduction, compliance, and operational trust, not only code and infrastructure.
+Presentation evidence identifies the purpose of each demonstrated control, distinguishes proposed benefits and unfinished features, and supports performance and cost claims with measured results.

@@ -14,7 +14,7 @@ The S3 trigger invokes Lambda asynchronously. `infrastructure/sqs/configure_inge
 
 ## Metrics and Alarms
 
-Every successful invocation emits one JSON log event containing `rows_received`, `rows_valid`, `rows_quarantined`, `quarantine_rate_percent`, `bucket`, `s3_key`, and `duration_ms`. Failed invocations emit an `ingest_failed` JSON event and are re-raised.
+Each successfully processed source file emits one JSON log event containing `rows_received`, `rows_valid`, `rows_quarantined`, `quarantine_rate_percent`, `bucket`, `s3_key`, and `duration_ms`. Failed invocations emit an `ingest_failed` JSON event and are re-raised.
 
 `infrastructure/monitoring/configure_ingest_monitoring.py` creates:
 
@@ -35,3 +35,5 @@ After the underlying dependency is healthy, inspect DLQ event bodies and CloudWa
 3. Temporarily test with an unavailable database only in a controlled test environment; verify the invocation is retried and eventually appears in the DLQ.
 4. Confirm the quarantine-rate and DLQ alarms enter ALARM for their respective test cases.
 5. Restore dependencies, replay the DLQ message, and verify the transaction count does not increase for rows already committed.
+
+`rows_valid` counts accepted rows, including rows already present on replay; it is not a count of newly inserted records. Quarantine keys derive from source identity/version to avoid collisions between files with the same basename. Multiple event records are processed sequentially; a later failure retries the event, so earlier files rely on idempotent inserts.

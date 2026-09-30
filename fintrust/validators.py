@@ -1,67 +1,81 @@
+"""Shared CSV validation; scoring rules remain an unapproved prototype."""
+from datetime import datetime, timezone
 from decimal import Decimal, InvalidOperation
+import uuid
+
+REQUIRED_COLUMNS = {"account_id", "amount", "tx_date", "tx_type"}
+ALLOWED_CURRENCIES = {"ZAR", "USD", "EUR", "GBP", "KES"}
 
 
-ALLOWED_CHANNELS = {"online", "branch", "atm", "mobile", "card"}
-ALLOWED_TYPES = {"debit", "credit", "transfer", "withdrawal", "payment"}
-ALLOWED_CURRENCIES = {"ZAR", "USD", "EUR"}
+def validate_row(row: dict[str, str]) -> str | None:
+    if None in row:
+        return "row has more values than the CSV header"
+    missing = [column for column in REQUIRED_COLUMNS if not (row.get(column) or "").strip()]
+    if missing:
+        return f"missing required field(s): {', '.join(sorted(missing))}"
+
+    try:
+        amount = Decimal(row["amount"])
+    except (InvalidOperation, ValueError):
+        return "amount must be numeric"
+    if not amount.is_finite() or amount <= 0:
+        return "amount must be greater than zero"
+    if amount >= Decimal("10000000000000"):
+        return "amount exceeds NUMERIC(15,2) capacity"
+    if amount != amount.quantize(Decimal("0.01")):
+        return "amount must have at most two decimal places"
+
+    currency = (row.get("currency") or "ZAR").strip().upper() or "ZAR"
+    if currency not in ALLOWED_CURRENCIES:
+        return f"unsupported currency: {currency}"
+
+    if row["tx_type"].strip().lower() not in {"debit", "credit", "transfer", "fee"}:
+        return "unsupported tx_type"
+
+    try:
+        parse_transaction_date(row["tx_date"])
+    except ValueError:
+        return "tx_date must be a valid ISO-8601 date or timestamp"
+
+    try:
+        uuid.UUID(row["account_id"].strip())
+    except ValueError:
+        return "account_id must be a UUID present in the accounts table"
+
+    return None
+
+
+def parse_transaction_date(value: str) -> datetime:
+    parsed = datetime.fromisoformat(value.strip().replace("Z", "+00:00"))
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed
 
 
 def validate_transaction_record(record: dict) -> tuple[bool, str | None]:
-    required = [
-        "account_id",
-        "transaction_id",
-        "tx_date",
-        "amount",
-        "transaction_type",
-        "channel",
-    ]
-
-    for field in required:
-        if record.get(field) in (None, ""):
-            return False, f"Missing required field: {field}"
-
-    try:
-        amount = Decimal(str(record["amount"]))
-    except (InvalidOperation, TypeError, ValueError):
-        return False, "amount must be numeric"
-
-    if amount <= 0:
-        return False, "amount must be greater than zero"
-
-    if record["transaction_type"].lower() not in ALLOWED_TYPES:
-        return False, "invalid transaction_type"
-
-    if record["channel"].lower() not in ALLOWED_CHANNELS:
-        return False, "invalid channel"
-
-    if record.get("currency", "ZAR").upper() not in ALLOWED_CURRENCIES:
-        return False, "invalid currency code"
-
-    if len(str(record["account_id"]).strip()) < 3:
-        return False, "account_id too short"
-
-    return True, None
+    error = validate_row(record)
+    return error is None, error
 
 
 def compute_risk_score(record: dict) -> int:
     score = 0
     amount = Decimal(str(record.get("amount", "0")))
 
+    if not amount.is_finite() or amount <= 0:
+        raise ValueError("amount must be finite and positive")
+
     if amount > Decimal("50000"):
         score += 30
     if amount > Decimal("200000"):
         score += 25
 
-    if str(record.get("transaction_type", "")).lower() in {"withdrawal", "transfer"}:
+    if str(record.get("tx_type", "")).lower() in {"withdrawal", "transfer"}:
         score += 20
 
-    if str(record.get("channel", "")).lower() in {"online", "mobile"}:
-        score += 10
-
-    if str(record.get("country", "ZA")).upper() != "ZA":
+    if record.get("cross_border", False):
         score += 15
 
-    if str(record.get("merchant_name", "")).lower().find("highrisk") >= 0:
+    if str(record.get("merchant", "")).lower().find("highrisk") >= 0:
         score += 20
 
     return min(score, 100)

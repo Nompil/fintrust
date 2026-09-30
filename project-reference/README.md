@@ -1,28 +1,12 @@
-# FinTrust Project Documents
+# Project reference
 
-Use this folder for project status, local setup, and stakeholder presentation references. Technical design and implementation notes remain in `../docs/`.
+Use these four files for daily work:
 
-## Project status
+1. [Requirements explained](requirements_day1_day3.md) - scope, course conflicts and deliverables.
+2. [Step-by-step learning guide](learning_guide.md) - database setup, commands, expected outputs, concepts and rehearsal.
+3. [Daily progress](daily_log.md) - completed work, verification and your own practice results.
+4. [Upcoming features](upcoming_features.md) - remaining local and AWS work.
 
-- [Project handoff](HANDOFF.md): current state, verified evidence, next steps, and continuation notes.
-- [Component guide](component_guide.md): responsibilities, live data flow, failure behavior, and implementation status.
-- [Completed work](completed_work.md): implementation and local verification evidence to date.
-- [Remaining work](remaining_work.md): unimplemented, undeployed, and submission-evidence tasks through 15 October.
-- [Local software setup](local_software_setup.md): what is installed, what to install, and local test commands.
+The primary technical reference is the [system design and SDLC record](../docs/system_design.md), also available as a [complete PDF](../output/pdf/fintrust_system_documentation.pdf). Detailed implementation references remain in `docs/`: [architecture](../docs/architecture.md), [ERD](../docs/erd.md), [API](../docs/api_design.md), [IAM](../docs/iam_role_matrix.md), [governance](../docs/data_governance.md), [resilience](../docs/day3_resilience.md) and [rubric checklist](../docs/rubric_checklist.md).
 
-## Design and technical documentation
-
-- [Architecture](../docs/architecture.md)
-- [Entity relationship diagram and data dictionary](../docs/erd.md)
-- [API design](../docs/api_design.md)
-- [IAM role matrix](../docs/iam_role_matrix.md)
-- [Data governance and POPIA](../docs/data_governance.md)
-- [Day 3 resilience and monitoring](../docs/day3_resilience.md)
-- [Rubric checklist](../docs/rubric_checklist.md)
-
-## Presentation material
-
-- [3-minute live demo script and panel Q&A](live_demo_script.md)
-- [Stakeholder presentation notes](presentation_notes.md)
-
-The demo and presentation documents describe the intended fully deployed experience. Update them and use only the parts evidenced by the actual AWS deployment before presenting.
+Diagrams: [PDF](../output/pdf/fintrust_architecture_and_erd.pdf) and [editable draw.io source](../docs/diagrams/fintrust.drawio).

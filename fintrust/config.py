@@ -39,6 +39,8 @@ def load_settings() -> dict:
         if environment_value:
             settings[setting] = environment_value
             continue
+        if os.getenv("FINTRUST_MODE") == "local":
+            raise RuntimeError(f"Local database setting {setting.upper()} is missing; run py tools/local.py setup")
         response = ssm.get_parameter(Name=parameter, WithDecryption=True)
         settings[setting] = response["Parameter"]["Value"]
     return settings

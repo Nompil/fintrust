@@ -20,7 +20,7 @@ def test_get_transactions_uses_schema_columns_and_bounded_parameters(monkeypatch
     assert query.get_transactions(ACCOUNT_ID, from_dt, to_dt, 900) == []
     assert "tx_id::text" in captured["statement"]
     assert "risk_score" not in captured["statement"]
-    assert captured["parameters"] == (ACCOUNT_ID, from_dt, to_dt, 500)
+    assert captured["parameters"] == (ACCOUNT_ID, from_dt, to_dt, 500, 0)
 
 
 def test_get_insights_uses_account_date_key_and_removes_ttl(monkeypatch):

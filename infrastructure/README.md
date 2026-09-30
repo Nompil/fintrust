@@ -4,6 +4,8 @@ These scripts create AWS resources when explicitly run. Do not run them until th
 
 ## Prerequisites
 
+This is an incomplete provisioning sequence. Before deployment, add the Day 1 customer-managed KMS configuration, separate access-log bucket, private VPC/service access, SQL grants and required Lambda VPC permissions. See `project-reference/requirements_day1_day3.md`. The current S3 script alone does not satisfy the Day 1 security checklist.
+
 - Python 3.11 (use the same runtime targeted by the Lambda functions)
 - Install dependencies from the repository root: `python -m pip install -r requirements.txt`
 - AWS CLI credentials configured for a non-production learning account

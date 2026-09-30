@@ -16,12 +16,13 @@ def test_transactions_requires_account_id():
 def test_transactions_returns_filtered_data(monkeypatch):
     captured = {}
 
-    def fake_get_transactions(account_id, from_dt, to_dt, limit):
+    def fake_get_transactions(account_id, from_dt, to_dt, limit, offset):
         captured.update({
             "account_id": account_id,
             "from_dt": from_dt,
             "to_dt": to_dt,
             "limit": limit,
+            "offset": offset,
         })
         return [{
             "tx_id": "tx-1",
@@ -37,7 +38,7 @@ def test_transactions_returns_filtered_data(monkeypatch):
     )
 
     assert response.status_code == 200
-    assert response.get_json()["meta"] == {"count": 1, "limit": 500}
+    assert response.get_json()["meta"] == {"count": 1, "limit": 500, "offset": 0}
     assert response.get_json()["data"][0]["tx_date"] == "2026-09-28T00:00:00+00:00"
     assert captured["account_id"] == ACCOUNT_ID
     assert captured["from_dt"].tzinfo is not None

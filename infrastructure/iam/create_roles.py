@@ -79,8 +79,10 @@ def create_roles() -> None:
             "fintrust-lambda-ingest-role",
             "fintrust-ingest",
             [
-                {"Effect": "Allow", "Action": ["s3:GetObject", "s3:PutObject"],
-                 "Resource": [f"arn:aws:s3:::{bucket}/raw/*", f"arn:aws:s3:::{bucket}/quarantine/*"]},
+                {"Effect": "Allow", "Action": ["s3:GetObject", "s3:GetObjectVersion"],
+                 "Resource": f"arn:aws:s3:::{bucket}/raw/*"},
+                {"Effect": "Allow", "Action": ["s3:PutObject"],
+                 "Resource": f"arn:aws:s3:::{bucket}/quarantine/*"},
                 {"Effect": "Allow", "Action": ["ssm:GetParameter"], "Resource": params_arns},
                 {"Effect": "Allow", "Action": ["sqs:SendMessage"], "Resource": ingest_dlq_arn},
             ],
