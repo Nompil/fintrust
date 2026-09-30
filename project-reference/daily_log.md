@@ -157,3 +157,11 @@ The learner confirmed setup/check succeeded: fintrust_local connects as fintrust
 - Automated verification: 52 tests passed with the separate PostgreSQL test database. Live HTTP checks returned expected 200/400/404/405 codes. Ten serial local transaction requests measured 75.08 ms median and 115.42 ms maximum on the 200-transaction practice dataset; this is not a cloud benchmark.
 - Added JUnit CI artifacts and a manual OIDC API-delivery workflow. Remote CI/CD remains unexecuted. Browser automation was unavailable; visual dashboard acceptance remains a learner exercise.
 - Local commits are now authorised. No AWS provisioning or remote push was performed. Account plan, credit balance/expiry and a usable AWS profile remain required before a cost-reviewed deployment.
+
+## 2026-09-30 - Frontend usability revision
+
+- Replaced the sidebar layout with compact top navigation, a navy activity summary, restrained green accents and a responsive banking-style layout inspired by supplied visual references.
+- Simplified visible labels, shortened account selectors while retaining the complete account reference, added readable dates, clear-date controls and start/end validation.
+- Added chart scale labels and an accessible data-table alternative, plain-language upload results, connection error guidance and a collapsible explanation of demonstration scores.
+- The local demonstration remains without authentication. Secure identity and account-level authorization are required before online use with real customer information; no cosmetic login is presented as security.
+- Verification: 52 tests passed including PostgreSQL integration checks. No browser automation surface is available in this environment; visual and keyboard acceptance remain pending in the learner's browser.
