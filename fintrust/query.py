@@ -36,12 +36,13 @@ def get_transactions(
     return run_query(sql, tuple(params))
 
 
-def get_insights(account_id: str, score_date: date | None = None) -> dict[str, Any] | None:
+def get_insights(account_id: str, score_date: date | None = None, *, transaction_id: str | None = None) -> dict[str, Any] | None:
     account_id = str(UUID(account_id))
-    key = {
-        "account_id": account_id,
-        "score_date": (score_date or date.today()).isoformat(),
-    }
+    # Transaction projections use TX#UUID; old daily summaries stay addressable.
+    if transaction_id and score_date:
+        raise ValueError("transaction_id and date cannot be combined")
+    key = {"account_id": account_id,
+           "score_date": "TX#" + str(UUID(transaction_id)) if transaction_id else (score_date or date.today()).isoformat()}
     item = get_item(os.getenv("DYNAMODB_TABLE", "risk_scores"), key)
     if item:
         item.pop("ttl", None)
@@ -64,3 +65,40 @@ def get_overview() -> dict:
     totals = run_query("SELECT currency, count(*) AS transactions, sum(amount)::text AS gross_amount FROM transactions GROUP BY currency ORDER BY currency")
     trend = run_query("SELECT (tx_date AT TIME ZONE 'UTC')::date::text AS day, count(*) AS transactions FROM transactions GROUP BY 1 ORDER BY 1")
     return {"counts": counts, "totals_by_currency": totals, "daily_transactions": trend}
+
+
+def get_transaction_page(account_id, from_dt=None, to_dt=None, limit=50, cursor=None):
+    """Count and page share one PostgreSQL statement snapshot."""
+    from .pagination import fingerprint, decode_cursor, encode_cursor
+    scope = fingerprint(account_id, from_dt, to_dt, limit)
+    clauses, params = ["account_id = %s"], [account_id]
+    for value, operator in ((from_dt, ">="), (to_dt, "<=")):
+        if value:
+            clauses.append(f"tx_date {operator} %s")
+            params.append(value)
+    boundary, page, boundary_params = "TRUE", 1, []
+    if cursor is not None:
+        when, identifier, page = decode_cursor(cursor, scope)
+        boundary = "(tx_date, tx_id) < (%s, %s::uuid)"
+        boundary_params = [when, identifier]
+    result = run_query(f"""
+        WITH filtered AS NOT MATERIALIZED (
+            SELECT tx_id, account_id, amount, currency, merchant, tx_date, tx_type, cross_border
+            FROM transactions WHERE {' AND '.join(clauses)}
+        ), selected AS (
+            SELECT tx_id::text, account_id::text, amount::text, currency, merchant,
+                   tx_date, tx_type, cross_border
+            FROM filtered WHERE {boundary}
+            ORDER BY tx_date DESC, tx_id DESC LIMIT %s
+        )
+        SELECT (SELECT count(*) FROM filtered) AS total,
+               COALESCE((SELECT json_agg(selected ORDER BY tx_date DESC, tx_id DESC)
+                         FROM selected), '[]'::json) AS rows
+    """, tuple(params + boundary_params + [limit + 1]))[0]
+    rows = result['rows']
+    for row in rows:
+        row['tx_date'] = parse_datetime(row['tx_date'])
+    more = len(rows) > limit
+    rows = rows[:limit]
+    return rows, {'count': len(rows), 'page': page, 'total': result['total'],
+                  'limit': limit, 'next_cursor': encode_cursor(rows[-1], scope, page + 1) if more else None}

@@ -1,5 +1,4 @@
 import json
-import logging
 import os
 from pathlib import Path
 from time import perf_counter
@@ -14,10 +13,11 @@ from flask import Flask, jsonify, request, g, send_from_directory
 from werkzeug.exceptions import HTTPException
 
 from .db import get_connection
-from .query import get_insights, get_transactions, parse_datetime
+from .query import get_insights, get_transactions, get_transaction_page, parse_datetime
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+from src.shared.logger import get_logger
+
+logger = get_logger("api")
 app = Flask("fintrust-api")
 app.config["MAX_CONTENT_LENGTH"] = 1024 * 1024 + 65536
 FRONTEND = Path(__file__).resolve().parents[1] / "frontend"
@@ -42,6 +42,16 @@ def request_context():
 
 @app.after_request
 def finish_request(response):
+    if response.is_json:
+        payload = response.get_json()
+        if isinstance(payload, dict):
+            payload.setdefault("status", "error" if response.status_code >= 400 else "ok")
+            payload.setdefault("data", {"db": payload["db"]} if "db" in payload else None)
+            count = len(payload["data"]) if isinstance(payload["data"], list) else int(payload["data"] is not None)
+            payload.setdefault("meta", {"count": count, "page": 1, "total": count})
+            if response.status_code >= 400:
+                payload.setdefault("request_id", getattr(g, "request_id", ""))
+            response.set_data(app.json.dumps(payload))
     response.headers["X-Request-ID"] = getattr(g, "request_id", "")
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["Cache-Control"] = "no-store"
@@ -160,14 +170,20 @@ def transactions():
             raise ValueError("offset must be a non-negative integer") from error
         if offset < 0:
             raise ValueError("offset must be a non-negative integer")
-        rows = get_transactions(account_id, from_dt, to_dt, limit, offset)
+        if 'offset' in request.args:
+            if 'cursor' in request.args:
+                raise ValueError('cursor and offset cannot be combined')
+            rows = get_transactions(account_id, from_dt, to_dt, limit, offset)
+            meta = {'count': len(rows), 'limit': limit, 'offset': offset}
+        else:
+            rows, meta = get_transaction_page(account_id, from_dt, to_dt, limit, request.args.get('cursor'))
         for row in rows:
             if row.get("tx_date") is not None:
                 row["tx_date"] = row["tx_date"].isoformat()
         return jsonify({
             "status": "ok",
             "data": rows,
-            "meta": {"count": len(rows), "limit": limit, "offset": offset},
+            "meta": meta,
         }), 200
     except ValueError as error:
         return jsonify({"error": str(error)}), 400
@@ -188,9 +204,20 @@ def insights():
             score_date = date.fromisoformat(date_value) if date_value else date.today()
         except ValueError as error:
             raise ValueError("date must use YYYY-MM-DD format") from error
-        item = get_insights(account_id, score_date)
+        transaction_id = request.args.get("transaction_id")
+        if transaction_id is not None:
+            if date_value:
+                raise ValueError("transaction_id and date cannot be combined")
+            try:
+                transaction_id = str(UUID(transaction_id))
+            except ValueError as error:
+                raise ValueError("transaction_id must be a UUID") from error
+            item = get_insights(account_id, transaction_id=transaction_id)
+        else:
+            item = get_insights(account_id, score_date)
         if item is None:
-            return jsonify({"error": "No score found for this account and date"}), 404
+            return jsonify({"error": "No score found for this account and transaction" if transaction_id is not None
+                            else "No score found for this account and date"}), 404
         payload = json.loads(json.dumps({"status": "ok", "data": item}, default=str))
         return jsonify(payload), 200
     except ValueError as error:

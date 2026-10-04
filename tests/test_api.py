@@ -10,7 +10,9 @@ def test_transactions_requires_account_id():
     response = api.app.test_client().get("/v1/transactions")
 
     assert response.status_code == 400
-    assert response.get_json() == {"error": "account_id is required"}
+    assert response.get_json()["error"] == "account_id is required"
+    assert response.json["status"] == "error"
+    assert response.json["request_id"]
 
 
 def test_transactions_returns_filtered_data(monkeypatch):
@@ -33,7 +35,7 @@ def test_transactions_returns_filtered_data(monkeypatch):
 
     monkeypatch.setattr(api, "get_transactions", fake_get_transactions)
     response = api.app.test_client().get(
-        f"/v1/transactions?account_id={ACCOUNT_ID}&limit=1000"
+        f"/v1/transactions?account_id={ACCOUNT_ID}&limit=1000&offset=0"
         "&from=2026-09-01T00:00:00%2B00:00&to=2026-09-30T00:00:00%2B00:00"
     )
 
@@ -50,7 +52,8 @@ def test_insights_returns_404_when_score_is_missing(monkeypatch):
     response = api.app.test_client().get(f"/v1/insights?account_id={ACCOUNT_ID}")
 
     assert response.status_code == 404
-    assert response.get_json() == {"error": "No score found for this account and date"}
+    assert response.get_json()["error"] == "No score found for this account and date"
+    assert response.json["data"] is None
 
 
 def test_insights_serializes_decimal_values(monkeypatch):
@@ -85,6 +88,7 @@ def test_health_returns_degraded_when_database_is_unavailable(monkeypatch):
     response = api.app.test_client().get("/v1/health")
 
     assert response.status_code == 503
-    assert response.get_json() == {"status": "degraded", "db": "error"}
+    assert response.json["status"] == "degraded"
+    assert response.json["data"] == {"db": "error"}
     assert connection.rolled_back is True
     assert connection.closed is True
