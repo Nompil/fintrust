@@ -1,3 +1,5 @@
+> Current verification: [FINAL_VERIFICATION.md](FINAL_VERIFICATION.md). The audit below records the earlier baseline; use the final report for current tests, package evidence and remaining gates.
+
 # Budget-first preparation
 
 ## Dependency review before code changes
