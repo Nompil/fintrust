@@ -1,4 +1,4 @@
-"""Shared CSV validation; scoring rules remain an unapproved prototype."""
+"""CSV admission checks. Risk rules live in fintrust.rules."""
 from datetime import datetime, timezone
 from decimal import Decimal, InvalidOperation
 import uuid
@@ -42,6 +42,20 @@ def validate_row(row: dict[str, str]) -> str | None:
     except ValueError:
         return "account_id must be a UUID present in the accounts table"
 
+    for field in ("transaction_id", "tx_id"):
+        if field in row:
+            try:
+                uuid.UUID((row[field] or "").strip())
+            except (ValueError, AttributeError):
+                return f"{field} must be a UUID"
+    if row.get("transaction_id") and row.get("tx_id"):
+        if uuid.UUID(row["transaction_id"].strip()) != uuid.UUID(row["tx_id"].strip()):
+            return "transaction_id and tx_id disagree"
+    country = (row.get("country") or "ZA").strip().upper()
+    if len(country) != 2 or not country.isascii() or not country.isalpha():
+        return "country must be a two-letter country code"
+    if len((row.get("merchant") or "").strip()) > 200:
+        return "merchant exceeds 200 characters"
     return None
 
 
@@ -55,35 +69,3 @@ def parse_transaction_date(value: str) -> datetime:
 def validate_transaction_record(record: dict) -> tuple[bool, str | None]:
     error = validate_row(record)
     return error is None, error
-
-
-def compute_risk_score(record: dict) -> int:
-    score = 0
-    amount = Decimal(str(record.get("amount", "0")))
-
-    if not amount.is_finite() or amount <= 0:
-        raise ValueError("amount must be finite and positive")
-
-    if amount > Decimal("50000"):
-        score += 30
-    if amount > Decimal("200000"):
-        score += 25
-
-    if str(record.get("tx_type", "")).lower() in {"withdrawal", "transfer"}:
-        score += 20
-
-    if record.get("cross_border", False):
-        score += 15
-
-    if str(record.get("merchant", "")).lower().find("highrisk") >= 0:
-        score += 20
-
-    return min(score, 100)
-
-
-def classify_risk(score: int) -> str:
-    if score >= 70:
-        return "High"
-    if score >= 40:
-        return "Medium"
-    return "Low"

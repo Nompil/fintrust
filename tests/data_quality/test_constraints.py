@@ -157,3 +157,69 @@ def test_dashboard_queries_use_real_postgresql(prepared_database_url, monkeypatc
     assert data["counts"]["transactions"] >= 200
     assert {row["currency"] for row in data["totals_by_currency"]} == {"ZAR", "USD"}
     assert len(client.get("/v1/accounts").get_json()["data"]) == 5
+
+
+@pytest.mark.parametrize('column', ['account_id', 'amount', 'tx_date', 'raw_file'])
+def test_transaction_required_fields(database_connection, column):
+    values = dict(account_id='20000000-0000-4000-8000-000000000001', amount=10,
+                  tx_date='2026-09-30', raw_file='raw/constraints.csv')
+    values[column] = None
+    assert_database_rejects(database_connection, psycopg2.errors.NotNullViolation,
+        "INSERT INTO transactions(account_id, amount, tx_date, raw_file, tx_type) VALUES (%s,%s,%s,%s,'debit')",
+        tuple(values.values()))
+
+
+def test_account_requires_customer(database_connection):
+    assert_database_rejects(database_connection, psycopg2.errors.NotNullViolation,
+        "INSERT INTO accounts(customer_id, account_type) VALUES (NULL, 'savings')", ())
+
+
+def test_zero_amount_rejected(database_connection):
+    assert_database_rejects(database_connection, psycopg2.errors.CheckViolation,
+        "INSERT INTO transactions(account_id,amount,tx_date,tx_type,raw_file) VALUES (%s,0,NOW(),'debit','raw/test.csv')",
+        ('20000000-0000-4000-8000-000000000001',))
+
+
+def test_orphan_transaction_rejected(database_connection):
+    assert_database_rejects(database_connection, psycopg2.errors.ForeignKeyViolation,
+        "INSERT INTO transactions(account_id,amount,tx_date,tx_type,raw_file) VALUES (%s,10,NOW(),'debit','raw/test.csv')",
+        ('ffffffff-ffff-4fff-8fff-ffffffffffff',))
+
+
+def test_cursor_traversal_real_database(prepared_database_url, monkeypatch):
+    from fintrust import db, query
+    monkeypatch.setattr(db, 'get_connection', lambda: psycopg2.connect(prepared_database_url))
+    account = '20000000-0000-4000-8000-000000000001'
+    seen, token, page = [], None, 0
+    while True:
+        rows, meta = query.get_transaction_page(account, limit=7, cursor=token)
+        page += 1
+        assert meta['page'] == page
+        seen.extend(row['tx_id'] for row in rows)
+        token = meta['next_cursor']
+        if token is None:
+            break
+        assert page < 100
+    assert len(seen) == len(set(seen)) == meta['total']
+    empty, meta = query.get_transaction_page('ffffffff-ffff-4fff-8fff-ffffffffffff')
+    assert empty == [] and meta['total'] == 0
+
+
+def test_real_ingestion_retains_source_key(prepared_database_url, monkeypatch):
+    from fintrust import ingest
+    from uuid import uuid4
+    source = 'raw/traceability-' + str(uuid4()) + '.csv'
+    monkeypatch.setattr(ingest, 'get_connection', lambda: psycopg2.connect(prepared_database_url))
+    contents = 'account_id,amount,tx_date,tx_type\n20000000-0000-4000-8000-000000000001,12.34,2026-09-30,debit\n'
+    try:
+        result = ingest.process_csv('test-bucket', source, contents)
+        assert result['rows_valid'] == 1
+        with psycopg2.connect(prepared_database_url) as connection:
+            with connection.cursor() as cursor:
+                cursor.execute('SELECT amount, raw_file FROM transactions WHERE raw_file=%s', (source,))
+                rows = cursor.fetchall()
+                assert len(rows) == 1 and rows[0][1] == source
+    finally:
+        with psycopg2.connect(prepared_database_url) as connection:
+            with connection.cursor() as cursor:
+                cursor.execute('DELETE FROM transactions WHERE raw_file=%s', (source,))

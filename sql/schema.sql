@@ -59,3 +59,21 @@ CREATE INDEX IF NOT EXISTS idx_tx_crossborder
 
 CREATE INDEX IF NOT EXISTS idx_risk_events_tx_date
     ON risk_events (tx_id, created_at DESC);
+
+CREATE INDEX IF NOT EXISTS idx_tx_account_cursor
+    ON transactions (account_id, tx_date DESC, tx_id DESC);
+
+-- Additive Phase 1 upgrade: existing historical alerts remain unverified (UNKNOWN).
+ALTER TABLE transactions ALTER COLUMN raw_file TYPE TEXT;
+ALTER TABLE alerts ALTER COLUMN sent_at DROP NOT NULL;
+ALTER TABLE alerts ALTER COLUMN sent_at DROP DEFAULT;
+ALTER TABLE alerts ADD COLUMN IF NOT EXISTS delivery_key BIGINT UNIQUE;
+ALTER TABLE alerts ADD COLUMN IF NOT EXISTS delivery_state VARCHAR(10) NOT NULL DEFAULT 'UNKNOWN'
+    CHECK (delivery_state IN ('PENDING','SENDING','SENT','FAILED','UNKNOWN'));
+ALTER TABLE alerts ADD COLUMN IF NOT EXISTS provider_message_id TEXT;
+CREATE TABLE IF NOT EXISTS processed_transactions (
+    tx_id UUID PRIMARY KEY REFERENCES transactions(tx_id),
+    fingerprint CHAR(64) NOT NULL,
+    result JSONB NOT NULL,
+    processed_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);

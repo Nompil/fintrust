@@ -1,10 +1,11 @@
-from fintrust.validators import classify_risk, compute_risk_score, validate_transaction_record
+from fintrust.validators import validate_transaction_record
+from fintrust.rules import classify_risk, compute_risk_score
 
 
 def test_validate_transaction_record_accepts_valid_record():
     record = {
         "account_id": "20000000-0000-4000-8000-000000000001",
-        "tx_id": "TXN-010",
+        "tx_id": "30000000-0000-4000-8000-000000000010",
         "tx_date": "2026-09-20",
         "amount": "25000",
         "tx_type": "debit",
@@ -19,7 +20,7 @@ def test_validate_transaction_record_accepts_valid_record():
 def test_validate_transaction_record_rejects_negative_amount():
     record = {
         "account_id": "20000000-0000-4000-8000-000000000001",
-        "tx_id": "TXN-011",
+        "tx_id": "30000000-0000-4000-8000-000000000011",
         "tx_date": "2026-09-20",
         "amount": "-1",
         "tx_type": "debit",
