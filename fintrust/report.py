@@ -7,8 +7,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 import boto3
 from .db import run_query
+from .config import AWS_REGION
 
-s3 = boto3.client("s3")
+s3 = boto3.client("s3", region_name=AWS_REGION)
 SQL_PATH = Path(__file__).resolve().parents[1] / "sql" / "monthly_summary.sql"
 
 

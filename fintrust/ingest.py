@@ -15,13 +15,14 @@ import boto3
 import psycopg2
 
 from .db import get_connection
+from .config import AWS_REGION
 from .validators import REQUIRED_COLUMNS, validate_row, parse_transaction_date
 
 from src.shared.logger import get_logger
 
 logger = get_logger("ingest")
-s3 = boto3.client("s3")
-sqs = boto3.client("sqs")
+s3 = boto3.client("s3", region_name=AWS_REGION)
+sqs = boto3.client("sqs", region_name=AWS_REGION)
 MAX_FILE_BYTES = 1024 * 1024
 MAX_FILE_ROWS = 5000
 

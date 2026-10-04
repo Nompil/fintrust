@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, timezone
 import boto3
 from psycopg2.extras import Json
 from .db import get_connection
+from .config import AWS_REGION
 from .dynamo import put_item, publish_score
 from .jobs import business_fingerprint, high_risk_event, parse_job
 from .rules import ScoringConfig, evaluate
@@ -12,8 +13,8 @@ from .validators import parse_transaction_date
 from src.shared.logger import get_logger
 
 logger = get_logger("scoring")
-lambda_client = boto3.client("lambda")
-s3 = boto3.client("s3")
+lambda_client = boto3.client("lambda", region_name=AWS_REGION)
+s3 = boto3.client("s3", region_name=AWS_REGION)
 
 
 class UnknownAccount(ValueError):

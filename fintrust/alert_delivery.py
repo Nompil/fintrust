@@ -13,9 +13,10 @@ from boto3.dynamodb.types import TypeDeserializer
 from botocore.config import Config
 from botocore.exceptions import ClientError
 from src.shared.logger import get_logger
+from .config import AWS_REGION
 
-dynamodb = boto3.resource("dynamodb")
-ses = boto3.client("ses", config=Config(retries={"total_max_attempts": 1},
+dynamodb = boto3.resource("dynamodb", region_name=AWS_REGION)
+ses = boto3.client("ses", region_name=AWS_REGION, config=Config(retries={"total_max_attempts": 1},
                                       connect_timeout=5, read_timeout=10))
 logger = get_logger("alert")
 

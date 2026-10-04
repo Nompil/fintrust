@@ -10,9 +10,10 @@ import boto3
 from botocore.config import Config
 from botocore.exceptions import ClientError
 from .db import get_connection
+from .config import AWS_REGION
 
 # SDK retries could duplicate a request whose first response was lost.
-ses = boto3.client("ses", config=Config(retries={"total_max_attempts": 1},
+ses = boto3.client("ses", region_name=AWS_REGION, config=Config(retries={"total_max_attempts": 1},
                                       connect_timeout=5, read_timeout=10))
 
 
