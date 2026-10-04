@@ -31,12 +31,13 @@ def test_quarantine_keeps_different_source_versions_separate(monkeypatch):
 
 
 def test_handler_processes_all_records_without_decoding_version_id(monkeypatch):
+    monkeypatch.setenv("TRANSACTION_QUEUE_URL", "https://sqs.example/jobs.fifo")
     requests = []
     def get_object(**kw):
         requests.append(kw)
         return {"Body": io.BytesIO(b"data")}
     monkeypatch.setattr(ingest.s3, "get_object", get_object)
-    monkeypatch.setattr(ingest, "process_csv", lambda *args: {"rows_valid": 1})
+    monkeypatch.setattr(ingest, "process_csv", lambda *args, **kwargs: {"rows_valid": 1})
     record = {"s3": {"bucket": {"name": "bucket"},
         "object": {"key": "raw/a+b.csv", "versionId": "version+id"}}}
     result = ingest.lambda_handler({"Records": [record, record]}, None)
@@ -77,13 +78,13 @@ def test_page_offset_reaches_query(monkeypatch):
     assert seen[0][-2:] == (10, 10)
 
 
-def test_unimplemented_features_do_not_report_success():
-    with pytest.raises(NotImplementedError):
-        alert.send_alert(ACCOUNT, 75, "High")
-    with pytest.raises(NotImplementedError):
-        report.generate_monthly_report()
-    with pytest.raises(NotImplementedError):
-        score.lambda_handler({"Records": [{"body": "{}"}]}, None)
+def test_malformed_events_do_not_report_success():
+    with pytest.raises(ValueError):
+        alert.send_alert({})
+    with pytest.raises(ValueError):
+        report.month_bounds("invalid")
+    assert score.lambda_handler({"Records": [{"messageId": "bad", "body": "{}"}]}, None) == {
+        "batchItemFailures": [{"itemIdentifier": "bad"}]}
 
 
 @pytest.mark.parametrize("amount", ["NaN", "Infinity", "-Infinity"])
