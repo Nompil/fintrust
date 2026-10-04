@@ -1,35 +1,35 @@
+"""Render nonsecret DB parameters; --apply is a separate live operator action."""
+import argparse
+import json
 import os
 
-import boto3
 
-REGION = os.getenv("AWS_REGION", "af-south-1")
-ssm = boto3.client("ssm", region_name=REGION)
+def build_parameters():
+    service = os.environ["FINTRUST_SERVICE"]
+    stage = os.getenv("FINTRUST_STAGE", "dev")
+    if service not in {"scoring", "api", "report"} or stage not in {"dev", "staging", "prod"}:
+        raise ValueError("Invalid service or stage")
+    values = {"host": os.environ["FINTRUST_DB_HOST"], "name": os.getenv("FINTRUST_DB_NAME", "fintrust"),
+              "user": f"fintrust_{service}_{stage}"}
+    if not all(values.values()):
+        raise ValueError("Database host and name cannot be empty")
+    return [{"Name": f"/fintrust/{stage}/{service}/db_{name}", "Value": value,
+             "Type": "String", "Overwrite": True} for name, value in values.items()]
 
 
-def store_parameters() -> None:
-    parameter_values = {
-        "/fintrust/dev/db_host": os.getenv("FINTRUST_DB_HOST"),
-        "/fintrust/dev/db_name": os.getenv("FINTRUST_DB_NAME", "fintrust"),
-        "/fintrust/dev/db_user": os.getenv("FINTRUST_DB_USER"),
-        "/fintrust/dev/db_password": os.getenv("FINTRUST_DB_PASSWORD"),
-    }
-    missing = [name for name, value in parameter_values.items() if not value]
-    if missing:
-        raise RuntimeError(
-            "Set the corresponding FINTRUST_DB_* environment variables before running; "
-            "do not put credentials in source control. Missing: " + ", ".join(missing)
-        )
-
-    for name, value in parameter_values.items():
-        parameter_type = "SecureString" if name.endswith("db_password") else "String"
-        ssm.put_parameter(
-            Name=name,
-            Value=value,
-            Type=parameter_type,
-            Overwrite=True,
-        )
-        print(f"Stored parameter {name} ({parameter_type})")
+def store_parameters():
+    parameters = build_parameters()
+    import boto3
+    ssm = boto3.client("ssm", region_name=os.getenv("AWS_REGION", "af-south-1"))
+    for parameter in parameters:
+        ssm.put_parameter(**parameter)
 
 
 if __name__ == "__main__":
-    store_parameters()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--apply", action="store_true", help="Write to AWS; requires separate deployment approval")
+    args = parser.parse_args()
+    if args.apply:
+        store_parameters()
+    else:
+        print(json.dumps(build_parameters(), indent=2))
