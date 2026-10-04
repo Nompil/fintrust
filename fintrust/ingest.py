@@ -1,9 +1,12 @@
 import csv
 import io
 import json
-import logging
 import uuid
 from decimal import Decimal
+from datetime import datetime, timezone
+import os
+
+from .jobs import business_fingerprint, make_job, transaction_id
 from time import perf_counter
 from typing import Any
 from urllib.parse import unquote_plus
@@ -14,9 +17,11 @@ import psycopg2
 from .db import get_connection
 from .validators import REQUIRED_COLUMNS, validate_row, parse_transaction_date
 
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+from src.shared.logger import get_logger
+
+logger = get_logger("ingest")
 s3 = boto3.client("s3")
+sqs = boto3.client("sqs")
 MAX_FILE_BYTES = 1024 * 1024
 MAX_FILE_ROWS = 5000
 
@@ -37,7 +42,7 @@ def transform_row(
     currency = (row.get("currency") or "ZAR").strip().upper() or "ZAR"
     country = (row.get("country") or "ZA").strip().upper() or "ZA"
     return (
-        str(uuid.uuid5(uuid.NAMESPACE_URL, f"fintrust:{source_identity or raw_file}:{source_row}")),
+        transaction_id(row, source_identity or raw_file, source_row),
         str(uuid.UUID(row["account_id"].strip())),
         Decimal(row["amount"]),
         currency,
@@ -96,10 +101,14 @@ def process_csv(
     key: str,
     raw_text: str,
     source_identity: str | None = None,
+    *, queue_url: str | None = None, version: str | None = None, etag: str | None = None,
+    check_accounts: bool = True,
 ) -> dict[str, int]:
+    # Direct loading is retained only for the existing local teaching workflow.
+    # The S3 Lambda entry point always supplies its required FIFO queue URL.
     if len(raw_text.encode("utf-8")) > MAX_FILE_BYTES:
         raise ValueError("CSV exceeds the 1 MiB file limit")
-    reader = csv.DictReader(io.StringIO(raw_text))
+    reader = csv.DictReader(io.StringIO(raw_text), strict=True)
     if reader.fieldnames and len(reader.fieldnames) != len(set(reader.fieldnames)):
         raise ValueError("CSV contains duplicate column names")
     headers = set(reader.fieldnames or [])
@@ -109,8 +118,9 @@ def process_csv(
 
     valid_rows: list[tuple[Any, ...]] = []
     quarantine_rows: list[dict[str, Any]] = []
-    source_rows: dict[str, dict[str, str]] = {}
-    source_lines: dict[str, int] = {}
+    source_rows = {}
+    source_lines = {}
+    queued_jobs = []
     rows_received = 0
     for row_number, row in enumerate(reader, start=2):
         rows_received += 1
@@ -122,24 +132,70 @@ def process_csv(
             continue
         values = transform_row(row, key, row_number, source_identity)
         valid_rows.append(values)
-        source_rows[values[0]] = row
-        source_lines[values[0]] = row_number
+        source_rows[values] = row
+        source_lines[values] = row_number
+        if queue_url:
+            queued_jobs.append((values, make_job(row, bucket, key,
+                source_identity or f"{bucket}:{key}", row_number, version, etag)))
 
-    failed_rows = _load_rows(valid_rows)
+    if queue_url and check_accounts:
+        # Local compatibility: resolve accounts before publishing.
+        # while unknown business accounts are rejected into quarantine.
+        connection = get_connection()
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT account_id::text FROM accounts WHERE account_id = ANY(%s::uuid[])",
+                               ([v[1] for v in valid_rows],))
+                accounts = {r[0] for r in cursor.fetchall()}
+        except Exception:
+            connection.rollback()
+            raise
+        finally:
+            connection.close()
+        failed_rows = [(v, "unknown account") for v in valid_rows if v[1] not in accounts]
+    elif queue_url:
+        failed_rows = []  # Scoring validates accounts under the ledger lock.
+    else:
+        failed_rows = _load_rows(valid_rows)
     for values, error in failed_rows:
         quarantine_rows.append({
-            "source_row": source_lines.get(values[0]),
+            "source_row": source_lines.get(values),
             "error": f"database constraint rejected row: {error}",
             "tx_id": values[0],
             "account_id": values[1],
-            "record": source_rows.get(values[0]),
+            "record": source_rows.get(values),
         })
 
     if quarantine_rows:
         source_id = uuid.uuid5(uuid.NAMESPACE_URL, source_identity or f"{bucket}:{key}")
         quarantine_key = f"quarantine/{source_id}.jsonl"
+        allowed = {"transaction_id", "tx_id", "account_id", "amount", "currency", "tx_date", "tx_type", "country"}
+        for item in quarantine_rows:
+            item.update(source_bucket=bucket, source_file=key, source_version=version, source_etag=etag,
+                        quarantined_at=datetime.now(timezone.utc).isoformat())
+            item["record"] = {k: v for k, v in (item.get("record") or {}).items() if k in allowed}
         body = "".join(json.dumps(item, default=str) + "\n" for item in quarantine_rows)
-        s3.put_object(Bucket=bucket, Key=quarantine_key, Body=body.encode("utf-8"))
+        s3.put_object(Bucket=os.getenv("QUARANTINE_BUCKET", bucket), Key=quarantine_key,
+                      Body=body.encode("utf-8"), ContentType="application/x-ndjson")
+
+    if queue_url:
+        rejected = {v for v, _ in failed_rows}
+        entries = []
+        for values, job in queued_jobs:
+            if values in rejected:
+                continue
+            # Includes the business UUID and canonical financial fields. Conflicting
+            # reuse of an ID must reach SQL for rejection, not be hidden by FIFO.
+            entries.append({"Id": str(len(entries)), "MessageBody": json.dumps(job),
+                            "MessageGroupId": job["account_id"],
+                            "MessageDeduplicationId": business_fingerprint(job)})
+        for start in range(0, len(entries), 10):
+            batch = entries[start:start + 10]
+            response = sqs.send_message_batch(QueueUrl=queue_url, Entries=batch)
+            # A batch can return HTTP 200 and still reject individual messages.
+            # Fail the S3 invocation; replay safely republishes successful entries.
+            if response.get("Failed") or len(response.get("Successful", [])) != len(batch):
+                raise RuntimeError("FIFO publish batch did not complete")
 
     quarantine_rate_percent = round(
         len(quarantine_rows) / rows_received * 100, 2
@@ -171,8 +227,12 @@ def _process_record(record):
         if len(raw_bytes) > MAX_FILE_BYTES:
             raise ValueError("CSV exceeds the 1 MiB file limit")
         raw_text = raw_bytes.decode("utf-8-sig")
-        source_identity = f"{bucket}:{key}:{version_id or 'unversioned'}"
-        counts = process_csv(bucket, key, raw_text, source_identity)
+        source_identity = f"{bucket}:{key}:{version_id or response.get('ETag') or 'unversioned'}"
+        queue_url = os.environ["TRANSACTION_QUEUE_URL"]
+        if not queue_url.endswith(".fifo"):
+            raise ValueError("TRANSACTION_QUEUE_URL must identify a FIFO queue")
+        counts = process_csv(bucket, key, raw_text, source_identity, queue_url=queue_url,
+                             version=version_id, etag=response.get("ETag"), check_accounts=False)
         duration_ms = round((perf_counter() - started) * 1000, 2)
         logger.info(json.dumps({
             "event": "ingest_complete",
