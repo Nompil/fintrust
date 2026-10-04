@@ -1,51 +1,29 @@
-name: FinTrust CI
+name: FinTrust Linux verification
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
 permissions:
   contents: read
 
-on:
-  push:
-    branches:
-      - "**"
-  pull_request:
-    branches:
-      - "**"
+concurrency:
+  group: linux-verification-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Run pytest
-        run: pytest -q --ignore=tests/data_quality --junitxml=test-results/unit.xml
-
-      - name: Preserve unit test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: unit-test-results
-          path: test-results/unit.xml
-          retention-days: 7
-
-  integration:
-    if: github.ref == 'refs/heads/develop'
-    runs-on: ubuntu-latest
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
     services:
       postgres:
         image: postgres:16
         env:
           POSTGRES_USER: postgres
+          # Disposable CI service only; never used for an application database.
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: fintrust_test
         ports:
@@ -57,27 +35,79 @@ jobs:
           --health-retries 5
     env:
       FINTRUST_TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/fintrust_test
+      AWS_REGION: af-south-1
+      AWS_DEFAULT_REGION: af-south-1
+      AWS_EC2_METADATA_DISABLED: 'true'
+      AWS_ACCESS_KEY_ID: testing
+      AWS_SECRET_ACCESS_KEY: testing
+      AWS_SESSION_TOKEN: testing
     steps:
-      - name: Checkout code
+      - name: Check out source
         uses: actions/checkout@v4
-
-      - name: Set up Python
+        with:
+          persist-credentials: false
+      - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-
-      - name: Install dependencies
+          python-version: '3.12'
+          architecture: x64
+      - name: Install approved test dependencies
+        run: python3.12 -m pip install -r requirements.txt
+      - name: Run full suite with disposable PostgreSQL
+        run: python3.12 -m pytest -q --junitxml=test-results/pytest.xml
+      - name: Build shared Linux runtime
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          mkdir -p build
+          curl --fail --silent --show-error --retry 3 --connect-timeout 15 --max-time 120 \
+            https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem \
+            -o build/global-bundle.pem
+          python3.12 tools/package_lambda.py --ca-bundle build/global-bundle.pem
+      - name: Verify archived handlers and native dependencies
+        run: |
+          set -o pipefail
+          python3.12 tools/verify_lambda_linux.py build/fintrust.zip | tee build/linux-verification.txt
+      - name: Record gate evidence
+        run: |
+          python3.12 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
 
-      - name: Run PostgreSQL constraint integration tests
-        run: pytest tests/data_quality/test_constraints.py -q --junitxml=test-results/postgres.xml
-
-      - name: Preserve database test results
+          manifest = json.loads(Path("build/fintrust.manifest.json").read_text())
+          assert manifest["linux_execution_verified"] is True
+          suites = ET.parse("test-results/pytest.xml").getroot().findall("testsuite")
+          counts = {key: sum(int(s.get(key, 0)) for s in suites)
+                    for key in ("tests", "failures", "errors", "skipped")}
+          assert counts["tests"] > 0 and not any(counts[k] for k in ("failures", "errors", "skipped")), counts
+          evidence = {"commit": os.environ["GITHUB_SHA"], "run_id": os.environ["GITHUB_RUN_ID"],
+                      "run_attempt": os.environ["GITHUB_RUN_ATTEMPT"], "tests": counts,
+                      "package": manifest}
+          Path("build/ci-evidence.json").write_text(json.dumps(evidence, indent=2) + "\n")
+          summary = ("Linux execution verified: TRUE\n\n"
+                     f"{counts['tests']} tests passed; 0 failed; 0 skipped.\n\n"
+                     f"Commit: {evidence['commit']}\n\n"
+                     "Ubuntu verification passed. AWS inventory requires separate authorization.\n")
+          print(summary)
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as output:
+              output.write(summary)
+          PY
+      - name: Preserve test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: postgres-test-results
-          path: test-results/postgres.xml
+          name: fintrust-test-results
+          path: test-results/pytest.xml
+          if-no-files-found: error
+          retention-days: 7
+      - name: Preserve verified package and evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: fintrust-linux-verified
+          path: |
+            build/fintrust.zip
+            build/fintrust.manifest.json
+            build/linux-verification.txt
+            build/ci-evidence.json
+          if-no-files-found: error
           retention-days: 7
