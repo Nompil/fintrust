@@ -8,14 +8,31 @@ import sys
 import tempfile
 import zipfile
 
-from package_lambda import HANDLERS, verify_archive
+try:
+    from .package_lambda import HANDLERS, verify_archive
+except ImportError:
+    from package_lambda import HANDLERS, verify_archive
+
+
+def validate_manifest(manifest, evidence):
+    expected = {**evidence, "runtime": "python3.12", "architecture": "x86_64", "handlers": HANDLERS}
+    for name, value in expected.items():
+        if manifest.get(name) != value:
+            raise ValueError(f"Manifest mismatch: {name}")
 
 
 def verify(path):
-    if platform.system() != "Linux" or sys.version_info[:2] != (3, 12):
-        raise RuntimeError("This verification requires Linux and CPython 3.12")
+    if (platform.system() != "Linux" or sys.version_info[:2] != (3, 12)
+            or platform.python_implementation() != "CPython" or platform.machine() != "x86_64"):
+        raise RuntimeError("This verification requires Linux x86_64 and CPython 3.12")
     path = Path(path).resolve()
     evidence = verify_archive(path)
+    manifest_path = path.with_suffix(".manifest.json")
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    validate_manifest(manifest, evidence)
+    manifest["linux_execution_verified"] = False
+    manifest.pop("linux_verification", None)
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     with tempfile.TemporaryDirectory(prefix="fintrust-import-") as folder:
         with zipfile.ZipFile(path) as archive:
             root = Path(folder).resolve()
@@ -30,16 +47,16 @@ def verify(path):
                            DB_AUTH_MODE="iam", DB_HOST="db.invalid", DB_NAME="fintrust",
                            DB_USER="fintrust_api_dev", FINTRUST_SERVICE="api", FINTRUST_STAGE="dev",
                            DB_SSLROOTCERT=str(root / "certs/global-bundle.pem"))
-        script = "import sys,importlib,socket; sys.path.insert(0, sys.argv[1]); "
-        script += "socket.socket.connect=lambda *a,**k: (_ for _ in ()).throw(RuntimeError('Network disabled')); "
-        script += "handlers=" + repr(list(HANDLERS.values())) + "; "
-        script += "[getattr(importlib.import_module(h.rsplit('.',1)[0]),h.rsplit('.',1)[1]) for h in handlers]"
-        subprocess.run([sys.executable, "-I", "-c", script, str(root)],
-                       cwd=root, env=environment, check=True, timeout=60)
-    manifest_path = path.with_suffix(".manifest.json")
-    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    if manifest["sha256"] != evidence["sha256"]:
-        raise ValueError("Manifest does not match verified archive")
+        result = subprocess.run([sys.executable, "-I", str(Path(__file__).with_name("lambda_import_probe.py")),
+                                 str(root), json.dumps(list(HANDLERS.values()))],
+                                cwd=root, env=environment, check=True, timeout=60,
+                                capture_output=True, text=True)
+        probe = json.loads(result.stdout)
+    if probe["ca_sha256"] != manifest.get("ca_sha256"):
+        raise ValueError("Manifest mismatch: ca_sha256")
+    validate_manifest(manifest, verify_archive(path))
+    manifest["linux_verification"] = {**probe, "machine": platform.machine(),
+                                      "python": platform.python_version(), "platform": platform.platform()}
     manifest["linux_execution_verified"] = True
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     print("All five archived handlers imported on Linux CPython 3.12.")

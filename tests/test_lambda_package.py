@@ -1,8 +1,36 @@
 import zipfile
+import json
+from pathlib import Path
+import subprocess
+import sys
 import pytest
 
 from tools.package_lambda import HANDLERS, verify_archive
 from infrastructure.ssm.put_parameters import build_parameters
+from tools.verify_lambda_linux import validate_manifest
+
+
+@pytest.mark.parametrize("field", ["sha256", "code_sha256_base64", "uncompressed_bytes", "architecture", "runtime", "handlers"])
+def test_execution_gate_rejects_mismatched_manifest(field):
+    evidence = {"sha256": "digest", "code_sha256_base64": "encoded", "uncompressed_bytes": 120}
+    manifest = {**evidence, "architecture": "x86_64", "runtime": "python3.12", "handlers": HANDLERS}
+    validate_manifest(manifest, evidence)
+    manifest[field] = "incorrect"
+    with pytest.raises(ValueError, match=field):
+        validate_manifest(manifest, evidence)
+
+
+@pytest.mark.parametrize("operation", ["socket.getaddrinfo('db.invalid', 5432)",
+                                      "socket.socket().connect(('127.0.0.1', 9))"])
+def test_import_probe_blocks_network_before_connection(tmp_path, operation):
+    (tmp_path / "network_handler.py").write_text(
+        f"import socket\n{operation}\ndef handler(event, context): pass\n", encoding="utf-8")
+    script = Path(__file__).resolve().parents[1] / "tools/lambda_import_probe.py"
+    result = subprocess.run([sys.executable, "-I", str(script), str(tmp_path),
+                             json.dumps(["network_handler.handler"])],
+                            capture_output=True, text=True, timeout=10)
+    assert result.returncode != 0
+    assert "Network access attempted during package verification" in result.stderr
 
 
 def test_archive_rejects_missing_runtime_assets(tmp_path):
