@@ -2,15 +2,15 @@
 
 ## Overview
 
-The Week 13 Day 3 API implementation is a Flask application in `fintrust/api.py`, with data access in `fintrust/query.py`. It can run locally and is adapted for Lambda/API Gateway by `aws-wsgi`. Routes are versioned under `/v1`.
+The API implementation is a Flask application in `fintrust/api.py`, with data access in `fintrust/query.py`. It can run locally and is adapted for Lambda/API Gateway by `aws-wsgi`. Routes are versioned under `/v1`.
 
 ## Routes
 
-| Method and path | Planned authentication at API Gateway | Purpose |
+| Method and path | Configured authentication at API Gateway (unverified) | Purpose |
 |---|---|---|
 | `GET /v1/health` | No authorizer; operational check only | Checks PostgreSQL connectivity and returns `200`/`503`. It exposes no transaction data. |
 | `GET /v1/transactions` | `AWS_IAM` | Reads recent transactions for the required account ID, with optional date range and bounded result count. |
-| `GET /v1/insights` | `AWS_IAM` | Reads the account/date risk-score item from DynamoDB. |
+| `GET /v1/insights` | `AWS_IAM` | Reads an immutable transaction projection or a legacy account/date item from DynamoDB. |
 
 ### `GET /v1/transactions`
 
@@ -20,26 +20,10 @@ Query parameters:
 - `from` (optional ISO-8601 date or timestamp)
 - `to` (optional ISO-8601 date or timestamp)
 - `limit` (optional integer; defaults to 50, clamped to 1-500)
-- `offset` (optional non-negative integer; defaults to 0). Increase by `limit` for the next page. Sorting uses `tx_date DESC, tx_id DESC`; concurrent inserts can shift offset pages.
+- `cursor` (optional opaque continuation token). Default pagination returns `count`, `page`, `total`, `limit` and `next_cursor` (null at the end); reuse the same account and filters when continuing.
+- `offset` (optional non-negative integer) selects legacy offset pagination. Do not combine it with `cursor`. Concurrent inserts can shift offset pages.
 
-Example response:
-
-```json
-{
-  "status": "ok",
-  "data": [
-    {
-      "tx_id": "a6e7b46f-cd0c-5cfc-9bdc-9de0ff391f7a",
-      "account_id": "20000000-0000-4000-8000-000000000001",
-      "amount": "250.00",
-      "currency": "ZAR",
-      "tx_date": "2026-09-28T09:15:00+00:00",
-      "tx_type": "debit"
-    }
-  ],
-  "meta": {"count": 1, "limit": 50, "offset": 0}
-}
-```
+Ordering is `tx_date DESC, tx_id DESC`. Monetary values are serialized without losing decimal precision.
 
 Missing/invalid account IDs, malformed timestamps, or an invalid limit return `400`. Database failures return a JSON `503` response.
 
@@ -48,9 +32,10 @@ Missing/invalid account IDs, malformed timestamps, or an invalid limit return `4
 Query parameters:
 
 - `account_id` (required UUID)
+- `transaction_id` (optional UUID): retrieves `score_date=TX#<transaction_id>`; cannot be combined with `date`.
 - `date` (optional `YYYY-MM-DD`; defaults to the runtime's current date)
 
-The DynamoDB key is `{account_id, score_date}`. The response omits the internal TTL attribute. Missing scores return `404`; DynamoDB service failures return `503`.
+The current writer creates transaction projections, not daily summaries. Date lookup remains a legacy compatibility path. The DynamoDB key is `{account_id, score_date}`. The response omits the internal TTL attribute. Missing scores return `404`; DynamoDB service failures return `503`.
 
 ## Dashboard and local intake
 
@@ -71,8 +56,10 @@ The default dashboard uses the same origin as Flask. Explicit alternate browser 
 - API Gateway authorization is required for all account-data routes before deployment. `AWS_IAM` is the proposed service-client method; an analyst browser requires an appropriate identity flow and route integration. The Flask app itself does not implement authentication; local development is loopback-only.
 - `/v1/health` contains status information only.
 - The API Lambda role should have read-only database and DynamoDB permissions. It must not receive `dynamodb:PutItem` or database write privileges.
-- Database credentials are loaded from local environment settings during development and SSM Parameter Store in Lambda.
+- Local database credentials come from ignored environment settings. Cloud database clients generate IAM authentication tokens and use TLS verification. Nonsecret SSM configuration is resolved during deployment, not fetched by private functions at runtime.
 
 The API is implemented locally; API Gateway routes, authorizers, and deployed Lambda integration still need AWS configuration and evidence.
 
-DynamoDB decimal values are returned as strings to preserve precision. Date-only transaction filters mean midnight UTC; an explicit end timestamp includes the entire final day. The Day 3 core remains read-only; the local demonstration adds a bounded upload adapter. Later deployed write routes are tracked in the requirements review.
+DynamoDB decimal values are returned as strings to preserve precision. Date-only transaction filters mean midnight UTC; timestamp bounds are interpreted by the query parser. The account-data API remains read-only; the local demonstration adds a bounded upload adapter. Later deployed write routes are tracked in the requirements review.
+
+The browser does not sign requests with SigV4. An authenticated browser integration remains a deployment blocker. See [security](SECURITY.md) and [architecture](architecture.md).

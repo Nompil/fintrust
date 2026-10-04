@@ -1,14 +1,15 @@
 # FinTrust Entity Relationship Diagram
 
-Presentation exports: [ERD SVG](diagrams/erd.svg), [editable draw.io](diagrams/fintrust.drawio), and [PDF, page 3](../output/pdf/fintrust_architecture_and_erd.pdf).
+Historical presentation exports (not reconciled with the current schema): [ERD SVG](diagrams/erd.svg), [editable draw.io](diagrams/fintrust.drawio), and [PDF, page 3](../output/pdf/fintrust_architecture_and_erd.pdf).
 
-This ERD matches `sql/schema.sql`. UUIDs identify business entities; transaction amounts use fixed-precision numeric types; the foreign keys preserve ledger history.
+This source describes the final schema after the additive statements in [sql/schema.sql](../sql/schema.sql). The SVG, draw.io and PDF exports need reconciliation before presentation. UUIDs identify business entities; transaction amounts use fixed-precision numeric types; the foreign keys preserve ledger history.
 
 ```mermaid
 erDiagram
     CUSTOMER ||--o{ ACCOUNT : owns
     ACCOUNT ||--o{ TRANSACTION : records
     TRANSACTION ||--o{ RISK_EVENT : triggers
+    TRANSACTION ||--o| PROCESSED_TRANSACTION : freezes_result
     RISK_EVENT ||--o{ ALERT : generates
 
     CUSTOMER {
@@ -37,7 +38,7 @@ erDiagram
         TIMESTAMPTZ tx_date
         VARCHAR tx_type "CHECK: debit, credit, transfer, fee"
         BOOLEAN cross_border
-        VARCHAR raw_file "Source S3 key for traceability"
+        TEXT raw_file "Source S3 key for traceability"
     }
 
     RISK_EVENT {
@@ -53,9 +54,20 @@ erDiagram
         BIGINT risk_event_id FK "References RISK_EVENT"
         VARCHAR severity
         TEXT message
-        TIMESTAMPTZ sent_at
+        TIMESTAMPTZ sent_at "Nullable; not proof of delivery"
+        BIGINT delivery_key UK
+        VARCHAR delivery_state "PENDING, SENDING, SENT, FAILED, UNKNOWN"
+        TEXT provider_message_id
+    }
+    PROCESSED_TRANSACTION {
+        UUID tx_id PK,FK
+        CHAR fingerprint "64-character payload digest"
+        JSONB result "Frozen scoring result"
+        TIMESTAMPTZ processed_at
     }
 ```
+
+The relational `alerts` table supports the legacy SQL helper. The configured cloud alert handler uses DynamoDB `ALERT#` delivery records; it does not write this table. `processed_transactions` commits with the ledger and risk result to make retries repeatable.
 
 ## Entity Data Dictionary and Rules
 
@@ -63,9 +75,9 @@ erDiagram
 |---|---|---|
 | `customers` | `customer_id UUID PK`, `full_name VARCHAR(150)`, `id_number VARCHAR(20) UNIQUE`, `kyc_status VARCHAR(20)`, `created_at TIMESTAMPTZ` | KYC is a finite state (`pending`, `verified`, `rejected`, `frozen`); a check constraint prevents unrecognised states. Full name and identity number are personal information and must be access-controlled. |
 | `accounts` | `account_id UUID PK`, `customer_id UUID FK`, `account_type VARCHAR(30)`, `balance NUMERIC(15,2)`, `status VARCHAR(20)`, `opened_at TIMESTAMPTZ` | Account types are constrained to the agreed set. `NUMERIC`, not floating point, avoids rounding errors in balances. Deleting a customer with accounts is restricted. |
-| `transactions` | `tx_id UUID PK`, `account_id UUID FK`, `amount NUMERIC(15,2)`, `currency CHAR(3)`, `tx_date TIMESTAMPTZ`, `tx_type VARCHAR(30)`, `cross_border BOOLEAN`, `raw_file VARCHAR(200)` | Amount is positive; direction is represented by `tx_type`, avoiding negative transaction amounts. Currency and type are constrained. `raw_file` traces a ledger row to its input object. Accounts with transactions cannot be deleted. |
+| `transactions` | `tx_id UUID PK`, `account_id UUID FK`, `amount NUMERIC(15,2)`, `currency CHAR(3)`, `tx_date TIMESTAMPTZ`, `tx_type VARCHAR(30)`, `cross_border BOOLEAN`, `raw_file TEXT` | Amount is positive; direction is represented by `tx_type`, avoiding negative transaction amounts. Currency and type are constrained. `raw_file` traces a ledger row to its input object. Accounts with transactions cannot be deleted. |
 | `risk_events` | `risk_event_id BIGSERIAL PK`, `tx_id UUID FK`, `risk_score INTEGER`, `reason VARCHAR(255)`, `created_at TIMESTAMPTZ` | A score must be in the range 0–100. Risk decisions are kept apart from the financial transaction record. |
-| `alerts` | `alert_id BIGSERIAL PK`, `risk_event_id BIGINT FK`, `severity VARCHAR(20)`, `message TEXT`, `sent_at TIMESTAMPTZ` | An alert is linked to the risk event that caused it, preserving investigation context. |
+| `alerts` | `alert_id BIGSERIAL PK`, `risk_event_id BIGINT FK`, `severity VARCHAR(20)`, `message TEXT`, `sent_at TIMESTAMPTZ NULL`, `delivery_key BIGINT UNIQUE`, `delivery_state VARCHAR(10)`, `provider_message_id TEXT` | A legacy SQL alert is linked to the risk event that caused it, preserving investigation context. |
 
 ## Relationships and Normalisation
 
@@ -81,3 +93,7 @@ erDiagram
 - `idx_tx_high_amount` is a partial index for transactions over R50,000.
 - `idx_tx_crossborder` is a partial index for cross-border compliance queries.
 - `idx_risk_events_tx_date` supports risk-event history by transaction.
+
+- `idx_tx_account_cursor` supports stable ordering by account, timestamp and transaction ID.
+
+`processed_transactions.tx_id` is both a primary and foreign key. Its payload fingerprint rejects conflicting reuse of an ID; its JSON result preserves the original decision on retries. DynamoDB projections are separate from this relational ERD.
