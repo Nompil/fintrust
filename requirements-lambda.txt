@@ -1,0 +1,13 @@
+# Complete runtime dependency set for CPython 3.12, Linux x86_64.
+-r requirements-runtime.txt
+blinker==1.9.0
+click==8.5.0
+itsdangerous==2.2.0
+Jinja2==3.1.6
+MarkupSafe==3.0.3
+Werkzeug==3.1.9
+jmespath==1.1.0
+python-dateutil==2.9.0.post0
+s3transfer==0.19.2
+six==1.17.0
+urllib3==2.8.0

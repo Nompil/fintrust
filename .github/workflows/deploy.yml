@@ -1,4 +1,4 @@
-name: FinTrust API delivery
+name: FinTrust Lambda package verification
 
 on:
   workflow_dispatch:
@@ -7,52 +7,26 @@ permissions:
   contents: read
 
 jobs:
-  verify:
+  package:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
       - run: python -m pip install -r requirements.txt
       - run: python -m pytest -q --ignore=tests/data_quality
-
-  deploy:
-    needs: verify
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    environment: aws-dev
-    permissions:
-      contents: read
-      id-token: write
-    env:
-      FUNCTION_NAME: ${{ vars.API_FUNCTION_NAME }}
-      ROLE_ARN: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Validate deployment configuration
+      - name: Build shared Linux runtime
         run: |
-          test -n "$FUNCTION_NAME"
-          test -n "$ROLE_ARN"
-      - uses: actions/setup-python@v5
+          mkdir -p build
+          curl --fail --silent --show-error https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem -o build/global-bundle.pem
+          python tools/package_lambda.py --ca-bundle build/global-bundle.pem
+      - name: Import packaged handlers on Linux
+        run: python tools/verify_lambda_linux.py build/fintrust.zip
+      - uses: actions/upload-artifact@v4
         with:
-          python-version: '3.11'
-      - name: Package Linux x86_64 API runtime
-        run: |
-          python -m pip install --platform manylinux2014_x86_64 --implementation cp --python-version 3.11 --only-binary=:all: --target build/package -r requirements-runtime.txt
-          cp -r fintrust frontend build/package/
-          cd build/package
-          zip -qr ../api.zip .
-      - uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
-          aws-region: af-south-1
-      - name: Validate existing Lambda runtime
-        run: |
-          test "$(aws lambda get-function-configuration --function-name "$FUNCTION_NAME" --query Runtime --output text)" = python3.11
-          test "$(aws lambda get-function-configuration --function-name "$FUNCTION_NAME" --query 'Architectures[0]' --output text)" = x86_64
-          test "$(aws lambda get-function-configuration --function-name "$FUNCTION_NAME" --query Handler --output text)" = fintrust.api.lambda_handler
-      - name: Update existing API Lambda code
-        run: |
-          aws lambda update-function-code --function-name "$FUNCTION_NAME" --zip-file fileb://build/api.zip --publish
-          aws lambda wait function-updated --function-name "$FUNCTION_NAME"
+          name: fintrust-lambda
+          path: |
+            build/fintrust.zip
+            build/fintrust.manifest.json
+          retention-days: 7
