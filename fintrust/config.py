@@ -21,11 +21,26 @@ def get_setting(name: str, default: Any = None, *, required: bool = False) -> An
 
 @lru_cache(maxsize=1)
 def load_settings() -> dict:
+    mode = os.getenv("DB_AUTH_MODE", "iam" if os.getenv("AWS_EXECUTION_ENV") else "password")
+    if os.getenv("AWS_EXECUTION_ENV") and mode != "iam":
+        raise RuntimeError("AWS services require IAM database authentication")
+    if mode not in {"password", "iam"}:
+        raise RuntimeError("DB_AUTH_MODE must be password or iam")
+    service = os.getenv("FINTRUST_SERVICE", "api")
+    stage = os.getenv("FINTRUST_STAGE", "dev")
+    if service not in {"ingest", "scoring", "alert", "api", "report"} or stage not in {"dev", "staging", "prod"}:
+        raise ValueError("Invalid service or stage")
+    prefix = f"/fintrust/{stage}/{service}"
+    source = os.getenv("DB_CONFIG_SOURCE", "ssm")
+    if source not in {"ssm", "environment"}:
+        raise ValueError("DB_CONFIG_SOURCE must be ssm or environment")
+    if os.getenv("AWS_EXECUTION_ENV") and os.getenv("SSM_DB_PREFIX", prefix) != prefix:
+        raise ValueError("SSM_DB_PREFIX conflicts with the service configuration")
     parameter_names = {
-        "db_host": "/fintrust/dev/db_host",
-        "db_name": "/fintrust/dev/db_name",
-        "db_user": "/fintrust/dev/db_user",
-        "db_password": "/fintrust/dev/db_password",
+        "db_host": f"{prefix}/db_host",
+        "db_name": f"{prefix}/db_name",
+        "db_user": f"{prefix}/db_user",
+        "db_password": f"{prefix}/db_password",
     }
     settings = {
         "aws_region": AWS_REGION,
@@ -33,14 +48,23 @@ def load_settings() -> dict:
         "s3_report_bucket": get_setting("S3_REPORT_BUCKET", "fintrust-reports"),
         "dynamodb_table": get_setting("DYNAMODB_TABLE", "risk_scores"),
         "db_port": int(get_setting("DB_PORT", 5432)),
+        "db_auth_mode": mode,
     }
     for setting, parameter in parameter_names.items():
+        if setting == "db_password" and mode == "iam":
+            settings[setting] = None
+            continue
         environment_value = os.getenv(setting.upper())
         if environment_value:
             settings[setting] = environment_value
             continue
+        if source == "environment":
+            raise RuntimeError(f"Missing deployment-resolved setting: {setting.upper()}")
         if os.getenv("FINTRUST_MODE") == "local":
             raise RuntimeError(f"Local database setting {setting.upper()} is missing; run py tools/local.py setup")
         response = ssm.get_parameter(Name=parameter, WithDecryption=True)
         settings[setting] = response["Parameter"]["Value"]
+    if source == "environment" and mode == "iam":
+        if settings["db_user"] != f"fintrust_{service}_{stage}":
+            raise ValueError("Database login does not match service and stage")
     return settings
