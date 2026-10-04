@@ -1,13 +1,27 @@
-# Diagram sources
+# Diagram register
 
-`fintrust.drawio` contains three editable pages: current Day 1-3 architecture, final target and the relational ERD. SVG exports are embedded in the design documents. The combined presentation PDF is in `output/pdf/fintrust_architecture_and_erd.pdf`.
+The current behavior is documented in [architecture](../architecture.md), [ERD](../erd.md) and [security](../SECURITY.md). Existing graphic exports predate the FIFO/Streams design and schema additions. They are retained as historical design artifacts and are not deployment evidence or reconciled final presentation material.
 
-The selected AWS service icons are unmodified PNG assets from the official July 2026 [AWS Architecture Icons package](https://aws.amazon.com/architecture/icons/). They are used to identify AWS services, not to imply AWS endorsement. The SVG diagrams embed the images so they can be shared without separate image paths.
+## Seven final views
 
-The build command is `py tools/build_diagrams.py`, with `reportlab`, `pillow` and `pymupdf` installed in a documentation environment. The system-record builder also requires `svglib`. These are documentation tools, not Lambda application dependencies. The generator writes PDF/SVG/draw.io outputs together; regeneration overwrites manual draw.io edits.
+| Required view | Retained source / asset | Reconciliation required |
+|---|---|---|
+| AWS architecture | `fintrust.drawio`, `architecture_target.svg` | Show five functions, FIFO, immutable projections, Streams and current VPC placement. |
+| PostgreSQL ERD | [Current Markdown ERD](../erd.md), `erd.svg`, draw.io ERD page | Export the additive schema including processed transactions and legacy alert fields. |
+| End-to-end transaction sequence | `upload_sequence.svg` | Existing view is local upload; replace its final presentation scope with queue/scoring/projection/alert retries. |
+| Quarantine versus DLQ | `activity.svg` | Existing local activity view does not cover the complete cloud failure routes. |
+| Network and security | No dedicated current asset | Show shared private subnets, database grants, gateways and external ingest/alert placement; no NAT. |
+| Data lifecycle | No dedicated current asset | Distinguish monthly summaries, proposed full archive and blocked deletion. |
+| Use cases | `use_cases.svg` | Reconcile analyst, operator and system actions; label unavailable cloud browser integration. |
 
-The diagrams express implementation/design status and proposed boundaries. They are not deployment evidence. Detailed connection/security gaps are recorded in `docs/architecture.md`.
+Retain `architecture_day1_day3.svg` as the early direct-SQL design. Do not use its historical implementation label as current status. The three draw.io pages also need reconciliation. No new graphic exports were generated during documentation consolidation.
 
-## Behaviour diagrams
+## Sources and export policy
 
-The local activity, use-case and upload-sequence diagrams are editable SVG files: `activity.svg`, `use_cases.svg` and `upload_sequence.svg`. They are rebuilt by `tools/build_system_document.py` and included in the complete system PDF. AWS diagrams and the ERD remain in the draw.io source. Diagram sources describe design and do not establish cloud deployment evidence.
+AWS icon PNGs in `aws-icons/` are unmodified assets from the official AWS Architecture Icons package (July 2026 version). They identify services and do not imply endorsement. Preserve attribution and the existing assets.
+
+`tools/build_diagrams.py` writes AWS architecture, ERD, draw.io and PDF outputs. `tools/build_system_document.py` writes behavior diagrams and the system PDF. Their hardcoded content must be updated before regeneration. Regeneration can overwrite manual draw.io edits; review the source first. The documentation environment uses reportlab, pillow, pymupdf and svglib; these are not Lambda runtime requirements.
+
+The retained PDFs are [architecture and ERD](../../output/pdf/fintrust_architecture_and_erd.pdf) and [system documentation](../../output/pdf/fintrust_system_documentation.pdf). Both require content reconciliation and visual inspection before final presentation.
+
+Maintain these seven views rather than producing diagrams for every checkpoint. Update a view when a material architecture decision changes it. Label repository implementation, target design and unverified integration explicitly. After AWS verification, reconcile actual configuration against source, update canonical docs and generator content, rebuild exports, inspect every page and link supporting evidence. Do not label a target as deployed without that evidence.
