@@ -91,7 +91,11 @@ def test_errors_have_correlation_ids_without_exception_details(monkeypatch):
 
 
 def test_request_log_has_status_duration_and_request_id(caplog):
-    response = api.app.test_client().get("/missing-route")
+    api.logger.addHandler(caplog.handler)
+    try:
+        response = api.app.test_client().get("/missing-route")
+    finally:
+        api.logger.removeHandler(caplog.handler)
     records = [json.loads(record.message) for record in caplog.records if record.message.startswith('{"event": "api_request"')]
     assert records[-1]["status"] == 404
     assert records[-1]["request_id"] == response.headers["X-Request-ID"]

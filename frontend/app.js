@@ -1,6 +1,9 @@
 'use strict';
 const $ = id => document.getElementById(id);
 let offset = 0;
+let cursors = [null];
+let nextCursor = null;
+function resetPages() { offset = 0; cursors = [null]; nextCursor = null; }
 const limit = 10;
 const money = n => {
   const [whole, fraction = ''] = String(n).split('.');
@@ -59,7 +62,8 @@ async function ledger() {
   }
   $('account-reference').textContent = `Account reference: ${$('account').value}`;
   if ($('from').value && $('to').value && $('from').value > $('to').value) throw new Error('Choose an end date on or after the start date.');
-  const params = new URLSearchParams({account_id: $('account').value, limit, offset});
+  const params = new URLSearchParams({account_id: $('account').value, limit});
+  if (cursors[offset / limit]) params.set('cursor', cursors[offset / limit]);
   if ($('from').value) params.set('from', `${$('from').value}T00:00:00Z`);
   if ($('to').value) params.set('to', `${$('to').value}T23:59:59.999999Z`);
   const result = await api(`/v1/transactions?${params}`); if (requestId !== ledgerRequest) return; $('ledger').replaceChildren();
@@ -75,7 +79,8 @@ async function ledger() {
   });
   if (!result.data.length) { const td = element('td', 'No transactions match this account and date range. Try different dates.'); td.colSpan = 6; const tr = document.createElement('tr'); tr.append(td); $('ledger').append(tr); }
   $('page-label').textContent = result.data.length ? `Showing ${offset + 1}-${offset + result.data.length}` : 'No matching transactions';
-  $('previous').disabled = offset === 0; $('next').disabled = result.data.length < limit;
+  nextCursor = result.meta.next_cursor;
+  $('previous').disabled = offset === 0; $('next').disabled = !nextCursor;
   try { const insight = await api(`/v1/insights?account_id=${encodeURIComponent($('account').value)}`); if (requestId !== ledgerRequest) return; $('insight').textContent = `Example score: ${insight.data.risk_score} out of 100, dated ${insight.data.score_date}. This is saved demonstration data.`; }
   catch (error) { if (requestId !== ledgerRequest) return; $('insight').textContent = error.message.startsWith('404:') ? 'No example score is available for this account today.' : 'The example score could not be loaded. Try refreshing the page.'; }
 }
@@ -88,16 +93,27 @@ async function refresh() {
     $('currency-totals').replaceChildren(); data.totals_by_currency.forEach(item => { const row = element('div', '', 'currency-line'); const label = element('div', item.currency); label.append(element('small', `${item.transactions} transactions`)); row.append(label, element('strong', money(item.gross_amount))); $('currency-totals').append(row); }); chart(data.daily_transactions);
     const selected = $('account').value; $('account').replaceChildren(); accounts.data.forEach((a, index) => { const type = a.account_type.replaceAll('_', ' '); const option = element('option', `Account ${index + 1} - ${type.charAt(0).toUpperCase() + type.slice(1)} (${a.account_id.slice(-4)})`); option.value = a.account_id; $('account').append(option); });
     if (accounts.data.some(a => a.account_id === selected)) $('account').value = selected;
-    await ledger(); $('updated').textContent = `Refreshed ${new Date().toLocaleTimeString()}`;
+    resetPages(); await ledger(); $('updated').textContent = `Refreshed ${new Date().toLocaleTimeString()}`;
   } catch (error) { $('health').textContent = 'Connection needs attention'; showError(error); } finally { $('refresh').disabled = false; }
 }
 $('refresh').addEventListener('click', refresh);
-$('account').addEventListener('change', () => { offset = 0; ledger().catch(showError); });
-$('filter-form').addEventListener('submit', event => { event.preventDefault(); $('error').hidden = true; offset = 0; ledger().catch(showError); });
-$('clear-filters').addEventListener('click', () => { $('from').value = ''; $('to').value = ''; $('error').hidden = true; offset = 0; ledger().catch(showError); });
+$('account').addEventListener('change', () => { resetPages(); ledger().catch(showError); });
+$('filter-form').addEventListener('submit', event => { event.preventDefault(); $('error').hidden = true; resetPages(); ledger().catch(showError); });
+$('clear-filters').addEventListener('click', () => { $('from').value = ''; $('to').value = ''; $('error').hidden = true; resetPages(); ledger().catch(showError); });
 document.querySelectorAll('nav a').forEach(link => link.addEventListener('click', () => { document.querySelectorAll('nav a').forEach(item => item.classList.remove('active')); link.classList.add('active'); }));
-$('previous').addEventListener('click', () => { offset = Math.max(0, offset - limit); ledger().catch(showError); });
-$('next').addEventListener('click', () => { offset += limit; ledger().catch(showError); });
+async function changePage(target) {
+  const previousOffset = offset;
+  offset = target;
+  $('previous').disabled = true; $('next').disabled = true;
+  try { await ledger(); }
+  catch (error) {
+    offset = previousOffset;
+    $('previous').disabled = offset === 0; $('next').disabled = !nextCursor;
+    showError(error);
+  }
+}
+$('previous').addEventListener('click', () => changePage(Math.max(0, offset - limit)));
+$('next').addEventListener('click', () => { if (!nextCursor) return; cursors[offset / limit + 1] = nextCursor; changePage(offset + limit); });
 $('upload-form').addEventListener('submit', async event => {
   event.preventDefault(); const files = [...$('files').files];
   if (files.length > 5) { showError(new Error('Select at most five files per batch.')); return; }
