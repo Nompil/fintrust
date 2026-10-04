@@ -1,3 +1,5 @@
+> Historical reference retained in place. Some implementation/status descriptions are superseded. Use the [current canonical guide](../README.md) and [documentation inventory](../README.md) for current behavior and proposed disposition. No archive or deletion has occurred.
+
 # Requirements and build review
 
 Reviewed 30 September 2026 against the eight supplied documents and the pasted Day 3 PM API lesson. This is the current requirements record. Older daily-log entries record history, not current readiness.

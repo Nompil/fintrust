@@ -1,3 +1,5 @@
+> Retained engineering evidence and procedure snapshot. Current navigation: [operations](../docs/OPERATIONS.md) and [evidence register](../docs/EVIDENCE/README.md). Preparation does not establish execution.
+
 # Final Phase 2 verification
 
 Follow-up: [LINUX_CI_GATE.md](LINUX_CI_GATE.md) records the completed pre-push

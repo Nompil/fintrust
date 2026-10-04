@@ -1,3 +1,5 @@
+> Historical reference retained in place. Some implementation/status descriptions are superseded. Use the [current canonical guide](SECURITY.md) and [documentation inventory](../README.md) for current behavior and proposed disposition. No archive or deletion has occurred.
+
 # IAM Role Matrix
 
 ## 1. Role Design

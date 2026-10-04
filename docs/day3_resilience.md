@@ -1,3 +1,5 @@
+> Historical reference retained in place. Some implementation/status descriptions are superseded. Use the [current canonical guide](OPERATIONS.md) and [documentation inventory](../README.md) for current behavior and proposed disposition. No archive or deletion has occurred.
+
 # Week 13 Day 3: Ingest Resilience and Monitoring
 
 ## Failure Boundaries

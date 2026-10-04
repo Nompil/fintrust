@@ -1,3 +1,5 @@
+> Historical engineering log. Current behavior and outstanding gates are maintained in the [canonical documentation](../README.md) and [evidence register](../docs/EVIDENCE/README.md).
+
 # Daily progress
 
 Purpose: keep a dated, factual record of what changed, what was tested, what was learned, and what comes next. Update this file at the end of every work session. Calendar dates and course days are recorded separately; a course day is not inferred from the calendar date.
@@ -169,3 +171,8 @@ The learner confirmed setup/check succeeded: fintrust_local connects as fintrust
 ## 2026-09-30 - PDF verification and AWS implementation sequence
 
 Both existing PDFs opened without parser repair and all 19 pages rendered. The reported issue was a text-editor view of PDF internals, not document corruption. PDF bytes were preserved. Added PDF viewing instructions and a staged AWS foundation/evidence checklist to the learning guide. Updated stale requirement statuses for file bounds and local API/database tests. No AWS resources were provisioned.
+
+
+## Documentation consolidation
+
+Reused the architecture source and diagram directory. Consolidated current security, operations and presentation guidance; corrected API pagination and ERD additions; indexed evidence and classified historical sources. Retained all historical files and existing untracked work. Flagged older graphic exports for reconciliation. No runtime changes, new test execution, AWS access, remote configuration or push occurred.

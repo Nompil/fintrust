@@ -1,3 +1,5 @@
+> Retained engineering evidence and procedure snapshot. Current navigation: [operations](../docs/OPERATIONS.md) and [evidence register](../docs/EVIDENCE/README.md). Preparation does not establish execution.
+
 # Linux verification gate
 
 Status: **PREPARED; LINUX EXECUTION NOT YET VERIFIED.** No remote is configured.

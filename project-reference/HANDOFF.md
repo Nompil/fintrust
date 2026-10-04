@@ -1,5 +1,14 @@
 # FinTrust project handoff
 
+## Current resume point
+
+Documentation consolidation is complete. Start with README.md and the canonical guides in docs/. Architecture, security, operations, presentation, schema and API sources now describe the current FIFO/Streams design. The diagram register flags stale exports and two missing dedicated views. No PDFs or SVGs were regenerated. Historical records remain in place; no archive/deletion was approved.
+
+The Linux CI preparation task remains complete but unexecuted. Do not restart its pre-push audit or claim Linux success. Repository creation, remote configuration, push and AWS account access require separate approval. Preserve the seven pre-existing untracked files. Runtime behavior did not change during documentation consolidation. Local commits should remain small and coherent.
+
+The previous resume notes below are retained as history; use current canonical guides for active decisions.
+
+
 ## Resume point
 
 Latest checkpoint: infrastructure/LINUX_CI_GATE.md. Pre-push review is complete;

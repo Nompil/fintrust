@@ -1,3 +1,5 @@
+> Historical reference retained in place. Some implementation/status descriptions are superseded. Use the [current canonical guide](../docs/OPERATIONS.md) and [documentation inventory](../README.md) for current behavior and proposed disposition. No archive or deletion has occurred.
+
 # Step-by-step learning guide
 
 Read the [requirements](requirements_day1_day3.md) for scope. Use the exercises below to run the project yourself.

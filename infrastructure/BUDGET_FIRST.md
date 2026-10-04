@@ -1,3 +1,5 @@
+> Historical reference retained in place. Some implementation/status descriptions are superseded. Use the [current canonical guide](../docs/OPERATIONS.md) and [documentation inventory](../README.md) for current behavior and proposed disposition. No archive or deletion has occurred.
+
 > Current verification: [FINAL_VERIFICATION.md](FINAL_VERIFICATION.md). The audit below records the earlier baseline; use the final report for current tests, package evidence and remaining gates.
 
 # Budget-first preparation

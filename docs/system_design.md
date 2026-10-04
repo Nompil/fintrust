@@ -1,3 +1,5 @@
+> Historical reference retained in place. Some implementation/status descriptions are superseded. Use the [current canonical guide](architecture.md) and [documentation inventory](../README.md) for current behavior and proposed disposition. No archive or deletion has occurred.
+
 # FinTrust System Design and Engineering Record
 
 Version 0.2 | 30 September 2026 | Local capstone implementation

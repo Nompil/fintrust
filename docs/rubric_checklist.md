@@ -2,7 +2,7 @@
 
 The eight numbered criteria total 100 points: Cloud 20, SQL 15, Python 15, Testing 10, Governance 10, Documentation 10, Technical demo 10, Business presentation 10. The source's 70/30 section headings conflict with this 80/20 split.
 
-Current milestone coverage and evidence gaps: [requirements review](../project-reference/requirements_day1_day3.md).
+Current evidence and gaps: [evidence register](EVIDENCE/README.md). The [original milestone requirements](../project-reference/requirements_day1_day3.md) are historical context. This checklist records requirements, not proof of completion.
 
 ## 1. Build and portfolio deliverables
 

@@ -1,6 +1,6 @@
 # Infrastructure preparation
 
-The current design and deployment gates are in [BUDGET_FIRST.md](BUDGET_FIRST.md). Preparation is local. No AWS resources have been inspected, created or changed during this phase.
+The current design is in [architecture](../docs/architecture.md); gates and recovery are in [operations](../docs/OPERATIONS.md). [BUDGET_FIRST.md](BUDGET_FIRST.md) preserves the earlier decision record. Preparation is local. No AWS resources have been inspected, created or changed during this phase.
 
 ## Offline entry points
 
@@ -15,7 +15,7 @@ repository creation, pushing and AWS access still require separate approval.
 - `infrastructure/api/gateway.json` defines the API boundary. Authenticated methods use AWS_IAM.
 - `infrastructure/rds/permissions.sql` defines database grants; an administrator must review and apply these separately after approval.
 
-Build the shared runtime with `python tools/package_lambda.py --ca-bundle build/global-bundle.pem`. Obtain the bundle from the official RDS trust store. The archive includes all five handlers and targets Python 3.12 on Linux x86_64. On that platform run `python tools/verify_lambda_linux.py build/fintrust.zip`. The manual GitHub workflow performs package verification only; it has no AWS credentials or deployment step.
+Build the shared runtime with `python tools/package_lambda.py --ca-bundle build/global-bundle.pem`. Obtain the bundle from the official RDS trust store. The archive includes all five handlers and targets Python 3.12 on Linux x86_64. On that platform run `python tools/verify_lambda_linux.py build/fintrust.zip`. The GitHub workflow runs the full test suite and Linux package verification; it has no AWS credentials or deployment step.
 
 ## Existing resources and legacy utilities
 

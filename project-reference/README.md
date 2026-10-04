@@ -1,12 +1,7 @@
-# Project reference
+# Project references
 
-Use these four files for daily work:
+Start with the [canonical documentation index](../README.md). Current architecture, security, operations and presentation guidance live in `docs/`; the [diagram](../docs/diagrams/README.md) and [evidence](../docs/EVIDENCE/README.md) registers identify the status of exports and verification.
 
-1. [Requirements explained](requirements_day1_day3.md) - scope, course conflicts and deliverables.
-2. [Step-by-step learning guide](learning_guide.md) - database setup, commands, expected outputs, concepts and rehearsal.
-3. [Daily progress](daily_log.md) - completed work, verification and your own practice results.
-4. [Upcoming features](upcoming_features.md) - remaining local and AWS work.
+[HANDOFF.md](HANDOFF.md) is the maintainer resume point. [daily_log.md](daily_log.md) preserves engineering progress. Requirements, learning exercises, upcoming-feature lists and older presentation notes remain here as historical references; their status statements do not override canonical documentation.
 
-The primary technical reference is the [system design and SDLC record](../docs/system_design.md), also available as a [complete PDF](../output/pdf/fintrust_system_documentation.pdf). Detailed implementation references remain in `docs/`: [architecture](../docs/architecture.md), [ERD](../docs/erd.md), [API](../docs/api_design.md), [IAM](../docs/iam_role_matrix.md), [governance](../docs/data_governance.md), [resilience](../docs/day3_resilience.md) and [rubric checklist](../docs/rubric_checklist.md).
-
-Diagrams: [PDF](../output/pdf/fintrust_architecture_and_erd.pdf) and [editable draw.io source](../docs/diagrams/fintrust.drawio).
+The README inventory classifies every reference and identifies pre-existing untracked files. No historical document has been moved, deleted or archived. Archival requires review and approval. Continue updating canonical guides and the existing log rather than adding another checkpoint report.

@@ -1,3 +1,5 @@
+> Historical reference retained in place. Some implementation/status descriptions are superseded. Use the [current canonical guide](../docs/architecture.md) and [documentation inventory](../README.md) for current behavior and proposed disposition. No archive or deletion has occurred.
+
 # Upcoming features and next steps
 
 Current scope: Week 13 Days 1-3. Earlier planning records a 15 October 2026 submission target; the supplied brief specifies end of Week 14 and Week 16 presentations.
