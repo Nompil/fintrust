@@ -2,7 +2,13 @@
 
 ## Resume point
 
-Latest checkpoint: infrastructure/FINAL_VERIFICATION.md. Full local suite: 158 passed,
+Latest checkpoint: infrastructure/LINUX_CI_GATE.md. Pre-push review is complete;
+ci.yml now runs the full suite and package verification on Ubuntu/Python 3.12.
+The redundant deploy.yml was consolidated into it. Preparation is complete: stop
+before repository creation, remote configuration, push or AWS access. Linux CI
+has not run. Preserve the seven unrelated untracked documents.
+
+Previous checkpoint: infrastructure/FINAL_VERIFICATION.md. Full local suite: 158 passed,
 0 failed, 1 skipped. Region consistency fixed and Linux verifier strengthened.
 Inventory commands and blank parameters are committed. Linux execution remains
 blocked by no installed Linux runner and no Git remote; no AWS access is authorized.

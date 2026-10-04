@@ -1,5 +1,9 @@
 # Final Phase 2 verification
 
+Follow-up: [LINUX_CI_GATE.md](LINUX_CI_GATE.md) records the completed pre-push
+review and prepared Ubuntu/Python 3.12 workflow. Linux execution remains
+unverified until that workflow succeeds; the recommendation below is unchanged.
+
 Decision: **NOT READY** to close the requested offline gate. Linux execution
 evidence is missing. Inventory is prepared but not authorized or executed.
 Public documentation was consulted without AWS account access.

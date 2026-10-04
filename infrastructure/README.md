@@ -4,6 +4,10 @@ The current design and deployment gates are in [BUDGET_FIRST.md](BUDGET_FIRST.md
 
 ## Offline entry points
 
+The prepared Ubuntu/Python 3.12 workflow and pre-push review are documented in
+[LINUX_CI_GATE.md](LINUX_CI_GATE.md). It runs the full suite and package verifier;
+repository creation, pushing and AWS access still require separate approval.
+
 - `python -m infrastructure.foundation --output build/foundation.json` renders private networking, gateway endpoints, encrypted storage and the stream-enabled risk table.
 - `python infrastructure/processing.py --output build/processing.json` renders five functions, queues, event mappings, an API alias and a disabled report schedule. Supply existing resource identifiers at deployment; consumers default to disabled.
 - `python infrastructure/iam/create_roles.py --help` lists inputs for service-specific policy rendering. Use the actual RDS resource ID, separate bucket names, queue ARNs, CMK ARN and verified SES identities.
