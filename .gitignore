@@ -25,3 +25,19 @@ dist/
 tmp/
 output/local/
 test-results/
+
+# Machine-specific credentials, editor state and runtime output
+.aws/
+.vscode/
+.idea/
+*.log
+*.tmp
+*.bak
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+*.sqlite-wal
+*.sqlite-shm
+fintrust.zip
+fintrust.manifest.json
