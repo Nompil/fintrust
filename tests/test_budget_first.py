@@ -1,7 +1,6 @@
 """Offline production-path retry and security boundary checks."""
 import io
 import json
-from concurrent.futures import ThreadPoolExecutor
 from unittest.mock import MagicMock
 
 import boto3
@@ -61,15 +60,43 @@ def test_projection_is_immutable(delivery):
 
 def test_delivery_replay_and_concurrent_claim(delivery):
     table, mail, _ = delivery
-    def send(_):
-        try:
-            return alert_delivery.deliver(ACCOUNT, TX)
-        except RuntimeError:
-            return None  # Another in-flight claim must not resend.
-    with ThreadPoolExecutor(max_workers=4) as pool:
-        list(pool.map(send, range(4)))
+    def send_with_contenders(**kwargs):
+        # Moto is not thread-safe. Interleave contenders at the external send
+        # boundary, after the winner's atomic claim and before its completion.
+        claimed = state(table)
+        assert claimed["delivery_state"] == "SENDING"
+        for _ in range(3):
+            with pytest.raises(RuntimeError, match="reconciliation") as rejected:
+                alert_delivery.deliver(ACCOUNT, TX)
+            assert isinstance(rejected.value.__cause__, ClientError)
+            assert rejected.value.__cause__.response["Error"]["Code"] == "ConditionalCheckFailedException"
+            assert state(table) == claimed
+        return {"MessageId": "ses-id"}
+
+    mail.side_effect = send_with_contenders
     assert alert_delivery.deliver(ACCOUNT, TX)["status"] == "SENT"
+    assert alert_delivery.deliver(ACCOUNT, TX)["status"] == "SENT"
+    assert state(table)["delivery_state"] == "SENT"
     assert state(table)["provider_message_id"] == "ses-id"
+    mail.assert_called_once()
+
+
+def test_completion_rejects_changed_claim_owner(delivery):
+    table, mail, _ = delivery
+    def change_owner(**kwargs):
+        table.update_item(Key={"account_id": ACCOUNT, "score_date": "ALERT#" + TX},
+            UpdateExpression="SET attempt_id=:attempt",
+            ExpressionAttributeValues={":attempt": "another-attempt"})
+        return {"MessageId": "ses-id"}
+
+    mail.side_effect = change_owner
+    with pytest.raises(ClientError) as rejected:
+        alert_delivery.deliver(ACCOUNT, TX)
+    assert rejected.value.response["Error"]["Code"] == "ConditionalCheckFailedException"
+    assert state(table)["attempt_id"] == "another-attempt"
+    assert state(table)["delivery_state"] == "SENDING"
+    with pytest.raises(RuntimeError, match="reconciliation"):
+        alert_delivery.deliver(ACCOUNT, TX)
     mail.assert_called_once()
 
 
