@@ -8,6 +8,54 @@ import pytest
 from tools.package_lambda import HANDLERS, verify_archive
 from infrastructure.ssm.put_parameters import build_parameters
 from tools.verify_lambda_linux import validate_manifest
+from tools import verify_lambda_linux
+
+
+def test_failed_probe_surfaces_diagnostics_and_keeps_manifest_unverified(tmp_path, monkeypatch, capsys):
+    path = tmp_path / "lambda.zip"
+    with zipfile.ZipFile(path, "w"):
+        pass
+    manifest_path = path.with_suffix(".manifest.json")
+    manifest_path.write_text(json.dumps({"linux_execution_verified": True,
+                                         "linux_verification": {"old": "evidence"}}))
+    monkeypatch.setattr(verify_lambda_linux.platform, "system", lambda: "Linux")
+    monkeypatch.setattr(verify_lambda_linux.platform, "machine", lambda: "x86_64")
+    monkeypatch.setattr(verify_lambda_linux.platform, "python_implementation", lambda: "CPython")
+    monkeypatch.setattr(verify_lambda_linux.sys, "version_info", (3, 12))
+    monkeypatch.setattr(verify_lambda_linux, "verify_archive", lambda path: {})
+    monkeypatch.setattr(verify_lambda_linux, "validate_manifest", lambda *args: None)
+    monkeypatch.setenv("DB_PASSWORD", "private-db-value")
+    monkeypatch.setenv("GITHUB_TOKEN", "private-token-value")
+    failure = subprocess.CalledProcessError(
+        7, ["probe"], output="stage: import; private-db-value",
+        stderr="ModuleNotFoundError: missing_module; private-token-value")
+
+    def fail(*args, **kwargs):
+        assert kwargs["check"] is True
+        assert kwargs["capture_output"] is True
+        raise failure
+
+    monkeypatch.setattr(verify_lambda_linux.subprocess, "run", fail)
+    with pytest.raises(subprocess.CalledProcessError) as rejected:
+        verify_lambda_linux.verify(path)
+    assert rejected.value is failure
+    output = capsys.readouterr()
+    assert output.out == ""
+    assert "return code 7" in output.err
+    assert "Probe stdout:\nstage: import; [REDACTED]" in output.err
+    assert "Probe stderr:\nModuleNotFoundError: missing_module; [REDACTED]" in output.err
+    assert "private-db-value" not in output.err
+    assert "private-token-value" not in output.err
+    manifest = json.loads(manifest_path.read_text())
+    assert manifest["linux_execution_verified"] is False
+    assert "linux_verification" not in manifest
+
+
+def test_failed_probe_labels_empty_streams(capsys):
+    verify_lambda_linux.report_probe_failure(subprocess.CalledProcessError(1, ["probe"]), {})
+    output = capsys.readouterr().err
+    assert "Probe stdout:\n<empty>" in output
+    assert "Probe stderr:\n<empty>" in output
 
 
 @pytest.mark.parametrize("field", ["sha256", "code_sha256_base64", "uncompressed_bytes", "architecture", "runtime", "handlers"])

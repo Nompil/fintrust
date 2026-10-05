@@ -21,6 +21,18 @@ def validate_manifest(manifest, evidence):
             raise ValueError(f"Manifest mismatch: {name}")
 
 
+def report_probe_failure(error, environment):
+    sensitive = ("SECRET", "TOKEN", "PASSWORD", "PASSWD", "CREDENTIAL", "PRIVATE_KEY", "ACCESS_KEY", "DATABASE_URL")
+    values = {value for source in (os.environ, environment) for key, value in source.items()
+              if value and any(marker in key.upper() for marker in sensitive)}
+    print(f"Lambda import probe failed (return code {error.returncode}).", file=sys.stderr)
+    for label, output in (("stdout", error.stdout), ("stderr", error.stderr)):
+        output = output or "<empty>"
+        for value in sorted(values, key=len, reverse=True):
+            output = output.replace(value, "[REDACTED]")
+        print(f"Probe {label}:\n{output}", file=sys.stderr)
+
+
 def verify(path):
     if (platform.system() != "Linux" or sys.version_info[:2] != (3, 12)
             or platform.python_implementation() != "CPython" or platform.machine() != "x86_64"):
@@ -47,10 +59,14 @@ def verify(path):
                            DB_AUTH_MODE="iam", DB_HOST="db.invalid", DB_NAME="fintrust",
                            DB_USER="fintrust_api_dev", FINTRUST_SERVICE="api", FINTRUST_STAGE="dev",
                            DB_SSLROOTCERT=str(root / "certs/global-bundle.pem"))
-        result = subprocess.run([sys.executable, "-I", str(Path(__file__).with_name("lambda_import_probe.py")),
-                                 str(root), json.dumps(list(HANDLERS.values()))],
-                                cwd=root, env=environment, check=True, timeout=60,
-                                capture_output=True, text=True)
+        try:
+            result = subprocess.run([sys.executable, "-I", str(Path(__file__).with_name("lambda_import_probe.py")),
+                                     str(root), json.dumps(list(HANDLERS.values()))],
+                                    cwd=root, env=environment, check=True, timeout=60,
+                                    capture_output=True, text=True)
+        except subprocess.CalledProcessError as error:
+            report_probe_failure(error, environment)
+            raise
         probe = json.loads(result.stdout)
     if probe["ca_sha256"] != manifest.get("ca_sha256"):
         raise ValueError("Manifest mismatch: ca_sha256")
