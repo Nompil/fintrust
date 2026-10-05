@@ -69,7 +69,8 @@ def test_execution_gate_rejects_mismatched_manifest(field):
 
 
 @pytest.mark.parametrize("operation", ["socket.getaddrinfo('db.invalid', 5432)",
-                                      "socket.socket().connect(('127.0.0.1', 9))"])
+                                      "socket.socket().connect(('127.0.0.1', 9))",
+                                      "socket.socket().bind(('127.0.0.1', 0))"])
 def test_import_probe_blocks_network_before_connection(tmp_path, operation):
     (tmp_path / "network_handler.py").write_text(
         f"import socket\n{operation}\ndef handler(event, context): pass\n", encoding="utf-8")
@@ -79,6 +80,38 @@ def test_import_probe_blocks_network_before_connection(tmp_path, operation):
                             capture_output=True, text=True, timeout=10)
     assert result.returncode != 0
     assert "Network access attempted during package verification" in result.stderr
+    line = next(line for line in result.stderr.splitlines() if line.startswith("Blocked network operation: "))
+    diagnostic = json.loads(line.removeprefix("Blocked network operation: "))
+    assert diagnostic["operation"].startswith("socket.")
+    assert any(frame["module"] == "network_handler" and frame["line"] == 2
+               for frame in diagnostic["stack"])
+
+
+def test_caught_network_rejection_still_reports_caller_without_locals(tmp_path):
+    (tmp_path / "network_handler.py").write_text(
+        "import socket\n"
+        "def check_socket():\n"
+        "    credential = 'private-value-not-for-logs'\n"
+        "    try:\n"
+        "        with socket.socket() as sock:\n"
+        "            sock.bind(('127.0.0.1', 0))\n"
+        "    except RuntimeError:\n"
+        "        print('rejection caught')\n"
+        "check_socket()\n"
+        "raise ValueError('stop after diagnostic')\n", encoding="utf-8")
+    script = Path(__file__).resolve().parents[1] / "tools/lambda_import_probe.py"
+    result = subprocess.run([sys.executable, "-I", str(script), str(tmp_path),
+                             json.dumps(["network_handler.handler"])],
+                            capture_output=True, text=True, timeout=10)
+    assert result.returncode != 0
+    assert result.stdout.strip() == "rejection caught"
+    line = next(line for line in result.stderr.splitlines() if line.startswith("Blocked network operation: "))
+    diagnostic = json.loads(line.removeprefix("Blocked network operation: "))
+    assert diagnostic["operation"] == "socket.bind"
+    assert diagnostic["stack"][0] == {"module": "network_handler", "function": "check_socket",
+                                      "file": str(tmp_path / "network_handler.py"), "line": 6}
+    assert "private-value-not-for-logs" not in result.stderr
+    assert "127.0.0.1" not in line
 
 
 def test_archive_rejects_missing_runtime_assets(tmp_path):

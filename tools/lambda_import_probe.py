@@ -15,6 +15,17 @@ def probe(root, handlers):
     def block_network(event, args):
         if event.startswith("socket.") and event != "socket.__new__":
             attempts.append(event)
+            # Capture attribution now: import helpers can catch the rejection.
+            # Omit source lines, frame locals and socket arguments/addresses.
+            stack = []
+            frame = sys._getframe(1)
+            while frame is not None:
+                stack.append({"module": frame.f_globals.get("__name__", "<unknown>"),
+                              "function": frame.f_code.co_name,
+                              "file": frame.f_code.co_filename, "line": frame.f_lineno})
+                frame = frame.f_back
+            print("Blocked network operation: " + json.dumps({"operation": event,
+                  "stack": stack}), file=sys.stderr, flush=True)
             raise RuntimeError("Network access attempted during package verification")
 
     # Audit hooks catch DNS and socket operations even if imported code catches
