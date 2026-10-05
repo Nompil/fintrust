@@ -3,12 +3,32 @@ import json
 from pathlib import Path
 import subprocess
 import sys
+import socket
+from types import SimpleNamespace
 import pytest
 
 from tools.package_lambda import HANDLERS, verify_archive
 from infrastructure.ssm.put_parameters import build_parameters
 from tools.verify_lambda_linux import validate_manifest
 from tools import verify_lambda_linux
+from tools.lambda_import_probe import is_ipv6_capability_check
+
+
+@pytest.mark.parametrize("change", [None, "address", "port", "family", "type", "module", "function", "file", "event"])
+def test_capability_allowance_requires_exact_address_socket_and_caller(tmp_path, change):
+    sock = SimpleNamespace(family=socket.AF_INET6, type=socket.SOCK_STREAM)
+    caller = SimpleNamespace(f_globals={"__name__": "urllib3.util.connection"},
+        f_code=SimpleNamespace(co_name="_has_ipv6", co_filename=str(tmp_path / "urllib3/util/connection.py")))
+    address, event = ("::1", 0), "socket.bind"
+    if change == "address": address = ("::", 0)
+    if change == "port": address = ("::1", 8000)
+    if change == "family": sock.family = socket.AF_INET
+    if change == "type": sock.type = socket.SOCK_DGRAM
+    if change == "module": caller.f_globals["__name__"] = "fintrust.api"
+    if change == "function": caller.f_code.co_name = "handler"
+    if change == "file": caller.f_code.co_filename = str(tmp_path / "elsewhere.py")
+    if change == "event": event = "socket.connect"
+    assert is_ipv6_capability_check(tmp_path, event, (sock, address), caller) is (change is None)
 
 
 def test_failed_probe_surfaces_diagnostics_and_keeps_manifest_unverified(tmp_path, monkeypatch, capsys):
@@ -70,7 +90,12 @@ def test_execution_gate_rejects_mismatched_manifest(field):
 
 @pytest.mark.parametrize("operation", ["socket.getaddrinfo('db.invalid', 5432)",
                                       "socket.socket().connect(('127.0.0.1', 9))",
-                                      "socket.socket().bind(('127.0.0.1', 0))"])
+                                      "socket.socket().connect_ex(('192.0.2.1', 9))",
+                                      "socket.socket().bind(('127.0.0.1', 0))",
+                                      "socket.socket().bind(('0.0.0.0', 0))",
+                                      "socket.socket(socket.AF_INET6).bind(('::1', 8000))",
+                                      "socket.socket(socket.AF_INET6).bind(('::1', 0))",
+                                      "socket.gethostname()"])
 def test_import_probe_blocks_network_before_connection(tmp_path, operation):
     (tmp_path / "network_handler.py").write_text(
         f"import socket\n{operation}\ndef handler(event, context): pass\n", encoding="utf-8")
