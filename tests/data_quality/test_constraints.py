@@ -91,12 +91,17 @@ def test_invalid_kyc_status_rejected_by_check_constraint(database_connection):
 
 
 def test_account_with_transactions_cannot_be_deleted(database_connection):
-    assert_database_rejects(
-        database_connection,
-        psycopg2.errors.RestrictViolation,
-        "DELETE FROM accounts WHERE account_id = %s",
-        ("20000000-0000-4000-8000-000000000001",),
-    )
+    # PostgreSQL 16 reports 23503; local PostgreSQL 18.6 reports 23001 for RESTRICT.
+    with pytest.raises((psycopg2.errors.ForeignKeyViolation,
+                        psycopg2.errors.RestrictViolation)) as rejected:
+        with database_connection.cursor() as cursor:
+            cursor.execute(
+                "DELETE FROM accounts WHERE account_id = %s",
+                ("20000000-0000-4000-8000-000000000001",),
+            )
+    assert rejected.value.pgcode in {"23503", "23001"}
+    assert rejected.value.diag.constraint_name == "transactions_account_id_fkey"
+    database_connection.rollback()
 
 
 def test_risk_report_counts_transactions_not_repeated_risk_events(database_connection):
