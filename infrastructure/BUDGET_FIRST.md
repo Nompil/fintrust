@@ -2,6 +2,17 @@
 
 > Current verification: [FINAL_VERIFICATION.md](FINAL_VERIFICATION.md). The audit below records the earlier baseline; use the final report for current tests, package evidence and remaining gates.
 
+Current cost decision: **Free Tier first**. The account's active Free Plan has
+USD 120 remaining at verification; this is credit-funded usage, not a legacy
+RDS monthly allowance. The Stage 3 candidate is private Single-AZ PostgreSQL 16
+on `db.t4g.micro`, 5 GiB gp2, with IAM/TLS and AWS-managed RDS encryption.
+The revised baseline is USD 16.085 per 730-hour month before credits and extras.
+See [the canonical cost review](DEPLOYMENT_BOOTSTRAP.md#b-rds-recommendation)
+for availability, memory acceptance, backup costs and the 24-hour initial demo
+limit. RDS creation and any paid-plan upgrade require separate approval.
+Existing combined templates and older recommendations below are not authorization
+to create their paid resources.
+
 # Budget-first preparation
 
 ## Dependency review before code changes

@@ -6,8 +6,8 @@ Continues the completed inventory at commit
 `65614ba14c22aed251a8498e34b60ef18cef68be`. The verified Linux CI result remains
 178 passed, zero failed, zero skipped, with the matching package marked
 `linux_execution_verified: true`. CI, inventory, GitHub setup and earlier phases
-were not repeated. No AWS account calls or changes were made for this review.
-Public AWS documentation and the unauthenticated regional pricing catalogue were read.
+were not repeated. The current review used read-only STS, RDS orderability and Free Tier plan calls,
+plus the public regional pricing catalogue. No AWS resources were changed.
 
 Account `966467878406`, region `af-south-1`, one `dev` assessment environment.
 The local inventory and reconciliation evidence remains in ignored
@@ -16,7 +16,7 @@ the default public network and unrelated DataSync buckets must remain untouched.
 
 ## A. Deployment identity recommendation
 
-Use `fintrust-deployer` with MFA and browser/CLI temporary credentials to assume
+Use `fintrust_deployer` with MFA and browser/CLI temporary credentials to assume
 `fintrust-deployer-role`. Keep `fintrust-inventory` read-only. No access keys,
 AdministratorAccess, PowerUserAccess, GitHub AWS credentials or OIDC are needed.
 
@@ -37,11 +37,11 @@ of working cloud permissions is made from a local policy review.
 |---|---|
 | Identifier / database | `fintrust-ledger-dev` / `fintrust`; one instance |
 | Engine | PostgreSQL 16, parameter family `postgres16`; pin a supported, orderable 16.x minor version at the Stage 3 review. Do not silently use an AWS default or substitute another region |
-| Instance | `db.t4g.small`: 2 vCPU, 2 GiB RAM. Smallest recommended starting point for this IAM-authenticated assessment, subject to regional orderability and a measured memory/connection check |
-| Cheaper alternative | `db.t4g.micro` has 1 GiB RAM. It is not the recommended baseline because IAM authentication consumes additional memory; do not silently downsize to meet budget |
+| Instance | **`db.t4g.micro`**, 2 vCPU, 1 GiB RAM; the smallest Free Plan-supported Graviton option, for a bounded sequential demo. Capacity acceptance is still required |
+| Alternatives | `db.t3.micro` has the same 1 GiB memory and costs more here. `db.t4g.small` remains a memory fallback requiring separate paid-plan/cost review; it is not the default |
 | Availability | Single-AZ, `MultiAZ=false`; no replica, proxy or Aurora. Two-AZ subnet group provides placement options, not high availability |
-| Storage | gp3, 20 GiB; baseline IOPS/throughput, no extra provisioned performance. Storage autoscaling off initially to prevent unreviewed growth; alarm on low free storage before data loading |
-| Encryption | `StorageEncrypted=true`, use the single approved regional FinTrust CMK from Stage 2; retain decrypt access for backups |
+| Storage | **5 GiB gp2**, confirmed regional minimum; no storage autoscaling or provisioned IOPS. Small synthetic data only; stop loading below 2 GiB free space. Review growth before increasing capacity. A 20 GiB gp3 alternative costs USD 2.265/month more |
+| Encryption | `StorageEncrypted=true`, prefer the regional AWS-managed `aws/rds` key. No separate customer-managed key is required for this single-account demo. This changes the RDS proposal only; existing S3 CMK policies must be reviewed separately before Stage 2 |
 | Network | `PubliclyAccessible=false`, IPv4 private endpoint, `fintrust-db-dev` subnet group across `af-south-1a` and `af-south-1b`; DB security group accepts TCP 5432 only from the application SG and a separately reviewed temporary bootstrap SG |
 | Authentication / TLS | IAM DB authentication enabled, `rds.force_ssl=1`, clients use `verify-full` and the bundled RDS CA. Distinct `fintrust_scoring_dev`, `fintrust_api_dev`, `fintrust_report_dev` logins get `rds_iam` plus their corresponding least-privilege SQL group |
 | Administrator secret | Recommend RDS-managed master secret in Secrets Manager, with its separate storage/API cost disclosed. No master password in Git, parameters, outputs, shell history or application environment. Retrieval only by the later bootstrap process |
@@ -52,16 +52,20 @@ of working cloud permissions is made from a local policy review.
 
 AWS documents [2 GiB for t4g.small](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.Summary.html)
 and [300–1000 MiB additional memory for IAM authentication](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html).
-The size recommendation is an engineering allowance, not a measured capacity result.
+Micro is a cost-first candidate, not a measured capacity result. IAM support is
+confirmed by the regional orderability API; sufficient memory is not. If the
+bounded workload cannot retain memory headroom, stop and review configuration
+and budget rather than disable IAM authentication or silently resize.
 RDS's Arm processor does not require changing the x86_64 Lambda package: the
 application communicates with PostgreSQL over its network protocol.
 
 Keep the engine's default `max_connections`; record the actual value before
 enabling consumers. Do not assume a fixed connection count from instance memory
-or raise it to hide overload. Proposed reserved concurrency: scoring 2, API 2,
-report 1; start report runs separately from ingestion. Current SQL helpers close
+or raise it to hide overload. For the micro trial, propose reserved concurrency 1 per DB-using function and
+exercise scoring, API and report sequentially; do not enable background schedules.
+These are deployment requirements, not changes already applied to processing.py. Current SQL helpers close
 connections and scoring processes records sequentially. Confirm all deployed paths
-before treating five as a practical concurrent-connection target, and leave room
+before setting a measured concurrent-connection limit, and leave room
 for bootstrap/admin connections and engine overhead. Account concurrency quotas
 can prevent reservations; stop rather than deploy without the reviewed limits.
 Record memory, DB connections and burst-credit balance during the small demo.
@@ -85,32 +89,90 @@ least-privilege role tests and restore procedure before claiming the DB ready.
 
 ## C. Budget and cost controls
 
-### Regional price calculation
+### Free Tier-first decision and account evidence
 
-The [AWS public Cape Town RDS price list](https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonRDS/current/af-south-1/index.json)
-returned these PostgreSQL Single-AZ on-demand rates. This was an unauthenticated
-HTTPS read, not a Cost Explorer or AWS account API query.
+Use AWS Free Tier wherever practical. Paid resources require a demonstrated
+project need and separate approval; credits are a reserve, not a spending target.
+The read-only `freetier get-account-plan-state` response confirms this account is
+`FREE` / `ACTIVE`, with **USD 120 remaining**. Remaining credit and duration change;
+recheck them immediately before Stage 3. No account-plan upgrade is authorized.
 
-| Item | Rate | Planning calculation |
-|---|---:|---:|
-| `db.t4g.small` compute | USD 0.041/hour | 730 hours = USD 29.93 |
-| `db.t4g.micro` comparison only | USD 0.021/hour | 730 hours = USD 15.33 |
-| gp3 allocated storage | USD 0.151/GiB-month | 20 GiB = USD 3.02/month |
-| Recommended RDS subtotal | | **USD 32.95/month** at 730 running hours |
-| Short-demo RDS subtotal | | **USD 4.004** for 24 running hours plus a full month of 20 GiB storage |
+[AWS RDS Free Tier](https://aws.amazon.com/rds/free/) lists `db.t3.micro` and
+`db.t4g.micro` for PostgreSQL on the Free Plan. This account uses the **credit-based
+plan**, not the legacy 12-month allowance. RDS usage consumes credits; there is no
+independent recurring allocation of 750 RDS hours or 20 GiB storage to assume here.
+Under the [Free Plan rules](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/free-tier-plans.html),
+access ends when credits or plan time run out. Preserve exports/evidence before
+that boundary. Do not upgrade automatically to preserve running infrastructure.
 
-These exclude CPU surplus credits, additional backups/snapshots, Secrets Manager,
-CMK, requests, monitoring, transfer, tax and FX. They assume no free tier or
-credits. T4g uses Unlimited burst mode and sustained CPU can add charges; see
-[RDS instance pricing characteristics](https://aws.amazon.com/rds/instance-types/).
-Orderability of the exact minor version/class/storage combination remains a
-Stage 3 check; a price-list entry is not an availability guarantee.
+For comparison only, the [legacy RDS offer](https://aws.amazon.com/rds/pricing/)
+provides eligible accounts 750 Single-AZ micro hours, 20 GB gp2 and 20 GB automated
+backup storage per month during its qualifying period. Allowances are shared,
+not per instance; gp3 must not be assumed included. That is not this account's offer.
 
-Illustration only, **not a live exchange-rate quote**: at R18/USD the RDS monthly
-subtotal is R593.10 before extras. Even micro's USD 18.35 compute/storage subtotal
-would be R330.30. Always-on RDS is incompatible with an approximately R200 ceiling
-under that planning assumption. Use short, scheduled demonstrations and approved
-teardown, or approve a higher budget; never promise credits make it free.
+### Regional availability and standing cost
+
+Read-only `DescribeOrderableDBInstanceOptions` in `af-south-1` returned
+`db.t3.micro`, `db.t4g.micro` and `db.t4g.small` for PostgreSQL **16.14**, with IAM
+authentication and storage encryption supported. The t4g.micro query also returned
+other 16.x minors. Recheck the chosen minor's standard-support status and pin it
+at Stage 3; do not interpret availability as deployment approval or guaranteed capacity.
+No smaller PostgreSQL micro class is proposed; changing engines to obtain another
+free offer would not preserve the existing PostgreSQL application.
+
+The [public Cape Town RDS catalogue](https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonRDS/current/af-south-1/index.json)
+was checked again. These are Single-AZ on-demand costs **before credits**:
+
+| Candidate | Compute/hour | 730 hours + 5 GiB gp2 | Free Plan-listed class |
+|---|---:|---:|---|
+| **db.t4g.micro** | USD 0.021 | **USD 16.085** | Yes; uses credits |
+| db.t3.micro | USD 0.024 | USD 18.275 | Yes; uses credits |
+| db.t4g.small | USD 0.041 | USD 30.685 | Not listed for the Free Plan; no automatic upgrade |
+
+Both gp2 and gp3 are USD 0.151/GiB-month here. The API and the engine-specific
+[storage table](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html)
+agree on **5 GiB minimum gp2** and **20 GiB minimum gp3**. gp2's small-volume
+baseline is 100 IOPS with burst credits; gp3 provides 3,000 baseline IOPS. Five GiB
+is a demo proposal, not a production retention design. The seed contains only
+five accounts and 200 transactions; cap further synthetic loading and measure
+actual database/WAL/storage usage before the demo. Do not assume all 5 GiB is
+available for application rows.
+
+Recommended compute + storage: **USD 16.09/month** rounded at 730 running hours.
+With 20 GiB gp3 it would be **USD 18.35/month**. The previous small/20 GiB estimate
+of USD 32.95 is superseded. A conservative short-demo estimate is
+`24 * 0.021 + 5 * 0.151 = USD 1.259`: 24 running hours plus a full month of storage.
+Stopped 5 GiB storage alone is USD 0.755/month while retained. Storage is billed
+for provisioned capacity over time, not merely rows inserted.
+
+These subtotals exclude burst CPU charges, extra/retained backups, Secrets Manager,
+KMS requests, monitoring, transfer and tax. They are credit consumption estimates,
+not a promise of a zero bill or an allowance to exhaust the USD 120 balance.
+T3/T4g sustained CPU in Unlimited mode can add charges. Single-AZ only: no replica,
+RDS Proxy, Aurora, Multi-AZ, extra IOPS, enhanced monitoring or paid Extended Support.
+
+One-day automated backup retention remains proposed. General backup allowances
+are tied to provisioned database storage in the region; retained snapshots or
+backups after deletion can continue costing money. Do not assume a permanent
+20 GiB free backup allowance on this account. Review the [backup pricing](https://aws.amazon.com/rds/postgresql/pricing/)
+and measured backup footprint at Stage 3. The proposed managed master secret
+also has a separate charge and must be explicitly included before approval.
+
+**Stage 3 is conditionally acceptable under Free Tier-first guidance** for this
+credit-funded micro demo, not as an always-free database. Before creation, agree
+at most 24 initial running hours, verify current credit/plan headroom, and approve
+the complete estimate including bootstrap/secret/monitoring costs. A later IAM/TLS
+smoke test must pass without OOM/restarts, with measured memory, connection,
+CPU-credit and storage headroom. If it fails, stop and review; small is not an
+automatic fallback. Local PostgreSQL remains the no-AWS-cost development option.
+
+After each approved session, disable consumers/schedules before stopping RDS.
+[RDS restarts after seven stopped days](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_StopInstance.html);
+set an owner reminder before that deadline. Stop is not cleanup: storage persists.
+After evidence/export/restore checks, obtain teardown approval, delete the instance
+and review final snapshots/retained backups and secrets individually. Keep budget
+alerts until residual storage costs are resolved; never delete ledger evidence
+just to meet the budget.
 
 ### Proposed safeguards
 
