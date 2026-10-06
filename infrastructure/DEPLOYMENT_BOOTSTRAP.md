@@ -1,0 +1,295 @@
+# Deployment bootstrap and cost gate
+
+Status: **REVIEW PREPARED; NO DEPLOYMENT AUTHORIZED.**
+
+Continues the completed inventory at commit
+`65614ba14c22aed251a8498e34b60ef18cef68be`. The verified Linux CI result remains
+178 passed, zero failed, zero skipped, with the matching package marked
+`linux_execution_verified: true`. CI, inventory, GitHub setup and earlier phases
+were not repeated. No AWS account calls or changes were made for this review.
+Public AWS documentation and the unauthenticated regional pricing catalogue were read.
+
+Account `966467878406`, region `af-south-1`, one `dev` assessment environment.
+The local inventory and reconciliation evidence remains in ignored
+`build/aws-inventory/REPORT.md`. It found no RDS or FinTrust application resources;
+the default public network and unrelated DataSync buckets must remain untouched.
+
+## A. Deployment identity recommendation
+
+Use `fintrust-deployer` with MFA and browser/CLI temporary credentials to assume
+`fintrust-deployer-role`. Keep `fintrust-inventory` read-only. No access keys,
+AdministratorAccess, PowerUserAccess, GitHub AWS credentials or OIDC are needed.
+
+[Deployment identity design](iam/DEPLOYER_DESIGN.md) supplies the trust policy,
+user policy, stage-specific role permission specification and acceptance checks.
+Only an authorized administrator bootstraps these identities. The deployer cannot
+expand its own permissions. The billing administrator creates the safeguards.
+Stage 1 requires no IAM PassRole or persistent CloudFormation execution role.
+
+The permission specification still needs action/resource-condition validation
+against the network-only template before attachment. MFA-backed role assumption
+must be demonstrated before infrastructure write access is installed. No claim
+of working cloud permissions is made from a local policy review.
+
+## B. RDS recommendation
+
+| Setting | Proposed value and reason |
+|---|---|
+| Identifier / database | `fintrust-ledger-dev` / `fintrust`; one instance |
+| Engine | PostgreSQL 16, parameter family `postgres16`; pin a supported, orderable 16.x minor version at the Stage 3 review. Do not silently use an AWS default or substitute another region |
+| Instance | `db.t4g.small`: 2 vCPU, 2 GiB RAM. Smallest recommended starting point for this IAM-authenticated assessment, subject to regional orderability and a measured memory/connection check |
+| Cheaper alternative | `db.t4g.micro` has 1 GiB RAM. It is not the recommended baseline because IAM authentication consumes additional memory; do not silently downsize to meet budget |
+| Availability | Single-AZ, `MultiAZ=false`; no replica, proxy or Aurora. Two-AZ subnet group provides placement options, not high availability |
+| Storage | gp3, 20 GiB; baseline IOPS/throughput, no extra provisioned performance. Storage autoscaling off initially to prevent unreviewed growth; alarm on low free storage before data loading |
+| Encryption | `StorageEncrypted=true`, use the single approved regional FinTrust CMK from Stage 2; retain decrypt access for backups |
+| Network | `PubliclyAccessible=false`, IPv4 private endpoint, `fintrust-db-dev` subnet group across `af-south-1a` and `af-south-1b`; DB security group accepts TCP 5432 only from the application SG and a separately reviewed temporary bootstrap SG |
+| Authentication / TLS | IAM DB authentication enabled, `rds.force_ssl=1`, clients use `verify-full` and the bundled RDS CA. Distinct `fintrust_scoring_dev`, `fintrust_api_dev`, `fintrust_report_dev` logins get `rds_iam` plus their corresponding least-privilege SQL group |
+| Administrator secret | Recommend RDS-managed master secret in Secrets Manager, with its separate storage/API cost disclosed. No master password in Git, parameters, outputs, shell history or application environment. Retrieval only by the later bootstrap process |
+| Backups | One-day automated retention for synthetic assessment data, copy tags to snapshots. Final snapshot on approved teardown; retain it only for the explicitly agreed evidence/restore period |
+| Protection | Deletion protection on; CloudFormation deletion/replacement snapshot policies. Teardown requires separate approval to disable protection, export/reconcile and verify restore evidence |
+| Maintenance | Automatic minor upgrades on within PostgreSQL 16; major upgrades off. Standard support only; no automatic paid Extended Support enrollment |
+| Monitoring | Standard metrics plus 14-day application logs initially; no paid enhanced monitoring/advanced database insights selected. Essential DB/memory/storage/connection alarms before workload |
+
+AWS documents [2 GiB for t4g.small](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.Summary.html)
+and [300–1000 MiB additional memory for IAM authentication](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html).
+The size recommendation is an engineering allowance, not a measured capacity result.
+RDS's Arm processor does not require changing the x86_64 Lambda package: the
+application communicates with PostgreSQL over its network protocol.
+
+Keep the engine's default `max_connections`; record the actual value before
+enabling consumers. Do not assume a fixed connection count from instance memory
+or raise it to hide overload. Proposed reserved concurrency: scoring 2, API 2,
+report 1; start report runs separately from ingestion. Current SQL helpers close
+connections and scoring processes records sequentially. Confirm all deployed paths
+before treating five as a practical concurrent-connection target, and leave room
+for bootstrap/admin connections and engine overhead. Account concurrency quotas
+can prevent reservations; stop rather than deploy without the reviewed limits.
+Record memory, DB connections and burst-credit balance during the small demo.
+
+### Private database bootstrap is a real dependency
+
+The laptop cannot directly reach this database through gateway endpoints. Do not
+add public access, an IGW, NAT or paid interface endpoints merely to run SQL.
+Recommend a separately reviewed, temporary VPC-attached migration Lambda with
+concurrency 1 and no triggers. An authorized local operator retrieves the master
+secret and supplies it through an in-memory invocation payload, never CLI literals,
+logs or artifacts; the runner must redact events/errors and close the connection.
+It applies the reviewed schema and service grants, then its temporary role,
+function and DB ingress are removed. This is a proposal, not implemented or invoked.
+It adds a temporary bootstrap Lambda in Stage 3, distinct from the five runtime
+functions, and requires explicit approval and a credential-handling review.
+
+Review the untracked `infrastructure/rds/schema.sql` separately before use; it
+has not been staged or adopted. Verify the canonical schema, account seed data,
+least-privilege role tests and restore procedure before claiming the DB ready.
+
+## C. Budget and cost controls
+
+### Regional price calculation
+
+The [AWS public Cape Town RDS price list](https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonRDS/current/af-south-1/index.json)
+returned these PostgreSQL Single-AZ on-demand rates. This was an unauthenticated
+HTTPS read, not a Cost Explorer or AWS account API query.
+
+| Item | Rate | Planning calculation |
+|---|---:|---:|
+| `db.t4g.small` compute | USD 0.041/hour | 730 hours = USD 29.93 |
+| `db.t4g.micro` comparison only | USD 0.021/hour | 730 hours = USD 15.33 |
+| gp3 allocated storage | USD 0.151/GiB-month | 20 GiB = USD 3.02/month |
+| Recommended RDS subtotal | | **USD 32.95/month** at 730 running hours |
+| Short-demo RDS subtotal | | **USD 4.004** for 24 running hours plus a full month of 20 GiB storage |
+
+These exclude CPU surplus credits, additional backups/snapshots, Secrets Manager,
+CMK, requests, monitoring, transfer, tax and FX. They assume no free tier or
+credits. T4g uses Unlimited burst mode and sustained CPU can add charges; see
+[RDS instance pricing characteristics](https://aws.amazon.com/rds/instance-types/).
+Orderability of the exact minor version/class/storage combination remains a
+Stage 3 check; a price-list entry is not an availability guarantee.
+
+Illustration only, **not a live exchange-rate quote**: at R18/USD the RDS monthly
+subtotal is R593.10 before extras. Even micro's USD 18.35 compute/storage subtotal
+would be R330.30. Always-on RDS is incompatible with an approximately R200 ceiling
+under that planning assumption. Use short, scheduled demonstrations and approved
+teardown, or approve a higher budget; never promise credits make it free.
+
+### Proposed safeguards
+
+- One monthly account-wide cost budget, provisional **USD 10**, named
+  `fintrust-assessment-monthly`. Account-wide coverage catches costs outside
+  FinTrust; a tag-only budget can miss untagged/new resources. Exclude credits and
+  refunds from the cost measure so they do not hide consumption; include tax and
+  other usage charges where supported. Inspect credit balance/expiry separately.
+- Set actual-cost emails at 50%, 80%, 100%: USD 5, 8, 10; add forecasted 100%.
+  Primary recipient is the owner's confirmed email; secondary recipient is an
+  approved mentor/billing contact if desired. Neither address is known yet; do
+  not invent one or create a subscription without approval.
+- Before creation, use the owner's billing currency, FX and tax assumptions to
+  finalize the USD amount. A conservative rule is `min(10, 180 / approved ZAR-per-USD)`
+  when tax is already included in the estimate; reserve at least R20 for delay/FX.
+  If tax is excluded, reduce that amount further. R200 must never be entered as
+  USD 200. USD 10 is a proposal, not an approved spending allowance.
+- For the rubric's billing alarm, separately configure `AWS/Billing`
+  `EstimatedCharges`, `Currency=USD`, Maximum over 6 hours, one evaluation period,
+  threshold equal to the approved USD budget, missing data treated as missing.
+  Enable billing alerts through the billing administrator and use a confirmed
+  email subscription on a named billing SNS topic. This alarm/topic is in
+  **us-east-1 only**, the documented global billing exception; application resources
+  remain in Cape Town. This also needs Stage 0 approval and a small cost allowance.
+- At 50%: inspect burn rate and remaining demo hours. At 80%: suspend new paid-stage
+  approvals, finish the necessary evidence and plan teardown. At 100%: no further
+  workload without explicit review. These are operator actions, not automatic
+  deletions. Do not use automatic budget actions that could destroy evidence.
+- Check Billing before and after each paid demonstration; agree a named owner,
+  maximum running hours and cleanup reminder before creating RDS. No savings plan,
+  reserved instance or long-term commitment for this assessment.
+
+[AWS Budgets](https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html)
+can notify after costs have already accrued: it is not a hard spending cap.
+The [CloudWatch billing alarm](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/monitor_estimated_charges_with_cloudwatch.html)
+uses global estimated USD charges from us-east-1 and does not forecast spending.
+Neither proves the remaining credit allowance or guarantees an R200 final bill.
+
+## D. Stage 1 network resources
+
+Retain the existing two shared private subnets. The working design does not
+require separate application/database subnet tiers for this assessment; SGs
+separate access. Four subnets can be considered later if the rubric explicitly
+requires them, but are not needed to make PostgreSQL private.
+
+| Resource | Exact proposed shape |
+|---|---|
+| Stack | `fintrust-network-dev`, ownership tags `Project=FinTrust`, `Environment=dev` |
+| VPC | `10.42.0.0/16`, DNS support/hostnames enabled |
+| Private subnet 1 | `10.42.0.0/24`, `af-south-1a`, public-IP assignment false |
+| Private subnet 2 | `10.42.1.0/24`, `af-south-1b`, public-IP assignment false |
+| Route table | One shared private table and two explicit associations; automatic local route plus S3/DynamoDB prefix-list routes only |
+| Application SG | No ingress; egress TCP 5432 to DB SG, TCP 443 only to regional S3/DynamoDB managed prefix lists |
+| DB SG | Ingress TCP 5432 only from application SG. Preserve the existing inert loopback egress rule to suppress EC2's automatic allow-all egress; return traffic is stateful |
+| DB subnet group | Explicit name `fintrust-db-dev`, both private subnets; no instance or parameter group yet |
+| S3 gateway endpoint | `com.amazonaws.af-south-1.s3`, associated private route table, narrow future-bucket object policy |
+| DynamoDB gateway endpoint | `com.amazonaws.af-south-1.dynamodb`, associated private route table, narrow future-risk-table policy |
+
+Known inventory prefix-list IDs are `pl-a3ac49ca` (S3) and `pl-d6ae4bbf`
+(DynamoDB). Keep them deployment parameters and validate their service/region
+before execution; do not bake them into portable code. AZ selection also remains
+a parameter with the reviewed two distinct AZs supplied for this account.
+
+No Internet Gateway is required. Private functions call RDS and gateway-supported
+S3/DynamoDB APIs; ingest and alert run outside the customer VPC. Lambda-managed
+polling/log delivery does not require private functions to reach the internet.
+No default internet route, NAT, interface endpoint, public IP or bastion is planned.
+[Gateway endpoints have no additional endpoint charge](https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html);
+underlying data-service usage remains billable later.
+
+Gateway policies must use deterministic ARNs for future resources, not `Ref`s to
+resources in other stages. Preserve the current allowed actions/account condition:
+S3 GetObject/GetObjectVersion/PutObject on the three bucket object ARNs, DynamoDB
+GetItem/PutItem/Query on `fintrust-risk-dev`. An ARN in a policy does not create its
+target. Do not temporarily use a full-access endpoint policy to break the dependency.
+
+## E. Infrastructure code review and required changes
+
+Planning only: the renderers, runtime, schema, tests and CI have not been changed.
+
+| Existing code | Finding | Smallest required change before that stage |
+|---|---|---|
+| `foundation.py` | Already has VPC, two private subnets, one route table, SGs, DB subnet/SSL parameter groups and gateway endpoints; no NAT/IGW or RDS instance | Extract the network-only stage with stable outputs. Add explicit names/ownership tags and a check that its resource types contain no paid application resources |
+| `foundation.py` | Also creates rotating retained CMK, three versioned retained buckets and on-demand DynamoDB; endpoint policies reference those resources directly | Do not deploy the current combined template as Stage 1. Split storage/key into Stage 2, table into Stage 4, DB TLS group into Stage 3. Replace endpoint target Refs with exact deterministic ARNs |
+| `foundation.py` | No hardcoded physical VPC/subnet/SG IDs; pseudo-parameters used for account/region; fixed proposed CIDRs; stage supports dev/staging/prod | Deploy dev only. Keep portable references and supply Cape Town/account guards at execution. Confirm CIDRs against any future connected network |
+| RDS | Instance definition absent; earlier documents assumed an existing instance | Add private encrypted Single-AZ definition with the settings above, managed master secret, protection/snapshot policies and no paid extras. Review minor version, orderability, cost and bootstrap first |
+| `rds/permissions.sql` | Scoped SQL groups exist; cloud LOGIN/rds_iam creation is described in comments | Implement reviewed repeatable setup for the three cloud logins; inspect schema source independently and verify grants before consumers |
+| `iam/create_roles.py` | Offline least-privilege application policy renderer, not a deployment identity creator; some bucket defaults use older names without region | Pass exact stage outputs, never rely on old defaults. Bootstrap deployment IAM separately; application roles must not gain deployment rights |
+| `processing.py` | One template couples all five functions, five SQS queues, mappings, logs and report schedule; consumer/schedule flag shared | Split or parameterize without changing handler behavior so stages can deploy separately. Keep mappings and schedule independently disabled. Add reviewed concurrency limits before invocation |
+| `processing.py` | Requires code bucket/key/hash, existing roles/resources, SES addresses and SSM paths | Define approved artifact storage: use a restricted `deployment/` prefix in the private reports bucket, avoiding a fourth bucket; retain verified artifact/hash pairing and give upload rights only later |
+| `ssm/put_parameters.py` | Writes nonsecret DB settings; private runtime uses deployment-resolved environment | Supply exact endpoint/database/service users only after RDS setup. Do not execute this mutating helper now |
+| `api/gateway.json` | Regional REST API with AWS_IAM data methods | Approve a separate signed demo caller; current browser UI does not sign requests. Do not expose static AWS credentials or disable IAM to make the demo work |
+| Monitoring helper | Mutates resources; default names differ from staged names; alarm recipients absent | Replace with reviewed stage-specific definitions/parameters and confirmed SNS actions. Essential operational alarms accompany workload enablement, not only the final stage |
+| Tracing | Active X-Ray is not wired into processing definitions | Review trace configuration/permissions and bounded sampling at Stage 10 if required; no runtime instrumentation changes in this gate |
+| Legacy helper scripts | Some create resources directly and use environment/SDK defaults | Use reviewed staged templates with explicit region/profile; do not run teaching helpers during deployment |
+
+The processing queue count is **five**: transaction FIFO, its FIFO DLQ, plus ingest,
+alert and report failure queues. Do not omit asynchronous failure destinations
+when splitting stages. S3 notification metadata is not applied automatically;
+wire only after permissions, monitoring and the consumer enablement review.
+
+No hardcoded live physical IDs were found in the core foundation/processing/API
+definitions reviewed. This is a targeted comparison, not a repeated repository
+audit. Historical documentation has older status/count assumptions; the checkpoint
+above is used for this phase without restarting documentation consolidation.
+
+## F. Deployment sequence and learning evidence
+
+Each row is a separate future review/approval checkpoint. Capture screenshots
+without passwords, tokens, authentication URLs or private data.
+
+| Stage | Create / connect / purpose | Console check and evidence | Cost and stop/cleanup |
+|---|---|---|---|
+| 0: identity + budget | MFA user and temporary deployment role; owner billing budget, email notifications and billing alarm | IAM trust/scoped permissions, MFA status and zero access keys; budget amount/thresholds and confirmed alarm recipient | IAM has no resource-hour fee; allow for alarm/SNS usage. Revoke role access when finished; retain billing alerts until all retained costs are reviewed |
+| 1: private foundation | VPC, two private subnets, routes, two SGs, DB subnet group, S3/DynamoDB gateway endpoints | VPC resource map, subnet public-IP false, routes without internet default, DB SG source, endpoint policies/associations | No selected network hourly charge. After dependent resources/ENIs are removed, remove only this stack |
+| 2: KMS + S3 | One CMK and raw/quarantine/reports buckets; restrictive TLS/encryption policies and artifact prefix | Encryption/key alias, public-access blocks, versioning and lifecycle | Key base/rotation/requests plus object storage. Retained versions persist; approve export/retention before bucket/key deletion |
+| 3: RDS + grants | Private PostgreSQL, TLS group, managed master secret and temporary migration runner; three service logins | Public access false, Single-AZ/class/storage/encryption, IAM auth, SG/subnets; sanitized SQL grant and TLS evidence | Main standing cost. Bootstrap runner removed after use; stop DB between short sessions but schedule final approved teardown and snapshot review |
+| 4: DynamoDB + queues | Risk table/stream and all five queues; replay/delivery-state infrastructure | Table keys/NEW_IMAGE, FIFO names, encryption, visibility/redrive/retention, failure destinations | Requests/storage; DLQ messages retained. Preserve uncertain deliveries and evidence before cleanup; no replay yet |
+| 5: ingest | Role, log group, verified code and outside-VPC ingest Lambda, S3 read/quarantine/SQS grants | Handler/runtime/hash, IAM scope, log retention and failure destination; notification remains unwired initially | Lambda/log/API usage. No uploads/event wiring until downstream ready; remove trigger before teardown |
+| 6: scoring | Private scoring Lambda with IAM DB login, SQS mapping initially disabled, DynamoDB/S3 access | VPC attachment, service DB username (no secrets), mapping disabled, batch failure support/concurrency | RDS already costs while running; bound consumers before enabling. Disable mapping and preserve queue before stop |
+| 7: alert + SES | Outside-VPC alert Lambda, scoped sender/recipient, stream mapping initially disabled | Verified SES identities/sandbox, INSERT/high-risk filter, conditional delivery tests, held-send recovery and alarms | SES/Lambda/log usage. Approve any real test email; disable mapping, reconcile SENDING/UNKNOWN before teardown |
+| 8: query + API | Private API Lambda and Regional REST endpoint, separate signed demo identity | AWS_IAM data routes, signed request success and unauthorized failure; private DB connectivity | Request/Lambda/log charges. Disable demo access and remove API during approved teardown |
+| 9: reporting | Private report Lambda, report queue policy and disabled monthly rule | SQL report in S3, rule DISABLED, limited retries/failure destination; manual synthetic run only when approved | RDS/query/Lambda/S3 charges. Keep schedule disabled outside approved tests; preserve required exports |
+| 10: observability + E2E | Complete scoped alarms/log queries/tracing and controlled synthetic flow | Error/DLQ/DB alarms, trace if required, S3-to-report/alert correlation, duplicate/retry evidence and cost view | Logs/metrics/alarms/traces bill by use/retention. Bound volume, stop triggers/schedule, reconcile, export and execute separately approved cleanup |
+
+Stage numbers describe construction order, not permission to enable traffic.
+Create basic logs, failure destinations, notifications and essential alarms with
+their associated stages. Only after Stages 5–8 are ready and monitoring/recovery
+is checked should the owner approve a small end-to-end upload and email. Do not
+wait until Stage 10 to discover there was no failure alert during earlier tests.
+
+## G. Standing costs and teardown
+
+| Category | Exposure |
+|---|---|
+| RDS | Compute while running, provisioned storage even when stopped, surplus CPU credits, excess/retained backup storage |
+| Encryption / secret | One CMK base charge (published USD 1/month before requests/eligible rotations); managed master secret storage/API charges |
+| Retained data | S3 current/noncurrent versions, DynamoDB data, snapshots and logs can cost money while no demo runs |
+| Monitoring | Alarms/custom metrics, log ingestion/retention, SNS and tracing as configured |
+| Usage | Lambda, API Gateway, SQS, DynamoDB requests, SES, S3/KMS requests, transfer including possible cross-AZ DB traffic |
+| Excluded | NAT, IGW/public IPs, interface endpoints, proxy, replicas/Multi-AZ, extra environments |
+
+See [KMS pricing](https://aws.amazon.com/kms/pricing/),
+[RDS pricing](https://aws.amazon.com/rds/postgresql/pricing/) and
+[Secrets Manager pricing](https://aws.amazon.com/secrets-manager/pricing/).
+Do not describe retained resources as free because the functions are idle.
+
+Stopping RDS is temporary: AWS can [restart it after seven days](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_StopInstance.html),
+and storage remains billable. Agree a short demo window and reminder; do not build
+an automatic stop/start scheduler in this phase. Final cleanup is separately
+approved: disable event sources, reconcile queue/delivery state, export and verify
+data, take/restore-check the agreed snapshot, remove applications, database and
+secret as approved, then networking after Lambda ENIs clear. Review retained
+objects/snapshots and CMK decrypt dependencies before any key deletion. Retain
+billing safeguards until residual charges are understood.
+
+## H. First approval and unresolved inputs
+
+First cloud action requiring approval: **Stage 0 only**, creation of the separate
+MFA deployer identity and billing safeguards by an authorized administrator.
+Approval must specify the finalized USD budget, real notification recipient and
+whether the us-east-1 billing alarm/SNS exception is accepted. It does not approve
+Stage 1, RDS, KMS, application deployment or email tests.
+
+Before network execution: implement/review the split template and scoped role
+policy, verify ownership/tag controls and change set, then obtain Stage 1 approval.
+Before paid stages: confirm credits/expiry and account billing responsibility,
+tax/FX, maximum RDS hours, exact orderable minor version, managed-secret cost,
+bootstrap credential handling, snapshot/export retention owner, artifact storage,
+SES addresses and signed API demonstration path. Unknown values stay unresolved.
+
+The proposed RDS size is ready for a decision; the database deployment itself is
+not ready. Do not claim a pinned minor version or approved budget without those
+inputs. No permission expansion or new inventory is needed to finish this review.
+
+## I. Stop
+
+No AWS identities, budgets or resources were created, modified or deleted.
+No AWS account APIs were called. No deployment commands were executed, no email
+was sent, and no Git push occurred. The seven pre-existing untracked files remain
+untouched. Only this planning report and its identity-design companion were added.
+Wait for separate approval before Stage 0 or any infrastructure execution.
