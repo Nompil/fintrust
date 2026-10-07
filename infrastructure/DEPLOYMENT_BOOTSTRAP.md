@@ -370,3 +370,25 @@ See [the identity design](iam/DEPLOYER_DESIGN.md#change-set-inspection-permissio
 for both findings and the manual retry. Reuse the existing change set if its status
 and reviewed proposal remain valid. Do not execute it during this check. No AWS
 policy update, infrastructure execution or push was performed by this correction.
+
+
+## Live VPC rollback checkpoint
+
+Read-only AWS events confirm fintrust-network-dev is ROLLBACK_COMPLETE after the
+Vpc resource was denied ec2:ModifyVpcAttribute. The action was already present in
+the attached and local network policy. Corrected only its case-sensitive
+`ec2:Attribute` values to `EnableDnsSupport` and `EnableDnsHostnames`, as shown in
+AWS's IAM example. Both DNS properties are enabled in the source and built
+Stage 1 template. Region, ownership tags, CalledVia and action/resource scope are
+unchanged. Focused tests: **22 passed**; corrected network Access Analyzer result:
+**zero findings**. The policy has not been updated in AWS by this correction and
+no live retry has been performed.
+
+The initial CREATE was executed by the operator and failed; earlier preparation
+checkpoints are historical. Stage 1 is not deployed successfully. Preserve evidence
+and inspect cleanup, then seek approval to replace only FinTrustStage1Network and
+delete the rolled-back named stack. A fresh CREATE change set needs a deleted
+stack name and new review; do not reuse the executed proposal or retry execution
+without approval. See [the identity design](iam/DEPLOYER_DESIGN.md#live-stage-1-vpc-rollback-finding)
+for the finding, sources and manual recovery sequence. No AWS mutation or push
+was performed in this correction.

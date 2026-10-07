@@ -233,8 +233,8 @@
           "aws:ResourceTag/Project": "FinTrust",
           "aws:ResourceTag/Environment": "dev",
           "ec2:Attribute": [
-            "enableDnsSupport",
-            "enableDnsHostnames"
+            "EnableDnsSupport",
+            "EnableDnsHostnames"
           ]
         },
         "ForAnyValue:StringEquals": {

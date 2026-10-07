@@ -133,3 +133,31 @@ def test_describe_change_set_does_not_require_change_set_name_context():
         assert grants[0]["Condition"]["StringLike"] == {
             "cloudformation:ChangeSetName": "fintrust-network-*"
         }
+
+
+
+def test_vpc_dns_permissions_use_case_sensitive_iam_attribute_names():
+    vpc = build_template()["Resources"]["Vpc"]["Properties"]
+    assert vpc["EnableDnsSupport"] is True
+    assert vpc["EnableDnsHostnames"] is True
+    policy = json.loads(Path("infrastructure/iam/stage1-network-policy.json").read_text())
+    grants = [s for s in policy["Statement"] if "ec2:ModifyVpcAttribute" in s["Action"]]
+    assert len(grants) == 1
+    grant = grants[0]
+    assert grant["Action"] == ["ec2:ModifyVpcAttribute"]
+    assert grant["Resource"] == "arn:aws:ec2:af-south-1:966467878406:vpc/*"
+    assert grant["Condition"] == {
+        "StringEquals": {
+            "aws:RequestedRegion": "af-south-1",
+            "aws:ResourceTag/Project": "FinTrust",
+            "aws:ResourceTag/Environment": "dev",
+            "ec2:Attribute": ["EnableDnsSupport", "EnableDnsHostnames"],
+        },
+        "ForAnyValue:StringEquals": {"aws:CalledVia": ["cloudformation.amazonaws.com"]},
+    }
+    # IAM StringEquals is case-sensitive; describe-API attribute spellings differ.
+    names = grant["Condition"]["StringEquals"]["ec2:Attribute"]
+    for required in ("EnableDnsSupport", "EnableDnsHostnames"):
+        assert required in names
+    for forbidden in ("enableDnsSupport", "enableDnsHostnames", "InstanceTenancy", "*"):
+        assert forbidden not in names

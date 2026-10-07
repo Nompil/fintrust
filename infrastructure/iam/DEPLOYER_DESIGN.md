@@ -155,7 +155,7 @@ The JSON is authoritative for each statement and condition.
 | `ec2:CreateSubnet`, `ec2:CreateRouteTable`, `ec2:CreateSecurityGroup` | Respective new EC2 ARNs with request tags **and** owned parent VPC ARN in separate statements; four private subnets, two route tables and two SGs |
 | `ec2:CreateVpcEndpoint` | New endpoint ARN with request tags and exact regional S3/DynamoDB service names; owned parent VPC and route-table ARNs. Explicit denial of subnet/SG attachment authorization, used by interface endpoints |
 | `ec2:CreateTags` | Only the five allowed EC2 creation resource types and corresponding `ec2:CreateAction`; creation tags, no standalone retagging |
-| `ec2:ModifyVpcAttribute` | Owned VPC ARN; only enableDnsSupport/enableDnsHostnames attributes |
+| `ec2:ModifyVpcAttribute` | Owned VPC ARN; only case-sensitive IAM attribute values EnableDnsSupport/EnableDnsHostnames |
 | `ec2:ModifySubnetAttribute` | Owned subnet ARN; only mapPublicIpOnLaunch, string value `false` |
 | `ec2:AssociateRouteTable`, `ec2:DisassociateRouteTable`, `ec2:ReplaceRouteTableAssociation` | Owned route-table and subnet ARNs; explicit private associations and rollback. No IGW/VPN attachment authorization |
 | `ec2:AuthorizeSecurityGroupIngress`, `ec2:AuthorizeSecurityGroupEgress`, `ec2:RevokeSecurityGroupIngress`, `ec2:RevokeSecurityGroupEgress` | Owned SG ARNs; PostgreSQL/gateway egress and removal of default egress. No permission to administer unrelated groups |
@@ -277,3 +277,48 @@ Stage 0 identities and the monthly budget exist. The next approval is the exact
 Stage 1 policy bundle and network-only template together. Permission attachment
 and stack/change-set creation remain separate authorized actions. This document
 does not authorize creation, policy attachment, login reconfiguration or deployment.
+
+
+### Live Stage 1 VPC rollback finding
+
+Read-only stack events confirm `fintrust-network-dev` reached ROLLBACK_COMPLETE.
+Its Vpc CREATE_FAILED event denied ec2:ModifyVpcAttribute on
+`vpc-0c78a5a12f205434a` under fintrust-deployer-role. The attached
+FinTrustStage1Network policy already contains that action and matches the local
+VpcDnsAttributes statement. This is not a missing action declaration.
+
+Both `build/stage1-network.json` and `network.py` explicitly set
+EnableDnsSupport=true and EnableDnsHostnames=true. CloudFormation configures
+these through ModifyVpcAttribute. The statement incorrectly used lowercase
+`enableDnsSupport` and `enableDnsHostnames` as ec2:Attribute condition values.
+AWS's [managed-policy example](https://docs.aws.amazon.com/aws-managed-policy/latest/reference/AWS-SSM-RemediationAutomation-ExecutionRolePolicy.html)
+uses `EnableDnsSupport` and `EnableDnsHostnames`. StringEquals is case-sensitive.
+Only those two values are corrected. No action, ARN, region, ownership tag or
+CalledVia control was added or removed. The template is unchanged. This fixes a
+verified policy discrepancy; the encoded denial context was not decoded, and
+successful live execution remains unverified.
+
+Focused checks: **22 passed**. Access Analyzer ValidatePolicy, using the verified
+fintrust-inventory identity, returned **zero findings** for the corrected network
+policy. The combined inline size remains **10,233 / 10,240** characters. Analyzer
+checks do not prove lifecycle authorization or eventual tag visibility.
+
+Recovery remains manual and requires separate approval:
+
+1. Preserve stack events/template/change-set evidence and inspect remaining stack
+   resources before deletion. Do not assume the error alone proves cleanup.
+2. Replace only FinTrustStage1Network on fintrust-deployer-role with the corrected
+   local JSON. Re-assume the role after propagation.
+3. After explicit deletion approval, delete only fintrust-network-dev in
+   af-south-1 using the reviewed role and wait for DELETE_COMPLETE. Do not force
+   delete, skip resources or manually remove unrelated resources on a denial.
+4. After separate preparation approval, create a fresh CREATE change set from
+   the reviewed unchanged Stage 1 template, same tags, exact eight resource types,
+   approved AZ/prefix-list inputs, no service role/imports/IAM capabilities.
+5. Inspect the new change set and obtain execution approval before any retry.
+
+AWS [stack status documentation](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/view-stack-events.html)
+states that ROLLBACK_COMPLETE permits only deletion. The existing failed stack
+must therefore be deleted before using its name for a fresh CREATE. The executed
+change set cannot serve as the next CREATE proposal. No deletion, policy update,
+new change set, infrastructure execution or push was performed in this correction.
