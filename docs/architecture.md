@@ -41,12 +41,18 @@ the ledger. The [ERD](erd.md) includes the replay table and legacy SQL alert fie
 | API / `fintrust.api` | PostgreSQL reads; DynamoDB point lookup | Private subnets |
 | Report / `fintrust.report` | PostgreSQL analysis; S3 CSV/JSON writes | Private subnets |
 
-The foundation defines two private subnets shared by application and database
-resources, not separate application/database tiers. It defines S3 and DynamoDB
-gateway endpoints. Private functions need those services and PostgreSQL; they do
+The Stage 1-only [network renderer](../infrastructure/network.py) defines two
+private application subnets and two private database subnets across two AZs,
+with separate route tables. Only application routes use the S3/DynamoDB gateway
+endpoints. SGs permit PostgreSQL only from the application group. No NAT, IGW or
+interface endpoint is required. The older combined foundation is not the Stage 1
+deployment entry point. The [cost plan](../infrastructure/DEPLOYMENT_BOOTSTRAP.md)
+proposes a Free Plan credit-funded `db.t4g.micro` with 5 GiB gp2 for the later
+bounded demo; no RDS instance has been created.
+Private functions use PostgreSQL and gateway-supported S3/DynamoDB APIs; they do
 not call SSM, SES, SQS or Lambda APIs at runtime in the configured cloud path.
-Nonsecret database settings are resolved at deployment. IAM database tokens are
-signed locally. Lambda manages queue/stream polling and log delivery.
+Nonsecret database settings are resolved at deployment. IAM tokens are signed
+locally; Lambda manages queue/stream polling and log delivery.
 
 Ingest originally used SQL account validation, and alert used SQL delivery state.
 Moving account validation into scoring and delivery claims into DynamoDB lets

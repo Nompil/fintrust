@@ -1,7 +1,16 @@
 # FinTrust security
 
-This document describes implemented configuration and control intent. No AWS
-account inspection or deployed security verification has occurred.
+Application deployment remains unverified. Read-only inventory and Stage 0 IAM/
+budget checks have completed; [the deployment identity design](../infrastructure/iam/DEPLOYER_DESIGN.md)
+records the exact evidence and limitations. `fintrust_deployer` has MFA and no
+access keys, and can assume the MFA-constrained `fintrust-deployer-role` through
+its reviewed identity policy. That role has no infrastructure policies attached.
+The Stage 1 JSON is proposed only, not an effective grant.
+
+The [Free Tier-first RDS plan](../infrastructure/DEPLOYMENT_BOOTSTRAP.md#b-rds-recommendation)
+uses a private encrypted Single-AZ micro candidate with IAM and verified TLS.
+AWS-managed RDS encryption is proposed to avoid an unnecessary customer-managed
+key; the existing S3 CMK controls are unchanged pending their separate review.
 
 ## Function permissions and database access
 

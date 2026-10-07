@@ -1,13 +1,14 @@
 # Deployment bootstrap and cost gate
 
-Status: **REVIEW PREPARED; NO DEPLOYMENT AUTHORIZED.**
+Status: **STAGE 0 CONFIGURATION VERIFIED; STAGE 1 READY FOR REVIEW ONLY.**
 
 Continues the completed inventory at commit
 `65614ba14c22aed251a8498e34b60ef18cef68be`. The verified Linux CI result remains
 178 passed, zero failed, zero skipped, with the matching package marked
 `linux_execution_verified: true`. CI, inventory, GitHub setup and earlier phases
 were not repeated. The current review used read-only STS, RDS orderability and Free Tier plan calls,
-plus the public regional pricing catalogue. No AWS resources were changed.
+plus the public regional pricing catalogue, Access Analyzer policy validation and
+CloudFormation template validation. Saved Stage 0 evidence was reused. No AWS resources were changed.
 
 Account `966467878406`, region `af-south-1`, one `dev` assessment environment.
 The local inventory and reconciliation evidence remains in ignored
@@ -26,10 +27,12 @@ Only an authorized administrator bootstraps these identities. The deployer canno
 expand its own permissions. The billing administrator creates the safeguards.
 Stage 1 requires no IAM PassRole or persistent CloudFormation execution role.
 
-The permission specification still needs action/resource-condition validation
-against the network-only template before attachment. MFA-backed role assumption
-must be demonstrated before infrastructure write access is installed. No claim
-of working cloud permissions is made from a local policy review.
+Saved read-only evidence confirms the MFA-constrained trust, zero deployer keys,
+only the exact-role assume grant, and no role permissions attached. The owner
+reports successful role assumption; this review did not repeat it. The CloudFormation and DB-subnet policies and preceding network revision passed
+Access Analyzer with no findings; final narrowed network-policy revalidation is
+pending because the login expired. The split network template passed CloudFormation validation. See the identity design for
+exact JSON, action rationale, mismatches and limits of those checks.
 
 ## B. RDS recommendation
 
@@ -50,7 +53,7 @@ of working cloud permissions is made from a local policy review.
 | Maintenance | Automatic minor upgrades on within PostgreSQL 16; major upgrades off. Standard support only; no automatic paid Extended Support enrollment |
 | Monitoring | Standard metrics plus 14-day application logs initially; no paid enhanced monitoring/advanced database insights selected. Essential DB/memory/storage/connection alarms before workload |
 
-AWS documents [2 GiB for t4g.small](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.Summary.html)
+AWS documents [instance memory sizes](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.Summary.html)
 and [300–1000 MiB additional memory for IAM authentication](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html).
 Micro is a cost-first candidate, not a measured capacity result. IAM support is
 confirmed by the regional orderability API; sufficient memory is not. If the
@@ -174,22 +177,17 @@ and review final snapshots/retained backups and secrets individually. Keep budge
 alerts until residual storage costs are resolved; never delete ledger evidence
 just to meet the budget.
 
-### Proposed safeguards
+### Verified safeguard and remaining billing checks
 
-- One monthly account-wide cost budget, provisional **USD 10**, named
-  `fintrust-assessment-monthly`. Account-wide coverage catches costs outside
-  FinTrust; a tag-only budget can miss untagged/new resources. Exclude credits and
-  refunds from the cost measure so they do not hide consumption; include tax and
-  other usage charges where supported. Inspect credit balance/expiry separately.
-- Set actual-cost emails at 50%, 80%, 100%: USD 5, 8, 10; add forecasted 100%.
-  Primary recipient is the owner's confirmed email; secondary recipient is an
-  approved mentor/billing contact if desired. Neither address is known yet; do
-  not invent one or create a subscription without approval.
-- Before creation, use the owner's billing currency, FX and tax assumptions to
-  finalize the USD amount. A conservative rule is `min(10, 180 / approved ZAR-per-USD)`
-  when tax is already included in the estimate; reserve at least R20 for delay/FX.
-  If tax is excluded, reduce that amount further. R200 must never be entered as
-  USD 200. USD 10 is a proposal, not an approved spending allowance.
+Saved successful reads confirm the account-wide fixed monthly **USD 10** budget
+`FinTrust-Monthly-Budget`, actual-cost thresholds 50/80/100 and forecasted 100,
+with an email subscriber for each. This replaces the old proposed budget name.
+The existing Zero-Spend Budget is untouched. Notification configuration is not
+proof of inbox delivery. The saved response does not establish credit/refund
+exclusion, so confirm gross usage remains visible before paid stages. Check the
+Free Tier remaining-credit balance as well as budget spend; credits can mask a bill.
+USD 10 is an alert threshold, not permission to spend or an exact R200 equivalent.
+
 - For the rubric's billing alarm, separately configure `AWS/Billing`
   `EstimatedCharges`, `Currency=USD`, Maximum over 6 hours, one evaluation period,
   threshold equal to the approved USD budget, missing data treated as missing.
@@ -213,23 +211,20 @@ Neither proves the remaining credit allowance or guarantees an R200 final bill.
 
 ## D. Stage 1 network resources
 
-Retain the existing two shared private subnets. The working design does not
-require separate application/database subnet tiers for this assessment; SGs
-separate access. Four subnets can be considered later if the rubric explicitly
-requires them, but are not needed to make PostgreSQL private.
+The approved planning scope now separates application and database subnets.
+[network.py](network.py) renders Stage 1 independently of the combined foundation.
 
 | Resource | Exact proposed shape |
 |---|---|
-| Stack | `fintrust-network-dev`, ownership tags `Project=FinTrust`, `Environment=dev` |
-| VPC | `10.42.0.0/16`, DNS support/hostnames enabled |
-| Private subnet 1 | `10.42.0.0/24`, `af-south-1a`, public-IP assignment false |
-| Private subnet 2 | `10.42.1.0/24`, `af-south-1b`, public-IP assignment false |
-| Route table | One shared private table and two explicit associations; automatic local route plus S3/DynamoDB prefix-list routes only |
-| Application SG | No ingress; egress TCP 5432 to DB SG, TCP 443 only to regional S3/DynamoDB managed prefix lists |
-| DB SG | Ingress TCP 5432 only from application SG. Preserve the existing inert loopback egress rule to suppress EC2's automatic allow-all egress; return traffic is stateful |
-| DB subnet group | Explicit name `fintrust-db-dev`, both private subnets; no instance or parameter group yet |
-| S3 gateway endpoint | `com.amazonaws.af-south-1.s3`, associated private route table, narrow future-bucket object policy |
-| DynamoDB gateway endpoint | `com.amazonaws.af-south-1.dynamodb`, associated private route table, narrow future-risk-table policy |
+| Stack | `fintrust-network-dev`; `Project=FinTrust`, `Environment=dev` tags |
+| VPC | `10.42.0.0/16`, DNS support/hostnames enabled, default tenancy |
+| Application subnets | `10.42.0.0/24` and `10.42.1.0/24`, two distinct AZ inputs, no public IP assignment |
+| Database subnets | `10.42.2.0/24` and `10.42.3.0/24`, same two AZs, no public IP assignment |
+| Route tables | Separate application/database tables; four explicit associations; local routes only except app gateway routes |
+| Application SG | No ingress; TCP 5432 to DB SG; TCP 443 to regional S3/DynamoDB prefix lists |
+| DB SG | TCP 5432 ingress from application SG only; inert loopback egress suppresses default allow-all |
+| DB subnet group | `fintrust-db-dev`, database subnets only; no DB instance or parameter group |
+| S3 / DynamoDB endpoints | Gateway only; application route table only; account-scoped policies for deterministic future data-resource ARNs |
 
 Known inventory prefix-list IDs are `pl-a3ac49ca` (S3) and `pl-d6ae4bbf`
 (DynamoDB). Keep them deployment parameters and validate their service/region
@@ -251,11 +246,12 @@ target. Do not temporarily use a full-access endpoint policy to break the depend
 
 ## E. Infrastructure code review and required changes
 
-Planning only: the renderers, runtime, schema, tests and CI have not been changed.
+The Stage 1-only renderer and focused boundary tests are now prepared locally.
+The combined foundation, runtime, schema and CI are unchanged.
 
 | Existing code | Finding | Smallest required change before that stage |
 |---|---|---|
-| `foundation.py` | Already has VPC, two private subnets, one route table, SGs, DB subnet/SSL parameter groups and gateway endpoints; no NAT/IGW or RDS instance | Extract the network-only stage with stable outputs. Add explicit names/ownership tags and a check that its resource types contain no paid application resources |
+| `network.py` | New isolated Stage 1 renderer with four subnets, separate route tables, tags, named DB subnet group, Gateway-only endpoints and stable outputs | 19 focused tests and CloudFormation template validation passed; review account/AZ/prefix-list inputs and change set before execution |
 | `foundation.py` | Also creates rotating retained CMK, three versioned retained buckets and on-demand DynamoDB; endpoint policies reference those resources directly | Do not deploy the current combined template as Stage 1. Split storage/key into Stage 2, table into Stage 4, DB TLS group into Stage 3. Replace endpoint target Refs with exact deterministic ARNs |
 | `foundation.py` | No hardcoded physical VPC/subnet/SG IDs; pseudo-parameters used for account/region; fixed proposed CIDRs; stage supports dev/staging/prod | Deploy dev only. Keep portable references and supply Cape Town/account guards at execution. Confirm CIDRs against any future connected network |
 | RDS | Instance definition absent; earlier documents assumed an existing instance | Add private encrypted Single-AZ definition with the settings above, managed master secret, protection/snapshot policies and no paid extras. Review minor version, orderability, cost and bootstrap first |
@@ -287,7 +283,7 @@ without passwords, tokens, authentication URLs or private data.
 | Stage | Create / connect / purpose | Console check and evidence | Cost and stop/cleanup |
 |---|---|---|---|
 | 0: identity + budget | MFA user and temporary deployment role; owner billing budget, email notifications and billing alarm | IAM trust/scoped permissions, MFA status and zero access keys; budget amount/thresholds and confirmed alarm recipient | IAM has no resource-hour fee; allow for alarm/SNS usage. Revoke role access when finished; retain billing alerts until all retained costs are reviewed |
-| 1: private foundation | VPC, two private subnets, routes, two SGs, DB subnet group, S3/DynamoDB gateway endpoints | VPC resource map, subnet public-IP false, routes without internet default, DB SG source, endpoint policies/associations | No selected network hourly charge. After dependent resources/ENIs are removed, remove only this stack |
+| 1: private foundation | VPC, four private subnets, routes, two SGs, DB subnet group, S3/DynamoDB gateway endpoints | VPC resource map, subnet public-IP false, routes without internet default, DB SG source, endpoint policies/associations | No selected network hourly charge. After dependent resources/ENIs are removed, remove only this stack |
 | 2: KMS + S3 | One CMK and raw/quarantine/reports buckets; restrictive TLS/encryption policies and artifact prefix | Encryption/key alias, public-access blocks, versioning and lifecycle | Key base/rotation/requests plus object storage. Retained versions persist; approve export/retention before bucket/key deletion |
 | 3: RDS + grants | Private PostgreSQL, TLS group, managed master secret and temporary migration runner; three service logins | Public access false, Single-AZ/class/storage/encryption, IAM auth, SG/subnets; sanitized SQL grant and TLS evidence | Main standing cost. Bootstrap runner removed after use; stop DB between short sessions but schedule final approved teardown and snapshot review |
 | 4: DynamoDB + queues | Risk table/stream and all five queues; replay/delivery-state infrastructure | Table keys/NEW_IMAGE, FIFO names, encryption, visibility/redrive/retention, failure destinations | Requests/storage; DLQ messages retained. Preserve uncertain deliveries and evidence before cleanup; no replay yet |
@@ -329,29 +325,33 @@ secret as approved, then networking after Lambda ENIs clear. Review retained
 objects/snapshots and CMK decrypt dependencies before any key deletion. Retain
 billing safeguards until residual charges are understood.
 
-## H. First approval and unresolved inputs
+## H. Next approval and unresolved inputs
 
-First cloud action requiring approval: **Stage 0 only**, creation of the separate
-MFA deployer identity and billing safeguards by an authorized administrator.
-Approval must specify the finalized USD budget, real notification recipient and
-whether the us-east-1 billing alarm/SNS exception is accepted. It does not approve
-Stage 1, RDS, KMS, application deployment or email tests.
+**Stage 1 is prepared for review, not attachment or execution approval.**
+Finish the final network-policy validation after login renewal; the prior clean
+validation predates its last scoping improvement. Review the exact three inline-policy
+JSON files linked from [DEPLOYER_DESIGN.md](iam/DEPLOYER_DESIGN.md), their combined
+10,055-character quota use, the network template and its limitations. No policy
+attachment, change set or infrastructure creation is authorized by this report.
 
-Before network execution: implement/review the split template and scoped role
-policy, verify ownership/tag controls and change set, then obtain Stage 1 approval.
-Before paid stages: confirm credits/expiry and account billing responsibility,
-tax/FX, maximum RDS hours, exact orderable minor version, managed-secret cost,
-bootstrap credential handling, snapshot/export retention owner, artifact storage,
-SES addresses and signed API demonstration path. Unknown values stay unresolved.
+After separate approval, an administrator can install only that reviewed bundle
+on the existing role. A subsequent authorized MFA role session must verify account
+and ARN before preparing a `fintrust-network-*` CREATE change set for the named
+stack, supplying the template's eight resource types, two distinct Cape Town AZs,
+regional prefix lists and ownership tags. Do not specify a service role, imports,
+CAPABILITY_IAM or auto-execution. Review resource additions/replacements and stop
+for execution approval; never use the combined foundation for this stage.
 
-The proposed RDS size is ready for a decision; the database deployment itself is
-not ready. Do not claim a pinned minor version or approved budget without those
-inputs. No permission expansion or new inventory is needed to finish this review.
+Before paid stages: reconfirm credit/plan headroom, gross-usage budget visibility,
+tax/FX, maximum RDS hours, exact supported minor, secret/bootstrap costs and handling,
+retention owner, artifact storage, SES identities and authenticated demo access.
+Stage 2 CMK use still needs a Free Tier-first justification; this review does not
+silently remove encryption requirements from existing bucket policies.
 
 ## I. Stop
 
-No AWS identities, budgets or resources were created, modified or deleted.
-No AWS account APIs were called. No deployment commands were executed, no email
-was sent, and no Git push occurred. The seven pre-existing untracked files remain
-untouched. Only this planning report and its identity-design companion were added.
-Wait for separate approval before Stage 0 or any infrastructure execution.
+Only read-only AWS metadata and validation APIs were used. No IAM/budget changes,
+policy attachment, infrastructure creation, RDS creation, invocation, email or
+Git push occurred. The seven pre-existing untracked files remain untouched.
+Linux CI was not repeated; its verified 178-pass result is historical evidence,
+not a claim that these new local changes have run in CI.
