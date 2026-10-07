@@ -58,7 +58,10 @@
         "cloudformation:ExecuteChangeSet",
         "cloudformation:DeleteChangeSet"
       ],
-      "Resource": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/*",
+      "Resource": [
+        "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/*",
+        "arn:aws:cloudformation:af-south-1:966467878406:changeSet/fintrust-network-*/*"
+      ],
       "Condition": {
         "StringEquals": {
           "aws:RequestedRegion": "af-south-1"

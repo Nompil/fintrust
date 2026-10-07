@@ -71,3 +71,47 @@ def test_policy_bundle_stays_inside_stage1_and_role_inline_quota():
                 assert all(a.split(":")[1].startswith(("Describe", "GetTemplate", "Validate")) for a in s["Action"])
             if any(a.startswith(("ec2:", "rds:")) and not a.split(":")[1].startswith(("Describe", "List")) for a in s["Action"]):
                 assert s["Condition"]["ForAnyValue:StringEquals"]["aws:CalledVia"] == ["cloudformation.amazonaws.com"]
+
+
+def test_change_set_access_covers_reviewed_arns_without_broadening_stack_scope():
+    from fnmatch import fnmatchcase
+
+    policy = json.loads(Path("infrastructure/iam/stage1-cloudformation-policy.json").read_text())
+    statements = {s["Sid"]: s for s in policy["Statement"]}
+    review = statements["ReviewAndExecuteNetworkChangeSet"]
+    stack = "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/*"
+    change_set = "arn:aws:cloudformation:af-south-1:966467878406:changeSet/fintrust-network-*/*"
+    assert set(review["Resource"]) == {stack, change_set}
+    assert set(review["Action"]) == {
+        "cloudformation:DescribeChangeSet", "cloudformation:ExecuteChangeSet",
+        "cloudformation:DeleteChangeSet",
+    }
+    assert review["Condition"] == {
+        "StringEquals": {"aws:RequestedRegion": "af-south-1"},
+        "StringLike": {"cloudformation:ChangeSetName": "fintrust-network-*"},
+    }
+    # Resource matching checks scope only; this is not an IAM authorization simulator.
+    allowed = "arn:aws:cloudformation:af-south-1:966467878406:changeSet/fintrust-network-stage1-review/id"
+    assert any(fnmatchcase(allowed, pattern) for pattern in review["Resource"])
+    for denied in (
+        allowed.replace("af-south-1", "us-east-1"),
+        allowed.replace("966467878406", "111111111111"),
+        allowed.replace("fintrust-network-stage1-review", "unrelated-review"),
+        stack.replace("fintrust-network-dev", "fintrust-network-prod").replace("*", "id"),
+    ):
+        assert not any(fnmatchcase(denied, pattern) for pattern in review["Resource"])
+    for sid in ("PrepareNetworkChangeSet", "ReadNetworkStack", "RecoverOrRemoveNetworkStack"):
+        assert statements[sid]["Resource"] == stack
+    creation = statements["PrepareNetworkChangeSet"]["Condition"]
+    assert creation["StringEquals"] == {
+        "aws:RequestedRegion": "af-south-1", "aws:RequestTag/Project": "FinTrust",
+        "aws:RequestTag/Environment": "dev",
+    }
+    assert creation["Null"] == {
+        "cloudformation:ResourceTypes": "false", "cloudformation:RoleArn": "true",
+        "cloudformation:ImportResourceTypes": "true",
+    }
+    assert set(creation["ForAllValues:StringEquals"]["cloudformation:ResourceTypes"]) == {
+        r["Type"] for r in build_template()["Resources"].values()
+    }
+    assert not any(a.startswith("iam:") for s in policy["Statement"] for a in s["Action"])
