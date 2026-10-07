@@ -1,6 +1,9 @@
 # Deployment bootstrap and cost gate
 
-Status: **STAGE 0 CONFIGURATION VERIFIED; STAGE 1 READY FOR REVIEW ONLY.**
+Status: **STAGE 1 DEPLOYED AND VERIFIED; STAGE 2 PREPARED FOR COST/IAM REVIEW.**
+
+The current Stage 1 and Stage 2 checkpoints below supersede historical preparation
+and rollback statements in this record.
 
 Continues the completed inventory at commit
 `65614ba14c22aed251a8498e34b60ef18cef68be`. The verified Linux CI result remains
@@ -406,3 +409,122 @@ Earlier rollback/recovery instructions above are historical and no longer apply
 to this successful stack. Preserve it for subsequent stages. This evidence verifies
 creation, not application connectivity or end-to-end integration. Stage 2 remains
 local preparation only and requires its own IAM/cost/change-set approval.
+
+
+## Stage 2 storage approval checkpoint
+
+The existing stage plan separates storage from networking and the later database,
+processing and API stages. [storage.py](storage.py) extracts only the existing
+foundation storage resources, adds FinTrust/dev ownership tags, restricts Stage
+to dev, and retains the key, alias, buckets and bucket policies on deletion or
+replacement. No runtime code or Stage 1 template changes were made.
+
+| Logical resource | Proposed physical resource / purpose |
+|---|---|
+| DataKey | One regional symmetric customer-managed KMS key; annual rotation, 30-day deletion window |
+| DataKeyAlias | alias/fintrust-dev |
+| RawBucket / RawBucketPolicy | fintrust-raw-966467878406-af-south-1-dev; source CSV storage and encryption/TLS controls |
+| QuarantineBucket / QuarantineBucketPolicy | fintrust-quarantine-966467878406-af-south-1-dev; rejected-record storage and controls |
+| ReportsBucket / ReportsBucketPolicy | fintrust-reports-966467878406-af-south-1-dev; reports and later deployment/ artifacts |
+
+There are exactly eight resources: AWS::KMS::Key, AWS::KMS::Alias,
+AWS::S3::Bucket and AWS::S3::BucketPolicy. There are no SSM parameters, IAM roles,
+RDS, Lambda, triggers, object uploads, network changes or new endpoints in this
+stage. SSM/database configuration and runtime roles remain later-stage work.
+All buckets retain Block Public Access, BucketOwnerEnforced, versioning, SSE-KMS
+with the exact key and S3 Bucket Keys. Five policy denies enforce TLS and reject
+conflicting encryption headers. Default encryption applies when headers are absent.
+Incomplete multipart uploads expire after seven days; the existing report archive
+transition remains. No automatic object/version deletion is introduced.
+
+### Cost decision before IAM attachment
+
+Expected standing charge for an empty deployment is **USD 1/month for the new
+unrotated key**, prorated hourly, plus usage-dependent S3/KMS charges and tax.
+[AWS KMS pricing](https://aws.amazon.com/kms/pricing/) charges another USD 1/month
+for each of the first two rotations. Its 20,000 monthly eligible request allowance
+is shared across regions and does not cover customer-managed key storage.
+[S3 pricing](https://aws.amazon.com/s3/pricing/) depends on regional stored bytes,
+versions, requests, transfers and archive operations; no object volume has been
+approved here. Empty buckets add no fixed bucket rental charge. Credits are not
+a zero-cost guarantee or a substitute for the monthly USD 10 budget.
+
+A CMK is retained because the existing design and execution-role renderer scope
+S3 permissions to a customer-controlled key and its encryption context. It is
+not required merely to encrypt S3 data: AWS-managed aws/s3 or SSE-S3 could remove
+the key-storage charge, but would require a separate reviewed change to those
+controls. **Choose/approve the CMK charge or request that alternative before any
+Stage 2 IAM attachment or resource creation.** No paid-resource approval is inferred.
+
+Retain prevents accidental disposal but also leaves billable storage and the key
+after stack deletion. Teardown needs separate export/restore/retention approval,
+all object versions handled deliberately, and explicit key lifecycle approval.
+Do not delete Stage 1 or schedule key deletion as a routine cleanup step.
+
+### Exact deployment permission requirements for review
+
+The current Stage 1 inline bundle uses 10,233 of the role's 10,240 characters;
+**do not append Stage 2 permissions to that bundle**. Prepare a separately reviewed
+managed policy, or review a stage-specific replacement that preserves necessary
+network reads. Neither attachment nor removal is authorized here. The following
+is the required permission scope, not an installed policy or successful live
+provider-permission test. The final policy JSON must pass Access Analyzer and
+policy-size/scoping tests before the first security mutation.
+
+| Permission area | Required action scope and boundary |
+|---|---|
+| CloudFormation preparation | ValidateTemplate/GetTemplateSummary with regional wildcard where required; CreateChangeSet only on arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-storage-dev/*, fintrust-storage-* names, both ownership request tags, nonempty exact four resource types above, no RoleArn or imports |
+| CloudFormation inspection | DescribeChangeSet in its own named-stack, region-only statement; DescribeStacks/DescribeStackEvents/DescribeStackResources/ListStackResources/GetTemplate on the same named stack |
+| CloudFormation writes | ExecuteChangeSet/DeleteChangeSet on the documented supported named-stack resource scope with fintrust-storage-* naming and regional conditions; execution requires separate proposal approval |
+| S3 creation/configuration | CreateBucket, PutBucketTagging, PutBucketPublicAccessBlock, PutBucketOwnershipControls, PutBucketVersioning, PutEncryptionConfiguration, PutLifecycleConfiguration, PutBucketPolicy on only the three bucket ARNs above; region/account and CloudFormation-mediated writes. CreateBucket LocationConstraint must be af-south-1. Tags are configured after creation, so existing-resource tag conditions cannot gate initial creation/tagging |
+| S3 provider inspection | GetBucketLocation, GetBucketTagging, GetBucketPublicAccessBlock, GetBucketOwnershipControls, GetBucketVersioning, GetEncryptionConfiguration, GetLifecycleConfiguration, GetBucketPolicy, GetBucketPolicyStatus, GetBucketAcl and ListBucket only on those exact bucket ARNs; no object contents access |
+| KMS creation | CreateKey necessarily uses Resource * before the key ID exists; constrain region, FinTrust/dev request tags, symmetric encryption use and CloudFormation mediation; TagResource for creation tags. Do not give broad KMS administration |
+| KMS configuration/inspection | DescribeKey, GetKeyPolicy, GetKeyRotationStatus, ListResourceTags and EnableKeyRotation on regional account keys with FinTrust/dev ownership; PutKeyPolicy only if required for later template maintenance and explicitly reviewed as a security boundary |
+| Alias | CreateAlias on only arn:aws:kms:af-south-1:966467878406:alias/fintrust-dev and its owned target key; alias resources do not carry key ownership tags. Scope read/list permissions to what the provider requires |
+
+No IAM write/PassRole, S3 object write/read/delete, KMS decrypt/data-key use,
+key deletion/disable, bucket deletion, RDS, EC2 mutations or Lambda permissions
+are part of this proposed creation grant. Runtime data access and artifact upload
+will be separately scoped later. Rollback permissions must be reviewed against
+Retain before attachment; do not add destructive permissions speculatively.
+
+### Prepared command and change-set sequence
+
+Local renderer:
+
+```powershell
+python -m infrastructure.storage --output build/stage2-storage.json
+```
+
+The generated template is ignored by Git. Focused local validation: **25 passed**
+across Stage 2 storage, Stage 1 network and budget-first tests. Read-only AWS
+CloudFormation ValidateTemplate through fintrust-inventory succeeded, with no IAM
+Capabilities returned. This confirms template acceptance, not deployment rights,
+key-policy safety under every caller, live bucket controls or application access.
+Linux CI and the full application suite were not repeated for this isolated renderer.
+
+After cost and final permission approval, verify the MFA-assumed caller account/
+role and the af-south-1 target, check exact bucket names/alias and existing stack
+ownership read-only, then prepare the following proposal. Replace the profile
+placeholder only with the verified assumed-role profile. **Not executed:**
+
+```powershell
+& 'C:\Program Files\Amazon\AWSCLIV2\aws.exe' cloudformation create-change-set `
+  --profile <verified-assumed-role-profile> --region af-south-1 `
+  --stack-name fintrust-storage-dev --change-set-name fintrust-storage-stage2-review `
+  --change-set-type CREATE --template-body file://build/stage2-storage.json `
+  --parameters ParameterKey=Stage,ParameterValue=dev `
+  --resource-types AWS::KMS::Key AWS::KMS::Alias AWS::S3::Bucket AWS::S3::BucketPolicy `
+  --tags Key=Project,Value=FinTrust Key=Environment,Value=dev --no-cli-pager
+```
+
+Do not supply capabilities, a service role or imports. Stop if a named resource
+already exists: no automatic adoption, deletion or replacement. Inspect the change
+set and require exactly eight Add actions with no unrelated resources before a
+separate execution approval. After approved execution, verify stack/resource
+status, bucket controls and key/alias metadata read-only before later-stage work.
+
+**Stop boundary:** Stage 2 template preparation is complete; deployment is not
+approved. The first next AWS mutation would be the separately reviewed permission
+attachment, followed by change-set preparation only after cost approval. No IAM
+attachment, change-set creation/execution, resource mutation, upload or push occurred.

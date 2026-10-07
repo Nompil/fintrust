@@ -4,8 +4,9 @@ Application deployment remains unverified. Read-only inventory and Stage 0 IAM/
 budget checks have completed; [the deployment identity design](../infrastructure/iam/DEPLOYER_DESIGN.md)
 records the exact evidence and limitations. `fintrust_deployer` has MFA and no
 access keys, and can assume the MFA-constrained `fintrust-deployer-role` through
-its reviewed identity policy. That role has no infrastructure policies attached.
-The Stage 1 JSON is proposed only, not an effective grant.
+its reviewed identity policy. The operator installed the reviewed Stage 1 permissions and completed the corrected
+network deployment. Stage 1 is verified by the saved creation evidence; Stage 2
+storage permissions and the CMK charge remain subject to separate approval.
 
 The [Free Tier-first RDS plan](../infrastructure/DEPLOYMENT_BOOTSTRAP.md#b-rds-recommendation)
 uses a private encrypted Single-AZ micro candidate with IAM and verified TLS.
@@ -47,19 +48,23 @@ JavaScript. The template `.env.example` contains placeholders.
 
 ## Network and storage controls
 
-The [foundation](../infrastructure/foundation.py) defines two private subnets,
-a Lambda security group, a database security group and a database subnet group.
-Database ingress is TCP 5432 from the Lambda group. Gateway endpoints provide
-S3/DynamoDB access, with scoped endpoint policies and regional prefix-list egress.
-There is no NAT Gateway or separate database subnet tier. The existing RDS
-instance must be inspected for private placement, TLS, engine and IAM settings;
-the foundation does not create or automatically secure that instance.
+The deployed [Stage 1 network](../infrastructure/network.py) defines two private
+application subnets and two private database subnets, application/database security
+groups and a database subnet group. Database ingress is TCP 5432 from the application
+group. S3/DynamoDB gateway endpoints are created. There is no NAT Gateway, Internet
+Gateway or interface endpoint. Creation evidence does not prove application
+connectivity, effective endpoint access or a deployed database. The older combined
+foundation is not the staged deployment entry point.
 
 Raw, quarantine and report buckets are defined with Block Public Access,
 versioning, retention on stack deletion and SSE-KMS using one customer-managed
 key. Bucket policies reject insecure transport and conflicting encryption/key
 headers. Requests without encryption headers use the bucket default. These are
 template controls; no live object encryption or public-access test is recorded.
+The isolated [Stage 2 renderer](../infrastructure/storage.py) preserves those controls
+and retains their policies/alias as well as the data/key. The
+[Stage 2 approval checkpoint](../infrastructure/DEPLOYMENT_BOOTSTRAP.md#stage-2-storage-approval-checkpoint)
+records resources, recurring cost, permission requirements and the deployment boundary.
 
 The DynamoDB definition uses AWS-owned encryption and no TTL. SQS definitions use
 SQS-managed encryption. Do not describe every service as using the bucket CMK.
