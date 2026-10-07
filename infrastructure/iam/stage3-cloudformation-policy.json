@@ -1,0 +1,100 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ValidateDatabase",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:ValidateTemplate",
+        "cloudformation:GetTemplateSummary"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    },
+    {
+      "Sid": "PrepareDatabase",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:CreateChangeSet"
+      ],
+      "Resource": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-database-dev/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:RequestTag/Project": "FinTrust",
+          "aws:RequestTag/Environment": "dev"
+        },
+        "ForAllValues:StringEquals": {
+          "cloudformation:ResourceTypes": [
+            "AWS::RDS::DBInstance",
+            "AWS::RDS::DBParameterGroup"
+          ]
+        },
+        "Null": {
+          "cloudformation:ResourceTypes": "false",
+          "cloudformation:RoleArn": "true",
+          "cloudformation:ImportResourceTypes": "true"
+        },
+        "StringLike": {
+          "cloudformation:ChangeSetName": "fintrust-database-*"
+        }
+      }
+    },
+    {
+      "Sid": "ReadDatabase",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:DescribeChangeSet",
+        "cloudformation:DescribeStacks",
+        "cloudformation:DescribeStackEvents",
+        "cloudformation:DescribeStackResources",
+        "cloudformation:ListStackResources",
+        "cloudformation:GetTemplate"
+      ],
+      "Resource": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-database-dev/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    },
+    {
+      "Sid": "ManageDatabaseSet",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:ExecuteChangeSet",
+        "cloudformation:DeleteChangeSet"
+      ],
+      "Resource": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-database-dev/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "StringLike": {
+          "cloudformation:ChangeSetName": "fintrust-database-*"
+        }
+      }
+    },
+    {
+      "Sid": "RecoverDatabaseStack",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:DeleteStack",
+        "cloudformation:ContinueUpdateRollback"
+      ],
+      "Resource": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-database-dev/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "Null": {
+          "cloudformation:RoleArn": "true"
+        }
+      }
+    }
+  ]
+}

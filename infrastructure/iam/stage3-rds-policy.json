@@ -1,0 +1,165 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "CreatePrivateMicro",
+      "Effect": "Allow",
+      "Action": [
+        "rds:CreateDBInstance"
+      ],
+      "Resource": "arn:aws:rds:af-south-1:966467878406:db:fintrust-ledger-dev",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:RequestTag/Project": "FinTrust",
+          "aws:RequestTag/Environment": "dev",
+          "rds:DatabaseClass": "db.t4g.micro",
+          "rds:DatabaseEngine": "postgres",
+          "rds:DatabaseName": "fintrust"
+        },
+        "Bool": {
+          "rds:StorageEncrypted": "true",
+          "rds:MultiAz": "false",
+          "rds:PubliclyAccessible": "false",
+          "rds:ManageMasterUserPassword": "true",
+          "rds:Vpc": "true"
+        },
+        "NumericEquals": {
+          "rds:StorageSize": "5"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "UseExistingDbDependencies",
+      "Effect": "Allow",
+      "Action": [
+        "rds:CreateDBInstance"
+      ],
+      "Resource": [
+        "arn:aws:rds:af-south-1:966467878406:pg:fintrust-postgres16-dev",
+        "arn:aws:rds:af-south-1:966467878406:subgrp:fintrust-db-dev",
+        "arn:aws:rds:af-south-1:966467878406:og:default:postgres-16"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "CreateNamedTlsGroup",
+      "Effect": "Allow",
+      "Action": [
+        "rds:CreateDBParameterGroup"
+      ],
+      "Resource": "arn:aws:rds:af-south-1:966467878406:pg:fintrust-postgres16-dev",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:RequestTag/Project": "FinTrust",
+          "aws:RequestTag/Environment": "dev"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "ConfigureOwnedTlsGroup",
+      "Effect": "Allow",
+      "Action": [
+        "rds:ModifyDBParameterGroup"
+      ],
+      "Resource": "arn:aws:rds:af-south-1:966467878406:pg:fintrust-postgres16-dev",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:ResourceTag/Project": "FinTrust",
+          "aws:ResourceTag/Environment": "dev"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "TagNewDatabaseResources",
+      "Effect": "Allow",
+      "Action": [
+        "rds:AddTagsToResource"
+      ],
+      "Resource": [
+        "arn:aws:rds:af-south-1:966467878406:db:fintrust-ledger-dev",
+        "arn:aws:rds:af-south-1:966467878406:pg:fintrust-postgres16-dev"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:RequestTag/Project": "FinTrust",
+          "aws:RequestTag/Environment": "dev"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "InspectNamedDatabase",
+      "Effect": "Allow",
+      "Action": [
+        "rds:DescribeDBInstances",
+        "rds:ListTagsForResource"
+      ],
+      "Resource": "arn:aws:rds:af-south-1:966467878406:db:fintrust-ledger-dev",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    },
+    {
+      "Sid": "InspectNamedTlsGroup",
+      "Effect": "Allow",
+      "Action": [
+        "rds:DescribeDBParameterGroups",
+        "rds:DescribeDBParameters",
+        "rds:ListTagsForResource"
+      ],
+      "Resource": "arn:aws:rds:af-south-1:966467878406:pg:fintrust-postgres16-dev",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    },
+    {
+      "Sid": "InspectExistingSubnets",
+      "Effect": "Allow",
+      "Action": [
+        "rds:DescribeDBSubnetGroups"
+      ],
+      "Resource": "arn:aws:rds:af-south-1:966467878406:subgrp:fintrust-db-dev",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    }
+  ]
+}
