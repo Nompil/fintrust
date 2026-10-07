@@ -1,0 +1,61 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ReadNamedDbSubnetGroup",
+      "Effect": "Allow",
+      "Action": [
+        "rds:DescribeDBSubnetGroups",
+        "rds:ListTagsForResource"
+      ],
+      "Resource": "arn:aws:rds:af-south-1:966467878406:subgrp:fintrust-db-dev",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    },
+    {
+      "Sid": "CreateNamedDbSubnetGroup",
+      "Effect": "Allow",
+      "Action": [
+        "rds:CreateDBSubnetGroup",
+        "rds:AddTagsToResource"
+      ],
+      "Resource": "arn:aws:rds:af-south-1:966467878406:subgrp:fintrust-db-dev",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:RequestTag/Project": "FinTrust",
+          "aws:RequestTag/Environment": "dev"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "MaintainOwnedDbSubnetGroup",
+      "Effect": "Allow",
+      "Action": [
+        "rds:ModifyDBSubnetGroup",
+        "rds:DeleteDBSubnetGroup"
+      ],
+      "Resource": "arn:aws:rds:af-south-1:966467878406:subgrp:fintrust-db-dev",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:ResourceTag/Project": "FinTrust",
+          "aws:ResourceTag/Environment": "dev"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    }
+  ]
+}
