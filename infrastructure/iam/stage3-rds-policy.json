@@ -160,6 +160,19 @@
           "aws:RequestedRegion": "af-south-1"
         }
       }
+    },
+    {
+      "Sid": "ReadRegionalEngineDefaults",
+      "Effect": "Allow",
+      "Action": [
+        "rds:DescribeEngineDefaultParameters"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
     }
   ]
 }

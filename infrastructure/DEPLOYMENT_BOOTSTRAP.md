@@ -874,3 +874,87 @@ References: [stack failure options](https://docs.aws.amazon.com/AWSCloudFormatio
 [failed-state snapshot limitations](https://docs.aws.amazon.com/cli/latest/reference/rds/delete-db-instance.html),
 [ModifyDBInstance](https://docs.aws.amazon.com/cli/latest/reference/rds/modify-db-instance.html),
 [DeleteStack](https://docs.aws.amazon.com/cli/latest/reference/cloudformation/delete-stack.html).
+
+### Stage 3 first deployment failure and retained-group retry
+
+Operator evidence reports fintrust-database-dev reached ROLLBACK_COMPLETE: no DB
+instance was created; DatabaseTls / fintrust-postgres16-dev was DELETE_SKIPPED
+and remains in RDS, family postgres16, description FinTrust PostgreSQL 16 requires
+TLS. The initial missing permission was rds:DescribeEngineDefaultParameters.
+The deployer also could not call cloudformation:DescribeStackResource, while the
+inventory identity could. These are operator-supplied live findings, not a new
+resource inspection by this correction.
+
+Corrected only the two read gaps: ReadRegionalEngineDefaults permits
+rds:DescribeEngineDefaultParameters with Resource * and RequestedRegion
+ af-south-1. AWS lists no resource type or engine-family condition for this
+metadata action; scoping it to a parameter-group ARN or resource tags would not
+work. It reads engine defaults, not database records. ReadDatabase adds the
+singular DescribeStackResource to its existing exact fintrust-database-dev stack
+ARN and regional condition. It is justified for deployment diagnostics, not an
+inventory-only restriction. Creation, mutation, encryption, tags, costs and
+retention settings are unchanged. No delete permission is added to the deployer.
+See [RDS authorization reference](https://docs.aws.amazon.com/service-authorization/latest/reference/list_rds.html)
+and [CloudFormation authorization reference](https://docs.aws.amazon.com/service-authorization/latest/reference/list_awscloudformation.html).
+
+**Recommended recovery:** with separate administrator approval, remove the failed
+stack and the unused retained parameter group, then prepare a fresh reviewed
+CREATE. Do not rename the template resource or silently treat the retained group
+as newly created. Import/reuse would require a separate adoption/template and
+permission review (the current creation policy forbids imports); it is unnecessary
+for this unused group and a failed initial deployment. ROLLBACK_COMPLETE permits
+only stack deletion before recreating the same stack name. The executed change
+set cannot be reused.
+
+Exact manual sequence, one step at a time:
+
+1. Capture stack ID, first CREATE_FAILED permission error, ROLLBACK_COMPLETE,
+   DatabaseTls DELETE_SKIPPED / physical ID and the RDS group family/description.
+   Save screenshots under docs/EVIDENCE/05-rds; no screenshot was supplied here.
+2. Reconfirm approved administrator identity/account 966467878406. Recheck absence
+   of fintrust-ledger-dev, and confirm no DB instance uses the retained parameter
+   group. AccessDenied is UNKNOWN, not absence. Check the group's FinTrust/dev
+   ownership tags. If a DB exists or any instance uses the group, STOP and follow
+   the protected-DB runbook; do not delete it.
+3. Administrator updates only the existing FinTrustStage3Rds and
+   FinTrustStage3CloudFormation customer-managed policies to these corrected
+   JSON documents, making the reviewed versions default. No new attachments or
+   secret-policy change are needed. Preserve previous versions for review.
+4. After explicit deletion approval, delete only fintrust-database-dev and wait
+   for stack-delete-complete. Its Retain policy leaves the parameter group.
+5. After confirming again that the group is unused and owned, delete only
+   fintrust-postgres16-dev. Verify DBParameterGroupNotFound afterward. No final
+   DB snapshot is needed because no DB was created; inspect for unexpected
+   instances, secrets or snapshots rather than assuming none exist.
+6. Re-assume the MFA-backed deployer role; verify account/region and corrected
+   policy versions. Prepare a fresh CREATE change set using the existing
+   build/stage3-database.json, exact parameters, resource types and tags. Review
+   exactly two additions again. Separate RDS execution/cost approval remains
+   required; this correction does not authorize any retry.
+
+Commands for steps 2, 4 and 5 (APPROVED_ADMIN_PROFILE is a placeholder, not a
+configured profile; all mutations below require separate approval):
+
+```powershell
+$recoveryAws = 'C:\Program Files\Amazon\AWSCLIV2\aws.exe'
+$recoveryProfile = 'APPROVED_ADMIN_PROFILE'
+& $recoveryAws sts get-caller-identity --profile $recoveryProfile --no-cli-pager
+& $recoveryAws rds describe-db-instances --db-instance-identifier fintrust-ledger-dev --profile $recoveryProfile --region af-south-1 --no-cli-pager
+& $recoveryAws rds describe-db-instances --query "DBInstances[?DBParameterGroups[?DBParameterGroupName=='fintrust-postgres16-dev']].DBInstanceIdentifier" --profile $recoveryProfile --region af-south-1 --no-cli-pager
+& $recoveryAws rds list-tags-for-resource --resource-name arn:aws:rds:af-south-1:966467878406:pg:fintrust-postgres16-dev --profile $recoveryProfile --region af-south-1 --no-cli-pager
+& $recoveryAws cloudformation delete-stack --stack-name fintrust-database-dev --profile $recoveryProfile --region af-south-1 --no-cli-pager
+& $recoveryAws cloudformation wait stack-delete-complete --stack-name fintrust-database-dev --profile $recoveryProfile --region af-south-1
+& $recoveryAws rds delete-db-parameter-group --db-parameter-group-name fintrust-postgres16-dev --profile $recoveryProfile --region af-south-1 --no-cli-pager
+& $recoveryAws rds describe-db-parameter-groups --db-parameter-group-name fintrust-postgres16-dev --profile $recoveryProfile --region af-south-1 --no-cli-pager
+```
+
+The retained parameter group has no separate standing charge. A surviving DB,
+secret, snapshot or retained backup would change that conclusion. Preserve
+before/after evidence and do not touch the Stage 1/2 stacks, subnet group or
+account-wide RDS service-linked role. READY FOR MANUAL RECOVERY means the plan is
+prepared for administrator review/approval, not permission to delete or deploy.
+
+Validation for this correction: 37 focused tests passed; Access Analyzer returned
+zero findings for both changed policies using fintrust-inventory. Caller identity
+matched account 966467878406 / user/fintrust-inventory. No attached policy, stack,
+parameter group, change set or other AWS resource was changed. No push occurred.

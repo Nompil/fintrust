@@ -59,7 +59,12 @@ def test_rds_permission_creation_constraints_and_no_disposal():
     for s in p["Statement"]:
         assert s["Condition"]["StringEquals"]["aws:RequestedRegion"] == "af-south-1"
         assert not any(a in {"rds:ModifyDBInstance","rds:DeleteDBInstance","rds:StopDBInstance","rds:StartDBInstance"} for a in s["Action"])
-        assert s["Resource"] != "*"
+        if s["Sid"] == "ReadRegionalEngineDefaults":
+            assert s["Action"] == ["rds:DescribeEngineDefaultParameters"]
+            assert s["Resource"] == "*"
+            assert s["Condition"] == {"StringEquals":{"aws:RequestedRegion":"af-south-1"}}
+        else:
+            assert s["Resource"] != "*"
 
 
 def test_secret_service_role_and_stack_policies_do_not_grant_data_access():
@@ -76,3 +81,18 @@ def test_secret_service_role_and_stack_policies_do_not_grant_data_access():
     assert prepare["Condition"]["ForAllValues:StringEquals"]["cloudformation:ResourceTypes"] == ["AWS::RDS::DBInstance","AWS::RDS::DBParameterGroup"]
     assert prepare["Condition"]["Null"]["cloudformation:RoleArn"] == "true"
     assert "fintrust-database-dev" in prepare["Resource"]
+
+
+def test_live_failure_read_permissions_preserve_scope():
+    rds=json.loads(Path("infrastructure/iam/stage3-rds-policy.json").read_text())["Statement"]
+    defaults=[s for s in rds if "rds:DescribeEngineDefaultParameters" in s["Action"]]
+    assert len(defaults) == 1
+    assert defaults[0]["Effect"] == "Allow"
+    assert defaults[0]["Resource"] == "*"
+    assert defaults[0]["Action"] == ["rds:DescribeEngineDefaultParameters"]
+    cf=json.loads(Path("infrastructure/iam/stage3-cloudformation-policy.json").read_text())["Statement"]
+    reads=[s for s in cf if "cloudformation:DescribeStackResource" in s["Action"]]
+    assert len(reads) == 1
+    assert reads[0]["Resource"] == "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-database-dev/*"
+    assert reads[0]["Condition"] == {"StringEquals":{"aws:RequestedRegion":"af-south-1"}}
+    assert not any(s["Effect"] == "Allow" and s["Resource"] == "*" and any(not a.startswith("rds:DescribeEngineDefaultParameters") for a in s["Action"]) for s in rds)
