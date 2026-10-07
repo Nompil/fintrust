@@ -1,0 +1,156 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "CreateTaggedKey",
+      "Effect": "Allow",
+      "Action": [
+        "kms:CreateKey"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:RequestTag/Project": "FinTrust",
+          "aws:RequestTag/Environment": "dev",
+          "kms:KeySpec": "SYMMETRIC_DEFAULT",
+          "kms:KeyUsage": "ENCRYPT_DECRYPT",
+          "kms:KeyOrigin": "AWS_KMS"
+        },
+        "Bool": {
+          "kms:MultiRegion": "false"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        },
+        "BoolIfExists": {
+          "kms:BypassPolicyLockoutSafetyCheck": "false"
+        }
+      }
+    },
+    {
+      "Sid": "TagKeyDuringCreation",
+      "Effect": "Allow",
+      "Action": [
+        "kms:TagResource"
+      ],
+      "Resource": "arn:aws:kms:af-south-1:966467878406:key/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:RequestTag/Project": "FinTrust",
+          "aws:RequestTag/Environment": "dev"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        },
+        "ForAllValues:StringEquals": {
+          "aws:TagKeys": [
+            "Project",
+            "Environment",
+            "aws:cloudformation:stack-name",
+            "aws:cloudformation:stack-id",
+            "aws:cloudformation:logical-id"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "InspectOwnedKey",
+      "Effect": "Allow",
+      "Action": [
+        "kms:DescribeKey",
+        "kms:GetKeyPolicy",
+        "kms:GetKeyRotationStatus",
+        "kms:ListResourceTags"
+      ],
+      "Resource": "arn:aws:kms:af-south-1:966467878406:key/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:ResourceTag/Project": "FinTrust",
+          "aws:ResourceTag/Environment": "dev"
+        }
+      }
+    },
+    {
+      "Sid": "ConfigureOwnedKey",
+      "Effect": "Allow",
+      "Action": [
+        "kms:EnableKeyRotation",
+        "kms:PutKeyPolicy"
+      ],
+      "Resource": "arn:aws:kms:af-south-1:966467878406:key/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:ResourceTag/Project": "FinTrust",
+          "aws:ResourceTag/Environment": "dev"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        },
+        "BoolIfExists": {
+          "kms:BypassPolicyLockoutSafetyCheck": "false"
+        }
+      }
+    },
+    {
+      "Sid": "CreateNamedAlias",
+      "Effect": "Allow",
+      "Action": [
+        "kms:CreateAlias"
+      ],
+      "Resource": "arn:aws:kms:af-south-1:966467878406:alias/fintrust-dev",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "AuthorizeAliasTarget",
+      "Effect": "Allow",
+      "Action": [
+        "kms:CreateAlias"
+      ],
+      "Resource": "arn:aws:kms:af-south-1:966467878406:key/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:ResourceTag/Project": "FinTrust",
+          "aws:ResourceTag/Environment": "dev"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "InspectAliases",
+      "Effect": "Allow",
+      "Action": [
+        "kms:ListAliases"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    }
+  ]
+}

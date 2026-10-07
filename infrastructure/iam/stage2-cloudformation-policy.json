@@ -1,0 +1,102 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ValidateStorage",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:ValidateTemplate",
+        "cloudformation:GetTemplateSummary"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    },
+    {
+      "Sid": "PrepareStorage",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:CreateChangeSet"
+      ],
+      "Resource": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-storage-dev/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:RequestTag/Project": "FinTrust",
+          "aws:RequestTag/Environment": "dev"
+        },
+        "ForAllValues:StringEquals": {
+          "cloudformation:ResourceTypes": [
+            "AWS::KMS::Key",
+            "AWS::KMS::Alias",
+            "AWS::S3::Bucket",
+            "AWS::S3::BucketPolicy"
+          ]
+        },
+        "Null": {
+          "cloudformation:ResourceTypes": "false",
+          "cloudformation:RoleArn": "true",
+          "cloudformation:ImportResourceTypes": "true"
+        },
+        "StringLike": {
+          "cloudformation:ChangeSetName": "fintrust-storage-*"
+        }
+      }
+    },
+    {
+      "Sid": "ReadStorage",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:DescribeChangeSet",
+        "cloudformation:DescribeStacks",
+        "cloudformation:DescribeStackEvents",
+        "cloudformation:DescribeStackResources",
+        "cloudformation:ListStackResources",
+        "cloudformation:GetTemplate"
+      ],
+      "Resource": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-storage-dev/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    },
+    {
+      "Sid": "ManageStorageSet",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:ExecuteChangeSet",
+        "cloudformation:DeleteChangeSet"
+      ],
+      "Resource": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-storage-dev/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "StringLike": {
+          "cloudformation:ChangeSetName": "fintrust-storage-*"
+        }
+      }
+    },
+    {
+      "Sid": "RecoverStorageStack",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:DeleteStack",
+        "cloudformation:ContinueUpdateRollback"
+      ],
+      "Resource": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-storage-dev/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "Null": {
+          "cloudformation:RoleArn": "true"
+        }
+      }
+    }
+  ]
+}

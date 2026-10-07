@@ -101,7 +101,7 @@ After Stage 0 approval, authenticate with the new user's MFA browser session, th
 use an assume-role profile referencing `fintrust-deployer-login`, the exact role
 ARN and `duration_seconds = 3600`. Before installing infrastructure write grants,
 prove the role session resolves to account `966467878406` and
-`assumed-role/fintrust-deployer-role/…`. Also prove a session lacking MFA cannot
+`assumed-role/fintrust-deployer-role/â€¦`. Also prove a session lacking MFA cannot
 assume it. The inventory principal must be unable to assume it.
 
 Browser login success alone does not prove STS receives the MFA condition context.
@@ -262,7 +262,7 @@ the exact change set before execution; policy validation is not that review.
 | 2 | KMS create/tag/key-policy/alias for one FinTrust key; subsequent key operations restricted to its ARN. S3 create, encryption, ownership/public-access blocks, versioning, lifecycle and TLS policy for the three exact FinTrust buckets. Key administration is a separate reviewed privilege, never unrestricted `PutKeyPolicy` on other keys |
 | 3 | RDS create/describe/modify/backup for exact `fintrust-ledger-dev`, its parameter/subnet group and key grants constrained to RDS. Bootstrap secret and temporary runner permissions separately approved; no routine database administrator access on application roles |
 | 4 | DynamoDB create/describe/configure the exact risk table/stream; SQS create/get/configure exact transaction FIFO, FIFO DLQ and three asynchronous failure queues |
-| 5–9 | Lambda create/update/configure exact five function ARNs; `iam:PassRole` only the matching pre-reviewed five execution roles with `iam:PassedToService=lambda.amazonaws.com`; log groups, S3 notification, mapping, API and schedule rights only for their named resources. IAM role creation/permissions handled by administrator or a separate bounded provisioning policy, never unrestricted deployment IAM |
+| 5â€“9 | Lambda create/update/configure exact five function ARNs; `iam:PassRole` only the matching pre-reviewed five execution roles with `iam:PassedToService=lambda.amazonaws.com`; log groups, S3 notification, mapping, API and schedule rights only for their named resources. IAM role creation/permissions handled by administrator or a separate bounded provisioning policy, never unrestricted deployment IAM |
 | 7 | SES verify/get the approved sender/recipient identities only; email sending belongs to the scoped alert execution role and separately approved tests |
 | 8 | Separate demo caller policy: `execute-api:Invoke` only approved GET paths/stage; not the deployment role and not browser-embedded AWS credentials |
 | 10 | Exact FinTrust alarms, SNS topic/subscriptions and log retention/filter settings; tracing update and execution-role X-Ray grants only after review. No tracing/monitoring wildcard administration |
@@ -333,3 +333,87 @@ record CREATE_COMPLETE for fintrust-network-dev in af-south-1. Stage 1 deploymen
 is verified; AWS integration remains in progress. The previous rollback deletion
 procedure is historical, not an instruction to delete this live stack. Later stage
 permissions/costs are separate approval boundaries.
+
+
+### Stage 2 proposed managed-policy bundle
+
+Status: prepared and validated locally; **not attached and not effective**.
+Attach only after separate administrator approval, and only to
+`arn:aws:iam::966467878406:role/fintrust-deployer-role`. The deployer user keeps
+its existing MFA assume-role path; it receives no direct storage grants.
+CloudFormation uses the assumed caller permissions without a service role.
+The inventory user receives no new grants. Existing account administrators are
+not removed or restricted by these identity policies.
+
+| Proposed managed policy | Exact JSON | Compact size |
+|---|---|---|
+| FinTrustStage2CloudFormation | [stage2-cloudformation-policy.json](stage2-cloudformation-policy.json) | 1,966 characters |
+| FinTrustStage2S3 | [stage2-s3-policy.json](stage2-s3-policy.json) | 1,672 characters |
+| FinTrustStage2Kms | [stage2-kms-policy.json](stage2-kms-policy.json) | 2,593 characters |
+
+All fit the 6,144-character managed-policy limit independently. Do not install
+these as additional inline policies: the Stage 1 inline bundle is already
+10,233/10,240 characters. Check the role's managed-policy attachment quota before
+approval. No IAM CreatePolicy/AttachRolePolicy permissions are given to the role.
+No Stage 1 policies are edited or removed by this proposal.
+
+**Who can do what after the proposed attachment:**
+
+- The MFA-assumed deployer role can prepare/review named `fintrust-storage-*`
+  proposals for `fintrust-storage-dev` in af-south-1. CreateChangeSet restricts
+  the four exact storage resource types, ownership tags, no imports and no service
+  role. Execute/delete proposals retain the naming restriction; inspection does
+  not depend on a missing change-set-name condition context.
+- That role can create/configure only the exact raw, quarantine and reports bucket
+  names ending `966467878406-af-south-1-dev`. Creation requires the regional location
+  constraint. Configuration covers tags, public-access blocks, ownership controls,
+  encryption, versioning, lifecycle and bucket policy. All S3 writes require
+  CloudFormation mediation. There are no object read/write/delete grants.
+- That role can create single-region, symmetric ENCRYPT_DECRYPT keys with AWS_KMS
+  origin and FinTrust/dev request tags through CloudFormation. CreateKey needs
+  Resource * because the ID does not exist yet. It can inspect owned regional
+  keys, enable rotation and put their key policy through CloudFormation without
+  bypassing the lockout safety check. TagResource is restricted to the two
+  ownership tags and CloudFormation system tag keys, with the ownership request
+  tags required. There are no cryptographic-use, grant, disable or key-deletion
+  permissions. After creation, narrow key/* to the actual approved key ARN in a
+  later reviewed revision; IAM creation permission cannot enforce a count of one.
+- Alias creation requires permissions on both `alias/fintrust-dev` and the owned
+  target key. No other alias creation, alias update or alias deletion is granted.
+  ListAliases requires Resource * and is region-scoped, read-only metadata.
+- The role can delete/recover only the named storage stack, without a service
+  role. Every Stage 2 resource has Retain on deletion/replacement, so this does
+  **not** authorize physical bucket/key/alias/policy or object disposal. Recovery
+  preserves retained resources; re-creation may encounter name collisions and
+  needs a separately reviewed adoption/import plan. No automatic retry is approved.
+
+**Policy-writing authority is a material security boundary.** PutBucketPolicy
+can replace policy content on the three named buckets; PutKeyPolicy can replace
+policy content on owned keys. IAM resource scope does not restrict these calls to
+one exact reviewed JSON document or prevent every private/cross-account grant.
+Public-access blocks and KMS lockout checks remain controls, not complete policy
+content restrictions. Review the exact template/change set before execution and
+remove the temporary configuration grants after verified creation if continued
+administration is unnecessary. TagResource can change the permitted ownership
+tags on regional keys through the permitted CloudFormation path; tags alone are
+not an immutable resource identity. The proposed bundle has Allow statements,
+not a permissions boundary overriding other administrator/resource-policy grants.
+
+The existing key policy delegates permission management to this account's IAM
+policies via the account principal. It is not a root-login instruction, nor proof
+that only this deployer can administer/use the key. Runtime roles are not attached
+here; their later key/bucket access needs separate review.
+
+AWS documents [alias permissions on both resources](https://docs.aws.amazon.com/kms/latest/APIReference/API_CreateAlias.html)
+and [key-creation and key-policy safety requirements](https://docs.aws.amazon.com/kms/latest/APIReference/API_CreateKey.html).
+The [KMS condition reference](https://docs.aws.amazon.com/kms/latest/developerguide/conditions-kms.html)
+supports the single-region, key-spec/origin/usage and lockout restrictions used here.
+
+Read-only identity verification matched account 966467878406 and
+`user/fintrust-inventory`. Access Analyzer ValidatePolicy returned **zero findings
+for all three JSON documents**. This checks policy structure and supported scope;
+it does not prove live CloudFormation provider authorization, eventual tag
+visibility, successful lockout checks or safe policy contents. No simulation,
+attachment, change set or deployment occurred. Focused checks: **30 passed** across Stage 2 IAM/storage, Stage 1 network
+and budget-first tests. See the deployment checkpoint for
+focused tests and the separate cost/attachment/execution approval sequence.

@@ -528,3 +528,21 @@ status, bucket controls and key/alias metadata read-only before later-stage work
 approved. The first next AWS mutation would be the separately reviewed permission
 attachment, followed by change-set preparation only after cost approval. No IAM
 attachment, change-set creation/execution, resource mutation, upload or push occurred.
+
+
+### Final Stage 2 permission proposal
+
+The [three Stage 2 managed-policy JSON documents](iam/DEPLOYER_DESIGN.md#stage-2-proposed-managed-policy-bundle)
+are now prepared. Their scope, intended attachment principal, wildcard rationale,
+policy-content administration powers and retained-resource recovery limits are
+explicitly recorded. Each passed read-only Access Analyzer with zero findings.
+The role's nearly-full inline quota requires the managed-policy route; no inline
+bundle changes were made.
+
+FinTrust retains one customer-managed KMS key for explicit encryption governance,
+key policy and lifecycle control. Its base cost is approximately USD 1/month,
+prorated hourly, plus usage. This is an intentional project tradeoff, not a claim
+that AWS-managed encryption is insufficient. The user requested this final
+security review before attachment; no deployment or IAM mutation approval is
+inferred from the cost recommendation. The previous permission table is design
+rationale; the linked JSON is the concrete proposal for approval.
