@@ -322,3 +322,14 @@ states that ROLLBACK_COMPLETE permits only deletion. The existing failed stack
 must therefore be deleted before using its name for a fresh CREATE. The executed
 change set cannot serve as the next CREATE proposal. No deletion, policy update,
 new change set, infrastructure execution or push was performed in this correction.
+
+
+### Corrected Stage 1 retry outcome
+
+The operator completed the reviewed retry successfully. Saved
+[stack evidence](../../docs/EVIDENCE/04-network/06-stage1-stack-create-complete.png)
+and [resource evidence](../../docs/EVIDENCE/04-network/07-stage1-resources-create-complete.png)
+record CREATE_COMPLETE for fintrust-network-dev in af-south-1. Stage 1 deployment
+is verified; AWS integration remains in progress. The previous rollback deletion
+procedure is historical, not an instruction to delete this live stack. Later stage
+permissions/costs are separate approval boundaries.

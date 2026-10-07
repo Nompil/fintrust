@@ -392,3 +392,17 @@ stack name and new review; do not reuse the executed proposal or retry execution
 without approval. See [the identity design](iam/DEPLOYER_DESIGN.md#live-stage-1-vpc-rollback-finding)
 for the finding, sources and manual recovery sequence. No AWS mutation or push
 was performed in this correction.
+
+
+## Current Stage 1 status
+
+**Stage 1: deployed and verified. AWS Integration: In Progress.**
+The operator completed the corrected reviewed retry. The saved
+[stack screenshot](../docs/EVIDENCE/04-network/06-stage1-stack-create-complete.png)
+shows fintrust-network-dev CREATE_COMPLETE in af-south-1. The
+[resource screenshot](../docs/EVIDENCE/04-network/07-stage1-resources-create-complete.png)
+records successful resource creation; the operator confirms all resources completed.
+Earlier rollback/recovery instructions above are historical and no longer apply
+to this successful stack. Preserve it for subsequent stages. This evidence verifies
+creation, not application connectivity or end-to-end integration. Stage 2 remains
+local preparation only and requires its own IAM/cost/change-set approval.
