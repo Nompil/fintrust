@@ -121,7 +121,7 @@ Review these three JSON documents together for `fintrust-deployer-role`:
 
 They are intended as three **inline role policies**, not three managed policies:
 the network document exceeds the managed-policy 6,144-character limit. Their
-combined non-whitespace JSON length is **10,137**, below the role's aggregate
+combined non-whitespace JSON length is **10,233**, below the role's aggregate
 10,240-character inline limit while it has no other inline policies. Re-evaluate
 that limit and replace/split the grants before later stages; do not append blindly.
 No policy has been attached, and this is not an IAM permissions boundary.
@@ -145,7 +145,8 @@ The JSON is authoritative for each statement and condition.
 |---|---|
 | `cloudformation:ValidateTemplate`, `cloudformation:GetTemplateSummary` | `*` for validation/summary of a local template before a stack exists; regional only |
 | `cloudformation:CreateChangeSet` | Stack ARN only; prepare a reviewable change. Require `fintrust-network-*` change-set name, ownership tags and a nonempty `cloudformation:ResourceTypes` subset matching the eight template types. No import or service-role ARN |
-| `cloudformation:DescribeChangeSet`, `cloudformation:ExecuteChangeSet`, `cloudformation:DeleteChangeSet` | Named stack ARN plus `arn:aws:cloudformation:af-south-1:966467878406:changeSet/fintrust-network-*/*`; regional and change-set-name conditions retained. Inspect, later execute or discard the reviewed change |
+| `cloudformation:DescribeChangeSet` | Separate ReadSet statement; named stack ARN and region only. Inspection does not depend on ChangeSetName context |
+| `cloudformation:ExecuteChangeSet`, `cloudformation:DeleteChangeSet` | ManageSet statement; named stack ARN, region and required `fintrust-network-*` ChangeSetName condition. Write naming guard retained |
 | `cloudformation:DescribeStacks`, `cloudformation:DescribeStackEvents`, `cloudformation:DescribeStackResources`, `cloudformation:ListStackResources`, `cloudformation:GetTemplate` | Stack ARN; named-stack status/resources/template evidence. No account-wide ListStacks |
 | `cloudformation:DeleteStack`, `cloudformation:ContinueUpdateRollback` | Stack ARN; separately approved cleanup/recovery, no service-role override. Neither is executed in this task |
 | `ec2:DescribeVpcs`, `ec2:DescribeSubnets`, `ec2:DescribeRouteTables`, `ec2:DescribeSecurityGroups`, `ec2:DescribeSecurityGroupRules`, `ec2:DescribeVpcEndpoints`, `ec2:DescribeVpcEndpointServices`, `ec2:DescribePrefixLists`, `ec2:DescribeAvailabilityZones`, `ec2:DescribeTags`, `ec2:DescribeNetworkInterfaces` | `*` required for these EC2 describe APIs; regional topology, CloudFormation stabilization and cleanup diagnostics |
@@ -179,36 +180,50 @@ attachment approval.** Do not treat the preceding revision's result as final evi
 
 ### Change-set inspection permission correction
 
-The operator reported successful creation of `fintrust-network-stage1-review` for
-`fintrust-network-dev`, followed by a DescribeChangeSet authorization denial in
-its waiter. No infrastructure execution was reported. The local correction adds
-`arn:aws:cloudformation:af-south-1:966467878406:changeSet/fintrust-network-*/*`
-to the Resource array for DescribeChangeSet, ExecuteChangeSet and DeleteChangeSet.
-The named stack ARN is retained: AWS's current action reference still lists
-`stack` for these three actions. All conditions and other statements are unchanged.
-The change-set ARN alone does not encode its parent stack; verify StackId during
-manual inspection. This document does not claim that the reported denial proves
-the missing ARN was the sole cause, or that policy validation proves live access.
+The operator reported successful creation of `fintrust-network-stage1-review`
+for `fintrust-network-dev`, then a DescribeChangeSet authorization denial before
+infrastructure execution. The first correction added a change-set ARN alongside
+the stack ARN and passed 20 local tests and Access Analyzer with no findings.
+The operator subsequently verified the installed policy and reported that
+DescribeChangeSet was still denied against the stack ARN. The first correction
+did not resolve live inspection access.
 
-The inventory identity was verified as account `966467878406`, user
-`fintrust-inventory`. Access Analyzer ValidatePolicy returned `findings: []` for
-the corrected CloudFormation policy. The focused network/budget checks passed:
-**20 passed**. The three documents use **10,137** compact JSON characters, leaving
-103 below the aggregate inline role limit, assuming no other inline policies.
-These results do not replace validation of the other policy documents or an
-actual DescribeChangeSet retry with the deployer role.
+The second correction separates read and write authorization:
 
-Manual next step: in IAM, open `fintrust-deployer-role`, edit only the inline policy
-`FinTrustStage1CloudFormation`, and replace its JSON with the corrected local file.
-Leave the other role policies untouched. Re-assume the role after propagation and
-retry DescribeChangeSet with both the change-set name and stack name in
-`af-south-1`. Reuse the existing change set if it remains CREATE_COMPLETE and
-AVAILABLE and its StackId/template/parameters match the reviewed proposal. An IAM
-policy edit does not itself require rebuilding a change set. Do not execute it.
-If access remains denied, retain the exact denial and check the installed policy,
-request name/ARN context, session policy and permissions boundary before changing
-permissions further. No IAM attachment, change-set execution or Git push occurred
+- `ReadSet` grants only DescribeChangeSet on the named stack ARN, with only
+  `aws:RequestedRegion=af-south-1`; it does not require ChangeSetName context.
+- `ManageSet` grants only ExecuteChangeSet and DeleteChangeSet on the same named
+  stack ARN, retaining region and `cloudformation:ChangeSetName=fintrust-network-*`.
+- The speculative change-set ARN is removed from write scope. AWS's current
+  [action reference](https://docs.aws.amazon.com/service-authorization/latest/reference/list_cloudformation.html)
+  lists stack resources for these actions. Creation/tag/type/no-role/no-import
+  controls and all unrelated statements remain unchanged; no IAM grants are added.
+
+The name condition is the suspected mismatch, not a proven live root cause.
+[DescribeChangeSet](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DescribeChangeSet.html)
+accepts a name plus stack name or a full change-set ARN. Inspection now permits
+any change set belonging to this one stack; writes retain the naming guard and
+still fail closed if its required context does not match.
+
+The verified inventory identity is account `966467878406`, user
+`fintrust-inventory`. Access Analyzer returned `findings: []` for the second
+correction. Focused network/budget tests: **21 passed**. The three documents use
+**10,233** compact JSON characters, leaving only **7** below the aggregate inline
+role limit, assuming no other inline policies. The shorter ReadSet/ManageSet
+labels carry no authorization semantics. Future grants need a separately reviewed
+policy-size plan. These checks do not prove deployer-role live authorization.
+
+Manual next step: in IAM, edit only `FinTrustStage1CloudFormation` on
+`fintrust-deployer-role` and replace its JSON with the corrected local file.
+Leave the other policies untouched. Re-assume the role after propagation and retry
+DescribeChangeSet with both the change-set name and stack name in `af-south-1`.
+Reuse the existing change set if it remains CREATE_COMPLETE and AVAILABLE and its
+StackId/template/parameters match the reviewed proposal. No recreation is required
+solely for an IAM policy edit. Do not execute it. If inspection is denied again,
+retain the exact error and inspect session/boundary/request context before further
+permission edits. No policy attachment, infrastructure execution or push occurred
 in this correction.
+
 ### Template and limits of permission validation
 
 Use [network.py](../network.py), not the combined `foundation.py`. It defines one

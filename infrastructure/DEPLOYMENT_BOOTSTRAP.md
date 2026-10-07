@@ -331,7 +331,7 @@ billing safeguards until residual charges are understood.
 Finish the final network-policy validation after login renewal; the prior clean
 validation predates its last scoping improvement. Review the exact three inline-policy
 JSON files linked from [DEPLOYER_DESIGN.md](iam/DEPLOYER_DESIGN.md), their combined
-10,137-character quota use, the network template and its limitations. No policy
+10,233-character quota use, the network template and its limitations. No policy
 attachment, change set or infrastructure creation is authorized by this report.
 
 After separate approval, an administrator can install only that reviewed bundle
@@ -358,14 +358,15 @@ not a claim that these new local changes have run in CI.
 
 ## Change-set inspection checkpoint
 
-The operator reports that `fintrust-network-stage1-review` exists for
-`fintrust-network-dev` but its DescribeChangeSet waiter was denied before
-infrastructure execution. The CloudFormation policy now includes the restricted
-change-set ARN alongside the existing named stack ARN for describe/execute/delete
-change-set actions, with all conditions unchanged. Read-only Access Analyzer
-validation returned no findings; 20 focused local tests passed. The policy has
-not been updated in AWS by this correction. See
-[the identity design](iam/DEPLOYER_DESIGN.md#change-set-inspection-permission-correction)
-for the authorization-reference discrepancy, manual replacement/retry and reuse
-conditions. Successful live access still needs verification; do not execute the
-change set as part of that retry.
+The operator reports that the first change-set ARN correction was installed but
+DescribeChangeSet remained denied against `fintrust-network-dev`. Inspection now
+has its own named-stack, region-only statement; execute/delete keep their required
+`fintrust-network-*` naming guard and documented stack scope. All other conditions
+are unchanged. The second correction passed **21 focused tests** and read-only
+Access Analyzer validation with **zero findings**. Combined inline policy size is
+**10,233 / 10,240 characters**. Live inspection access remains unverified pending
+manual replacement of only FinTrustStage1CloudFormation and role re-assumption.
+See [the identity design](iam/DEPLOYER_DESIGN.md#change-set-inspection-permission-correction)
+for both findings and the manual retry. Reuse the existing change set if its status
+and reviewed proposal remain valid. Do not execute it during this check. No AWS
+policy update, infrastructure execution or push was performed by this correction.

@@ -78,12 +78,11 @@ def test_change_set_access_covers_reviewed_arns_without_broadening_stack_scope()
 
     policy = json.loads(Path("infrastructure/iam/stage1-cloudformation-policy.json").read_text())
     statements = {s["Sid"]: s for s in policy["Statement"]}
-    review = statements["ReviewAndExecuteNetworkChangeSet"]
+    review = statements["ManageSet"]
     stack = "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/*"
-    change_set = "arn:aws:cloudformation:af-south-1:966467878406:changeSet/fintrust-network-*/*"
-    assert set(review["Resource"]) == {stack, change_set}
+    assert review["Resource"] == stack
     assert set(review["Action"]) == {
-        "cloudformation:DescribeChangeSet", "cloudformation:ExecuteChangeSet",
+        "cloudformation:ExecuteChangeSet",
         "cloudformation:DeleteChangeSet",
     }
     assert review["Condition"] == {
@@ -91,15 +90,15 @@ def test_change_set_access_covers_reviewed_arns_without_broadening_stack_scope()
         "StringLike": {"cloudformation:ChangeSetName": "fintrust-network-*"},
     }
     # Resource matching checks scope only; this is not an IAM authorization simulator.
-    allowed = "arn:aws:cloudformation:af-south-1:966467878406:changeSet/fintrust-network-stage1-review/id"
-    assert any(fnmatchcase(allowed, pattern) for pattern in review["Resource"])
+    allowed = stack.replace("*", "id")
+    assert any(fnmatchcase(allowed, pattern) for pattern in [review["Resource"]])
     for denied in (
         allowed.replace("af-south-1", "us-east-1"),
         allowed.replace("966467878406", "111111111111"),
-        allowed.replace("fintrust-network-stage1-review", "unrelated-review"),
+        allowed.replace("fintrust-network-dev", "unrelated-stack"),
         stack.replace("fintrust-network-dev", "fintrust-network-prod").replace("*", "id"),
     ):
-        assert not any(fnmatchcase(denied, pattern) for pattern in review["Resource"])
+        assert not any(fnmatchcase(denied, pattern) for pattern in [review["Resource"]])
     for sid in ("PrepareNetworkChangeSet", "ReadNetworkStack", "RecoverOrRemoveNetworkStack"):
         assert statements[sid]["Resource"] == stack
     creation = statements["PrepareNetworkChangeSet"]["Condition"]
@@ -115,3 +114,22 @@ def test_change_set_access_covers_reviewed_arns_without_broadening_stack_scope()
         r["Type"] for r in build_template()["Resources"].values()
     }
     assert not any(a.startswith("iam:") for s in policy["Statement"] for a in s["Action"])
+
+
+
+def test_describe_change_set_does_not_require_change_set_name_context():
+    policy = json.loads(Path("infrastructure/iam/stage1-cloudformation-policy.json").read_text())
+    reads = [s for s in policy["Statement"] if "cloudformation:DescribeChangeSet" in s["Action"]]
+    assert len(reads) == 1
+    assert reads[0] == {
+        "Sid": "ReadSet", "Effect": "Allow",
+        "Action": ["cloudformation:DescribeChangeSet"],
+        "Resource": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/*",
+        "Condition": {"StringEquals": {"aws:RequestedRegion": "af-south-1"}},
+    }
+    for action in ("cloudformation:ExecuteChangeSet", "cloudformation:DeleteChangeSet"):
+        grants = [s for s in policy["Statement"] if action in s["Action"]]
+        assert len(grants) == 1
+        assert grants[0]["Condition"]["StringLike"] == {
+            "cloudformation:ChangeSetName": "fintrust-network-*"
+        }
