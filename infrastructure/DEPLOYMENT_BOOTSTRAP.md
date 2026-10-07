@@ -728,3 +728,149 @@ provides the stronger baseline without a storage-price increase. Regression chec
 require the documented PostgreSQL SSD minimum and the exact selected size/type.
 This supersedes the five-GiB cost/setting claims in earlier preparation summaries.
 No live database, policy, service role or change set was changed.
+
+### Stage 3 administrator recovery runbook
+
+The operator reports fintrust-database-stage3-review is CREATE_COMPLETE / AVAILABLE
+with exactly two Add actions. This report is not a new account inspection. Save
+its screenshot as docs/EVIDENCE/05-rds/01-stage3-change-set-reviewed.png; no image
+was supplied with the recovery request, so that evidence has not been saved here.
+No execution is authorized by this runbook.
+
+**Execution checkpoint:** NOT READY TO EXECUTE until the operator confirms a
+working administrator recovery identity in account 966467878406, accepts the
+ongoing cost and test window, and gives separate execution approval. The reviewed
+proposal is technically prepared. Its deployer permissions intentionally exclude
+physical database cleanup; an administrator must remain available if rollback
+cannot dispose of the database. This is not a request to broaden the deployer.
+
+#### Inspect before choosing recovery
+
+In the Console select Cape Town, CloudFormation > fintrust-database-dev > Events
+and Resources. Capture the first CREATE_FAILED reason and subsequent rollback
+failures; record the stack ID and actual physical IDs. In RDS > Databases inspect
+fintrust-ledger-dev, status, deletion protection, pending changes, encryption,
+subnet group, security groups and managed-secret ARN. Never capture secret values.
+Wait for active create/modify/rollback operations to settle before intervening.
+DBInstanceNotFound means there is no instance to disable/delete; AccessDenied
+means UNKNOWN. Do not infer absence from an authorization error.
+
+Default execution attempts rollback on provisioning failure. A protected DB
+cannot be deleted, and the restricted deployer may also lack deletion/snapshot
+permissions. The stack can enter ROLLBACK_FAILED; stack failure does not mean the
+DB or secret disappeared. DatabaseTls has Retain and can outlive rollback. If
+preserving successful resources is chosen separately at execution, a CREATE_FAILED
+stack follows the preserve/retry path instead; do not silently change that option.
+ContinueUpdateRollback applies to UPDATE_ROLLBACK_FAILED, not a failed initial
+CREATE rollback.
+
+For commands below replace APPROVED_ADMIN_PROFILE with an existing authenticated
+administrator profile. Do not configure new credentials or use the inventory
+profile for writes. Verify sts get-caller-identity first: account 966467878406,
+expected administrator identity. The CLI path is C:\Program Files\Amazon\AWSCLIV2\aws.exe.
+These commands are examples for a later approved recovery, not commands to run now.
+
+```powershell
+$recoveryAws = 'C:\Program Files\Amazon\AWSCLIV2\aws.exe'
+$recoveryProfile = 'APPROVED_ADMIN_PROFILE'
+& $recoveryAws sts get-caller-identity --profile $recoveryProfile --no-cli-pager
+& $recoveryAws cloudformation describe-stack-events --stack-name fintrust-database-dev --profile $recoveryProfile --region af-south-1 --output json --no-cli-pager
+& $recoveryAws cloudformation list-stack-resources --stack-name fintrust-database-dev --profile $recoveryProfile --region af-south-1 --output json --no-cli-pager
+& $recoveryAws rds describe-db-instances --db-instance-identifier fintrust-ledger-dev --profile $recoveryProfile --region af-south-1 --output json --no-cli-pager
+```
+
+#### Approved disposal through CloudFormation
+
+Prefer stack-managed disposal once failure is terminal and removal is approved.
+In RDS select the exact instance > Modify > clear Deletion protection. Review
+pending modifications before selecting Apply immediately: unrelated pending
+changes can also be applied. CLI equivalent:
+
+```powershell
+& $recoveryAws rds modify-db-instance --db-instance-identifier fintrust-ledger-dev --no-deletion-protection --apply-immediately --profile $recoveryProfile --region af-south-1 --no-cli-pager
+& $recoveryAws rds describe-db-instances --db-instance-identifier fintrust-ledger-dev --query 'DBInstances[0].{Status:DBInstanceStatus,Protection:DeletionProtection,Pending:PendingModifiedValues}' --profile $recoveryProfile --region af-south-1 --no-cli-pager
+```
+
+Proceed only after protection reads false and the instance is in a state allowing
+deletion. For a terminal ROLLBACK_FAILED, ROLLBACK_COMPLETE or CREATE_FAILED stack,
+use ordinary administrator stack deletion, not force deletion or resource skipping:
+
+```powershell
+& $recoveryAws cloudformation delete-stack --stack-name fintrust-database-dev --profile $recoveryProfile --region af-south-1 --no-cli-pager
+& $recoveryAws cloudformation wait stack-delete-complete --stack-name fintrust-database-dev --profile $recoveryProfile --region af-south-1
+```
+
+The stack has no execution role, so the administrator caller must have all required
+RDS/snapshot cleanup permissions. Snapshot deletion policy requests a final DB
+snapshot; inspect its actual ARN/status rather than assume creation succeeded.
+If deletion fails, capture DELETE_FAILED events and resolve that specific error.
+A ROLLBACK_COMPLETE stack cannot be reused for a fresh CREATE until removed.
+
+**Exceptional orphan cleanup:** use direct RDS deletion only after confirming
+ownership, stack management state and separate disposal approval. For a DB that
+supports snapshots, select Create final snapshot and a unique unused name in
+RDS > Actions > Delete. CLI equivalent (replace the snapshot placeholder):
+
+```powershell
+& $recoveryAws rds delete-db-instance --db-instance-identifier fintrust-ledger-dev --no-skip-final-snapshot --final-db-snapshot-identifier APPROVED_UNIQUE_SNAPSHOT_NAME --delete-automated-backups --profile $recoveryProfile --region af-south-1 --no-cli-pager
+& $recoveryAws rds wait db-instance-deleted --db-instance-identifier fintrust-ledger-dev --profile $recoveryProfile --region af-south-1
+```
+
+The example explicitly deletes automated backups while keeping the final manual
+snapshot; approve that retention choice before use. For failed, incompatible-restore
+or incompatible-network DB status AWS requires skipping the final snapshot.
+STOP in that case: do not silently waive the final-snapshot requirement. Record
+whether any recoverable data/backup exists and obtain separate loss/cleanup
+approval. Direct deletion of a still stack-managed DB creates drift and is not
+the normal recovery path.
+
+#### Retained resources, cost and evidence
+
+Use RDS > Snapshots > Manual and filter by fintrust-ledger-dev. Record the actual
+snapshot identifiers and status, including any partially completed snapshots.
+Keep the approved final snapshot until export/reconciliation and restore testing
+or a documented empty-database exception are accepted; agree an owner and retention
+limit. Later snapshot deletion requires separate approval. Identify the retained
+parameter group by its exact name and tags; confirm no DB instance references it
+before deleting it. Read-only inventory commands:
+
+```powershell
+& $recoveryAws rds describe-db-snapshots --db-instance-identifier fintrust-ledger-dev --snapshot-type manual --profile $recoveryProfile --region af-south-1 --no-cli-pager
+& $recoveryAws rds describe-db-instance-automated-backups --db-instance-identifier fintrust-ledger-dev --profile $recoveryProfile --region af-south-1 --no-cli-pager
+& $recoveryAws rds describe-db-parameter-groups --db-parameter-group-name fintrust-postgres16-dev --profile $recoveryProfile --region af-south-1 --no-cli-pager
+& $recoveryAws rds describe-db-instances --query "DBInstances[?DBParameterGroups[?DBParameterGroupName=='fintrust-postgres16-dev']].DBInstanceIdentifier" --profile $recoveryProfile --region af-south-1 --no-cli-pager
+```
+
+After separate approval, delete only reviewed unused retained resources:
+
+```powershell
+& $recoveryAws rds delete-db-snapshot --db-snapshot-identifier APPROVED_ACTUAL_SNAPSHOT_ID --profile $recoveryProfile --region af-south-1 --no-cli-pager
+& $recoveryAws rds delete-db-parameter-group --db-parameter-group-name fintrust-postgres16-dev --profile $recoveryProfile --region af-south-1 --no-cli-pager
+```
+
+Reconcile retained automated backups separately; manual snapshot deletion does
+not remove them. RDS removes its managed secret when the DB is deleted; verify
+its actual metadata using the recorded ARN, never independently delete it while
+the DB exists. Do not delete the account-wide service-linked role or Stage 1/2
+resources. Before retrying, check DB/parameter-group name collisions and retained
+resources; adoption or reuse needs a reviewed template, not an automatic retry.
+
+A surviving DB incurs instance hours, storage, managed-secret and applicable
+backup/usage charges. A stopped DB still incurs storage/secret/backup costs and
+normally restarts after seven days. Manual/final snapshots and retained automated
+backups can remain billable after DB/stack removal. The parameter group and
+service-linked role have no separate standing charge. Stage 2 S3/KMS costs continue.
+
+Save evidence under docs/EVIDENCE/05-rds: reviewed change set, first failure,
+rollback/deletion failures, physical resource inventory, approved recovery decision,
+protection-disabled result, final snapshot status, final stack/DB absence and
+retained-resource reconciliation. Include stack/change-set IDs, tested commit and
+administrator identity; exclude credentials, MFA codes and secret values. A waiter
+failure is a signal to inspect events, never proof of cleanup.
+
+References: [stack failure options](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stack-failure-options.html),
+[Snapshot/Retain policies](https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-attribute-deletionpolicy.html),
+[RDS deletion](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_DeleteInstance.html),
+[failed-state snapshot limitations](https://docs.aws.amazon.com/cli/latest/reference/rds/delete-db-instance.html),
+[ModifyDBInstance](https://docs.aws.amazon.com/cli/latest/reference/rds/modify-db-instance.html),
+[DeleteStack](https://docs.aws.amazon.com/cli/latest/reference/cloudformation/delete-stack.html).
