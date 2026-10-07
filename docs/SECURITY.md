@@ -101,3 +101,15 @@ Before deployment, verify live IAM/trust policies, gateway routes, security grou
 RDS logins/TLS, bucket encryption, SES identities and API authorization. Before
 normal traffic, exercise alarm delivery and recovery. No deletion or replay is
 authorized by this documentation.
+
+
+## Stage 3 preparation checkpoint
+
+Read-only checks confirm network and storage stacks are CREATE_COMPLETE. The
+[Stage 3 plan](../infrastructure/DEPLOYMENT_BOOTSTRAP.md#stage-3-private-database-approval-checkpoint)
+proposes a private PostgreSQL 16.15 micro instance with IAM authentication,
+forced TLS, AWS-managed RDS encryption and an RDS-managed master secret. The S3
+CMK is unchanged. There are no secret-value grants, SQL execution or network
+changes in preparation. RDS service-role creation, paid runtime, permission
+attachment, change-set execution, private SQL bootstrap and protected teardown
+remain separate approval/verification boundaries.

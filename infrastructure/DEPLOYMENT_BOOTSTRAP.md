@@ -1,6 +1,6 @@
 # Deployment bootstrap and cost gate
 
-Status: **STAGE 1 DEPLOYED AND VERIFIED; STAGE 2 PREPARED FOR COST/IAM REVIEW.**
+Status: **STAGES 1 AND 2 DEPLOYED AND VERIFIED; STAGE 3 PREPARED FOR REVIEW.**
 
 The current Stage 1 and Stage 2 checkpoints below supersede historical preparation
 and rollback statements in this record.
@@ -546,3 +546,173 @@ that AWS-managed encryption is insufficient. The user requested this final
 security review before attachment; no deployment or IAM mutation approval is
 inferred from the cost recommendation. The previous permission table is design
 rationale; the linked JSON is the concrete proposal for approval.
+
+
+## Stage 3 private database approval checkpoint
+
+Read-only inventory confirms both fintrust-network-dev and fintrust-storage-dev
+are CREATE_COMPLETE. AWS Integration remains In Progress. Earlier Stage 2
+preparation statements above are historical; no Stage 1/2 changes are proposed.
+
+[database.py](database.py) renders exactly two CloudFormation resources for
+`fintrust-database-dev`: `LedgerDatabase` (AWS::RDS::DBInstance) and `DatabaseTls`
+(AWS::RDS::DBParameterGroup). RDS also creates/manages a master-password secret
+in Secrets Manager; this is a dependent billable resource, not a third explicitly
+managed CloudFormation resource. The missing AWSServiceRoleForRDS must be created
+by an authorized administrator as a separately approved prerequisite.
+
+| Setting | Exact Stage 3 proposal |
+|---|---|
+| Database | fintrust-ledger-dev / fintrust; PostgreSQL **16.15**, parameter family postgres16 |
+| Compute/storage | db.t4g.micro; Single-AZ; **5 GiB gp2**; no autoscaling, IOPS, replica or proxy |
+| Network | IPv4, PubliclyAccessible=false; reuse fintrust-db-dev and sg-01644a4c9f2c44162; no network mutations |
+| Database subnets | subnet-04dc0f576867d7a6c and subnet-084deb13f49a36064 in vpc-0aba008bb360f5147 |
+| Ingress | Existing database SG has only TCP 5432 from sg-0850bd798bb9505e2 (application/Lambda SG); no IP-range ingress |
+| TLS/IAM | rds.force_ssl=1 in fintrust-postgres16-dev; EnableIAMDatabaseAuthentication=true; application IAM path already uses verify-full and the bundled RDS CA |
+| Encryption | StorageEncrypted=true; omit KmsKeyId to select the regional AWS-managed aws/rds key. Do not reuse the Stage 2 S3 CMK; this follows the existing Free Tier-first RDS plan |
+| Master credentials | fintrust_admin; ManageMasterUserPassword=true, no password parameter/output; default AWS-managed aws/secretsmanager encryption, no customer key or secret-value read grant |
+| Support/monitoring | Standard support only; Extended Support disabled; minor upgrades on, major upgrades off; no enhanced monitoring or Performance Insights |
+| Backup/deletion | One-day automated backups, CopyTagsToSnapshot=true; deletion protection on; deletion/replacement Snapshot; parameter group Retain |
+
+The template pins the existing database group as its only accepted SG input and
+the existing named subnet group; it does not create an ingress exception. Live
+orderability confirms 16.15/gp2/micro, five-GiB minimum, encryption and IAM support
+in af-south-1. This replaces the older 16.14 candidate without changing major
+version. Micro capacity, IAM memory headroom and actual TLS connections remain
+unmeasured. Begin with a small sequential synthetic workload, then check free
+memory/connections/storage; never silently resize or turn off IAM authentication.
+
+### Proposed permission bundle
+
+All documents are local proposals, not attached policies:
+
+- [FinTrustStage3CloudFormation](iam/stage3-cloudformation-policy.json): only
+  fintrust-database-dev and fintrust-database-* proposals; exact DBInstance and
+  DBParameterGroup resource types, FinTrust/dev request tags, no service role,
+  imports, IAM capabilities or PassRole. Named-stack reads/recovery only.
+- [FinTrustStage3Rds](iam/stage3-rds-policy.json): exact new DB/parameter-group
+  ARNs and existing subnet-group/default PostgreSQL option-group references;
+  CloudFormation-mediated creation with PostgreSQL/micro/five-GiB, encrypted,
+  private VPC, Single-AZ and managed-password conditions. TLS-group configuration
+  and ownership tagging are scoped; no database deletion, resizing, stop/start,
+  network mutation or SQL login permissions are granted.
+- [FinTrustStage3Secret](iam/stage3-secret-policy.json): CreateSecret/TagResource
+  only for account/regional rds!db-* secret names plus DescribeKey for keys with
+  aws/rds or aws/secretsmanager aliases. There is no GetSecretValue, crypto-use,
+  grant or secret-delete permission. RDS generates the unknown secret identifier;
+  the prefix cannot identify only this DB before creation. This grant can create
+  other matching RDS-prefix secrets; narrow it after resolving the actual ARN.
+  No unverified CalledVia condition is imposed on the RDS/Secrets Manager
+  dependency. Confirm the provider path during the later authorized deployment.
+- [RDS service-role bootstrap](iam/stage3-service-linked-role-policy.json): a
+  **separate administrator prerequisite**, only CreateServiceLinkedRole for
+  rds.amazonaws.com and its exact account role ARN. Do not attach this document
+  to the deployer by default. It has no general role creation or PassRole.
+
+IAM rds:Vpc is Boolean true (VPC placement), not a VPC ID condition. The named
+subnet group, template SG restriction and pre-execution inspection establish the
+actual VPC/SG boundary. Class, size and IAM/password settings not supported as
+IAM condition keys are also asserted by the template tests and change-set review.
+The template's IAM-auth flag is not a substitute for SQL rds_iam grants.
+Each JSON fits the managed-policy size limit; check attachment quota before
+approval rather than appending to the nearly-full Stage 1 inline bundle.
+
+[Secrets integration permissions](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-secrets-manager.html)
+require CreateSecret, TagResource and DescribeKey. No new customer-key grant is
+needed for this managed-key proposal. [RDS service-linked roles](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAM.ServiceLinkedRoles.html)
+are service-managed prerequisites, not a CloudFormation execution role.
+
+### Cost before credits
+
+Refreshed [public Cape Town RDS catalogue](https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonRDS/current/af-south-1/index.json):
+compute USD **0.021/hour**, gp2 USD **0.151/GiB-month**. One 5 GiB volume is USD
+0.755/month. [Secrets Manager pricing](https://aws.amazon.com/secrets-manager/pricing/)
+adds approximately USD **0.40/secret-month**, plus API calls. Using 730 hours for
+monthly proration, the database/storage/secret subtotal is:
+
+| Running period | Compute | Prorated storage + secret | Total |
+|---|---:|---:|---:|
+| One hour | USD 0.021 | USD 0.00158 | **USD 0.02258** |
+| 24 hours | USD 0.504 | USD 0.03797 | **USD 0.54197** |
+| 730 hours | USD 15.330 | USD 1.155 | **USD 16.485** |
+
+These are estimates, not caps or a Free Tier promise. Excluded: API calls, burst
+CPU surplus credits, excess backup/manual/final snapshots, transfer, taxes and
+other stages (including the existing S3 key). Credit eligibility/balance must be
+reconfirmed before approval. Full-month operation exceeds the USD 10 budget;
+prefer an explicitly approved 24-hour test window and a cleanup owner. The older
+24-hour estimate included a full month of storage; this table instead prorates
+storage and secret for the stated running interval. Retaining them longer adds cost.
+
+### SQL initialization and acceptance dependency
+
+Reviewed canonical sql/schema.sql and infrastructure/rds/permissions.sql, with
+sql/views.sql, sql/procedure.sql and reporting SQL. No SQL was executed or modified.
+The seven pre-existing untracked files, including infrastructure/rds/schema.sql,
+remain untouched. The canonical schema uses pgcrypto and restricted foreign keys.
+permissions.sql defines service groups and documents the three required staged
+IAM logins; it does not automatically create/grant those cloud logins.
+
+Database creation alone does not initialize tables, service users or seed data.
+A later separately reviewed migration runner must execute the canonical SQL,
+provision fintrust_scoring_dev / fintrust_api_dev / fintrust_report_dev with rds_iam
+and matching service grants, and verify connections using verify-full. The prior
+private migration-Lambda proposal remains a dependency; it is not created by this
+stage and has not been implemented or invoked. Use the existing application SG
+for a reviewed runner without adding public access/NAT/ingress. Credential handling,
+secret-value access, runner permissions/artifact and removal need their own review.
+Do not claim Stage 3/application readiness until this bootstrap and capacity tests pass.
+
+### Validation, recovery and next boundary
+
+**36 focused tests passed**, including six new Stage 3 boundary tests. All four
+proposed policy documents passed Access Analyzer with **zero final findings**.
+Its initial rds:Vpc type warning was corrected and revalidated. CloudFormation
+ValidateTemplate through fintrust-inventory passed with no IAM capabilities.
+These are read-only/static validation results, not live provider permission or
+RDS/TLS/SQL execution evidence. No Linux CI/full-suite rerun was needed for the
+isolated infrastructure addition.
+
+Deletion protection deliberately blocks normal teardown. The creation bundle
+also lacks ModifyDBInstance/DeleteDBInstance and physical cleanup permissions.
+Before execution, agree how an authorized administrator will recover a failed
+create or disable protection for approved teardown; automatic rollback can be
+blocked by protection or missing disposal grants. Preserve events and inspect
+actual retained resources; do not force-delete, skip resources or grant broad
+RDS access. A ROLLBACK_COMPLETE stack requires approved deletion before a new
+CREATE; inspect retained names/snapshots and secret state first.
+
+For approved final teardown: reconcile/export synthetic records, test restore,
+choose retained snapshot period, then separately review scoped protection-disable,
+DB deletion/final snapshot and stack cleanup permissions. Snapshot policies do
+not waive deletion protection. RDS deletes its managed secret when the instance
+is deleted; restoring a snapshot requires a fresh credential/bootstrap plan.
+The retained parameter group and snapshots can outlive the stack; storage costs
+continue. Stopping is not deletion: storage/backup/secret costs remain and RDS
+normally restarts after seven days; no stop command is authorized here.
+
+**Exact next manual AWS step after approval:** an authorized administrator creates
+only AWSServiceRoleForRDS (if still absent) with `iam create-service-linked-role
+--aws-service-name rds.amazonaws.com`, then installs only the three reviewed Stage 3
+managed policies on fintrust-deployer-role after checking attachment quota. This
+requires explicit identity/cost/recovery approval and is not authorized by this
+record. Do not attach the separate bootstrap policy to the role automatically.
+
+After separate preparation approval, render build/stage3-database.json, verify
+MFA-assumed identity/account/region, reconfirm named resource absence/orderability
+and the live network outputs, then prepare (not execute) the named CREATE proposal:
+
+```powershell
+& 'C:\Program Files\Amazon\AWSCLIV2\aws.exe' cloudformation create-change-set `
+  --profile fintrust-deployer-role --region af-south-1 `
+  --stack-name fintrust-database-dev --change-set-name fintrust-database-stage3-review `
+  --change-set-type CREATE --template-body file://build/stage3-database.json `
+  --parameters ParameterKey=DatabaseSubnetGroup,ParameterValue=fintrust-db-dev `
+    ParameterKey=DatabaseSecurityGroup,ParameterValue=sg-01644a4c9f2c44162 `
+  --resource-types AWS::RDS::DBInstance AWS::RDS::DBParameterGroup `
+  --tags Key=Project,Value=FinTrust Key=Environment,Value=dev --no-cli-pager
+```
+
+Require exactly two Add actions and review the dependent managed secret/service
+role, settings and recovery plan before separate execution approval. No AWS
+mutation, attachment, change set, SQL execution or push occurred in preparation.
