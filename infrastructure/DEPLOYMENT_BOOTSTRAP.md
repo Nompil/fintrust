@@ -46,7 +46,7 @@ exact JSON, action rationale, mismatches and limits of those checks.
 | Instance | **`db.t4g.micro`**, 2 vCPU, 1 GiB RAM; the smallest Free Plan-supported Graviton option, for a bounded sequential demo. Capacity acceptance is still required |
 | Alternatives | `db.t3.micro` has the same 1 GiB memory and costs more here. `db.t4g.small` remains a memory fallback requiring separate paid-plan/cost review; it is not the default |
 | Availability | Single-AZ, `MultiAZ=false`; no replica, proxy or Aurora. Two-AZ subnet group provides placement options, not high availability |
-| Storage | **5 GiB gp2**, confirmed regional minimum; no storage autoscaling or provisioned IOPS. Small synthetic data only; stop loading below 2 GiB free space. Review growth before increasing capacity. A 20 GiB gp3 alternative costs USD 2.265/month more |
+| Storage | **20 GiB gp3**, documented PostgreSQL SSD minimum; no storage autoscaling or provisioned IOPS. Small synthetic data only; stop loading below 2 GiB free space. Review growth before increasing capacity. gp2 and gp3 have the same regional storage price; gp3 provides a stronger baseline |
 | Encryption | `StorageEncrypted=true`, prefer the regional AWS-managed `aws/rds` key. No separate customer-managed key is required for this single-account demo. This changes the RDS proposal only; existing S3 CMK policies must be reviewed separately before Stage 2 |
 | Network | `PubliclyAccessible=false`, IPv4 private endpoint, `fintrust-db-dev` subnet group across `af-south-1a` and `af-south-1b`; DB security group accepts TCP 5432 only from the application SG and a separately reviewed temporary bootstrap SG |
 | Authentication / TLS | IAM DB authentication enabled, `rds.force_ssl=1`, clients use `verify-full` and the bundled RDS CA. Distinct `fintrust_scoring_dev`, `fintrust_api_dev`, `fintrust_report_dev` logins get `rds_iam` plus their corresponding least-privilege SQL group |
@@ -57,7 +57,7 @@ exact JSON, action rationale, mismatches and limits of those checks.
 | Monitoring | Standard metrics plus 14-day application logs initially; no paid enhanced monitoring/advanced database insights selected. Essential DB/memory/storage/connection alarms before workload |
 
 AWS documents [instance memory sizes](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.Summary.html)
-and [300–1000 MiB additional memory for IAM authentication](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html).
+and [300â€“1000 MiB additional memory for IAM authentication](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html).
 Micro is a cost-first candidate, not a measured capacity result. IAM support is
 confirmed by the regional orderability API; sufficient memory is not. If the
 bounded workload cannot retain memory headroom, stop and review configuration
@@ -129,26 +129,26 @@ free offer would not preserve the existing PostgreSQL application.
 The [public Cape Town RDS catalogue](https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonRDS/current/af-south-1/index.json)
 was checked again. These are Single-AZ on-demand costs **before credits**:
 
-| Candidate | Compute/hour | 730 hours + 5 GiB gp2 | Free Plan-listed class |
+| Candidate | Compute/hour | 730 hours + 20 GiB gp3 | Free Plan-listed class |
 |---|---:|---:|---|
-| **db.t4g.micro** | USD 0.021 | **USD 16.085** | Yes; uses credits |
-| db.t3.micro | USD 0.024 | USD 18.275 | Yes; uses credits |
-| db.t4g.small | USD 0.041 | USD 30.685 | Not listed for the Free Plan; no automatic upgrade |
+| **db.t4g.micro** | USD 0.021 | **USD 18.350** | Yes; uses credits |
+| db.t3.micro | USD 0.024 | USD 20.540 | Yes; uses credits |
+| db.t4g.small | USD 0.041 | USD 32.950 | Not listed for the Free Plan; no automatic upgrade |
 
-Both gp2 and gp3 are USD 0.151/GiB-month here. The API and the engine-specific
-[storage table](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html)
-agree on **5 GiB minimum gp2** and **20 GiB minimum gp3**. gp2's small-volume
-baseline is 100 IOPS with burst credits; gp3 provides 3,000 baseline IOPS. Five GiB
-is a demo proposal, not a production retention design. The seed contains only
-five accounts and 200 transactions; cap further synthetic loading and measure
-actual database/WAL/storage usage before the demo. Do not assume all 5 GiB is
-available for application rows.
+Both gp2 and gp3 are USD 0.151/GiB-month here. The
+[CreateDBInstance API contract](https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_CreateDBInstance.html)
+requires **20 GiB minimum for PostgreSQL gp2 and gp3**. Earlier orderability
+metadata reported five GiB for gp2; that response does not override the engine's
+creation constraints. Select **20 GiB gp3**: equal storage cost and 3,000 baseline
+IOPS rather than gp2's burst-dependent small-volume baseline. No extra IOPS or
+throughput is provisioned. The seed is small; cap further loading and measure
+actual database/WAL usage rather than treating all capacity as application space.
 
-Recommended compute + storage: **USD 16.09/month** rounded at 730 running hours.
-With 20 GiB gp3 it would be **USD 18.35/month**. The previous small/20 GiB estimate
-of USD 32.95 is superseded. A conservative short-demo estimate is
-`24 * 0.021 + 5 * 0.151 = USD 1.259`: 24 running hours plus a full month of storage.
-Stopped 5 GiB storage alone is USD 0.755/month while retained. Storage is billed
+Recommended compute + storage: **USD 18.35/month** at 730 running hours. The
+previous five-GiB estimate is superseded. A conservative short-demo estimate is
+`24 * 0.021 + 20 * 0.151 = USD 3.524`: 24 running hours plus a full month of storage.
+The Stage 3 table below instead prorates storage/secret for a 24-hour lifespan.
+Stopped 20 GiB storage alone is USD 3.02/month while retained. Storage is billed
 for provisioned capacity over time, not merely rows inserted.
 
 These subtotals exclude burst CPU charges, extra/retained backups, Secrets Manager,
@@ -299,7 +299,7 @@ without passwords, tokens, authentication URLs or private data.
 
 Stage numbers describe construction order, not permission to enable traffic.
 Create basic logs, failure destinations, notifications and essential alarms with
-their associated stages. Only after Stages 5–8 are ready and monitoring/recovery
+their associated stages. Only after Stages 5â€“8 are ready and monitoring/recovery
 is checked should the owner approve a small end-to-end upload and email. Do not
 wait until Stage 10 to discover there was no failure alert during earlier tests.
 
@@ -564,7 +564,7 @@ by an authorized administrator as a separately approved prerequisite.
 | Setting | Exact Stage 3 proposal |
 |---|---|
 | Database | fintrust-ledger-dev / fintrust; PostgreSQL **16.15**, parameter family postgres16 |
-| Compute/storage | db.t4g.micro; Single-AZ; **5 GiB gp2**; no autoscaling, IOPS, replica or proxy |
+| Compute/storage | db.t4g.micro; Single-AZ; **20 GiB gp3**; no autoscaling, IOPS, replica or proxy |
 | Network | IPv4, PubliclyAccessible=false; reuse fintrust-db-dev and sg-01644a4c9f2c44162; no network mutations |
 | Database subnets | subnet-04dc0f576867d7a6c and subnet-084deb13f49a36064 in vpc-0aba008bb360f5147 |
 | Ingress | Existing database SG has only TCP 5432 from sg-0850bd798bb9505e2 (application/Lambda SG); no IP-range ingress |
@@ -576,7 +576,7 @@ by an authorized administrator as a separately approved prerequisite.
 
 The template pins the existing database group as its only accepted SG input and
 the existing named subnet group; it does not create an ingress exception. Live
-orderability confirms 16.15/gp2/micro, five-GiB minimum, encryption and IAM support
+orderability confirms 16.15/gp3/micro, twenty-GiB minimum, encryption and IAM support
 in af-south-1. This replaces the older 16.14 candidate without changing major
 version. Micro capacity, IAM memory headroom and actual TLS connections remain
 unmeasured. Begin with a small sequential synthetic workload, then check free
@@ -592,7 +592,7 @@ All documents are local proposals, not attached policies:
   imports, IAM capabilities or PassRole. Named-stack reads/recovery only.
 - [FinTrustStage3Rds](iam/stage3-rds-policy.json): exact new DB/parameter-group
   ARNs and existing subnet-group/default PostgreSQL option-group references;
-  CloudFormation-mediated creation with PostgreSQL/micro/five-GiB, encrypted,
+  CloudFormation-mediated creation with PostgreSQL/micro/twenty-GiB, encrypted,
   private VPC, Single-AZ and managed-password conditions. TLS-group configuration
   and ownership tagging are scoped; no database deletion, resizing, stop/start,
   network mutation or SQL login permissions are granted.
@@ -625,16 +625,16 @@ are service-managed prerequisites, not a CloudFormation execution role.
 ### Cost before credits
 
 Refreshed [public Cape Town RDS catalogue](https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonRDS/current/af-south-1/index.json):
-compute USD **0.021/hour**, gp2 USD **0.151/GiB-month**. One 5 GiB volume is USD
-0.755/month. [Secrets Manager pricing](https://aws.amazon.com/secrets-manager/pricing/)
+compute USD **0.021/hour**, gp2/gp3 USD **0.151/GiB-month**. One 20 GiB volume is USD
+3.02/month. [Secrets Manager pricing](https://aws.amazon.com/secrets-manager/pricing/)
 adds approximately USD **0.40/secret-month**, plus API calls. Using 730 hours for
 monthly proration, the database/storage/secret subtotal is:
 
 | Running period | Compute | Prorated storage + secret | Total |
 |---|---:|---:|---:|
-| One hour | USD 0.021 | USD 0.00158 | **USD 0.02258** |
-| 24 hours | USD 0.504 | USD 0.03797 | **USD 0.54197** |
-| 730 hours | USD 15.330 | USD 1.155 | **USD 16.485** |
+| One hour | USD 0.021 | USD 0.004685 | **USD 0.025685** |
+| 24 hours | USD 0.504 | USD 0.112438 | **USD 0.616438** |
+| 730 hours | USD 15.330 | USD 3.420 | **USD 18.750** |
 
 These are estimates, not caps or a Free Tier promise. Excluded: API calls, burst
 CPU surplus credits, excess backup/manual/final snapshots, transfer, taxes and
@@ -716,3 +716,15 @@ and the live network outputs, then prepare (not execute) the named CREATE propos
 Require exactly two Add actions and review the dependent managed secret/service
 role, settings and recovery plan before separate execution approval. No AWS
 mutation, attachment, change set, SQL execution or push occurred in preparation.
+
+
+### Stage 3 PostgreSQL minimum-storage correction
+
+The initial five-GiB gp2 proposal was invalid under the engine-specific
+CreateDBInstance contract, despite the orderability API returning that minimum.
+Corrected the template to **20 GiB gp3** and the Stage 3 RDS IAM NumericEquals
+constraint to **20**. Public Cape Town prices are equal for gp2/gp3; gp3 therefore
+provides the stronger baseline without a storage-price increase. Regression checks
+require the documented PostgreSQL SSD minimum and the exact selected size/type.
+This supersedes the five-GiB cost/setting claims in earlier preparation summaries.
+No live database, policy, service role or change set was changed.

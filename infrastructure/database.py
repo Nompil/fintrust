@@ -24,7 +24,7 @@ def build_template():
                 "Properties":{
                     "DBInstanceIdentifier":"fintrust-ledger-dev", "DBName":"fintrust",
                     "Engine":"postgres", "EngineVersion":"16.15", "DBInstanceClass":"db.t4g.micro",
-                    "AllocatedStorage":"5", "StorageType":"gp2", "MultiAZ":False,
+                    "AllocatedStorage":"20", "StorageType":"gp3", "MultiAZ":False,
                     "PubliclyAccessible":False, "NetworkType":"IPV4",
                     "DBSubnetGroupName":{"Ref":"DatabaseSubnetGroup"},
                     "VPCSecurityGroups":[{"Ref":"DatabaseSecurityGroup"}],

@@ -20,7 +20,8 @@ def test_database_scope_and_existing_network_inputs():
 def test_micro_budget_storage_and_support_settings():
     p=build_template()["Resources"]["LedgerDatabase"]["Properties"]
     assert (p["Engine"],p["EngineVersion"],p["DBInstanceClass"]) == ("postgres","16.15","db.t4g.micro")
-    assert p["AllocatedStorage"] == "5" and p["StorageType"] == "gp2"
+    assert int(p["AllocatedStorage"]) >= 20  # PostgreSQL SSD minimum; orderability metadata alone is insufficient.
+    assert p["AllocatedStorage"] == "20" and p["StorageType"] == "gp3"
     assert "MaxAllocatedStorage" not in p and "Iops" not in p
     assert p["EngineLifecycleSupport"] == "open-source-rds-extended-support-disabled"
     assert p["MonitoringInterval"] == 0 and p["EnablePerformanceInsights"] is False
@@ -53,7 +54,7 @@ def test_rds_permission_creation_constraints_and_no_disposal():
     assert create["Resource"] == "arn:aws:rds:af-south-1:966467878406:db:fintrust-ledger-dev"
     assert c["StringEquals"]["rds:DatabaseClass"] == "db.t4g.micro"
     assert c["StringEquals"]["rds:DatabaseEngine"] == "postgres"
-    assert c["NumericEquals"] == {"rds:StorageSize":"5"}
+    assert c["NumericEquals"] == {"rds:StorageSize":"20"}
     assert c["Bool"] == {"rds:StorageEncrypted":"true","rds:MultiAz":"false","rds:PubliclyAccessible":"false","rds:ManageMasterUserPassword":"true","rds:Vpc":"true"}
     for s in p["Statement"]:
         assert s["Condition"]["StringEquals"]["aws:RequestedRegion"] == "af-south-1"

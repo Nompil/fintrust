@@ -25,7 +25,7 @@
           "rds:Vpc": "true"
         },
         "NumericEquals": {
-          "rds:StorageSize": "5"
+          "rds:StorageSize": "20"
         },
         "ForAnyValue:StringEquals": {
           "aws:CalledVia": [
