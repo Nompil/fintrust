@@ -50,6 +50,16 @@ Windows candidate; rebinding it to this Linux artifact and a future S3 VersionId
 requires a separate focused review before any AWS upload or deployment.
 The post-run documentation/evidence commit is local only and is not pushed.
 
+## Private RDS path prepared for review
+
+[Private RDS migration plan](PRIVATE_RDS_MIGRATION_PLAN.md) records live read-only
+network/RDS metadata, the recommended dedicated temporary VPC runner, credential
+bootstrap, ownership/privilege gates, read-only SQL preflights, snapshot recovery,
+release ordering and cleanup. No runner is deployed and no live SQL/secret retrieval
+or AWS mutation occurred. Live baseline/schema/grants remain UNKNOWN. An empty or
+incompatible database requires a separate bootstrap review before migration 001.
+Application concurrency remains 0. The verified application ZIP is unchanged.
+
 ## Historical preparation record
 
 The following sections retain the earlier preparation and failed-run evidence.

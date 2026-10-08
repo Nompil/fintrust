@@ -1,0 +1,14 @@
+[
+    {
+        "Id": "vpce-0647afafb32f34e6d",
+        "Type": "Gateway",
+        "Service": "com.amazonaws.af-south-1.dynamodb",
+        "State": "available"
+    },
+    {
+        "Id": "vpce-0b59921927bd0e852",
+        "Type": "Gateway",
+        "Service": "com.amazonaws.af-south-1.s3",
+        "State": "available"
+    }
+]

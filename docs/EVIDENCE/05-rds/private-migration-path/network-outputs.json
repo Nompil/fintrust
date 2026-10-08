@@ -1,0 +1,53 @@
+{
+    "Status": "CREATE_COMPLETE",
+    "Outputs": [
+        {
+            "OutputKey": "DatabaseSubnet1",
+            "OutputValue": "subnet-04dc0f576867d7a6c"
+        },
+        {
+            "OutputKey": "DatabaseSubnets",
+            "OutputValue": "fintrust-db-dev"
+        },
+        {
+            "OutputKey": "DatabaseSubnet2",
+            "OutputValue": "subnet-084deb13f49a36064"
+        },
+        {
+            "OutputKey": "ApplicationSubnet1",
+            "OutputValue": "subnet-0c2d87e8a83361e30"
+        },
+        {
+            "OutputKey": "S3Endpoint",
+            "OutputValue": "vpce-0b59921927bd0e852"
+        },
+        {
+            "OutputKey": "ApplicationSubnet2",
+            "OutputValue": "subnet-0328276227fa30ead"
+        },
+        {
+            "OutputKey": "Vpc",
+            "OutputValue": "vpc-0aba008bb360f5147"
+        },
+        {
+            "OutputKey": "ApplicationRoutes",
+            "OutputValue": "rtb-01b4916c13d2894a5"
+        },
+        {
+            "OutputKey": "LambdaGroup",
+            "OutputValue": "sg-0850bd798bb9505e2"
+        },
+        {
+            "OutputKey": "DynamodbEndpoint",
+            "OutputValue": "vpce-0647afafb32f34e6d"
+        },
+        {
+            "OutputKey": "DatabaseRoutes",
+            "OutputValue": "rtb-008ec3760f6ccd9f0"
+        },
+        {
+            "OutputKey": "DatabaseGroup",
+            "OutputValue": "sg-01644a4c9f2c44162"
+        }
+    ]
+}

@@ -1,0 +1,136 @@
+{
+    "RouteTables": [
+        {
+            "Associations": [
+                {
+                    "Main": false,
+                    "RouteTableAssociationId": "rtbassoc-0c9237f84e8346448",
+                    "RouteTableId": "rtb-008ec3760f6ccd9f0",
+                    "SubnetId": "subnet-04dc0f576867d7a6c",
+                    "AssociationState": {
+                        "State": "associated"
+                    }
+                },
+                {
+                    "Main": false,
+                    "RouteTableAssociationId": "rtbassoc-03f07a9ff6eb100d9",
+                    "RouteTableId": "rtb-008ec3760f6ccd9f0",
+                    "SubnetId": "subnet-084deb13f49a36064",
+                    "AssociationState": {
+                        "State": "associated"
+                    }
+                }
+            ],
+            "PropagatingVgws": [],
+            "RouteTableId": "rtb-008ec3760f6ccd9f0",
+            "Routes": [
+                {
+                    "DestinationCidrBlock": "10.42.0.0/16",
+                    "GatewayId": "local",
+                    "Origin": "CreateRouteTable",
+                    "State": "active"
+                }
+            ],
+            "Tags": [
+                {
+                    "Key": "Name",
+                    "Value": "fintrust-databaseroutes-dev"
+                },
+                {
+                    "Key": "aws:cloudformation:stack-name",
+                    "Value": "fintrust-network-dev"
+                },
+                {
+                    "Key": "Project",
+                    "Value": "FinTrust"
+                },
+                {
+                    "Key": "aws:cloudformation:stack-id",
+                    "Value": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d"
+                },
+                {
+                    "Key": "Environment",
+                    "Value": "dev"
+                },
+                {
+                    "Key": "aws:cloudformation:logical-id",
+                    "Value": "DatabaseRoutes"
+                }
+            ],
+            "VpcId": "vpc-0aba008bb360f5147",
+            "OwnerId": "966467878406"
+        },
+        {
+            "Associations": [
+                {
+                    "Main": false,
+                    "RouteTableAssociationId": "rtbassoc-093f19942c1625024",
+                    "RouteTableId": "rtb-01b4916c13d2894a5",
+                    "SubnetId": "subnet-0c2d87e8a83361e30",
+                    "AssociationState": {
+                        "State": "associated"
+                    }
+                },
+                {
+                    "Main": false,
+                    "RouteTableAssociationId": "rtbassoc-07e092a4c1a95468c",
+                    "RouteTableId": "rtb-01b4916c13d2894a5",
+                    "SubnetId": "subnet-0328276227fa30ead",
+                    "AssociationState": {
+                        "State": "associated"
+                    }
+                }
+            ],
+            "PropagatingVgws": [],
+            "RouteTableId": "rtb-01b4916c13d2894a5",
+            "Routes": [
+                {
+                    "DestinationCidrBlock": "10.42.0.0/16",
+                    "GatewayId": "local",
+                    "Origin": "CreateRouteTable",
+                    "State": "active"
+                },
+                {
+                    "DestinationPrefixListId": "pl-a3ac49ca",
+                    "GatewayId": "vpce-0b59921927bd0e852",
+                    "Origin": "CreateRoute",
+                    "State": "active"
+                },
+                {
+                    "DestinationPrefixListId": "pl-d6ae4bbf",
+                    "GatewayId": "vpce-0647afafb32f34e6d",
+                    "Origin": "CreateRoute",
+                    "State": "active"
+                }
+            ],
+            "Tags": [
+                {
+                    "Key": "Name",
+                    "Value": "fintrust-applicationroutes-dev"
+                },
+                {
+                    "Key": "aws:cloudformation:stack-id",
+                    "Value": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d"
+                },
+                {
+                    "Key": "aws:cloudformation:stack-name",
+                    "Value": "fintrust-network-dev"
+                },
+                {
+                    "Key": "Project",
+                    "Value": "FinTrust"
+                },
+                {
+                    "Key": "aws:cloudformation:logical-id",
+                    "Value": "ApplicationRoutes"
+                },
+                {
+                    "Key": "Environment",
+                    "Value": "dev"
+                }
+            ],
+            "VpcId": "vpc-0aba008bb360f5147",
+            "OwnerId": "966467878406"
+        }
+    ]
+}

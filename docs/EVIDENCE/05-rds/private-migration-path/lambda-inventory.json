@@ -1,0 +1,9 @@
+[
+    {
+        "Name": "fintrust-ingest-dev",
+        "Runtime": "python3.12",
+        "Vpc": null,
+        "Role": "arn:aws:iam::966467878406:role/fintrust-ingest-dev",
+        "Handler": "fintrust.ingest.lambda_handler"
+    }
+]

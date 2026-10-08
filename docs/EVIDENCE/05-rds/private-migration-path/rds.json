@@ -1,0 +1,66 @@
+{
+    "Id": "fintrust-ledger-dev",
+    "Status": "available",
+    "Engine": "postgres",
+    "Version": "16.15",
+    "Class": "db.t4g.micro",
+    "Database": "fintrust",
+    "MasterUsername": "fintrust_admin",
+    "Endpoint": {
+        "Address": "fintrust-ledger-dev.cv84aee6u6up.af-south-1.rds.amazonaws.com",
+        "Port": 5432,
+        "HostedZoneId": "Z34PQSL3TPJI7P"
+    },
+    "ResourceId": "db-QZ3JN4H22YOMU7VLI22RL2IUYQ",
+    "SubnetGroup": {
+        "DBSubnetGroupName": "fintrust-db-dev",
+        "DBSubnetGroupDescription": "Private FinTrust database tier",
+        "VpcId": "vpc-0aba008bb360f5147",
+        "SubnetGroupStatus": "Complete",
+        "Subnets": [
+            {
+                "SubnetIdentifier": "subnet-04dc0f576867d7a6c",
+                "SubnetAvailabilityZone": {
+                    "Name": "af-south-1a"
+                },
+                "SubnetOutpost": {},
+                "SubnetStatus": "Active"
+            },
+            {
+                "SubnetIdentifier": "subnet-084deb13f49a36064",
+                "SubnetAvailabilityZone": {
+                    "Name": "af-south-1b"
+                },
+                "SubnetOutpost": {},
+                "SubnetStatus": "Active"
+            }
+        ]
+    },
+    "Groups": [
+        {
+            "VpcSecurityGroupId": "sg-01644a4c9f2c44162",
+            "Status": "active"
+        }
+    ],
+    "Parameters": [
+        {
+            "DBParameterGroupName": "fintrust-postgres16-dev",
+            "ParameterApplyStatus": "in-sync"
+        }
+    ],
+    "Secret": {
+        "SecretArn": "arn:aws:secretsmanager:af-south-1:966467878406:secret:rds!db-e93012ae-0d14-4225-bdc3-988f4d98f72a-BbEGMn",
+        "SecretStatus": "active",
+        "KmsKeyId": "arn:aws:kms:af-south-1:966467878406:key/c68acc77-115b-4da5-80be-9ea69291da19"
+    },
+    "Encrypted": true,
+    "KmsKey": "arn:aws:kms:af-south-1:966467878406:key/9e378e95-2fe3-4f4a-b694-427a1c545d53",
+    "IamAuth": true,
+    "Public": false,
+    "MultiAZ": false,
+    "StorageGiB": 20,
+    "StorageType": "gp3",
+    "BackupDays": 1,
+    "LatestRestorableTime": "2026-10-08T23:37:23+00:00",
+    "DeletionProtection": true
+}

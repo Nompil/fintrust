@@ -2,7 +2,9 @@
 
 FinTrust checks transaction exports and produces reviewable risk signals. It does
 not move money or decide that a customer has committed fraud. The current cloud
-handler path is implemented in the repository; AWS deployment is unverified.
+handler path is implemented in the repository; AWS Integration remains In Progress.
+Stages 1-4 and the disabled Stage 5 ingest deployment are recorded as verified;
+the hardened release and private database migration have not been deployed.
 
 ## Processing and storage
 
@@ -65,9 +67,23 @@ locally; Lambda manages queue/stream polling and log delivery.
 Ingest originally used SQL account validation, and alert used SQL delivery state.
 Moving account validation into scoring and delivery claims into DynamoDB lets
 ingest and alert stay outside the customer VPC. No NAT Gateway or interface
-endpoints are selected. The route associations, endpoint policies and security
-groups still need account-level verification. Outside the customer VPC does not
+endpoints are selected. The migration-path inventory verifies route associations
+and security groups; runtime endpoint permissions and a live DB handshake still
+require their own checks. Outside the customer VPC does not
 mean that a function has an unauthenticated public application endpoint.
+
+## Proposed private database maintenance path
+
+The [private RDS migration plan](../infrastructure/PRIVATE_RDS_MIGRATION_PLAN.md)
+selects a separate temporary Lambda in the existing application subnets/SG.
+Read-only inventory confirms private PostgreSQL 16.15, forced TLS, no existing
+VPC Lambda/EC2 runner, and only S3/DynamoDB gateway endpoints. No DB ingress change,
+NAT or interface endpoint is proposed. Initial privileged credential handoff requires
+separate approval and redaction tests; later DDL uses a temporary IAM database login
+with narrowly scoped ownership membership. Ingest remains outside the VPC and disabled.
+The migration is locally verified; the private runner is only proposed and live SQL
+schema/grants/migration remain unverified. The Linux application release is verified
+by CI run 37850256137 (385 passed, no failures/skips), not yet uploaded or deployed.
 
 ## Queries and reports
 
@@ -101,9 +117,9 @@ with the schedule disabled initially. Monthly reports are not full ledger archiv
 | EventBridge | Invoke the monthly report on a schedule |
 | IAM, KMS, CloudWatch | Define permissions, bucket-key controls and operational visibility |
 
-The region is `af-south-1`. The foundation creates no RDS instance; reuse and
-ownership must be reconciled before any deployment. Avoiding NAT and interface
-endpoints reduces standing-cost exposure. One customer-managed KMS key is a
+The region is `af-south-1`. The Stage 3 database renderer owns the private RDS
+instance; live SQL ownership/grants still require the migration preflight. Avoiding
+NAT and interface endpoints reduces standing-cost exposure. One customer-managed KMS key is a
 paid design choice for the data buckets. Existing RDS, retained objects/backups,
 logs and requests can still cost money. Account credits and Free Tier eligibility
 are unknown; the design is not a zero-cost promise.
@@ -115,9 +131,10 @@ are unknown; the design is not a zero-cost promise.
 cloud path above. The local CSV loader and `fintrust.alert` retain direct SQL
 teaching paths; they are not the selected cloud ingest/alert deployment path.
 
-Latest recorded local suite: 158 passed, 0 failed, 1 skipped. The Ubuntu/Python
-3.12 workflow is prepared but has not run. Linux native-library execution, AWS
-integration, deployed security controls and recovery remain unverified. Use the
+The hardened Linux release passed 385 tests with zero failures/skips in CI run
+37850256137, including native imports. This verifies the artifact, not live end-to-end
+AWS integration or the unimplemented private migration runner. Live SQL migration
+and recovery execution remain unverified. Use the
 [evidence register](EVIDENCE/README.md) for acceptance gates and the
 [diagram register](diagrams/README.md) for export status. Existing PDF/SVG exports
 still contain earlier architecture and must not be presented as current cloud

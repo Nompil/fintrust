@@ -1,0 +1,7 @@
+[
+    {
+        "Name": "rds.force_ssl",
+        "Value": "1",
+        "Apply": "dynamic"
+    }
+]

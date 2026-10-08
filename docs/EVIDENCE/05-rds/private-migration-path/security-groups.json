@@ -1,0 +1,134 @@
+{
+    "SecurityGroups": [
+        {
+            "GroupId": "sg-0850bd798bb9505e2",
+            "IpPermissionsEgress": [
+                {
+                    "IpProtocol": "tcp",
+                    "FromPort": 5432,
+                    "ToPort": 5432,
+                    "UserIdGroupPairs": [
+                        {
+                            "UserId": "966467878406",
+                            "GroupId": "sg-01644a4c9f2c44162"
+                        }
+                    ],
+                    "IpRanges": [],
+                    "Ipv6Ranges": [],
+                    "PrefixListIds": []
+                },
+                {
+                    "IpProtocol": "tcp",
+                    "FromPort": 443,
+                    "ToPort": 443,
+                    "UserIdGroupPairs": [],
+                    "IpRanges": [],
+                    "Ipv6Ranges": [],
+                    "PrefixListIds": [
+                        {
+                            "PrefixListId": "pl-a3ac49ca"
+                        },
+                        {
+                            "PrefixListId": "pl-d6ae4bbf"
+                        }
+                    ]
+                }
+            ],
+            "Tags": [
+                {
+                    "Key": "aws:cloudformation:stack-id",
+                    "Value": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d"
+                },
+                {
+                    "Key": "Environment",
+                    "Value": "dev"
+                },
+                {
+                    "Key": "aws:cloudformation:stack-name",
+                    "Value": "fintrust-network-dev"
+                },
+                {
+                    "Key": "Name",
+                    "Value": "fintrust-lambdagroup-dev"
+                },
+                {
+                    "Key": "Project",
+                    "Value": "FinTrust"
+                },
+                {
+                    "Key": "aws:cloudformation:logical-id",
+                    "Value": "LambdaGroup"
+                }
+            ],
+            "VpcId": "vpc-0aba008bb360f5147",
+            "SecurityGroupArn": "arn:aws:ec2:af-south-1:966467878406:security-group/sg-0850bd798bb9505e2",
+            "OwnerId": "966467878406",
+            "GroupName": "fintrust-network-dev-LambdaGroup-1AfRPfqVwasm",
+            "Description": "Ledger functions",
+            "IpPermissions": []
+        },
+        {
+            "GroupId": "sg-01644a4c9f2c44162",
+            "IpPermissionsEgress": [
+                {
+                    "IpProtocol": "-1",
+                    "UserIdGroupPairs": [],
+                    "IpRanges": [
+                        {
+                            "CidrIp": "127.0.0.1/32"
+                        }
+                    ],
+                    "Ipv6Ranges": [],
+                    "PrefixListIds": []
+                }
+            ],
+            "Tags": [
+                {
+                    "Key": "Project",
+                    "Value": "FinTrust"
+                },
+                {
+                    "Key": "aws:cloudformation:logical-id",
+                    "Value": "DatabaseGroup"
+                },
+                {
+                    "Key": "aws:cloudformation:stack-name",
+                    "Value": "fintrust-network-dev"
+                },
+                {
+                    "Key": "Name",
+                    "Value": "fintrust-databasegroup-dev"
+                },
+                {
+                    "Key": "Environment",
+                    "Value": "dev"
+                },
+                {
+                    "Key": "aws:cloudformation:stack-id",
+                    "Value": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d"
+                }
+            ],
+            "VpcId": "vpc-0aba008bb360f5147",
+            "SecurityGroupArn": "arn:aws:ec2:af-south-1:966467878406:security-group/sg-01644a4c9f2c44162",
+            "OwnerId": "966467878406",
+            "GroupName": "fintrust-network-dev-DatabaseGroup-o8ExlaEZnNdo",
+            "Description": "Private PostgreSQL",
+            "IpPermissions": [
+                {
+                    "IpProtocol": "tcp",
+                    "FromPort": 5432,
+                    "ToPort": 5432,
+                    "UserIdGroupPairs": [
+                        {
+                            "UserId": "966467878406",
+                            "GroupId": "sg-0850bd798bb9505e2"
+                        }
+                    ],
+                    "IpRanges": [],
+                    "Ipv6Ranges": [],
+                    "PrefixListIds": []
+                }
+            ]
+        }
+    ]
+}

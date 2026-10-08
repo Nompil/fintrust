@@ -1,0 +1,44 @@
+{
+  "status": "PRIVATE RDS MIGRATION PATH READY FOR REVIEW",
+  "recorded_at_utc": "2026-10-08T23:54:52.788669+00:00",
+  "client_date": "2026-10-09",
+  "timezone": "Africa/Johannesburg",
+  "baseline_commit": "f118aa9d149bfc2a290999479d760d1479436a44",
+  "inventory_identity": "arn:aws:iam::966467878406:user/fintrust-inventory",
+  "aws_reads": [
+    "sts:GetCallerIdentity",
+    "rds:DescribeDBInstances",
+    "cloudformation:DescribeStacks",
+    "ec2:DescribeSecurityGroups",
+    "lambda:ListFunctions",
+    "ec2:DescribeInstances",
+    "rds:DescribeDBParameters",
+    "ec2:DescribeRouteTables",
+    "ec2:DescribeVpcEndpoints",
+    "lambda:GetFunctionConcurrency"
+  ],
+  "aws_mutations": false,
+  "secret_value_retrieved": false,
+  "live_sql_executed": false,
+  "live_schema_status": "UNKNOWN",
+  "runner_implemented": false,
+  "runner_deployed": false,
+  "local_tests": {
+    "passed": 7,
+    "failed": 0,
+    "skipped": 0,
+    "duration_seconds": 3.1,
+    "python": "3.14.7",
+    "os": "Windows",
+    "postgresql": "18.6",
+    "temporary_schemas_remaining": 0
+  },
+  "target_runtime_verification_for_new_preflight": "NOT EXECUTED; local SQL checked on PostgreSQL 18; PostgreSQL 16 runner validation remains an implementation gate",
+  "sql_sha256_normalized_lf": {
+    "sql/migrations/001_transaction_identity.sql": "0ff06ca8c43596ac9b8651f4bd851bfb0487343f4c9eccb198849e3e59772bd6",
+    "sql/preflight/001_transaction_identity_catalog.sql": "c09012f47cc8956845a02b98a9525c843c457fb33a2b48bff8184c001e1e4943",
+    "sql/preflight/001_transaction_identity_data.sql": "862c530b5feb5a5150164003e55d9ca9735b283aa1a7de33a254f20568fbf001"
+  },
+  "application_artifact_sha256_unchanged": "cf9c18a5f267373e2fc2e22331987bb6dce8e2e65366b2d1f5651bb035dd6654",
+  "approval_boundary": "Review design and transient bootstrap credential handoff before implementing/deploying a read-only runner; live schema review before bootstrap/DDL approval."
+}
