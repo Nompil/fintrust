@@ -1422,3 +1422,92 @@ the known authorization defect is corrected and no physical log-group deletion
 is required. Recovery actions require explicit approval; deployment retry and
 activation are separate gates. No AWS IAM update, deletion, upload, change set,
 Lambda deployment, concurrency change, trigger wiring or push occurred here.
+
+### Stage 5 repeated tagging denial: effective-authorization investigation
+
+This finding supersedes the earlier READY FOR MANUAL RECOVERY recommendation.
+The second deployment also reached ROLLBACK_COMPLETE. Inventory independently
+confirmed FinTrustStage5Deployment v2 is default, attached to fintrust-deployer-role,
+and includes the exact TagIngestLogGroup statement. The role has no permissions
+boundary; the stack has no CloudFormation service-role ARN. No AWS policy was
+changed during this investigation.
+
+AWS documents TagResource resource-level log-group scope with an ARN that has
+no trailing :*. The Service Authorization Reference lists aws:RequestTag,
+aws:ResourceTag and aws:TagKeys for TagResource/log-group. Request-tag conditions
+are valid for this action; there is no basis to claim they are unsupported.
+AWS also describes CalledVia as conditional on supported forward access sessions,
+not as a key guaranteed for every provider-side dependent permission evaluation.
+Supporting a key does not prove that the failed dependent check supplied it.
+Sources:
+- [CloudWatch Logs authorization actions and condition keys](https://docs.aws.amazon.com/service-authorization/latest/reference/list_logs.html)
+- [LogGroup IAM ARN distinction](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_LogGroup.html)
+- [IAM CalledVia availability](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html#condition-keys-calledvia)
+
+CloudTrail returned two CreateLogGroup failures, including the retry at
+2026-10-08T13:07:08Z. Both identify an assumed fintrust-deployer-role principal
+and invokedBy=cloudformation.amazonaws.com. The retry has request ID
+4405018a-9e3c-4599-bd04-4f10a38f16cb. RequestParameters, resources and additional
+event data are absent. TagResource lookup returned zero events for the inspected
+window. This points to the additional permission check within CreateLogGroup;
+it does not prove there was a separate TagResource API request. CloudTrail's
+invokedBy field is not a dump of the IAM CalledVia context.
+
+Read-only IAM simulations of the isolated live-v2 tagging statement returned:
+
+| Supplied hypothetical request context | Decision |
+|---|---|
+| Exact no-suffix ARN; region, Project, Environment and CalledVia present | allowed |
+| Same ARN/tags/region, CalledVia absent | implicitDeny; missing aws:CalledVia |
+| Same ARN/region/CalledVia, request tags absent | implicitDeny; missing both request-tag keys |
+| ARN ending :*, all condition values present | implicitDeny; resource mismatch |
+
+A structured SimulatePrincipalPolicy request for the full live role with the
+correct no-suffix ARN and all four context values also returned allowed.
+These simulations are hypothetical policy evaluation, not an observation of
+CloudWatch Logs' actual dependent-authorization resource/context. Initial CLI
+list-form simulations had argument parsing failures or unsuitable aggregate
+output; only the successful structured requests above are diagnostic evidence.
+No simulated deny was misrepresented as the real provider failure.
+
+The exact failed condition or internal authorization ARN remains UNKNOWN.
+The evidence does not justify changing the documented tagging ARN, removing
+request-tag conditions, removing CalledVia, or claiming a working correction.
+Fresh STS credentials were reported by the operator. No stale-session contribution
+was established; identical CloudTrail session names do not independently prove
+credential lifetime. Full request authorization can also involve session or
+organization controls outside the isolated statement. Neither static validation
+nor simulation proves all such live controls or internal authorization checks.
+
+No IAM correction was made. The before/after TagIngestLogGroup statement is
+identical to v2. Existing focused scope/condition regression tests remain intact;
+no test fabricates unknown provider-call context. The full Stage 5 focused
+selection still passed: 97 passed, zero failures/skips. Access Analyzer
+revalidated the unchanged deployer policy with zero findings. These results do
+not close the live permission blocker.
+
+Live logs inventory again returned no log group. CloudFormation lists only
+IngestLogs /aws/lambda/fintrust-ingest-dev as DELETE_SKIPPED; no physical log
+cleanup is currently required. The earlier uploaded ZIP VersionId remains the
+specified deployment artifact: 8Y7mCJGc.s2QG2NdP1n9qy_KxntXbdx.
+No runtime, template or package source changed and no rebuild/re-upload is needed.
+This turn did not independently rehash the encrypted remote artifact; retain
+previous exact-version checksum evidence.
+
+DO NOT APPLY YET / NOT READY FOR MANUAL RECOVERY. Next diagnostic evidence needed:
+obtain the effective resource ARN and condition context used by the failed
+CreateLogGroup dependent tagging authorization, using the recorded request ID,
+account, region, time and principal in an administrator-reviewed AWS support
+investigation, or separately approve a tightly controlled diagnostic experiment.
+No support message or diagnostic AWS mutation was sent/performed here.
+Do not silently broaden the tagging resource or weaken conditions as a guess.
+
+Once that evidence identifies the specific mismatch: prepare the minimal local
+correction, test supported context cases, simulate it, validate with Access
+Analyzer, and obtain approval before replacing the live default policy version.
+Then preserve failure evidence, reconcile resources, obtain separate deletion
+approval for the ROLLBACK_COMPLETE stack, verify the physical group remains absent,
+and prepare a fresh reviewed CREATE using the same exact package version.
+Keep concurrency zero and triggers unwired. Stop again before execution.
+No AWS IAM update, stack/log deletion, package upload, change set, deployment,
+concurrency change, trigger wiring or push occurred during this investigation.
