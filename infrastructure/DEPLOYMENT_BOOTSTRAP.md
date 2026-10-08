@@ -1150,3 +1150,146 @@ Stage 4 is prepared for policy/attachment review, not deployed or authorized for
 execution. Next: administrator review of the three proposed managed policies and
 attachment quota, then separate approval before any attachment or change-set
 creation. No AWS mutation, deployment, data access or push occurred.
+
+## Stage 5 — ingest Lambda preparation
+
+Stage 1 network, Stage 2 storage, Stage 3 database and Stage 4 messaging are
+reported verified by the operator, with their stacks CREATE_COMPLETE. AWS
+Integration remains In Progress. The existing sequence makes Stage 5 ingest
+only; scoring, alert delivery/SES, query/API and reporting remain later stages.
+This preparation does not independently certify their runtime integration.
+
+### Scope and configuration
+
+Render with `python -m infrastructure.ingest_deployment`. The renderer first
+checks the retained Linux CI artifact, then writes ignored
+`build/stage5-ingest.json`. Proposed stack: `fintrust-ingest-dev`; proposed
+change-set name: `fintrust-ingest-stage5-review`. No change set was created.
+
+Exactly three explicit resources:
+
+| Logical ID | Type | Configuration |
+|---|---|---|
+| IngestLogs | AWS::Logs::LogGroup | /aws/lambda/fintrust-ingest-dev; 14-day retention; Retain on delete/replacement |
+| IngestFunction | AWS::Lambda::Function | fintrust-ingest-dev; Python 3.12; x86_64; fintrust.ingest.lambda_handler; 256 MiB; 120 seconds |
+| IngestAsync | AWS::Lambda::EventInvokeConfig | $LATEST; two retries; six-hour maximum age; existing ingest failure queue |
+
+All resources stay in af-south-1. The function runs outside the VPC and has no
+subnet/security-group attachment or NAT dependency. Environment variables are
+FINTRUST_SERVICE=ingest, FINTRUST_STAGE=dev,
+TRANSACTION_QUEUE_URL=https://sqs.af-south-1.amazonaws.com/966467878406/fintrust-transactions-dev.fifo,
+and QUARANTINE_BUCKET=fintrust-quarantine-966467878406-af-south-1-dev.
+AWS supplies AWS_REGION. There are no database credentials, DB environment
+variables, Secrets Manager reads, SSM reads, DynamoDB grants or IAM DB grants
+for this stage. The cloud ingest path enqueues transactions; it does not query
+PostgreSQL. Existing shared-package native dependencies remain unchanged.
+
+ReservedConcurrentExecutions is **0**, deliberately preventing processing.
+Live GetAccountSettings returned ConcurrentExecutions=10 and
+UnreservedConcurrentExecutions=10. A positive reservation of one would conflict
+with the requirement to leave 100 unreserved executions. Zero is the documented
+function stop setting. Do not remove the limit to bypass this boundary. Review
+regional quota and an approved bounded activation plan separately before enabling
+ingest. No quota request was made. Static validation does not prove the live
+CloudFormation provider can complete every operation under these permissions.
+See [Lambda concurrency controls](https://docs.aws.amazon.com/lambda/latest/dg/configuration-concurrency.html).
+
+There is no S3 notification, Lambda resource-policy permission, event-source
+mapping, schedule or invocation in this stage. Async failure configuration alone
+does not activate a producer. SQS/DynamoDB consumers remain unwired.
+
+### Matching package and upload boundary
+
+Use only `build/ci-evidence/37342810131/fintrust-linux-verified/fintrust.zip`,
+with its matching manifest, CI evidence and verifier log. The older
+`build/fintrust.zip` is not approved for this deployment.
+
+SHA-256: d645d8949ee5b128b2b5c4c1558dd61a1a5c0fd3cdeace60363b19f70d167d62.
+Compressed size: 21,646,562 bytes; uncompressed size: 37,097,109 bytes.
+The retained manifest has linux_execution_verified=true: all five archived
+handlers imported on Linux CPython 3.12/x86_64; native psycopg and CA checks passed,
+with no forbidden network attempts. Local verification rechecked archive CRC,
+native binary structure, sizes/digest, matching green CI evidence and current
+runtime/UI/SQL source, allowing Windows text line-ending conversion. It did not
+execute Linux native imports on Windows or rebuild the package.
+
+The existing reports bucket is reused for the package, under an isolated
+`deployment/lambda/<SHA-256>/fintrust.zip` key. Exact bucket:
+fintrust-reports-966467878406-af-south-1-dev. No new artifact bucket is proposed.
+The required CodeObjectVersion parameter has no default and rejects null; its
+actual value is unresolved because no package upload occurred. Separately
+approve an administrator upload of the exact verified bytes under existing KMS
+protection, then verify the uploaded version/checksum before preparing a change
+set. S3 ETag is not a SHA-256 proof. Retain object version, digest, CI evidence and
+reviewed template together. Every rebuild requires matching Linux evidence again.
+
+### IAM review and bootstrap
+
+Proposed deployer attachment: **FinTrustStage5Deployment**, from
+`infrastructure/iam/stage5-deployment-policy.json`. It combines exact-stack
+CloudFormation permissions, tagged/CloudFormation-mediated Lambda/log creation
+and configuration, exact-role PassRole to Lambda, exact package-version S3 read,
+and existing-key decrypt via S3. No InvokeFunction, AddPermission, event-source
+mapping creation, package upload or execution-role administration is granted.
+Only ValidateTemplate/GetTemplateSummary and regional log-group enumeration use
+Resource="*", where the APIs need that scope. Named change sets are restricted
+to fintrust-ingest-*; creation requires the three exact resource types, FinTrust/dev
+tags, no service role and no imports. No IAM capabilities are needed.
+
+The live deployer has nine managed-policy attachments; this single policy fits
+the default tenth slot and the 6,144-character policy-size limit. Confirm the
+actual attachment quota before approval. Later stages need a separate policy
+lifecycle review rather than silently removing earlier grants.
+
+An administrator must separately create execution role **fintrust-ingest-dev**
+using `stage5-ingest-trust.json` (Lambda service only), and attach only
+**FinTrustStage5IngestRuntime**, from `stage5-ingest-runtime-policy.json`.
+Live GetRole found this role absent. The template references its exact ARN and
+does not create IAM resources. Existing KMS key:
+arn:aws:kms:af-south-1:966467878406:key/598a4158-2cc6-4946-af24-512784a276c8.
+Runtime grants are log streams/events in the exact group, raw/raw/* object reads,
+quarantine/quarantine/* writes, and SendMessage to the existing transactions FIFO
+and ingest failure queues. KMS decrypt/data-key grants require S3 mediation,
+caller account and the respective bucket/object encryption context. Bucket-level
+context supports S3 Bucket Keys; S3 object permissions still bound the prefixes.
+The runtime role cannot read the deployment package or administer resources.
+
+### Validation, cost and recovery
+
+Focused tests: **95 passed** across Stage 5, Stage 4, processing, ingest and
+package checks. No full database suite or CI rerun was needed for this scoped
+preparation. Access Analyzer returned zero findings for the final deployer and
+runtime identity policies and Lambda trust resource policy. CloudFormation
+ValidateTemplate passed for the final disabled template; CodeObjectVersion is
+the only parameter, with no IAM capabilities reported. Identity matched the
+fintrust-inventory user in account 966467878406. Validation is static/read-only,
+not proof of deployment, uploaded-code loading or end-to-end processing.
+
+No provisioned concurrency or additional fixed-price resource is introduced.
+IAM roles have no resource standing charge; Lambda usage, CloudWatch logs,
+S3 package/version storage and KMS requests are usage-based. Zero concurrency and
+unwired sources prevent normal function execution, but stored package versions
+and retained logs can still cost money. Existing RDS, Secrets Manager, S3 and
+customer-managed KMS costs continue independently. No account-specific Free Tier
+coverage or zero total bill is promised; estimate invocation volume before
+activation. See [Lambda pricing](https://aws.amazon.com/lambda/pricing/).
+
+The execution role and package are administrator-created prerequisites outside
+this stack. Log retention intentionally leaves the log group behind during
+rollback/deletion; its physical name can collide on retry. Capture stack events,
+physical IDs and retained resources before any cleanup. Function deletion is
+CloudFormation's default, but this policy intentionally omits physical Lambda
+DeleteFunction/DeleteFunctionEventInvokeConfig and log deletion grants. A failed
+creation may therefore need separately approved administrator cleanup and can
+reach ROLLBACK_FAILED. Do not blindly retry or widen the role to resolve it.
+Reconcile any function/config/log/role/package objects, preserving required
+evidence. ROLLBACK_COMPLETE needs separately approved stack deletion before a
+fresh CREATE. Destructive cleanup or import/reuse remains a separate decision.
+
+Next manual AWS step: review and explicitly approve the exact execution-role
+bootstrap, single deployer policy attachment and verified-package upload plan.
+Only afterward resolve CodeObjectVersion and separately approve change-set
+preparation. Require exactly three Add actions and stop again before execution.
+No IAM attachment, upload, change-set creation, invocation, deployment, quota
+change or push occurred during this preparation. Stage 5 is prepared for review;
+activation remains blocked pending the concurrency quota decision.
