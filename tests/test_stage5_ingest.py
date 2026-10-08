@@ -101,3 +101,16 @@ def test_package_rejects_unverified_or_mismatched_evidence(tmp_path, monkeypatch
     monkeypatch.setattr(deploy, "verify_archive", lambda _: actual)
     with pytest.raises(ValueError, match=reason):
         deploy.verify_package(path)
+
+def test_batch_send_uses_documented_sendmessage_permission_on_exact_queues():
+    # AWS maps SendMessageBatch to sqs:SendMessage, not a separate IAM action.
+    # https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-api-permissions-reference.html
+    statements = policy("ingest-runtime-policy")["Statement"]
+    sqs_statements = [s for s in statements if any(a.startswith("sqs:") for a in s["Action"])]
+    assert len(sqs_statements) == 1
+    assert sqs_statements[0]["Effect"] == "Allow"
+    assert sqs_statements[0]["Action"] == ["sqs:SendMessage"]
+    assert set(sqs_statements[0]["Resource"]) == {
+        "arn:aws:sqs:af-south-1:966467878406:fintrust-transactions-dev.fifo",
+        "arn:aws:sqs:af-south-1:966467878406:fintrust-ingest-failures-dev",
+    }

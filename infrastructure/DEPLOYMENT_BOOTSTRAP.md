@@ -1293,3 +1293,32 @@ preparation. Require exactly three Add actions and stop again before execution.
 No IAM attachment, upload, change-set creation, invocation, deployment, quota
 change or push occurred during this preparation. Stage 5 is prepared for review;
 activation remains blocked pending the concurrency quota decision.
+
+### Stage 5 batch-send permission review
+
+A pre-deployment review raised a suspected missing batch-send permission because
+fintrust/ingest.py calls sqs.send_message_batch. The AWS SQS API permissions
+reference explicitly maps both SendMessage and SendMessageBatch to the IAM action
+sqs:SendMessage. There is no separate sqs:SendMessageBatch IAM action to add.
+The existing runtime policy already grants the required permission on exactly
+fintrust-transactions-dev.fifo and fintrust-ingest-failures-dev; the latter
+supports Lambda's async failure destination. No policy or application change
+was required, and no queue scope was broadened.
+
+Source: [AWS SQS API permission mapping](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-api-permissions-reference.html).
+A focused regression check now locks the SQS action and both exact queue ARNs.
+The full Stage 5 focused selection passed: 96 passed, zero failed/skipped.
+Access Analyzer revalidated the unchanged runtime policy with zero findings.
+Offline package/source consistency passed again for SHA-256
+ d645d8949ee5b128b2b5c4c1558dd61a1a5c0fd3cdeace60363b19f70d167d62
+and matching linux_execution_verified=true evidence. No new package or Linux
+CI run is required because application/package sources did not change.
+
+Stage 5 is READY FOR MANUAL AWS SETUP after explicit approval of the previously
+reviewed bootstrap, attachment and upload actions. This is not deployment or
+activation readiness: verify the exact uploaded VersionId/checksum before the
+change set, keep concurrency zero and triggers unwired, and confirm the controlled
+administrator recovery session before execution. The operator reports
+fintrust-admin is available; it was not authenticated or used during this review.
+No AWS mutation, role creation, policy attachment, package upload, change set,
+Lambda deployment, activation, trigger wiring or push occurred.
