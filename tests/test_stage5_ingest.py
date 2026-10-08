@@ -131,11 +131,11 @@ def test_tagged_log_group_creation_has_separately_scoped_tagresource_grant():
     assert tagging["Condition"]["ForAnyValue:StringEquals"]["aws:CalledVia"] == ["cloudformation.amazonaws.com"]
     logs_actions = {a for s in statements.values() for a in s["Action"] if a.startswith("logs:")}
     assert logs_actions == {"logs:CreateLogGroup", "logs:TagResource", "logs:PutRetentionPolicy",
-                            "logs:DescribeLogGroups", "logs:ListTagsForResource"}
+                            "logs:DescribeLogGroups", "logs:ListTagsForResource", "logs:TagLogGroup"}
 
 def test_temporary_diagnostic_changes_only_tagging_calledvia_condition():
     from copy import deepcopy
-    original = policy("deployment-policy")
+    original = json.loads(Path("infrastructure/iam/evidence/stage5-tagloggroup-version-baseline.json").read_text())["v2"]["PolicyVersion"]["Document"]
     expected = deepcopy(original)
     tagging = next(s for s in expected["Statement"] if s["Sid"] == "TagIngestLogGroup")
     del tagging["Condition"]["ForAnyValue:StringEquals"]
@@ -203,7 +203,7 @@ def test_second_diagnostic_exact_tagging_scope(arn, region, in_scope):
 
 def test_second_diagnostic_leaves_canonical_control_and_other_grants_intact():
     from copy import deepcopy
-    canonical = policy("deployment-policy")
+    canonical = json.loads(Path("infrastructure/iam/evidence/stage5-tagloggroup-version-baseline.json").read_text())["v2"]["PolicyVersion"]["Document"]
     expected = deepcopy(canonical)
     tagging = next(s for s in expected["Statement"] if s["Sid"] == "TagIngestLogGroup")
     assert tagging["Condition"] == {

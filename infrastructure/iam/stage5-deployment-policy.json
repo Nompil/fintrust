@@ -291,6 +291,19 @@
           ]
         }
       }
+    },
+    {
+      "Sid": "LegacyTagIngestLogGroup",
+      "Effect": "Allow",
+      "Action": [
+        "logs:TagLogGroup"
+      ],
+      "Resource": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
     }
   ]
 }

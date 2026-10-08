@@ -1598,3 +1598,33 @@ read-only validation are committed under iam/evidence/. Proposed future version
 cleanup deletes only archived, nondefault v3 after separate approval, preserving
 canonical v2 and v5 control; no deletion or policy-version creation occurred.
 No direct creation/CloudFormation retry is authorized by this preparation.
+
+### Stage 5 permanent legacy tagging correction — approval checkpoint
+
+The approved one-shot direct v6 test succeeded: HTTP 200, zero retries, request
+e641540c-a094-42b4-9411-b06bfeda7e8b. Exact FinTrust/dev tags were verified and
+the empty diagnostic group deleted. Canonical v2 was restored; v6 remains
+nondefault. Earlier TagResource relaxations, primary CreateLogGroup CalledVia
+relaxation and the v5 direct test failed.
+
+Local stage5-deployment-policy.json now equals archived canonical v2 PLUS ONLY
+the proven logs:TagLogGroup grant on the exact suffixed ingest group in af-south-1.
+Primary creation/modern TagResource retain all canonical tags and CalledVia. The
+new one-group legacy grant permits direct retagging and has only the proven
+region condition; review this tradeoff before installation. No diagnostic-wide
+relaxations are promoted. This is a prepared permanent fix, not a live deployment.
+
+[Permanent policy review and exact recovery commands](STAGE5_PERMANENT_FIX.md)
+supersedes the older diagnostic retry plans for future work. Proposed version-slot
+cleanup is archived nondefault v4 only; preserve v2/v5/v6. Current AWS v2 remains
+default. Read-only preparation completed 18 simulations and zero Access Analyzer
+findings; regression results are recorded in the permanent-fix document.
+
+After separate approvals: install one new permanent version; delete the failed
+ROLLBACK_COMPLETE stack only after preserving evidence; confirm physical group
+and Lambda absence; prepare fintrust-ingest-stage5-permanent-review with unchanged
+build/stage5-ingest.json and CodeObjectVersion=8Y7mCJGc.s2QG2NdP1n9qy_KxntXbdx.;
+review exactly three Adds; stop before the one execution. Reserved concurrency
+remains 0, no triggers, no historical package rebuild/upload or SQL changes.
+The newer duplicate/idempotency release remains a separate later build/migration
+and deployment. Do not rerender the frozen template or mix the two releases.

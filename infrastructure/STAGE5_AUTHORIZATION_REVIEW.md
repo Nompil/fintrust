@@ -1,5 +1,9 @@
 # Stage 5 complete tagged-log creation authorization review
 
+Current checkpoint: the approved v6 direct test succeeded; canonical v2 plus one
+scoped legacy grant is prepared locally. See [permanent fix and recovery](STAGE5_PERMANENT_FIX.md).
+Earlier hypotheses/results below are preserved as chronological evidence.
+
 Status: **ROOT CAUSE NARROWED — READY FOR NEXT CONTROLLED TEST** (local proposal
 for approval only). Most likely remaining policy gate: CreateLogGroup request
 context, with CalledVia the next single-variable test. No root cause is proven.
@@ -283,3 +287,30 @@ logs:TagLogGroup on the exact suffixed group ARN to v5. See
 scope, tests, real simulations, archived nondefault-v3 deletion proposal and
 future one-shot commands. This preparation made no AWS mutation. No existing
 control policy was changed and no additional live test was executed.
+
+## Successful live TagLogGroup diagnostic and permanent correction
+
+On 2026-10-08 the approved one-shot direct SDK experiment used v6, exactly v5
+plus one scoped logs:TagLogGroup grant. It returned HTTP 200, RetryAttempts=0,
+RequestId e641540c-a094-42b4-9411-b06bfeda7e8b. FinTrust/dev tags were verified;
+the empty diagnostic group was deleted and canonical v2 restored. V6 remains
+nondefault. This strongly isolates the missing effective legacy permission for
+the tested direct path; it does not prove all canonical CloudFormation conditions.
+
+The permanent local policy preserves EVERY archived v2 statement and adds only
+LegacyTagIngestLogGroup, logs:TagLogGroup on the exact suffixed group ARN, with
+region af-south-1. Modern TagResource and primary creation keep request tags and
+CalledVia. The new legacy grant can directly retag the single group; this security
+tradeoff is explicit, not hidden behind primary creation's tag restrictions.
+Do not promote relaxed v6 wholesale. No other Logs action, source/template/package
+or runtime change is part of this fix.
+
+Eighteen real read-only custom-policy simulations matched expected scope/context
+decisions; Access Analyzer findings=[]. Results and successful live diagnostic/
+cleanup are archived in iam/evidence/stage5-permanent-validation.json. The current
+version snapshot archives v2/v4/v5/v6; only v4 nondefault cleanup is proposed after
+fresh content verification, preserving v2 rollback and the direct test controls.
+See [permanent fix](STAGE5_PERMANENT_FIX.md) for the exact future policy-install,
+failed-stack removal, frozen CREATE review, one execution and recovery commands.
+No AWS mutation occurred during permanent-fix preparation; the deployment remains
+unproven, disabled, and subject to separate approvals.

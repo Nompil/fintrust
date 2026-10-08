@@ -1,7 +1,9 @@
 # Stage 5 targeted TagLogGroup diagnostic proposal
 
-Status: **TAGLOGGROUP DIAGNOSTIC READY** — prepared only; live execution requires
-separate approval. No AWS mutation occurred in this preparation.
+Status: **TAGLOGGROUP DIAGNOSTIC COMPLETED** — the approved v6 direct request
+succeeded (e641540c-a094-42b4-9411-b06bfeda7e8b), group cleanup completed and v2
+restored. The proposal below is preserved historical evidence, not a repeat
+instruction. See [permanent correction](STAGE5_PERMANENT_FIX.md).
 
 ## Evidence and justification
 

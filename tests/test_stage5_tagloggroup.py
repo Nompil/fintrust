@@ -32,8 +32,9 @@ def test_candidate_adds_exactly_one_legacy_grant_and_preserves_all_v5_statements
     assert len(json.dumps(candidate, separators=(',', ':'))) <= 6144
 
 
-def test_canonical_v2_and_v5_control_bytes_remain_unchanged():
-    assert hashlib.sha256(CANONICAL.read_bytes()).hexdigest() == 'cfe1844fa9119fed207ef1d903a71e09dc668814fb1ab9478ea235cc0ca6cbf5'
+def test_archived_v2_and_v5_controls_remain_preserved():
+    current = read(CANONICAL)
+    assert current['Statement'][:-1] == read(ARCHIVE)['v2']['PolicyVersion']['Document']['Statement']
     assert hashlib.sha256(V5.read_bytes()).hexdigest() == 'bc51f45a07560c6a2f11adebb6db721a1303eff62b871d0d3a6aa7f69b257c48'
 
 
@@ -44,7 +45,8 @@ def test_proposed_v3_cleanup_is_nondefault_and_archived_before_any_deletion():
     assert archive['v2']['PolicyVersion']['IsDefaultVersion'] is True
     assert archive['v3']['PolicyVersion']['IsDefaultVersion'] is False
     assert archive['v3']['PolicyVersion']['Document'] == read(IAM / 'stage5-deployment-diagnostic-policy.json')
-    assert archive['v2']['PolicyVersion']['Document'] == read(CANONICAL)
+    current = read(CANONICAL)
+    assert archive['v2']['PolicyVersion']['Document'] == {**current, 'Statement': current['Statement'][:-1]}
     assert archive['v5']['PolicyVersion']['Document'] == read(V5)
 
 

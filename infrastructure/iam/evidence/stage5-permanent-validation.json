@@ -1,0 +1,1334 @@
+{
+  "collected_at_utc": "2026-10-08T19:04:04.243400+00:00",
+  "candidate_sha256": "48d07003f3b69fb780e7edc220dfe438cc7a23a6dc5d10fd80f85817a06c8f9d",
+  "inventory_identity": {
+    "UserId": "AIDA6CBPZPYDK2OOJRFBA",
+    "Account": "966467878406",
+    "Arn": "arn:aws:iam::966467878406:user/fintrust-inventory"
+  },
+  "aws_mutations": 0,
+  "simulations": [
+    {
+      "name": "v2-no-legacy",
+      "action": "logs:TagLogGroup",
+      "resource": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        }
+      ],
+      "expected": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "logs:TagLogGroup",
+            "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "aws:CalledVia",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "aws:CalledVia",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "legacy-exact",
+      "action": "logs:TagLogGroup",
+      "resource": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        }
+      ],
+      "expected": "allowed",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "logs:TagLogGroup",
+            "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+            "EvalDecision": "allowed",
+            "MatchedStatements": [
+              {
+                "SourcePolicyId": "PolicyInputList.1",
+                "SourcePolicyType": "IAM Policy",
+                "StartPosition": {
+                  "Line": 1,
+                  "Column": 5823
+                },
+                "EndPosition": {
+                  "Line": 1,
+                  "Column": 6064
+                }
+              }
+            ],
+            "MissingContextValues": [],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+                "EvalResourceDecision": "allowed",
+                "MatchedStatements": [
+                  {
+                    "SourcePolicyId": "PolicyInputList.1",
+                    "SourcePolicyType": "IAM Policy",
+                    "StartPosition": {
+                      "Line": 1,
+                      "Column": 5823
+                    },
+                    "EndPosition": {
+                      "Line": 1,
+                      "Column": 6064
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "legacy-with-full-context",
+      "action": "logs:TagLogGroup",
+      "resource": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:RequestTag/Project",
+          "ContextKeyValues": [
+            "FinTrust"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:RequestTag/Environment",
+          "ContextKeyValues": [
+            "dev"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:CalledVia",
+          "ContextKeyValues": [
+            "cloudformation.amazonaws.com"
+          ],
+          "ContextKeyType": "stringList"
+        }
+      ],
+      "expected": "allowed",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "logs:TagLogGroup",
+            "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+            "EvalDecision": "allowed",
+            "MatchedStatements": [
+              {
+                "SourcePolicyId": "PolicyInputList.1",
+                "SourcePolicyType": "IAM Policy",
+                "StartPosition": {
+                  "Line": 1,
+                  "Column": 5823
+                },
+                "EndPosition": {
+                  "Line": 1,
+                  "Column": 6064
+                }
+              }
+            ],
+            "MissingContextValues": [],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+                "EvalResourceDecision": "allowed",
+                "MatchedStatements": [
+                  {
+                    "SourcePolicyId": "PolicyInputList.1",
+                    "SourcePolicyType": "IAM Policy",
+                    "StartPosition": {
+                      "Line": 1,
+                      "Column": 5823
+                    },
+                    "EndPosition": {
+                      "Line": 1,
+                      "Column": 6064
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "legacy-wrong-group",
+      "action": "logs:TagLogGroup",
+      "resource": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-report-dev:*",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        }
+      ],
+      "expected": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "logs:TagLogGroup",
+            "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-report-dev:*",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "aws:CalledVia",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-report-dev:*",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "aws:CalledVia",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "legacy-wrong-region-context",
+      "action": "logs:TagLogGroup",
+      "resource": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "us-east-1"
+          ],
+          "ContextKeyType": "string"
+        }
+      ],
+      "expected": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "logs:TagLogGroup",
+            "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "aws:CalledVia",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "aws:CalledVia",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "legacy-wrong-region-arn",
+      "action": "logs:TagLogGroup",
+      "resource": "arn:aws:logs:us-east-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        }
+      ],
+      "expected": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "logs:TagLogGroup",
+            "EvalResourceName": "arn:aws:logs:us-east-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "aws:CalledVia",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:logs:us-east-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "aws:CalledVia",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "legacy-wrong-account",
+      "action": "logs:TagLogGroup",
+      "resource": "arn:aws:logs:af-south-1:111122223333:log-group:/aws/lambda/fintrust-ingest-dev:*",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        }
+      ],
+      "expected": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "logs:TagLogGroup",
+            "EvalResourceName": "arn:aws:logs:af-south-1:111122223333:log-group:/aws/lambda/fintrust-ingest-dev:*",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "aws:CalledVia",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:logs:af-south-1:111122223333:log-group:/aws/lambda/fintrust-ingest-dev:*",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "aws:CalledVia",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "legacy-unsuffixed",
+      "action": "logs:TagLogGroup",
+      "resource": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        }
+      ],
+      "expected": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "logs:TagLogGroup",
+            "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "aws:CalledVia",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "aws:CalledVia",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "legacy-no-delete",
+      "action": "logs:DeleteLogGroup",
+      "resource": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:RequestTag/Project",
+          "ContextKeyValues": [
+            "FinTrust"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:RequestTag/Environment",
+          "ContextKeyValues": [
+            "dev"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:CalledVia",
+          "ContextKeyValues": [
+            "cloudformation.amazonaws.com"
+          ],
+          "ContextKeyType": "stringList"
+        }
+      ],
+      "expected": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "logs:DeleteLogGroup",
+            "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "cloudformation:ImportResourceTypes",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "cloudformation:ImportResourceTypes",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "legacy-no-untag",
+      "action": "logs:UntagLogGroup",
+      "resource": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:RequestTag/Project",
+          "ContextKeyValues": [
+            "FinTrust"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:RequestTag/Environment",
+          "ContextKeyValues": [
+            "dev"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:CalledVia",
+          "ContextKeyValues": [
+            "cloudformation.amazonaws.com"
+          ],
+          "ContextKeyType": "stringList"
+        }
+      ],
+      "expected": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "logs:UntagLogGroup",
+            "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "cloudformation:ImportResourceTypes",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "cloudformation:ImportResourceTypes",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "create-full-context",
+      "action": "logs:CreateLogGroup",
+      "resource": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:RequestTag/Project",
+          "ContextKeyValues": [
+            "FinTrust"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:RequestTag/Environment",
+          "ContextKeyValues": [
+            "dev"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:CalledVia",
+          "ContextKeyValues": [
+            "cloudformation.amazonaws.com"
+          ],
+          "ContextKeyType": "stringList"
+        }
+      ],
+      "expected": "allowed",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "logs:CreateLogGroup",
+            "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+            "EvalDecision": "allowed",
+            "MatchedStatements": [
+              {
+                "SourcePolicyId": "PolicyInputList.1",
+                "SourcePolicyType": "IAM Policy",
+                "StartPosition": {
+                  "Line": 1,
+                  "Column": 3419
+                },
+                "EndPosition": {
+                  "Line": 1,
+                  "Column": 3809
+                }
+              }
+            ],
+            "MissingContextValues": [],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+                "EvalResourceDecision": "allowed",
+                "MatchedStatements": [
+                  {
+                    "SourcePolicyId": "PolicyInputList.1",
+                    "SourcePolicyType": "IAM Policy",
+                    "StartPosition": {
+                      "Line": 1,
+                      "Column": 3419
+                    },
+                    "EndPosition": {
+                      "Line": 1,
+                      "Column": 3809
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "create-without-calledvia",
+      "action": "logs:CreateLogGroup",
+      "resource": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:RequestTag/Project",
+          "ContextKeyValues": [
+            "FinTrust"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:RequestTag/Environment",
+          "ContextKeyValues": [
+            "dev"
+          ],
+          "ContextKeyType": "string"
+        }
+      ],
+      "expected": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "logs:CreateLogGroup",
+            "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:CalledVia",
+              "cloudformation:ImportResourceTypes",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:CalledVia",
+                  "cloudformation:ImportResourceTypes",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "create-wrong-project",
+      "action": "logs:CreateLogGroup",
+      "resource": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:RequestTag/Project",
+          "ContextKeyValues": [
+            "Other"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:RequestTag/Environment",
+          "ContextKeyValues": [
+            "dev"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:CalledVia",
+          "ContextKeyValues": [
+            "cloudformation.amazonaws.com"
+          ],
+          "ContextKeyType": "stringList"
+        }
+      ],
+      "expected": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "logs:CreateLogGroup",
+            "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "cloudformation:ImportResourceTypes",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "cloudformation:ImportResourceTypes",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "create-without-tags",
+      "action": "logs:CreateLogGroup",
+      "resource": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:CalledVia",
+          "ContextKeyValues": [
+            "cloudformation.amazonaws.com"
+          ],
+          "ContextKeyType": "stringList"
+        }
+      ],
+      "expected": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "logs:CreateLogGroup",
+            "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "modern-full-context",
+      "action": "logs:TagResource",
+      "resource": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:RequestTag/Project",
+          "ContextKeyValues": [
+            "FinTrust"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:RequestTag/Environment",
+          "ContextKeyValues": [
+            "dev"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:CalledVia",
+          "ContextKeyValues": [
+            "cloudformation.amazonaws.com"
+          ],
+          "ContextKeyType": "stringList"
+        }
+      ],
+      "expected": "allowed",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "logs:TagResource",
+            "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev",
+            "EvalDecision": "allowed",
+            "MatchedStatements": [
+              {
+                "SourcePolicyId": "PolicyInputList.1",
+                "SourcePolicyType": "IAM Policy",
+                "StartPosition": {
+                  "Line": 1,
+                  "Column": 5441
+                },
+                "EndPosition": {
+                  "Line": 1,
+                  "Column": 5823
+                }
+              }
+            ],
+            "MissingContextValues": [],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev",
+                "EvalResourceDecision": "allowed",
+                "MatchedStatements": [
+                  {
+                    "SourcePolicyId": "PolicyInputList.1",
+                    "SourcePolicyType": "IAM Policy",
+                    "StartPosition": {
+                      "Line": 1,
+                      "Column": 5441
+                    },
+                    "EndPosition": {
+                      "Line": 1,
+                      "Column": 5823
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "modern-without-calledvia",
+      "action": "logs:TagResource",
+      "resource": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:RequestTag/Project",
+          "ContextKeyValues": [
+            "FinTrust"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:RequestTag/Environment",
+          "ContextKeyValues": [
+            "dev"
+          ],
+          "ContextKeyType": "string"
+        }
+      ],
+      "expected": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "logs:TagResource",
+            "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:CalledVia",
+              "cloudformation:ImportResourceTypes",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:CalledVia",
+                  "cloudformation:ImportResourceTypes",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "modern-without-tags",
+      "action": "logs:TagResource",
+      "resource": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:CalledVia",
+          "ContextKeyValues": [
+            "cloudformation.amazonaws.com"
+          ],
+          "ContextKeyType": "stringList"
+        }
+      ],
+      "expected": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "logs:TagResource",
+            "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "legacy-direct-retag-risk",
+      "action": "logs:TagLogGroup",
+      "resource": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:RequestTag/Project",
+          "ContextKeyValues": [
+            "Other"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:RequestTag/Environment",
+          "ContextKeyValues": [
+            "dev"
+          ],
+          "ContextKeyType": "string"
+        }
+      ],
+      "expected": "allowed",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "logs:TagLogGroup",
+            "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+            "EvalDecision": "allowed",
+            "MatchedStatements": [
+              {
+                "SourcePolicyId": "PolicyInputList.1",
+                "SourcePolicyType": "IAM Policy",
+                "StartPosition": {
+                  "Line": 1,
+                  "Column": 5823
+                },
+                "EndPosition": {
+                  "Line": 1,
+                  "Column": 6064
+                }
+              }
+            ],
+            "MissingContextValues": [],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+                "EvalResourceDecision": "allowed",
+                "MatchedStatements": [
+                  {
+                    "SourcePolicyId": "PolicyInputList.1",
+                    "SourcePolicyType": "IAM Policy",
+                    "StartPosition": {
+                      "Line": 1,
+                      "Column": 5823
+                    },
+                    "EndPosition": {
+                      "Line": 1,
+                      "Column": 6064
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "cloudformation_retry_verified": false,
+  "limitations": "Independent custom-policy simulations do not prove backend dependent authorization or CloudFormation request context. Canonical primary creation and modern tagging retain request tags and CalledVia. The new legacy grant permits direct retagging of only the exact group; no context assumptions beyond the proven region check are added.",
+  "access_analyzer": {
+    "findings": []
+  },
+  "live_diagnostic": {
+    "started_at_utc": "2026-10-08T18:47:10.063961+00:00",
+    "creation_attempts": 1,
+    "caller": {
+      "Account": "966467878406",
+      "Arn": "arn:aws:sts::966467878406:assumed-role/fintrust-deployer-role/botocore-session-1791484978",
+      "UserId": "AROA6CBPZPYDGYGBP2XTJ:botocore-session-1791484978"
+    },
+    "group": "/aws/lambda/fintrust-ingest-dev",
+    "tags": {
+      "Project": "FinTrust",
+      "Environment": "dev"
+    },
+    "policy_version": "v6",
+    "success": true,
+    "response": {
+      "ResponseMetadata": {
+        "RequestId": "e641540c-a094-42b4-9411-b06bfeda7e8b",
+        "HTTPStatusCode": 200,
+        "HTTPHeaders": {
+          "x-amzn-requestid": "e641540c-a094-42b4-9411-b06bfeda7e8b",
+          "x-amzn-log-group-authz": "outdated",
+          "content-type": "application/x-amz-json-1.1",
+          "content-length": "0",
+          "date": "Thu, 08 Oct 2026 18:47:08 GMT"
+        },
+        "RetryAttempts": 0
+      }
+    },
+    "finished_at_utc": "2026-10-08T18:47:10.241053+00:00"
+  },
+  "live_diagnostic_cleanup": {
+    "diagnostic_group_deleted": true,
+    "logGroups": [],
+    "admin": {
+      "UserId": "AIDA6CBPZPYDFEIIDBTKZ",
+      "Account": "966467878406",
+      "Arn": "arn:aws:iam::966467878406:user/fintrust-admin"
+    },
+    "final_versions": {
+      "Versions": [
+        {
+          "VersionId": "v6",
+          "IsDefaultVersion": false,
+          "CreateDate": "2026-10-08T18:46:45+00:00"
+        },
+        {
+          "VersionId": "v5",
+          "IsDefaultVersion": false,
+          "CreateDate": "2026-10-08T16:28:17+00:00"
+        },
+        {
+          "VersionId": "v4",
+          "IsDefaultVersion": false,
+          "CreateDate": "2026-10-08T15:26:33+00:00"
+        },
+        {
+          "VersionId": "v2",
+          "IsDefaultVersion": true,
+          "CreateDate": "2026-10-08T13:00:33+00:00"
+        },
+        {
+          "VersionId": "v1",
+          "IsDefaultVersion": false,
+          "CreateDate": "2026-10-08T12:16:03+00:00"
+        }
+      ]
+    },
+    "verified_at_utc": "2026-10-08T18:50:08.521517+00:00",
+    "original_cleanup_pause_resolved": true
+  },
+  "final_versions": {
+    "Versions": [
+      {
+        "VersionId": "v6",
+        "IsDefaultVersion": false,
+        "CreateDate": "2026-10-08T18:46:45+00:00"
+      },
+      {
+        "VersionId": "v5",
+        "IsDefaultVersion": false,
+        "CreateDate": "2026-10-08T16:28:17+00:00"
+      },
+      {
+        "VersionId": "v4",
+        "IsDefaultVersion": false,
+        "CreateDate": "2026-10-08T15:26:33+00:00"
+      },
+      {
+        "VersionId": "v2",
+        "IsDefaultVersion": true,
+        "CreateDate": "2026-10-08T13:00:33+00:00"
+      },
+      {
+        "VersionId": "v1",
+        "IsDefaultVersion": false,
+        "CreateDate": "2026-10-08T12:16:03+00:00"
+      }
+    ]
+  },
+  "candidate_hash_normalization": "LF line endings",
+  "focused_tests": {
+    "passed": 157,
+    "failed": 0,
+    "skipped": 0,
+    "duration_seconds": 7.14,
+    "suite": "Stage 5 ingest/authorization/tagloggroup/permanent; Stage 4 messaging; processing; ingest; Lambda package"
+  },
+  "frozen_template_sha256": "01d8eae2ac57e7c4ae28c0e5c763f3d48f42d840d217a9164cea37c6c2d3720b",
+  "historical_zip_sha256": "d645d8949ee5b128b2b5c4c1558dd61a1a5c0fd3cdeace60363b19f70d167d62",
+  "recovery_powershell_blocks_syntax_checked": 6
+}
