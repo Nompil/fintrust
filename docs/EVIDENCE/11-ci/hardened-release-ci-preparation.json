@@ -1,0 +1,42 @@
+{
+  "status": "LINUX CI PREPARATION BLOCKED",
+  "timestamp_utc": "2026-10-08T21:20:32.321992+00:00",
+  "baseline_commit": "044b6de78da2031f0b36f4956bb6bb30b1614619",
+  "workflow": ".github/workflows/ci.yml",
+  "static_validation": "YAML parsed; runner/service/permissions/dispatch/build bypass checked; Python scripts and embedded workflow Python parsed",
+  "local_regression_tests": {
+    "passed": 44,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 3.37,
+    "host": "Windows-11-10.0.26300-SP0",
+    "python": "3.14.7"
+  },
+  "initial_test_attempt": "8 passed, 35 fixture errors in host pytest temp directory; resolved by isolated repository-local --basetemp; final focused run passed",
+  "candidate_sha256": "3b95884caa30bb678d47dbf6fe4993784fae8b958b48a4630b5bd35cec7de29e",
+  "candidate_base64": "O5WITKowu2eNR9v2/kmTeE+ui5WLSKRjC1vTXOx94p4=",
+  "candidate_bytes": 21626987,
+  "content_gate_rejected_members": [
+    {
+      "member": "bin/dotenv.exe",
+      "size": 108363,
+      "magic": "4d5a"
+    },
+    {
+      "member": "bin/flask.exe",
+      "size": 108359,
+      "magic": "4d5a"
+    }
+  ],
+  "linux_execution_verified": false,
+  "linux_ci_run": "NOT RUN",
+  "blockers": [
+    "Existing exact ZIP contains Windows MZ console launchers rejected by the requested no-Windows-material gate. Do not silently rebuild.",
+    "Exact local ZIP/manifest are ignored build outputs, unavailable to hosted runners. Artifact transfer requires a user decision; binary has not been added to Git.",
+    "Prepared workflow/source changes need an explicitly approved push before GitHub can run them."
+  ],
+  "aws_access": false,
+  "artifact_uploaded": false,
+  "artifact_rebuilt": false,
+  "tooling_installed": false
+}

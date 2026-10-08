@@ -19,7 +19,7 @@ def is_ipv6_capability_check(root, event, args, caller):
             == root / "urllib3/util/connection.py")
 
 
-def probe(root, handlers):
+def probe(root, handlers, all_production=False):
     root = Path(root).resolve()
     sys.path.insert(0, str(root))
     attempts = []
@@ -54,6 +54,18 @@ def probe(root, handlers):
         if not callable(getattr(module, entry)):
             raise ValueError(f"Handler is not callable: {handler}")
         modules[module_name] = module
+    if all_production:
+        for package in ("fintrust", "src"):
+            for source in sorted((root / package).rglob("*.py")):
+                parts = list(source.relative_to(root).with_suffix("").parts)
+                if parts[-1] == "__init__":
+                    parts.pop()
+                name = ".".join(parts)
+                modules[name] = importlib.import_module(name)
+        for name in ("boto3", "botocore", "s3transfer", "urllib3", "dateutil", "jmespath", "psycopg2",
+                     "flask", "awsgi", "dotenv", "blinker", "click", "itsdangerous",
+                     "jinja2", "werkzeug", "markupsafe", "markupsafe._speedups", "six"):
+            modules[name] = importlib.import_module(name)
     modules["psycopg2._psycopg"] = importlib.import_module("psycopg2._psycopg")
     for name, module in modules.items():
         if not Path(module.__file__).resolve().is_relative_to(root):
@@ -67,7 +79,8 @@ def probe(root, handlers):
         raise ValueError("CA bundle contains no usable trust anchors")
     if attempts:
         raise RuntimeError(f"Network operations attempted: {attempts}")
-    return {"handlers_imported": handlers, "psycopg_native_loaded": True,
+    return {"handlers_imported": handlers, "modules_imported": sorted(modules), "all_production_modules_checked": all_production,
+            "psycopg_native_loaded": True,
             "sql_sha256": hashlib.sha256(sql).hexdigest(),
             "ca_sha256": hashlib.sha256(ca.read_bytes()).hexdigest(),
             "ca_loaded": True, "network_attempts": attempts,
@@ -75,4 +88,4 @@ def probe(root, handlers):
 
 
 if __name__ == "__main__":
-    print(json.dumps(probe(sys.argv[1], json.loads(sys.argv[2]))))
+    print(json.dumps(probe(sys.argv[1], json.loads(sys.argv[2]), "--all-production" in sys.argv[3:])))

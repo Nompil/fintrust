@@ -305,3 +305,92 @@ packaged production module before declaring this release verified.
 
 **LINUX VERIFICATION BLOCKED — no installed Linux CPython 3.12 x86_64 execution
 path is available on this host.**
+
+## Official Linux release gate: GitHub Actions
+
+GitHub Actions is the official repeatable Linux release-verification environment.
+WSL is optional local development convenience, not a release requirement. Every
+future Lambda release must pass the exact-artifact Linux gate before AWS upload
+or deployment; ordinary source CI building a different ZIP is not proof for a
+retained local artifact.
+
+The existing `.github/workflows/ci.yml` job is reused. Manual dispatch with
+`verify_existing_zip=true` checks a supplied candidate instead of building it.
+Runner: Ubuntu 24.04 x86_64, setup-python CPython 3.12 x64. It reuses the existing
+full pytest suite and isolated PostgreSQL 16 service. Non-database ingest,
+validation, identity, fingerprint, file/row/cross-file duplicates, replay,
+quarantine, timestamp and normal/suspicious transaction tests use mocks; SQL
+constraints, service-role grants, database admission/concurrency, queries and
+reporting tests use only the disposable CI database. Any skip/failure/error
+blocks the release gate. No private RDS connection is configured.
+
+Input contract: `release-verification/fintrust-hardened.zip` and matching
+`fintrust-hardened.manifest.json` must be available in the runner checkout.
+`tools/verify_release_input.py` checks the independently reviewed dispatch
+`release_sha256` before archive inspection/extraction, checks archive CRC/layout,
+rejects Windows executables/native files, environment/configuration/development
+material and known access-key/private-key patterns, binds first-party source to
+the tested checkout (normalizing line endings), and copies the exact bytes into
+`build/hardened-release/`. It resets inherited execution evidence. This scoped
+pattern scan is not a guarantee for every possible secret format.
+
+The existing verifier runs with `--all-production`. Its isolated network guard
+imports every packaged fintrust/src Python module and all installed production
+dependency entry packages, loads psycopg2._psycopg and markupsafe._speedups, checks
+archive module locations, all five callable handlers, SQL and CA trust anchors.
+The narrowly attributed urllib3 IPv6 local capability check is unchanged; DNS,
+outbound sockets and other unexpected socket operations remain rejected. No
+application handler is invoked. Modules are imported with dummy AWS credentials
+and metadata lookup disabled; no AWS deployment credentials are used.
+
+Actual-run evidence includes timestamp, commit/run URL, runner OS/architecture/
+Python, artifact hash/size, handler/module/native results and JUnit totals.
+`docs/EVIDENCE/11-ci/hardened-release-linux-ci.json` and `.md`, probe output,
+verified manifest and JUnit XML are preserved as the GitHub artifact
+`fintrust-hardened-linux-verification` for 30 days, including failure evidence.
+Download successful evidence back into the repository and commit it only after
+an actual run. A passing import manifest alone does not override failed/skipped
+tests. No successful hardened run is claimed by this preparation.
+
+### Current candidate blockers — do not silently rebuild
+
+The exact retained candidate still has SHA256
+`3b95884caa30bb678d47dbf6fe4993784fae8b958b48a4630b5bd35cec7de29e` and base64
+`O5WITKowu2eNR9v2/kmTeE+ui5WLSKRjC1vTXOx94p4=`. New local content checking found
+`bin/dotenv.exe` (108363 bytes) and `bin/flask.exe` (108359 bytes), both with Windows
+MZ signatures. These are console launchers in the archive, separate from the
+Linux native extensions. The strict no-Windows-material gate rejects them.
+This is a package-content finding, NOT a demonstrated Linux handler-import
+failure. Earlier limited binary checks did not reject `.exe` launchers. No ZIP
+bytes were changed, no rebuild performed, and execution remains unverified.
+
+The build directory is Git-ignored. GitHub cannot access an unpushed local ZIP.
+The transfer decision is pending: including the reviewed binary and manifest in
+Git would add about 21 MB to history and needs user agreement, or an alternative
+approved artifact-transfer mechanism must be chosen and added. No binary is
+staged by this change. No external download URL or historical artifact is
+substituted. The workflow requires its changes to be pushed before it can run;
+no push is authorized yet. The default source-build CI remains separate.
+
+Local validation: 44 focused tests passed, 0 failed, 0 skipped; workflow YAML and
+Python/embedded scripts parse; runner, dispatch, PostgreSQL service, read-only
+GitHub permissions and release-mode build bypass checked. The first local test
+attempt hit host pytest temporary-directory fixture access errors; an isolated
+repository-local `--basetemp` resolved them. No Linux tests ran locally.
+Preparation evidence: `docs/EVIDENCE/11-ci/hardened-release-ci-preparation.json`.
+
+After the candidate-content/transfer decision and an explicitly approved push,
+the intended dispatch is (DO NOT run yet):
+
+```powershell
+gh workflow run ci.yml --repo Nompil/fintrust --ref main -f verify_existing_zip=true -f release_sha256=3b95884caa30bb678d47dbf6fe4993784fae8b958b48a4630b5bd35cec7de29e
+```
+
+The existing candidate will fail the Windows-launcher content check. The smallest
+proposed correction, if approved after reviewing this finding, is removal of the
+two Windows console launchers from a fresh candidate while preserving runtime
+modules/dependencies, followed by new hashes/manifests and exact-artifact CI.
+Do not label the current ZIP superseded or verified before that decision.
+
+**LINUX CI PREPARATION BLOCKED — exact ZIP contains Windows console launchers;
+runner artifact transfer and push authorization are outstanding.**

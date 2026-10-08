@@ -33,7 +33,7 @@ def report_probe_failure(error, environment):
         print(f"Probe {label}:\n{output}", file=sys.stderr)
 
 
-def verify(path):
+def verify(path, all_production=False):
     if (platform.system() != "Linux" or sys.version_info[:2] != (3, 12)
             or platform.python_implementation() != "CPython" or platform.machine() != "x86_64"):
         raise RuntimeError("This verification requires Linux x86_64 and CPython 3.12")
@@ -61,7 +61,8 @@ def verify(path):
                            DB_SSLROOTCERT=str(root / "certs/global-bundle.pem"))
         try:
             result = subprocess.run([sys.executable, "-I", str(Path(__file__).with_name("lambda_import_probe.py")),
-                                     str(root), json.dumps(list(HANDLERS.values()))],
+                                     str(root), json.dumps(list(HANDLERS.values())),
+                                     *(["--all-production"] if all_production else [])],
                                     cwd=root, env=environment, check=True, timeout=60,
                                     capture_output=True, text=True)
         except subprocess.CalledProcessError as error:
@@ -79,4 +80,4 @@ def verify(path):
 
 
 if __name__ == "__main__":
-    verify(sys.argv[1])
+    verify(sys.argv[1], "--all-production" in sys.argv[2:])

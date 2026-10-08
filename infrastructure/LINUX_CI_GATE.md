@@ -2,6 +2,16 @@
 
 # Linux verification gate
 
+## Current release-verification standard
+
+GitHub Actions is the official repeatable Linux release-verification environment;
+WSL is optional. The retained snapshot below describes earlier preparation, not
+the current release status. The existing workflow now has a manual exact-ZIP
+mode reusing Linux CPython 3.12 and disposable PostgreSQL 16. See
+[the hardened release gate](HARDENED_RUNTIME_RELEASE.md#official-linux-release-gate-github-actions)
+for the input contract, actual-run evidence and current candidate blockers.
+A newly built CI ZIP cannot verify a different retained local ZIP.
+
 Status: **PREPARED; LINUX EXECUTION NOT YET VERIFIED.** No remote is configured.
 No repository creation, push, GitHub run or AWS account access occurred.
 

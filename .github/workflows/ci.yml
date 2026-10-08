@@ -2,6 +2,15 @@ name: FinTrust Linux verification
 
 on:
   workflow_dispatch:
+    inputs:
+      verify_existing_zip:
+        description: Verify a supplied release ZIP without building it
+        type: boolean
+        default: false
+      release_sha256:
+        description: Independently reviewed SHA256 of the supplied ZIP
+        type: string
+        default: '3b95884caa30bb678d47dbf6fe4993784fae8b958b48a4630b5bd35cec7de29e'
   push:
     branches: [main]
   pull_request:
@@ -51,22 +60,53 @@ jobs:
         with:
           python-version: '3.12'
           architecture: x64
+      - name: Check exact release input before tests or extraction
+        if: inputs.verify_existing_zip == true
+        env:
+          RELEASE_SHA256: ${{ inputs.release_sha256 }}
+        run: python3.12 tools/verify_release_input.py
       - name: Install approved test dependencies
         run: python3.12 -m pip install -r requirements.txt
       - name: Run full suite with disposable PostgreSQL
         run: python3.12 -m pytest -q --junitxml=test-results/pytest.xml
       - name: Build shared Linux runtime
+        if: inputs.verify_existing_zip != true
         run: |
           mkdir -p build
           curl --fail --silent --show-error --retry 3 --connect-timeout 15 --max-time 120 \
             https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem \
             -o build/global-bundle.pem
           python3.12 tools/package_lambda.py --ca-bundle build/global-bundle.pem
+      - name: Verify exact release ZIP and all production modules
+        if: inputs.verify_existing_zip == true
+        run: |
+          set -o pipefail
+          python3.12 tools/verify_lambda_linux.py build/hardened-release/fintrust-hardened.zip --all-production 2>&1 | tee build/linux-verification.txt
+      - name: Record exact release gate evidence
+        if: always() && inputs.verify_existing_zip == true
+        env:
+          RELEASE_SHA256: ${{ inputs.release_sha256 }}
+        run: python3.12 tools/record_release_verification.py
+      - name: Preserve exact release verification evidence
+        if: always() && inputs.verify_existing_zip == true
+        uses: actions/upload-artifact@v4
+        with:
+          name: fintrust-hardened-linux-verification
+          path: |
+            docs/EVIDENCE/11-ci/hardened-release-linux-ci.json
+            docs/EVIDENCE/11-ci/hardened-release-linux-ci.md
+            build/linux-verification.txt
+            build/hardened-release/fintrust-hardened.manifest.json
+            test-results/pytest.xml
+          if-no-files-found: error
+          retention-days: 30
       - name: Verify archived handlers and native dependencies
+        if: inputs.verify_existing_zip != true
         run: |
           set -o pipefail
           python3.12 tools/verify_lambda_linux.py build/fintrust.zip | tee build/linux-verification.txt
       - name: Record gate evidence
+        if: inputs.verify_existing_zip != true
         run: |
           python3.12 - <<'PY'
           import json
@@ -101,6 +141,7 @@ jobs:
           if-no-files-found: error
           retention-days: 7
       - name: Preserve verified package and evidence
+        if: inputs.verify_existing_zip != true
         uses: actions/upload-artifact@v4
         with:
           name: fintrust-linux-verified
