@@ -4,13 +4,14 @@
 
 ## Current release-verification standard
 
-GitHub Actions is the official repeatable Linux release-verification environment;
-WSL is optional. The retained snapshot below describes earlier preparation, not
-the current release status. The existing workflow now has a manual exact-ZIP
-mode reusing Linux CPython 3.12 and disposable PostgreSQL 16. See
-[the hardened release gate](HARDENED_RUNTIME_RELEASE.md#official-linux-release-gate-github-actions)
-for the input contract, actual-run evidence and current candidate blockers.
-A newly built CI ZIP cannot verify a different retained local ZIP.
+GitHub Actions Linux CPython 3.12 is the authoritative Lambda build-and-verification
+environment. The existing workflow builds the hardened ZIP from reviewed source,
+verifies that exact archive, runs the full suite with disposable PostgreSQL 16
+and publishes the verified ZIP/evidence only after a zero-failure/zero-skip gate.
+WSL is optional. The prior retained-local-ZIP transfer plan is replaced. See
+[the current hardened release process](HARDENED_RUNTIME_RELEASE.md#authoritative-release-process-linux-ci-builds-and-verifies)
+for preparation results and the pending push/run. The snapshot below describes
+historical setup; it does not establish a current hardened release pass.
 
 Status: **PREPARED; LINUX EXECUTION NOT YET VERIFIED.** No remote is configured.
 No repository creation, push, GitHub run or AWS account access occurred.

@@ -16,10 +16,13 @@ def build_hardened(ca_bundle, output, wheelhouse=None):
     manifest = build(ca_bundle, output, wheelhouse)
     temporary = output.with_suffix('.filtered.zip')
     excluded = []
+    launchers = []
     try:
         with zipfile.ZipFile(output) as source, zipfile.ZipFile(temporary, 'w') as target:
             for info in source.infolist():
-                if is_sdk_example(info.filename):
+                if info.filename.startswith("bin/"):
+                    launchers.append(info.filename)
+                elif is_sdk_example(info.filename):
                     excluded.append(info.filename)
                 else:
                     target.writestr(info, source.read(info.filename))
@@ -29,6 +32,7 @@ def build_hardened(ca_bundle, output, wheelhouse=None):
     manifest.update(verify_archive(output))
     manifest['linux_execution_verified'] = False
     manifest['excluded_sdk_examples'] = excluded
+    manifest['excluded_cli_launchers'] = launchers
     output.with_suffix('.manifest.json').write_text(json.dumps(manifest, indent=2)+'\n', encoding='utf-8')
     return manifest
 

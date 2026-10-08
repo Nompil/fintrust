@@ -1,4 +1,4 @@
-# Hardened ingest release preparation — NOT READY
+# Hardened ingest release preparation â€” NOT READY
 
 Stage 5 infrastructure is live and verified using historical SHA
 `d645d8949ee5b128b2b5c4c1558dd61a1a5c0fd3cdeace60363b19f70d167d62`.
@@ -171,7 +171,7 @@ Expected UPDATE change set: **one Modify IngestFunction, replacement false**;
 IngestLogs and IngestAsync unchanged. If async modification appears, STOP: the
 current async policy deliberately has no UpdateFunctionEventInvokeConfig grant.
 
-## Safest release order and exact future command plan — NOT EXECUTED
+## Safest release order and exact future command plan â€” NOT EXECUTED
 
 1. Prove Linux imports and the zero-skip target suite first; freeze its exact hash.
 2. Review/implement the temporary private-RDS migration/bootstrap path and master
@@ -303,94 +303,104 @@ as requested. After an approved Linux CPython 3.12 x86_64 environment is availab
 run the existing verifier against this exact ZIP and additionally check every
 packaged production module before declaring this release verified.
 
-**LINUX VERIFICATION BLOCKED — no installed Linux CPython 3.12 x86_64 execution
+**LINUX VERIFICATION BLOCKED â€” no installed Linux CPython 3.12 x86_64 execution
 path is available on this host.**
 
-## Official Linux release gate: GitHub Actions
+## Authoritative release process: Linux CI builds and verifies
 
-GitHub Actions is the official repeatable Linux release-verification environment.
-WSL is optional local development convenience, not a release requirement. Every
-future Lambda release must pass the exact-artifact Linux gate before AWS upload
-or deployment; ordinary source CI building a different ZIP is not proof for a
-retained local artifact.
+**GitHub Actions Linux CPython 3.12 builds the release artifact. The same job
+verifies the exact artifact it built. Only a CI-verified artifact may proceed
+to AWS deployment.** WSL remains optional and paused; Docker is not required.
 
-The existing `.github/workflows/ci.yml` job is reused. Manual dispatch with
-`verify_existing_zip=true` checks a supplied candidate instead of building it.
-Runner: Ubuntu 24.04 x86_64, setup-python CPython 3.12 x64. It reuses the existing
-full pytest suite and isolated PostgreSQL 16 service. Non-database ingest,
-validation, identity, fingerprint, file/row/cross-file duplicates, replay,
-quarantine, timestamp and normal/suspicious transaction tests use mocks; SQL
-constraints, service-role grants, database admission/concurrency, queries and
-reporting tests use only the disposable CI database. Any skip/failure/error
-blocks the release gate. No private RDS connection is configured.
+Current preparation is READY FOR PUSH, not evidence of a successful Linux build.
+An explicit push approval is still required. The invalid Windows ZIP is not
+transferred, tracked or rebuilt locally. The earlier exact-local-ZIP transfer
+plan is replaced by this source-to-Linux-build process.
 
-Input contract: `release-verification/fintrust-hardened.zip` and matching
-`fintrust-hardened.manifest.json` must be available in the runner checkout.
-`tools/verify_release_input.py` checks the independently reviewed dispatch
-`release_sha256` before archive inspection/extraction, checks archive CRC/layout,
-rejects Windows executables/native files, environment/configuration/development
-material and known access-key/private-key patterns, binds first-party source to
-the tested checkout (normalizing line endings), and copies the exact bytes into
-`build/hardened-release/`. It resets inherited execution evidence. This scoped
-pattern scan is not a guarantee for every possible secret format.
+### Why the Windows archive contained executables
 
-The existing verifier runs with `--all-production`. Its isolated network guard
-imports every packaged fintrust/src Python module and all installed production
-dependency entry packages, loads psycopg2._psycopg and markupsafe._speedups, checks
-archive module locations, all five callable handlers, SQL and CA trust anchors.
-The narrowly attributed urllib3 IPv6 local capability check is unchanged; DNS,
-outbound sockets and other unexpected socket operations remain rejected. No
-application handler is invoked. Modules are imported with dummy AWS credentials
-and metadata lookup disabled; no AWS deployment credentials are used.
+`tools/package_lambda.py` runs the host Python's pip with CPython 3.12/Linux
+wheel-selection flags and a target staging directory. Those flags select wheels;
+they do not change the host operating system used to generate console scripts.
+The installed pip/distlib ScriptMaker sets `_is_nt` from the host `os.name` and
+writes `.exe` launchers on Windows. The packager then archives every staging
+file, including `bin/dotenv.exe` and `bin/flask.exe`. Their MZ signatures were
+confirmed. Neither launcher is needed by Lambda to import dotenv or Flask.
 
-Actual-run evidence includes timestamp, commit/run URL, runner OS/architecture/
-Python, artifact hash/size, handler/module/native results and JUnit totals.
-`docs/EVIDENCE/11-ci/hardened-release-linux-ci.json` and `.md`, probe output,
-verified manifest and JUnit XML are preserved as the GitHub artifact
-`fintrust-hardened-linux-verification` for 30 days, including failure evidence.
-Download successful evidence back into the repository and commit it only after
-an actual run. A passing import manifest alone does not override failed/skipped
-tests. No successful hardened run is claimed by this preparation.
+The hardened wrapper now removes every `bin/` console launcher on all hosts,
+plus existing SDK example material. Linux CLI scripts are unnecessary too.
+Underlying Python packages, distribution metadata, service models and native
+extensions are preserved. Regression tests prove both host launcher variants
+are omitted and checksums are recomputed. Dependencies and application code
+are unchanged; this remains the existing shared five-handler production package.
 
-### Current candidate blockers — do not silently rebuild
+### One existing workflow, one authoritative artifact
 
-The exact retained candidate still has SHA256
-`3b95884caa30bb678d47dbf6fe4993784fae8b958b48a4630b5bd35cec7de29e` and base64
-`O5WITKowu2eNR9v2/kmTeE+ui5WLSKRjC1vTXOx94p4=`. New local content checking found
-`bin/dotenv.exe` (108363 bytes) and `bin/flask.exe` (108359 bytes), both with Windows
-MZ signatures. These are console launchers in the archive, separate from the
-Linux native extensions. The strict no-Windows-material gate rejects them.
-This is a package-content finding, NOT a demonstrated Linux handler-import
-failure. Earlier limited binary checks did not reject `.exe` launchers. No ZIP
-bytes were changed, no rebuild performed, and execution remains unverified.
+`.github/workflows/ci.yml` reuses Ubuntu 24.04 x86_64, setup-python CPython 3.12
+x64 and disposable PostgreSQL 16. Its stages are:
 
-The build directory is Git-ignored. GitHub cannot access an unpushed local ZIP.
-The transfer decision is pending: including the reviewed binary and manifest in
-Git would add about 21 MB to history and needs user agreement, or an alternative
-approved artifact-transfer mechanism must be chosen and added. No binary is
-staged by this change. No external download URL or historical artifact is
-substituted. The workflow requires its changes to be pushed before it can run;
-no push is authorized yet. The default source-build CI remains separate.
+1. Checkout source with credential persistence disabled and assert OS/architecture/Python.
+2. Fetch the public RDS CA trust bundle and build from pinned `requirements-lambda.txt`
+   production wheels with `tools/package_hardened_lambda.py`. Test dependencies
+   are not installed at this point and cannot enter the ZIP staging directory.
+3. Generate `build/hardened-release/fintrust-hardened-linux-py312.zip` and its
+   manifest using ordered members/fixed ZIP metadata. Repeatability assumes
+   identical source, wheel and CA inputs; changes in those inputs change hashes.
+4. Check hash against the build manifest before extraction; archive layout/CRC,
+   first-party source binding, forbidden config/development files, CLI launchers,
+   Windows file suffixes and MZ signatures, plus access-key/private-key patterns.
+   This scoped scan is not a guarantee for every conceivable secret format.
+5. Run `tools/verify_lambda_linux.py --all-production` against that same archive.
+   All five handlers, every packaged fintrust/src module, production dependency
+   entry packages, psycopg2._psycopg and markupsafe._speedups load from the extracted
+   archive. SQL and CA trust loading are checked. Existing DNS/socket audit
+   controls remain, including only the attributed urllib3 capability bind exception.
+6. Install test-only dependencies outside the ZIP, then run the full suite with
+   PostgreSQL 16, including duplicate/identity/replay/quarantine/precision tests,
+   SQL admission/concurrency and service-role permission tests. No failed/error/
+   skipped test is accepted by the release gate.
+7. Record actual commit/run URL/timestamp, OS/architecture/Python, filename, SHA256
+   hex/base64, size, handler/module/native results and JUnit totals. Re-hash the
+   final ZIP before publication and compare it to the verified manifest.
+8. Preserve failure/success evidence in `fintrust-hardened-verification-evidence`.
+   Publish the ZIP only after all gates pass in `fintrust-hardened-linux-py312`,
+   with manifest, JSON/Markdown evidence, import output and JUnit XML. Retention
+   is 30 days; download successful artifacts/evidence promptly for release storage.
 
-Local validation: 44 focused tests passed, 0 failed, 0 skipped; workflow YAML and
-Python/embedded scripts parse; runner, dispatch, PostgreSQL service, read-only
-GitHub permissions and release-mode build bypass checked. The first local test
-attempt hit host pytest temporary-directory fixture access errors; an isolated
-repository-local `--basetemp` resolved them. No Linux tests ran locally.
-Preparation evidence: `docs/EVIDENCE/11-ci/hardened-release-ci-preparation.json`.
+The GitHub token has only contents:read. There are no repository-secret inputs,
+OIDC/deployment permissions, AWS CLI/API commands, AWS uploads or live invocations.
+Literal testing credentials and disabled metadata discovery support mocked tests.
+Database tests connect only to the disposable CI PostgreSQL service. The package
+probe rejects network operations; package indexes/public CA download are build
+inputs, not AWS account access. Concurrency/triggers/private RDS remain untouched.
 
-After the candidate-content/transfer decision and an explicitly approved push,
-the intended dispatch is (DO NOT run yet):
+### Pending actual execution and supersession
+
+The old ZIP SHA256 is still
+`3b95884caa30bb678d47dbf6fe4993784fae8b958b48a4630b5bd35cec7de29e`, with base64
+`O5WITKowu2eNR9v2/kmTeE+ui5WLSKRjC1vTXOx94p4=` and
+`linux_execution_verified=false`. It is NOT RELEASE-READY. After a successful
+Linux build, record its replacement checksum/run URL here and label the old ZIP
+`SUPERSEDED — contained Windows launcher executables`. Do not claim that transition
+before the workflow actually runs. No authoritative replacement hash exists yet.
+
+Any deployment template/IAM artifact path/checksum binding still referencing the
+Windows candidate must be updated in a separately reviewed release step using
+only the downloaded CI-verified artifact. Preparation does not authorize upload,
+IAM changes, private RDS migration, deployment or activation.
+
+Local validation: 48 focused tests passed, 0 failed, 0 skipped on Windows Python
+3.14.7; YAML, Python syntax, workflow stage order, build/test separation, runner/
+service configuration and read-only permissions checked. These are preparation
+checks, not Linux execution proof. Evidence:
+`docs/EVIDENCE/11-ci/hardened-linux-build-preparation.json`.
+
+A push is required because the reviewed source/workflow is not yet on GitHub.
+After separate approval, push the reviewed commits; the existing main push trigger
+runs the job. Manual rerun command, if needed after that approved push:
 
 ```powershell
-gh workflow run ci.yml --repo Nompil/fintrust --ref main -f verify_existing_zip=true -f release_sha256=3b95884caa30bb678d47dbf6fe4993784fae8b958b48a4630b5bd35cec7de29e
+gh workflow run ci.yml --repo Nompil/fintrust --ref main
 ```
 
-The existing candidate will fail the Windows-launcher content check. The smallest
-proposed correction, if approved after reviewing this finding, is removal of the
-two Windows console launchers from a fresh candidate while preserving runtime
-modules/dependencies, followed by new hashes/manifests and exact-artifact CI.
-Do not label the current ZIP superseded or verified before that decision.
-
-**LINUX CI PREPARATION BLOCKED — exact ZIP contains Windows console launchers;
-runner artifact transfer and push authorization are outstanding.**
+**LINUX BUILD PIPELINE READY FOR PUSH.**

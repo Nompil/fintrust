@@ -30,6 +30,9 @@ def test_checksum_mismatch_rejected_before_archive_inspection(tmp_path, monkeypa
     ("fintrust/bad.py", b"AKIA" + b"A" * 16),
     ("fintrust/bad.py", b"-----BEGIN PRIVATE KEY-----"),
     ("windows.exe", b"MZ"),
+    ("renamed_binary", b"MZ hidden PE"),
+    ("bin/flask", b"Linux CLI launcher"),
+    ("moto/__init__.py", b"development dependency"),
 ])
 def test_release_input_rejects_secret_dev_or_unsafe_material(tmp_path, monkeypatch, name, data):
     path = tmp_path / "candidate.zip"
@@ -70,3 +73,32 @@ def test_failed_run_records_unknown_imports_without_claiming_verification(tmp_pa
     assert evidence["release_gate_passed"] is False
     assert evidence["tests"] is None
     assert evidence["artifact_sha256"] is None
+
+
+def test_runner_evidence_requires_zero_skips_even_after_successful_imports(tmp_path, monkeypatch):
+    from tools import record_release_verification as recorder
+    monkeypatch.chdir(tmp_path)
+    archive = tmp_path / "build/hardened-release/fintrust-hardened-linux-py312.zip"
+    archive.parent.mkdir(parents=True)
+    archive.write_bytes(b"test-only archive fixture")
+    manifest = {"sha256": hashlib.sha256(archive.read_bytes()).hexdigest(),
+                "content_checked": True, "linux_execution_verified": True,
+                "linux_verification": {"all_production_modules_checked": True}}
+    archive.with_suffix(".manifest.json").write_text(json.dumps(manifest))
+    (tmp_path / "test-results").mkdir()
+    (tmp_path / "test-results/pytest.xml").write_text(
+        '<testsuites><testsuite tests="2" failures="0" errors="0" skipped="1"/></testsuites>')
+    for key, value in {"GITHUB_SHA": "test-only", "GITHUB_RUN_ID": "0",
+                       "GITHUB_RUN_ATTEMPT": "1", "GITHUB_REPOSITORY": "test/fixture",
+                       "GITHUB_STEP_SUMMARY": str(tmp_path / "summary.md")}.items():
+        monkeypatch.setenv(key, value)
+    monkeypatch.setattr(recorder.platform, "system", lambda: "Linux")
+    monkeypatch.setattr(recorder.platform, "machine", lambda: "x86_64")
+    monkeypatch.setattr(recorder.platform, "python_implementation", lambda: "CPython")
+    monkeypatch.setattr(recorder.platform, "python_version_tuple", lambda: ("3", "12", "0"))
+    with pytest.raises(RuntimeError, match="gate failed"):
+        recorder.record()
+    evidence = json.loads((tmp_path / "docs/EVIDENCE/11-ci/hardened-release-linux-ci.json").read_text())
+    assert evidence["release_gate_passed"] is False
+    assert evidence["tests"]["skipped"] == 1
+    assert evidence["artifact_filename"] == archive.name

@@ -1,0 +1,32 @@
+{
+  "status": "LINUX BUILD PIPELINE READY FOR PUSH",
+  "baseline_commit": "a625bea75b659bfa24a88555c417bddb248d4b60",
+  "checked_at_utc": "2026-10-08T21:29:28.537085+00:00",
+  "local_validation": {
+    "tests_passed": 48,
+    "failures": 0,
+    "skipped": 0,
+    "seconds": 3.0,
+    "python": "3.14.7",
+    "os": "Windows",
+    "yaml_static_checks": "passed",
+    "python_syntax": "passed"
+  },
+  "configured_runner": {
+    "os": "ubuntu-24.04",
+    "architecture": "x86_64",
+    "python": "3.12"
+  },
+  "output_artifact": "fintrust-hardened-linux-py312.zip",
+  "github_ci_run": "NOT RUN",
+  "linux_execution_verified": false,
+  "authoritative_checksums": "pending actual successful CI build",
+  "old_candidate": {
+    "sha256": "3b95884caa30bb678d47dbf6fe4993784fae8b958b48a4630b5bd35cec7de29e",
+    "status": "NOT RELEASE-READY; supersession pending successful Linux artifact",
+    "mutated": false
+  },
+  "aws_access": false,
+  "push_performed": false,
+  "zip_uploaded": false
+}

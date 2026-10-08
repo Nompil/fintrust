@@ -4,16 +4,13 @@ import json
 import os
 from pathlib import Path
 import re
-import shutil
+import sys
 import zipfile
 
 try:
     from .package_lambda import verify_archive
 except ImportError:
     from package_lambda import verify_archive
-
-SOURCE = Path("release-verification/fintrust-hardened.zip")
-TARGET = Path("build/hardened-release/fintrust-hardened.zip")
 
 
 def check_input(source, expected):
@@ -30,10 +27,14 @@ def check_input(source, expected):
                     or any(part.startswith(".env") for part in parts)
                     or any(part in {".aws", ".git", "__pycache__", "tests", "test-results", "docs", "project-reference", ".venv", "venv"} for part in parts)
                     or name.endswith((".pyc", ".pyd", ".dll", ".exe", ".key", ".p12", ".pfx"))
+                    or name.startswith("bin/")
+                    or name.startswith(("pytest/", "_pytest/", "moto/"))
                     or name.startswith("boto3/examples/")
                     or (name.startswith("botocore/data/") and name.endswith("/examples-1.json"))):
                 raise ValueError(f"Unexpected or development-only archive member: {name}")
             data = archive.read(info)
+            if data.startswith(b"MZ"):
+                raise ValueError(f"Windows PE executable in archive member: {name}")
             if (re.search(rb"(?:AKIA|ASIA)[A-Z0-9]{16}", data)
                     or re.search(rb"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----", data)):
                 raise ValueError(f"Credential pattern found in archive member: {name}")
@@ -41,13 +42,14 @@ def check_input(source, expected):
 
 
 if __name__ == "__main__":
-    evidence = check_input(SOURCE, os.environ["RELEASE_SHA256"])
-    manifest = json.loads(SOURCE.with_suffix(".manifest.json").read_text())
+    source = Path(sys.argv[1])
+    manifest = json.loads(source.with_suffix(".manifest.json").read_text())
+    evidence = check_input(source, os.environ.get("RELEASE_SHA256", manifest["sha256"]))
     for key, value in evidence.items():
         if manifest.get(key) != value:
             raise ValueError(f"Release manifest mismatch: {key}")
     # Tests from this checkout must represent the supplied first-party code.
-    with zipfile.ZipFile(SOURCE) as archive:
+    with zipfile.ZipFile(source) as archive:
         for package in ("fintrust", "src"):
             local = {str(path.relative_to(Path.cwd())).replace("\\", "/")
                      for path in (Path.cwd() / package).rglob("*.py")}
@@ -61,7 +63,6 @@ if __name__ == "__main__":
     # Execution evidence cannot be inherited from a previous runner.
     manifest["linux_execution_verified"] = False
     manifest.pop("linux_verification", None)
-    TARGET.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(SOURCE, TARGET)
-    TARGET.with_suffix(".manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
+    manifest["content_checked"] = True
+    source.with_suffix(".manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
     print(json.dumps(evidence, indent=2))

@@ -9,7 +9,7 @@ import xml.etree.ElementTree as ET
 
 
 def record():
-    archive = Path("build/hardened-release/fintrust-hardened.zip")
+    archive = Path("build/hardened-release/fintrust-hardened-linux-py312.zip")
     manifest_path = archive.with_suffix(".manifest.json")
     manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else {}
     junit = Path("test-results/pytest.xml")
@@ -25,7 +25,8 @@ def record():
     passed = (platform.system() == "Linux" and platform.machine() == "x86_64"
               and platform.python_implementation() == "CPython"
               and platform.python_version_tuple()[:2] == ("3", "12")
-              and actual == os.environ["RELEASE_SHA256"]
+              and actual is not None and actual == manifest.get("sha256")
+              and manifest.get("content_checked") is True
               and manifest.get("linux_execution_verified") is True
               and probe.get("all_production_modules_checked") is True
               and counts is not None and counts["passed"] > 0
@@ -37,7 +38,9 @@ def record():
                 "run_url": f"https://github.com/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}",
                 "runner": {"os": platform.system(), "architecture": platform.machine(),
                            "python": platform.python_version(), "platform": platform.platform()},
-                "artifact_sha256": actual, "expected_sha256": os.environ["RELEASE_SHA256"],
+                "artifact_filename": archive.name, "artifact_sha256": actual,
+                "artifact_sha256_base64": manifest.get("code_sha256_base64"),
+                "manifest_sha256": manifest.get("sha256"),
                 "artifact_bytes": archive.stat().st_size if archive.exists() else None,
                 "tests": counts, "package": manifest,
                 "linux_execution_verified": manifest.get("linux_execution_verified", False),

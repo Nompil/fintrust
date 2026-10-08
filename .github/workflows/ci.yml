@@ -2,15 +2,6 @@ name: FinTrust Linux verification
 
 on:
   workflow_dispatch:
-    inputs:
-      verify_existing_zip:
-        description: Verify a supplied release ZIP without building it
-        type: boolean
-        default: false
-      release_sha256:
-        description: Independently reviewed SHA256 of the supplied ZIP
-        type: string
-        default: '3b95884caa30bb678d47dbf6fe4993784fae8b958b48a4630b5bd35cec7de29e'
   push:
     branches: [main]
   pull_request:
@@ -32,7 +23,7 @@ jobs:
         image: postgres:16
         env:
           POSTGRES_USER: postgres
-          # Disposable CI service only; never used for an application database.
+          # Disposable CI service only; never an application database credential.
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: fintrust_test
         ports:
@@ -60,95 +51,61 @@ jobs:
         with:
           python-version: '3.12'
           architecture: x64
-      - name: Check exact release input before tests or extraction
-        if: inputs.verify_existing_zip == true
-        env:
-          RELEASE_SHA256: ${{ inputs.release_sha256 }}
-        run: python3.12 tools/verify_release_input.py
+      - name: Confirm Linux release environment
+        run: |
+          python3.12 - <<'PY'
+          import platform, sys
+          print(platform.platform(), platform.machine(), sys.version)
+          assert platform.system() == "Linux"
+          assert platform.machine() == "x86_64"
+          assert platform.python_implementation() == "CPython"
+          assert sys.version_info[:2] == (3, 12)
+          PY
+      - name: Build hardened release with production wheels
+        run: |
+          mkdir -p build/hardened-release
+          curl --fail --silent --show-error --retry 3 --connect-timeout 15 --max-time 120 \
+            https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem \
+            -o build/hardened-release/global-bundle.pem
+          python3.12 tools/package_hardened_lambda.py \
+            --ca-bundle build/hardened-release/global-bundle.pem \
+            --output build/hardened-release/fintrust-hardened-linux-py312.zip
+      - name: Check exact built content and source binding
+        run: python3.12 tools/verify_release_input.py build/hardened-release/fintrust-hardened-linux-py312.zip
+      - name: Verify built handlers and all production modules
+        run: |
+          set -o pipefail
+          python3.12 tools/verify_lambda_linux.py build/hardened-release/fintrust-hardened-linux-py312.zip --all-production 2>&1 | tee build/linux-verification.txt
       - name: Install approved test dependencies
         run: python3.12 -m pip install -r requirements.txt
       - name: Run full suite with disposable PostgreSQL
         run: python3.12 -m pytest -q --junitxml=test-results/pytest.xml
-      - name: Build shared Linux runtime
-        if: inputs.verify_existing_zip != true
-        run: |
-          mkdir -p build
-          curl --fail --silent --show-error --retry 3 --connect-timeout 15 --max-time 120 \
-            https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem \
-            -o build/global-bundle.pem
-          python3.12 tools/package_lambda.py --ca-bundle build/global-bundle.pem
-      - name: Verify exact release ZIP and all production modules
-        if: inputs.verify_existing_zip == true
-        run: |
-          set -o pipefail
-          python3.12 tools/verify_lambda_linux.py build/hardened-release/fintrust-hardened.zip --all-production 2>&1 | tee build/linux-verification.txt
-      - name: Record exact release gate evidence
-        if: always() && inputs.verify_existing_zip == true
-        env:
-          RELEASE_SHA256: ${{ inputs.release_sha256 }}
+      - name: Record release gate evidence
+        if: always()
         run: python3.12 tools/record_release_verification.py
-      - name: Preserve exact release verification evidence
-        if: always() && inputs.verify_existing_zip == true
+      - name: Preserve verification evidence
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: fintrust-hardened-linux-verification
+          name: fintrust-hardened-verification-evidence
           path: |
             docs/EVIDENCE/11-ci/hardened-release-linux-ci.json
             docs/EVIDENCE/11-ci/hardened-release-linux-ci.md
             build/linux-verification.txt
-            build/hardened-release/fintrust-hardened.manifest.json
+            build/hardened-release/fintrust-hardened-linux-py312.manifest.json
             test-results/pytest.xml
           if-no-files-found: error
           retention-days: 30
-      - name: Verify archived handlers and native dependencies
-        if: inputs.verify_existing_zip != true
-        run: |
-          set -o pipefail
-          python3.12 tools/verify_lambda_linux.py build/fintrust.zip | tee build/linux-verification.txt
-      - name: Record gate evidence
-        if: inputs.verify_existing_zip != true
-        run: |
-          python3.12 - <<'PY'
-          import json
-          import os
-          from pathlib import Path
-          import xml.etree.ElementTree as ET
-
-          manifest = json.loads(Path("build/fintrust.manifest.json").read_text())
-          assert manifest["linux_execution_verified"] is True
-          suites = ET.parse("test-results/pytest.xml").getroot().findall("testsuite")
-          counts = {key: sum(int(s.get(key, 0)) for s in suites)
-                    for key in ("tests", "failures", "errors", "skipped")}
-          assert counts["tests"] > 0 and not any(counts[k] for k in ("failures", "errors", "skipped")), counts
-          evidence = {"commit": os.environ["GITHUB_SHA"], "run_id": os.environ["GITHUB_RUN_ID"],
-                      "run_attempt": os.environ["GITHUB_RUN_ATTEMPT"], "tests": counts,
-                      "package": manifest}
-          Path("build/ci-evidence.json").write_text(json.dumps(evidence, indent=2) + "\n")
-          summary = ("Linux execution verified: TRUE\n\n"
-                     f"{counts['tests']} tests passed; 0 failed; 0 skipped.\n\n"
-                     f"Commit: {evidence['commit']}\n\n"
-                     "Ubuntu verification passed. AWS inventory requires separate authorization.\n")
-          print(summary)
-          with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as output:
-              output.write(summary)
-          PY
-      - name: Preserve test results
-        if: always()
+      - name: Publish only the verified release
         uses: actions/upload-artifact@v4
         with:
-          name: fintrust-test-results
-          path: test-results/pytest.xml
-          if-no-files-found: error
-          retention-days: 7
-      - name: Preserve verified package and evidence
-        if: inputs.verify_existing_zip != true
-        uses: actions/upload-artifact@v4
-        with:
-          name: fintrust-linux-verified
+          name: fintrust-hardened-linux-py312
           path: |
-            build/fintrust.zip
-            build/fintrust.manifest.json
+            build/hardened-release/fintrust-hardened-linux-py312.zip
+            build/hardened-release/fintrust-hardened-linux-py312.manifest.json
+            docs/EVIDENCE/11-ci/hardened-release-linux-ci.json
+            docs/EVIDENCE/11-ci/hardened-release-linux-ci.md
             build/linux-verification.txt
-            build/ci-evidence.json
+            test-results/pytest.xml
           if-no-files-found: error
-          retention-days: 7
+          retention-days: 30
