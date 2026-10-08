@@ -314,3 +314,14 @@ See [permanent fix](STAGE5_PERMANENT_FIX.md) for the exact future policy-install
 failed-stack removal, frozen CREATE review, one execution and recovery commands.
 No AWS mutation occurred during permanent-fix preparation; the deployment remains
 unproven, disabled, and subject to separate approvals.
+
+
+## Current checkpoint: async qualified ARN and CREATE rollback failure
+
+The permanent logs fix created IngestLogs and IngestFunction. IngestAsync failed
+on PutFunctionEventInvokeConfig for the exact $LATEST ARN; rollback failed on
+missing DeleteFunctionEventInvokeConfig. The stack is ROLLBACK_FAILED and v2
+is restored as default. See [STAGE5_ASYNC_FIX.md](STAGE5_ASYNC_FIX.md) for the
+size-constrained supplemental policy, read-only evidence and administrator cleanup
+plan. Earlier ROLLBACK_COMPLETE retry instructions are historical and must not
+be executed for this state. No AWS mutations or runtime/SQL changes in this review.

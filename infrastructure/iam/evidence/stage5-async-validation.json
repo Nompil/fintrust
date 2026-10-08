@@ -1,0 +1,1839 @@
+{
+  "collected_at_utc": "2026-10-08T20:01:15.084359+00:00",
+  "candidate_sha256": "0e6f44364b9403ef19cae6d1fd8c683356c5dd6d6be4b92b5b6898b583479c63",
+  "base_sha256": "48d07003f3b69fb780e7edc220dfe438cc7a23a6dc5d10fd80f85817a06c8f9d",
+  "candidate_hash_normalization": "LF line endings",
+  "inventory_identity": {
+    "UserId": "AIDA6CBPZPYDK2OOJRFBA",
+    "Account": "966467878406",
+    "Arn": "arn:aws:iam::966467878406:user/fintrust-inventory"
+  },
+  "aws_mutations": 0,
+  "simulations": [
+    {
+      "name": "Put-latest",
+      "action": "lambda:PutFunctionEventInvokeConfig",
+      "resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:CalledVia",
+          "ContextKeyValues": [
+            "cloudformation.amazonaws.com"
+          ],
+          "ContextKeyType": "stringList"
+        }
+      ],
+      "expected": "allowed",
+      "before_fix": false,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:PutFunctionEventInvokeConfig",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+            "EvalDecision": "allowed",
+            "MatchedStatements": [
+              {
+                "SourcePolicyId": "PolicyInputList.2",
+                "SourcePolicyType": "IAM Policy",
+                "StartPosition": {
+                  "Line": 1,
+                  "Column": 38
+                },
+                "EndPosition": {
+                  "Line": 1,
+                  "Column": 408
+                }
+              }
+            ],
+            "MissingContextValues": [],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+                "EvalResourceDecision": "allowed",
+                "MatchedStatements": [
+                  {
+                    "SourcePolicyId": "PolicyInputList.2",
+                    "SourcePolicyType": "IAM Policy",
+                    "StartPosition": {
+                      "Line": 1,
+                      "Column": 38
+                    },
+                    "EndPosition": {
+                      "Line": 1,
+                      "Column": 408
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "before-Put-latest",
+      "action": "lambda:PutFunctionEventInvokeConfig",
+      "resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:CalledVia",
+          "ContextKeyValues": [
+            "cloudformation.amazonaws.com"
+          ],
+          "ContextKeyType": "stringList"
+        }
+      ],
+      "expected": "implicitDeny",
+      "before_fix": true,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:PutFunctionEventInvokeConfig",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Put-other-function",
+      "action": "lambda:PutFunctionEventInvokeConfig",
+      "resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-report-dev:$LATEST",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:CalledVia",
+          "ContextKeyValues": [
+            "cloudformation.amazonaws.com"
+          ],
+          "ContextKeyType": "stringList"
+        }
+      ],
+      "expected": "implicitDeny",
+      "before_fix": false,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:PutFunctionEventInvokeConfig",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-report-dev:$LATEST",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-report-dev:$LATEST",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Put-other-version",
+      "action": "lambda:PutFunctionEventInvokeConfig",
+      "resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:1",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:CalledVia",
+          "ContextKeyValues": [
+            "cloudformation.amazonaws.com"
+          ],
+          "ContextKeyType": "stringList"
+        }
+      ],
+      "expected": "implicitDeny",
+      "before_fix": false,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:PutFunctionEventInvokeConfig",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:1",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:1",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Put-other-alias",
+      "action": "lambda:PutFunctionEventInvokeConfig",
+      "resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:demo",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:CalledVia",
+          "ContextKeyValues": [
+            "cloudformation.amazonaws.com"
+          ],
+          "ContextKeyType": "stringList"
+        }
+      ],
+      "expected": "implicitDeny",
+      "before_fix": false,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:PutFunctionEventInvokeConfig",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:demo",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:demo",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Put-other-account",
+      "action": "lambda:PutFunctionEventInvokeConfig",
+      "resource": "arn:aws:lambda:af-south-1:111122223333:function:fintrust-ingest-dev:$LATEST",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:CalledVia",
+          "ContextKeyValues": [
+            "cloudformation.amazonaws.com"
+          ],
+          "ContextKeyType": "stringList"
+        }
+      ],
+      "expected": "implicitDeny",
+      "before_fix": false,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:PutFunctionEventInvokeConfig",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:111122223333:function:fintrust-ingest-dev:$LATEST",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:111122223333:function:fintrust-ingest-dev:$LATEST",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Put-other-region-arn",
+      "action": "lambda:PutFunctionEventInvokeConfig",
+      "resource": "arn:aws:lambda:us-east-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:CalledVia",
+          "ContextKeyValues": [
+            "cloudformation.amazonaws.com"
+          ],
+          "ContextKeyType": "stringList"
+        }
+      ],
+      "expected": "implicitDeny",
+      "before_fix": false,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:PutFunctionEventInvokeConfig",
+            "EvalResourceName": "arn:aws:lambda:us-east-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:us-east-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Put-wrong-region-context",
+      "action": "lambda:PutFunctionEventInvokeConfig",
+      "resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "us-east-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:CalledVia",
+          "ContextKeyValues": [
+            "cloudformation.amazonaws.com"
+          ],
+          "ContextKeyType": "stringList"
+        }
+      ],
+      "expected": "implicitDeny",
+      "before_fix": false,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:PutFunctionEventInvokeConfig",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Put-missing-calledvia",
+      "action": "lambda:PutFunctionEventInvokeConfig",
+      "resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        }
+      ],
+      "expected": "implicitDeny",
+      "before_fix": false,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:PutFunctionEventInvokeConfig",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "aws:CalledVia",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "aws:CalledVia",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Delete-latest",
+      "action": "lambda:DeleteFunctionEventInvokeConfig",
+      "resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:CalledVia",
+          "ContextKeyValues": [
+            "cloudformation.amazonaws.com"
+          ],
+          "ContextKeyType": "stringList"
+        }
+      ],
+      "expected": "allowed",
+      "before_fix": false,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:DeleteFunctionEventInvokeConfig",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+            "EvalDecision": "allowed",
+            "MatchedStatements": [
+              {
+                "SourcePolicyId": "PolicyInputList.2",
+                "SourcePolicyType": "IAM Policy",
+                "StartPosition": {
+                  "Line": 1,
+                  "Column": 38
+                },
+                "EndPosition": {
+                  "Line": 1,
+                  "Column": 408
+                }
+              }
+            ],
+            "MissingContextValues": [],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+                "EvalResourceDecision": "allowed",
+                "MatchedStatements": [
+                  {
+                    "SourcePolicyId": "PolicyInputList.2",
+                    "SourcePolicyType": "IAM Policy",
+                    "StartPosition": {
+                      "Line": 1,
+                      "Column": 38
+                    },
+                    "EndPosition": {
+                      "Line": 1,
+                      "Column": 408
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "before-Delete-latest",
+      "action": "lambda:DeleteFunctionEventInvokeConfig",
+      "resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:CalledVia",
+          "ContextKeyValues": [
+            "cloudformation.amazonaws.com"
+          ],
+          "ContextKeyType": "stringList"
+        }
+      ],
+      "expected": "implicitDeny",
+      "before_fix": true,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:DeleteFunctionEventInvokeConfig",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Delete-other-function",
+      "action": "lambda:DeleteFunctionEventInvokeConfig",
+      "resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-report-dev:$LATEST",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:CalledVia",
+          "ContextKeyValues": [
+            "cloudformation.amazonaws.com"
+          ],
+          "ContextKeyType": "stringList"
+        }
+      ],
+      "expected": "implicitDeny",
+      "before_fix": false,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:DeleteFunctionEventInvokeConfig",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-report-dev:$LATEST",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-report-dev:$LATEST",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Delete-other-version",
+      "action": "lambda:DeleteFunctionEventInvokeConfig",
+      "resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:1",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:CalledVia",
+          "ContextKeyValues": [
+            "cloudformation.amazonaws.com"
+          ],
+          "ContextKeyType": "stringList"
+        }
+      ],
+      "expected": "implicitDeny",
+      "before_fix": false,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:DeleteFunctionEventInvokeConfig",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:1",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:1",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Delete-other-alias",
+      "action": "lambda:DeleteFunctionEventInvokeConfig",
+      "resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:demo",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:CalledVia",
+          "ContextKeyValues": [
+            "cloudformation.amazonaws.com"
+          ],
+          "ContextKeyType": "stringList"
+        }
+      ],
+      "expected": "implicitDeny",
+      "before_fix": false,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:DeleteFunctionEventInvokeConfig",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:demo",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:demo",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Delete-other-account",
+      "action": "lambda:DeleteFunctionEventInvokeConfig",
+      "resource": "arn:aws:lambda:af-south-1:111122223333:function:fintrust-ingest-dev:$LATEST",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:CalledVia",
+          "ContextKeyValues": [
+            "cloudformation.amazonaws.com"
+          ],
+          "ContextKeyType": "stringList"
+        }
+      ],
+      "expected": "implicitDeny",
+      "before_fix": false,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:DeleteFunctionEventInvokeConfig",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:111122223333:function:fintrust-ingest-dev:$LATEST",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:111122223333:function:fintrust-ingest-dev:$LATEST",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Delete-other-region-arn",
+      "action": "lambda:DeleteFunctionEventInvokeConfig",
+      "resource": "arn:aws:lambda:us-east-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:CalledVia",
+          "ContextKeyValues": [
+            "cloudformation.amazonaws.com"
+          ],
+          "ContextKeyType": "stringList"
+        }
+      ],
+      "expected": "implicitDeny",
+      "before_fix": false,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:DeleteFunctionEventInvokeConfig",
+            "EvalResourceName": "arn:aws:lambda:us-east-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:us-east-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Delete-wrong-region-context",
+      "action": "lambda:DeleteFunctionEventInvokeConfig",
+      "resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "us-east-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:CalledVia",
+          "ContextKeyValues": [
+            "cloudformation.amazonaws.com"
+          ],
+          "ContextKeyType": "stringList"
+        }
+      ],
+      "expected": "implicitDeny",
+      "before_fix": false,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:DeleteFunctionEventInvokeConfig",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Delete-missing-calledvia",
+      "action": "lambda:DeleteFunctionEventInvokeConfig",
+      "resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        }
+      ],
+      "expected": "implicitDeny",
+      "before_fix": false,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:DeleteFunctionEventInvokeConfig",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "aws:CalledVia",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "aws:CalledVia",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Get-latest",
+      "action": "lambda:GetFunctionEventInvokeConfig",
+      "resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        }
+      ],
+      "expected": "allowed",
+      "before_fix": false,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:GetFunctionEventInvokeConfig",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+            "EvalDecision": "allowed",
+            "MatchedStatements": [
+              {
+                "SourcePolicyId": "PolicyInputList.2",
+                "SourcePolicyType": "IAM Policy",
+                "StartPosition": {
+                  "Line": 1,
+                  "Column": 408
+                },
+                "EndPosition": {
+                  "Line": 1,
+                  "Column": 658
+                }
+              }
+            ],
+            "MissingContextValues": [],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+                "EvalResourceDecision": "allowed",
+                "MatchedStatements": [
+                  {
+                    "SourcePolicyId": "PolicyInputList.2",
+                    "SourcePolicyType": "IAM Policy",
+                    "StartPosition": {
+                      "Line": 1,
+                      "Column": 408
+                    },
+                    "EndPosition": {
+                      "Line": 1,
+                      "Column": 658
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "before-Get-latest",
+      "action": "lambda:GetFunctionEventInvokeConfig",
+      "resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        }
+      ],
+      "expected": "implicitDeny",
+      "before_fix": true,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:GetFunctionEventInvokeConfig",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "aws:CalledVia",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "aws:CalledVia",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Get-other-function",
+      "action": "lambda:GetFunctionEventInvokeConfig",
+      "resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-report-dev:$LATEST",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        }
+      ],
+      "expected": "implicitDeny",
+      "before_fix": false,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:GetFunctionEventInvokeConfig",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-report-dev:$LATEST",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "aws:CalledVia",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-report-dev:$LATEST",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "aws:CalledVia",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Get-other-version",
+      "action": "lambda:GetFunctionEventInvokeConfig",
+      "resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:1",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        }
+      ],
+      "expected": "implicitDeny",
+      "before_fix": false,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:GetFunctionEventInvokeConfig",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:1",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "aws:CalledVia",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:1",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "aws:CalledVia",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Get-other-alias",
+      "action": "lambda:GetFunctionEventInvokeConfig",
+      "resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:demo",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        }
+      ],
+      "expected": "implicitDeny",
+      "before_fix": false,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:GetFunctionEventInvokeConfig",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:demo",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "aws:CalledVia",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:demo",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "aws:CalledVia",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Get-other-account",
+      "action": "lambda:GetFunctionEventInvokeConfig",
+      "resource": "arn:aws:lambda:af-south-1:111122223333:function:fintrust-ingest-dev:$LATEST",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        }
+      ],
+      "expected": "implicitDeny",
+      "before_fix": false,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:GetFunctionEventInvokeConfig",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:111122223333:function:fintrust-ingest-dev:$LATEST",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "aws:CalledVia",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:111122223333:function:fintrust-ingest-dev:$LATEST",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "aws:CalledVia",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Get-other-region-arn",
+      "action": "lambda:GetFunctionEventInvokeConfig",
+      "resource": "arn:aws:lambda:us-east-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        }
+      ],
+      "expected": "implicitDeny",
+      "before_fix": false,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:GetFunctionEventInvokeConfig",
+            "EvalResourceName": "arn:aws:lambda:us-east-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "aws:CalledVia",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:us-east-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "aws:CalledVia",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Get-wrong-region-context",
+      "action": "lambda:GetFunctionEventInvokeConfig",
+      "resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "us-east-1"
+          ],
+          "ContextKeyType": "string"
+        }
+      ],
+      "expected": "implicitDeny",
+      "before_fix": false,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:GetFunctionEventInvokeConfig",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "aws:CalledVia",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "aws:CalledVia",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "concurrency-unqualified",
+      "action": "lambda:PutFunctionConcurrency",
+      "resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:CalledVia",
+          "ContextKeyValues": [
+            "cloudformation.amazonaws.com"
+          ],
+          "ContextKeyType": "stringList"
+        }
+      ],
+      "expected": "allowed",
+      "before_fix": false,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:PutFunctionConcurrency",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev",
+            "EvalDecision": "allowed",
+            "MatchedStatements": [
+              {
+                "SourcePolicyId": "PolicyInputList.1",
+                "SourcePolicyType": "IAM Policy",
+                "StartPosition": {
+                  "Line": 1,
+                  "Column": 2393
+                },
+                "EndPosition": {
+                  "Line": 1,
+                  "Column": 2747
+                }
+              }
+            ],
+            "MissingContextValues": [],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev",
+                "EvalResourceDecision": "allowed",
+                "MatchedStatements": [
+                  {
+                    "SourcePolicyId": "PolicyInputList.1",
+                    "SourcePolicyType": "IAM Policy",
+                    "StartPosition": {
+                      "Line": 1,
+                      "Column": 2393
+                    },
+                    "EndPosition": {
+                      "Line": 1,
+                      "Column": 2747
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "concurrency-qualified-denied",
+      "action": "lambda:PutFunctionConcurrency",
+      "resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:CalledVia",
+          "ContextKeyValues": [
+            "cloudformation.amazonaws.com"
+          ],
+          "ContextKeyType": "stringList"
+        }
+      ],
+      "expected": "implicitDeny",
+      "before_fix": false,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:PutFunctionConcurrency",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "no-invoke",
+      "action": "lambda:InvokeFunction",
+      "resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+      "context": [
+        {
+          "ContextKeyName": "aws:RequestedRegion",
+          "ContextKeyValues": [
+            "af-south-1"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "aws:CalledVia",
+          "ContextKeyValues": [
+            "cloudformation.amazonaws.com"
+          ],
+          "ContextKeyType": "stringList"
+        }
+      ],
+      "expected": "implicitDeny",
+      "before_fix": false,
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:InvokeFunction",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:RoleArn"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:RoleArn"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "cloudformation_retry_verified": false,
+  "limitations": "Custom-policy simulation proves policy matching for supplied context only, not backend behavior, CalledVia propagation, other attached policies, SCPs, boundaries or live execution.",
+  "access_analyzer": {
+    "findings": []
+  }
+}

@@ -1628,3 +1628,14 @@ review exactly three Adds; stop before the one execution. Reserved concurrency
 remains 0, no triggers, no historical package rebuild/upload or SQL changes.
 The newer duplicate/idempotency release remains a separate later build/migration
 and deployment. Do not rerender the frozen template or mix the two releases.
+
+
+## Current checkpoint: async qualified ARN and CREATE rollback failure
+
+The permanent logs fix created IngestLogs and IngestFunction. IngestAsync failed
+on PutFunctionEventInvokeConfig for the exact $LATEST ARN; rollback failed on
+missing DeleteFunctionEventInvokeConfig. The stack is ROLLBACK_FAILED and v2
+is restored as default. See [STAGE5_ASYNC_FIX.md](STAGE5_ASYNC_FIX.md) for the
+size-constrained supplemental policy, read-only evidence and administrator cleanup
+plan. Earlier ROLLBACK_COMPLETE retry instructions are historical and must not
+be executed for this state. No AWS mutations or runtime/SQL changes in this review.

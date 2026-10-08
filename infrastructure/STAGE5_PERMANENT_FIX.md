@@ -1,5 +1,9 @@
 # Stage 5 permanent Logs authorization correction and recovery
 
+> Current state: the v7 attempt fixed logs, then failed async creation and rollback.
+> Stack is ROLLBACK_FAILED, v2 default restored. Use [STAGE5_ASYNC_FIX.md](STAGE5_ASYNC_FIX.md)
+> for the current recovery plan; the original execution sequence below is historical.
+
 Status: **PERMANENT STAGE5 IAM FIX READY FOR DEPLOYMENT** means locally prepared,
 regression tested and read-only validated. Installation, failed-stack deletion,
 change-set preparation and execution each remain approval checkpoints. This
@@ -104,7 +108,7 @@ stage5-deployment-diagnostic2-policy.json. Preserve v2 as rollback, v5 as failin
 direct control, v6 as successful direct evidence, and v1 unchanged. The archive
 must be committed before deletion. No deletion occurred in this preparation.
 
-## Exact future manual recovery commands — NOT executed here
+## Exact future manual recovery commands â€” NOT executed here
 
 Use PowerShell in C:\Users\Nompilo\Desktop\fintrust. These are a staged plan;
 do not paste/run the whole document without the approvals indicated. No more
