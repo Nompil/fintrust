@@ -132,3 +132,25 @@ def test_tagged_log_group_creation_has_separately_scoped_tagresource_grant():
     logs_actions = {a for s in statements.values() for a in s["Action"] if a.startswith("logs:")}
     assert logs_actions == {"logs:CreateLogGroup", "logs:TagResource", "logs:PutRetentionPolicy",
                             "logs:DescribeLogGroups", "logs:ListTagsForResource"}
+
+def test_temporary_diagnostic_changes_only_tagging_calledvia_condition():
+    from copy import deepcopy
+    original = policy("deployment-policy")
+    expected = deepcopy(original)
+    tagging = next(s for s in expected["Statement"] if s["Sid"] == "TagIngestLogGroup")
+    del tagging["Condition"]["ForAnyValue:StringEquals"]
+    candidate = policy("deployment-diagnostic-policy")
+    assert candidate == expected
+    assert len(json.dumps(candidate, separators=(",", ":"))) <= 6144
+    # The canonical policy remains the control/restoration version.
+    control = next(s for s in original["Statement"] if s["Sid"] == "TagIngestLogGroup")
+    assert control["Condition"]["ForAnyValue:StringEquals"]["aws:CalledVia"] == ["cloudformation.amazonaws.com"]
+
+
+def test_temporary_diagnostic_retains_exact_resource_and_request_tags():
+    tagging = next(s for s in policy("deployment-diagnostic-policy")["Statement"] if s["Sid"] == "TagIngestLogGroup")
+    assert tagging["Action"] == ["logs:TagResource"] and tagging["Effect"] == "Allow"
+    assert tagging["Resource"] == "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev"
+    assert tagging["Condition"] == {"StringEquals": {
+        "aws:RequestedRegion": "af-south-1", "aws:RequestTag/Project": "FinTrust",
+        "aws:RequestTag/Environment": "dev"}}
