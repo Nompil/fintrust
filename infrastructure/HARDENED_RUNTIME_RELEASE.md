@@ -279,3 +279,29 @@ a zero-skip PostgreSQL 16 suite are missing; the private-RDS runner/credential p
 is not implemented and live schema/grants are unverified. Local tests/build and
 IAM proposals are prepared. Historical disabled Stage 5 infrastructure remains
 verified; no hardened AWS release has occurred.
+
+## Isolated Linux verification environment checkpoint
+
+Checked the exact candidate ZIP without rebuilding or uploading it. Its SHA256
+remains `3b95884caa30bb678d47dbf6fe4993784fae8b958b48a4630b5bd35cec7de29e`
+and base64 remains `O5WITKowu2eNR9v2/kmTeE+ui5WLSKRjC1vTXOx94p4=`.
+
+No Docker, Podman or QEMU executable was found on PATH or the checked standard
+installation paths. No Docker, Linux distribution or VM runtime appeared in the
+checked installed-program records. WSL explicitly reports it is not installed.
+The available host is Windows AMD64, CPython 3.14.7. The existing verifier exits
+1 at its host prerequisite: `This verification requires Linux x86_64 and CPython
+3.12`. Handler/module/native imports therefore did not run; this is not evidence
+of an artifact incompatibility. `linux_execution_verified` remains false.
+
+Exact host-check evidence and verifier stdout/stderr are recorded in
+`docs/EVIDENCE/11-ci/hardened-release-linux-environment-check.json`. No application,
+dependency, ZIP, manifest, AWS resource or private-database migration was changed.
+No tests were rerun because only evidence/documentation changed. No tooling was
+installed: installing a Linux environment requires a separate user decision,
+as requested. After an approved Linux CPython 3.12 x86_64 environment is available,
+run the existing verifier against this exact ZIP and additionally check every
+packaged production module before declaring this release verified.
+
+**LINUX VERIFICATION BLOCKED — no installed Linux CPython 3.12 x86_64 execution
+path is available on this host.**

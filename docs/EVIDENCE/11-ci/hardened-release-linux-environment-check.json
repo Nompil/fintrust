@@ -1,0 +1,35 @@
+{
+  "checked_at_utc": "2026-10-08T20:57:28.853180+00:00",
+  "release_commit": "0324d65411a0243592785336f19745bdb36cef61",
+  "status": "LINUX VERIFICATION BLOCKED",
+  "reason": "No installed Linux execution environment found: Docker/Podman/QEMU absent from PATH and standard installation paths; WSL reports not installed; no installed Linux CPython 3.12 runtime identified.",
+  "host": {
+    "python": "3.14.7",
+    "implementation": "CPython",
+    "os": "Windows",
+    "architecture": "AMD64"
+  },
+  "wsl_check": {
+    "returncode": 1,
+    "output": "The Windows Subsystem for Linux is not installed. You can install by running 'wsl.exe --install'.\r\r\nFor more information please visit https://aka.ms/wslinstall"
+  },
+  "artifact": {
+    "path": "C:\\Users\\Nompilo\\Desktop\\fintrust\\build\\hardened-release\\fintrust-hardened.zip",
+    "sha256": "3b95884caa30bb678d47dbf6fe4993784fae8b958b48a4630b5bd35cec7de29e",
+    "base64": "O5WITKowu2eNR9v2/kmTeE+ui5WLSKRjC1vTXOx94p4=",
+    "unchanged": true,
+    "rebuilt": false
+  },
+  "verifier": {
+    "returncode": 1,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"C:\\Users\\Nompilo\\Desktop\\fintrust\\tools\\verify_lambda_linux.py\", line 82, in <module>\n    verify(sys.argv[1])\n    ~~~~~~^^^^^^^^^^^^^\n  File \"C:\\Users\\Nompilo\\Desktop\\fintrust\\tools\\verify_lambda_linux.py\", line 39, in verify\n    raise RuntimeError(\"This verification requires Linux x86_64 and CPython 3.12\")\nRuntimeError: This verification requires Linux x86_64 and CPython 3.12\n",
+    "handler_imports": "NOT RUN: host prerequisite rejected",
+    "production_module_imports": "NOT RUN",
+    "native_dependency_load": "NOT RUN"
+  },
+  "linux_execution_verified": false,
+  "aws_access": false,
+  "uploaded": false,
+  "tooling_installed": false
+}
