@@ -1,0 +1,55 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "UpdateOnlyIngestCode",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:UpdateFunctionCode"
+      ],
+      "Resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "ReadOnlyHardenedCodeVersion",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObjectVersion"
+      ],
+      "Resource": "arn:aws:s3:::fintrust-reports-966467878406-af-south-1-dev/deployment/lambda/3b95884caa30bb678d47dbf6fe4993784fae8b958b48a4630b5bd35cec7de29e/fintrust.zip",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    },
+    {
+      "Sid": "DecryptOnlyHardenedCode",
+      "Effect": "Allow",
+      "Action": [
+        "kms:Decrypt"
+      ],
+      "Resource": "arn:aws:kms:af-south-1:966467878406:key/598a4158-2cc6-4946-af24-512784a276c8",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "kms:ViaService": "s3.af-south-1.amazonaws.com",
+          "kms:CallerAccount": "966467878406",
+          "kms:EncryptionContext:aws:s3:arn": [
+            "arn:aws:s3:::fintrust-reports-966467878406-af-south-1-dev",
+            "arn:aws:s3:::fintrust-reports-966467878406-af-south-1-dev/deployment/lambda/3b95884caa30bb678d47dbf6fe4993784fae8b958b48a4630b5bd35cec7de29e/fintrust.zip"
+          ]
+        }
+      }
+    }
+  ]
+}

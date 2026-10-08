@@ -1,0 +1,35 @@
+{
+  "aws_mutations": 0,
+  "host": "Windows / CPython 3.14 / local PostgreSQL 18",
+  "source_commit": "e52ca2d9db1e219184b0892126222ec0ab2f0bda",
+  "full": {
+    "passed": 342,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 1,
+    "duration_seconds": "90.605",
+    "skip_reasons": [
+      "Service-role execution check requires a disposable test database administrator"
+    ]
+  },
+  "focused": {
+    "passed": 114,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 1,
+    "duration_seconds": "76.013",
+    "skip_reasons": [
+      "Service-role execution check requires a disposable test database administrator"
+    ]
+  },
+  "initial_full_before_packaging_test": {
+    "passed": 341,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 1,
+    "duration_seconds": "99.827",
+    "skip_reasons": [
+      "Service-role execution check requires a disposable test database administrator"
+    ]
+  }
+}

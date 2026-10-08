@@ -85,3 +85,14 @@ requires a new Linux-verified artifact; the earlier uploaded ZIP remains evidenc
 for its previous source only. Stage 5 tagging recovery and deployment remain
 separate, unexecuted approval checkpoints. Do not run older Stage 5 commands as a
 release procedure for the new source.
+
+
+## Hardened runtime preparation checkpoint
+
+Stage 5 historical ingest infrastructure is Verified, disabled at concurrency 0.
+The newer runtime is built and tested locally, but is NOT live and NOT release-ready.
+See [hardened release review](../infrastructure/HARDENED_RUNTIME_RELEASE.md) for
+342 passed/1 skipped, isolated rerunnable migration validation, new artifact,
+exact IAM delta and future commands. Linux CPython 3.12 verification and the
+private RDS migration path/schema/grants remain blockers. No AWS mutation,
+upload, migration, invocation, trigger or concurrency change occurred.

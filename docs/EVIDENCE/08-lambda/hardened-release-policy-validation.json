@@ -1,0 +1,24 @@
+{
+  "aws_mutations": 0,
+  "policies": {
+    "stage5-hardened-release-policy.json": {
+      "sha256_lf": "d177bc0c7616697cf5b034053ca9432919297e787772f58725b34abab3caa099",
+      "findings": []
+    },
+    "stage5-ingest-runtime-policy.json": {
+      "sha256_lf": "d45da95f5b11578e525e6de9a634c7e10ccfb6f1f207a53759dbea1bd7327385",
+      "findings": []
+    }
+  },
+  "template_validation": {
+    "Parameters": [
+      {
+        "ParameterKey": "CodeObjectVersion",
+        "NoEcho": false,
+        "Description": "Verified version ID of the approved package object"
+      }
+    ],
+    "Description": "FinTrust Stage 5 unwired ingest Lambda; separate execution approval required"
+  },
+  "linux_execution_verified": false
+}

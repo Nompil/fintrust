@@ -1,0 +1,141 @@
+{
+  "policy": {
+    "Policy": {
+      "PolicyName": "FinTrustStage5IngestRuntime",
+      "PolicyId": "ANPA6CBPZPYDGM23HP6BW",
+      "Arn": "arn:aws:iam::966467878406:policy/FinTrustStage5IngestRuntime",
+      "Path": "/",
+      "DefaultVersionId": "v1",
+      "AttachmentCount": 1,
+      "PermissionsBoundaryUsageCount": 0,
+      "IsAttachable": true,
+      "CreateDate": "2026-10-08T11:40:57+00:00",
+      "UpdateDate": "2026-10-08T11:40:57+00:00",
+      "Tags": []
+    }
+  },
+  "version": {
+    "PolicyVersion": {
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "logs:CreateLogStream",
+              "logs:PutLogEvents"
+            ],
+            "Resource": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:log-stream:*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "s3:GetObject",
+              "s3:GetObjectVersion"
+            ],
+            "Resource": "arn:aws:s3:::fintrust-raw-966467878406-af-south-1-dev/raw/*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "s3:PutObject"
+            ],
+            "Resource": "arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev/quarantine/*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "sqs:SendMessage"
+            ],
+            "Resource": [
+              "arn:aws:sqs:af-south-1:966467878406:fintrust-transactions-dev.fifo",
+              "arn:aws:sqs:af-south-1:966467878406:fintrust-ingest-failures-dev"
+            ]
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "kms:Decrypt"
+            ],
+            "Resource": "arn:aws:kms:af-south-1:966467878406:key/598a4158-2cc6-4946-af24-512784a276c8",
+            "Sid": "ReadRaw",
+            "Condition": {
+              "StringEquals": {
+                "kms:ViaService": "s3.af-south-1.amazonaws.com",
+                "kms:CallerAccount": "966467878406"
+              },
+              "StringLike": {
+                "kms:EncryptionContext:aws:s3:arn": [
+                  "arn:aws:s3:::fintrust-raw-966467878406-af-south-1-dev",
+                  "arn:aws:s3:::fintrust-raw-966467878406-af-south-1-dev/raw/*"
+                ]
+              }
+            }
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "kms:GenerateDataKey"
+            ],
+            "Resource": "arn:aws:kms:af-south-1:966467878406:key/598a4158-2cc6-4946-af24-512784a276c8",
+            "Sid": "WriteQuarantine",
+            "Condition": {
+              "StringEquals": {
+                "kms:ViaService": "s3.af-south-1.amazonaws.com",
+                "kms:CallerAccount": "966467878406"
+              },
+              "StringLike": {
+                "kms:EncryptionContext:aws:s3:arn": [
+                  "arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev",
+                  "arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev/quarantine/*"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "VersionId": "v1",
+      "IsDefaultVersion": true,
+      "CreateDate": "2026-10-08T11:40:57+00:00"
+    }
+  },
+  "role": {
+    "Role": {
+      "Path": "/",
+      "RoleName": "fintrust-ingest-dev",
+      "RoleId": "AROA6CBPZPYDKVZ3CWL7A",
+      "Arn": "arn:aws:iam::966467878406:role/fintrust-ingest-dev",
+      "CreateDate": "2026-10-08T11:47:39+00:00",
+      "AssumeRolePolicyDocument": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {
+              "Service": "lambda.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
+          }
+        ]
+      },
+      "Description": "",
+      "MaxSessionDuration": 3600,
+      "Tags": [
+        {
+          "Key": "Project",
+          "Value": "FinTrust"
+        },
+        {
+          "Key": "Environment",
+          "Value": "dev"
+        }
+      ],
+      "RoleLastUsed": {
+        "LastUsedDate": "2026-10-08T20:15:05+00:00",
+        "Region": "af-south-1"
+      }
+    }
+  },
+  "matches_local_policy": false,
+  "aws_mutations": 0
+}
