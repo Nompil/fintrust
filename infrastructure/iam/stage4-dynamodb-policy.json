@@ -1,0 +1,61 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "CreateNamedRiskTable",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:CreateTable"
+      ],
+      "Resource": "arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:RequestTag/Project": "FinTrust",
+          "aws:RequestTag/Environment": "dev"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "TagNamedRiskTable",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:TagResource"
+      ],
+      "Resource": "arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:RequestTag/Project": "FinTrust",
+          "aws:RequestTag/Environment": "dev"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "InspectNamedRiskTable",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:DescribeTable",
+        "dynamodb:DescribeContinuousBackups",
+        "dynamodb:DescribeTimeToLive",
+        "dynamodb:ListTagsOfResource"
+      ],
+      "Resource": "arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    }
+  ]
+}

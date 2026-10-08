@@ -1,0 +1,101 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ValidateMessaging",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:ValidateTemplate",
+        "cloudformation:GetTemplateSummary"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    },
+    {
+      "Sid": "PrepareMessaging",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:CreateChangeSet"
+      ],
+      "Resource": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-messaging-dev/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:RequestTag/Project": "FinTrust",
+          "aws:RequestTag/Environment": "dev"
+        },
+        "ForAllValues:StringEquals": {
+          "cloudformation:ResourceTypes": [
+            "AWS::DynamoDB::Table",
+            "AWS::SQS::Queue"
+          ]
+        },
+        "Null": {
+          "cloudformation:ResourceTypes": "false",
+          "cloudformation:RoleArn": "true",
+          "cloudformation:ImportResourceTypes": "true"
+        },
+        "StringLike": {
+          "cloudformation:ChangeSetName": "fintrust-messaging-*"
+        }
+      }
+    },
+    {
+      "Sid": "ReadMessaging",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:DescribeChangeSet",
+        "cloudformation:DescribeStacks",
+        "cloudformation:DescribeStackEvents",
+        "cloudformation:DescribeStackResource",
+        "cloudformation:DescribeStackResources",
+        "cloudformation:ListStackResources",
+        "cloudformation:GetTemplate"
+      ],
+      "Resource": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-messaging-dev/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    },
+    {
+      "Sid": "ManageMessagingSet",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:ExecuteChangeSet",
+        "cloudformation:DeleteChangeSet"
+      ],
+      "Resource": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-messaging-dev/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "StringLike": {
+          "cloudformation:ChangeSetName": "fintrust-messaging-*"
+        }
+      }
+    },
+    {
+      "Sid": "RecoverMessagingStack",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:DeleteStack",
+        "cloudformation:ContinueUpdateRollback"
+      ],
+      "Resource": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-messaging-dev/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "Null": {
+          "cloudformation:RoleArn": "true"
+        }
+      }
+    }
+  ]
+}

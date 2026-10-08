@@ -1,0 +1,104 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "CreateNamedQueues",
+      "Effect": "Allow",
+      "Action": [
+        "sqs:CreateQueue"
+      ],
+      "Resource": [
+        "arn:aws:sqs:af-south-1:966467878406:fintrust-transactions-dev.fifo",
+        "arn:aws:sqs:af-south-1:966467878406:fintrust-transactions-dlq-dev.fifo",
+        "arn:aws:sqs:af-south-1:966467878406:fintrust-ingest-failures-dev",
+        "arn:aws:sqs:af-south-1:966467878406:fintrust-report-failures-dev",
+        "arn:aws:sqs:af-south-1:966467878406:fintrust-alert-failures-dev"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:RequestTag/Project": "FinTrust",
+          "aws:RequestTag/Environment": "dev"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "TagNamedQueues",
+      "Effect": "Allow",
+      "Action": [
+        "sqs:TagQueue"
+      ],
+      "Resource": [
+        "arn:aws:sqs:af-south-1:966467878406:fintrust-transactions-dev.fifo",
+        "arn:aws:sqs:af-south-1:966467878406:fintrust-transactions-dlq-dev.fifo",
+        "arn:aws:sqs:af-south-1:966467878406:fintrust-ingest-failures-dev",
+        "arn:aws:sqs:af-south-1:966467878406:fintrust-report-failures-dev",
+        "arn:aws:sqs:af-south-1:966467878406:fintrust-alert-failures-dev"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:RequestTag/Project": "FinTrust",
+          "aws:RequestTag/Environment": "dev"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "ConfigureOwnedQueues",
+      "Effect": "Allow",
+      "Action": [
+        "sqs:SetQueueAttributes"
+      ],
+      "Resource": [
+        "arn:aws:sqs:af-south-1:966467878406:fintrust-transactions-dev.fifo",
+        "arn:aws:sqs:af-south-1:966467878406:fintrust-transactions-dlq-dev.fifo",
+        "arn:aws:sqs:af-south-1:966467878406:fintrust-ingest-failures-dev",
+        "arn:aws:sqs:af-south-1:966467878406:fintrust-report-failures-dev",
+        "arn:aws:sqs:af-south-1:966467878406:fintrust-alert-failures-dev"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:ResourceTag/Project": "FinTrust",
+          "aws:ResourceTag/Environment": "dev"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "InspectNamedQueues",
+      "Effect": "Allow",
+      "Action": [
+        "sqs:GetQueueAttributes",
+        "sqs:GetQueueUrl",
+        "sqs:ListQueueTags"
+      ],
+      "Resource": [
+        "arn:aws:sqs:af-south-1:966467878406:fintrust-transactions-dev.fifo",
+        "arn:aws:sqs:af-south-1:966467878406:fintrust-transactions-dlq-dev.fifo",
+        "arn:aws:sqs:af-south-1:966467878406:fintrust-ingest-failures-dev",
+        "arn:aws:sqs:af-south-1:966467878406:fintrust-report-failures-dev",
+        "arn:aws:sqs:af-south-1:966467878406:fintrust-alert-failures-dev"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    }
+  ]
+}
