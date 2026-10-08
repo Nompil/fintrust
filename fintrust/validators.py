@@ -2,6 +2,7 @@
 from datetime import datetime, timezone
 from decimal import Decimal, InvalidOperation
 import uuid
+import re
 
 REQUIRED_COLUMNS = {"account_id", "amount", "tx_date", "tx_type"}
 ALLOWED_CURRENCIES = {"ZAR", "USD", "EUR", "GBP", "KES"}
@@ -51,6 +52,13 @@ def validate_row(row: dict[str, str]) -> str | None:
     if row.get("transaction_id") and row.get("tx_id"):
         if uuid.UUID(row["transaction_id"].strip()) != uuid.UUID(row["tx_id"].strip()):
             return "transaction_id and tx_id disagree"
+    for field, limit in (("source_system", 100), ("source_transaction_id", 200), ("source_reference", 200)):
+        value = row.get(field)
+        if value is not None and (not isinstance(value, str) or len(value.strip()) > limit):
+            return f"{field} exceeds {limit} characters or is not text"
+    if row.get("source_transaction_id") and row.get("source_reference"):
+        if row["source_transaction_id"].strip() != row["source_reference"].strip():
+            return "source_transaction_id and source_reference disagree"
     country = (row.get("country") or "ZA").strip().upper()
     if len(country) != 2 or not country.isascii() or not country.isalpha():
         return "country must be a two-letter country code"
@@ -60,6 +68,11 @@ def validate_row(row: dict[str, str]) -> str | None:
 
 
 def parse_transaction_date(value: str) -> datetime:
+    # datetime/PostgreSQL support microseconds; reject excess precision rather
+    # than silently truncating timestamps used in identity and risk comparison.
+    fractions = re.findall(r"[.,](\d+)", value)
+    if any(len(fraction) > 6 for fraction in fractions):
+        raise ValueError("timestamp precision exceeds six fractional digits")
     parsed = datetime.fromisoformat(value.strip().replace("Z", "+00:00"))
     if parsed.tzinfo is None:
         parsed = parsed.replace(tzinfo=timezone.utc)

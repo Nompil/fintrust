@@ -56,8 +56,10 @@ def test_custom_csv_upload_quarantines_invalid_rows(monkeypatch):
     data = response.get_json()["data"]
     assert data["rows_valid"] == 1 and data["rows_quarantined"] == 1
     assert data["quarantine"][0]["source_row"] == 3
-    assert upload("renamed-export.csv").get_json()["data"]["upload_id"] == data["upload_id"]
-    assert loaded[0][0] == loaded[1][0]
+    replay = upload("renamed-export.csv").get_json()["data"]
+    assert replay["upload_id"] == data["upload_id"]
+    assert replay["reason_code"] == "DUPLICATE_FILE" and replay["rows_valid"] == 0
+    assert len(loaded) == 1
 
 
 def test_oversized_and_invalid_uploads_return_json(monkeypatch):

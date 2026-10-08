@@ -21,6 +21,8 @@ class ScoringConfig:
     velocity_count: int = 5
     velocity_seconds: int = 300
     velocity_points: int = 30
+    duplicate_charge_seconds: int = 120
+    duplicate_charge_points: int = 40
     medium: int = 40
     high: int = 70
 
@@ -28,11 +30,11 @@ class ScoringConfig:
         if (not self.high_amount.is_finite() or not self.very_high_amount.is_finite()
                 or not 0 < self.high_amount < self.very_high_amount
                 or not 0 < self.medium < self.high <= 100
-                or self.velocity_count < 1 or self.velocity_seconds < 1):
+                or self.velocity_count < 1 or self.velocity_seconds < 1 or self.duplicate_charge_seconds < 1):
             raise ValueError("Invalid scoring thresholds")
         if any(not 0 <= getattr(self, name) <= 100 for name in (
                 "amount_points", "very_high_points", "transfer_points", "cross_border_points",
-                "merchant_points", "velocity_points")):
+                "merchant_points", "velocity_points", "duplicate_charge_points")):
             raise ValueError("Rule points must be between 0 and 100")
 
     @classmethod
@@ -42,7 +44,7 @@ class ScoringConfig:
                              str(getattr(defaults, name)))) for name in cls.__dataclass_fields__})
 
 
-def evaluate(record, velocity=1, config=None):
+def evaluate(record, velocity=1, config=None, *, duplicate_matches=()):
     cfg = config or ScoringConfig.from_env()
     amount = Decimal(str(record["amount"]))
     if not amount.is_finite() or amount <= 0:
@@ -63,6 +65,11 @@ def evaluate(record, velocity=1, config=None):
     if velocity > cfg.velocity_count:
         add("HIGH_VELOCITY", cfg.velocity_points,
             f"{velocity} transactions in {cfg.velocity_seconds} seconds exceeds {cfg.velocity_count}")
+    if duplicate_matches:
+        add("POSSIBLE_DUPLICATE_CHARGE", cfg.duplicate_charge_points,
+            f"Distinct source references match merchant/amount/currency within {cfg.duplicate_charge_seconds} seconds")
+        rules[-1]["matching_transaction_ids"] = list(duplicate_matches)
+        rules[-1]["window_seconds"] = cfg.duplicate_charge_seconds
     score = min(sum(rule["points"] for rule in rules), 100)
     return {"score": score, "risk_level": classify_risk(score, cfg), "triggered_rules": rules}
 

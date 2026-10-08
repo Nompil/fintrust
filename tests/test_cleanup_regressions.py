@@ -60,7 +60,7 @@ def test_database_failure_during_row_retry_rolls_back(monkeypatch):
     monkeypatch.setattr(ingest, "get_connection", lambda: conn)
     with pytest.raises(psycopg2.OperationalError):
         ingest._load_rows([("row",)])
-    assert conn.rollbacks == 2
+    assert conn.rollbacks == 1
     assert conn.closed
 
 

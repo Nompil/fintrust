@@ -58,6 +58,9 @@ def build_policies(account, region, stage, bucket, table, db_resource_id, sender
         if service == "ingest":
             statements += [allow(["s3:GetObject", "s3:GetObjectVersion"], f"{arn}:s3:::{bucket}/raw/*"),
                            allow(["s3:PutObject"], f"{arn}:s3:::{quarantine_bucket}/quarantine/*")]
+            statements += [allow(["s3:GetObject"], f"{arn}:s3:::{quarantine_bucket}/quarantine/batches/*"),
+                           allow(["s3:ListBucket"], f"{arn}:s3:::{quarantine_bucket}",
+                                 Condition={"StringLike": {"s3:prefix": "quarantine/batches/*"}})]
             statements.append(allow(["sqs:SendMessage"], queue_arn))
             if dlq_arn:
                 statements.append(allow(["sqs:SendMessage"], dlq_arn))

@@ -23,7 +23,7 @@ def receive_upload(file):
     key = f"raw/uploads/{digest}.csv"
     bucket = "fintrust-local-practice"
     ingest.s3.put_object(Bucket=bucket, Key=key, Body=payload)
-    counts = ingest.process_csv(bucket, key, text, identity)
+    counts = ingest.process_csv(bucket, key, text, identity, track_batches=True, file_bytes=payload, source_filename=filename)
     quarantine = []
     if counts["rows_quarantined"]:
         quarantine_key = f"quarantine/{uuid.uuid5(uuid.NAMESPACE_URL, identity)}.jsonl"
@@ -32,4 +32,4 @@ def receive_upload(file):
     ingest.logger.info(json.dumps({"event": "local_upload_complete", "upload_id": digest, **counts}))
     return {"filename": filename, "upload_id": digest, **counts,
         "quarantine": quarantine[:50], "quarantine_preview_limit": 50,
-        "note": "Accepted rows include replayed rows; identical file bytes are deduplicated in this upload path."}
+        "note": "Completed identical uploads are audited as DUPLICATE_FILE. Ambiguous similar events without upstream references are retained."}

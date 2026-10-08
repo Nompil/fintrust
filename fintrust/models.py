@@ -15,6 +15,12 @@ class Transaction:
     cross_border: bool
     raw_file: str
     merchant: str | None = None
+    source_system: str | None = None
+    source_transaction_id: str | None = None
+    transaction_fingerprint: str | None = None
+    batch_id: str | None = None
+    file_sha256: str | None = None
+    source_row: int | None = None
 
     def to_dict(self) -> dict:
         data = asdict(self)

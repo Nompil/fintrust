@@ -50,10 +50,8 @@ def get_insights(account_id: str, score_date: date | None = None, *, transaction
 
 
 def parse_datetime(value: str) -> datetime:
-    parsed = datetime.fromisoformat(value.strip().replace("Z", "+00:00"))
-    if parsed.tzinfo is None:
-        parsed = parsed.replace(tzinfo=timezone.utc)
-    return parsed
+    from .validators import parse_transaction_date
+    return parse_transaction_date(value)
 
 
 def get_accounts() -> list[dict[str, Any]]:

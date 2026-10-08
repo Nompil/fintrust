@@ -49,7 +49,9 @@
         "StringLike": {
           "kms:EncryptionContext:aws:s3:arn": [
             "arn:aws:s3:::fintrust-raw-966467878406-af-south-1-dev",
-            "arn:aws:s3:::fintrust-raw-966467878406-af-south-1-dev/raw/*"
+            "arn:aws:s3:::fintrust-raw-966467878406-af-south-1-dev/raw/*",
+            "arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev",
+            "arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev/quarantine/batches/*"
           ]
         }
       }
@@ -71,6 +73,27 @@
             "arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev",
             "arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev/quarantine/*"
           ]
+        }
+      }
+    },
+    {
+      "Sid": "ReadBatchAudit",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject"
+      ],
+      "Resource": "arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev/quarantine/batches/*"
+    },
+    {
+      "Sid": "ListBatchMarkers",
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListBucket"
+      ],
+      "Resource": "arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev",
+      "Condition": {
+        "StringLike": {
+          "s3:prefix": "quarantine/batches/*"
         }
       }
     }

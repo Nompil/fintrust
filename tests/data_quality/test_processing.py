@@ -61,6 +61,7 @@ def pipeline(monkeypatch, prepared_database_url):
         monkeypatch.setattr(ingest, "s3", s3)
         monkeypatch.setattr(ingest, "sqs", sqs)
         monkeypatch.setattr(report, "s3", s3)
+        monkeypatch.setattr(score, "s3", s3)
         resource = boto3.resource("dynamodb", region_name="af-south-1")
         resource.create_table(TableName="risk_scores", BillingMode="PAY_PER_REQUEST",
             AttributeDefinitions=[{"AttributeName": n, "AttributeType": "S"} for n in ("account_id", "score_date")],
@@ -92,15 +93,17 @@ def test_full_csv_fifo_score_alert_projection_and_replay(pipeline):
     text += f"{uuid.uuid4()},{ACCOUNT},-1,2024-02-29,debit,ZA,private@example.com\n"
     s3.put_object(Bucket="fintrust-test-raw", Key="raw/input.csv", Body=text.encode())
     event = {"Records": [{"s3": {"bucket": {"name": "fintrust-test-raw"}, "object": {"key": "raw/input.csv"}}}]}
-    for _ in range(2):
-        counts = ingest.lambda_handler(event, None)
-        assert counts["rows_valid"] == 2 and counts["rows_quarantined"] == 1
+    counts = ingest.lambda_handler(event, None)
+    assert counts["rows_valid"] == 2 and counts["rows_quarantined"] == 1
+    replay = ingest.lambda_handler(event, None)
+    assert replay["rows_valid"] == 0 and replay["reason_code"] == "DUPLICATE_FILE"
     messages = sqs.receive_message(QueueUrl=queue, MaxNumberOfMessages=10, MessageSystemAttributeNames=["All"])["Messages"]
     assert len(messages) == 2
     assert all(m["Attributes"]["MessageGroupId"] == ACCOUNT for m in messages)
     assert query("SELECT count(*) FROM transactions WHERE tx_id=%s", (high["transaction_id"],))[0][0] == 0
     quarantine = s3.list_objects_v2(Bucket="fintrust-test-raw", Prefix="quarantine/")["Contents"]
-    rejected = json.loads(s3.get_object(Bucket="fintrust-test-raw", Key=quarantine[0]["Key"])["Body"].read())
+    rejected_key = next(item["Key"] for item in quarantine if item["Key"].endswith(".jsonl"))
+    rejected = json.loads(s3.get_object(Bucket="fintrust-test-raw", Key=rejected_key)["Body"].read())
     assert rejected["source_row"] == 4 and rejected["source_etag"] and rejected["quarantined_at"]
     assert "email" not in rejected["record"]
     batch = {"Records": [{"messageId": m["MessageId"], "body": m["Body"]} for m in messages]}

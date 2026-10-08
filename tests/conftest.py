@@ -26,3 +26,12 @@ def sample_transaction():
         "country": "ZA",
         "currency": "ZAR",
     }
+
+
+@pytest.fixture(autouse=True)
+def prohibit_unmocked_aws_transport(monkeypatch):
+    """Tests must fail locally if a new AWS operation escapes the mocks."""
+    from botocore.httpsession import URLLib3Session
+    def blocked(*args, **kwargs):
+        raise AssertionError("An unmocked AWS HTTP request escaped the test boundary")
+    monkeypatch.setattr(URLLib3Session, "send", blocked)

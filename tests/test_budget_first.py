@@ -173,6 +173,8 @@ def test_ingest_handler_does_not_open_database(monkeypatch):
     monkeypatch.setenv("TRANSACTION_QUEUE_URL", "jobs.fifo")
     csv = f"account_id,amount,tx_date,tx_type\n{ACCOUNT},1,2024-02-29,debit\n"
     monkeypatch.setattr(ingest.s3, "get_object", lambda **kw: {"Body": io.BytesIO(csv.encode())})
+    monkeypatch.setattr(ingest.s3, "list_objects_v2", lambda **kw: {})
+    monkeypatch.setattr(ingest.s3, "put_object", lambda **kw: {})
     monkeypatch.setattr(ingest.sqs, "send_message_batch", lambda **kw: {"Successful": [{"Id": "0"}]})
     result = ingest.lambda_handler({"Records": [{"s3": {"bucket": {"name": "raw-bucket"},
         "object": {"key": "raw/input.csv"}}}]}, None)

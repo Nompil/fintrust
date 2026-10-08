@@ -57,7 +57,7 @@ def test_runtime_permissions_cannot_read_db_secrets_or_manage_resources():
     p = policy("ingest-runtime-policy")
     actions = {a for s in p["Statement"] for a in s["Action"]}
     assert actions == {"logs:CreateLogStream", "logs:PutLogEvents", "s3:GetObject",
-                       "s3:GetObjectVersion", "s3:PutObject", "sqs:SendMessage",
+                       "s3:GetObjectVersion", "s3:PutObject", "s3:ListBucket", "sqs:SendMessage",
                        "kms:Decrypt", "kms:GenerateDataKey"}
     assert all(s["Resource"] != "*" for s in p["Statement"])
     for s in p["Statement"]:
@@ -154,3 +154,12 @@ def test_temporary_diagnostic_retains_exact_resource_and_request_tags():
     assert tagging["Condition"] == {"StringEquals": {
         "aws:RequestedRegion": "af-south-1", "aws:RequestTag/Project": "FinTrust",
         "aws:RequestTag/Environment": "dev"}}
+
+
+def test_batch_audit_reads_are_scoped_to_existing_quarantine_prefix():
+    statements = {s.get("Sid"): s for s in policy("ingest-runtime-policy")["Statement"]}
+    assert statements["ReadBatchAudit"]["Action"] == ["s3:GetObject"]
+    assert statements["ReadBatchAudit"]["Resource"] == "arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev/quarantine/batches/*"
+    assert statements["ListBatchMarkers"]["Action"] == ["s3:ListBucket"]
+    assert statements["ListBatchMarkers"]["Condition"] == {"StringLike": {"s3:prefix": "quarantine/batches/*"}}
+    assert not any(a.startswith("rds:") or a.startswith("dynamodb:") for s in statements.values() for a in s["Action"])
