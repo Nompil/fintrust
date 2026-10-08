@@ -114,3 +114,21 @@ def test_batch_send_uses_documented_sendmessage_permission_on_exact_queues():
         "arn:aws:sqs:af-south-1:966467878406:fintrust-transactions-dev.fifo",
         "arn:aws:sqs:af-south-1:966467878406:fintrust-ingest-failures-dev",
     }
+
+def test_tagged_log_group_creation_has_separately_scoped_tagresource_grant():
+    statements = {s["Sid"]: s for s in policy("deployment-policy")["Statement"]}
+    tagging = statements["TagIngestLogGroup"]
+    assert tagging["Effect"] == "Allow"
+    assert tagging["Action"] == ["logs:TagResource"]
+    # TagResource uses the log-group ARN without the :* suffix.
+    assert tagging["Resource"] == "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev"
+    assert tagging["Condition"] == statements["CreateIngestLogGroup"]["Condition"]
+    assert tagging["Condition"]["StringEquals"] == {
+        "aws:RequestedRegion": "af-south-1",
+        "aws:RequestTag/Project": "FinTrust",
+        "aws:RequestTag/Environment": "dev",
+    }
+    assert tagging["Condition"]["ForAnyValue:StringEquals"]["aws:CalledVia"] == ["cloudformation.amazonaws.com"]
+    logs_actions = {a for s in statements.values() for a in s["Action"] if a.startswith("logs:")}
+    assert logs_actions == {"logs:CreateLogGroup", "logs:TagResource", "logs:PutRetentionPolicy",
+                            "logs:DescribeLogGroups", "logs:ListTagsForResource"}

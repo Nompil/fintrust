@@ -1322,3 +1322,103 @@ administrator recovery session before execution. The operator reports
 fintrust-admin is available; it was not authenticated or used during this review.
 No AWS mutation, role creation, policy attachment, package upload, change set,
 Lambda deployment, activation, trigger wiring or push occurred.
+
+### Stage 5 tagged log-group failure and recovery
+
+Live read-only inventory confirmed fintrust-ingest-dev is ROLLBACK_COMPLETE.
+The first CREATE_FAILED event is IngestLogs (AWS::Logs::LogGroup), reporting
+that CreateLogGroup with tags requires the additional logs:TagResource permission.
+The unchanged template requests FinTrust/dev tags and 14-day log retention.
+This is a provider authorization requirement that static template validation
+alone did not establish.
+
+The only policy correction is a separate TagIngestLogGroup statement granting
+logs:TagResource on exactly
+arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev.
+The tagging ARN omits the :* suffix used by other log operations. Conditions
+require aws:RequestedRegion=af-south-1, aws:RequestTag/Project=FinTrust,
+aws:RequestTag/Environment=dev and aws:CalledVia containing
+cloudformation.amazonaws.com. Existing statements remain unchanged; no delete,
+untag or unrelated Logs actions were added. Resource ownership tags are not
+required before creation because the resource does not yet exist.
+Sources: [CreateLogGroup tagged-creation permissions](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_CreateLogGroup.html),
+[TagResource ARN format](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_TagResource.html).
+
+CloudFormation records IngestLogs physical ID /aws/lambda/fintrust-ingest-dev
+as DELETE_SKIPPED. However, DescribeLogGroups returned no matching groups;
+ListTagsForResource and DescribeLogStreams both returned ResourceNotFoundException.
+The physical group therefore does not currently exist. Its retention, tags and
+streams are not applicable, rather than evidence that a retained group has the
+intended settings. No log events were read. The stack resource list contains only
+IngestLogs, with no Lambda or async configuration recorded. DELETE_SKIPPED is a
+retention record and does not itself prove successful physical creation.
+Administrator log-group deletion is neither needed nor justified at this checkpoint.
+Recheck existence immediately before retry; if it appears, stop and reconcile
+ownership, retention, tags, streams and data preservation before any deletion.
+
+The exact uploaded package version was inspected read-only:
+- bucket: fintrust-reports-966467878406-af-south-1-dev
+- key: deployment/lambda/d645d8949ee5b128b2b5c4c1558dd61a1a5c0fd3cdeace60363b19f70d167d62/fintrust.zip
+- VersionId: 8Y7mCJGc.s2QG2NdP1n9qy_KxntXbdx.
+- ContentLength: 21,646,562 bytes; ServerSideEncryption: aws:kms
+- key ARN: arn:aws:kms:af-south-1:966467878406:key/598a4158-2cc6-4946-af24-512784a276c8
+- BucketKeyEnabled: true.
+
+HeadObject with checksum mode returned no checksum field. A version-specific
+GetObject attempt was denied because fintrust-inventory lacks kms:Decrypt.
+No read permission was broadened and no administrator identity was used.
+Remote byte-level checksum verification is therefore based on the operator's
+previous verified upload evidence, not a new independent hash claim. Local
+matching package/source/manifest checks passed again, with retained Linux
+verification true and SHA-256
+d645d8949ee5b128b2b5c4c1558dd61a1a5c0fd3cdeace60363b19f70d167d62.
+The ZIP, function sources and template did not change. Reuse the exact uploaded
+VersionId; no rebuild or re-upload is needed. If prior checksum evidence cannot
+be produced, use the controlled administrator to download that exact existing
+version and compare SHA-256 before retry, without uploading another object.
+
+Validation: 97 focused tests passed, zero failures/skips, across Stage 5,
+Stage 4, processing, ingest and package tests. Access Analyzer ValidatePolicy
+returned zero findings for the corrected Stage 5 deployer policy. The regression
+checks the new exact tagging ARN, required request tags, Cape Town restriction,
+CloudFormation mediation and absence of unrelated Logs actions. IAM policy size
+remains within the existing tested 6,144-character managed-policy limit.
+
+Manual recovery sequence, only after explicit approval:
+1. Preserve failed stack events, stack ARN, resource list, absent-log-group output
+   and original artifact/version verification evidence under docs/EVIDENCE/08-lambda.
+2. Using the controlled administrator, create a new version of the existing
+   FinTrustStage5Deployment managed policy from stage5-deployment-policy.json,
+   set it as default, and leave all other policies/attachments unchanged. Inspect
+   existing versions first; do not create a duplicate policy or delete versions
+   blindly. Inventory verifies the new default JSON and existing attachment.
+3. Recheck the failed stack's resources and absent physical group. With separate
+   deletion approval, remove only the ROLLBACK_COMPLETE fintrust-ingest-dev stack.
+   A fresh CREATE using the same stack name requires that failed stack to be
+   deleted first. Do not use ContinueUpdateRollback for a failed CREATE.
+4. Wait for stack deletion, confirm the log group is still absent, and preserve
+   the execution role and exact S3 artifact version. No log-group deletion is
+   presently required. Stop if any unexpected live resource appears.
+5. Re-assume the deployer role with MFA and confirm account/region. With separate
+   preparation approval, create fintrust-ingest-stage5-review for
+   fintrust-ingest-dev from unchanged build/stage5-ingest.json, using
+   CodeObjectVersion=8Y7mCJGc.s2QG2NdP1n9qy_KxntXbdx., the three approved resource
+   types and FinTrust/dev tags. Wait and inspect exactly three Add actions.
+6. Stop before execution approval. Keep concurrency zero and triggers unwired.
+
+The administrator stack-deletion commands, NOT executed here, are:
+
+```powershell
+& 'C:\Program Files\Amazon\AWSCLIV2\aws.exe' cloudformation delete-stack `
+  --stack-name fintrust-ingest-dev --profile fintrust-admin `
+  --region af-south-1 --no-cli-pager
+& 'C:\Program Files\Amazon\AWSCLIV2\aws.exe' cloudformation wait stack-delete-complete `
+  --stack-name fintrust-ingest-dev --profile fintrust-admin --region af-south-1
+```
+
+Confirm the administrator identity before using those commands. Static validation
+still does not prove all future provider permissions. READY FOR MANUAL RECOVERY:
+the known authorization defect is corrected and no physical log-group deletion
+is required. Recovery actions require explicit approval; deployment retry and
+activation are separate gates. No AWS IAM update, deletion, upload, change set,
+Lambda deployment, concurrency change, trigger wiring or push occurred here.
