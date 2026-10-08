@@ -1,0 +1,92 @@
+{
+  "status": "ARCHIVED POLICY INTEGRITY FIX READY FOR CI RERUN",
+  "checked_at_utc": "2026-10-08T21:52:23.902175+00:00",
+  "failed_run": "37848817090",
+  "root_cause": "core.autocrlf=true produced CRLF Windows checkout hashes when evidence was collected; Git stored LF blobs and Linux raw-byte assertions hashed LF. Both policy/evidence blobs unchanged from original commits.",
+  "history": [
+    {
+      "path": "infrastructure/iam/stage5-deployment-diagnostic3-policy.json",
+      "first_commit": "fb75a47d503dec6cac05e3662b984fd34e42f786",
+      "last_commit": "fb75a47d503dec6cac05e3662b984fd34e42f786",
+      "commit_count": 1,
+      "historical_git_blob_unchanged": true,
+      "git_lf_sha256": "b4bc2ca9fe33396548c402d0ac42d008477a661b7d26806bfa015d6fd8d8a84f",
+      "working_sha256": "bc51f45a07560c6a2f11adebb6db721a1303eff62b871d0d3a6aa7f69b257c48",
+      "historical_crlf_sha256": "bc51f45a07560c6a2f11adebb6db721a1303eff62b871d0d3a6aa7f69b257c48"
+    },
+    {
+      "path": "infrastructure/iam/stage5-deployment-tagloggroup-diagnostic-policy.json",
+      "first_commit": "9c5d2155a4c493cf4fad990b49f0443c5fd876dd",
+      "last_commit": "9c5d2155a4c493cf4fad990b49f0443c5fd876dd",
+      "commit_count": 1,
+      "historical_git_blob_unchanged": true,
+      "git_lf_sha256": "e4dc5766884cef1895d667065bf94e715bcb6e9b63cfeb6a66fd5582279eb7e4",
+      "working_sha256": "7ccef683b4e4da11aa85c9c1fdc25fd8216b1dbd5eddc4e3aea06a56641e06e6",
+      "historical_crlf_sha256": "7ccef683b4e4da11aa85c9c1fdc25fd8216b1dbd5eddc4e3aea06a56641e06e6"
+    },
+    {
+      "path": "infrastructure/iam/evidence/stage5-tagloggroup-validation.json",
+      "first_commit": "9c5d2155a4c493cf4fad990b49f0443c5fd876dd",
+      "last_commit": "9c5d2155a4c493cf4fad990b49f0443c5fd876dd",
+      "commit_count": 1,
+      "historical_git_blob_unchanged": true,
+      "git_lf_sha256": "8333ac0e83c313bd94a5494722bf246d0bd28fff883db6581ea66c0ea0038ca0",
+      "working_sha256": "80f6b7f23c1e5e305768543e42e7e314806f408727e619858061557f63933b62",
+      "historical_crlf_sha256": "80f6b7f23c1e5e305768543e42e7e314806f408727e619858061557f63933b62"
+    },
+    {
+      "path": "infrastructure/iam/evidence/stage5-tagloggroup-version-baseline.json",
+      "first_commit": "9c5d2155a4c493cf4fad990b49f0443c5fd876dd",
+      "last_commit": "9c5d2155a4c493cf4fad990b49f0443c5fd876dd",
+      "commit_count": 1,
+      "historical_git_blob_unchanged": true,
+      "git_lf_sha256": "2289321441b3b9f8cc0abd57b8a46343d0bedd9ba05f34fcd5d19cddd46bbb62",
+      "working_sha256": "4e1f4ef42b4c2c31da58d24256eb2ad43029c21c4747e1848857da3325a65571",
+      "historical_crlf_sha256": "4e1f4ef42b4c2c31da58d24256eb2ad43029c21c4747e1848857da3325a65571"
+    }
+  ],
+  "second_checksum_binding": "candidate_sha256 binds the immutable stage5-deployment-tagloggroup-diagnostic-policy.json from 9c5d215, not mutable canonical stage5-deployment-policy.json. v5_sha256 binds unchanged diagnostic3 policy from fb75a47.",
+  "fix": "Reconstruct recorded CRLF byte representation before hashing in the historical integrity tests only. Preserve original expected hashes, evidence objects, whitespace, order, and all content except checkout newlines. No JSON reserialization.",
+  "expected_hashes_changed": false,
+  "historical_evidence_modified": false,
+  "local_tests": {
+    "original_failing_tests": {
+      "passed": 2,
+      "failed": 0,
+      "seconds": 0.18
+    },
+    "complete_module": {
+      "passed": 29,
+      "failed": 0,
+      "seconds": 0.67
+    },
+    "related_integrity_tests": {
+      "passed": 93,
+      "failed": 0,
+      "seconds": 0.83
+    },
+    "full_suite": {
+      "tests": 385,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1,
+      "passed": 384,
+      "duration_seconds": 96.57,
+      "python": "3.14.7",
+      "os": "Windows",
+      "postgresql": "18 (existing dedicated local test database)",
+      "skip_details": [
+        {
+          "test": "test_database_roles_can_execute_pipeline_without_owner_privileges",
+          "reason": "Service-role execution check requires a disposable test database administrator"
+        }
+      ]
+    }
+  },
+  "release_gate_passed": false,
+  "ci_import_verification": "Passed in failed run, but full release gate failed. Evidence remains unchanged.",
+  "artifact_changed": false,
+  "application_changed": false,
+  "aws_access": false,
+  "push_performed": false
+}

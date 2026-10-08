@@ -444,3 +444,49 @@ false; the Windows candidate is still not release-ready and supersession awaits
 a fully successful Linux artifact. No AWS access, rebuild, push or CI rerun occurred.
 
 **CI CONTENT GATE FIX READY FOR RERUN.**
+
+## CI run 37848817090: historical policy byte representation
+
+The Linux build, content gate, five handlers, all production modules and native
+extensions passed; network attempts were empty. Full CI tests were 372 passed,
+2 failed, 0 skipped (14.21s). Both failures were historical policy SHA assertions,
+not runtime package failures. The release ZIP was not published. Archived run
+JSON truthfully records import-only `linux_execution_verified=true` alongside
+`release_gate_passed=false`; the release remains unapproved. Do not rewrite that
+run evidence to imply either a release pass or an import failure.
+
+`core.autocrlf=true` stores LF Git blobs and checks them out as CRLF on Windows.
+The original evidence recorded raw Windows bytes, while Linux hashed LF bytes:
+
+| Immutable policy | Recorded Windows CRLF SHA256 | Git/Linux LF SHA256 |
+|---|---|---|
+| stage5-deployment-diagnostic3-policy.json | bc51f45a07560c6a2f11adebb6db721a1303eff62b871d0d3a6aa7f69b257c48 | b4bc2ca9fe33396548c402d0ac42d008477a661b7d26806bfa015d6fd8d8a84f |
+| stage5-deployment-tagloggroup-diagnostic-policy.json | 7ccef683b4e4da11aa85c9c1fdc25fd8216b1dbd5eddc4e3aea06a56641e06e6 | e4dc5766884cef1895d667065bf94e715bcb6e9b63cfeb6a66fd5582279eb7e4 |
+
+The v5 policy is unchanged since fb75a47; the diagnostic candidate, validation
+record and version baseline are unchanged since 9c5d215. Current Git blobs match
+their first committed bytes exactly; current Windows content differs only in
+newlines. The later e14b6af test adjustment accommodated the reviewed canonical
+v7 addition without changing the historical policies or evidence.
+
+The second recorded digest binds to the immutable 9c5d215 diagnostic candidate,
+not the mutable canonical policy. The original candidate/v5 hashes and evidence
+remain untouched. A test-local helper reconstructs original CRLF bytes before
+hashing on either OS. It does not parse/reformat JSON or disregard whitespace,
+key/statement order, actions, resources or conditions. Regression tests check LF
+and CRLF against the same original hashes; substantive and formatting mutations
+still change the hash. New canonical versions cannot replace historical bindings.
+
+Focused tests: both original failures passed (2 tests); entire module 29 passed;
+related evidence/authorization suite 93 passed. Full local result is recorded in
+`docs/EVIDENCE/11-ci/archived-policy-integrity-correction.json` after completion.
+No application, packaging/workflow, dependency, artifact or IAM files were changed.
+No AWS access, rebuild or push occurred. A separately approved CI push/rerun is
+required; `release_gate_passed` stays false pending that run.
+
+Full local suite: **384 passed, 0 failed, 1 skipped**, 96.57s, on Windows
+CPython 3.14.7 and PostgreSQL 18. The existing service-role execution test requires
+a disposable database superuser and remains skipped with the restricted local
+role; this is not counted as passed. Linux CI must still pass with zero skips.
+
+**ARCHIVED POLICY INTEGRITY FIX READY FOR CI RERUN.**
