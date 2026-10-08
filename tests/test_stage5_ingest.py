@@ -163,3 +163,55 @@ def test_batch_audit_reads_are_scoped_to_existing_quarantine_prefix():
     assert statements["ListBatchMarkers"]["Action"] == ["s3:ListBucket"]
     assert statements["ListBatchMarkers"]["Condition"] == {"StringLike": {"s3:prefix": "quarantine/batches/*"}}
     assert not any(a.startswith("rds:") or a.startswith("dynamodb:") for s in statements.values() for a in s["Action"])
+
+
+def test_second_diagnostic_changes_only_request_tags_from_first():
+    from copy import deepcopy
+    first = policy("deployment-diagnostic-policy")
+    expected = deepcopy(first)
+    tagging = next(s for s in expected["Statement"] if s["Sid"] == "TagIngestLogGroup")
+    del tagging["Condition"]["StringEquals"]["aws:RequestTag/Project"]
+    del tagging["Condition"]["StringEquals"]["aws:RequestTag/Environment"]
+    candidate = policy("deployment-diagnostic2-policy")
+    assert candidate == expected
+    assert len(json.dumps(candidate, separators=(",", ":"))) <= 6144
+    assert tagging == {"Sid": "TagIngestLogGroup", "Effect": "Allow",
+        "Action": ["logs:TagResource"],
+        "Resource": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev",
+        "Condition": {"StringEquals": {"aws:RequestedRegion": "af-south-1"}}}
+
+
+@pytest.mark.parametrize("arn,region,in_scope", [
+    ("arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev", "af-south-1", True),
+    ("arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-report-dev", "af-south-1", False),
+    ("arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev", "us-east-1", False),
+    ("arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*", "af-south-1", False),
+])
+def test_second_diagnostic_exact_tagging_scope(arn, region, in_scope):
+    # This checks the exact structural gate, not the full AWS authorization engine.
+    # Actual read-only SimulateCustomPolicy results are recorded in the diagnostic plan.
+    statements = policy("deployment-diagnostic2-policy")["Statement"]
+    grants = [s for s in statements if "logs:TagResource" in s["Action"]]
+    assert len(grants) == 1
+    tagging = grants[0]
+    assert "*" not in tagging["Resource"]
+    assert tagging["Action"] == ["logs:TagResource"]
+    assert tagging["Condition"] == {"StringEquals": {"aws:RequestedRegion": "af-south-1"}}
+    matches = arn == tagging["Resource"] and region == tagging["Condition"]["StringEquals"]["aws:RequestedRegion"]
+    assert matches is in_scope
+
+
+def test_second_diagnostic_leaves_canonical_control_and_other_grants_intact():
+    from copy import deepcopy
+    canonical = policy("deployment-policy")
+    expected = deepcopy(canonical)
+    tagging = next(s for s in expected["Statement"] if s["Sid"] == "TagIngestLogGroup")
+    assert tagging["Condition"] == {
+        "StringEquals": {"aws:RequestedRegion": "af-south-1",
+                         "aws:RequestTag/Project": "FinTrust", "aws:RequestTag/Environment": "dev"},
+        "ForAnyValue:StringEquals": {"aws:CalledVia": ["cloudformation.amazonaws.com"]}}
+    tagging["Condition"] = {"StringEquals": {"aws:RequestedRegion": "af-south-1"}}
+    assert policy("deployment-diagnostic2-policy") == expected
+    # In particular, the create permission still requires tags and CloudFormation.
+    create = next(s for s in canonical["Statement"] if s["Sid"] == "CreateIngestLogGroup")
+    assert create["Condition"] == next(s for s in canonical["Statement"] if s["Sid"] == "TagIngestLogGroup")["Condition"]

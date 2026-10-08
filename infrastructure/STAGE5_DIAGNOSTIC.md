@@ -277,3 +277,21 @@ DIAGNOSTIC PLAN READY: one policy condition changes, exact scope and request tag
 are preserved, validation passed, and v2 restoration is explicit. This does not
 mean the root cause is proven or AWS mutation is approved. No IAM update, deletion,
 change set, deployment, activation, trigger wiring, upload or push occurred.
+
+
+## Experiment-one live outcome and second proposal (2026-10-08)
+
+Operator evidence confirms temporary v3 still failed with the same tagged
+CreateLogGroup/TagResource denial, request ID
+`e9ed29b3-f2dc-48d0-befb-801908dce534`. Removing CalledVia alone was insufficient.
+Read-only inventory reconfirms v2 restored/default, v3 nondefault, both matching
+their local policy documents. The failed stack is ROLLBACK_COMPLETE and the
+physical group is absent despite DELETE_SKIPPED.
+
+[Experiment two](STAGE5_DIAGNOSTIC2.md) preserves that v3 control and removes only
+the two request-tag prerequisites in a separate temporary file. 106 focused
+tests, seven read-only IAM simulations and zero Access Analyzer findings passed.
+No canonical-policy edit or AWS mutation occurred. Follow the second plan rather
+than repeating experiment one. Historical package integrity still passes, but
+current hardened source differs; a current-source release requires a separate
+Linux build approval. The experiment only tests the pinned historical package.

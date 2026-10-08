@@ -1536,3 +1536,25 @@ skip. New proposed runtime policy Access Analyzer validation: zero findings.
 Current source/package consistency: BLOCKED until a new reviewed Linux build;
 the retained historical artifact is unchanged. Review the hardening before any
 RDS migration, role update, package release or Stage 5 recovery execution.
+
+
+### Stage 5 second controlled tagging-context diagnostic
+
+Experiment one (temporary v3, CalledVia removed only) still failed with the same
+logs:TagResource dependent-creation denial, request ID
+`e9ed29b3-f2dc-48d0-befb-801908dce534`. Read-only inventory confirms canonical v2
+is default again, the failed stack is ROLLBACK_COMPLETE and the group is absent.
+
+[STAGE5_DIAGNOSTIC2.md](STAGE5_DIAGNOSTIC2.md) prepares a separate temporary policy
+removing only the request-tag pair relative to v3, retaining exact ARN/region.
+106 focused tests passed with zero failures/skips; seven actual read-only IAM
+simulation cases matched expectations; Access Analyzer returned zero findings.
+The plan includes one approved attempt, capture and mandatory v2 restoration.
+Success would strongly implicate request-tag context, not prove the exact missing
+key; the same denial means stop broadening IAM and inspect other authorization
+mechanisms. Canonical policy remains unchanged. No AWS mutation or push occurred.
+
+The existing object/version and historical Linux evidence are unchanged. No
+rebuild/upload is required for this historical policy diagnostic. The already
+committed identity-hardening source still needs its own new Linux-verified package
+before a current-source deployment. Do not confuse those separate approval gates.
