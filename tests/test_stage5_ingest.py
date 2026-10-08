@@ -215,3 +215,24 @@ def test_second_diagnostic_leaves_canonical_control_and_other_grants_intact():
     # In particular, the create permission still requires tags and CloudFormation.
     create = next(s for s in canonical["Statement"] if s["Sid"] == "CreateIngestLogGroup")
     assert create["Condition"] == next(s for s in canonical["Statement"] if s["Sid"] == "TagIngestLogGroup")["Condition"]
+
+
+def test_third_diagnostic_changes_only_primary_create_calledvia_from_v4():
+    from copy import deepcopy
+    original = policy("deployment-diagnostic2-policy")
+    expected = deepcopy(original)
+    create = next(s for s in expected["Statement"] if s["Sid"] == "CreateIngestLogGroup")
+    del create["Condition"]["ForAnyValue:StringEquals"]
+    candidate = policy("deployment-diagnostic3-policy")
+    assert candidate == expected
+    assert create["Action"] == ["logs:CreateLogGroup"]
+    assert create["Resource"] == "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*"
+    assert create["Condition"] == {"StringEquals": {
+        "aws:RequestedRegion": "af-south-1", "aws:RequestTag/Project": "FinTrust",
+        "aws:RequestTag/Environment": "dev"}}
+    assert len(json.dumps(candidate, separators=(",", ":"))) <= 6144
+    # TagResource and all other grants remain byte-equivalent as parsed JSON.
+    assert next(s for s in candidate["Statement"] if s["Sid"] == "TagIngestLogGroup") == next(
+        s for s in original["Statement"] if s["Sid"] == "TagIngestLogGroup")
+    canonical = next(s for s in policy("deployment-policy")["Statement"] if s["Sid"] == "CreateIngestLogGroup")
+    assert canonical["Condition"]["ForAnyValue:StringEquals"]["aws:CalledVia"] == ["cloudformation.amazonaws.com"]

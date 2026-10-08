@@ -422,3 +422,23 @@ zero Analyzer findings, pinned historical artifact and explicit restoration are
 prepared. The live cause remains unproven; current-source release remains blocked.
 No IAM version, stack deletion, change set, deployment, rebuild/upload, activation,
 trigger wiring, RDS/SQS/DynamoDB change or push occurred.
+
+
+## Complete tagged-create authorization investigation (2026-10-08)
+
+The second live diagnostic also failed (request ID
+`21ae5b40-b1d9-421a-a113-87728de892de`); v2 restoration is verified.
+[Complete authorization review](STAGE5_AUTHORIZATION_REVIEW.md) examines both
+CreateLogGroup and TagResource, all current role policies, boundaries, session
+evidence, Organizations and the regional provider schema. No boundary, applicable
+SCP or Logs-relevant explicit deny was found. CloudTrail omits failed-call request
+parameters and actual IAM context. Do not claim all tagging hypotheses eliminated.
+
+Fifteen read-only simulations show that v4 may allow tagging while the unchanged
+CreateLogGroup gate denies without CalledVia or tags. A separate local candidate
+changes only primary CreateLogGroup CalledVia relative to v4, preserving both
+creation ownership tags and all other grants. This is a proposed discriminating
+test, not a proven fix; canonical and previous diagnostic policies are unchanged.
+117 focused tests passed with no failures/skips; Access Analyzer returned zero
+findings for canonical and candidate. No AWS mutation or push occurred.
+Stop for review before any policy version, cleanup, change set or deployment.
