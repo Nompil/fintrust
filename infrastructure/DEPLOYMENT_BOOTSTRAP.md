@@ -1578,3 +1578,23 @@ test, not a proven fix; canonical and previous diagnostic policies are unchanged
 117 focused tests passed with no failures/skips; Access Analyzer returned zero
 findings for canonical and candidate. No AWS mutation or push occurred.
 Stop for review before any policy version, cleanup, change set or deployment.
+
+### Stage 5 direct failure and targeted legacy tagging preparation
+
+The third controlled CloudFormation experiment (v5) failed before Lambda
+creation, followed by one separately approved direct SDK tagged-create attempt
+that failed with the same additional TagResource error. Direct request:
+9aa1ba5a-1a43-4238-bd8d-a62f4b038348. Both experiments restored canonical v2;
+the exact log group remains absent, the failed stack is not deleted again,
+and AWS Integration remains In Progress. Runtime code/package and Stages 1-4
+are unaffected. Full local evidence: docs/EVIDENCE/08-lambda/45-stage5-diagnostic3-result.md
+and 51-stage5-direct-logs-result.md.
+
+A final targeted alternative-path diagnostic is prepared only:
+[TagLogGroup plan](STAGE5_TAGLOGGROUP_DIAGNOSTIC.md). Relative to v5, it adds
+only logs:TagLogGroup for the exact ingest log-group ARN with :* and region.
+No existing grant is relaxed. Full v2/v3/v5 archival evidence and candidate-bound
+read-only validation are committed under iam/evidence/. Proposed future version
+cleanup deletes only archived, nondefault v3 after separate approval, preserving
+canonical v2 and v5 control; no deletion or policy-version creation occurred.
+No direct creation/CloudFormation retry is authorized by this preparation.

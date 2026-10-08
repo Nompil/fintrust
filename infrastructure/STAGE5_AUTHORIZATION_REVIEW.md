@@ -264,3 +264,22 @@ showed no physical group/Lambda/async config. No cleanup was performed here.
 The regional provider's internal authorization resource/context and policy
 check order remain externally invisible. This is explicitly a hypothesis-testing
 approval checkpoint, not ROOT CAUSE IDENTIFIED or permission to deploy.
+
+## Later live results and targeted legacy-path proposal
+
+Diagnostic three activated v5 once and again failed at IngestLogs
+(request 0d0c4c54-315a-4bf6-80e3-02e70f34ec93); v2 was restored. A subsequent
+approved one-shot direct SDK CreateLogGroup with the same v5 permissions also
+failed (request 9aa1ba5a-1a43-4238-bd8d-a62f4b038348). The direct test used the
+MFA-backed CLI role credentials in process memory; it was not a CloudFormation
+call or a direct CLI Logs invocation. The group stayed absent and v2 was restored.
+These results show that removing primary CalledVia was insufficient and a
+CloudFormation-only explanation is insufficient; they do not prove the backend
+condition/resource decision.
+
+The next locally prepared candidate adds only the documented legacy alternative
+logs:TagLogGroup on the exact suffixed group ARN to v5. See
+[TagLogGroup diagnostic](STAGE5_TAGLOGGROUP_DIAGNOSTIC.md) for sources, exact
+scope, tests, real simulations, archived nondefault-v3 deletion proposal and
+future one-shot commands. This preparation made no AWS mutation. No existing
+control policy was changed and no additional live test was executed.
