@@ -958,3 +958,186 @@ Validation for this correction: 37 focused tests passed; Access Analyzer returne
 zero findings for both changed policies using fintrust-inventory. Caller identity
 matched account 966467878406 / user/fintrust-inventory. No attached policy, stack,
 parameter group, change set or other AWS resource was changed. No push occurred.
+
+## Stage 4 risk table and queues approval checkpoint
+
+Operator reports Stage 3 fintrust-database-dev and both RDS resources reached
+CREATE_COMPLETE. Stages 1, 2 and 3 are verified by the operator; AWS Integration
+remains In Progress. This preparation did not independently re-inspect those
+stacks. Database SQL initialization, service users, verified TLS connections and
+capacity testing remain later acceptance dependencies.
+
+The existing staged plan defines Stage 4 as DynamoDB + queues. The isolated
+[messaging.py](messaging.py) renderer extracts the existing risk table from
+foundation.py and the five existing queues from processing.py. It makes no AWS
+calls. It renders build/stage4-messaging.json for fintrust-messaging-dev; Stage
+is fixed to dev. Exactly six explicit CloudFormation resources are proposed:
+
+| Logical ID | Type | Physical name | Purpose |
+|---|---|---|---|
+| RiskTable | AWS::DynamoDB::Table | fintrust-risk-dev | Risk projections and durable alert delivery state |
+| Transactions | AWS::SQS::Queue | fintrust-transactions-dev.fifo | Ordered scoring jobs |
+| TransactionDLQ | AWS::SQS::Queue | fintrust-transactions-dlq-dev.fifo | Exhausted scoring jobs |
+| IngestFailures | AWS::SQS::Queue | fintrust-ingest-failures-dev | Lambda asynchronous ingest failure destination |
+| ReportFailures | AWS::SQS::Queue | fintrust-report-failures-dev | Report Lambda / later EventBridge failure destination |
+| AlertFailures | AWS::SQS::Queue | fintrust-alert-failures-dev | Later DynamoDB stream consumer failure destination |
+
+RiskTable retains the string account_id HASH / score_date RANGE keys, on-demand
+PAY_PER_REQUEST billing and NEW_IMAGE stream. TX# projection and ALERT# delivery
+state rows share this table; there is no separate delivery-state table. No TTL
+is configured: expiring delivery claims could allow unsafe duplicate sends.
+No indexes, replicas, provisioned capacity, PITR, export or backup resources are
+introduced. Default AWS-owned encryption remains enabled at rest despite
+SSEEnabled=false (that field declines an AWS-managed/customer-managed KMS key).
+The queues use SQS-managed encryption, with no new CMK or KMS request charges.
+
+Transactions keeps a 720-second visibility timeout (six times the planned
+120-second scoring timeout), four-day retention, explicit deduplication IDs and
+maxReceiveCount=5 to its FIFO DLQ. All failure queues retain messages for 14 days.
+The transaction DLQ additionally restricts redrive sources to the exact transaction
+queue with RedriveAllowPolicy byQueue. Its deterministic source ARN avoids a
+circular dependency. This controls which queue can use it as a DLQ; it grants
+no replay permission. All six resources are tagged Project=FinTrust / Environment=dev
+and Retain on deletion/replacement. Retention is intentional for messages, risk
+records and uncertain delivery claims; it is not infinite SQS message retention.
+
+This stage creates no Lambda, role, event-source mapping, producer permission,
+queue resource policy, notification, alarm, schedule, VPC endpoint or network
+change. The stream is enabled but no consumer is wired. ReportQueuePolicy remains
+a later EventBridge integration resource; no Events SendMessage grant is needed
+now. Outputs supply table name/ARN/stream ARN and each queue URL/ARN for later
+stages. Existing endpoint policy already targets fintrust-risk-dev. Outside-VPC
+ingest/alert and private scoring placement are unchanged.
+
+**Later-stage dependency:** the combined processing.py still contains queue
+creation and foundation.py still contains table creation. Neither combined
+template may be deployed over these named Stage 4 resources. Later Lambda-stage
+renderers must reference Stage 4 outputs instead of recreating queues/table. No
+unrequested runtime/template migration was made during this preparation.
+
+### Stage 4 permission proposals
+
+Attach only after separate administrator approval to fintrust-deployer-role;
+use three customer-managed policies, not the nearly-full Stage 1 inline bundle:
+
+- FinTrustStage4CloudFormation: [stage4-cloudformation-policy.json](iam/stage4-cloudformation-policy.json).
+  Only fintrust-messaging-dev stack, fintrust-messaging-* change sets, exact
+  DynamoDB::Table and SQS::Queue resource types, nonempty resource-type list,
+  FinTrust/dev creation tags, no imports, IAM capabilities, execution service
+  role or PassRole. Regional template validation needs Resource *. Stack reads
+  include singular DescribeStackResource. Stack delete/rollback recovery does
+  not authorize physical deletion of retained resources.
+- FinTrustStage4DynamoDB: [stage4-dynamodb-policy.json](iam/stage4-dynamodb-policy.json).
+  CreateTable/TagResource on only table/fintrust-risk-dev in this account/region,
+  required ownership request tags and CloudFormation mediation. Named-table
+  DescribeTable/DescribeContinuousBackups/DescribeTimeToLive/ListTagsOfResource
+  support provider inspection. No data reads/writes, stream consumption, table
+  update, backups, exports or deletion. Creation supplies billing, keys, stream
+  and encryption; no broad UpdateTable grant is proposed.
+- FinTrustStage4Sqs: [stage4-sqs-policy.json](iam/stage4-sqs-policy.json).
+  CreateQueue/TagQueue only on the five exact regional/account queue ARNs with
+  required ownership request tags and CloudFormation mediation. SetQueueAttributes
+  requires those exact ARNs, ownership resource tags and mediation. GetQueueUrl,
+  GetQueueAttributes and ListQueueTags inspect only those queues. No SendMessage,
+  ReceiveMessage, DeleteMessage, purge, message move, delete or arbitrary queue list.
+
+SetQueueAttributes can change queue policy/encryption/redrive configuration;
+IAM cannot restrict this action to only one reviewed set of attributes. Exact
+ARNs, mediation and ownership tags reduce scope but do not replace template
+review. Remove configuration grants when no longer needed. CloudFormation
+create permissions cannot enforce a resource count; require exactly six Add
+operations at change-set review. These proposals are not permissions boundaries
+that override other existing grants. Tags are not immutable ownership proof.
+No new service-linked role is required by this single-region/table/queue design.
+
+### Cape Town Stage 4 cost
+
+Public regional catalogs confirm the following rates before credits and any
+account-wide Free Tier allocation:
+
+| Meter | Rate |
+|---|---:|
+| SQS standard requests, first paid tier | USD 0.476 / million |
+| SQS FIFO requests, first paid tier | USD 0.595 / million |
+| DynamoDB Standard on-demand writes | USD 0.84 / million write request units |
+| DynamoDB Standard on-demand reads | USD 0.168 / million read request units |
+| DynamoDB Standard storage beyond applicable allowance | USD 0.33677 / GB-month |
+| DynamoDB Streams reads beyond applicable allowance | USD 0.2694 / million requests |
+
+Sources: [SQS Cape Town catalog](https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AWSQueueService/current/af-south-1/index.json),
+[DynamoDB Cape Town catalog](https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonDynamoDB/current/af-south-1/index.json),
+[SQS metering/free tier](https://aws.amazon.com/sqs/pricing/),
+[DynamoDB pricing](https://aws.amazon.com/dynamodb/pricing/).
+
+No fixed queue/table instance hourly charge is introduced; empty idle resources
+have no material usage bill. Populated DynamoDB storage remains billable after
+traffic stops or the stack is removed, subject to applicable allowance. The
+catalog shows first 25 GB-month storage and 2.5 million stream read requests
+at zero price; these are shared allowances, not verified remaining account
+entitlements. SQS lists one million monthly requests free across regions. Do
+not assume on-demand reads/writes are covered by provisioned-capacity Free Tier.
+
+Example before allowances: 10,000 FIFO request units, 1,000 standard request units,
+10,000 DynamoDB write units, 10,000 read units and 0.01 GB-month storage total
+approximately USD 0.019874; this is a scenario, not a measured demo estimate.
+Items are metered by size/consistency and SQS payloads by 64-KB chunks; sends,
+receives, deletes, empty polling and retries each contribute requests. Later
+Lambda streams polling has its own pricing rules; no polling occurs in this
+stage. Backup/restore, transfer, Lambda, logs and existing RDS/S3/KMS costs are
+outside this subtotal. Live RDS continues its Stage 3 standing cost while this
+stage is prepared. Budget alerts are warnings, not spending caps.
+
+### Recovery, evidence and next manual boundary
+
+Before attachment: check managed-policy quota, verify exact JSON scope and confirm
+all six intended physical names are absent or known-owned. If any already exists,
+STOP for reconciliation; a CREATE does not adopt existing resources. After
+approval, an administrator creates/attaches only the three reviewed policies;
+the deployer cannot administer IAM. Inventory checks attachments and policy
+versions. Re-assume with MFA and verify account/region before later preparation.
+
+Retain deliberately leaves successfully created resources after failed creation
+or stack deletion. A ROLLBACK_COMPLETE stack needs separately approved deletion
+before a fresh CREATE. Capture failed events and all physical IDs first; retained
+queue/table names can collide. Do not silently rename, recreate or delete them.
+Import/reuse requires a separately supported reviewed adoption plan. Physical
+DeleteQueue/DeleteTable permissions are deliberately absent from this bundle;
+provide a separate administrator recovery owner before execution. Failed
+resources not tracked by CloudFormation also need metadata inspection.
+
+Retained queues still expire messages after four/14 days: capture queue counts
+and failure evidence promptly; this preparation does not authorize reading,
+exporting or replaying their contents. Before later disposal, disable all
+producers/consumers, reconcile pending work and SENDING/UNKNOWN alerts, preserve
+approved evidence/data, and obtain explicit destructive approval. Never purge
+or recreate queues to clear errors. DynamoDB data/claims must be reconciled or
+backed up under a separately reviewed export/restore plan before table deletion.
+The stream has finite record retention, so enabling consumers later requires an
+explicit catch-up/reconciliation plan if existing risk data predates the stream
+window. No automatic replay is enabled by Stage 4.
+
+The next manual AWS step is review/approval of the three proposed managed
+policies and their attachment quota, then administrator attachment. After separate
+change-set preparation approval, from the repository root:
+
+```powershell
+& 'C:\Program Files\Amazon\AWSCLIV2\aws.exe' cloudformation create-change-set `
+  --profile fintrust-deployer-role --region af-south-1 `
+  --stack-name fintrust-messaging-dev --change-set-name fintrust-messaging-stage4-review `
+  --change-set-type CREATE --template-body file://build/stage4-messaging.json `
+  --parameters ParameterKey=Stage,ParameterValue=dev `
+  --resource-types AWS::DynamoDB::Table AWS::SQS::Queue `
+  --tags Key=Project,Value=FinTrust Key=Environment,Value=dev --no-cli-pager
+```
+
+Do not run this command during local preparation. Require CREATE_COMPLETE /
+AVAILABLE and exactly six Add actions; retain reviewed JSON and later stack
+resource evidence under docs/EVIDENCE/07-sqs-dynamodb. Stop again for execution
+approval. No policies, change sets, queues, tables or runtime resources were
+created or modified by this preparation.
+
+Local validation: 90 focused tests passed across Stage 4, earlier stage boundaries
+and processing contracts. Whitespace checks passed. Access Analyzer and read-only
+CloudFormation validation remain PENDING: fintrust-inventory identity check
+returned an expired-session error. No successful AWS validation is claimed. Resume
+only those pending checks after login renewal; do not repeat completed phases.
