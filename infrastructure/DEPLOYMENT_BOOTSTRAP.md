@@ -1136,8 +1136,17 @@ resource evidence under docs/EVIDENCE/07-sqs-dynamodb. Stop again for execution
 approval. No policies, change sets, queues, tables or runtime resources were
 created or modified by this preparation.
 
-Local validation: 90 focused tests passed across Stage 4, earlier stage boundaries
-and processing contracts. Whitespace checks passed. Access Analyzer and read-only
-CloudFormation validation remain PENDING: fintrust-inventory identity check
-returned an expired-session error. No successful AWS validation is claimed. Resume
-only those pending checks after login renewal; do not repeat completed phases.
+Validation completed after inventory login renewal. Caller identity matched
+account 966467878406 and arn:aws:iam::966467878406:user/fintrust-inventory.
+Access Analyzer ValidatePolicy returned zero findings for all three Stage 4
+identity policies. CloudFormation ValidateTemplate passed for the matching
+build/stage4-messaging.json in af-south-1, with only Stage=dev as a parameter and
+no IAM capabilities reported. These checks are read-only/static validation;
+they do not prove live provider permissions or successful resource creation.
+The existing local baseline remains 90 focused tests passed; no code or policy
+changed during validation, so tests were not repeated. Whitespace checks passed.
+
+Stage 4 is prepared for policy/attachment review, not deployed or authorized for
+execution. Next: administrator review of the three proposed managed policies and
+attachment quota, then separate approval before any attachment or change-set
+creation. No AWS mutation, deployment, data access or push occurred.
