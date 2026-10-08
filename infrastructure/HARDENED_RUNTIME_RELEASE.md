@@ -1,10 +1,67 @@
-# Hardened ingest release preparation â€” NOT READY
+# Hardened ingest release - LINUX RELEASE VERIFIED; AWS RELEASE BLOCKED
+
+## Current verified release checkpoint
+
+[GitHub Actions run 37850256137](https://github.com/Nompil/fintrust/actions/runs/37850256137)
+passed after the approved push of source commit
+`5385c581e76ae1c0d486e569b6beb4c6b67d548c` to origin/main.
+The authoritative build used Ubuntu 24.04, Linux x86_64, CPython 3.12.15 and
+disposable PostgreSQL 16.15. Full tests: **385 passed, 0 failed, 0 skipped**
+in **13.39 seconds**. Both archived-policy integrity checks and the administrator
+required database-role test ran and passed; original historical hashes remain intact.
+
+The exact Linux-built ZIP passed content/security and source binding checks,
+all five handler imports, all production-module imports, native PostgreSQL and
+MarkupSafe dependency loads, SQL/CA checks, and manifest/checksum checks.
+No outbound network operations occurred during the import probe; its existing
+exact urllib3 IPv6 loopback capability-check exception remained unchanged.
+The content gate rejected Windows executables/PE files, launchers, development
+material, .env files and credential patterns while accepting dependency-internal
+Python modules such as boto3/docs. These are scoped checks, not a general secret audit.
+
+Authoritative artifact:
+
+- Filename: `fintrust-hardened-linux-py312.zip`
+- Size: **21,372,233 bytes**
+- SHA256: `cf9c18a5f267373e2fc2e22331987bb6dce8e2e65366b2d1f5651bb035dd6654`
+- Base64 SHA256: `z5wYpfJnNz4vwuIjMZh7ttzo4uZTZrLR9WUbsDXdZlQ=`
+- Published artifact: `fintrust-hardened-linux-py312` (ID `11581842656`)
+- `linux_execution_verified = true`
+- `release_gate_passed = true`
+
+The workflow published the verified ZIP, manifest with checksums, and verification
+evidence. The downloaded ZIP was independently rechecked locally for checksum,
+base64 checksum, size, content/layout and source binding without rebuilding.
+Local artifact: `build/hardened-release/fintrust-hardened-linux-py312.zip`.
+Run evidence, manifest, JUnit results, import output, computed checksums and receipt:
+[docs/EVIDENCE/11-ci/37850256137](../docs/EVIDENCE/11-ci/37850256137/local-release-receipt.json).
+GitHub artifacts have the workflow's 30-day retention; preserve the local copy.
+
+The old Windows-built `fintrust-hardened.zip`, SHA256
+`3b95884caa30bb678d47dbf6fe4993784fae8b958b48a4630b5bd35cec7de29e`, is
+**SUPERSEDED - contained Windows launcher executables**. Its bytes and original
+unverified manifest are preserved; verification flags apply only to the new Linux ZIP.
+
+This closes the Linux release gate, not the AWS deployment gate. No AWS access,
+upload, migration, invocation, concurrency change or trigger wiring occurred in
+this CI task. The private RDS migration path and live schema/grants remain pending.
+The existing release template/IAM proposal still references the superseded
+Windows candidate; rebinding it to this Linux artifact and a future S3 VersionId
+requires a separate focused review before any AWS upload or deployment.
+The post-run documentation/evidence commit is local only and is not pushed.
+
+## Historical preparation record
+
+The following sections retain the earlier preparation and failed-run evidence.
+Their candidate identifiers, counts and pending statuses describe those checkpoints;
+the current verified Linux checkpoint above supersedes their release-gate status.
 
 Stage 5 infrastructure is live and verified using historical SHA
 `d645d8949ee5b128b2b5c4c1558dd61a1a5c0fd3cdeace60363b19f70d167d62`.
 Concurrency remains 0; triggers are unwired. Hardened source, migration and the
 new candidate below are LOCAL preparation, not live. No AWS mutations, invocation,
-new uploads, SQL application, source push or runtime activation occurred.
+new uploads, SQL application, source push or runtime activation occurred at that
+historical preparation checkpoint.
 
 ## Source and tests
 

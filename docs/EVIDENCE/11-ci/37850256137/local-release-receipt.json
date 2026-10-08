@@ -1,0 +1,42 @@
+{
+  "status": "HARDENED LINUX RELEASE VERIFIED",
+  "run_url": "https://github.com/Nompil/fintrust/actions/runs/37850256137",
+  "source_commit": "5385c581e76ae1c0d486e569b6beb4c6b67d548c",
+  "downloaded_artifact_name": "fintrust-hardened-linux-py312",
+  "github_artifact_id": 11581842656,
+  "local_artifact_path": "C:\\Users\\Nompilo\\Desktop\\fintrust\\build\\hardened-release\\fintrust-hardened-linux-py312.zip",
+  "sha256": "cf9c18a5f267373e2fc2e22331987bb6dce8e2e65366b2d1f5651bb035dd6654",
+  "sha256_base64": "z5wYpfJnNz4vwuIjMZh7ttzo4uZTZrLR9WUbsDXdZlQ=",
+  "bytes": 21372233,
+  "local_checksum_and_content_rechecked": true,
+  "required_integrity_and_admin_tests_ran_and_passed": [
+    "test_archived_v2_and_v5_controls_remain_preserved",
+    "test_validation_evidence_matches_current_candidate_and_preserves_simulator_limits",
+    "test_database_roles_can_execute_pipeline_without_owner_privileges"
+  ],
+  "tests": {
+    "tests": 385,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 385
+  },
+  "pytest_duration_seconds": 13.39,
+  "runner": {
+    "os": "Linux",
+    "architecture": "x86_64",
+    "python": "3.12.15",
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39"
+  },
+  "postgresql": "16.15",
+  "linux_execution_verified": true,
+  "release_gate_passed": true,
+  "old_windows_artifact": {
+    "sha256": "3b95884caa30bb678d47dbf6fe4993784fae8b958b48a4630b5bd35cec7de29e",
+    "status": "SUPERSEDED \u2014 contained Windows launcher executables",
+    "bytes_preserved": true
+  },
+  "aws_access": false,
+  "aws_upload_or_deployment": false,
+  "remaining_blocker": "Private RDS migration path and separately reviewed live schema/runtime IAM/release update remain pending."
+}

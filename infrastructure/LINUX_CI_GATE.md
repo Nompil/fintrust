@@ -10,8 +10,18 @@ verifies that exact archive, runs the full suite with disposable PostgreSQL 16
 and publishes the verified ZIP/evidence only after a zero-failure/zero-skip gate.
 WSL is optional. The prior retained-local-ZIP transfer plan is replaced. See
 [the current hardened release process](HARDENED_RUNTIME_RELEASE.md#authoritative-release-process-linux-ci-builds-and-verifies)
-for preparation results and the pending push/run. The snapshot below describes
-historical setup; it does not establish a current hardened release pass.
+for the successful hardened release checkpoint and authoritative artifact identifiers.
+Run [37850256137](https://github.com/Nompil/fintrust/actions/runs/37850256137)
+verified source `5385c581e76ae1c0d486e569b6beb4c6b67d548c` on Ubuntu 24.04,
+Linux x86_64, CPython 3.12.15 and PostgreSQL 16.15: **385 passed, 0 failed,
+0 skipped**. Both `linux_execution_verified` and `release_gate_passed` are true.
+The verified ZIP and manifest/evidence were published and rechecked locally.
+AWS upload/deployment and the private RDS migration path remain pending.
+
+## Historical initial setup snapshot
+
+The snapshot below describes historical setup, before the GitHub repository and
+current release workflow existed; it does not replace the current checkpoint.
 
 Status: **PREPARED; LINUX EXECUTION NOT YET VERIFIED.** No remote is configured.
 No repository creation, push, GitHub run or AWS account access occurred.
