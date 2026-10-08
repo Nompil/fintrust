@@ -73,3 +73,15 @@ Processing templates retain logs for fourteen days. Alarm thresholds, notificati
 ## Evidence
 
 The [evidence register](EVIDENCE/README.md) separates local results, prepared procedures and missing execution proof. Update it with real outputs only. See [architecture](architecture.md) for service placement and [security](SECURITY.md) for access boundaries.
+
+
+### Local transaction-identity hardening checkpoint
+
+[Identity, batch audit and duplicate-charge handling](IDEMPOTENCY.md)
+records the new local implementation, additive migration and review/release gates.
+Duplicate data is prevented/audited; distinct suspicious charges remain in the
+ledger. No AWS migration or permission update was performed. New runtime source
+requires a new Linux-verified artifact; the earlier uploaded ZIP remains evidence
+for its previous source only. Stage 5 tagging recovery and deployment remain
+separate, unexecuted approval checkpoints. Do not run older Stage 5 commands as a
+release procedure for the new source.

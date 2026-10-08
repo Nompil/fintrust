@@ -47,3 +47,15 @@ Chosen 7R classification: **Replatform**. FinTrust preserves the existing transa
 ## 6. Evidence still required
 
 Verify deployed access controls, encryption, audit logs, retention and deletion behavior. Risk controls above are design commitments; this repository is not evidence of legal compliance.
+
+
+### Local transaction-identity hardening checkpoint
+
+[Identity, batch audit and duplicate-charge handling](IDEMPOTENCY.md)
+records the new local implementation, additive migration and review/release gates.
+Duplicate data is prevented/audited; distinct suspicious charges remain in the
+ledger. No AWS migration or permission update was performed. New runtime source
+requires a new Linux-verified artifact; the earlier uploaded ZIP remains evidence
+for its previous source only. Stage 5 tagging recovery and deployment remain
+separate, unexecuted approval checkpoints. Do not run older Stage 5 commands as a
+release procedure for the new source.

@@ -30,7 +30,7 @@ erDiagram
     }
 
     TRANSACTION {
-        UUID tx_id PK "Stable source-row UUID"
+        UUID tx_id PK "Internal UUID; canonical accepted identity"
         UUID account_id FK "References ACCOUNT; delete restricted"
         NUMERIC amount "15,2; CHECK amount > 0"
         CHAR currency "CHECK: ZAR, USD, EUR, GBP, KES"
@@ -39,6 +39,13 @@ erDiagram
         VARCHAR tx_type "CHECK: debit, credit, transfer, fee"
         BOOLEAN cross_border
         TEXT raw_file "Source S3 key for traceability"
+        VARCHAR source_system "Upstream namespace"
+        VARCHAR source_transaction_id "Partial unique with source/account"
+        CHAR transaction_fingerprint "Compared after identity; not unique"
+        UUID batch_id "S3 batch audit reference"
+        CHAR file_sha256
+        INTEGER source_row
+        CHAR country
     }
 
     RISK_EVENT {
@@ -76,7 +83,7 @@ The relational `alerts` table supports the legacy SQL helper. The configured clo
 | `customers` | `customer_id UUID PK`, `full_name VARCHAR(150)`, `id_number VARCHAR(20) UNIQUE`, `kyc_status VARCHAR(20)`, `created_at TIMESTAMPTZ` | KYC is a finite state (`pending`, `verified`, `rejected`, `frozen`); a check constraint prevents unrecognised states. Full name and identity number are personal information and must be access-controlled. |
 | `accounts` | `account_id UUID PK`, `customer_id UUID FK`, `account_type VARCHAR(30)`, `balance NUMERIC(15,2)`, `status VARCHAR(20)`, `opened_at TIMESTAMPTZ` | Account types are constrained to the agreed set. `NUMERIC`, not floating point, avoids rounding errors in balances. Deleting a customer with accounts is restricted. |
 | `transactions` | `tx_id UUID PK`, `account_id UUID FK`, `amount NUMERIC(15,2)`, `currency CHAR(3)`, `tx_date TIMESTAMPTZ`, `tx_type VARCHAR(30)`, `cross_border BOOLEAN`, `raw_file TEXT` | Amount is positive; direction is represented by `tx_type`, avoiding negative transaction amounts. Currency and type are constrained. `raw_file` traces a ledger row to its input object. Accounts with transactions cannot be deleted. |
-| `risk_events` | `risk_event_id BIGSERIAL PK`, `tx_id UUID FK`, `risk_score INTEGER`, `reason VARCHAR(255)`, `created_at TIMESTAMPTZ` | A score must be in the range 0–100. Risk decisions are kept apart from the financial transaction record. |
+| `risk_events` | `risk_event_id BIGSERIAL PK`, `tx_id UUID FK`, `risk_score INTEGER`, `reason VARCHAR(255)`, `created_at TIMESTAMPTZ` | A score must be in the range 0â€“100. Risk decisions are kept apart from the financial transaction record. |
 | `alerts` | `alert_id BIGSERIAL PK`, `risk_event_id BIGINT FK`, `severity VARCHAR(20)`, `message TEXT`, `sent_at TIMESTAMPTZ NULL`, `delivery_key BIGINT UNIQUE`, `delivery_state VARCHAR(10)`, `provider_message_id TEXT` | A legacy SQL alert is linked to the risk event that caused it, preserving investigation context. |
 
 ## Relationships and Normalisation
@@ -97,3 +104,10 @@ The relational `alerts` table supports the legacy SQL helper. The configured clo
 - `idx_tx_account_cursor` supports stable ordering by account, timestamp and transaction ID.
 
 `processed_transactions.tx_id` is both a primary and foreign key. Its payload fingerprint rejects conflicting reuse of an ID; its JSON result preserves the original decision on retries. DynamoDB projections are separate from this relational ERD.
+
+
+The additive [identity migration](../sql/migrations/001_transaction_identity.sql)
+keeps historical rows valid. Batch records reside in the existing S3 quarantine
+bucket to preserve ingest's placement outside the VPC; `batch_id` is an audit
+reference, not a SQL foreign key. Fingerprints never globally deduplicate similar
+payments. See [identity rules and release gates](IDEMPOTENCY.md).

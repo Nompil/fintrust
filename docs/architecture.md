@@ -14,9 +14,17 @@ and publishes valid jobs. Files are bounded to 1 MiB and 5,000 rows. FIFO messag
 are grouped by account. Scoring checks account existence and serializes ledger
 work per account. An unknown account is quarantined; a database outage is retried.
 
+File hashing and durable batch audit precede row admission. Completed identical
+uploads are audited rather than republished; repeated reliable row identities
+are quarantined with structured reasons. Similar events without reliable identity
+remain separate. See [identity and duplicate handling](IDEMPOTENCY.md) for the
+exact source-reference scope, publication/retry boundaries and deployment gates.
+
 Scoring commits the transaction, risk event and frozen result together in
 PostgreSQL. `processed_transactions` records the transaction fingerprint and
-original result. A replay reuses that result; a conflicting transaction ID fails.
+original result. A replay reuses that result under the canonical UUID; a conflicting
+UUID or upstream source identity fails. Distinct possible double charges stay in
+the ledger and receive a configurable risk signal.
 DynamoDB publication follows the SQL commit. If publication fails, a queue retry
 can complete it without creating another ledger row or changing the score.
 
@@ -47,8 +55,8 @@ with separate route tables. Only application routes use the S3/DynamoDB gateway
 endpoints. SGs permit PostgreSQL only from the application group. No NAT, IGW or
 interface endpoint is required. The older combined foundation is not the Stage 1
 deployment entry point. The [cost plan](../infrastructure/DEPLOYMENT_BOOTSTRAP.md)
-proposes a Free Plan credit-funded `db.t4g.micro` with 5 GiB gp2 for the later
-bounded demo; no RDS instance has been created.
+records the corrected `db.t4g.micro`, Single-AZ, 20 GiB gp3 PostgreSQL deployment.
+Stages 1–4 were reported verified in AWS; the new identity hardening is local only.
 Private functions use PostgreSQL and gateway-supported S3/DynamoDB APIs; they do
 not call SSM, SES, SQS or Lambda APIs at runtime in the configured cloud path.
 Nonsecret database settings are resolved at deployment. IAM tokens are signed
@@ -118,3 +126,25 @@ implementation evidence.
 Connection pooling/reuse, approved scoring weights, production identity,
 monitoring completion and archive automation remain open. The scoring rules are
 explainable teaching rules, not a validated fraud model.
+
+
+## Duplicate-data admission and payment risk
+
+```mermaid
+flowchart LR
+    Upload[S3 CSV upload] --> Batch[Byte hash and batch audit]
+    Batch --> Validation[Row validation and reliable identity checks]
+    Validation -->|Invalid or repeated identity| Quarantine[Structured quarantine and audit]
+    Validation -->|Valid transaction| FIFO[SQS FIFO grouped by account]
+    FIFO --> Score[Score and SQL identity admission]
+    Score --> Ledger[RDS ledger and frozen result]
+    Score --> Projection[DynamoDB canonical projection]
+    Projection --> Alerts[Alerts]
+    Ledger --> Reads[API and reports]
+```
+
+Possible duplicate charges follow the valid branch: both distinct financial
+transactions remain, with `POSSIBLE_DUPLICATE_CHARGE` as a review signal.
+Implemented/local-tested, live-unverified and future controls are separated in
+[IDEMPOTENCY.md](IDEMPOTENCY.md). Historical diagrams/exported PDFs are not updated
+execution evidence.

@@ -1518,3 +1518,21 @@ concurrency change, trigger wiring or push occurred during this investigation.
 experiment, validated with 99 focused tests, seven IAM simulations and zero
 Access Analyzer findings. Canonical policy remains unchanged. The plan is ready
 for review; no experiment or AWS mutation is approved or executed.
+
+
+### Local transaction-identity hardening checkpoint
+
+[Identity, batch audit and duplicate-charge handling](../docs/IDEMPOTENCY.md)
+records the new local implementation, additive migration and review/release gates.
+Duplicate data is prevented/audited; distinct suspicious charges remain in the
+ledger. No AWS migration or permission update was performed. New runtime source
+requires a new Linux-verified artifact; the earlier uploaded ZIP remains evidence
+for its previous source only. Stage 5 tagging recovery and deployment remain
+separate, unexecuted approval checkpoints. Do not run older Stage 5 commands as a
+release procedure for the new source.
+
+Local hardening validation: 252 passed, 0 failed, 1 existing administrator-only
+skip. New proposed runtime policy Access Analyzer validation: zero findings.
+Current source/package consistency: BLOCKED until a new reviewed Linux build;
+the retained historical artifact is unchanged. Review the hardening before any
+RDS migration, role update, package release or Stage 5 recovery execution.
