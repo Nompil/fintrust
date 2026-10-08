@@ -22,6 +22,18 @@ def test_checksum_mismatch_rejected_before_archive_inspection(tmp_path, monkeypa
 
 @pytest.mark.parametrize("name,data", [
     (".env", b"local configuration"),
+    ("docs/architecture.md", b"project documentation"),
+    ("fintrust/docs/internal.md", b"first-party docs"),
+    ("src/docs/internal.md", b"first-party docs"),
+    (".github/workflows/ci.yml", b"repository workflow"),
+    (".git/config", b"repository config"),
+    ("project-reference/notes.md", b"development material"),
+    ("bin/dotenv.exe", b"MZ Windows launcher"),
+    ("bin/flask.exe", b"MZ Windows launcher"),
+    ("boto3/docs/unexpected.exe", b"MZ Windows binary"),
+    ("boto3/docs/hidden_binary", b"MZ hidden PE"),
+    ("boto3/docs/.env", b"environment config"),
+    ("boto3/docs/credential.py", b"AKIA" + b"A" * 16),
     ("fintrust/__pycache__/cached.pyc", b"cache"),
     ("tests/example.py", b"test"),
     ("../outside.py", b"unsafe"),
@@ -102,3 +114,13 @@ def test_runner_evidence_requires_zero_skips_even_after_successful_imports(tmp_p
     assert evidence["release_gate_passed"] is False
     assert evidence["tests"]["skipped"] == 1
     assert evidence["artifact_filename"] == archive.name
+
+
+@pytest.mark.parametrize("name", ["boto3/docs/__init__.py", "botocore/docs/service.py",
+                                  "vendor_package/internal/docs/helper.py"])
+def test_dependency_internal_docs_are_not_project_documentation(tmp_path, monkeypatch, name):
+    path = tmp_path / "candidate.zip"
+    with zipfile.ZipFile(path, "w") as archive:
+        archive.writestr(name, "def helper(): return None\n")
+    monkeypatch.setattr(release, "verify_archive", lambda _: {"layout_checked": True})
+    assert release.check_input(path, hashlib.sha256(path.read_bytes()).hexdigest()) == {"layout_checked": True}

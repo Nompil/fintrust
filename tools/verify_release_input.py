@@ -25,7 +25,11 @@ def check_input(source, expected):
             parts = Path(name).parts
             if (name.startswith(("/", "\\")) or ".." in parts or "\\" in name
                     or any(part.startswith(".env") for part in parts)
-                    or any(part in {".aws", ".git", "__pycache__", "tests", "test-results", "docs", "project-reference", ".venv", "venv"} for part in parts)
+                    or any(part in {".aws", ".git", ".github", "__pycache__", "tests", "test-results", "project-reference", ".venv", "venv"} for part in parts)
+                    # Dependency-internal docs can be importable runtime modules.
+                    # Reject repository docs and docs nested in first-party code.
+                    or parts[0] == "docs"
+                    or (parts[0] in {"fintrust", "src"} and "docs" in parts[1:])
                     or name.endswith((".pyc", ".pyd", ".dll", ".exe", ".key", ".p12", ".pfx"))
                     or name.startswith("bin/")
                     or name.startswith(("pytest/", "_pytest/", "moto/"))

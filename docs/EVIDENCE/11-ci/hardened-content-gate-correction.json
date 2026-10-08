@@ -1,0 +1,52 @@
+{
+  "status": "CI CONTENT GATE FIX READY FOR RERUN",
+  "checked_at_utc": "2026-10-08T21:41:35.608392+00:00",
+  "failed_run": {
+    "id": "37847686705",
+    "url": "https://github.com/Nompil/fintrust/actions/runs/37847686705",
+    "source_commit": "0804fd86ba9661d0bf507085f5bd7d1f75cc9424",
+    "classification": "CI packaging verification failed due to an over-broad content classification rule; Linux build itself succeeded.",
+    "failing_step": "Check exact built content and source binding",
+    "exact_error": "ValueError: Unexpected or development-only archive member: boto3/docs/__init__.py",
+    "candidate_sha256": "cf9c18a5f267373e2fc2e22331987bb6dce8e2e65366b2d1f5651bb035dd6654",
+    "candidate_base64": "z5wYpfJnNz4vwuIjMZh7ttzo4uZTZrLR9WUbsDXdZlQ=",
+    "candidate_bytes": 21372233,
+    "runner": {
+      "os": "Linux",
+      "architecture": "x86_64",
+      "python": "3.12.15",
+      "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39"
+    },
+    "postgresql": "16.15",
+    "linux_execution_verified": false,
+    "release_zip_published": false
+  },
+  "root_cause": "docs was forbidden in any path segment; dependency-internal Python modules were incorrectly classified as project documentation.",
+  "distribution_verification": {
+    "name": "boto3",
+    "version": "1.43.104",
+    "member": "boto3/docs/__init__.py",
+    "record_hash": "sha256=QM5OK8DS8ugKJE2HfI1BY9gFRvj7p7RyGQVN1MLLZII",
+    "observed_hash": "sha256=QM5OK8DS8ugKJE2HfI1BY9gFRvj7p7RyGQVN1MLLZII",
+    "official_source": "https://github.com/boto/boto3/blob/develop/boto3/docs/__init__.py",
+    "runtime_import_references": [
+      "boto3/resources/action.py imports boto3.docs.docstring.ActionDocstring",
+      "boto3/dynamodb/transform.py imports boto3.docs.utils.DocumentModifiedShape"
+    ],
+    "scope": "Installed pinned distribution and retained local ZIP inspected; failed CI ZIP was not published and could not be downloaded. CI identifies this member from its pinned boto3 Linux build."
+  },
+  "correction": "Reject top-level docs and docs within fintrust/src; allow dependency-internal docs without filename exceptions. Preserve every other scan and add .github exclusion.",
+  "local_tests": {
+    "passed": 63,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 3.94
+  },
+  "workflow_changed": false,
+  "dependencies_changed": false,
+  "application_changed": false,
+  "zip_changed": false,
+  "aws_access": false,
+  "push_performed": false,
+  "ci_rerun": "pending separately approved push"
+}

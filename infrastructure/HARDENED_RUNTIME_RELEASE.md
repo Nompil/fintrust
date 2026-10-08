@@ -404,3 +404,43 @@ gh workflow run ci.yml --repo Nompil/fintrust --ref main
 ```
 
 **LINUX BUILD PIPELINE READY FOR PUSH.**
+
+## CI run 37847686705: path-classification correction
+
+**CI packaging verification failed due to an over-broad content classification
+rule; Linux build itself succeeded.** Actual run:
+https://github.com/Nompil/fintrust/actions/runs/37847686705
+Source commit: `0804fd86ba9661d0bf507085f5bd7d1f75cc9424`.
+Ubuntu 24.04 x86_64, CPython 3.12.15 and PostgreSQL 16.15 were confirmed.
+The gate rejected `boto3/docs/__init__.py` before imports/tests; no release ZIP
+was published, only failure evidence. Candidate SHA256
+`cf9c18a5f267373e2fc2e22331987bb6dce8e2e65366b2d1f5651bb035dd6654`
+is NOT release-approved; execution remains false.
+
+Root cause: the verifier treated any `docs` path segment as repository material.
+The corrected rule rejects top-level `docs/` and docs nested in first-party
+`fintrust/` or `src/`; dependency-internal Python modules are not rejected merely
+for a `docs` segment. This is path-aware, not a special filename allowance.
+The pinned boto3 1.43.104 installed distribution RECORD hash matches that member,
+and boto3 resources/action.py and dynamodb/transform.py import boto3.docs modules.
+The upstream module is documented at
+https://github.com/boto/boto3/blob/develop/boto3/docs/__init__.py .
+The failed CI ZIP was not published; distribution provenance was checked against
+local pinned distribution/retained package plus the actual CI failure evidence,
+not by claiming a download of that CI ZIP. No dependency files were removed.
+
+Every archive member still undergoes Windows suffix/MZ, credential, private-key,
+.env, cache, unsafe path and unwanted CLI checks. Existing project tests and
+pytest/moto exclusions remain. `.github` is explicitly rejected too. The checksum,
+layout, source binding, native import, full-test and zero-skip gates are unchanged.
+No workflow/build strategy, application code or dependencies were changed.
+
+Local regression result: **63 passed, 0 failed, 0 skipped** (3.94 seconds), including
+legitimate nested docs, repository docs/tests, both Windows launchers, hidden MZ,
+.env/credential patterns inside dependency docs, and unrelated development material.
+Evidence: `docs/EVIDENCE/11-ci/hardened-content-gate-correction.json`.
+A separately approved push/rerun is required. `linux_execution_verified` is still
+false; the Windows candidate is still not release-ready and supersession awaits
+a fully successful Linux artifact. No AWS access, rebuild, push or CI rerun occurred.
+
+**CI CONTENT GATE FIX READY FOR RERUN.**
