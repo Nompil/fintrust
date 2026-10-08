@@ -101,4 +101,3 @@ def test_package_rejects_unverified_or_mismatched_evidence(tmp_path, monkeypatch
     monkeypatch.setattr(deploy, "verify_archive", lambda _: actual)
     with pytest.raises(ValueError, match=reason):
         deploy.verify_package(path)
-
