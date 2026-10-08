@@ -1511,3 +1511,10 @@ and prepare a fresh reviewed CREATE using the same exact package version.
 Keep concurrency zero and triggers unwired. Stop again before execution.
 No AWS IAM update, stack/log deletion, package upload, change set, deployment,
 concurrency change, trigger wiring or push occurred during this investigation.
+
+### Stage 5 controlled diagnostic proposal
+
+[STAGE5_DIAGNOSTIC.md](STAGE5_DIAGNOSTIC.md) prepares the temporary CalledVia-only
+experiment, validated with 99 focused tests, seven IAM simulations and zero
+Access Analyzer findings. Canonical policy remains unchanged. The plan is ready
+for review; no experiment or AWS mutation is approved or executed.
