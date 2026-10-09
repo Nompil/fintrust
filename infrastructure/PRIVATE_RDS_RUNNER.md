@@ -1,4 +1,4 @@
-# Temporary private RDS runner — LOCAL PREPARATION ONLY
+# Temporary private RDS runner — CI VERIFIED; AWS NOT APPROVED
 
 Continues approved design commit `24ef12eeac07a12801e96672dd4941f8a9b9e716`.
 No AWS resources/policies were changed; no live secret was retrieved and no live
@@ -7,34 +7,27 @@ SQL was executed. This is not permission to deploy. The application ZIP remains
 
 ## Current gate
 
-**PRIVATE RDS MIGRATION RUNNER CI FAILED** at the remaining schema-CREATE
-boundary. [Latest CI 37898074673](https://github.com/Nompil/fintrust/actions/runs/37898074673),
-source `ab0a70e30606378f15b1662f2af804592e8499e7`, used Ubuntu 24.04 x86_64,
-Python 3.12.15 and disposable PostgreSQL 16.15. **446 tests passed, 0 failed,
-0 skipped**. Local focused checks: 60 passed; following ACL correction: 15
-infrastructure checks passed.
+**PRIVATE RDS INDEX PRIVILEGE PATH VERIFIED**.
+[CI 37931518056](https://github.com/Nompil/fintrust/actions/runs/37931518056), source
+`cc3d1948e52c6a7f465acbc2a4d5e02564daa9a8`, passed on Ubuntu 24.04 x86_64,
+Python 3.12.15 and disposable PostgreSQL 16.15: **451 passed, 0 failed, 0 skipped**,
+including 66 focused migration tests.
 
-The separate rehearsal reproduced the original invalid ADMIN self-grant, then
-successfully completed corrected bootstrap under the non-superuser creator.
-It proved migration delegation denial, DDL denial without SET ROLE, unrelated
-DDL/schema CREATE denial and SQL-failure rollback. It subsequently failed running
-the fixed migration with `permission denied for schema public`: index creation
-requires CREATE on the containing schema. Cleanup and migration rerun were not
-reached in this run; they are not claimed verified.
+The parameterless SECURITY DEFINER helper creates only the two fixed indexes;
+the migration login receives neither schema CREATE nor helper-role membership.
+Actual PG16 rehearsal passed bootstrap, privilege denials, conflicting index/type
+refusal, transactional rollback, migration/rerun, helper self-removal and both
+temporary-role removals. All 200 legacy rows and runtime permissions were preserved.
 
-The owner currently lacks schema CREATE intentionally. Granting it would permit
-unrelated object creation as well, conflicting with the approved restriction.
-No permission was broadened. A separately reviewed narrow index-creation design
-is required, such as a temporary fixed, parameterless SECURITY DEFINER helper
-with qualified object names, trusted search_path, exclusive invocation by the
-migration login, no PUBLIC EXECUTE, exact index-definition checks and administrator
-cleanup. That alternative is only a proposal, not implemented or verified.
+All four runner ZIPs built and imported their actual handlers/production modules
+and native psycopg2 on Linux Python 3.12 and in the Lambda runtime container with
+networking disabled. Downloaded hashes, sizes, source bindings and package contents
+were independently checked. Both Linux and PG16 verification flags are true.
+[Preserved evidence and exact artifact hashes](../docs/EVIDENCE/05-rds/migration-runner-ci/37931518056/RESULT.md).
 
-The gate remains blocking, with the unchanged privilege rehearsal still required.
-Runner packaging/import stages were not reached; neither verification flag is
-true. No AWS account access occurred and the application ZIP remains unchanged.
-[Evidence summary](../docs/EVIDENCE/05-rds/migration-runner-ci/37898074673/summary.json)
-records exactly which assertions completed and which gates did not.
+This closes the CI privilege/package gate, not live RDS IAM/TLS or AWS deployment.
+No AWS account was accessed. The next checkpoint is **business-rule/schema freeze**.
+Earlier failed runs below remain historical evidence, superseded by this green run.
 
 The user accepted reuse of the existing app SG, including its S3/DynamoDB HTTPS
 prefix-list egress. No dedicated replacement runner SG or DB SG modification is
@@ -45,13 +38,9 @@ Secrets Manager IAM and endpoint policies retain exact bootstrap scope. The
 runner and temporary privileges must be removed afterward. This is an accepted
 network tradeoff, **not strict endpoint-and-DB-only network isolation**.
 
-Local verification: **59 focused tests passed (0 skipped)**; **443 regression tests
-passed, 1 skipped**. The skipped existing service-role test requires a disposable
-PostgreSQL administrator; no local administrator access was requested or broadened.
-New isolated test schemas were removed. Four candidate archives passed static
-layout/ELF/ABI/source-binding checks; actual Linux imports and PG16 role rehearsal
-remain unexecuted. Full results and exact four artifact hashes are in the local
-[summary](../docs/EVIDENCE/05-rds/migration-runner-local/summary.json).
+Earlier local candidates (59 focused / 443 regression passed, 1 skipped) are
+historical only. Their manifests remain in `migration-runner-local`; use the four
+CI 37931518056 ZIPs and manifests above for future review. The final CI has no skips.
 
 ## Implementation and phase separation
 
@@ -101,8 +90,10 @@ A successful preflight means the read completed; its assessment may still block 
 
 Only the source-hash-bound `sql/migrations/001_transaction_identity.sql` is supported.
 The existing file is unchanged. The runner removes its fixed BEGIN/COMMIT wrappers
-and owns the transaction: SET LOCAL ROLE narrow owner, lock transactions ACCESS
-EXCLUSIVE, assess existing definitions/data, execute fixed DDL, check exact columns,
+and owns the transaction: SET LOCAL ROLE narrow owner, verify exact current
+owner and acquire ACCESS EXCLUSIVE through a same-owner ALTER TABLE no-op, assess
+existing definitions/data, run the fixed column/check phase, RESET ROLE to invoke
+the fixed index helper, SET LOCAL ROLE owner again and check exact columns,
 validated CHECK definitions and complete unique/nonunique index definitions, then
 compare transaction row counts before commit. It rejects unsafe partial inline
 constraints instead of assuming ADD COLUMN IF NOT EXISTS repairs them. Failed
@@ -145,8 +136,9 @@ to revoke the transactions SELECT grant as its post-transfer grantor, then remov
 This avoids assuming table ownership/ACL grantor rules disappear after transfer.
 
 `remove_temporary_identity.sql` refuses active migration sessions or unexpected
-owned relations, sets NOLOGIN, revokes memberships and exact grants, and drops only
-the migration login. Other dependencies make DROP ROLE fail and roll back. Never
+owned relations, sets NOLOGIN, removes any restored fixed helper and its role,
+revokes migration memberships and exact grants, then drops the migration login.
+Other dependencies make DROP ROLE fail and roll back. Never
 DROP OWNED/CASCADE or remove the permanent owner, data, application roles or secret.
 The CI-only PG16 rehearsal exercises bootstrap -> owner-authenticated DDL/rerun ->
 cleanup as a nonsuperuser CREATEROLE administrator. Its local rds_iam stand-in tests
@@ -219,10 +211,10 @@ static policy tests; preserve the earlier Stage 5 lessons.
 
 ## Artifact and validation workflow
 
-Four separate archives, source bindings, sizes, hex/Base64 hashes and target flags
-are recorded in `docs/EVIDENCE/05-rds/migration-runner-local/summary.json`.
-Current builds reuse only pinned production dependency files from the already
-verified application ZIP, read-only. No application code is copied. psycopg2-binary
+The authoritative four CI archives, source bindings, sizes, hex/Base64 hashes and
+target flags are recorded under `docs/EVIDENCE/05-rds/migration-runner-ci/37931518056/`.
+CI builds use pinned Linux wheels; earlier local candidates reused a read-only
+dependency subset of the application ZIP. No application code is copied. psycopg2-binary
 2.9.13 supplies the CPython312 extension and bundled libpq; ELF64/x86_64 and all
 archive paths/source hashes are checked. Windows .pyd/.dll and application modules
 are rejected. New ZIPs have **linux_execution_verified=false** until real imports.
@@ -238,7 +230,8 @@ substitute the local candidate's hash or existing application's green result.
 
 ## Exact future approval sequence — commands are NOT executed
 
-First obtain Linux/PG16 gate evidence and resolve the SG egress review item. Refresh
+Linux/PG16 evidence is green and the SG egress tradeoff is accepted. First complete
+the business-rule/schema freeze. Any later AWS work needs separate approval. Refresh
 inventory metadata (identity, secret ARN/key, RDS state, subnet/AZ/IP/DNS/NACLs, SGs,
 endpoint absence) without GetSecretValue. Finalize endpoint/IAM/template validation.
 
@@ -303,7 +296,7 @@ roll back; uncertain commit/network timeouts require read-only reconciliation,
 not blind retry. Role/drop cleanup failure rolls back and needs catalog review.
 No cleanup helper auto-deletes AWS resources or shuts down existing RDS.
 
-## PostgreSQL 16 creator-grant correction (CI rerun pending)
+## PostgreSQL 16 creator-grant correction (historical; now CI verified)
 
 The first failing statement was:
 `GRANT fintrust_transactions_owner TO fintrust_admin WITH SET TRUE, INHERIT FALSE, ADMIN TRUE`.
@@ -329,8 +322,9 @@ Role graph, expressed as `grantor -> granted role -> member`:
 | Cleanup, restore master SET restriction | fintrust_admin -> fintrust_transactions_owner -> fintrust_admin | false / false / false |
 
 The existing application/runtime roles receive no membership from this correction.
-SET ROLE to the non-login owner is required for migration DDL and fixed index
-creation; it does not authorize unrelated table DDL or schema CREATE. Table
+SET ROLE to the non-login owner is required for column/check migration DDL.
+Fixed index creation now uses the separate helper below; neither path exposes
+unrelated table DDL or schema CREATE to the migration login. Table
 ownership inherently permits management of the transactions table; it is not a
 column-level DDL sandbox. Cleanup revokes both login memberships, ACLs and CONNECT,
 then drops the temporary login. The original administrator keeps its creator
@@ -354,18 +348,19 @@ SET LOCAL ROLE to the new owner for that existing ACL operation and RESET ROLE
 before continuing role administration. No new privilege is granted. Ownership
 still inherently permits the owner to regrant DML; the REVOKE is not a DML sandbox.
 
-### Remaining schema CREATE boundary
+### Historical schema CREATE failure (resolved by fixed helper)
 
 CI 37898074673 passed corrected bootstrap and the isolation/rollback assertions,
 then failed before migration completion. PostgreSQL 16 index creation explicitly
 checks CREATE on the table namespace, in addition to ownership:
 [PostgreSQL 16 indexcmds.c](https://github.com/postgres/postgres/blob/REL_16_STABLE/src/backend/commands/indexcmds.c).
 The owner-role grant alone is insufficient. Keeping schema CREATE revoked means
-this exact migration cannot yet complete; granting it would also allow unrelated
-schema objects. No migration ZIPs are verified, no cleanup completion is claimed,
-and no AWS operation is approved. Resolve the scoped index path before a new CI run.
+the original direct-index implementation could not complete; granting it would
+also allow unrelated schema objects. The fixed helper below resolves that failure;
+CI 37931518056 subsequently verified all four ZIPs and cleanup. No AWS operation
+is approved.
 
-## Fixed index capability implementation (target CI pending)
+## Fixed index capability implementation (PostgreSQL 16 CI verified)
 
 | Option | Capability exposed to migration login | Recovery/audit | Decision |
 |---|---|---|---|
@@ -411,11 +406,11 @@ memberships/ACLs and drops the login. The permanent NOLOGIN transaction owner
 remains. No objects should be owned by either disposable login/helper role after
 cleanup; indexes remain owned by the transaction table owner.
 
-Local focused suite: 63 passed, 0 failed/skipped. Exact PostgreSQL 16 privilege
+Final local focused suite: 66 passed, 0 failed/skipped. Exact PostgreSQL 16 privilege
 checks run first in the same CI workflow, then the complete regression, four
 archive builds and Linux import gates. No check was removed. The authoritative
-flags remain false until that run completes. Next after green: **business-rule /
-schema freeze**, not AWS execution or live migration.
+flags are now true for CI 37931518056 and its four downloaded artifacts. Next:
+**business-rule/schema freeze**, not AWS execution or live migration.
 
 See [PostgreSQL SECURITY DEFINER guidance](https://www.postgresql.org/docs/16/sql-createfunction.html#SQL-CREATEFUNCTION-SECURITY).
 

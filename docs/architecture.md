@@ -85,8 +85,10 @@ payloads or configuration; no DB ingress change or NAT is proposed. Endpoint cos
 IAM and redaction checks require approval; later DDL uses a temporary IAM database login
 with narrowly scoped ownership membership. Ingest remains outside the VPC and disabled.
 The migration and runner have local tests; the [temporary runner](../infrastructure/PRIVATE_RDS_RUNNER.md)
-is locally implemented but its Linux/Python3.12 and PostgreSQL16 verification gates
-remain open. It is not deployed; live SQL schema/grants/migration remain unverified. The Linux application release is verified
+passed Linux/Python 3.12 and PostgreSQL 16 verification in CI 37931518056
+(451 passed, no failures/skips), including the fixed index helper and cleanup.
+Next is business-rule/schema freeze. The runner is not deployed; live SQL
+schema/grants/migration and RDS IAM authentication remain unverified. The Linux application release is verified
 by CI run 37850256137 (385 passed, no failures/skips), not yet uploaded or deployed.
 
 ## Queries and reports

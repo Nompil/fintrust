@@ -1,0 +1,46 @@
+{
+  "filename": "fintrust-migration-preflight.zip",
+  "byte_size": 20670849,
+  "sha256": "2f8afab595bac03f2b53f2ee7cda5befd282d5adaf57e7f7514ab1602d3dbd5f",
+  "sha256_base64": "L4r6tZW6wD8rU/LufNpb79KC1a2vV+f3UUqxYC09vV8=",
+  "phase": "preflight",
+  "runtime": "python3.12",
+  "architecture": "x86_64",
+  "target_os": "Linux",
+  "psycopg2_binary": "2.9.13",
+  "linux_execution_verified": true,
+  "postgresql16_execution_verified": true,
+  "handler": "migration_runner.preflight_entry.lambda_handler",
+  "source_binding": {
+    "migration_runner/__init__.py": "31dc56534c23703e9539d3c5899c2ef800ac3c5d89cb4a5fcc8a5f4cb63ce27d",
+    "migration_runner/config.py": "287a4d91a5a2fbd1c7ae26bcfb00ac2de32897918e2afc7a9a735eb816f4bf61",
+    "migration_runner/contract.py": "f40cc817fca1ad2645613114666e27f636706cdd324869e9a395ee8df6dc7623",
+    "migration_runner/common.py": "e8f9b906846706656370e0439f108c15f83bb8edae04aa969414c73e96f33306",
+    "migration_runner/sql_binding.py": "cb1f77e5f7dbbd9f63d691628830ee9801ad2f1ce7077e7a3107b4438c0d5512",
+    "migration_runner/preflight_entry.py": "963aa0150c95cac494dcd8059bf06a2b23f3a587b2978bab51904eff15d37de5",
+    "migration_runner/admin.py": "a50d5e675f9968afe756e62f90ca444f348222fc1984436d7f1389e7284fe6b7",
+    "sql/preflight/001_transaction_identity_catalog.sql": "c09012f47cc8956845a02b98a9525c843c457fb33a2b48bff8184c001e1e4943",
+    "sql/preflight/001_transaction_identity_data.sql": "862c530b5feb5a5150164003e55d9ca9735b283aa1a7de33a254f20568fbf001",
+    "certs/global-bundle.pem": "fe45bbebf92ad3e27a583bbb2ddd1553c521ed4d49af5514dc0a40372ea5395c"
+  },
+  "dependency_source": "pinned Linux wheels",
+  "linux_verification": {
+    "modules": [
+      "migration_runner.admin",
+      "migration_runner.common",
+      "migration_runner.config",
+      "migration_runner.contract",
+      "migration_runner.preflight_entry",
+      "migration_runner.sql_binding"
+    ],
+    "handler_imported": true,
+    "native_loaded": true,
+    "psycopg2": "2.9.13 (dt dec pq3 ext lo64)",
+    "libpq": 170011,
+    "network_requests": 0,
+    "ca_loaded": true,
+    "python": "3.12.15",
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.34",
+    "machine": "x86_64"
+  }
+}

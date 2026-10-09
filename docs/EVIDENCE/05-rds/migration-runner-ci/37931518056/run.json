@@ -1,0 +1,141 @@
+{
+  "conclusion": "success",
+  "createdAt": "2026-10-09T12:39:53Z",
+  "headSha": "cc3d1948e52c6a7f465acbc2a4d5e02564daa9a8",
+  "jobs": [
+    {
+      "completedAt": "2026-10-09T12:41:30Z",
+      "conclusion": "success",
+      "databaseId": 113823148288,
+      "name": "verify",
+      "startedAt": "2026-10-09T12:39:57Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-09T12:40:00Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-09T12:39:58Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-09T12:40:32Z",
+          "conclusion": "success",
+          "name": "Initialize containers",
+          "number": 2,
+          "startedAt": "2026-10-09T12:40:00Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-09T12:40:33Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "number": 3,
+          "startedAt": "2026-10-09T12:40:32Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-09T12:40:33Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-python@v5",
+          "number": 4,
+          "startedAt": "2026-10-09T12:40:33Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-09T12:40:41Z",
+          "conclusion": "success",
+          "name": "Install test dependencies",
+          "number": 5,
+          "startedAt": "2026-10-09T12:40:33Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-09T12:40:41Z",
+          "conclusion": "success",
+          "name": "Rehearse exact bootstrap and cleanup privileges in disposable PostgreSQL 16",
+          "number": 6,
+          "startedAt": "2026-10-09T12:40:41Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-09T12:40:54Z",
+          "conclusion": "success",
+          "name": "Focused and regression tests against PostgreSQL 16",
+          "number": 7,
+          "startedAt": "2026-10-09T12:40:41Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-09T12:41:06Z",
+          "conclusion": "success",
+          "name": "Build only migration archives",
+          "number": 8,
+          "startedAt": "2026-10-09T12:40:54Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-09T12:41:25Z",
+          "conclusion": "success",
+          "name": "Import exact ZIPs inside Lambda Python 3.12 Linux runtime without networking",
+          "number": 9,
+          "startedAt": "2026-10-09T12:41:06Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-09T12:41:25Z",
+          "conclusion": "success",
+          "name": "Record target verification gate",
+          "number": 10,
+          "startedAt": "2026-10-09T12:41:25Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-09T12:41:28Z",
+          "conclusion": "success",
+          "name": "Run actions/upload-artifact@v4",
+          "number": 11,
+          "startedAt": "2026-10-09T12:41:25Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-09T12:41:28Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-python@v5",
+          "number": 20,
+          "startedAt": "2026-10-09T12:41:28Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-09T12:41:28Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v4",
+          "number": 21,
+          "startedAt": "2026-10-09T12:41:28Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-09T12:41:29Z",
+          "conclusion": "success",
+          "name": "Stop containers",
+          "number": 22,
+          "startedAt": "2026-10-09T12:41:28Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-09T12:41:29Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 23,
+          "startedAt": "2026-10-09T12:41:29Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/Nompil/fintrust/actions/runs/37931518056/job/113823148288"
+    }
+  ],
+  "status": "completed",
+  "updatedAt": "2026-10-09T12:41:31Z",
+  "url": "https://github.com/Nompil/fintrust/actions/runs/37931518056"
+}

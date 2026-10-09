@@ -1,0 +1,48 @@
+{
+  "filename": "fintrust-migration-bootstrap.zip",
+  "byte_size": 20674310,
+  "sha256": "b2e6112dd0a6d7dcd1d74cab7aa0f5b54dfc94b0185657de12d58af1f5d6a9e4",
+  "sha256_base64": "suYRLdCm19zR10yreqD1tU38lLAYVlfeEtWK8fXWqeQ=",
+  "phase": "bootstrap",
+  "runtime": "python3.12",
+  "architecture": "x86_64",
+  "target_os": "Linux",
+  "psycopg2_binary": "2.9.13",
+  "linux_execution_verified": true,
+  "postgresql16_execution_verified": true,
+  "handler": "migration_runner.bootstrap_entry.lambda_handler",
+  "source_binding": {
+    "migration_runner/__init__.py": "31dc56534c23703e9539d3c5899c2ef800ac3c5d89cb4a5fcc8a5f4cb63ce27d",
+    "migration_runner/config.py": "287a4d91a5a2fbd1c7ae26bcfb00ac2de32897918e2afc7a9a735eb816f4bf61",
+    "migration_runner/contract.py": "f40cc817fca1ad2645613114666e27f636706cdd324869e9a395ee8df6dc7623",
+    "migration_runner/common.py": "e8f9b906846706656370e0439f108c15f83bb8edae04aa969414c73e96f33306",
+    "migration_runner/sql_binding.py": "cb1f77e5f7dbbd9f63d691628830ee9801ad2f1ce7077e7a3107b4438c0d5512",
+    "migration_runner/bootstrap_entry.py": "2ce5ba0f64f6e73a0b322255ef58fd3046fdbce67f5420dd1f1bebb6a770a012",
+    "migration_runner/admin.py": "a50d5e675f9968afe756e62f90ca444f348222fc1984436d7f1389e7284fe6b7",
+    "sql/preflight/001_transaction_identity_catalog.sql": "c09012f47cc8956845a02b98a9525c843c457fb33a2b48bff8184c001e1e4943",
+    "sql/preflight/001_transaction_identity_data.sql": "862c530b5feb5a5150164003e55d9ca9735b283aa1a7de33a254f20568fbf001",
+    "sql/bootstrap/temporary_identity.sql": "462ea66683e7b8bf624485ee02eca9f4ed87c6d86bf549dd57ecc0eecc041782",
+    "sql/bootstrap/fixed_identity_indexes.sql": "3a339260c5737238ceb4b5b38ccd090d8c0c67cdd45cec38337d97284e2862ca",
+    "certs/global-bundle.pem": "fe45bbebf92ad3e27a583bbb2ddd1553c521ed4d49af5514dc0a40372ea5395c"
+  },
+  "dependency_source": "pinned Linux wheels",
+  "linux_verification": {
+    "modules": [
+      "migration_runner.admin",
+      "migration_runner.bootstrap_entry",
+      "migration_runner.common",
+      "migration_runner.config",
+      "migration_runner.contract",
+      "migration_runner.sql_binding"
+    ],
+    "handler_imported": true,
+    "native_loaded": true,
+    "psycopg2": "2.9.13 (dt dec pq3 ext lo64)",
+    "libpq": 170011,
+    "network_requests": 0,
+    "ca_loaded": true,
+    "python": "3.12.15",
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.34",
+    "machine": "x86_64"
+  }
+}

@@ -1,18 +1,8 @@
-> Latest correction checkpoint: CI 37898074673 / source `ab0a70e`.
-> Original ADMIN grant cycle corrected; bootstrap and privilege-denial/rollback
-> checks passed. Regression: 446 passed, 0 failed, 0 skipped. Migration fails
-> because index creation requires CREATE on schema public, currently denied to
-> preserve unrelated-DDL isolation. No privileges broadened. Runner ZIP build,
-> import verification, migration rerun and cleanup rehearsal remain unverified.
-> See PRIVATE_RDS_RUNNER.md for exact evidence and the next design boundary.
-
-> CI continuation: approved source `2fb8ec4` was pushed and manual runner CI
-> [37895291574](https://github.com/Nompil/fintrust/actions/runs/37895291574) ran.
-> Regression: 444 passed, 0 failed, 0 skipped on Linux/Python 3.12/PostgreSQL 16.15.
-> Exact bootstrap privilege rehearsal failed with `ADMIN option cannot be granted
-> back to your own grantor`; packaging and Linux imports did not run. AWS execution
-> remains blocked. Existing app SG egress is an accepted documented tradeoff;
-> no dedicated replacement SG or DB SG changes are approved. See PRIVATE_RDS_RUNNER.md.
+> Current checkpoint: [CI 37931518056](https://github.com/Nompil/fintrust/actions/runs/37931518056)
+> / source `cc3d1948e52c6a7f465acbc2a4d5e02564daa9a8`: 451 passed, 0 failed,
+> 0 skipped. PostgreSQL 16 bootstrap/helper/migration/rerun/cleanup and all four
+> Linux Python 3.12 ZIP imports passed. See PRIVATE_RDS_RUNNER.md and its evidence.
+> Next: business-rule/schema freeze. No AWS execution is authorized.
 
 # Private RDS migration path - secure bootstrap ready for review
 
@@ -22,10 +12,11 @@ This revision supersedes commit 78b2ceb's controller-to-Lambda password-payload
 proposal: that handoff is now explicitly prohibited. A temporary Secrets Manager
 interface endpoint is proposed instead and needs cost/security approval.
 Local implementation now exists; see [runner checkpoint](PRIVATE_RDS_RUNNER.md).
-Its separate ZIPs are not yet Linux/PG16 execution-verified. No runner is deployed
+Its four separate ZIPs are now Linux/PG16 execution-verified. No runner is deployed
 or invoked. No live SQL, secret retrieval, snapshot, IAM/network mutation or
 application deployment occurred. The original design below remains subject to
-the implementation checkpoint and its SG-egress review item.
+the implementation checkpoint. Existing app SG egress is an accepted documented
+tradeoff; no replacement SG or DB SG change is approved.
 Read-only AWS metadata was collected on 2026-10-09 (Africa/Johannesburg date).
 Live schema, owners, grants, row counts and migration state remain **UNKNOWN**.
 
@@ -519,8 +510,8 @@ Current actual evidence is metadata JSON and prior local preflight test results 
 `docs/EVIDENCE/05-rds/private-migration-path/`, plus metadata, pricing and offline
 signing checks in `docs/EVIDENCE/05-rds/private-bootstrap-path/`. Production SQL is unchanged. The two
 preflight scripts and local tests are preparation, not an executable AWS runner.
-Review-ready is not execution-ready: the next user decision is approval of the
-temporary Secrets Manager endpoint and direct-fetch read-only runner design. Live schema preflight,
+Review-ready is not execution-ready: the next checkpoint is business-rule/schema
+freeze. The temporary endpoint/runner AWS steps still need explicit approval. Live schema preflight,
 bootstrap privileges, snapshot and DDL remain later explicit gates.
 
 ## Prior local validation result (commit 78b2ceb; not rerun for this documentation change)
