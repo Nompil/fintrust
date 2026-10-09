@@ -42,7 +42,15 @@ def operate(conn, op):
         before = d["row_counts"]["transactions"]
         # Only this pinned file is executed. Its wrappers are removed so all DDL,
         # postchecks and row-count checks commit together, or roll back together.
-        cur.execute(common.body("sql/migrations/001_transaction_identity.sql", migration=True))
+        if a["state"] != "correct":
+            columns, _ = common.migration_parts()
+            cur.execute(columns)
+            # Only the login can invoke the fixed helper, not the table-owner role.
+            cur.execute("RESET ROLE")
+            cur.execute("SELECT public.fintrust_create_identity_indexes()")
+            cur.execute("SET LOCAL ROLE fintrust_transactions_owner")
+        # A fully verified rerun is a no-op; the helper was dropped transactionally
+        # by the successful first call. Never silently skip a conflicting definition.
         after_c, after_d, after_a = common.inspect(cur)
         if after_a["state"] != "correct" or after_d["row_counts"]["transactions"] != before:
             raise common.Refused("post_migration_verification_failed")

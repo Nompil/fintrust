@@ -4,11 +4,14 @@ DO $$ BEGIN
  IF current_user <> 'fintrust_admin' OR current_database() <> 'fintrust' THEN
    RAISE EXCEPTION 'bootstrap identity mismatch';
  END IF;
- IF EXISTS (SELECT FROM pg_roles WHERE rolname IN ('fintrust_migrate_dev','fintrust_transactions_owner')) THEN
+ IF EXISTS (SELECT FROM pg_roles WHERE rolname IN ('fintrust_migrate_dev','fintrust_transactions_owner','fintrust_index_builder')) THEN
    RAISE EXCEPTION 'existing maintenance role requires review';
  END IF;
  IF (SELECT pg_get_userbyid(relowner) FROM pg_class WHERE oid='public.transactions'::regclass) <> current_user THEN
    RAISE EXCEPTION 'table ownership requires review';
+ END IF;
+ IF to_regprocedure('public.fintrust_create_identity_indexes()') IS NOT NULL THEN
+   RAISE EXCEPTION 'existing index helper requires review';
  END IF;
 END $$;
 CREATE ROLE fintrust_transactions_owner NOLOGIN NOINHERIT NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS;
@@ -43,3 +46,10 @@ GRANT fintrust_transactions_owner TO fintrust_migrate_dev WITH SET TRUE, INHERIT
 -- Creator ADMIN membership is supplied by PostgreSQL, not this self-grant.
 -- Disable only the separate self-granted SET/inheritance path after bootstrap.
 GRANT fintrust_transactions_owner TO fintrust_admin WITH SET FALSE, INHERIT FALSE, ADMIN FALSE;
+
+-- Privileged index capability is held by a separate NOLOGIN definer owner.
+-- The migration login has neither membership nor SET access to this role.
+CREATE ROLE fintrust_index_builder NOLOGIN NOINHERIT NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS;
+GRANT USAGE, CREATE ON SCHEMA public TO fintrust_index_builder;
+GRANT fintrust_transactions_owner TO fintrust_index_builder WITH INHERIT TRUE, SET FALSE, ADMIN FALSE;
+GRANT fintrust_index_builder TO fintrust_admin WITH SET TRUE, INHERIT FALSE, ADMIN FALSE;

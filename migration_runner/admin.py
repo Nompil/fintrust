@@ -30,6 +30,7 @@ def bootstrap(conn, op):
             raise common.Refused("schema_not_approved")
         # Fixed SQL refuses existing roles/unknown ownership instead of adapting.
         cur.execute((config.ROOT / "sql/bootstrap/temporary_identity.sql").read_text())
+        cur.execute((config.ROOT / "sql/bootstrap/fixed_identity_indexes.sql").read_text())
         cur.execute("SELECT pg_has_role(%s, 'rds_iam', 'MEMBER'), pg_has_role(%s, %s, 'SET')", (config.USER,config.USER,config.OWNER))
         if cur.fetchone() != (True,True):
             raise common.Refused("bootstrap_verification_failed")

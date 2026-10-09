@@ -98,3 +98,29 @@ def test_bootstrap_switches_to_owner_for_post_transfer_acl_change():
     reset = source.index("RESET ROLE", revoke)
     delegation = source.index("GRANT fintrust_transactions_owner TO fintrust_migrate_dev", reset)
     assert transfer < switch < revoke < reset < delegation
+
+
+def test_index_helper_has_fixed_surface_and_exact_canonical_indexes():
+    import re
+    from migration_runner.common import migration_parts
+    helper=Path("sql/bootstrap/fixed_identity_indexes.sql").read_text()
+    assert "CREATE FUNCTION public.fintrust_create_identity_indexes() RETURNS void" in helper
+    assert "SET search_path = pg_catalog, pg_temp" in helper
+    assert "SECURITY DEFINER" in helper and "EXECUTE " not in helper.split("$helper$;")[0]
+    assert "FROM PUBLIC" in helper and "TO fintrust_migrate_dev" in helper
+    assert "DROP FUNCTION public.fintrust_create_identity_indexes()" in helper
+    def statements(text):
+        return [re.sub(r"\s+", " ", q.strip()).replace("public.transactions", "transactions")
+                for q in re.findall(r"CREATE (?:UNIQUE )?INDEX IF NOT EXISTS[^;]+;", text)]
+    assert statements(helper)==statements(migration_parts()[1])
+    assert len(statements(helper))==2
+
+
+def test_index_builder_never_granted_to_migration_or_table_owner():
+    bootstrap=Path("sql/bootstrap/temporary_identity.sql").read_text()
+    grants=[s for s in bootstrap.splitlines() if s.startswith("GRANT fintrust_index_builder TO")]
+    assert grants and all("TO fintrust_admin" in s and "ADMIN FALSE" in s for s in grants)
+    assert "TO fintrust_index_builder WITH INHERIT TRUE, SET FALSE, ADMIN FALSE" in bootstrap
+    cleanup=Path("sql/bootstrap/remove_temporary_identity.sql").read_text()
+    assert "DROP FUNCTION IF EXISTS public.fintrust_create_identity_indexes()" in cleanup
+    assert "DROP ROLE fintrust_index_builder" in cleanup

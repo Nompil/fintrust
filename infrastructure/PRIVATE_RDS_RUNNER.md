@@ -364,3 +364,57 @@ The owner-role grant alone is insufficient. Keeping schema CREATE revoked means
 this exact migration cannot yet complete; granting it would also allow unrelated
 schema objects. No migration ZIPs are verified, no cleanup completion is claimed,
 and no AWS operation is approved. Resolve the scoped index path before a new CI run.
+
+## Fixed index capability implementation (target CI pending)
+
+| Option | Capability exposed to migration login | Recovery/audit | Decision |
+|---|---|---|---|
+| Temporary schema CREATE on login | Any object creation in public during the grant | Simple revoke, but unrelated DDL becomes possible | Rejected |
+| SET ROLE into schema-privileged owner | Same broad schema capability through membership | Extra role cleanup does not restrict what caller can execute | Rejected |
+| Parameterless SECURITY DEFINER helper | Only the two fixed index statements through EXECUTE | Transactional DDL, explicit function/role cleanup; more code to review | Selected |
+
+All three use supported PostgreSQL 16 features. The selected mechanism does not
+require superuser or RDS extensions; actual RDS identity/TLS/IAM behaviour still
+requires separately approved live preflight. No AWS operation is approved here.
+
+`fintrust_index_builder` is NOLOGIN, NOINHERIT, NOSUPERUSER, NOCREATEDB,
+NOCREATEROLE, NOREPLICATION and NOBYPASSRLS. It holds schema USAGE/CREATE and
+inherits only `fintrust_transactions_owner` for the index ownership check.
+Schema CREATE itself is not index-specific: isolation comes from **no membership
+or SET access for the migration login**, and a fixed definer function. The role
+is not accessible by application roles. The existing bootstrap administrator has
+the automatic creator ADMIN edge, and toggles its own non-admin SET edge solely
+for transferring function ownership/ACLs and cleanup.
+
+`public.fintrust_create_identity_indexes()` takes zero arguments and has
+`search_path=pg_catalog,pg_temp`. PUBLIC execution is revoked in the bootstrap
+transaction; the only caller grant is to `fintrust_migrate_dev`. Unexpected default
+function grants fail bootstrap. It verifies session/database/definer identity,
+locks public.transactions, checks heap/table ownership/RLS/triggers and built-in
+indexed column types/collations, and rejects conflicting existing index names or
+definitions. No dynamic SQL is used. The two CREATE INDEX statements are compared
+to the canonical migration in tests. The function drops itself after creating or
+accepting the exact indexes; postcheck failure rolls back that DROP as well.
+
+The canonical `001_transaction_identity.sql` is **unchanged**. The runner checks
+its existing SHA256, splits at its fixed index section, runs column/check DDL as
+the transaction owner, resets to the login to call the helper, then SETs the owner
+for exact-definition/count postchecks. This is explicit privilege orchestration,
+not omission of index statements. No CREATE INDEX CONCURRENTLY is used. A fully
+verified rerun is a no-op because successful execution removed the helper. An
+incorrect/partial state never bypasses preflight checks. All column/index DDL,
+helper self-removal and postchecks share one caller transaction.
+
+Administrator cleanup drops a restored helper after an aborted transaction,
+revokes helper schema/membership grants, drops the helper role, revokes migration
+memberships/ACLs and drops the login. The permanent NOLOGIN transaction owner
+remains. No objects should be owned by either disposable login/helper role after
+cleanup; indexes remain owned by the transaction table owner.
+
+Local focused suite: 63 passed, 0 failed/skipped. Exact PostgreSQL 16 privilege
+checks run first in the same CI workflow, then the complete regression, four
+archive builds and Linux import gates. No check was removed. The authoritative
+flags remain false until that run completes. Next after green: **business-rule /
+schema freeze**, not AWS execution or live migration.
+
+See [PostgreSQL SECURITY DEFINER guidance](https://www.postgresql.org/docs/16/sql-createfunction.html#SQL-CREATEFUNCTION-SECURITY).

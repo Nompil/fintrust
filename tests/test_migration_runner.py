@@ -169,7 +169,9 @@ class LocalCursor:
     def __enter__(self):self.cur.__enter__();return self
     def __exit__(self,*args):return self.cur.__exit__(*args)
     def execute(self,query,*args):
-        if query=="SET LOCAL ROLE fintrust_transactions_owner":return
+        if query in ("SET LOCAL ROLE fintrust_transactions_owner", "RESET ROLE"):return
+        if query=="SELECT public.fintrust_create_identity_indexes()":
+            return self.cur.execute(common.migration_parts()[1])
         if query=="LOCK TABLE public.transactions IN ACCESS EXCLUSIVE MODE":query="LOCK TABLE transactions IN ACCESS EXCLUSIVE MODE"
         return self.cur.execute(query,*args)
     def __getattr__(self,name):return getattr(self.cur,name)

@@ -59,6 +59,20 @@ def body(path, *, migration=False):
     return source[start:-len("ROLLBACK;\n")]
 
 
+# Canonical migration remains unchanged. The pinned source is partitioned at its
+# fixed index section; the helper executes the same two statements with a qualified
+# table name. Any canonical change requires a new source hash and review.
+INDEX_MARKER = "-- References are unique within an upstream system/account, never amount/time."
+
+
+def migration_parts():
+    source = body("sql/migrations/001_transaction_identity.sql", migration=True)
+    if source.count(INDEX_MARKER) != 1:
+        raise Refused("migration_phase_boundary_mismatch")
+    columns, indexes = source.split(INDEX_MARKER)
+    return columns, INDEX_MARKER + indexes
+
+
 def catalog(cur):
     cur.execute(body("sql/preflight/001_transaction_identity_catalog.sql"))
     return cur.fetchone()[0]

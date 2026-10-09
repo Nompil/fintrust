@@ -6,6 +6,14 @@ DO $$ BEGIN
  IF EXISTS (SELECT FROM pg_class WHERE relowner=(SELECT oid FROM pg_roles WHERE rolname='fintrust_migrate_dev')) THEN RAISE EXCEPTION 'unexpected owned objects'; END IF;
 END $$;
 ALTER ROLE fintrust_migrate_dev NOLOGIN;
+-- Also handles an aborted migration that restored the helper transactionally.
+GRANT fintrust_index_builder TO fintrust_admin WITH SET TRUE, INHERIT FALSE, ADMIN FALSE;
+SET LOCAL ROLE fintrust_index_builder;
+DROP FUNCTION IF EXISTS public.fintrust_create_identity_indexes();
+RESET ROLE;
+REVOKE fintrust_transactions_owner FROM fintrust_index_builder;
+REVOKE USAGE, CREATE ON SCHEMA public FROM fintrust_index_builder;
+DROP ROLE fintrust_index_builder;
 REVOKE fintrust_transactions_owner FROM fintrust_migrate_dev;
 REVOKE rds_iam FROM fintrust_migrate_dev;
 REVOKE SELECT (customer_id) ON public.customers FROM fintrust_migrate_dev;

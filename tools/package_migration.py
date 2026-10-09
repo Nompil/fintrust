@@ -66,7 +66,7 @@ def build(phase,out,ca,dependency_archive=None):
         modules=["__init__.py","config.py","contract.py","common.py","sql_binding.py",phase+"_entry.py","iam.py" if phase=="iam" else "admin.py"]
         sources=["migration_runner/"+n for n in modules]+["sql/preflight/001_transaction_identity_catalog.sql","sql/preflight/001_transaction_identity_data.sql"]
         if phase=="iam":sources.append("sql/migrations/001_transaction_identity.sql")
-        elif phase=="bootstrap":sources.append("sql/bootstrap/temporary_identity.sql")
+        elif phase=="bootstrap":sources.extend(["sql/bootstrap/temporary_identity.sql","sql/bootstrap/fixed_identity_indexes.sql"])
         elif phase=="cleanup":sources.append("sql/bootstrap/remove_temporary_identity.sql")
         bindings={}
         for name in sources:
