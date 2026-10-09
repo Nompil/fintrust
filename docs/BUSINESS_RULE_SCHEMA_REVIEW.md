@@ -1,7 +1,10 @@
 # FinTrust first-release business-rule and schema review
 
 Review date: 2026-10-09 (Africa/Johannesburg). Source checkpoint: `a136467`.
-Status: **REVIEW COMPLETE; BUSINESS DECISIONS PENDING; SCHEMA NOT FROZEN**.
+Status: **INITIAL REVIEW SUPERSEDED BY THE RELEASE 1 CONTRACT; SCHEMA READY FOR REVIEW**.
+See [Release 1 business process](RELEASE1_BUSINESS_PROCESS.md) for approved scope,
+selected rule defaults, migration002 proposal, tests and implementation gaps.
+The observations and unanswered recommendations below are historical review context.
 This document is a proposed business contract and source-backed gap assessment,
 not approval to change schema, run migration 001, or perform infrastructure work.
 No application/SQL changes, package builds, AWS calls or live database access belong
@@ -290,7 +293,8 @@ screen; reuse existing immutable evidence and make write consistency explicit.
 | D6 | Case semantics | One transaction case, opens Medium/High, transitions above, immutable actor/history, authorized reopen |
 | D7 | Reconciliation and delivery | Per-record terminal outcome accounting; one cloud alert path; uncertain sends require operator reconciliation |
 
-D1/D2 were asked during this review and remain unanswered as of this draft. Other
+D1/D2 were unanswered at this initial review. The user subsequently selected working
+review/correction scope and deferred refunds/reversals/chargebacks; see the Release 1 contract. Other
 choices are recommendations for review, not assumptions silently applied to code.
 
 ## Migration 001 disposition and exit criteria

@@ -1,0 +1,63 @@
+{
+  "status": "FINTRUST RELEASE 1 BUSINESS PROCESS AND SCHEMA READY FOR REVIEW",
+  "review_date": "2026-10-09",
+  "timezone": "Africa/Johannesburg",
+  "tests": {
+    "passed": 94,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "duration_seconds": 29.365,
+    "new_workflow_contract_and_schema_cases": 53
+  },
+  "environment": {
+    "python": "3.14.7",
+    "os": "Windows",
+    "architecture": "AMD64",
+    "postgresql": "18.6",
+    "database": "fintrust_local_test",
+    "isolated_workflow_schemas_remaining": 0
+  },
+  "coverage": [
+    "reference strict validation and structured reasons",
+    "amount/future/risk/velocity/duplicate-window boundaries",
+    "review RBAC reference and transition contract",
+    "SQL review history/version checks",
+    "SQL quarantine evidence and correction lineage",
+    "SQL reconciliation/over-count/deletion guards",
+    "existing file/cross-file/SQL replay behaviour",
+    "existing conservative SES retry and reporting"
+  ],
+  "scope": {
+    "release_1_review_and_manual_correction": true,
+    "refund_reversal_chargeback": "deferred and rejected",
+    "migration_001_changed": false,
+    "runtime_handlers_changed": false,
+    "live_rds_accessed": false,
+    "aws_accessed": false,
+    "ci_rerun": false,
+    "packages_rebuilt": false,
+    "application_zip_unchanged": true,
+    "workflow_api_ui_implemented": false
+  },
+  "migration_002_sha256": "a02434f71e45f1f9c8abb4d37b6d3f76616ca8d56cf2eb159dc349e6a058a1dc",
+  "migration_001_sha256": "0ff06ca8c43596ac9b8651f4bd851bfb0487343f4c9eccb198849e3e59772bd6",
+  "application_zip_sha256": "cf9c18a5f267373e2fc2e22331987bb6dce8e2e65366b2d1f5651bb035dd6654",
+  "csv_files": {
+    "A": "fintrust_e2e_mixed_transactions.csv",
+    "B": "fintrust_e2e_companion_transactions_B.csv",
+    "location": "external ChatGPT downloads, not in repository",
+    "executed": false,
+    "current_tests": "supplied scenario rows, no invented file path"
+  },
+  "limitations": [
+    "migration002 tested locally on PostgreSQL18, not target PostgreSQL16 or live RDS",
+    "reference validation/RBAC contracts not wired into production",
+    "Cognito/API/UI and worker/projection integration designed, not deployed",
+    "selected strict feed/future tolerance/country/risk defaults require review"
+  ],
+  "corrected_test_setup_findings": [
+    "malformed row fixture used non-string keyword before reaching validator; changed to dictionary merge",
+    "imported pipeline fixture needed explicit prepared_database_url fixture registration; added without skipping tests"
+  ]
+}

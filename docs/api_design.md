@@ -63,3 +63,13 @@ The API is implemented locally; API Gateway routes, authorizers, and deployed La
 DynamoDB decimal values are returned as strings to preserve precision. Date-only transaction filters mean midnight UTC; timestamp bounds are interpreted by the query parser. The account-data API remains read-only; the local demonstration adds a bounded upload adapter. Later deployed write routes are tracked in the requirements review.
 
 The browser does not sign requests with SigV4. An authenticated browser integration remains a deployment blocker. See [security](SECURITY.md) and [architecture](architecture.md).
+
+
+## Proposed Release 1 workflow contract
+
+[Release 1 business process](RELEASE1_BUSINESS_PROCESS.md) defines minimal analyst
+review, manual quarantine correction, reconciliation and Admin/Analyst/Auditor
+access. Existing routes above are unchanged. New list/detail and state-changing
+routes are designed, not implemented; require verified actor/role, expected review
+version and durable request idempotency. No frontend button may imply working
+review/reprocessing until those backend contracts are implemented and tested.

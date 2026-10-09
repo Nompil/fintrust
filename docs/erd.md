@@ -83,7 +83,7 @@ The relational `alerts` table supports the legacy SQL helper. The configured clo
 | `customers` | `customer_id UUID PK`, `full_name VARCHAR(150)`, `id_number VARCHAR(20) UNIQUE`, `kyc_status VARCHAR(20)`, `created_at TIMESTAMPTZ` | KYC is a finite state (`pending`, `verified`, `rejected`, `frozen`); a check constraint prevents unrecognised states. Full name and identity number are personal information and must be access-controlled. |
 | `accounts` | `account_id UUID PK`, `customer_id UUID FK`, `account_type VARCHAR(30)`, `balance NUMERIC(15,2)`, `status VARCHAR(20)`, `opened_at TIMESTAMPTZ` | Account types are constrained to the agreed set. `NUMERIC`, not floating point, avoids rounding errors in balances. Deleting a customer with accounts is restricted. |
 | `transactions` | `tx_id UUID PK`, `account_id UUID FK`, `amount NUMERIC(15,2)`, `currency CHAR(3)`, `tx_date TIMESTAMPTZ`, `tx_type VARCHAR(30)`, `cross_border BOOLEAN`, `raw_file TEXT` | Amount is positive; direction is represented by `tx_type`, avoiding negative transaction amounts. Currency and type are constrained. `raw_file` traces a ledger row to its input object. Accounts with transactions cannot be deleted. |
-| `risk_events` | `risk_event_id BIGSERIAL PK`, `tx_id UUID FK`, `risk_score INTEGER`, `reason VARCHAR(255)`, `created_at TIMESTAMPTZ` | A score must be in the range 0â€“100. Risk decisions are kept apart from the financial transaction record. |
+| `risk_events` | `risk_event_id BIGSERIAL PK`, `tx_id UUID FK`, `risk_score INTEGER`, `reason VARCHAR(255)`, `created_at TIMESTAMPTZ` | A score must be in the range 0Ã¢â‚¬â€œ100. Risk decisions are kept apart from the financial transaction record. |
 | `alerts` | `alert_id BIGSERIAL PK`, `risk_event_id BIGINT FK`, `severity VARCHAR(20)`, `message TEXT`, `sent_at TIMESTAMPTZ NULL`, `delivery_key BIGINT UNIQUE`, `delivery_state VARCHAR(10)`, `provider_message_id TEXT` | A legacy SQL alert is linked to the risk event that caused it, preserving investigation context. |
 
 ## Relationships and Normalisation
@@ -111,3 +111,18 @@ keeps historical rows valid. Batch records reside in the existing S3 quarantine
 bucket to preserve ingest's placement outside the VPC; `batch_id` is an audit
 reference, not a SQL foreign key. Fingerprints never globally deduplicate similar
 payments. See [identity rules and release gates](IDEMPOTENCY.md).
+
+
+## Release 1 operational schema proposal
+
+The existing ERD above describes the current ledger. Separate proposed migration
+[002_operational_workflows.sql](../sql/migrations/002_operational_workflows.sql)
+adds ingestion_batches -> ingestion_attempts and ingestion_records; each record
+links to its exact attempt and optionally a canonical transaction. risk_events
+has at most one risk_reviews row, with many risk_review_history versions.
+A quarantined occurrence has at most one quarantine_cases row and many immutable
+quarantine_corrections; each resubmission points to a new processing occurrence.
+S3 stores versioned safe payload evidence; SQL stores references/lineage.
+DynamoDB remains the cloud alert delivery authority. No duplicate SQL alert table.
+See [the process/schema contract](RELEASE1_BUSINESS_PROCESS.md) for state semantics,
+proposed frontend contracts and actual local validation. This is not deployed.
