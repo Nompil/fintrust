@@ -188,6 +188,7 @@ def migration_database(database,monkeypatch):
         from psycopg2 import sql
         cur.execute(sql.SQL("SET LOCAL search_path = pg_catalog, {}").format(sql.Identifier(schema)))
     monkeypatch.setattr(common,"setup",setup)
+    monkeypatch.setattr(common,"lock_transactions",lambda cur: cur.execute("LOCK TABLE transactions IN ACCESS EXCLUSIVE MODE"))
     base(conn)
     return conn,LocalConnection(conn)
 
@@ -231,3 +232,16 @@ def test_transaction_search_path_places_temp_schema_last():
     cur=Mock()
     common.setup(cur,read_only=False)
     cur.execute.assert_any_call("SET LOCAL search_path = pg_catalog, public, pg_temp")
+
+
+def test_owner_preserving_lock_refuses_unexpected_owner():
+    cur=Mock();cur.fetchone.return_value=("someone_else",)
+    with pytest.raises(common.Refused,match="transaction_owner_mismatch"):
+        common.lock_transactions(cur)
+    assert cur.execute.call_count==1
+
+
+def test_owner_preserving_lock_uses_only_existing_owner():
+    cur=Mock();cur.fetchone.return_value=(config.OWNER,)
+    common.lock_transactions(cur)
+    cur.execute.assert_any_call("ALTER TABLE public.transactions OWNER TO fintrust_transactions_owner")

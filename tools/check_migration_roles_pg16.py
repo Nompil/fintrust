@@ -115,6 +115,12 @@ def run():
                 expect_denied(cur, indexes)
                 cur.execute("ROLLBACK TO SAVEPOINT missing_schema_permission")
                 cur.execute("RELEASE SAVEPOINT missing_schema_permission")
+                # Exact runtime locking works without adding DML permissions.
+                common.lock_transactions(cur)
+                cur.execute("SELECT count(*) FROM pg_locks WHERE pid=pg_backend_pid() AND relation='public.transactions'::regclass AND mode='AccessExclusiveLock' AND granted")
+                assert cur.fetchone()[0]==1
+                cur.execute("SELECT has_table_privilege(current_user,'public.transactions','UPDATE'), has_table_privilege(current_user,'public.transactions','DELETE'), has_table_privilege(current_user,'public.transactions','TRUNCATE')")
+                assert cur.fetchone()==(False,False,False)
                 # Two approved indexes are the only definer DDL. Temp-name shadows
                 # and hostile caller search_path cannot redirect the qualified target.
                 cur.execute("RESET ROLE")
@@ -213,7 +219,7 @@ def run():
                 "helper_existing_correct_index_verified":True,"helper_conflicting_index_rejected":True,
                 "helper_conflicting_column_type_rejected":True,"helper_no_public_execute_verified":True,
                 "helper_no_role_membership_verified":True,"helper_dropped_after_success":True,
-                "schema_create_requirement_reproduced":True,
+                "schema_create_requirement_reproduced":True,"owner_preserving_lock_verified":True,
                 "original_admin_self_grant_reproduced":True,"bootstrap_memberships":bootstrap_memberships,
                 "migration_admin_delegation_denied":True,"unrelated_ddl_denied":True,
                 "set_role_required":True,"ddl_rollback_verified":True,"partial_indexes_verified":True,

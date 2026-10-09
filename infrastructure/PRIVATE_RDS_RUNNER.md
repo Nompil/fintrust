@@ -423,3 +423,13 @@ The hostile-temp-name rehearsal exposed an implicit PostgreSQL pg_temp search-pa
 priority in the transaction setup (run 37929161604). The runner now explicitly
 places pg_temp last: pg_catalog, public, pg_temp. The helper already used a pinned
 path and fully qualified public.transactions. The temp-shadow test is retained.
+
+Run 37929605168 exposed a PostgreSQL lock ACL distinction: explicit ACCESS EXCLUSIVE
+LOCK requires UPDATE/DELETE/TRUNCATE, which the owner role deliberately lacks.
+No DML was granted. The runner checks the exact current table owner and reasserts
+that same owner with ALTER TABLE, acquiring ACCESS EXCLUSIVE without changing
+ownership or ACLs (PG16 tablecmds.c no-op path). CI checks the actual granted lock
+and absent DML privileges. The helper uses SELECT-authorized ACCESS SHARE to
+freeze its table target; fixed CREATE INDEX adds its normal writer-conflicting
+lock. Within the runner, the stronger owner-preserving lock already spans the
+whole transaction. An unexpected owner is refused before this operation.

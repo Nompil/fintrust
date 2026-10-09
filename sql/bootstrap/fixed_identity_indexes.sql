@@ -12,7 +12,10 @@ BEGIN
        OR current_database() <> 'fintrust' THEN
         RAISE EXCEPTION 'index helper identity mismatch';
     END IF;
-    LOCK TABLE public.transactions IN ACCESS EXCLUSIVE MODE;
+    -- SELECT permits ACCESS SHARE: freeze target DDL without granting DML.
+    -- CREATE INDEX takes its own writer-conflicting lock; the runner already
+    -- holds ACCESS EXCLUSIVE from its checked owner-preserving ALTER TABLE.
+    LOCK TABLE public.transactions IN ACCESS SHARE MODE;
     target := pg_catalog.to_regclass('public.transactions');
     IF NOT EXISTS (SELECT FROM pg_catalog.pg_class WHERE oid=target
         AND relkind='r' AND relowner='fintrust_transactions_owner'::pg_catalog.regrole

@@ -29,7 +29,7 @@ def operate(conn, op):
             return {"owned_relations":owned,"drop_requires_administrator":True}, False
         if op == "migrate":
             cur.execute("SET LOCAL ROLE fintrust_transactions_owner")
-            cur.execute("LOCK TABLE public.transactions IN ACCESS EXCLUSIVE MODE")
+            common.lock_transactions(cur)
         c,d,a = common.inspect(cur)
         if op == "preflight":
             return safe_report(c,d,a), False

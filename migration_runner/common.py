@@ -73,6 +73,17 @@ def migration_parts():
     return columns, INDEX_MARKER + indexes
 
 
+def lock_transactions(cur):
+    # PostgreSQL LOCK ACCESS EXCLUSIVE requires DML ACLs even for an owner.
+    # Preserve the reviewed no-DML ACLs: reassert the already-verified owner.
+    # ALTER TABLE acquires ACCESS EXCLUSIVE; with the same owner it changes no ACL
+    # or ownership. A mismatch stops instead of transferring another owner's table.
+    cur.execute("SELECT pg_get_userbyid(relowner) FROM pg_class WHERE oid='public.transactions'::regclass AND relkind='r'")
+    if cur.fetchone() != (config.OWNER,):
+        raise Refused("transaction_owner_mismatch")
+    cur.execute("ALTER TABLE public.transactions OWNER TO fintrust_transactions_owner")
+
+
 def catalog(cur):
     cur.execute(body("sql/preflight/001_transaction_identity_catalog.sql"))
     return cur.fetchone()[0]
