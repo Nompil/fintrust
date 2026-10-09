@@ -418,3 +418,8 @@ flags remain false until that run completes. Next after green: **business-rule /
 schema freeze**, not AWS execution or live migration.
 
 See [PostgreSQL SECURITY DEFINER guidance](https://www.postgresql.org/docs/16/sql-createfunction.html#SQL-CREATEFUNCTION-SECURITY).
+
+The hostile-temp-name rehearsal exposed an implicit PostgreSQL pg_temp search-path
+priority in the transaction setup (run 37929161604). The runner now explicitly
+places pg_temp last: pg_catalog, public, pg_temp. The helper already used a pinned
+path and fully qualified public.transactions. The temp-shadow test is retained.

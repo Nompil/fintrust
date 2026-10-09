@@ -93,7 +93,7 @@ def session_check(cur, user):
 
 def setup(cur, *, read_only):
     cur.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ " + ("READ ONLY" if read_only else "READ WRITE"))
-    cur.execute("SET LOCAL search_path = pg_catalog, public")
+    cur.execute("SET LOCAL search_path = pg_catalog, public, pg_temp")
     cur.execute("SET LOCAL lock_timeout = '2s'")
     cur.execute("SET LOCAL statement_timeout = '15s'")
 

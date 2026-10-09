@@ -225,3 +225,9 @@ def test_iam_membership_guard(row,monkeypatch):
     monkeypatch.setattr(common,"session_check",lambda *args:None)
     cur=Mock();cur.fetchone.return_value=row
     with pytest.raises(common.Refused):iam.identity(cur)
+
+
+def test_transaction_search_path_places_temp_schema_last():
+    cur=Mock()
+    common.setup(cur,read_only=False)
+    cur.execute.assert_any_call("SET LOCAL search_path = pg_catalog, public, pg_temp")

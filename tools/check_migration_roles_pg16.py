@@ -123,7 +123,7 @@ def run():
                 cur.execute("SET ROLE fintrust_transactions_owner")
                 # Function self-removal and column/index DDL roll back together.
                 cur.execute("SAVEPOINT complete_rollback")
-                cur.execute("SET LOCAL search_path=pg_catalog,public")
+                cur.execute("SET LOCAL search_path=pg_catalog,public,pg_temp")
                 cur.execute(columns)
                 cur.execute("RESET ROLE")
                 cur.execute("SELECT public.fintrust_create_identity_indexes()")
@@ -145,7 +145,7 @@ def run():
                 cur.execute("CREATE INDEX idx_tx_source_identity ON public.transactions(amount)")
                 cur.execute("SET SESSION AUTHORIZATION fintrust_migrate_dev")
                 cur.execute("SET ROLE fintrust_transactions_owner")
-                cur.execute("SET LOCAL search_path=pg_catalog,public")
+                cur.execute("SET LOCAL search_path=pg_catalog,public,pg_temp")
                 cur.execute(columns);cur.execute("RESET ROLE")
                 expect_denied(cur, "SELECT public.fintrust_create_identity_indexes()", psycopg2.errors.RaiseException)
                 cur.execute("ROLLBACK TO SAVEPOINT conflicting_index")
@@ -154,7 +154,7 @@ def run():
                 cur.execute("SET SESSION AUTHORIZATION fintrust_migrate_dev")
                 cur.execute("SET ROLE fintrust_transactions_owner")
                 cur.execute("SAVEPOINT conflicting_type")
-                cur.execute("SET LOCAL search_path=pg_catalog,public")
+                cur.execute("SET LOCAL search_path=pg_catalog,public,pg_temp")
                 cur.execute(columns)
                 cur.execute("ALTER TABLE public.transactions ALTER source_system TYPE varchar(101)")
                 cur.execute("RESET ROLE")
@@ -164,7 +164,7 @@ def run():
                 # Seed one *correct* existing index as fixture administrator, then
                 # confirm the helper accepts it and creates only the missing one.
                 cur.execute("RESET ROLE");cur.execute("RESET SESSION AUTHORIZATION")
-                cur.execute("SET LOCAL search_path=pg_catalog,public")
+                cur.execute("SET LOCAL search_path=pg_catalog,public,pg_temp")
                 cur.execute(columns)
                 cur.execute("CREATE UNIQUE INDEX idx_tx_source_identity ON public.transactions(source_system, account_id, source_transaction_id) WHERE source_transaction_id IS NOT NULL")
                 cur.execute("SET SESSION AUTHORIZATION fintrust_migrate_dev")
