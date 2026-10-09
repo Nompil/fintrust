@@ -1,0 +1,9 @@
+# Minimal pinned runtime for the separate CPython 3.12 / Linux x86_64 runner.
+boto3==1.43.104
+botocore==1.43.104
+jmespath==1.1.0
+python-dateutil==2.9.0.post0
+s3transfer==0.19.2
+six==1.17.0
+urllib3==2.8.0
+psycopg2-binary==2.9.13

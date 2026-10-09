@@ -84,8 +84,9 @@ SGs so the runner fetches its secret directly. No secret is passed in invocation
 payloads or configuration; no DB ingress change or NAT is proposed. Endpoint cost,
 IAM and redaction checks require approval; later DDL uses a temporary IAM database login
 with narrowly scoped ownership membership. Ingest remains outside the VPC and disabled.
-The migration is locally verified; the private runner is only proposed and live SQL
-schema/grants/migration remain unverified. The Linux application release is verified
+The migration and runner have local tests; the [temporary runner](../infrastructure/PRIVATE_RDS_RUNNER.md)
+is locally implemented but its Linux/Python3.12 and PostgreSQL16 verification gates
+remain open. It is not deployed; live SQL schema/grants/migration remain unverified. The Linux application release is verified
 by CI run 37850256137 (385 passed, no failures/skips), not yet uploaded or deployed.
 
 ## Queries and reports

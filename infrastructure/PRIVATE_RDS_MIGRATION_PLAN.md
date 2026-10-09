@@ -5,8 +5,11 @@ read-only preflight preparation checkpoint, not authorization to deploy or execu
 This revision supersedes commit 78b2ceb's controller-to-Lambda password-payload
 proposal: that handoff is now explicitly prohibited. A temporary Secrets Manager
 interface endpoint is proposed instead and needs cost/security approval.
-The runner is NOT implemented, packaged, deployed or invoked. No live SQL, secret
-retrieval, snapshot, IAM/network mutation or application deployment occurred.
+Local implementation now exists; see [runner checkpoint](PRIVATE_RDS_RUNNER.md).
+Its separate ZIPs are not yet Linux/PG16 execution-verified. No runner is deployed
+or invoked. No live SQL, secret retrieval, snapshot, IAM/network mutation or
+application deployment occurred. The original design below remains subject to
+the implementation checkpoint and its SG-egress review item.
 Read-only AWS metadata was collected on 2026-10-09 (Africa/Johannesburg date).
 Live schema, owners, grants, row counts and migration state remain **UNKNOWN**.
 

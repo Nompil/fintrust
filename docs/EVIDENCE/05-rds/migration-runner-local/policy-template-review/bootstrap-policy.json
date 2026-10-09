@@ -1,0 +1,53 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "CreateReviewedBoundary",
+      "Effect": "Allow",
+      "Action": [
+        "iam:CreatePolicy",
+        "iam:GetPolicy",
+        "iam:GetPolicyVersion"
+      ],
+      "Resource": "arn:aws:iam::966467878406:policy/FinTrustMigrationBoundary"
+    },
+    {
+      "Sid": "CreateBoundedRunnerRole",
+      "Effect": "Allow",
+      "Action": [
+        "iam:CreateRole"
+      ],
+      "Resource": "arn:aws:iam::966467878406:role/fintrust-migration-dev",
+      "Condition": {
+        "StringEquals": {
+          "iam:PermissionsBoundary": "arn:aws:iam::966467878406:policy/FinTrustMigrationBoundary",
+          "aws:RequestTag/Project": "FinTrust",
+          "aws:RequestTag/Environment": "dev",
+          "aws:RequestTag/Purpose": "temporary-migration"
+        }
+      }
+    },
+    {
+      "Sid": "ManageRunnerPhasePolicy",
+      "Effect": "Allow",
+      "Action": [
+        "iam:PutRolePolicy",
+        "iam:DeleteRolePolicy",
+        "iam:GetRole",
+        "iam:GetRolePolicy",
+        "iam:ListRolePolicies",
+        "iam:TagRole",
+        "iam:DeleteRole"
+      ],
+      "Resource": "arn:aws:iam::966467878406:role/fintrust-migration-dev"
+    },
+    {
+      "Sid": "RemoveTemporaryBoundary",
+      "Effect": "Allow",
+      "Action": [
+        "iam:DeletePolicy"
+      ],
+      "Resource": "arn:aws:iam::966467878406:policy/FinTrustMigrationBoundary"
+    }
+  ]
+}

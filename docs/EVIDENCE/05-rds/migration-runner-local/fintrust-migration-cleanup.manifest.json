@@ -1,0 +1,28 @@
+{
+  "filename": "fintrust-migration-cleanup.zip",
+  "byte_size": 20815963,
+  "sha256": "0636e3494a8e1c76c087f86f7cf245aabfa47d7c09c73784238a153b419aa987",
+  "sha256_base64": "BjbjSUqOHHbAh/hvfPJFqr+kfXwJxzeEI4oVO0GaqYc=",
+  "phase": "cleanup",
+  "runtime": "python3.12",
+  "architecture": "x86_64",
+  "target_os": "Linux",
+  "psycopg2_binary": "2.9.13",
+  "linux_execution_verified": false,
+  "postgresql16_execution_verified": false,
+  "handler": "migration_runner.cleanup_entry.lambda_handler",
+  "source_binding": {
+    "migration_runner/__init__.py": "31dc56534c23703e9539d3c5899c2ef800ac3c5d89cb4a5fcc8a5f4cb63ce27d",
+    "migration_runner/config.py": "287a4d91a5a2fbd1c7ae26bcfb00ac2de32897918e2afc7a9a735eb816f4bf61",
+    "migration_runner/contract.py": "f40cc817fca1ad2645613114666e27f636706cdd324869e9a395ee8df6dc7623",
+    "migration_runner/common.py": "c9e427a6c345a7157136d2693590510a1709a27f265febb2aaca6ec52d00f218",
+    "migration_runner/sql_binding.py": "cb1f77e5f7dbbd9f63d691628830ee9801ad2f1ce7077e7a3107b4438c0d5512",
+    "migration_runner/cleanup_entry.py": "eae48b2f0b2e85d9f613ce09fcc25c08a6bf0a041e411dafa7a0b3706f0b3640",
+    "migration_runner/admin.py": "cbe8f38d93bc9eb55f9970a11c16e00791ff3113533df817f5de88966b5aad36",
+    "sql/preflight/001_transaction_identity_catalog.sql": "c09012f47cc8956845a02b98a9525c843c457fb33a2b48bff8184c001e1e4943",
+    "sql/preflight/001_transaction_identity_data.sql": "862c530b5feb5a5150164003e55d9ca9735b283aa1a7de33a254f20568fbf001",
+    "sql/bootstrap/remove_temporary_identity.sql": "e96f0c0a1ec0e21bbe12a0e26f32b49761af8e4101abff0db3ad73d79c3fa7f3",
+    "certs/global-bundle.pem": "fe45bbebf92ad3e27a583bbb2ddd1553c521ed4d49af5514dc0a40372ea5395c"
+  },
+  "dependency_source": "verified application ZIP (read-only subset)"
+}

@@ -1,0 +1,129 @@
+{
+  "recorded_utc": "2026-10-09T06:33:03.340140+00:00",
+  "scope": "LOCAL IMPLEMENTATION/PREPARATION ONLY",
+  "base_commit": "24ef12eeac07a12801e96672dd4941f8a9b9e716",
+  "status": "PRIVATE RDS MIGRATION RUNNER BLOCKED",
+  "blockers": [
+    "No installed local Linux CPython 3.12 x86_64 runtime; new ZIP imports not executed",
+    "PostgreSQL 16 nonsuperuser bootstrap/ownership/cleanup rehearsal and live RDS IAM/TLS not verified",
+    "Existing app-SG S3/DynamoDB egress exception needs explicit review; no DB ingress changes prepared"
+  ],
+  "host": {
+    "python": "3.14.7",
+    "os": "Windows",
+    "machine": "AMD64",
+    "postgresql": "18.6"
+  },
+  "focused_tests": {
+    "passed": 59,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 11.74
+  },
+  "linux_verification": {
+    "passed": false,
+    "reason": "Linux CPython 3.12 x86_64 execution environment unavailable"
+  },
+  "postgresql16_execution_verified": false,
+  "static_archive_checks": {
+    "passed": true,
+    "archives": 4,
+    "elf64_x86_64": true,
+    "cpython312_driver": true,
+    "source_bindings": true,
+    "iam_archive_excludes_admin_code_and_sql": true,
+    "windows_native_binaries": false
+  },
+  "artifacts": [
+    {
+      "filename": "fintrust-migration-preflight.zip",
+      "byte_size": 20815033,
+      "sha256": "fb6cfd027e1f0a166304e6ddea17778cf50760fe083ba4f18341ecb86e34783c",
+      "sha256_base64": "+2z9An4fChZjBObd6hd3jPUHYP4IO6Txg0HsuG40eDw=",
+      "phase": "preflight",
+      "runtime": "python3.12",
+      "architecture": "x86_64",
+      "target_os": "Linux",
+      "psycopg2_binary": "2.9.13"
+    },
+    {
+      "filename": "fintrust-migration-bootstrap.zip",
+      "byte_size": 20816102,
+      "sha256": "66d069ec2a3d7f60a2e58462665b6595561b8fd53d29b5876959136fd50550bd",
+      "sha256_base64": "ZtBp7Co9f2Ci5YRiZltllVYbj9U9KbWHaVkTb9UFUL0=",
+      "phase": "bootstrap",
+      "runtime": "python3.12",
+      "architecture": "x86_64",
+      "target_os": "Linux",
+      "psycopg2_binary": "2.9.13"
+    },
+    {
+      "filename": "fintrust-migration-iam.zip",
+      "byte_size": 20815947,
+      "sha256": "9b816db22116b60bc24099c222e34a5cc2bcaada8a55f67ec24600cdec8cf29b",
+      "sha256_base64": "m4FtsiEWtgvCQJnCIuNKXMK8qtqKVfZ+wkYAzeyM8ps=",
+      "phase": "iam",
+      "runtime": "python3.12",
+      "architecture": "x86_64",
+      "target_os": "Linux",
+      "psycopg2_binary": "2.9.13"
+    },
+    {
+      "filename": "fintrust-migration-cleanup.zip",
+      "byte_size": 20815963,
+      "sha256": "0636e3494a8e1c76c087f86f7cf245aabfa47d7c09c73784238a153b419aa987",
+      "sha256_base64": "BjbjSUqOHHbAh/hvfPJFqr+kfXwJxzeEI4oVO0GaqYc=",
+      "phase": "cleanup",
+      "runtime": "python3.12",
+      "architecture": "x86_64",
+      "target_os": "Linux",
+      "psycopg2_binary": "2.9.13"
+    }
+  ],
+  "aws_mutations": false,
+  "live_secret_retrieved": false,
+  "live_database_connected": false,
+  "aws_validation_calls": false,
+  "github_push_or_workflow_run": false,
+  "application_artifact_unchanged": true,
+  "application_sha256": "cf9c18a5f267373e2fc2e22331987bb6dce8e2e65366b2d1f5651bb035dd6654",
+  "topology": {
+    "vpc": "vpc-0aba008bb360f5147",
+    "runner_and_endpoint_subnet": "subnet-0c2d87e8a83361e30",
+    "az": "af-south-1a",
+    "network_resources": 4,
+    "runner_resources": 3,
+    "iam_role_bootstrap_separate": true,
+    "reserved_concurrency": 0,
+    "existing_db_ingress_unchanged": true
+  },
+  "cost_usd": {
+    "interface_endpoint_one_az_hour": "0.01309",
+    "four_hours": "0.05236",
+    "twenty_four_hours": "0.31416",
+    "730_hours": "9.55570",
+    "first_pb_gb": "0.01",
+    "additional": "Lambda/log/API/transfer/taxes and existing RDS/secret charges; snapshot approval separate"
+  },
+  "next_step": "Review local commit, then separately approve pushing/running the migration-only workflow or provide Linux/Python3.12+PostgreSQL16 environment; do not start AWS setup.",
+  "future_first_live_operation": "Administrator READ ONLY preflight; stop for review before snapshot/bootstrap/migration.",
+  "notes": [
+    "Unit/local integration tests substitute local target and role guards; production guard requires PostgreSQL16 and TLS.",
+    "Role grant/bootstrap cleanup integration script is CI-only and NOT yet run.",
+    "Policies/templates are exact offline proposals, not Access Analyzer or CloudFormation validated."
+  ],
+  "regression": {
+    "passed": 443,
+    "failures": 0,
+    "skipped": 1,
+    "seconds": 115.12,
+    "skip_details": [
+      {
+        "suite": "tests.data_quality.test_processing",
+        "test": "test_database_roles_can_execute_pipeline_without_owner_privileges",
+        "reason": "Service-role execution check requires a disposable test database administrator"
+      }
+    ]
+  },
+  "temporary_local_test_schemas_remaining": 0
+}

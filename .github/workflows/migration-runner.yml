@@ -1,0 +1,79 @@
+name: Temporary migration runner verification
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: fintrust_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres -d fintrust_test"
+          --health-interval 10s --health-timeout 5s --health-retries 5
+    env:
+      FINTRUST_TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/fintrust_test
+      AWS_ACCESS_KEY_ID: testing
+      AWS_SECRET_ACCESS_KEY: testing
+      AWS_SESSION_TOKEN: testing
+      AWS_DEFAULT_REGION: af-south-1
+      AWS_EC2_METADATA_DISABLED: 'true'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          architecture: x64
+      - name: Install test dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Focused and regression tests against PostgreSQL 16
+        run: python -m pytest -q --junitxml=build/migration-runner/regression.xml
+      - name: Rehearse exact bootstrap and cleanup privileges in disposable PostgreSQL 16
+        run: python tools/check_migration_roles_pg16.py
+      - name: Build only migration archives
+        run: |
+          mkdir -p build/migration-runner
+          curl --fail --silent --show-error --retry 3 --max-time 120 https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem -o build/migration-runner/global-bundle.pem
+          for phase in preflight bootstrap iam cleanup; do
+            python tools/package_migration.py --phase "$phase" --ca-bundle build/migration-runner/global-bundle.pem
+            python tools/verify_migration_linux.py "build/migration-runner/fintrust-migration-$phase.zip"
+          done
+      - name: Import exact ZIPs inside Lambda Python 3.12 Linux runtime without networking
+        run: |
+          docker pull public.ecr.aws/lambda/python:3.12
+          docker image inspect public.ecr.aws/lambda/python:3.12 --format '{{json .RepoDigests}}' > build/migration-runner/lambda-image-digest.json
+          for phase in preflight bootstrap iam cleanup; do
+            docker run --rm --network none --entrypoint python -v "$PWD:/work" -w /work public.ecr.aws/lambda/python:3.12 tools/verify_migration_linux.py "build/migration-runner/fintrust-migration-$phase.zip"
+          done
+      - name: Record target verification gate
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from xml.etree import ElementTree as ET
+          root=Path('build/migration-runner')
+          report=ET.parse(root/'regression.xml').getroot()
+          suites=list(report.iter('testsuite'))
+          assert sum(int(s.get('tests','0')) for s in suites)>0
+          assert all(int(s.get(k,'0'))==0 for s in suites for k in ('failures','errors','skipped'))
+          assert json.loads((root/'pg16-role-rehearsal.json').read_text())['bootstrap_migrate_rerun_cleanup_passed']
+          for p in root.glob('*.manifest.json'):
+              m=json.loads(p.read_text());assert m['linux_execution_verified']
+              m['postgresql16_execution_verified']=True
+              p.write_text(json.dumps(m,indent=2)+'\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fintrust-temporary-migration-verified
+          path: build/migration-runner/
+          if-no-files-found: error
+          retention-days: 14

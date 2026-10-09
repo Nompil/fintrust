@@ -1,0 +1,122 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "REVIEW ONLY: temporary migration bootstrap; concurrency zero; qualified version only",
+  "Parameters": {
+    "EndpointId": {
+      "Type": "String",
+      "AllowedPattern": "vpce-[a-f0-9]+"
+    },
+    "ClientSecurityGroupId": {
+      "Type": "String",
+      "AllowedPattern": "sg-[a-f0-9]+"
+    },
+    "CodeKey": {
+      "Type": "String",
+      "AllowedPattern": "deployment/migration/[a-f0-9]{64}/fintrust-migration-bootstrap\\.zip"
+    },
+    "CodeObjectVersion": {
+      "Type": "String",
+      "MinLength": 1,
+      "AllowedPattern": "(?!null$)[A-Za-z0-9._+/=-]+"
+    },
+    "CodeSha256": {
+      "Type": "String",
+      "AllowedPattern": "[A-Za-z0-9+/]{43}="
+    }
+  },
+  "Resources": {
+    "RunnerLogs": {
+      "Type": "AWS::Logs::LogGroup",
+      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Retain",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/fintrust-migration-dev",
+        "RetentionInDays": 14,
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": "dev"
+          },
+          {
+            "Key": "Purpose",
+            "Value": "temporary-migration"
+          }
+        ]
+      }
+    },
+    "Runner": {
+      "Type": "AWS::Lambda::Function",
+      "DependsOn": "RunnerLogs",
+      "Properties": {
+        "FunctionName": "fintrust-migration-dev",
+        "Runtime": "python3.12",
+        "Architectures": [
+          "x86_64"
+        ],
+        "Handler": "migration_runner.bootstrap_entry.lambda_handler",
+        "MemorySize": 512,
+        "Timeout": 300,
+        "ReservedConcurrentExecutions": 0,
+        "Role": "arn:aws:iam::966467878406:role/fintrust-migration-dev",
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": "dev"
+          },
+          {
+            "Key": "Purpose",
+            "Value": "temporary-migration"
+          }
+        ],
+        "Code": {
+          "S3Bucket": "fintrust-reports-966467878406-af-south-1-dev",
+          "S3Key": {
+            "Ref": "CodeKey"
+          },
+          "S3ObjectVersion": {
+            "Ref": "CodeObjectVersion"
+          }
+        },
+        "VpcConfig": {
+          "SubnetIds": [
+            "subnet-0c2d87e8a83361e30"
+          ],
+          "SecurityGroupIds": [
+            "sg-0850bd798bb9505e2",
+            {
+              "Ref": "ClientSecurityGroupId"
+            }
+          ],
+          "Ipv6AllowedForDualStack": false
+        }
+      }
+    },
+    "RunnerVersion": {
+      "Type": "AWS::Lambda::Version",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "Runner"
+        },
+        "CodeSha256": {
+          "Ref": "CodeSha256"
+        },
+        "Description": "Reviewed bootstrap; do not invoke unqualified function"
+      }
+    }
+  },
+  "Outputs": {
+    "QualifiedRunnerArn": {
+      "Value": {
+        "Ref": "RunnerVersion"
+      }
+    }
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "REVIEW ONLY: temporary single-AZ Secrets Manager path; no existing DB SG changes",
+  "Resources": {
+    "EndpointSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupName": "fintrust-migration-secrets-endpoint-dev",
+        "GroupDescription": "Temporary Secrets Manager private HTTPS",
+        "VpcId": "vpc-0aba008bb360f5147",
+        "SecurityGroupEgress": [
+          {
+            "IpProtocol": "-1",
+            "CidrIp": "127.0.0.1/32",
+            "Description": "Suppress EC2 default outbound rule"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": "dev"
+          },
+          {
+            "Key": "Purpose",
+            "Value": "temporary-migration"
+          }
+        ]
+      }
+    },
+    "ClientSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupName": "fintrust-migration-client-dev",
+        "GroupDescription": "Temporary migration HTTPS client",
+        "VpcId": "vpc-0aba008bb360f5147",
+        "SecurityGroupEgress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 443,
+            "ToPort": 443,
+            "DestinationSecurityGroupId": {
+              "Ref": "EndpointSecurityGroup"
+            }
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": "dev"
+          },
+          {
+            "Key": "Purpose",
+            "Value": "temporary-migration"
+          }
+        ]
+      }
+    },
+    "EndpointIngress": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "GroupId": {
+          "Ref": "EndpointSecurityGroup"
+        },
+        "SourceSecurityGroupId": {
+          "Ref": "ClientSecurityGroup"
+        },
+        "IpProtocol": "tcp",
+        "FromPort": 443,
+        "ToPort": 443
+      }
+    },
+    "SecretsEndpoint": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "DependsOn": "EndpointIngress",
+      "Properties": {
+        "VpcId": "vpc-0aba008bb360f5147",
+        "VpcEndpointType": "Interface",
+        "ServiceName": "com.amazonaws.af-south-1.secretsmanager",
+        "PrivateDnsEnabled": true,
+        "IpAddressType": "ipv4",
+        "SubnetIds": [
+          "subnet-0c2d87e8a83361e30"
+        ],
+        "SecurityGroupIds": [
+          {
+            "Ref": "EndpointSecurityGroup"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "OnlyMigrationRole",
+              "Effect": "Allow",
+              "Action": [
+                "secretsmanager:GetSecretValue"
+              ],
+              "Resource": "arn:aws:secretsmanager:af-south-1:966467878406:secret:rds!db-e93012ae-0d14-4225-bdc3-988f4d98f72a-BbEGMn",
+              "Condition": {
+                "ArnEquals": {
+                  "aws:PrincipalArn": "arn:aws:iam::966467878406:role/fintrust-migration-dev"
+                }
+              },
+              "Principal": "*"
+            }
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": "dev"
+          },
+          {
+            "Key": "Purpose",
+            "Value": "temporary-migration"
+          }
+        ]
+      }
+    }
+  },
+  "Outputs": {
+    "EndpointId": {
+      "Value": {
+        "Ref": "SecretsEndpoint"
+      }
+    },
+    "ClientSecurityGroupId": {
+      "Value": {
+        "Ref": "ClientSecurityGroup"
+      }
+    }
+  }
+}
