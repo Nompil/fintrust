@@ -336,3 +336,11 @@ Vanilla PostgreSQL role membership does not prove RDS IAM authentication.
 
 References: [PostgreSQL 16 role attributes](https://www.postgresql.org/docs/16/role-attributes.html)
 and [GRANT](https://www.postgresql.org/docs/16/sql-grant.html).
+
+The first corrected rerun, 37896426512, reproduced the original ADMIN failure
+successfully and progressed through corrected membership grants. It then exposed
+`permission denied for table transactions` within bootstrap: the post-transfer
+REVOKE still ran as the NOINHERIT administrator. Bootstrap now explicitly uses
+SET LOCAL ROLE to the new owner for that existing ACL operation and RESET ROLE
+before continuing role administration. No new privilege is granted. Ownership
+still inherently permits the owner to regrant DML; the REVOKE is not a DML sandbox.

@@ -34,8 +34,11 @@ GRANT fintrust_transactions_owner TO fintrust_admin WITH SET TRUE, INHERIT FALSE
 GRANT CREATE ON SCHEMA public TO fintrust_transactions_owner;
 ALTER TABLE public.transactions OWNER TO fintrust_transactions_owner;
 REVOKE CREATE ON SCHEMA public FROM fintrust_transactions_owner;
+-- Ownership/ACL operations require the controlled SET path after transfer.
+SET LOCAL ROLE fintrust_transactions_owner;
 -- Ownership conveys DDL, not a permanent runtime DML role.
 REVOKE INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER ON public.transactions FROM fintrust_transactions_owner;
+RESET ROLE;
 GRANT fintrust_transactions_owner TO fintrust_migrate_dev WITH SET TRUE, INHERIT FALSE, ADMIN FALSE;
 -- Creator ADMIN membership is supplied by PostgreSQL, not this self-grant.
 -- Disable only the separate self-granted SET/inheritance path after bootstrap.

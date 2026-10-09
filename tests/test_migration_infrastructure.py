@@ -88,3 +88,13 @@ def test_creator_self_grants_control_set_without_admin_cycle():
         assert len(grants) == 2
         assert all("ADMIN FALSE" in line and "INHERIT FALSE" in line for line in grants)
         assert "SET TRUE" in grants[0] and "SET FALSE" in grants[1]
+
+
+def test_bootstrap_switches_to_owner_for_post_transfer_acl_change():
+    source = Path("sql/bootstrap/temporary_identity.sql").read_text()
+    transfer = source.index("ALTER TABLE public.transactions OWNER TO")
+    switch = source.index("SET LOCAL ROLE fintrust_transactions_owner", transfer)
+    revoke = source.index("REVOKE INSERT", switch)
+    reset = source.index("RESET ROLE", revoke)
+    delegation = source.index("GRANT fintrust_transactions_owner TO fintrust_migrate_dev", reset)
+    assert transfer < switch < revoke < reset < delegation
