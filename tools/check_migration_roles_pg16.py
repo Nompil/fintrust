@@ -194,6 +194,12 @@ def run():
                 assert a['state']=='correct' and d['row_counts']['transactions']==200
             conn.rollback()
             with conn.cursor() as cur:
+                # Remove only the hostile temp-table test fixture as its owner.
+                # Production cleanup must still refuse unexpected owned objects.
+                cur.execute("RESET ROLE")
+                cur.execute("DROP TABLE pg_temp.transactions")
+            conn.commit()
+            with conn.cursor() as cur:
                 cur.execute("RESET ROLE");cur.execute("RESET SESSION AUTHORIZATION");cur.execute("SET SESSION AUTHORIZATION fintrust_admin")
                 cur.execute((ROOT/'sql/bootstrap/remove_temporary_identity.sql').read_text())
                 cur.execute("SELECT count(*) FROM pg_roles WHERE rolname IN ('fintrust_migrate_dev','fintrust_index_builder')");assert cur.fetchone()[0]==0

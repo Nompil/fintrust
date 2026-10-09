@@ -433,3 +433,9 @@ and absent DML privileges. The helper uses SELECT-authorized ACCESS SHARE to
 freeze its table target; fixed CREATE INDEX adds its normal writer-conflicting
 lock. Within the runner, the stronger owner-preserving lock already spans the
 whole transaction. An unexpected owner is refused before this operation.
+
+Run 37931115828 passed helper execution, self-removal/rollback, conflicting-index
+and type checks, existing-correct-index handling, migration/rerun and definition
+verification. Cleanup correctly refused the deliberately created hostile temp
+table still owned by the test login. The rehearsal now removes that test fixture
+as its owner before cleanup; the production owned-object refusal is unchanged.
