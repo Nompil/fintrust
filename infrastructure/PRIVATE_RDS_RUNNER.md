@@ -7,25 +7,34 @@ SQL was executed. This is not permission to deploy. The application ZIP remains
 
 ## Current gate
 
-**PRIVATE RDS MIGRATION RUNNER CI FAILED**. Approved source
-`2fb8ec4f92339e5efbf097bdc0a22f72a1cd1d25` was pushed unchanged. Manual CI
-[37895291574](https://github.com/Nompil/fintrust/actions/runs/37895291574) used
-Ubuntu 24.04 x86_64, Python 3.12.15 and disposable PostgreSQL 16.15.
-The full suite (including focused runner tests) passed: **444 passed, 0 failed,
-0 skipped**. The separate exact bootstrap/cleanup privilege rehearsal failed
-while executing `sql/bootstrap/temporary_identity.sql`:
-`ADMIN option cannot be granted back to your own grantor`.
-The traceback identifies the SQL file but not the individual statement. The
-administrator membership grants using `ADMIN TRUE` require focused correction
-and actual PG16 rehearsal; do not bypass the check or substitute superuser execution.
+**PRIVATE RDS MIGRATION RUNNER CI FAILED** at the remaining schema-CREATE
+boundary. [Latest CI 37898074673](https://github.com/Nompil/fintrust/actions/runs/37898074673),
+source `ab0a70e30606378f15b1662f2af804592e8499e7`, used Ubuntu 24.04 x86_64,
+Python 3.12.15 and disposable PostgreSQL 16.15. **446 tests passed, 0 failed,
+0 skipped**. Local focused checks: 60 passed; following ACL correction: 15
+infrastructure checks passed.
 
-The workflow stopped before runner packaging/import verification. No verified
-runner ZIPs were published. `linux_execution_verified = false` and
-`postgresql16_privilege_tests_verified = false` remain mandatory until both gates
-pass. The application release ZIP is unchanged. Its redundant automatic push CI
-run was cancelled. No AWS account access or live database operation occurred.
-Run metadata and logs are preserved in
-[CI evidence](../docs/EVIDENCE/05-rds/migration-runner-ci/37895291574/summary.json).
+The separate rehearsal reproduced the original invalid ADMIN self-grant, then
+successfully completed corrected bootstrap under the non-superuser creator.
+It proved migration delegation denial, DDL denial without SET ROLE, unrelated
+DDL/schema CREATE denial and SQL-failure rollback. It subsequently failed running
+the fixed migration with `permission denied for schema public`: index creation
+requires CREATE on the containing schema. Cleanup and migration rerun were not
+reached in this run; they are not claimed verified.
+
+The owner currently lacks schema CREATE intentionally. Granting it would permit
+unrelated object creation as well, conflicting with the approved restriction.
+No permission was broadened. A separately reviewed narrow index-creation design
+is required, such as a temporary fixed, parameterless SECURITY DEFINER helper
+with qualified object names, trusted search_path, exclusive invocation by the
+migration login, no PUBLIC EXECUTE, exact index-definition checks and administrator
+cleanup. That alternative is only a proposal, not implemented or verified.
+
+The gate remains blocking, with the unchanged privilege rehearsal still required.
+Runner packaging/import stages were not reached; neither verification flag is
+true. No AWS account access occurred and the application ZIP remains unchanged.
+[Evidence summary](../docs/EVIDENCE/05-rds/migration-runner-ci/37898074673/summary.json)
+records exactly which assertions completed and which gates did not.
 
 The user accepted reuse of the existing app SG, including its S3/DynamoDB HTTPS
 prefix-list egress. No dedicated replacement runner SG or DB SG modification is
@@ -344,3 +353,14 @@ REVOKE still ran as the NOINHERIT administrator. Bootstrap now explicitly uses
 SET LOCAL ROLE to the new owner for that existing ACL operation and RESET ROLE
 before continuing role administration. No new privilege is granted. Ownership
 still inherently permits the owner to regrant DML; the REVOKE is not a DML sandbox.
+
+### Remaining schema CREATE boundary
+
+CI 37898074673 passed corrected bootstrap and the isolation/rollback assertions,
+then failed before migration completion. PostgreSQL 16 index creation explicitly
+checks CREATE on the table namespace, in addition to ownership:
+[PostgreSQL 16 indexcmds.c](https://github.com/postgres/postgres/blob/REL_16_STABLE/src/backend/commands/indexcmds.c).
+The owner-role grant alone is insufficient. Keeping schema CREATE revoked means
+this exact migration cannot yet complete; granting it would also allow unrelated
+schema objects. No migration ZIPs are verified, no cleanup completion is claimed,
+and no AWS operation is approved. Resolve the scoped index path before a new CI run.

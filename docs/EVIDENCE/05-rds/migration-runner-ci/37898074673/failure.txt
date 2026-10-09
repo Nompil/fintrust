@@ -1,0 +1,5 @@
+Run 37898074673, source ab0a70e30606378f15b1662f2af804592e8499e7
+verify	Rehearse exact bootstrap and cleanup privileges in disposable PostgreSQL 16	2026-10-09T07:17:31.6057217Z Traceback (most recent call last):
+verify	Rehearse exact bootstrap and cleanup privileges in disposable PostgreSQL 16	2026-10-09T07:17:31.6075332Z   File "/home/runner/work/fintrust/fintrust/tools/check_migration_roles_pg16.py", line 95, in run
+verify	Rehearse exact bootstrap and cleanup privileges in disposable PostgreSQL 16	2026-10-09T07:17:31.6076587Z     cur.execute(source);cur.execute(source)
+verify	Rehearse exact bootstrap and cleanup privileges in disposable PostgreSQL 16	2026-10-09T07:17:31.6078485Z psycopg2.errors.InsufficientPrivilege: permission denied for schema public

@@ -1,0 +1,43 @@
+{
+  "run_id": 37898074673,
+  "source_commit": "ab0a70e30606378f15b1662f2af804592e8499e7",
+  "conclusion": "failure",
+  "regression": {
+    "passed": 446,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 18.16
+  },
+  "local_focused": {
+    "passed": 60,
+    "failed": 0,
+    "skipped": 0
+  },
+  "latest_local_infrastructure_tests": {
+    "passed": 15,
+    "failed": 0,
+    "skipped": 0
+  },
+  "original_invalid_admin_self_grant_reproduced": true,
+  "corrected_bootstrap_passed": true,
+  "migration_admin_delegation_denied": true,
+  "ddl_without_set_role_denied": true,
+  "unrelated_table_ddl_denied": true,
+  "schema_create_denied": true,
+  "ddl_rollback_verified": true,
+  "remaining_error": "permission denied for schema public",
+  "remaining_operation": "CREATE INDEX requires schema CREATE in PostgreSQL 16",
+  "migration_rerun_completed": false,
+  "cleanup_rehearsal_completed": false,
+  "linux_execution_verified": false,
+  "postgresql16_privilege_tests_verified": false,
+  "runner_package_build_reached": false,
+  "aws_access_performed": false,
+  "application_zip_sha256": "cf9c18a5f267373e2fc2e22331987bb6dce8e2e65366b2d1f5651bb035dd6654",
+  "application_zip_unchanged": true,
+  "commits_pushed": [
+    "22b54437bec38d354e989afad15b1c0d7011a330",
+    "ab0a70e30606378f15b1662f2af804592e8499e7"
+  ],
+  "note": "Privilege successes inferred from ordered assertions completed before traceback at cur.execute(source). No RDS authentication semantics proven."
+}

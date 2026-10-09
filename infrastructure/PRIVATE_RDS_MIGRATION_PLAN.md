@@ -1,3 +1,11 @@
+> Latest correction checkpoint: CI 37898074673 / source `ab0a70e`.
+> Original ADMIN grant cycle corrected; bootstrap and privilege-denial/rollback
+> checks passed. Regression: 446 passed, 0 failed, 0 skipped. Migration fails
+> because index creation requires CREATE on schema public, currently denied to
+> preserve unrelated-DDL isolation. No privileges broadened. Runner ZIP build,
+> import verification, migration rerun and cleanup rehearsal remain unverified.
+> See PRIVATE_RDS_RUNNER.md for exact evidence and the next design boundary.
+
 > CI continuation: approved source `2fb8ec4` was pushed and manual runner CI
 > [37895291574](https://github.com/Nompil/fintrust/actions/runs/37895291574) ran.
 > Regression: 444 passed, 0 failed, 0 skipped on Linux/Python 3.12/PostgreSQL 16.15.
