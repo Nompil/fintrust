@@ -7,18 +7,34 @@ SQL was executed. This is not permission to deploy. The application ZIP remains
 
 ## Current gate
 
-**PRIVATE RDS MIGRATION RUNNER BLOCKED** pending actual Linux CPython 3.12/x86_64
-imports and PostgreSQL 16 execution/privilege rehearsal. The local host is Windows
-Python 3.14.7/PostgreSQL 18.6; WSL is not installed and Docker/Podman unavailable.
-The separate manual CI workflow is prepared, not pushed or run. Windows packaging
-with verified Linux dependencies is not Linux execution proof.
+**PRIVATE RDS MIGRATION RUNNER CI FAILED**. Approved source
+`2fb8ec4f92339e5efbf097bdc0a22f72a1cd1d25` was pushed unchanged. Manual CI
+[37895291574](https://github.com/Nompil/fintrust/actions/runs/37895291574) used
+Ubuntu 24.04 x86_64, Python 3.12.15 and disposable PostgreSQL 16.15.
+The full suite (including focused runner tests) passed: **444 passed, 0 failed,
+0 skipped**. The separate exact bootstrap/cleanup privilege rehearsal failed
+while executing `sql/bootstrap/temporary_identity.sql`:
+`ADMIN option cannot be granted back to your own grantor`.
+The traceback identifies the SQL file but not the individual statement. The
+administrator membership grants using `ADMIN TRUE` require focused correction
+and actual PG16 rehearsal; do not bypass the check or substitute superuser execution.
 
-A network review item also remains: attaching the existing app SG preserves its
-S3/DynamoDB HTTPS prefix-list egress. SG permissions combine; the new client SG
-cannot restrict those existing allows. Runtime IAM grants no S3/DynamoDB data
-permissions, but that is not the same as network isolation. No DB ingress change
-is implemented. If strict endpoint-and-DB-only egress is required, STOP for a
-separate DB ingress/new runner-SG design approval. Do not silently change Stage 1.
+The workflow stopped before runner packaging/import verification. No verified
+runner ZIPs were published. `linux_execution_verified = false` and
+`postgresql16_privilege_tests_verified = false` remain mandatory until both gates
+pass. The application release ZIP is unchanged. Its redundant automatic push CI
+run was cancelled. No AWS account access or live database operation occurred.
+Run metadata and logs are preserved in
+[CI evidence](../docs/EVIDENCE/05-rds/migration-runner-ci/37895291574/summary.json).
+
+The user accepted reuse of the existing app SG, including its S3/DynamoDB HTTPS
+prefix-list egress. No dedicated replacement runner SG or DB SG modification is
+approved. The temporary HTTPS client SG supplies the endpoint path without
+removing existing app SG allows. The VPC has no NAT/general internet route;
+runtime IAM receives no unnecessary S3/DynamoDB application-data permissions;
+Secrets Manager IAM and endpoint policies retain exact bootstrap scope. The
+runner and temporary privileges must be removed afterward. This is an accepted
+network tradeoff, **not strict endpoint-and-DB-only network isolation**.
 
 Local verification: **59 focused tests passed (0 skipped)**; **443 regression tests
 passed, 1 skipped**. The skipped existing service-role test requires a disposable

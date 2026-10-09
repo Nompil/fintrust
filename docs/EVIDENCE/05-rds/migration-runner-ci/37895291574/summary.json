@@ -1,0 +1,35 @@
+{
+  "workflow_run_id": 37895291574,
+  "source_commit": "2fb8ec4f92339e5efbf097bdc0a22f72a1cd1d25",
+  "url": "https://github.com/Nompil/fintrust/actions/runs/37895291574",
+  "status": "failure",
+  "environment": {
+    "os": "Ubuntu 24.04",
+    "architecture": "x86_64",
+    "python": "3.12.15",
+    "postgresql": "16.15"
+  },
+  "regression": {
+    "passed": 444,
+    "failed": 0,
+    "skipped": 0,
+    "duration_seconds": 10.71,
+    "focused_tests_included": true
+  },
+  "privilege_rehearsal": {
+    "passed": false,
+    "error_class": "psycopg2.errors.InvalidGrantOperation",
+    "error": "ADMIN option cannot be granted back to your own grantor",
+    "failing_sql_file": "sql/bootstrap/temporary_identity.sql",
+    "precise_sql_statement_not_exposed_by_traceback": true
+  },
+  "linux_execution_verified": false,
+  "postgresql16_privilege_tests_verified": false,
+  "runner_packages_built": false,
+  "runner_artifacts_published": false,
+  "application_artifact_sha256": "cf9c18a5f267373e2fc2e22331987bb6dce8e2e65366b2d1f5651bb035dd6654",
+  "application_artifact_unchanged": true,
+  "aws_account_access_performed": false,
+  "automatic_application_ci_cancelled": 37895293023,
+  "accepted_network_tradeoff": "Reuse application SG including existing S3/DynamoDB HTTPS egress; no general internet/NAT route; exact-secret IAM and endpoint policy; temporary lifecycle; not strict endpoint-and-DB-only network isolation."
+}

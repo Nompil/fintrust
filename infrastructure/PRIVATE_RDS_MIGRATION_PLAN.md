@@ -1,3 +1,11 @@
+> CI continuation: approved source `2fb8ec4` was pushed and manual runner CI
+> [37895291574](https://github.com/Nompil/fintrust/actions/runs/37895291574) ran.
+> Regression: 444 passed, 0 failed, 0 skipped on Linux/Python 3.12/PostgreSQL 16.15.
+> Exact bootstrap privilege rehearsal failed with `ADMIN option cannot be granted
+> back to your own grantor`; packaging and Linux imports did not run. AWS execution
+> remains blocked. Existing app SG egress is an accepted documented tradeoff;
+> no dedicated replacement SG or DB SG changes are approved. See PRIVATE_RDS_RUNNER.md.
+
 # Private RDS migration path - secure bootstrap ready for review
 
 Status: **PRIVATE RDS BOOTSTRAP PATH READY FOR REVIEW**. This is a design and
