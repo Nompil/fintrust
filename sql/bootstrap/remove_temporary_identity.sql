@@ -14,11 +14,11 @@ REVOKE SELECT (risk_event_id) ON public.risk_events FROM fintrust_migrate_dev;
 REVOKE SELECT (alert_id) ON public.alerts FROM fintrust_migrate_dev;
 REVOKE SELECT (tx_id) ON public.processed_transactions FROM fintrust_migrate_dev;
 -- The transactions ACL grantor changed with ownership. Revoke as exact owner.
-GRANT fintrust_transactions_owner TO fintrust_admin WITH SET TRUE, INHERIT FALSE, ADMIN TRUE;
+GRANT fintrust_transactions_owner TO fintrust_admin WITH SET TRUE, INHERIT FALSE, ADMIN FALSE;
 SET LOCAL ROLE fintrust_transactions_owner;
 REVOKE SELECT ON public.transactions FROM fintrust_migrate_dev;
 RESET ROLE;
-GRANT fintrust_transactions_owner TO fintrust_admin WITH SET FALSE, INHERIT FALSE, ADMIN TRUE;
+GRANT fintrust_transactions_owner TO fintrust_admin WITH SET FALSE, INHERIT FALSE, ADMIN FALSE;
 REVOKE USAGE ON SCHEMA public FROM fintrust_migrate_dev;
 REVOKE CONNECT ON DATABASE fintrust FROM fintrust_migrate_dev;
 REVOKE SELECT (customer_id) ON public.customers FROM fintrust_transactions_owner;

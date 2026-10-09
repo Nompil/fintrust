@@ -128,7 +128,7 @@ for fixed aggregate postchecks, removed at cleanup. Ownership necessarily convey
 ability to regrant table privileges; it cannot be reduced to one ALTER operation
 with GRANT. Fixed signed code, phase IAM, qualified invocation and review are controls.
 
-PostgreSQL 16 role-creator administration matters: the master retains ADMIN TRUE
+PostgreSQL 16 role-creator administration matters: the master retains the automatically supplied creator ADMIN membership
 but SET FALSE/INHERIT FALSE on the new owner so it can manage cleanup membership.
 The temporary login never gets ADMIN or master/rds_superuser membership. The
 master's owner SET capability is briefly restored in the fixed cleanup transaction
@@ -293,3 +293,46 @@ execution-role ENI permissions until Lambda finishes cleanup. Data DDL failures
 roll back; uncertain commit/network timeouts require read-only reconciliation,
 not blind retry. Role/drop cleanup failure rolls back and needs catalog review.
 No cleanup helper auto-deletes AWS resources or shuts down existing RDS.
+
+## PostgreSQL 16 creator-grant correction (CI rerun pending)
+
+The first failing statement was:
+`GRANT fintrust_transactions_owner TO fintrust_admin WITH SET TRUE, INHERIT FALSE, ADMIN TRUE`.
+A non-superuser CREATEROLE creator already receives a bootstrap-superuser grant
+with ADMIN TRUE, SET FALSE, INHERIT FALSE. The explicit self-grant attempted to
+add a circular administrator delegation; PostgreSQL 16 rejected it. All four
+owner-to-administrator SET toggles (bootstrap and cleanup) now specify ADMIN FALSE.
+The existing bootstrap-superuser administration edge is retained for the creator
+so it can grant/revoke memberships and drop its temporary role; no new ADMIN
+option is delegated. The migration login never receives ADMIN or CREATEROLE.
+
+Role graph, expressed as `grantor -> granted role -> member`:
+
+| Phase | Edge | ADMIN / INHERIT / SET |
+|---|---|---|
+| Automatic on owner creation | bootstrap superuser -> fintrust_transactions_owner -> fintrust_admin | true / false / false |
+| Automatic on login creation | bootstrap superuser -> fintrust_migrate_dev -> fintrust_admin | true / false / false |
+| Bootstrap | fintrust_admin -> rds_iam -> fintrust_migrate_dev | false / false / true (NOINHERIT login default) |
+| Bootstrap, before ownership transfer | fintrust_admin -> fintrust_transactions_owner -> fintrust_admin | false / false / true |
+| Bootstrap, migration access | fintrust_admin -> fintrust_transactions_owner -> fintrust_migrate_dev | false / false / true |
+| Bootstrap, disable master SET path | fintrust_admin -> fintrust_transactions_owner -> fintrust_admin | false / false / false |
+| Cleanup, temporary master SET path | fintrust_admin -> fintrust_transactions_owner -> fintrust_admin | false / false / true |
+| Cleanup, restore master SET restriction | fintrust_admin -> fintrust_transactions_owner -> fintrust_admin | false / false / false |
+
+The existing application/runtime roles receive no membership from this correction.
+SET ROLE to the non-login owner is required for migration DDL and fixed index
+creation; it does not authorize unrelated table DDL or schema CREATE. Table
+ownership inherently permits management of the transactions table; it is not a
+column-level DDL sandbox. Cleanup revokes both login memberships, ACLs and CONNECT,
+then drops the temporary login. The original administrator keeps its creator
+administration edge; cleanup does not pretend to deprivilege the existing master.
+
+The CI rehearsal explicitly reproduces the original invalid grant in a savepoint,
+then runs the corrected SQL under a non-superuser creator. It checks no onward
+delegation, denial of DDL before SET ROLE, unrelated DDL/schema CREATE denials,
+transactional rollback, two migration executions and partial indexes, 200 rows,
+login removal, master SET removal and unchanged runtime-probe permissions.
+Vanilla PostgreSQL role membership does not prove RDS IAM authentication.
+
+References: [PostgreSQL 16 role attributes](https://www.postgresql.org/docs/16/role-attributes.html)
+and [GRANT](https://www.postgresql.org/docs/16/sql-grant.html).

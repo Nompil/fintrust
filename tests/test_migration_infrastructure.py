@@ -79,3 +79,12 @@ def test_endpoint_binding_rejects_invalid_id(tmp_path):
     with pytest.raises(ValueError):m.render(tmp_path,"*")
     docs=m.render(tmp_path,"vpce-0123456789abcdef0")
     assert "__VERIFIED_ENDPOINT_ID_REQUIRED__" not in json.dumps(docs)
+
+
+def test_creator_self_grants_control_set_without_admin_cycle():
+    for name in ("temporary_identity.sql", "remove_temporary_identity.sql"):
+        source = (Path("sql/bootstrap") / name).read_text()
+        grants = [line for line in source.splitlines() if line.startswith("GRANT fintrust_transactions_owner TO fintrust_admin")]
+        assert len(grants) == 2
+        assert all("ADMIN FALSE" in line and "INHERIT FALSE" in line for line in grants)
+        assert "SET TRUE" in grants[0] and "SET FALSE" in grants[1]
