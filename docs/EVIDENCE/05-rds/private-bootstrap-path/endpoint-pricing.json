@@ -1,0 +1,108 @@
+{
+  "url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonVPC/current/af-south-1/index.json",
+  "publication_date": "2026-09-17T19:05:28Z",
+  "retrieved_utc": "2026-10-09T00:04:38.142086+00:00",
+  "region": "af-south-1",
+  "prices": [
+    {
+      "sku": "ZDW5EY4S3DDMYNNT",
+      "usage": "AFS1-VpcEndpoint-GWLBE-Hours",
+      "description": "$0.01309 per Hrs for VpcEndpoint-GWLBE-Hours:VpcEndpoint in Africa (Cape Town)",
+      "unit": "Hrs",
+      "usd": "0.0130900000",
+      "begin": "0",
+      "end": "Inf",
+      "effective": "2026-09-01T00:00:00Z"
+    },
+    {
+      "sku": "UMXAJ5MJY7C5ZQVQ",
+      "usage": "AFS1-VpcEndpoint-Bytes",
+      "description": "$0.01 per GB for upto 1 PB monthly data processed by VPC Endpoints",
+      "unit": "GB",
+      "usd": "0.0100000000",
+      "begin": "0",
+      "end": "1048576",
+      "effective": "2026-09-01T00:00:00Z"
+    },
+    {
+      "sku": "UMXAJ5MJY7C5ZQVQ",
+      "usage": "AFS1-VpcEndpoint-Bytes",
+      "description": "$0.006 per GB for more than 1 PB and less than 5 PB monthly data processed by VPC Endpoints",
+      "unit": "GB",
+      "usd": "0.0060000000",
+      "begin": "1048576",
+      "end": "5242880",
+      "effective": "2026-09-01T00:00:00Z"
+    },
+    {
+      "sku": "UMXAJ5MJY7C5ZQVQ",
+      "usage": "AFS1-VpcEndpoint-Bytes",
+      "description": "$0.004 per GB for more than 5 PB monthly data processed by VPC Endpoints",
+      "unit": "GB",
+      "usd": "0.0040000000",
+      "begin": "5242880",
+      "end": "Inf",
+      "effective": "2026-09-01T00:00:00Z"
+    },
+    {
+      "sku": "TSTQAJN5KDG9PYFD",
+      "usage": "AFS1-VpcEndpoint-ODB-Resource-Hours",
+      "description": "$0.02618 - Hourly charge to access ODB Network Resource through Resource-endpoint",
+      "unit": "Hrs",
+      "usd": "0.0261800000",
+      "begin": "0",
+      "end": "Inf",
+      "effective": "2026-09-01T00:00:00Z"
+    },
+    {
+      "sku": "ND97RP446BSRY8GD",
+      "usage": "AFS1-VpcEndpoint-Resource-Hours",
+      "description": "$0.02618 per hour per VPC resource for VPC endpoint of type 'resource' in  Africa (Cape Town)",
+      "unit": "Hrs",
+      "usd": "0.0261800000",
+      "begin": "0",
+      "end": "Inf",
+      "effective": "2026-09-01T00:00:00Z"
+    },
+    {
+      "sku": "VYPXYMHM92K2P8CF",
+      "usage": "AFS1-VpcEndpoint-Tunnel-Hours",
+      "description": "$0.02618 - Hourly charge to access CIDR resources through Tunnel endpoint",
+      "unit": "Hrs",
+      "usd": "0.0261800000",
+      "begin": "0",
+      "end": "Inf",
+      "effective": "2026-09-01T00:00:00Z"
+    },
+    {
+      "sku": "8ZMGRUS7QT5EM7NR",
+      "usage": "AFS1-VpcEndpoint-Hours",
+      "description": "$0.01309 per VPC Endpoint Hour",
+      "unit": "Hrs",
+      "usd": "0.0130900000",
+      "begin": "0",
+      "end": "Inf",
+      "effective": "2026-09-01T00:00:00Z"
+    },
+    {
+      "sku": "WYDHGRSG7JQ27WPK",
+      "usage": "AFS1-VpcEndpoint-Service-Hours",
+      "description": "$0.05 per hour per active remote region for a VPCE service",
+      "unit": "Hrs",
+      "usd": "0.0500000000",
+      "begin": "0",
+      "end": "Inf",
+      "effective": "2026-09-01T00:00:00Z"
+    },
+    {
+      "sku": "JJG9RWVSD7RMG42M",
+      "usage": "AFS1-VpcEndpoint-GWLBE-Bytes",
+      "description": "Charge for per GB data processed by AWS Gateway Load Balancer VPC Endpoint",
+      "unit": "GB",
+      "usd": "0.0035000000",
+      "begin": "0",
+      "end": "Inf",
+      "effective": "2026-09-01T00:00:00Z"
+    }
+  ]
+}

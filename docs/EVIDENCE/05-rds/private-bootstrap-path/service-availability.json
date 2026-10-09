@@ -1,0 +1,17 @@
+[
+    {
+        "Name": "com.amazonaws.af-south-1.secretsmanager",
+        "Types": [
+            {
+                "ServiceType": "Interface"
+            }
+        ],
+        "AZs": [
+            "af-south-1a",
+            "af-south-1b",
+            "af-south-1c"
+        ],
+        "PrivateDns": "secretsmanager.af-south-1.amazonaws.com",
+        "PolicySupported": true
+    }
+]

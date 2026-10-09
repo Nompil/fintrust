@@ -59,6 +59,10 @@ release ordering and cleanup. No runner is deployed and no live SQL/secret retri
 or AWS mutation occurred. Live baseline/schema/grants remain UNKNOWN. An empty or
 incompatible database requires a separate bootstrap review before migration 001.
 Application concurrency remains 0. The verified application ZIP is unchanged.
+The secure-bootstrap revision now proposes one temporary Secrets Manager interface
+endpoint: the Lambda retrieves the RDS-managed secret directly into memory.
+The earlier controller-to-invocation password handoff is prohibited. Endpoint/SG
+cost and permissions require approval before implementing the read-only runner.
 
 ## Historical preparation record
 

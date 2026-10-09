@@ -1,0 +1,70 @@
+{
+  "recorded_utc": "2026-10-09T00:11:53.402762+00:00",
+  "base_commit": "78b2cebfa9ae948d119ca8f4e5725bd2b958a050",
+  "status": "PRIVATE RDS BOOTSTRAP PATH READY FOR REVIEW",
+  "scope": "Focused documentation/design and metadata inventory; no implementation or execution approval.",
+  "inventory_principal": "arn:aws:iam::966467878406:user/fintrust-inventory",
+  "region": "af-south-1",
+  "database": "fintrust-ledger-dev",
+  "master_secret_arn": "arn:aws:secretsmanager:af-south-1:966467878406:secret:rds!db-e93012ae-0d14-4225-bdc3-988f4d98f72a-BbEGMn",
+  "secret_value_retrieved": false,
+  "aws_mutations": false,
+  "database_connections": 0,
+  "push_performed": false,
+  "current_path_can_retrieve_secret": false,
+  "existing_endpoints": "S3 and DynamoDB gateway endpoints only",
+  "proposed_path": {
+    "service": "com.amazonaws.af-south-1.secretsmanager",
+    "type": "Interface",
+    "private_dns": true,
+    "vpc": "vpc-0aba008bb360f5147",
+    "subnet": "subnet-0c2d87e8a83361e30",
+    "new_security_groups": [
+      "fintrust-migration-client-dev",
+      "fintrust-migration-secrets-endpoint-dev"
+    ],
+    "existing_app_security_group": "sg-0850bd798bb9505e2",
+    "database_security_group_unchanged": "sg-01644a4c9f2c44162",
+    "secret_delivery": "Direct GetSecretValue to request-local Lambda memory; never through controller or invocation event"
+  },
+  "iam_signing_check": "Passed offline with dummy credentials; not live RDS authentication proof",
+  "cost_usd": {
+    "endpoint_per_az_hour": "0.01309",
+    "four_hours_one_az": "0.05236",
+    "twenty_four_hours_one_az": "0.31416",
+    "seven_hundred_thirty_hours_one_az": "9.55570",
+    "first_pb_per_gb": "0.01",
+    "exclusions": "Lambda, logging, Secrets Manager API usage, existing RDS/secret charges, snapshots, transfer and taxes"
+  },
+  "cleanup": "Revoke master retrieval for IAM-only migration; separately approve fixed administrator cleanup; revoke again and remove endpoint, temporary SGs, function/versions and role after ENI release. Preserve RDS-managed secret/rotation.",
+  "validation": {
+    "all_evidence_json_parsed": true,
+    "document_json_examples_parsed": 2,
+    "exact_secret_scope_asserted": true,
+    "endpoint_and_current_version_conditions_asserted": true,
+    "regional_price_asserted": true,
+    "application_or_sql_tests_rerun": false,
+    "reason": "No application, SQL, IAM policy file or template changed. Prior tests remain historical; runner implementation/native import tests remain required.",
+    "access_analyzer_run": false,
+    "cloudformation_validation_run": false
+  },
+  "remaining_gates": [
+    "Approve temporary endpoint cost/security exception",
+    "Implement and review runner/template/scoped IAM",
+    "Linux CPython 3.12 x86_64 native imports and PostgreSQL 16 tests",
+    "Read-only live SQL preflight approval",
+    "Separate bootstrap role/ownership, snapshot and migration approvals"
+  ],
+  "evidence_files": [
+    "dns-hostnames.json",
+    "dns-support.json",
+    "endpoint-pricing.json",
+    "endpoints.json",
+    "local-signing-check.json",
+    "secret-key-metadata.json",
+    "secret-metadata.json",
+    "service-availability.json"
+  ],
+  "historical_application_artifact_sha256": "cf9c18a5f267373e2fc2e22331987bb6dce8e2e65366b2d1f5651bb035dd6654",
+  "artifact_rebuilt_or_uploaded": false
+}

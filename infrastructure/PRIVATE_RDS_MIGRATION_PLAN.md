@@ -1,7 +1,10 @@
-# Private RDS migration path - ready for design review
+# Private RDS migration path - secure bootstrap ready for review
 
-Status: **PRIVATE RDS MIGRATION PATH READY FOR REVIEW**. This is a design and
+Status: **PRIVATE RDS BOOTSTRAP PATH READY FOR REVIEW**. This is a design and
 read-only preflight preparation checkpoint, not authorization to deploy or execute.
+This revision supersedes commit 78b2ceb's controller-to-Lambda password-payload
+proposal: that handoff is now explicitly prohibited. A temporary Secrets Manager
+interface endpoint is proposed instead and needs cost/security approval.
 The runner is NOT implemented, packaged, deployed or invoked. No live SQL, secret
 retrieval, snapshot, IAM/network mutation or application deployment occurred.
 Read-only AWS metadata was collected on 2026-10-09 (Africa/Johannesburg date).
@@ -42,19 +45,21 @@ code/live inventory. No existing SSM runner on EC2 exists in this VPC. CloudShel
 VPC environments and external hybrid SSM nodes were not inventoried; do not claim
 account-wide absence. No existing approved private laptop/VPN path is recorded.
 The earlier bootstrap note proposed a new bootstrap SG; reuse the existing app SG
-instead. No DB ingress change is needed. Recheck NACLs, subnet capacity and DNS
+instead. Add a separate temporary HTTPS client SG and endpoint SG as described
+below. No DB ingress change is needed. Recheck NACLs, subnet capacity and DNS
 attributes during runner implementation; SGs/routes alone do not prove a DB handshake.
 
 ## Alternatives
 
 | Approach | Reachability, credentials, TLS, cost and suitability |
 |---|---|
-| A. Dedicated temporary VPC Lambda - preferred | Reuse app subnets/SG, direct TLS 5432, no NAT/public ingress/endpoint. Separate audited package and narrow role, fixed operations, synchronous invocation, one connection. Small request/compute/log usage; delete after use. Read-only first, approved DDL later; transactional rollback and snapshot recovery. Credential bootstrap described below is essential. |
+| A. Temporary Secrets Manager endpoint + dedicated Lambda - preferred | Direct private HTTPS secret retrieval, then verified PostgreSQL TLS. Adds one interface endpoint in one AZ and two narrowly scoped SGs; no NAT/public ingress. Fixed operations, exact secret IAM and endpoint policy, read-only first. Endpoint hourly/data charges plus small Lambda/log/API usage; remove after the bounded bootstrap/migration/admin-cleanup session. |
 | B. Reuse application Lambda - reject | Only ingest exists and it is outside VPC. Adding network access, DDL credentials and a migration mode would expand its role and alter reviewed runtime/package boundaries. Future scoring role must not own tables. Lambda cost remains small but cleanup/rollback and audit separation worsen. |
 | C. EC2 + SSM - reject for this task | Could reach RDS with app SG, TLS and IAM DB token or secret. No runner exists. Private SSM control needs endpoints (ssm/ssmmessages and any applicable region/agent dependencies) or network egress. Adds instance/EBS, agent/IAM, endpoint charges, OS maintenance and cleanup; conflicts with the current no-NAT/no-interface-endpoint plan. |
 | D. Default CloudShell/local laptop - reject direct access | Neither has a route into this VPC. Public RDS, broad ingress or improvised tunnels are unacceptable. TLS and an IAM token cannot create a network route. |
-| D2. CloudShell VPC environment - viable fallback, not selected | A configured VPC environment can reach RDS with the app SG without NAT for the DB connection. It needs its own IAM/ENI setup and region availability check. In this subnet it cannot fetch Secrets Manager or arbitrary packages from public APIs; IAM DB login must already exist or credentials must be handed in. Ephemeral shell/tool transfer and interactive privileged SQL are harder to pin and audit than fixed reviewed Lambda operations. No claim that CloudShell inherently cannot reach private RDS. |
+| D2. CloudShell VPC environment - not selected | Can reach private RDS when configured for this VPC; however it has the same missing Secrets Manager route. Under the no-secret-payload/history rule it still needs the temporary interface endpoint unless an IAM DB login already exists. Ephemeral tools, interactive administration and credential handling add complexity. Its free compute does not solve bootstrap or eliminate endpoint cost. |
 | E. RDS Data API - not applicable | This instance is standard RDS PostgreSQL, not an Aurora Data API cluster. No HTTP SQL path exists for it; changing to Aurora is an unnecessary architecture/cost change. |
+| A2. Outside-VPC controller + private runner - orchestration only | Controller sends a nonsecret operation/request ID and invokes the approved runner version; it has no GetSecretValue permission. Supplying the master password/token in the event is rejected. A controller reaching Secrets Manager does not bridge the private runner network. Staging an encrypted secret in S3/SSM/Lambda configuration creates another credential copy and is not selected. |
 | F. Existing repo SQL/local tools | Canonical SQL and local tests are useful inputs, not a network bridge. `tools/local.py` deliberately restricts itself to loopback practice databases. The untracked `infrastructure/rds/schema.sql` is not adopted; do not execute it. |
 
 Sources: [Lambda VPC](https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html),
@@ -64,93 +69,214 @@ Sources: [Lambda VPC](https://docs.aws.amazon.com/lambda/latest/dg/configuration
 
 ## Selected architecture and credential bootstrap
 
-Prepare a separate `fintrust-migration-dev` Lambda (proposed name), Python 3.12
-x86_64, 512 MiB, 300-second timeout, no URL, no triggers, no async destinations,
-no extensions, no tracing, no provisioned concurrency. Start at reserved concurrency
-0. Only after separate approval allow this temporary function concurrency 1 for
-controlled synchronous requests; application ingest remains at 0. If account
-concurrency quotas cannot support that reservation, stop for review, do not relax it.
-Reuse both application subnets and `sg-0850bd798bb9505e2`. Deploy a precreated
-14-day log group `/aws/lambda/fintrust-migration-dev`, dedicated execution role and
-explicit policies. No new SG, endpoint, EC2, NAT or RDS instance is selected.
+Metadata-only checks on 2026-10-09 establish the exact relationship:
 
-Initially build a **read-only-only** runner version. It must have no DDL operation
-or arbitrary SQL input. The approved immutable code/version/checksum, migration
-SQL checksum, endpoint, DB, schema, account and region are pinned by the controller.
-A later DDL runner version requires separate review after live preflight. Do not
-bundle migration control into the verified application ZIP or rebuild that ZIP.
+- DB ARN: `arn:aws:rds:af-south-1:966467878406:db:fintrust-ledger-dev`.
+- Master username: `fintrust_admin`; RDS MasterUserSecret status active.
+- Secret ARN: `arn:aws:secretsmanager:af-south-1:966467878406:secret:rds!db-e93012ae-0d14-4225-bdc3-988f4d98f72a-BbEGMn`.
+- DescribeSecret reports OwningService=rds, rotation enabled and
+  aws:rds:primaryDBInstanceArn pointing to that exact DB. No secret value was read.
+- Secret encryption key: `arn:aws:kms:af-south-1:966467878406:key/c68acc77-115b-4da5-80be-9ea69291da19`,
+  Enabled, KeyManager=AWS, default Secrets Manager key. DescribeSecret's null
+  KmsKeyId is expected for aws/secretsmanager; it does not mean unencrypted.
+  This is distinct from the DB storage key and the customer-managed S3 key.
+- Only S3 and DynamoDB gateways exist. They do not route Secrets Manager traffic.
+  The recorded app routes have no default egress and app SG permits HTTPS only
+  to those service prefix lists. Current placement cannot retrieve the secret.
+- DNS support and DNS hostnames are enabled. Secrets Manager's interface service
+  `com.amazonaws.af-south-1.secretsmanager` is available in af-south-1a/b/c with
+  private DNS `secretsmanager.af-south-1.amazonaws.com` and endpoint-policy support.
 
-IAM auth needs a PostgreSQL login plus `rds_iam` and matching `rds-db:connect`;
-enabling the instance feature alone does not create them. Owner/grant state is
-unknown, so do not assume an IAM principal can bootstrap itself. See
-[AWS database account setup](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.DBAccounts.html).
+Evidence: [bootstrap metadata](../docs/EVIDENCE/05-rds/private-bootstrap-path/summary.json).
+The earlier metadata/preflight evidence remains historical and unmodified.
 
-For the first inspection only, retain the existing repo proposal: an approved,
-scripted controller on the administrator workstation uses an MFA-backed identity
-to retrieve the exact RDS master secret, validates its username/target metadata,
-and sends credentials only in memory through a synchronous Lambda Invoke SDK
-request over HTTPS. The controller is a reviewed tool, not manual SQL improvisation.
-It must not accept arbitrary SQL, dump SDK debug output, shell arguments, files,
-environment variables, CLI history, notebook state, events, DSNs or exception
-messages containing credentials. Disable SDK invocation retries. Do not use the
-Lambda console's saved test events, async invocation, DLQs or LogType=Tail.
-Runner logs only allowlisted request/phase/hash/status/SQLSTATE metadata. Explicitly
-catch failures and never return raw DB/SDK exceptions or the input event. CloudTrail
-is metadata evidence, not a place to save the secret-bearing payload. Redaction and
-failure-path tests are mandatory before approving this credential handoff.
+### Exact proposed network path
 
-This is a sensitive bootstrap exception: master credentials exist transiently in
-controller/runner memory and master privileges could be abused by faulty code.
-TLS and read-only transactions do not turn the master into a least-privilege login.
-Approve that narrow first connection explicitly; never give it to application code.
-If this handoff is rejected, stop: a separately approved temporary Secrets Manager
-interface endpoint (with SG changes/cost) is the alternative, not an implicit fallback.
-Gateway endpoints do not provide Secrets Manager access. See
-[Secrets Manager endpoint](https://docs.aws.amazon.com/secretsmanager/latest/userguide/vpc-endpoint-overview.html).
+Use the existing VPC `vpc-0aba008bb360f5147`. For this temporary task, select ONLY
+application subnet `subnet-0c2d87e8a83361e30` (af-south-1a) for both runner and endpoint.
+This deliberately trades multi-AZ availability for minimum temporary cost; if that
+AZ is unavailable, stop/review rather than silently create a second endpoint ENI.
+No public IP, NAT, IGW, default route or RDS accessibility change is needed.
 
-Use psycopg2 directly in the runner, not `fintrust.db`: application configuration
-correctly requires IAM auth in Lambda and its password path is inappropriate here.
-Bundle reviewed psycopg2 Linux CPython 3.12 wheels and the current public RDS CA;
-verify the runner separately under Linux. Require `sslmode=verify-full`, the actual
-RDS DNS endpoint above, port 5432, connect_timeout=5; never use an IP alias or
-`sslmode=require` as a certificate/hostname-verification substitute. Return only
-SSL protocol/cipher and client verification mode, never credentials/cert private data.
+1. Create one **Interface** endpoint for com.amazonaws.af-south-1.secretsmanager,
+   IPv4, private DNS enabled, exact restricted endpoint policy below.
+2. Create temporary `fintrust-migration-client-dev` SG: no inbound rules; its only
+   egress is TCP 443 to the temporary endpoint SG. Explicitly remove the default
+   all-egress rule in the eventual template; tags Project=FinTrust, Environment=dev.
+3. Create temporary `fintrust-migration-secrets-endpoint-dev` SG: ingress TCP 443
+   only from that client SG; no open egress rule is required for stateful responses.
+   Ensure the final template removes default all-egress (do not assume an omitted
+   property does this). No CIDR-wide permissions. Endpoint uses only this SG.
+4. Runner attaches BOTH existing app SG `sg-0850bd798bb9505e2` and temporary client
+   SG. Security-group permissions combine: existing 5432-to-DB connectivity remains,
+   temporary client SG adds only HTTPS to endpoint ENIs. Existing app/DB SGs are
+   not edited. Extra app-SG S3/DynamoDB routes do not grant IAM data permissions.
+5. Regional Secrets Manager DNS resolves to the private endpoint ENI. SDK request
+   goes Lambda ENI -> endpoint SG TCP443 -> PrivateLink -> Secrets Manager.
+   Response is returned over the same TLS connection. Secrets Manager performs
+   KMS decryption server-side; no Lambda-to-KMS endpoint or client decrypt call.
+6. psycopg2 connects Lambda ENI -> existing DB SG TCP5432 -> private RDS endpoint
+   with sslmode=verify-full and the bundled RDS CA. Verify NACL ephemeral-return
+   rules, subnet free IPs, DNS resolution and peer certificate in the later
+   approved connectivity test; endpoint existence alone is not handshake proof.
 
-## IAM design for later implementation (no policies attached)
+[AWS private secret access](https://docs.aws.amazon.com/secretsmanager/latest/userguide/vpc-endpoint-overview.html),
+[endpoint prerequisites](https://docs.aws.amazon.com/vpc/latest/privatelink/create-interface-endpoint.html),
+[secret encryption](https://docs.aws.amazon.com/secretsmanager/latest/userguide/security-encryption.html).
 
-- Controller: `secretsmanager:GetSecretValue` and `DescribeSecret` only on
-  `arn:aws:secretsmanager:af-south-1:966467878406:secret:rds!db-e93012ae-0d14-4225-bdc3-988f4d98f72a-BbEGMn`;
-  `lambda:InvokeFunction` only the approved qualified migration function version;
-  scoped RDS/CloudFormation/Lambda metadata reads to verify bindings. Region
-  af-south-1. No application invocation, S3 writes or arbitrary secret listing.
-  Check current secret encryption metadata/key policy; do not add broad KMS decrypt.
-  Customer-key encryption, if discovered, requires exact-key decrypt via Secrets
-  Manager/context conditions separately. No secret value was read this turn.
-- Migration execution role: Lambda service trust; exact log-group stream creation
-  and event writes; Lambda-required EC2 ENI actions only:
-  CreateNetworkInterface, DescribeNetworkInterfaces, DescribeSubnets,
-  DeleteNetworkInterface, AssignPrivateIpAddresses, UnassignPrivateIpAddresses.
-  AWS documents Resource=* for this VPC permission set; restrict requested region.
-  Add AWS's explicit Deny on these actions for calls whose
-  `lambda:SourceFunctionArn` is the migration function, so function code cannot
-  exercise its ENI permissions. Do not use an unproven CalledVia condition for
-  Lambda service ENI calls. No Secrets Manager, SSM, KMS, S3, SQS or DynamoDB data
-  permission is needed in the runner for the in-memory bootstrap route.
-- After database login provisioning approval, add only
-  `rds-db:connect` on
+### Credential lifecycle and IAM signing
+
+The future `fintrust-migration-dev` function calls GetSecretValue itself, using
+its Lambda-provided execution-role credentials and the fixed secret ARN with
+VersionStage=AWSCURRENT. Validate returned ARN, nonempty credential structure and
+username=fintrust_admin against pinned deployment metadata. Do not trust a
+caller-supplied DB hostname or secret ARN. Keep password only in request-local
+memory, pass it directly to psycopg2, close the DB connection and release references
+in finally. Python does not guarantee secure memory zeroization; no such claim is made.
+No global credential cache, extension cache, /tmp secret file or returned password.
+Rotation can change AWSCURRENT: a failed authentication stops for reconciliation;
+never print credentials or automatically repeat DDL after a connection ambiguity.
+
+Controller sends ONLY an allowlisted operation and correlation ID to an approved
+qualified function version. It neither retrieves nor forwards passwords/tokens.
+Disable payload/debug/DSN logging and tracing; no async invokes, saved console test
+credentials, DLQs or LogType=Tail. Catch errors and emit sanitized phase, SQLSTATE,
+request ID and outcome only. Test failures and redaction with sentinel secrets
+before deployment. CloudTrail/GetSecretValue metadata and sanitized DB results
+provide evidence without credential contents. Explicitly reject hardcoded passwords,
+Git secrets, passwords in Lambda environment (even encrypted at rest), invocation
+payloads, logs/evidence, public RDS and NAT solely for migration.
+
+IAM tokens are local SigV4 presigned connection strings valid for 15 minutes at
+connection establishment. Inspection of pinned botocore 1.43.104 and an offline
+check with explicit dummy credentials and HTTP/DNS/socket connects blocked proved
+signing makes no AWS API request. No real token was generated or retained.
+The signer needs already-available valid AWS credentials; assume-role/profile/SSO
+credential discovery can require networking elsewhere. Use the credentials supplied
+to Lambda, with no SDK AssumeRole or credential-provider network dependency inside
+the VPC. IAM signing does not create a DB user, grant rds_iam, grant table ownership
+or prove RDS authentication. Instance IAM auth is already enabled, but the live
+PostgreSQL users/privileges remain unknown.
+[Token use](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.Connecting.Python.html),
+[required DB account](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.DBAccounts.html),
+[GetSecretValue permissions](https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html),
+[Secrets Manager authorization conditions](https://docs.aws.amazon.com/service-authorization/latest/reference/list_secretsmanager.html).
+
+Initially implement a read-only-only runner version (Python 3.12/x86_64, 512 MiB,
+300 seconds, one connection), precreated 14-day logs, reserved concurrency 0,
+no URL/triggers/provisioned concurrency. Later approval permits temporary runner
+concurrency 1 only. Application ingest remains 0 and unwired. The first live SQL
+operation is the reviewed read-only preflight, not role creation or migration.
+Owner/bootstrap SQL needs a separate review, snapshot and execution approval.
+
+## Exact IAM scope for later implementation (design only)
+
+Proposed role ARN: `arn:aws:iam::966467878406:role/fintrust-migration-dev`, trusted
+only by lambda.amazonaws.com for sts:AssumeRole. No controller GetSecretValue grant.
+The endpoint ID is not yet allocated: `__APPROVED_SECRETS_VPCE_ID__` below MUST become
+the created stack's verified endpoint Ref, never `*` or StringEqualsIfExists.
+These JSON statements are review specifications, not attached policy files.
+
+Bootstrap-only execution-role statement:
+
+```json
+{
+  "Sid": "ReadOnlyRdsMasterThroughTemporaryEndpoint",
+  "Effect": "Allow",
+  "Action": "secretsmanager:GetSecretValue",
+  "Resource": "arn:aws:secretsmanager:af-south-1:966467878406:secret:rds!db-e93012ae-0d14-4225-bdc3-988f4d98f72a-BbEGMn",
+  "Condition": {
+    "StringEquals": {
+      "aws:RequestedRegion": "af-south-1",
+      "aws:SourceVpce": "__APPROVED_SECRETS_VPCE_ID__",
+      "secretsmanager:VersionStage": "AWSCURRENT"
+    }
+  }
+}
+```
+
+The runner needs no DescribeSecret/RDS API call: the operator verifies metadata
+read-only outside the VPC and binds nonsecret configuration. Endpoint policy:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Sid": "OnlyMigrationRoleAndMasterSecret",
+    "Effect": "Allow",
+    "Principal": "*",
+    "Action": "secretsmanager:GetSecretValue",
+    "Resource": "arn:aws:secretsmanager:af-south-1:966467878406:secret:rds!db-e93012ae-0d14-4225-bdc3-988f4d98f72a-BbEGMn",
+    "Condition": {
+      "ArnEquals": {"aws:PrincipalArn": "arn:aws:iam::966467878406:role/fintrust-migration-dev"}
+    }
+  }]
+}
+```
+
+Principal=* is constrained to the exact role by aws:PrincipalArn; this endpoint
+policy does not independently grant the role secret access. Both policy layers
+must permit it; existing SCPs/boundaries/explicit denies must also be checked.
+No resource-policy mutation on the RDS-managed secret is proposed. The current
+AWS-managed Secrets Manager key requires no additional customer-key policy or
+explicit kms:Decrypt grant in this design; no broad KMS grant is added. If future
+metadata indicates a customer-managed key, stop and separately scope decrypt to
+that key, via Secrets Manager and the exact SecretARN encryption context.
+
+Base execution permissions retained across phases:
+
+- logs:CreateLogStream and logs:PutLogEvents only on
+  `arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-migration-dev:log-stream:*`,
+  region af-south-1; precreated group avoids CreateLogGroup in runtime.
+- ec2:CreateNetworkInterface, ec2:DescribeNetworkInterfaces, ec2:DescribeSubnets,
+  ec2:DeleteNetworkInterface, ec2:AssignPrivateIpAddresses,
+  ec2:UnassignPrivateIpAddresses on Resource=* with RequestedRegion=af-south-1,
+  per Lambda's documented VPC permission contract. Add an explicit Deny for these
+  actions when lambda:SourceFunctionArn equals
+  `arn:aws:lambda:af-south-1:966467878406:function:fintrust-migration-dev`, preventing
+  function code from using service ENI permissions. No unproven CalledVia check.
+- After approved DB-login provisioning, only rds-db:connect on
   `arn:aws:rds-db:af-south-1:966467878406:dbuser:db-QZ3JN4H22YOMU7VLI22RL2IUYQ/fintrust_migrate_dev`.
-  Tokens are signed locally; there is no RDS API/STS call from inside the VPC.
-- Separate runner deployment/cleanup identity: scope Lambda create/read/update/
-  version/concurrency/delete to the proposed function, logs create/tag/retention
-  to its exact group, PassRole only its execution role with PassedToService=lambda,
-  and VPC/subnet/SG conditions where supported. IAM bootstrap remains administrator
-  controlled. Bind to the approved runner artifact, not the hardened application ZIP.
-  Snapshot permissions are a separate approval, never in the runner execution role.
+  Regional/account scope is in this exact ARN; no wildcard DB login/resource ID.
+- No S3/SQS/DynamoDB/SSM data operations, secret writes, secret listing, rotation,
+  EC2 instances, RDS lifecycle or snapshot permissions in the runner role.
 
-Exact deployable JSON/CloudFormation is deferred until design and credential
-handoff approval, per "Do not build it yet". Access Analyzer, template validation,
-Linux imports, region/resource condition checks and redaction tests will be required
-for that implementation; none is claimed for a runner that does not yet exist.
+Controller: lambda:InvokeFunction on the single reviewed qualified runner version
+only, plus approved nonsecret status/configuration reads. Use its MFA-backed
+operator session. AWS bootstrap administrator owns endpoint/SG creation and
+cleanup, execution-role policy/trust provisioning and exact-function PassRole
+(iam:PassedToService=lambda.amazonaws.com). Existing Stage 1 policy explicitly
+denies endpoint subnet/SG attachment: do not attach an Allow and expect it to
+override that Deny or weaken Stage 1. Use the separately approved bootstrap
+administrator or scoped bootstrap role for the endpoint resources. Future deployer
+policy must enumerate the reviewed Create/Modify/DeleteVpcEndpoint, temporary
+Create/DeleteSecurityGroup, exact ingress/egress rule and tagging operations,
+scoped to this VPC, service, temporary resources/tags and region where supported;
+read actions use * only when AWS requires it. No such policy is generated/attached
+in this documentation-only task. Its final JSON, resource dependencies and IAM
+validation are a required implementation review, not implied approval here.
+
+## Package/native dependency verification before execution
+
+Yes: psycopg2 and its Linux native extension/libpq dependencies are required.
+The project pins psycopg2-binary==2.9.13; retain that reviewed family rather than
+silently switching to psycopg v3. Use direct psycopg2 connection code: importing
+fintrust.db for bootstrap would conflict with the application's IAM-only policy.
+Build the separate minimal runner on Linux CPython 3.12 x86_64 using compatible
+manylinux wheels (not the Windows interpreter's native package). Package handler,
+reviewed SQL, CA and the dependencies actually used, excluding tests/dev material.
+
+Required later checks: inspect ELF/x86_64 and CPython ABI, import psycopg2 and
+psycopg2._psycopg/libpq from the extracted exact ZIP in Linux/Python 3.12 (also use
+Lambda's Python 3.12 runtime environment for OS-library compatibility), execute
+read-only/migration contract tests against disposable PostgreSQL 16.15, then
+certificate/hostname verification, secret-redaction and network-denial tests.
+Integration tests must inject fake secret data and mock AWS transport; never pull
+real secrets in CI. Confirm no credentials in ZIP/config, scan logs/output with
+sentinels on every error path, hash and manifest-bind that runner ZIP. These are
+future acceptance gates, not tests already performed. Existing 385-pass application
+CI and its verified ZIP do not certify a new runner. Existing seven local preflight
+SQL tests on PostgreSQL 18 remain useful but are not PostgreSQL 16 runner proof.
 
 ## Read-only database preflight contract
 
@@ -307,17 +433,17 @@ Linux tests establish code compatibility, not live schema/grants. Shared ZIP han
 do not mean scoring/API/report are deployed. Do not enable ingest into an unreviewed
 consumer pipeline simply because its own imports and DB migration pass.
 
-1. Approve this design and sensitive credential handoff; implement/test/review the
-   separate read-only runner, exact IAM/template/package, redaction and cleanup.
+1. Approve this revised design and temporary endpoint cost; implement/test/review the
+   separate read-only runner, endpoint/SGs, exact IAM/template/package, redaction and cleanup.
 2. Approve runner infrastructure; deploy disabled, verify pinned network/package,
-   then separately authorize one synchronous read-only preflight (temporary runner
+   verify private secret retrieval/target binding, then separately authorize one synchronous read-only preflight (temporary runner
    concurrency 1 only). Application concurrency stays 0, triggers unwired.
 3. Review live catalog/counts. If baseline absent/incompatible, stop for a separate
    canonical schema/bootstrap/roles plan. Do not apply 001 to an empty database.
 4. Freeze writers, approve/create/wait for snapshot and capture restore checkpoint.
 5. Approve the precise owner/login/grant bootstrap if required. Provision the narrow
-   IAM DB migration identity, verify TLS/privileges, remove master credential access
-   from the controller once bootstrap no longer needs it.
+   IAM DB migration identity, verify TLS/privileges, remove bootstrap secret access
+   from the runner once bootstrap no longer needs it (lifecycle below).
 6. Review/package/authorize the fixed DDL runner version; recheck preflight under
    lock, execute 001 once, verify catalog, validation/index state and unchanged
    row counts. Controlled rerun only after reconciliation and explicit approval,
@@ -339,12 +465,12 @@ consumer pipeline simply because its own imports and DB migration pass.
 ## Costs, cleanup and evidence
 
 Lambda on-demand has no idle instance charge; requests, execution, logs and temporary
-code storage are usage based. No provisioned concurrency or network endpoint standing
-charge is proposed. Example capacity bound: four full 300-second calls at 512 MiB
+code storage are usage based. No provisioned concurrency is proposed. One temporary Secrets Manager endpoint
+adds an hourly charge until deleted, even when the runner is idle. Example capacity bound: four full 300-second calls at 512 MiB
 are 600 GB-seconds plus requests and initialization/log usage; multiply by the
 current af-south-1 rate before execution. Typically cents for such a short session,
 not a guaranteed Free Tier entitlement. Existing RDS, managed secret and S3/KMS
-charges continue. Snapshot storage and any restore instance are the material added
+charges continue. See the exact temporary endpoint estimate below. Snapshot storage and any restore instance are the material added
 cost risks. No credits were consumed by a deployed runner because none exists.
 [Lambda pricing](https://aws.amazon.com/lambda/pricing/),
 [RDS backup pricing](https://aws.amazon.com/rds/postgresql/pricing/).
@@ -353,8 +479,8 @@ Cleanup order: reconcile outcome; revoke migration owner's temporary membership,
 NOLOGIN/revoke IAM auth and drop the temporary DB login only after checking it owns
 nothing; disable runner; delete its approved function/versions; wait for managed
 VPC ENI cleanup before deleting execution-role permissions/role. Lambda may need
-up to 20 minutes for ENI cleanup; do not manually remove shared ENIs. Remove controller
-secret/invoke permissions, approved temporary runner artifact, then retain sanitized
+up to 20 minutes for ENI cleanup; do not manually remove shared ENIs. Remove runner bootstrap secret permissions and controller invoke permissions,
+remove the temporary endpoint/SGs in the order below and the approved temporary runner artifact, then retain sanitized
 14-day logs/evidence or delete on separate approval. Never DROP OWNED CASCADE, delete
 existing subnets/SGs/DB or remove the persistent narrow NOLOGIN owner. Snapshot
 cleanup needs its own approved retention decision. Residual logs, snapshot and code
@@ -370,14 +496,15 @@ Evidence filenames planned below must not be populated with fabricated success:
 | same | `18-migration-runner-cleanup.json`: DB-role membership removal, function/role/ENI and retained snapshot/log disposition |
 | docs/EVIDENCE/12-e2e/ | `01-hardened-schema-compatibility.json`, `02-hardened-release-binding.json`, `03-controlled-smoke.json`: live role checks/read compatibility, artifact/version binding and separately approved smoke evidence |
 
-Current actual evidence is only metadata JSON and local preflight test results in
-`docs/EVIDENCE/05-rds/private-migration-path/`. Production SQL is unchanged. The two
+Current actual evidence is metadata JSON and prior local preflight test results in
+`docs/EVIDENCE/05-rds/private-migration-path/`, plus metadata, pricing and offline
+signing checks in `docs/EVIDENCE/05-rds/private-bootstrap-path/`. Production SQL is unchanged. The two
 preflight scripts and local tests are preparation, not an executable AWS runner.
 Review-ready is not execution-ready: the next user decision is approval of the
-no-new-endpoint, transient-credential read-only runner design. Live schema preflight,
+temporary Secrets Manager endpoint and direct-fetch read-only runner design. Live schema preflight,
 bootstrap privileges, snapshot and DDL remain later explicit gates.
 
-## Local validation result
+## Prior local validation result (commit 78b2ceb; not rerun for this documentation change)
 
 Seven focused PostgreSQL tests passed, zero failed/skipped, in 3.10 seconds on
 Windows Python 3.14.7 / PostgreSQL 18.6. Each test used an isolated schema in the
@@ -417,3 +544,105 @@ The catalog ACL/membership report must also confirm these runtime roles lack
 ownership, broad inherited administration, and schema CREATE. Only a later live
 connection under each exact IAM login proves its authentication and effective
 query privileges; owner impersonation in local CI does not prove RDS IAM login.
+
+## Bootstrap role provisioning and removal of master access
+
+After the read-only catalog is reviewed and backup approved, the fixed bootstrap
+operation uses the master connection to create the passwordless login:
+
+```sql
+CREATE ROLE fintrust_migrate_dev LOGIN NOINHERIT NOSUPERUSER NOCREATEDB
+  NOCREATEROLE NOREPLICATION NOBYPASSRLS CONNECTION LIMIT 1;
+GRANT rds_iam TO fintrust_migrate_dev;
+GRANT CONNECT ON DATABASE fintrust TO fintrust_migrate_dev;
+GRANT USAGE ON SCHEMA public TO fintrust_migrate_dev;
+```
+
+This is a design example, not permission to run it. If the role exists, stop and
+compare attributes/memberships instead of blindly altering it. Do not grant rds_iam
+to the master; retain RDS-managed password authentication for that service identity.
+Grant narrowly required SELECT for preflight on the six FinTrust tables (not all
+schemas); grant no application write privileges to the migration login. DDL still
+requires ownership as explained above. Prefer an existing narrow NOLOGIN owner;
+otherwise separately approve transfer of only public.transactions to
+fintrust_transactions_owner. Grant temporary membership with SET TRUE, INHERIT FALSE,
+ADMIN FALSE on PostgreSQL 16, then SET ROLE only during fixed migration DDL. Never
+grant fintrust_admin or rds_superuser membership. If baseline tables are absent,
+stop for a separate schema/bootstrap plan; the role example does not authorize it.
+
+After provisioning, verify a NEW IAM-token/TLS connection as fintrust_migrate_dev
+and its exact privileges. Master access is then removed before normal migration:
+
+1. End master session; close all connections and discard request-local secret.
+   Record success metadata only. Disable runner concurrency and wait for zero
+   in-flight invocations and no runner DB sessions before changing phases.
+2. Remove the role's bootstrap GetSecretValue Allow and add an explicit Deny for
+   that action on the exact master secret as defense against another attached Allow.
+   Keep only the exact rds-db:connect grant and necessary ENI/log permissions.
+3. Deploy a reviewed IAM-only runner version with no password-fetch path. Controller
+   may invoke only this version; withdraw invocation permission to old bootstrap
+   versions and remove them after evidence capture. Configuration/version changes
+   must replace the previous execution environment; do not claim del() zeroizes it.
+   Test secret access is denied without returning/logging any value, and prove an
+   IAM DB connection works. No SDK AssumeRole, Secrets Manager or KMS call is needed
+   for the subsequent token-authenticated DB connection.
+4. Retain the endpoint and its two SGs only for the bounded maintenance session.
+   During IAM-only migration/verification, the execution-role Deny prevents master
+   retrieval. The endpoint policy remains restricted to this role and exact secret;
+   it is not an alternate credential path for the controller or other functions.
+5. After migration/verification, disable concurrency and reconcile all DB sessions.
+   The migration login cannot remove itself: separately approve the fixed admin
+   cleanup version. Remove the IAM-only version's invoke permission and version,
+   deploy only the reviewed cleanup code, and only then replace the secret Deny
+   with the exact endpoint-restricted bootstrap Allow for that cleanup operation.
+   Never re-enable secret retrieval while migration code remains invokable. The
+   administrator revokes SET membership and rds_iam, sets fintrust_migrate_dev
+   NOLOGIN, checks dependencies/owned objects, and drops the empty temporary login.
+   Never DROP OWNED CASCADE or remove the persistent NOLOGIN owner/table.
+6. Close the final master session; disable concurrency and wait for zero invocations.
+   Remove the bootstrap Allow and restore its explicit secret Deny. Delete the
+   approved function/versions and wait for Lambda ENI release before removing
+   execution-role ENI permissions/role. Delete the Secrets Manager endpoint, wait
+   for its ENI removal, revoke the two SG rules referencing each other and delete
+   only the temporary SGs after no ENIs reference them. Do not delete shared ENIs
+   or the existing app/DB SGs. Remove qualified controller invoke permissions.
+7. Keep the RDS-managed secret, automatic rotation and AWS-managed key untouched.
+   No new password copy, forced rotation or secret deletion is proposed. If any
+   outcome is uncertain, disable tooling, record remaining hourly costs and seek
+   reconciliation rather than destroy the only administrative recovery path.
+
+To avoid ambiguity in that lifecycle, the preferred session sequence is bootstrap
+-> revoke master access -> IAM-only migration/verification -> separately approved
+fixed administrator cleanup -> revoke master access again -> remove endpoint,
+client/endpoint SGs, function/versions and execution role after ENI cleanup.
+During the middle IAM-only phase the endpoint remains for the bounded session but
+no runner master-secret access is allowed. The administrator cleanup connection is
+an explicit last bootstrap operation, not use of the master for DDL migration.
+The first approval remains read-only preflight only; no role creation/cleanup DDL
+is bundled into that invocation.
+
+## Temporary endpoint cost and evidence
+
+Official public af-south-1 AmazonVPC catalogue, retrieved 2026-10-09:
+`AFS1-VpcEndpoint-Hours` SKU `8ZMGRUS7QT5EM7NR`: **USD 0.01309 per AZ-hour**;
+first-PB endpoint data processing **USD 0.01/GB**. This is the interface endpoint
+rate, not the similarly named Gateway Load Balancer/resource/tunnel rates.
+One AZ: 4 hours USD 0.05236; 24 hours USD 0.31416; 730 hours USD 9.55570 if forgotten.
+Partial endpoint-hours are billed as full hours. Two AZs double the hourly component.
+Choose a four-hour maintenance window and same-session cleanup; this is an operating
+budget, not an automatic billing cap. Taxes, Lambda/log/Secrets Manager API usage,
+existing secret storage and any cross-AZ DB transfer/snapshot charges are additional.
+No new secret or KMS key is created. Keeping runner and endpoint in af-south-1a avoids
+cross-AZ secret retrieval. No Free Tier/credit coverage is assumed.
+[Regional catalogue](https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonVPC/current/af-south-1/index.json),
+[PrivateLink billing](https://aws.amazon.com/privatelink/pricing/).
+
+Current evidence is metadata/local-signing/design only in
+`docs/EVIDENCE/05-rds/private-bootstrap-path/`; no secret/token is stored there.
+Future evidence: endpoint ID/private DNS/SG policy review, pinned runner hash and
+redaction tests, sanitized GetSecretValue request ID (not SecretString), TLS and
+SQL read-only proof, approved role/ownership delta, IAM login verification,
+secret-permission removal, explicit admin cleanup, endpoint/SG/role deletion.
+The historical 78b2ceb no-endpoint/payload design and its evidence remain in Git;
+this revision is authoritative. Existing uncommitted deployment notes are not edited.
+No endpoint, function, role, policy or database mutation was performed this turn.

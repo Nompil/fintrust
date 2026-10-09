@@ -75,11 +75,14 @@ mean that a function has an unauthenticated public application endpoint.
 ## Proposed private database maintenance path
 
 The [private RDS migration plan](../infrastructure/PRIVATE_RDS_MIGRATION_PLAN.md)
-selects a separate temporary Lambda in the existing application subnets/SG.
+selects a separate temporary Lambda in one existing application subnet, using
+the existing app SG plus a temporary HTTPS client SG.
 Read-only inventory confirms private PostgreSQL 16.15, forced TLS, no existing
-VPC Lambda/EC2 runner, and only S3/DynamoDB gateway endpoints. No DB ingress change,
-NAT or interface endpoint is proposed. Initial privileged credential handoff requires
-separate approval and redaction tests; later DDL uses a temporary IAM database login
+VPC Lambda/EC2 runner, and only S3/DynamoDB gateway endpoints. The revised bootstrap
+proposal adds one temporary Secrets Manager interface endpoint and two restricted
+SGs so the runner fetches its secret directly. No secret is passed in invocation
+payloads or configuration; no DB ingress change or NAT is proposed. Endpoint cost,
+IAM and redaction checks require approval; later DDL uses a temporary IAM database login
 with narrowly scoped ownership membership. Ingest remains outside the VPC and disabled.
 The migration is locally verified; the private runner is only proposed and live SQL
 schema/grants/migration remain unverified. The Linux application release is verified

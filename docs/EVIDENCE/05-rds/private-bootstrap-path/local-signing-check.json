@@ -1,0 +1,11 @@
+{
+  "check": "RDS IAM token signing with HTTP, DNS and socket connects blocked",
+  "passed": true,
+  "boto3": "1.43.104",
+  "botocore": "1.43.104",
+  "credentials": "explicit dummy only",
+  "aws_requests": 0,
+  "real_token_generated": false,
+  "token_stored": false,
+  "limit": "Proves local signing, not live database-user existence or RDS authentication."
+}
