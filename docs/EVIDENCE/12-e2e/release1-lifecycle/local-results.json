@@ -12,5 +12,17 @@
     "note": "Full run collected before the additional all-valid notification test; final fixture run includes that test and alert-consumer filtering. Final Linux CI must run the complete final source.",
     "path": "build/release1-closure/631a8af3f1d444e0800bcca0709239c7/results.xml"
   },
-  "aws_access": false
+  "aws_access": false,
+  "browser": {
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "path": "build/release1-closure/faef7c29aa714ac08e3fd9902d2d16ef/results.xml",
+    "high_review_selector": "exact backend score 70 table cell"
+  },
+  "initial_ci": {
+    "run_id": 38066070505,
+    "result": "browser harness selector timeout; artifact content/import checks and PG16 role checks passed; full suite was not run",
+    "correction": "Match the exact score table cell rather than concatenated row text word boundaries"
+  }
 }
