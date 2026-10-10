@@ -1,0 +1,14 @@
+{
+  "status": "BLOCKED",
+  "profile": "fintrust-inventory",
+  "requested_region": "af-south-1",
+  "expected_account": "966467878406",
+  "identity_verified": false,
+  "error": "AWS CLI inventory login session expired; reauthentication required",
+  "aws_mutations_performed": false,
+  "secret_values_retrieved": false,
+  "migration_source_sha256_lf": {
+    "001_transaction_identity.sql": "0ff06ca8c43596ac9b8651f4bd851bfb0487343f4c9eccb198849e3e59772bd6",
+    "002_operational_workflows.sql": "5b2c04440eea244bfce150347dfa1953dd2a7e7ddb6af7e3a66e187d1c912f02"
+  }
+}
