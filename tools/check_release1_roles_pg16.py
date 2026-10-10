@@ -15,6 +15,8 @@ from psycopg2.extensions import parse_dsn
 from fintrust import migrations
 
 def main():
+    # Synthetic projection target: transport is stubbed; no AWS table exists.
+    os.environ["DYNAMODB_TABLE"]="release1-ci-synthetic-projection"
     dsn=os.environ["FINTRUST_TEST_DATABASE_URL"];target=parse_dsn(dsn)
     if target.get("host") not in {"localhost","127.0.0.1","::1"} or target.get("dbname") not in {"fintrust_test","fintrust_local_test"}:
         raise ValueError("Disposable loopback test database required")
