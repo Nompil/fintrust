@@ -1,0 +1,454 @@
+{
+  "status": "BLOCKED",
+  "verified_application_source": "d648dd0a77b6906daa94ec7ade7b2ff3e3158ed0",
+  "originals": [
+    {
+      "filename": "fintrust_e2e_mixed_transactions.csv",
+      "bytes": 2328,
+      "sha256": "1b2a3a1fa424b7c4e320b2fc9d0f13154945d0dc370a0aaa5a0e44f0573ff8df",
+      "sha256_base64": "Gyo6H6Qkt8TjILL8nQ8TFUlF0Nw3CgqqWg5E8Fc/+N8=",
+      "headers": [
+        "transaction_id",
+        "account_id",
+        "amount",
+        "currency",
+        "country",
+        "transaction_type",
+        "transaction_timestamp"
+      ],
+      "row_count": 33,
+      "unchanged": true,
+      "admission": "BLOCKED",
+      "parser_reason": "MISSING_HEADERS",
+      "missing_required_headers": [
+        "source_system",
+        "tx_date",
+        "tx_type"
+      ],
+      "missing_source_reference_alternative": true,
+      "unsupported_headers": [
+        "transaction_timestamp",
+        "transaction_type"
+      ],
+      "exact_header_matches": [
+        "account_id",
+        "amount",
+        "country",
+        "currency",
+        "transaction_id"
+      ],
+      "row_report": [
+        {
+          "source_row": 2,
+          "original_transaction_label": "TX-E2E-001",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 3,
+          "original_transaction_label": "TX-E2E-002",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 4,
+          "original_transaction_label": "TX-E2E-003",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 5,
+          "original_transaction_label": "TX-E2E-004",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 6,
+          "original_transaction_label": "TX-E2E-005",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 7,
+          "original_transaction_label": "TX-E2E-006",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 8,
+          "original_transaction_label": "TX-E2E-007",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 9,
+          "original_transaction_label": "TX-VEL-001",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 10,
+          "original_transaction_label": "TX-VEL-002",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 11,
+          "original_transaction_label": "TX-VEL-003",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 12,
+          "original_transaction_label": "TX-VEL-004",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 13,
+          "original_transaction_label": "TX-VEL-005",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 14,
+          "original_transaction_label": "TX-VEL-006",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 15,
+          "original_transaction_label": "TX-VEL-007",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 16,
+          "original_transaction_label": "TX-VEL-008",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 17,
+          "original_transaction_label": "TX-VEL-009",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 18,
+          "original_transaction_label": "TX-VEL-010",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 19,
+          "original_transaction_label": "TX-VEL-011",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 20,
+          "original_transaction_label": "TX-VEL-012",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 21,
+          "original_transaction_label": "TX-E2E-001",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 22,
+          "original_transaction_label": "TX-DOUBLE-001",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 23,
+          "original_transaction_label": "TX-DOUBLE-002",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 24,
+          "original_transaction_label": "TX-INV-001",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 25,
+          "original_transaction_label": "TX-INV-002",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 26,
+          "original_transaction_label": "TX-INV-003",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 27,
+          "original_transaction_label": "TX-INV-004",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 28,
+          "original_transaction_label": "TX-INV-005",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 29,
+          "original_transaction_label": "TX-INV-006",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 30,
+          "original_transaction_label": "TX-INV-007",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 31,
+          "original_transaction_label": "TX-INV-008",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 32,
+          "original_transaction_label": "TX-INV-009",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 33,
+          "original_transaction_label": "",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 34,
+          "original_transaction_label": "TX-INV-011",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        }
+      ]
+    },
+    {
+      "filename": "fintrust_e2e_companion_transactions_B.csv",
+      "bytes": 868,
+      "sha256": "7d981dd595b0ba56dbedbe683fd991ad5cec41f49fc68b7d5e7e1a8b96da60b6",
+      "sha256_base64": "fZgd1ZWwulbb7b5oP9mRrVzsQfSfxot9Xn4ai5baYLY=",
+      "headers": [
+        "transaction_id",
+        "account_id",
+        "amount",
+        "currency",
+        "country",
+        "transaction_type",
+        "transaction_timestamp"
+      ],
+      "row_count": 11,
+      "unchanged": true,
+      "admission": "BLOCKED",
+      "parser_reason": "MISSING_HEADERS",
+      "missing_required_headers": [
+        "source_system",
+        "tx_date",
+        "tx_type"
+      ],
+      "missing_source_reference_alternative": true,
+      "unsupported_headers": [
+        "transaction_timestamp",
+        "transaction_type"
+      ],
+      "exact_header_matches": [
+        "account_id",
+        "amount",
+        "country",
+        "currency",
+        "transaction_id"
+      ],
+      "row_report": [
+        {
+          "source_row": 2,
+          "original_transaction_label": "TX-B-001",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 3,
+          "original_transaction_label": "TX-B-002",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 4,
+          "original_transaction_label": "TX-E2E-005",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 5,
+          "original_transaction_label": "TX-B-SIMILAR-001",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 6,
+          "original_transaction_label": "TX-B-003",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 7,
+          "original_transaction_label": "TX-B-004",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 8,
+          "original_transaction_label": "TX-B-005",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 9,
+          "original_transaction_label": "TX-B-006",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 10,
+          "original_transaction_label": "TX-B-INV-001",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 11,
+          "original_transaction_label": "TX-B-INV-002",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        },
+        {
+          "source_row": 12,
+          "original_transaction_label": "TX-B-INV-003",
+          "expected_file_outcome": "INVALID_CSV_SCHEMA",
+          "actual_file_outcome": "INVALID_CSV_SCHEMA",
+          "business_expected": "NOT_ASSIGNED: account/type/source mapping requires review",
+          "business_actual": "NOT_PROCESSED: whole file rejected before row work"
+        }
+      ]
+    }
+  ],
+  "sequence": [
+    "A original",
+    "B original",
+    "A original unchanged replay"
+  ],
+  "scope": "Compatibility audit only; actual HTTP/SQL non-mutation proof is in test_original_fixture_admission.py",
+  "application_changed": false,
+  "artifact_rebuilt": false,
+  "aws_actions": false,
+  "required_semantics": [
+    "Reviewed ACC101..ACC104 UUID mapping and known-account baseline; unknown ACC999999 must remain unknown",
+    "Reviewed PURCHASE meaning; no implicit conversion to debit",
+    "Reviewed source_system namespace and upstream transaction reference mapping",
+    "Reviewed receipt clock for deterministic future timestamp expectations"
+  ],
+  "coverage_gaps": [
+    "No raw same-label materially-changed-payload conflict row in A/B",
+    "Twelve velocity rows are four minutes apart; they do not prove >5 in five minutes"
+  ],
+  "policy": "Do not regenerate or silently normalize originals. Propose separately named mapped fixtures only after semantic review."
+}

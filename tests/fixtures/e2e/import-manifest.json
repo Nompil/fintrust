@@ -1,0 +1,43 @@
+{
+  "files": [
+    {
+      "filename": "fintrust_e2e_mixed_transactions.csv",
+      "bytes": 2328,
+      "sha256": "1b2a3a1fa424b7c4e320b2fc9d0f13154945d0dc370a0aaa5a0e44f0573ff8df",
+      "sha256_base64": "Gyo6H6Qkt8TjILL8nQ8TFUlF0Nw3CgqqWg5E8Fc/+N8=",
+      "headers": [
+        "transaction_id",
+        "account_id",
+        "amount",
+        "currency",
+        "country",
+        "transaction_type",
+        "transaction_timestamp"
+      ],
+      "row_count": 33,
+      "unchanged": true,
+      "admission": "BLOCKED",
+      "parser_reason": "MISSING_HEADERS"
+    },
+    {
+      "filename": "fintrust_e2e_companion_transactions_B.csv",
+      "bytes": 868,
+      "sha256": "7d981dd595b0ba56dbedbe683fd991ad5cec41f49fc68b7d5e7e1a8b96da60b6",
+      "sha256_base64": "fZgd1ZWwulbb7b5oP9mRrVzsQfSfxot9Xn4ai5baYLY=",
+      "headers": [
+        "transaction_id",
+        "account_id",
+        "amount",
+        "currency",
+        "country",
+        "transaction_type",
+        "transaction_timestamp"
+      ],
+      "row_count": 11,
+      "unchanged": true,
+      "admission": "BLOCKED",
+      "parser_reason": "MISSING_HEADERS"
+    }
+  ],
+  "row_outcomes": "BLOCKED before row processing; no acceptance claims"
+}

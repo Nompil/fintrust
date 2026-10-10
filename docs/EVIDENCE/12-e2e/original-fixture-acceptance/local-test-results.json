@@ -1,0 +1,41 @@
+{
+  "application_source": "d648dd0a77b6906daa94ec7ade7b2ff3e3158ed0",
+  "fixture_acceptance": "BLOCKED: whole-file schema mismatch, not successful business acceptance",
+  "fixture_specific": {
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0
+  },
+  "focused_final_cases_in_full_regression": {
+    "passed": 123,
+    "failed": 0,
+    "skipped": 0
+  },
+  "initial_focused_attempt": {
+    "passed": 122,
+    "failed": 1,
+    "root_cause": "New test queried nonexistent quarantined_rows; corrected to existing quarantine_cases. No application correction."
+  },
+  "full_local": {
+    "passed": 573,
+    "failed": 0,
+    "expected_skipped": 1,
+    "unexpected_skipped": 0,
+    "skip_test": "tests.data_quality.test_processing.test_database_roles_can_execute_pipeline_without_owner_privileges",
+    "reason": "Service-role execution check requires a disposable test database administrator",
+    "elapsed_seconds": 314.84
+  },
+  "previous_pg16_ci": {
+    "run_id": "38058750009",
+    "passed": 571,
+    "failed": 0,
+    "skipped": 0,
+    "current_application_source_verified": true,
+    "new_ci_run": false
+  },
+  "browser": "Previous candidate required-page gate passed; no accepted fixture data enters UI, so not rerun",
+  "aws_actions": false,
+  "artifact_rebuilt": false,
+  "application_changed": false,
+  "shareable_evidence_redaction": "Synthetic credential-shaped test names redacted; counts unchanged"
+}

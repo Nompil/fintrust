@@ -4,13 +4,13 @@ Continues verified source4d91c3d and evidence423f198. No settled network, RDS or
 
 ## Actual external fixtures
 
-Actual CSV A/B bytes have not been supplied. No paths, hashes, imported rows or expected outcomes are invented. Import only operator-supplied originals:
+Actual CSV A/B originals have now been imported unchanged. Both are blocked at file admission by contract mismatches; no business outcomes are invented. The earlier verified candidate snapshot predates this import. Import only operator-supplied originals:
 
 ```powershell
 python tools/import_release1_fixtures.py '<actual CSV A path>' '<actual CSV B path>'
 ```
 
-Copies go to tests/fixtures/e2e unchanged. Admission inspection and SHA256 are recorded; a schema mismatch produces BLOCKED, never silent rewriting. Per-row expected outcomes require a reviewed fixed receipt clock, account baseline and sequential A then B processing; corrections must be separate files with original hashes retained. The current constructed tests prove named scenarios, not unseen CSV A/B. This remains a release acceptance blocker.
+Copies go to tests/fixtures/e2e unchanged. Admission inspection and SHA256 are recorded; a schema mismatch produces BLOCKED, never silent rewriting. Per-row expected outcomes require a reviewed fixed receipt clock, account baseline and sequential A then B processing; corrections must be separate files with original hashes retained. The constructed tests prove named scenarios; they do not prove acceptance of the incompatible original CSV A/B. This remains a release acceptance blocker.
 
 ## File admission
 
@@ -20,7 +20,7 @@ Release1 upload executes strict SQL worker locally and returns durable reconcili
 
 ## Technical operations
 
-Maintainer can view operational/schema/release health and bounded delivery claims, and request audited retries. Backend rejects financial/review/quarantine/admin APIs for this role. Projection/correction retries queue existing worker-owned work; they cannot insert financial facts via HTTP DB privileges. Receipt UUID/digest/actor and terminal result are immutable. Replays return the receipt, modified payloads409. Failed/running receipts require investigation, not blind resubmission. Redrive validates exact account/region/source/DLQ ARNs and RedrivePolicy, receives1–10 messages, sends preserved body before delete, uses a new SQS delivery token and durable SQL idempotency. It does not purge queues or change compliance decisions.
+Maintainer can view operational/schema/release health and bounded delivery claims, and request audited retries. Backend rejects financial/review/quarantine/admin APIs for this role. Projection/correction retries queue existing worker-owned work; they cannot insert financial facts via HTTP DB privileges. Receipt UUID/digest/actor and terminal result are immutable. Replays return the receipt, modified payloads409. Failed/running receipts require investigation, not blind resubmission. Redrive validates exact account/region/source/DLQ ARNs and RedrivePolicy, receives1Ã¢â‚¬â€œ10 messages, sends preserved body before delete, uses a new SQS delivery token and durable SQL idempotency. It does not purge queues or change compliance decisions.
 
 Cloud redrive is deliberately disabled pending a reviewed external operations controller: the private API has no NAT/SQS endpoint. The proposed controller policy is offline, unattached and unvalidated against AWS Access Analyzer. No NAT/interface endpoint is silently added. Failed-alert claims are visible; SENDING/RETRYING/UNKNOWN are never automatically reclaimed. Definite SES rejection alone permits FAILED -> RETRYING -> SENT; ledger commit is independent.
 
@@ -47,3 +47,7 @@ Known-account upload authorization is enforced before storage: even Admin upload
 ## Final exact-source verification
 
 Source d648dd0a77b6906daa94ec7ade7b2ff3e3158ed0, CI38058750009:571 passed,0 failed,0 skipped on Linux3.12.15 / PostgreSQL16.15. Browser and service-role gates passed. NewZIP981417e236116992e5d9e7d9208a6610815044bd870bde0ddee4fe12afa76fac is verified; historical ZIP untouched. Full hashes, size, dependency inventory, evidence and capability truth matrix: docs/EVIDENCE/12-e2e/release1-candidate/RESULT.md. ActualCSV A/B and cloud deployment gates remain blocked as documented.
+
+## Original fixtures now imported
+
+Actual A/B originals have been located and imported unchanged (33/11 rows). Their headers and identity/account/type semantics mismatch the frozen contract; both fail file admission. Acceptance is still BLOCKED, now by compatibility rather than missing files. See docs/EVIDENCE/12-e2e/original-fixture-acceptance/RESULT.md and contract-audit.json. The verified application/ZIP remain unchanged; no AWS readiness gate was advanced.
