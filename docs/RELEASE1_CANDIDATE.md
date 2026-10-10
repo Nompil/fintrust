@@ -20,7 +20,7 @@ Release1 upload executes strict SQL worker locally and returns durable reconcili
 
 ## Technical operations
 
-Maintainer can view operational/schema/release health and bounded delivery claims, and request audited retries. Backend rejects financial/review/quarantine/admin APIs for this role. Projection/correction retries queue existing worker-owned work; they cannot insert financial facts via HTTP DB privileges. Receipt UUID/digest/actor and terminal result are immutable. Replays return the receipt, modified payloads409. Failed/running receipts require investigation, not blind resubmission. Redrive validates exact account/region/source/DLQ ARNs and RedrivePolicy, receives1–10 messages, sends preserved body before delete, uses a new SQS delivery token and durable SQL idempotency. It does not purge queues or change compliance decisions.
+Maintainer can view operational/schema/release health and bounded delivery claims, and request audited retries. Backend rejects financial/review/quarantine/admin APIs for this role. Projection/correction retries queue existing worker-owned work; they cannot insert financial facts via HTTP DB privileges. Receipt UUID/digest/actor and terminal result are immutable. Replays return the receipt, modified payloads409. Failed/running receipts require investigation, not blind resubmission. Redrive validates exact account/region/source/DLQ ARNs and RedrivePolicy, receives1â€“10 messages, sends preserved body before delete, uses a new SQS delivery token and durable SQL idempotency. It does not purge queues or change compliance decisions.
 
 Cloud redrive is deliberately disabled pending a reviewed external operations controller: the private API has no NAT/SQS endpoint. The proposed controller policy is offline, unattached and unvalidated against AWS Access Analyzer. No NAT/interface endpoint is silently added. Failed-alert claims are visible; SENDING/RETRYING/UNKNOWN are never automatically reclaimed. Definite SES rejection alone permits FAILED -> RETRYING -> SENT; ledger commit is independent.
 
@@ -43,3 +43,7 @@ Revised002 has not been applied to live RDS. Source/catalog/privilege checks and
 Final CI, artifact hashes/size, browser and remaining blockers are recorded in the candidate evidence report after the run. No AWS mutations are authorized in this phase.
 
 Known-account upload authorization is enforced before storage: even Admin uploads must stay within assigned accounts. Unknown/malformed account rows still follow validation/quarantine.
+
+## Final exact-source verification
+
+Source d648dd0a77b6906daa94ec7ade7b2ff3e3158ed0, CI38058750009:571 passed,0 failed,0 skipped on Linux3.12.15 / PostgreSQL16.15. Browser and service-role gates passed. NewZIP981417e236116992e5d9e7d9208a6610815044bd870bde0ddee4fe12afa76fac is verified; historical ZIP untouched. Full hashes, size, dependency inventory, evidence and capability truth matrix: docs/EVIDENCE/12-e2e/release1-candidate/RESULT.md. ActualCSV A/B and cloud deployment gates remain blocked as documented.

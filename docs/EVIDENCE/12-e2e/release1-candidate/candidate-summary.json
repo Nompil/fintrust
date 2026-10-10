@@ -1,0 +1,65 @@
+{
+  "local_ci_status": "IMPLEMENTED + VERIFIED",
+  "controlled_aws_status": "BLOCKED",
+  "source_commit": "d648dd0a77b6906daa94ec7ade7b2ff3e3158ed0",
+  "pushed_commits": [
+    "6a53abd48e3a38b6098f88e41961daaea15648e1",
+    "d648dd0a77b6906daa94ec7ade7b2ff3e3158ed0"
+  ],
+  "ci_run_id": "38058750009",
+  "ci_url": "https://github.com/Nompil/fintrust/actions/runs/38058750009",
+  "postgresql": "16.15",
+  "python": "3.12.15",
+  "os": "Linux",
+  "architecture": "x86_64",
+  "focused_current_ci": {
+    "tests.test_budget_first": 16,
+    "tests.test_release1_candidate": 28,
+    "tests.test_release1_end_to_end": 39,
+    "tests.test_release1_workflows": 53
+  },
+  "full_ci": {
+    "tests": 571,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 571
+  },
+  "browser": "PASSED; all required pages; Auditor/Maintainer authority checks; no page errors",
+  "local_full_before_final_account_scope_case": {
+    "passed": 569,
+    "failed": 0,
+    "skipped": 1,
+    "skip": "administrator-only test successfully executed in final CI"
+  },
+  "local_final_candidate_tests": {
+    "passed": 28,
+    "failed": 0,
+    "skipped": 0
+  },
+  "local_final_browser_tests": {
+    "passed": 1,
+    "failed": 0
+  },
+  "artifact": {
+    "path": "build/release1-candidate/fintrust-release1-linux-py312.zip",
+    "bytes": 21404079,
+    "sha256": "981417e236116992e5d9e7d9208a6610815044bd870bde0ddee4fe12afa76fac",
+    "sha256_base64": "mBQX4jYRaZLl2efZIIpmEIFQRL2HC94N3uT+Eq+nb6w=",
+    "linux_execution_verified": true,
+    "source_binding": "PASSED including frontend",
+    "dependencies": "dependency-versions.json"
+  },
+  "historical_zip_unchanged": true,
+  "migration_001_unchanged": true,
+  "real_csv_a_b": "NOT SUPPLIED; no paths/hashes/outcomes invented",
+  "blockers": [
+    "Actual CSV A/B originals and immutable per-row acceptance manifest",
+    "Verified live migration 002 execution path",
+    "Secure cloud API identity provisioning",
+    "Reviewed cloud operations controller/network path"
+  ],
+  "aws_actions": false,
+  "launch": "python tools/serve_release1.py --role Admin --seed-scenarios",
+  "next_aws_checkpoint": "Separately approved read-only inventory and private RDS preflight; STOP before mutation"
+}

@@ -1,0 +1,817 @@
+{
+  "source_commit": "d648dd0a77b6906daa94ec7ade7b2ff3e3158ed0",
+  "ci_run": "38058750009",
+  "real_fixtures": "NOT SUPPLIED",
+  "cases": [
+    {
+      "test": "tests.data_quality.test_idempotency.test_same_upstream_reference_different_internal_uuid_returns_canonical_result",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.data_quality.test_idempotency.test_concurrent_different_uuids_same_reference_insert_once",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.data_quality.test_idempotency.test_reused_reference_changed_financial_data_is_conflict",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.data_quality.test_idempotency.test_similar_distinct_references_one_second_apart_preserve_both_and_flag",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.data_quality.test_idempotency.test_duplicate_charge_comparison_requires_all_business_conditions[changes0]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.data_quality.test_idempotency.test_duplicate_charge_comparison_requires_all_business_conditions[changes1]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.data_quality.test_idempotency.test_duplicate_charge_comparison_requires_all_business_conditions[changes2]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.data_quality.test_idempotency.test_duplicate_charge_comparison_requires_all_business_conditions[changes3]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.data_quality.test_idempotency.test_duplicate_charge_comparison_requires_all_business_conditions[changes4]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.data_quality.test_idempotency.test_no_reference_similar_events_are_not_collapsed",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.data_quality.test_idempotency.test_sql_unique_source_reference_defends_nonpipeline_writers",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.data_quality.test_idempotency.test_local_loader_upstream_replay_and_conflict_are_audited",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.data_quality.test_idempotency.test_stream_replay_with_new_uuid_publishes_only_canonical_projection",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.data_quality.test_idempotency.test_historical_version_one_frozen_digest_remains_replayable",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.data_quality.test_idempotency.test_schema_and_additive_migration_can_be_reapplied",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_candidate.test_csv_only_admission[file.pdf]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_candidate.test_csv_only_admission[file.doc]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_candidate.test_csv_only_admission[file.docx]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_candidate.test_csv_only_admission[file.xls]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_candidate.test_csv_only_admission[file.xlsx]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_candidate.test_csv_only_admission[file.json]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_candidate.test_csv_only_admission[file.zip]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_candidate.test_csv_only_admission[file.exe]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_candidate.test_csv_only_admission[file.png]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_candidate.test_file_rejected_before_rows[empty]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_candidate.test_file_rejected_before_rows[encoding]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_candidate.test_file_rejected_before_rows[zip]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_candidate.test_file_rejected_before_rows[executable]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_candidate.test_file_rejected_before_rows[pdf]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_candidate.test_file_rejected_before_rows[json]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_candidate.test_file_rejected_before_rows[schema]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_candidate.test_file_rejected_before_rows[oversized]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_candidate.test_file_rejected_before_rows[header-only]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_candidate.test_candidate_upload_batch_duplicate_and_wrong_files",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_candidate.test_maintainer_authority_and_safe_health",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_candidate.test_operations_malformed_input_is_400[request_id-None]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_candidate.test_operations_malformed_input_is_400[action-value1]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_candidate.test_operations_malformed_input_is_400[target-value2]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_candidate.test_operations_malformed_input_is_400[notes-value3]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_candidate.test_audited_projection_retry_after_sql_commit",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_candidate.test_fifo_failure_dlq_controlled_redrive_no_duplicates",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_candidate.test_alert_definite_failure_retries_once_without_ledger_rollback",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_candidate.test_upload_denies_unassigned_known_account_before_storage",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_file_rejection_has_no_financial_work[empty]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_file_rejection_has_no_financial_work[delimiter]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_file_rejection_has_no_financial_work[header-case]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_file_rejection_has_no_financial_work[duplicate-header]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_file_rejection_has_no_financial_work[header-only]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_file_rejection_has_no_financial_work[oversized-file]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_csv_shape_quotes_bom_reorder_and_late_malformed",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_mixed_rows_reconcile_and_replay_preserves_every_occurrence",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_partial_batch_and_dynamo_failure_after_sql_retries",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_unknown_inactive_and_invalid_rows_are_quarantine_not_dlq",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_concurrent_identical_delivery_and_changed_occurrence[0]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_concurrent_identical_delivery_and_changed_occurrence[1]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_concurrent_identical_delivery_and_changed_occurrence[2]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_migration_order_rerun_and_catalog_drift",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_api_authentication_roles_and_no_header_escalation",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_review_api_stale_idempotent_audit_and_ledger_immutable",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_correction_api_revalidates_deduplicates_and_preserves_original",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_velocity_closed_five_minute_time_boundary[300-True]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_velocity_closed_five_minute_time_boundary[300.000001-False]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_correction_still_invalid_and_cross_file_duplicate",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_correction_failure_outbox_retries_and_no_sensitive_fields",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_malformed_review_json_is_400[changed0]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_malformed_review_json_is_400[changed1]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_malformed_review_json_is_400[changed2]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_malformed_review_json_is_400[changed3]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_malformed_review_json_is_400[changed4]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_malformed_review_json_is_400[changed5]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_object_scope_detail_report_and_metrics",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_rds_scoring_and_kms_failure_never_acknowledged",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_publication_partial_failure_and_whole_file_attempt_audit",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_strict_input_boundaries_before_s3_read",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_migration_order_partial_conflict_and_transactional_rollback",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_quarantine_detail_safe_payload_and_history",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_new_runtime_policy_scopes_are_opt_in_and_no_ledger_admin",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_release1_projection_replay_sends_one_logical_alert",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_empty_file_worker_is_failed_not_success",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_multiple_errors_include_unknown_account_deterministically",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_fresh_empty_database_migration_sequence",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_end_to_end.test_report_pagination_and_no_mixed_batch_scope_leak",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_validation_scenarios[changes0-MISSING_REQUIRED_FIELD]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_validation_scenarios[changes1-INVALID_AMOUNT]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_validation_scenarios[changes2-INVALID_AMOUNT]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_validation_scenarios[changes3-ZERO_AMOUNT]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_validation_scenarios[changes4-NEGATIVE_AMOUNT]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_validation_scenarios[changes5-INVALID_TIMESTAMP]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_validation_scenarios[changes6-MISSING_REQUIRED_FIELD]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_validation_scenarios[changes7-INVALID_TIMESTAMP]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_validation_scenarios[changes8-FUTURE_TIMESTAMP]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_validation_scenarios[changes9-INVALID_COUNTRY]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_validation_scenarios[changes10-UNSUPPORTED_COUNTRY]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_validation_scenarios[changes11-UNSUPPORTED_CURRENCY]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_validation_scenarios[changes12-UNSUPPORTED_FINANCIAL_OPERATION]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_validation_scenarios[changes13-UNSUPPORTED_FINANCIAL_OPERATION]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_validation_scenarios[changes14-UNSUPPORTED_FINANCIAL_OPERATION]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_validation_scenarios[changes15-MISSING_SOURCE_IDENTITY]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_validation_scenarios[changes16-INVALID_TRANSACTION_ID]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_validation_scenarios[changes17-AMOUNT_PRECISION]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_validation_scenarios[changes18-AMOUNT_OUT_OF_RANGE]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_validation_scenarios[changes19-MALFORMED_ROW]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_future_tolerance_edges[299-True]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_future_tolerance_edges[300-True]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_future_tolerance_edges[300.000001-False]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_normal_unknown_account_and_missing_internal_id",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_amount_edges[49999.99-0]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_amount_edges[50000.00-0]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_amount_edges[50000.01-30]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_amount_edges[200000-30]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_amount_edges[200000.01-55]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_cross_border_combination_and_similar_charge",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_velocity_count_edges[4-False]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_velocity_count_edges[5-False]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_velocity_count_edges[6-True]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_twelve_spread_over_hour_does_not_imply_five_minute_velocity",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_review_rbac_and_transitions",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_reconciliation_pending_technical_and_business_failures",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_review_schema_audit_and_stale_update",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_review_invalid_transition_atomic",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_sql_reconciliation_and_terminal_immutability",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_sql_counts_cannot_overflow_and_whole_file_attempt_does_not_add_rows",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_correction_new_occurrence_and_resolution",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_schema_does_not_change_001_or_embed_operational_columns_in_transactions",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_duplicate_charge_closed_window_edges[-120.000001-False]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_duplicate_charge_closed_window_edges[-120-True]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_duplicate_charge_closed_window_edges[-119.999999-True]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_duplicate_charge_closed_window_edges[119.999999-True]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_duplicate_charge_closed_window_edges[120-True]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_duplicate_charge_closed_window_edges[120.000001-False]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_risk_level_edges[39-Low]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_risk_level_edges[40-Medium]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_risk_level_edges[69-Medium]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_risk_level_edges[70-High]",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    },
+    {
+      "test": "tests.test_release1_workflows.test_sql_record_delete_and_unknown_total_failure",
+      "status": "PASSED",
+      "proof": "JUnit test completed; assertions in committed test source",
+      "data": "constructed synthetic scenarios, not actual external CSV A/B"
+    }
+  ]
+}

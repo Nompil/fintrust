@@ -1,0 +1,5 @@
+{
+  "shareable_junit_redaction": "Credential-shaped test names redacted; assertions/results/counts unchanged",
+  "original_ci_junit": "build/release1-ci/38058750009/evidence/test-results/pytest.xml",
+  "no_live_credentials_accessed": true
+}
