@@ -11,7 +11,7 @@ import sys
 import tempfile
 import zipfile
 ROOT=Path(__file__).resolve().parents[1]
-PHASES=("preflight","bootstrap","iam","cleanup")
+PHASES=("preflight","bootstrap","iam","cleanup","bootstrap002","iam002","cleanup002")
 VERIFIED_APPLICATION_SHA="cf9c18a5f267373e2fc2e22331987bb6dce8e2e65366b2d1f5651bb035dd6654"
 PREFIXES=("boto3/","botocore/","jmespath/","dateutil/","s3transfer/","urllib3/","psycopg2/","psycopg2_binary.libs/")
 DIST=("boto3-","botocore-","jmespath-","python_dateutil-","s3transfer-","six-","urllib3-","psycopg2_binary-")
@@ -35,7 +35,7 @@ def inspect(path,phase):
         if z.testzip():raise ValueError("ZIP CRC failed")
         handler=f"migration_runner/{phase}_entry.py"
         if handler not in names or "certs/global-bundle.pem" not in names:raise ValueError("Missing handler/CA")
-        if phase=="iam" and any(n.endswith("admin.py") or n.startswith("sql/bootstrap/") or n.endswith(("bootstrap_entry.py","preflight_entry.py","cleanup_entry.py")) for n in names):raise ValueError("Administrator code in IAM package")
+        if phase in {"iam","iam002"} and any(n.endswith("admin.py") or n.startswith("sql/bootstrap/") or n.endswith(("bootstrap_entry.py","preflight_entry.py","cleanup_entry.py")) for n in names):raise ValueError("Administrator code in IAM package")
         if sum(i.file_size for i in z.infolist()) >= 250*1024*1024:raise ValueError("Lambda size limit")
         bindings=json.loads(z.read("source-binding.json"))
         for name,digest in bindings.items():
@@ -63,8 +63,12 @@ def build(phase,out,ca,dependency_archive=None):
                         dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(z.read(name))
         else:
             subprocess.run([sys.executable,"-m","pip","install","--disable-pip-version-check","--no-compile","--platform","manylinux2014_x86_64","--implementation","cp","--python-version","3.12","--only-binary=:all:","--no-deps","--target",str(package),"-r",str(ROOT/"requirements-migration.txt")],check=True)
-        modules=["__init__.py","config.py","contract.py","common.py","sql_binding.py",phase+"_entry.py","iam.py" if phase=="iam" else "admin.py"]
+        modules=["__init__.py","config.py","contract.py","common.py","sql_binding.py",phase+"_entry.py","iam.py" if phase in {"iam","iam002"} else "admin.py"]
         sources=["migration_runner/"+n for n in modules]+["sql/preflight/001_transaction_identity_catalog.sql","sql/preflight/001_transaction_identity_data.sql"]
+        if phase=="preflight":sources += ["migration_runner/release1_preflight.py","sql/preflight/002_release1_catalog.sql"]
+        if phase.endswith("002"):
+            sources += ["migration_runner/workflows.py","migration_runner/workflow_catalog.py","migration_runner/iam.py","sql/migrations/002_operational_workflows.sql"]
+            sources=list(dict.fromkeys(sources))
         if phase=="iam":sources.append("sql/migrations/001_transaction_identity.sql")
         elif phase=="bootstrap":sources.extend(["sql/bootstrap/temporary_identity.sql","sql/bootstrap/fixed_identity_indexes.sql"])
         elif phase=="cleanup":sources.append("sql/bootstrap/remove_temporary_identity.sql")

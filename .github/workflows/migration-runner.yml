@@ -37,13 +37,15 @@ jobs:
         run: python -m pip install -r requirements.txt
       - name: Rehearse exact bootstrap and cleanup privileges in disposable PostgreSQL 16
         run: python tools/check_migration_roles_pg16.py
+      - name: Rehearse fixed migration 002 helper and cleanup privileges
+        run: python tools/check_workflows_pg16.py
       - name: Focused and regression tests against PostgreSQL 16
         run: python -m pytest -q --junitxml=build/migration-runner/regression.xml
       - name: Build only migration archives
         run: |
           mkdir -p build/migration-runner
           curl --fail --silent --show-error --retry 3 --max-time 120 https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem -o build/migration-runner/global-bundle.pem
-          for phase in preflight bootstrap iam cleanup; do
+          for phase in preflight bootstrap iam cleanup bootstrap002 iam002 cleanup002; do
             python tools/package_migration.py --phase "$phase" --ca-bundle build/migration-runner/global-bundle.pem
             python tools/verify_migration_linux.py "build/migration-runner/fintrust-migration-$phase.zip"
           done
@@ -51,7 +53,7 @@ jobs:
         run: |
           docker pull public.ecr.aws/lambda/python:3.12
           docker image inspect public.ecr.aws/lambda/python:3.12 --format '{{json .RepoDigests}}' > build/migration-runner/lambda-image-digest.json
-          for phase in preflight bootstrap iam cleanup; do
+          for phase in preflight bootstrap iam cleanup bootstrap002 iam002 cleanup002; do
             docker run --rm --network none --entrypoint python -v "$PWD:/work" -w /work public.ecr.aws/lambda/python:3.12 tools/verify_migration_linux.py "build/migration-runner/fintrust-migration-$phase.zip"
           done
       - name: Record target verification gate
@@ -66,6 +68,7 @@ jobs:
           assert sum(int(s.get('tests','0')) for s in suites)>0
           assert all(int(s.get(k,'0'))==0 for s in suites for k in ('failures','errors','skipped'))
           assert json.loads((root/'pg16-role-rehearsal.json').read_text())['bootstrap_migrate_rerun_cleanup_passed']
+          assert json.loads((root/'pg16-workflows-rehearsal.json').read_text())['status']=='PASSED'
           for p in root.glob('*.manifest.json'):
               m=json.loads(p.read_text());assert m['linux_execution_verified']
               m['postgresql16_execution_verified']=True

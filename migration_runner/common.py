@@ -123,6 +123,8 @@ def preflight(conn, user):
         session_check(cur, user)
         c, d, a = inspect(cur)
         result = safe_report(c, d, a)
+        from .release1_preflight import supplement
+        result["release1"] = supplement(cur)
     conn.rollback()
     return result
 

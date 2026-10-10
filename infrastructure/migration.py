@@ -19,7 +19,7 @@ BUCKET=f"fintrust-reports-{ACCOUNT}-{REGION}-dev"
 ENI=["ec2:CreateNetworkInterface","ec2:DescribeNetworkInterfaces","ec2:DescribeSubnets",
      "ec2:DeleteNetworkInterface","ec2:AssignPrivateIpAddresses","ec2:UnassignPrivateIpAddresses"]
 TAGS=[{"Key":"Project","Value":"FinTrust"},{"Key":"Environment","Value":"dev"},{"Key":"Purpose","Value":"temporary-migration"}]
-PHASES=("preflight","bootstrap","iam","cleanup")
+PHASES=("preflight","bootstrap","iam","cleanup","bootstrap002","iam002","cleanup002")
 
 def allow(sid,actions,resource,conditions=None,effect="Allow"):
     s={"Sid":sid,"Effect":effect,"Action":actions,"Resource":resource}
@@ -48,7 +48,7 @@ def runtime_policy(phase,endpoint):
     statements=[allow("Logs",["logs:CreateLogStream","logs:PutLogEvents"],LOG+":log-stream:*",regional()),
                 allow("LambdaEni",ENI,"*",regional()),
                 allow("NoCodeEni",ENI,"*",{"ArnEquals":{"lambda:SourceFunctionArn":FUNCTION}},"Deny")]
-    if phase=="iam":
+    if phase in {"iam","iam002"}:
         statements += [allow("NoMaster",["secretsmanager:GetSecretValue"],config.SECRET,effect="Deny"),
                        allow("MigrationLogin",["rds-db:connect"],DBUSER)]
     else:
@@ -127,7 +127,8 @@ def deployment_policy():
        allow("CreateFunction",["lambda:CreateFunction","lambda:TagResource"],FUNCTION,mediated(True)),
        allow("ManageFunction",["lambda:UpdateFunctionCode","lambda:UpdateFunctionConfiguration","lambda:PutFunctionConcurrency","lambda:DeleteFunction","lambda:PublishVersion"],[FUNCTION,FUNCTION+":*"],mediated()),
        allow("ReadFunction",["lambda:GetFunction","lambda:GetFunctionConfiguration","lambda:GetFunctionConcurrency","lambda:ListVersionsByFunction","lambda:ListTags"],[FUNCTION,FUNCTION+":*"],regional()),
-       allow("CreateLogs",["logs:CreateLogGroup","logs:TagLogGroup"],LOG+":*",mediated(True)),
+       allow("CreateLogs",["logs:CreateLogGroup"],LOG+":*",mediated(True)),
+       allow("LegacyTagLogs",["logs:TagLogGroup"],LOG+":*",regional()),
        allow("TagLogs",["logs:TagResource"],LOG,mediated(True)),
        allow("Retention",["logs:PutRetentionPolicy"],LOG+":*",mediated()),
        allow("ReadLogGroups",["logs:DescribeLogGroups"],"*",regional()),
@@ -171,3 +172,19 @@ if __name__=="__main__":
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument("--output",default="build/migration-runner/review")
     parser.add_argument("--endpoint-id",default="__VERIFIED_ENDPOINT_ID_REQUIRED__")
     args=parser.parse_args();print("Rendered",len(render(args.output,args.endpoint_id)),"LOCAL REVIEW documents; no AWS calls")
+
+# Separate grants; never bundled into deployment policy or attached automatically.
+def operator_trust():
+    return {"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"AWS":f"arn:aws:iam::{ACCOUNT}:root"},"Action":"sts:AssumeRole","Condition":{"ArnEquals":{"aws:PrincipalArn":f"arn:aws:iam::{ACCOUNT}:user/fintrust_deployer"},"Bool":{"aws:MultiFactorAuthPresent":"true"}}}]}
+
+def invoke_policy(version):
+    import re
+    if not re.fullmatch(r"[1-9][0-9]*",str(version)):raise ValueError("Verified numeric Lambda version required")
+    return {"Version":"2012-10-17","Statement":[allow("InvokeQualifiedRunner",["lambda:InvokeFunction"],FUNCTION+":"+str(version),regional())]}
+
+def snapshot_policy(snapshot_name):
+    import re
+    if not re.fullmatch(r"fintrust-release1-before002-[0-9]{8}t[0-9]{6}z",snapshot_name):raise ValueError("Exact reviewed snapshot name required")
+    db=f"arn:aws:rds:{REGION}:{ACCOUNT}:db:fintrust-ledger-dev"
+    snap=f"arn:aws:rds:{REGION}:{ACCOUNT}:snapshot:{snapshot_name}"
+    return {"Version":"2012-10-17","Statement":[allow("SnapshotExactSource",["rds:CreateDBSnapshot"],db,regional()),allow("CreateExactSnapshot",["rds:CreateDBSnapshot","rds:AddTagsToResource"],snap,{"StringEquals":{"aws:RequestedRegion":REGION,"aws:RequestTag/Project":"FinTrust","aws:RequestTag/Environment":"dev"}}),allow("InspectSnapshots",["rds:DescribeDBSnapshots"],"*",regional())]}
