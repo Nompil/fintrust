@@ -7,6 +7,7 @@ import argparse
 import base64
 import hashlib
 import json
+import os
 from pathlib import Path
 import shutil
 import ssl
@@ -61,6 +62,7 @@ def build(ca_bundle, output, wheelhouse=None):
         for directory in ("fintrust", "src", "frontend"):
             shutil.copytree(ROOT / directory, package / directory,
                             ignore=shutil.ignore_patterns("__pycache__", "*.pyc", ".env*"))
+        (package / "release-info.json").write_text(json.dumps({"source_commit":os.getenv("GITHUB_SHA",os.getenv("FINTRUST_RELEASE_COMMIT","UNDECLARED")),"runtime":"python3.12","architecture":"x86_64"})+"\n")
         (package / "sql").mkdir()
         shutil.copy2(ROOT / "sql/monthly_summary.sql", package / "sql/monthly_summary.sql")
         (package / "certs").mkdir()
@@ -74,7 +76,7 @@ def build(ca_bundle, output, wheelhouse=None):
                     info.external_attr = 0o100644 << 16
                     archive.writestr(info, path.read_bytes())
     manifest = {"runtime": "python3.12", "architecture": "x86_64", "handlers": HANDLERS,
-                "ca_sha256": hashlib.sha256(ca_bundle.read_bytes()).hexdigest(), **verify_archive(output),
+                "source_commit":os.getenv("GITHUB_SHA",os.getenv("FINTRUST_RELEASE_COMMIT","UNDECLARED")), "ca_sha256": hashlib.sha256(ca_bundle.read_bytes()).hexdigest(), **verify_archive(output),
                 "linux_execution_verified": False}
     output.with_suffix(".manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     return manifest

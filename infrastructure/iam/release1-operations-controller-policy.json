@@ -1,0 +1,8 @@
+{
+  "Version":"2012-10-17",
+  "Statement":[
+    {"Sid":"InspectApprovedQueuePair","Effect":"Allow","Action":["sqs:GetQueueAttributes"],"Resource":["arn:aws:sqs:af-south-1:966467878406:fintrust-transactions-dev.fifo","arn:aws:sqs:af-south-1:966467878406:fintrust-transactions-dlq-dev.fifo"],"Condition":{"StringEquals":{"aws:RequestedRegion":"af-south-1"}}},
+    {"Sid":"ReceiveAndDeleteOnlyDlq","Effect":"Allow","Action":["sqs:ReceiveMessage","sqs:DeleteMessage"],"Resource":"arn:aws:sqs:af-south-1:966467878406:fintrust-transactions-dlq-dev.fifo","Condition":{"StringEquals":{"aws:RequestedRegion":"af-south-1"}}},
+    {"Sid":"ReturnOnlyToSourceFifo","Effect":"Allow","Action":["sqs:SendMessage"],"Resource":"arn:aws:sqs:af-south-1:966467878406:fintrust-transactions-dev.fifo","Condition":{"StringEquals":{"aws:RequestedRegion":"af-south-1"}}}
+  ]
+}

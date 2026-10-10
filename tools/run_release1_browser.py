@@ -18,9 +18,14 @@ from pathlib import Path
 from werkzeug.serving import make_server
 from tests.conftest import prohibit_unmocked_aws_transport
 from tests.test_release1_end_to_end import release_db,authenticated_client,feed,run,row
+from tests.test_release1_candidate import maintainer_headers
 from fintrust import api
 
-def test_browser_release1(release_db,authenticated_client):
+def test_browser_release1(release_db,authenticated_client,maintainer_headers,monkeypatch):
+    from fintrust import db
+    monkeypatch.setattr(db,"get_connection",release_db[2])
+    monkeypatch.setenv("FINTRUST_RELEASE1_UPLOAD","1");monkeypatch.setenv("FINTRUST_MODE","local");monkeypatch.setenv("INPUT_BUCKET","browser-input")
+    s3=release_db[4];s3.create_bucket(Bucket="browser-input",CreateBucketConfiguration={"LocationConstraint":"af-south-1"});s3.put_bucket_versioning(Bucket="browser-input",VersioningConfiguration={"Status":"Enabled"})
     run(feed([row(amount="200000.01",country="US"),row(source_transaction_id="INVALID",amount="bad")]))
     root=Path(__file__).resolve().parents[1]
     evidence=root/"docs/EVIDENCE/12-e2e/release1-closure/browser"

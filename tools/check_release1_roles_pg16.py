@@ -64,6 +64,12 @@ def main():
                 probes.append("api_denied_"+table+"_"+privilege.lower())
             cur.execute("SELECT has_schema_privilege(current_user,%s,'CREATE')",(name,));assert cur.fetchone()==(False,)
             cur.execute("SELECT count(*) FROM risk_review_history WHERE risk_event_id=%s",(result["risk_event_id"],));assert cur.fetchone()==(2,)
+            request=str(uuid.uuid4())
+            cur.execute("INSERT INTO operations_requests(request_id,actor_subject,action,target,request_digest,state) VALUES(%s,'ci-maintainer','REBUILD_PROJECTION',%s,%s,'RUNNING')",(request,result["transaction_id"],"a"*64))
+            cur.execute("UPDATE operations_requests SET state='COMPLETED',completed_at=NOW(),result='{}' WHERE request_id=%s",(request,))
+            cur.execute("SELECT version FROM schema_migrations ORDER BY version");assert cur.fetchall()==[(1,),(2,)]
+            cur.execute("SELECT has_table_privilege(current_user,%s,'DELETE')",(name+".operations_requests",));assert cur.fetchone()==(False,)
+            probes.append("api_role_durable_operations_receipt_and_schema_version_without_financial_write")
             cur.execute("RESET ROLE")
             cur.execute("SELECT count(*) FROM transactions");assert cur.fetchone()==(201,)
         conn.rollback()

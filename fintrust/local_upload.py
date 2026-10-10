@@ -8,16 +8,9 @@ from . import ingest
 
 
 def receive_upload(file):
-    filename = secure_filename(file.filename or "")
-    if not filename.lower().endswith(".csv"):
-        raise ValueError("a .csv file is required")
-    payload = file.stream.read(ingest.MAX_FILE_BYTES + 1)
-    if len(payload) > ingest.MAX_FILE_BYTES:
-        raise ValueError("CSV exceeds the 1 MiB file limit")
-    try:
-        text = payload.decode("utf-8-sig")
-    except UnicodeDecodeError as error:
-        raise ValueError("CSV must use UTF-8 encoding") from error
+    from .file_admission import admit
+    filename,payload=admit(file,legacy=True)
+    text=payload.decode("utf-8-sig")
     digest = sha256(payload).hexdigest()
     identity = f"local-upload:{digest}"
     key = f"raw/uploads/{digest}.csv"

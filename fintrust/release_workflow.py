@@ -184,3 +184,12 @@ def rebuild_projection(transaction_id):
         cur.execute("UPDATE projection_outbox SET state='COMPLETED',completed_at=NOW() WHERE tx_id=%s",(identifier,))
     _with_connection(projected)
     return identifier
+
+
+def drain_projections(limit=10):
+    if type(limit) is not int or not 1<=limit<=100:raise ValueError("Bounded drain required")
+    items=_with_connection(lambda cur:(cur.execute("SELECT tx_id::text FROM projection_outbox WHERE state='PENDING' ORDER BY tx_id LIMIT %s",(limit,)),cur.fetchall())[1])
+    completed=0
+    for (identifier,) in items:
+        rebuild_projection(identifier);completed+=1
+    return {"completed":completed,"limit":limit}

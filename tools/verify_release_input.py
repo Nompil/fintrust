@@ -54,16 +54,19 @@ if __name__ == "__main__":
             raise ValueError(f"Release manifest mismatch: {key}")
     # Tests from this checkout must represent the supplied first-party code.
     with zipfile.ZipFile(source) as archive:
-        for package in ("fintrust", "src"):
+        for package in ("fintrust", "src", "frontend"):
             local = {str(path.relative_to(Path.cwd())).replace("\\", "/")
-                     for path in (Path.cwd() / package).rglob("*.py")}
+                     for path in (Path.cwd() / package).rglob("*" if package=="frontend" else "*.py") if path.is_file()}
             packaged = {name for name in archive.namelist()
-                        if name.startswith(package + "/") and name.endswith(".py")}
+                        if name.startswith(package + "/") and (package=="frontend" or name.endswith(".py"))}
             if local != packaged:
                 raise ValueError(f"Release source file set differs: {package}")
             for name in local:
                 if archive.read(name).replace(b"\r\n", b"\n") != Path(name).read_bytes().replace(b"\r\n", b"\n"):
                     raise ValueError(f"Release source differs from tested checkout: {name}")
+    with zipfile.ZipFile(source) as archive:
+        info=json.loads(archive.read("release-info.json"))
+        if info["source_commit"]!=manifest["source_commit"] or os.getenv("GITHUB_SHA") and info["source_commit"]!=os.environ["GITHUB_SHA"]:raise ValueError("Source commit binding mismatch")
     # Execution evidence cannot be inherited from a previous runner.
     manifest["linux_execution_verified"] = False
     manifest.pop("linux_verification", None)

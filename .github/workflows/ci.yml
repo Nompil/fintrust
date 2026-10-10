@@ -69,21 +69,32 @@ jobs:
             -o build/hardened-release/global-bundle.pem
           python3.12 tools/package_hardened_lambda.py \
             --ca-bundle build/hardened-release/global-bundle.pem \
-            --output build/hardened-release/fintrust-hardened-linux-py312.zip
+            --output build/release1-candidate/fintrust-release1-linux-py312.zip
       - name: Check exact built content and source binding
-        run: python3.12 tools/verify_release_input.py build/hardened-release/fintrust-hardened-linux-py312.zip
+        run: python3.12 tools/verify_release_input.py build/release1-candidate/fintrust-release1-linux-py312.zip
       - name: Verify built handlers and all production modules
         run: |
           set -o pipefail
-          python3.12 tools/verify_lambda_linux.py build/hardened-release/fintrust-hardened-linux-py312.zip --all-production 2>&1 | tee build/linux-verification.txt
+          python3.12 tools/verify_lambda_linux.py build/release1-candidate/fintrust-release1-linux-py312.zip --all-production 2>&1 | tee build/linux-verification.txt
       - name: Install approved test dependencies
         run: python3.12 -m pip install -r requirements.txt
       - name: Verify Release 1 PostgreSQL 16 service roles
         run: python3.12 tools/check_release1_roles_pg16.py
+      - name: Install scoped browser verification dependency
+        run: npm install --prefix build/browser-tools --no-save --ignore-scripts playwright@1.62.1
+      - name: Run Release 1 candidate browser gate
+        env:
+          FINTRUST_NODE: /usr/local/bin/node
+          FINTRUST_PLAYWRIGHT_MODULE: ${{ github.workspace }}/build/browser-tools/node_modules/playwright
+        run: |
+          export FINTRUST_NODE="$(command -v node)"
+          python3.12 tools/run_release1_browser.py
       - name: Run full suite with disposable PostgreSQL
         run: python3.12 -m pytest -q --junitxml=test-results/pytest.xml
       - name: Record release gate evidence
         if: always()
+        env:
+          FINTRUST_RELEASE_ARCHIVE: build/release1-candidate/fintrust-release1-linux-py312.zip
         run: python3.12 tools/record_release_verification.py
       - name: Preserve verification evidence
         if: always()
@@ -94,22 +105,24 @@ jobs:
             docs/EVIDENCE/11-ci/hardened-release-linux-ci.json
             docs/EVIDENCE/11-ci/hardened-release-linux-ci.md
             build/linux-verification.txt
-            build/hardened-release/fintrust-hardened-linux-py312.manifest.json
+            build/release1-candidate/fintrust-release1-linux-py312.manifest.json
             test-results/pytest.xml
             docs/EVIDENCE/12-e2e/release1-closure/postgres16-roles.json
+            docs/EVIDENCE/12-e2e/release1-closure/browser/
           if-no-files-found: error
           retention-days: 30
       - name: Publish only the verified release
         uses: actions/upload-artifact@v4
         with:
-          name: fintrust-hardened-linux-py312
+          name: fintrust-release1-linux-py312
           path: |
-            build/hardened-release/fintrust-hardened-linux-py312.zip
-            build/hardened-release/fintrust-hardened-linux-py312.manifest.json
+            build/release1-candidate/fintrust-release1-linux-py312.zip
+            build/release1-candidate/fintrust-release1-linux-py312.manifest.json
             docs/EVIDENCE/11-ci/hardened-release-linux-ci.json
             docs/EVIDENCE/11-ci/hardened-release-linux-ci.md
             build/linux-verification.txt
             test-results/pytest.xml
             docs/EVIDENCE/12-e2e/release1-closure/postgres16-roles.json
+            docs/EVIDENCE/12-e2e/release1-closure/browser/
           if-no-files-found: error
           retention-days: 30

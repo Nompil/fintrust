@@ -9,7 +9,7 @@ from psycopg2.extensions import parse_dsn
 ROOT=Path(__file__).resolve().parents[1]
 IDENTITY_COLUMNS={"source_system":"character varying(100)","source_transaction_id":"character varying(200)",
  "transaction_fingerprint":"character(64)","batch_id":"uuid","file_sha256":"character(64)","source_row":"integer","country":"character(2)"}
-TABLES=("ingestion_batches","ingestion_attempts","ingestion_records","risk_reviews","risk_review_history","quarantine_cases","quarantine_corrections","correction_outbox","projection_outbox")
+TABLES=("ingestion_batches","ingestion_attempts","ingestion_records","risk_reviews","risk_review_history","quarantine_cases","quarantine_corrections","correction_outbox","projection_outbox","operations_requests")
 
 class SchemaDrift(ValueError): pass
 

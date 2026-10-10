@@ -32,11 +32,17 @@ def deliver(account_id, transaction_id):
     key = {"account_id": account_id, "score_date": "ALERT#" + transaction_id}
     attempt = str(uuid.uuid4())
     try:
+        table.put_item(Item={**key,"delivery_state":"PENDING","updated_at":datetime.now(timezone.utc).isoformat()},ConditionExpression="attribute_not_exists(account_id)")
+    except ClientError as error:
+        if error.response["Error"]["Code"]!="ConditionalCheckFailedException":raise
+    prior=table.get_item(Key=key,ConsistentRead=True).get("Item",{})
+    active_state="RETRYING" if prior.get("delivery_state")=="FAILED" else "SENDING"
+    try:
         table.update_item(Key=key,
             UpdateExpression="SET #state=:sending, attempt_id=:attempt, updated_at=:now, risk_event_id=:risk",
-            ConditionExpression="attribute_not_exists(#state) OR #state=:failed",
+            ConditionExpression="#state=:pending OR #state=:failed",
             ExpressionAttributeNames={"#state": "delivery_state"},
-            ExpressionAttributeValues={":sending": "SENDING", ":failed": "FAILED", ":attempt": attempt,
+            ExpressionAttributeValues={":sending": active_state, ":pending":"PENDING", ":failed": "FAILED", ":attempt": attempt,
                 ":now": datetime.now(timezone.utc).isoformat(), ":risk": result["risk_event_id"]})
     except ClientError as exc:
         if exc.response["Error"]["Code"] != "ConditionalCheckFailedException":
@@ -52,7 +58,7 @@ def deliver(account_id, transaction_id):
             ConditionExpression="attempt_id=:attempt AND #state=:sending",
             ExpressionAttributeNames={"#state": "delivery_state"},
             ExpressionAttributeValues={":state": state, ":message": message_id, ":attempt": attempt,
-                ":sending": "SENDING", ":now": datetime.now(timezone.utc).isoformat()})
+                ":sending": active_state, ":now": datetime.now(timezone.utc).isoformat()})
 
     try:
         response = ses.send_email(Source=sender, Destination={"ToAddresses": [recipient]},

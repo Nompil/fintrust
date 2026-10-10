@@ -34,7 +34,10 @@ def request_context():
         return jsonify({"error": "origin is not allowed"}), 403
     if request.path.startswith("/v1/") and request.method!="OPTIONS" and request.path!="/v1/health":
         from .auth import authenticate
-        try: g.principal=authenticate()
+        try:
+            g.principal=authenticate()
+            if g.principal.role=="Maintainer" and request.path not in {"/v1/session","/v1/operations","/v1/operations/retry"} and not request.path.startswith("/v1/workflows/batches"):
+                return jsonify({"error":"Maintainer scope is technical operations"}),403
         except PermissionError: return jsonify({"error":"authentication required"}),401
     if request.method == "OPTIONS":
         method = request.headers.get("Access-Control-Request-Method", "GET")
@@ -112,17 +115,24 @@ def overview():
 
 @app.post("/v1/upload")
 def upload():
-    if os.getenv("FINTRUST_LOCAL_DEMO") != "1":
+    if os.getenv("FINTRUST_LOCAL_DEMO") != "1" and os.getenv("FINTRUST_RELEASE1_UPLOAD") != "1":
         return jsonify({"error": "local upload is disabled"}), 404
     if g.principal.role!="Admin": raise PermissionError("Local teaching uploads require Admin")
+    from .file_admission import AdmissionError,admit
     from .local_upload import receive_upload
     file = request.files.get("file")
-    if file is None:
-        return jsonify({"error": "multipart field 'file' is required"}), 400
+    if file is None or len(request.files.getlist("file"))!=1 or len(list(request.files.items(multi=True)))!=1:
+        return jsonify({"error":"Exactly one file is required","reason_code":"INVALID_FILE_COUNT"}),400
     try:
+        if os.getenv("FINTRUST_RELEASE1_UPLOAD")=="1":
+            name,payload=admit(file)
+            from .operations import upload_csv
+            return jsonify({"status":"ok","data":upload_csv(name,payload,g.principal)}),200
         return jsonify({"status": "ok", "data": receive_upload(file)}), 200
+    except AdmissionError as error:
+        return jsonify({"error":error.detail,"reason_code":error.code}),400
     except ValueError as error:
-        return jsonify({"error": str(error)}), 400
+        return jsonify({"error": "Invalid CSV request"}), 400
 
 
 def _account_id_arg() -> str:
@@ -320,3 +330,19 @@ def lambda_handler(event, context):
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5000, debug=False)
+
+@app.get("/v1/operations")
+def operations_read():
+    from .operations import snapshot
+    return jsonify({"data":snapshot(g.principal)})
+
+@app.post("/v1/operations/retry")
+def operations_retry():
+    from .operations import retry
+    return jsonify({"data":retry(request.get_json(),g.principal)})
+
+@app.get("/v1/administration")
+def administration():
+    if g.principal.role!="Admin":raise PermissionError("Admin required")
+    from .release_contract import VERSION
+    return jsonify({"data":{"contract_version":VERSION,"identity":"operator-controlled hashed-token registry","user_management":"Not exposed through HTTP; approved operator administration only","live_deployment":"Separate approval required"}})

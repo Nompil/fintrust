@@ -297,4 +297,32 @@ CREATE TABLE public.projection_outbox (
     state TEXT NOT NULL DEFAULT 'PENDING' CHECK(state IN ('PENDING','COMPLETED')),
     completed_at TIMESTAMPTZ
 );
+
+-- Technical operations receipts are not financial or compliance decisions.
+CREATE TABLE public.operations_requests (
+    request_id UUID PRIMARY KEY,
+    actor_subject TEXT NOT NULL CHECK(length(actor_subject) BETWEEN 1 AND 200),
+    action TEXT NOT NULL CHECK(action IN ('REBUILD_PROJECTION','RETRY_CORRECTION','REDRIVE')),
+    target TEXT NOT NULL,
+    request_digest CHAR(64) NOT NULL,
+    state TEXT NOT NULL CHECK(state IN ('RUNNING','COMPLETED','FAILED')),
+    result JSONB,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    completed_at TIMESTAMPTZ
+);
+CREATE FUNCTION public.guard_operations_receipt() RETURNS trigger
+LANGUAGE plpgsql SET search_path=pg_catalog,pg_temp AS $$
+BEGIN
+    IF TG_OP='DELETE' THEN RAISE EXCEPTION 'Operations receipt cannot be deleted'; END IF;
+    IF NEW.request_id<>OLD.request_id OR NEW.actor_subject<>OLD.actor_subject OR
+       NEW.action<>OLD.action OR NEW.target<>OLD.target OR NEW.request_digest<>OLD.request_digest OR
+       NEW.created_at<>OLD.created_at OR OLD.state<>'RUNNING' OR NEW.state NOT IN ('COMPLETED','FAILED') THEN
+       RAISE EXCEPTION 'Operations receipt identity and terminal result are immutable';
+    END IF;
+    RETURN NEW;
+END $$;
+CREATE TRIGGER operations_receipt_immutable BEFORE UPDATE OR DELETE ON public.operations_requests
+FOR EACH ROW EXECUTE FUNCTION public.guard_operations_receipt();
+REVOKE ALL ON FUNCTION public.guard_operations_receipt() FROM PUBLIC;
+
 COMMIT;

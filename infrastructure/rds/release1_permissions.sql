@@ -19,6 +19,12 @@ GRANT SELECT ON transactions,processed_transactions,risk_events,alerts,accounts,
 GRANT INSERT ON ingestion_batches,ingestion_attempts,ingestion_records,quarantine_corrections,correction_outbox TO fintrust_workflow_api;
 GRANT UPDATE(review_status,reviewer_subject,reviewed_by,reviewed_at,review_notes,resolution_code,
     change_actor,change_request_id,request_digest,version) ON risk_reviews TO fintrust_workflow_api;
+GRANT SELECT ON schema_migrations TO fintrust_workflow_api;
+GRANT SELECT ON correction_outbox TO fintrust_workflow_api;
+GRANT UPDATE(state) ON correction_outbox,projection_outbox TO fintrust_workflow_api;
+GRANT SELECT,INSERT ON operations_requests TO fintrust_workflow_api;
+GRANT UPDATE(state,result,completed_at) ON operations_requests TO fintrust_workflow_api;
+GRANT EXECUTE ON FUNCTION public.guard_operations_receipt() TO fintrust_workflow_api;
 GRANT UPDATE(quarantine_id) ON quarantine_cases TO fintrust_workflow_api;
 -- Trigger writes history under a dedicated non-login role, never under browser/API authority.
 GRANT INSERT ON risk_review_history TO fintrust_workflows_owner;

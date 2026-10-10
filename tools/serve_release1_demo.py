@@ -14,11 +14,11 @@ import sys
 import threading
 from unittest.mock import patch
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))
-SCHEMA="fintrust_release1_demo"
+SCHEMA="fintrust_release1_candidate"
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--role",choices=["Admin","Analyst","Auditor"],default="Admin")
+    parser.add_argument("--role",choices=["Admin","Analyst","Auditor","Maintainer"],default="Admin")
     parser.add_argument("--port",type=int,default=5001)
     parser.add_argument("--seed-scenarios",action="store_true",help="Add labelled constructed scenarios; not the external CSV A/B")
     args=parser.parse_args()
@@ -39,11 +39,11 @@ def main():
         with conn:
             with conn.cursor() as cur:
                 cur.execute("SELECT pg_get_userbyid(nspowner),obj_description(oid,'pg_namespace') FROM pg_namespace WHERE nspname=%s",(SCHEMA,));existing=cur.fetchone()
-                if existing and existing!=(ROLE,"FinTrust isolated synthetic Release1 demo"):
+                if existing and existing!=(ROLE,"FinTrust isolated synthetic Release1 candidate"):
                     raise ValueError("Existing schema is unrelated and was left unchanged")
                 if not existing:
                     cur.execute(sql.SQL("CREATE SCHEMA {}").format(sql.Identifier(SCHEMA)))
-                    cur.execute(sql.SQL("COMMENT ON SCHEMA {} IS 'FinTrust isolated synthetic Release1 demo'").format(sql.Identifier(SCHEMA)))
+                    cur.execute(sql.SQL("COMMENT ON SCHEMA {} IS 'FinTrust isolated synthetic Release1 candidate'").format(sql.Identifier(SCHEMA)))
                     cur.execute(sql.SQL("SET search_path TO {},public").format(sql.Identifier(SCHEMA)))
                     cur.execute((ROOT/"sql/schema.sql").read_text().split("-- Additive identity hardening.")[0].replace("CREATE EXTENSION IF NOT EXISTS pgcrypto;",""))
                     cur.execute((ROOT/"sql/seed.sql").read_text())
@@ -51,7 +51,7 @@ def main():
     finally:conn.close()
     token=getpass("Local demo access token (>=32 random characters; hidden, never stored plaintext): ")
     if not 32<=len(token)<=256:raise ValueError("Token length must be 32..256")
-    role={"Admin":"Admin","Analyst":"Risk/Compliance Analyst","Auditor":"Read-only/Auditor"}[args.role]
+    role={"Admin":"Admin","Analyst":"Risk/Compliance Analyst","Auditor":"Read-only/Auditor","Maintainer":"Maintainer"}[args.role]
     file=ROOT/".env.release1-auth.json"
     registry=json.loads(file.read_text()) if file.exists() else {"principals":[]}
     subject="local-"+args.role.lower();digest=hashlib.sha256(token.encode()).hexdigest();token=None
@@ -59,16 +59,19 @@ def main():
     if any(p["token_sha256"]==digest for p in registry["principals"]):raise ValueError("Use a different token for each local role")
     registry["principals"].append({"subject":subject,"role":role,"accounts":["20000000-0000-4000-8000-00000000000"+str(i) for i in range(1,6)],"token_sha256":digest})
     file.write_text(json.dumps(registry,indent=2)+"\n",encoding="utf-8")
-    os.environ.update(FINTRUST_AUTH_FILE=str(file),FINTRUST_LOCAL_DEMO="0",FINTRUST_RELEASE1="1",DYNAMODB_TABLE="release1-scores",QUARANTINE_BUCKET="release1-demo-safe",AWS_ACCESS_KEY_ID="testing",AWS_SECRET_ACCESS_KEY="testing",AWS_SESSION_TOKEN="testing",AWS_DEFAULT_REGION="af-south-1",AWS_EC2_METADATA_DISABLED="true",AWS_IGNORE_CONFIGURED_ENDPOINT_URLS="true")
+    os.environ.update(FINTRUST_AUTH_FILE=str(file),FINTRUST_LOCAL_DEMO="0",FINTRUST_RELEASE1="1",FINTRUST_RELEASE1_UPLOAD="1",INPUT_BUCKET="release1-input",FINTRUST_ACCOUNT_ID="966467878406",DYNAMODB_TABLE="release1-scores",QUARANTINE_BUCKET="release1-demo-safe",AWS_ACCESS_KEY_ID="testing",AWS_SECRET_ACCESS_KEY="testing",AWS_SESSION_TOKEN="testing",AWS_DEFAULT_REGION="af-south-1",AWS_EC2_METADATA_DISABLED="true",AWS_IGNORE_CONFIGURED_ENDPOINT_URLS="true")
     from moto import mock_aws
     from botocore.httpsession import URLLib3Session
     import boto3
+    import subprocess
+    os.environ["FINTRUST_RELEASE_COMMIT"]=subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip()
     stop=threading.Event()
     with mock_aws(),patch.object(URLLib3Session,"send",side_effect=RuntimeError("Unmocked AWS request blocked by local demo")):
         from fintrust import api,db,ingest,score,dynamo,release_workflow as worker
         for module in (api,db,ingest,score,worker):module.get_connection=connect
         s3=boto3.client("s3",region_name="af-south-1");s3.create_bucket(Bucket="release1-demo-safe",CreateBucketConfiguration={"LocationConstraint":"af-south-1"})
         s3.put_bucket_versioning(Bucket="release1-demo-safe",VersioningConfiguration={"Status":"Enabled"})
+        s3.create_bucket(Bucket="release1-input",CreateBucketConfiguration={"LocationConstraint":"af-south-1"});s3.put_bucket_versioning(Bucket="release1-input",VersioningConfiguration={"Status":"Enabled"})
         score.s3=s3;ingest.s3=s3
         dynamo.dynamodb=boto3.resource("dynamodb",region_name="af-south-1")
         dynamo.dynamodb.create_table(TableName="release1-scores",BillingMode="PAY_PER_REQUEST",AttributeDefinitions=[{"AttributeName":x,"AttributeType":"S"} for x in ("account_id","score_date")],KeySchema=[{"AttributeName":"account_id","KeyType":"HASH"},{"AttributeName":"score_date","KeyType":"RANGE"}])
@@ -82,7 +85,9 @@ def main():
             for item in envelopes("constructed-input","raw/constructed-"+tag+".csv",text.getvalue().encode(),version="local-mock-v1"):worker.process_envelope(item)
         def drain():
             while not stop.wait(2):
-                try:worker.drain_corrections(limit=10)
+                try:
+                    worker.drain_corrections(limit=10)
+                    worker.drain_projections(limit=10)
                 except Exception as error:print("Correction worker failed:",type(error).__name__,"(pending work retained)")
         thread=threading.Thread(target=drain,daemon=True);thread.start()
         try:

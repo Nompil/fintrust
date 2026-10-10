@@ -20,6 +20,7 @@ def parse_file(payload):
     if len(payload)>1048576: raise FileRejected("FILE_TOO_LARGE")
     try: text=payload.decode("utf-8-sig")
     except UnicodeDecodeError: raise FileRejected("INVALID_ENCODING") from None
+    if any(ord(c)<32 and c not in "\t\r\n" for c in text): raise FileRejected("INVALID_FILE_FORMAT")
     try:
         reader=csv.DictReader(io.StringIO(text, newline=""), strict=True)
         headers=reader.fieldnames or []

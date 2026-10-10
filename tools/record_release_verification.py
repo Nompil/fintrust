@@ -9,7 +9,7 @@ import xml.etree.ElementTree as ET
 
 
 def record():
-    archive = Path("build/hardened-release/fintrust-hardened-linux-py312.zip")
+    archive = Path(os.environ.get("FINTRUST_RELEASE_ARCHIVE","build/hardened-release/fintrust-hardened-linux-py312.zip"))
     manifest_path = archive.with_suffix(".manifest.json")
     manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else {}
     junit = Path("test-results/pytest.xml")
