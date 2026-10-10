@@ -1,0 +1,8 @@
+{
+  "tests": 590,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "raw_report": "build/release1-ci/38066413745/evidence/test-results/pytest.xml",
+  "ci_run": 38066413745
+}

@@ -1,0 +1,11 @@
+{
+  "path": "C:\\Users\\Nompilo\\Desktop\\fintrust\\build\\release1-ci\\38066413745\\release\\build\\release1-candidate\\fintrust-release1-linux-py312.zip",
+  "sha256": "0ad342f40447751bf105e88d2ac1d473f6423394c1e01b3b4b921287a5d84b45",
+  "base64": "CtNC9ARHdRvxBeiNKsHUc/ZCM5TB4Bs7S5ISh6XYS0U=",
+  "bytes": 21404920,
+  "source_commit": "12b0c94844b6ff1a6389beb99e1f87a51fedb598",
+  "linux_execution_verified": true,
+  "content_checked": true,
+  "download_checksum_verified": true,
+  "changed_app_and_frontend_match_local_utf8_source": true
+}

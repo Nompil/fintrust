@@ -16,4 +16,4 @@ Verification uses the actual HTTP upload adapter, real isolated loopback Postgre
 
 ## Current verification
 
-Implementation prepared; focused, full, browser and Linux CI results will be recorded in docs/EVIDENCE/12-e2e/release1-lifecycle/RESULT.md. Do not infer live deployment from local or CI verification.
+Verified against source 12b0c94844b6ff1a6389beb99e1f87a51fedb598: 19 focused tests, 590 final Linux full-suite tests, zero failures/skips in CI, actual browser lifecycle passed. Exact artifact/source/download checks passed. Detailed results and hashes are in docs/EVIDENCE/12-e2e/release1-lifecycle/RESULT.md. No ingestion blocker remains; next is read-only AWS preflight. Do not infer live deployment from local or CI verification.

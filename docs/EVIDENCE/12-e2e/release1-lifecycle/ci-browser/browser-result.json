@@ -1,0 +1,41 @@
+{
+  "status": "PASSED",
+  "browser": "/usr/bin/google-chrome",
+  "pages": [
+    "Login",
+    "Dashboard",
+    "Transactions",
+    "Risk Events",
+    "Review Queue",
+    "Quarantine",
+    "Ingestion Batches",
+    "Reports",
+    "Accounts",
+    "Account History",
+    "Audit",
+    "Operations",
+    "Administration",
+    "Transaction Detail"
+  ],
+  "dataset_sequence": "A -> B -> exact A replay",
+  "upload_counts": {
+    "A": {
+      "accepted": 29,
+      "quarantined": 12,
+      "duplicates": 1
+    },
+    "B": {
+      "accepted": 7,
+      "quarantined": 4,
+      "duplicates": 1
+    }
+  },
+  "invalid_file_rejected": true,
+  "notice_persists_until_acknowledged": true,
+  "review_mutation": "UNDER_REVIEW",
+  "auditor_mutation_buttons": 0,
+  "maintainer_compliance_pages": 0,
+  "maintainer_technical_actions_visible": true,
+  "page_errors": [],
+  "aws_access": false
+}

@@ -4,13 +4,13 @@ Continues verified source4d91c3d and evidence423f198. No settled network, RDS or
 
 ## Actual external fixtures
 
-Actual CSV A/B originals have now been imported unchanged. Both are blocked at file admission by contract mismatches; no business outcomes are invented. The earlier verified candidate snapshot predates this import. Import only operator-supplied originals:
+Actual CSV A/B originals have now been imported unchanged. Both are intentionally rejected at file admission by contract mismatches; no business outcomes are invented for the originals. The separately derived Release 1 fixtures are the reviewed acceptance inputs. The earlier verified candidate snapshot predates this import. Import only operator-supplied originals:
 
 ```powershell
 python tools/import_release1_fixtures.py '<actual CSV A path>' '<actual CSV B path>'
 ```
 
-Copies go to tests/fixtures/e2e unchanged. Admission inspection and SHA256 are recorded; a schema mismatch produces BLOCKED, never silent rewriting. Per-row expected outcomes require a reviewed fixed receipt clock, account baseline and sequential A then B processing; corrections must be separate files with original hashes retained. The constructed tests prove named scenarios; they do not prove acceptance of the incompatible original CSV A/B. This remains a release acceptance blocker.
+Copies go to tests/fixtures/e2e unchanged. Admission inspection and SHA256 are recorded; a schema mismatch produces BLOCKED, never silent rewriting. Per-row expected outcomes require a reviewed fixed receipt clock, account baseline and sequential A then B processing; corrections must be separate files with original hashes retained. The constructed tests prove named scenarios; they do not prove acceptance of the incompatible original CSV A/B. This historical blocker is addressed by the separately derived fixtures and documented test-only mapping in RELEASE1_INGESTION_LIFECYCLE.md; originals remain unchanged legacy evidence.
 
 ## File admission
 
@@ -56,3 +56,8 @@ Actual A/B originals have been located and imported unchanged (33/11 rows). Thei
 ## Derived ingestion lifecycle continuation
 
 The original legacy CSV rejection is expected and preserved. User-authorized derived Release 1 A/B fixtures now map explicitly to the frozen contract; see RELEASE1_INGESTION_LIFECYCLE.md and tests/fixtures/e2e/release1/MAPPING.md. All 54 row outcomes passed against actual local SQL: 36 accepted, 16 quarantined and two duplicates. Source-bound Linux CI is required for the new persistent upload notification implementation; its final result will be recorded under EVIDENCE/12-e2e/release1-lifecycle. No AWS action was performed.
+
+
+## Current ingestion acceptance gate: VERIFIED
+
+Final source `12b0c94844b6ff1a6389beb99e1f87a51fedb598`, CI run 38066413745: 590 passed, zero failed/skipped; actual derived A/B/replay browser gate passed. Downloaded new Linux artifact SHA256 `0ad342f40447751bf105e88d2ac1d473f6423394c1e01b3b4b921287a5d84b45`. All 54 row outcomes and file/row/risk distinctions verified; see EVIDENCE/12-e2e/release1-lifecycle/RESULT.md. Original CSVs remain unchanged legacy evidence, not compatible production intake. AWS remains untouched; read-only preflight is the next boundary.

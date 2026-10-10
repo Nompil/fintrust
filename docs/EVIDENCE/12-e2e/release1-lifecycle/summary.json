@@ -1,0 +1,80 @@
+{
+  "status": "VERIFIED — READY FOR READ-ONLY AWS PREFLIGHT",
+  "source_commit": "12b0c94844b6ff1a6389beb99e1f87a51fedb598",
+  "ci_run": "38066413745",
+  "ci_url": "https://github.com/Nompil/fintrust/actions/runs/38066413745",
+  "fixtures": {
+    "A": {
+      "filename": "fintrust_release1_transactions_A.csv",
+      "sha256": "02e72ce290842bed2b03088daec5bfc87a18f17fd858c6128d205714765c829e",
+      "rows": 42,
+      "original": "fintrust_e2e_mixed_transactions.csv",
+      "original_sha256": "1b2a3a1fa424b7c4e320b2fc9d0f13154945d0dc370a0aaa5a0e44f0573ff8df",
+      "original_rows": 33
+    },
+    "B": {
+      "filename": "fintrust_release1_transactions_B.csv",
+      "sha256": "c71d9a6862eed230cf4e0c72c961bbede3b5f36b4d8c3f3374532a1f1194f386",
+      "rows": 12,
+      "original": "fintrust_e2e_companion_transactions_B.csv",
+      "original_sha256": "7d981dd595b0ba56dbedbe683fd991ad5cec41f49fc68b7d5e7e1a8b96da60b6",
+      "original_rows": 11
+    }
+  },
+  "sequence": [
+    "A",
+    "B",
+    "exact A replay"
+  ],
+  "new_ledger": 36,
+  "quarantine": 16,
+  "duplicate_rows": 2,
+  "identity_conflicts": 1,
+  "risk_counts": {
+    "Low": 30,
+    "Medium": 4,
+    "High": 2
+  },
+  "open_reviews_before_browser_mutation": 6,
+  "mocked_high_alert_sends": 2,
+  "file_rejection_cases": [
+    "malformed CSV",
+    "wrong headers",
+    "empty file",
+    "binary renamed .csv",
+    "unsupported filename type"
+  ],
+  "file_rejections_create_quarantine": false,
+  "all_54_expected_row_outcomes_match": true,
+  "whole_file_replay_changes_financial_counts": false,
+  "notifications": "safe backend summaries persist across navigation and subsequent uploads until acknowledgement; cleared on sign-out",
+  "focused_tests": {
+    "passed": 19,
+    "failed": 0,
+    "skipped": 0
+  },
+  "full_tests": {
+    "tests": 590,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 590
+  },
+  "browser": "PASSED; actual fixture uploads, exact score-70 review mutation, Auditor/Maintainer restrictions and zero page errors",
+  "artifact": {
+    "path": "C:\\Users\\Nompilo\\Desktop\\fintrust\\build\\release1-ci\\38066413745\\release\\build\\release1-candidate\\fintrust-release1-linux-py312.zip",
+    "sha256": "0ad342f40447751bf105e88d2ac1d473f6423394c1e01b3b4b921287a5d84b45",
+    "base64": "CtNC9ARHdRvxBeiNKsHUc/ZCM5TB4Bs7S5ISh6XYS0U=",
+    "bytes": 21404920,
+    "source_commit": "12b0c94844b6ff1a6389beb99e1f87a51fedb598",
+    "linux_execution_verified": true,
+    "content_checked": true,
+    "download_checksum_verified": true,
+    "changed_app_and_frontend_match_local_utf8_source": true
+  },
+  "aws_access": false,
+  "remaining_ingestion_blockers": [],
+  "next_boundary": "read-only AWS/RDS preflight only; migration, deployment, auth and activation remain separate approval gates",
+  "initial_failed_ci": 38066070505,
+  "initial_failure": "browser selector text-boundary mismatch, fixed and revalidated"
+}
