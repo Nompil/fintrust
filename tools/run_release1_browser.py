@@ -12,6 +12,9 @@ def main():
     package=os.environ.get("FINTRUST_PLAYWRIGHT_MODULE")
     if not node or not Path(node).is_file() or not package:
         raise SystemExit("Set FINTRUST_NODE and FINTRUST_PLAYWRIGHT_MODULE to existing installations")
+    if not os.getenv("FINTRUST_RELEASE_COMMIT"):
+        import subprocess
+        os.environ["FINTRUST_RELEASE_COMMIT"]=os.getenv("GITHUB_SHA") or subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip()
     target=ROOT/"build/release1-browser-check.py";target.parent.mkdir(exist_ok=True)
     target.write_text('''import os,subprocess,threading
 from pathlib import Path

@@ -32,6 +32,10 @@ const {chromium}=require(process.env.FINTRUST_PLAYWRIGHT_MODULE);
   await page.locator('#title').filter({hasText:'Operations'}).waitFor();await page.waitForFunction(()=>!document.querySelector('#status').textContent.startsWith('Loading'));
   if(await page.locator('#navigation').getByRole('button',{name:'Review Queue',exact:true}).count())throw Error('Maintainer sees compliance page');
   await page.locator('#operations-actions').waitFor({state:'visible'});
+  if(await page.locator('#paging').isVisible())throw Error('Operations incorrectly shows row pagination');
+  const operationsText=await page.locator('#content').innerText();
+  if(operationsText.includes('NaN')||operationsText.includes('UNDECLARED')||!/[a-f0-9]{40}/.test(operationsText))throw Error('Operations source/pagination evidence is invalid');
+
   await page.screenshot({path:path.join(output,'release1-maintainer-operations.png'),fullPage:true});
   if(errors.length)throw Error(errors.join('; '));
   fs.writeFileSync(path.join(output,'browser-result.json'),JSON.stringify({status:'PASSED',browser:executablePath,pages:['Login','Dashboard',...pages,'Transaction Detail'],review_mutation:'UNDER_REVIEW',auditor_mutation_buttons:0,maintainer_compliance_pages:0,maintainer_technical_actions_visible:true,page_errors:errors,aws_access:false},null,2));
