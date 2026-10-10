@@ -1,0 +1,198 @@
+{
+  "status": "LOCAL_FRONTEND_VERIFIED",
+  "source_commit": "b517e78c566426ebef9c57951b1cb1d2c2a7e3f3",
+  "aws_access": false,
+  "aws_mutations": false,
+  "push_performed": false,
+  "full_regression": {
+    "passed": 603,
+    "failed": 0,
+    "expected_skips": [
+      {
+        "test": "tests.data_quality.test_processing.test_database_roles_can_execute_pipeline_without_owner_privileges",
+        "reason": "Service-role execution check requires a disposable test database administrator"
+      }
+    ],
+    "unexpected_skips": 0,
+    "junit": "frontend-freeze-full-regression.xml"
+  },
+  "focused_workflows": {
+    "passed": 55,
+    "failed": 0,
+    "skipped": 0,
+    "execution": "Verified subset of final full regression; new presentation tests also ran separately: 11 passed",
+    "new_tests_passed": 11,
+    "junit": "frontend-freeze-focused.xml"
+  },
+  "browser": {
+    "status": "PASSED",
+    "source_commit": "b517e78c566426ebef9c57951b1cb1d2c2a7e3f3",
+    "browser": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+    "pages": [
+      "Login",
+      "Overview",
+      "Rejected Uploads",
+      "Notifications",
+      "Transactions",
+      "Risk Events",
+      "Review Queue",
+      "Quarantine",
+      "Ingestion Batches",
+      "Reports",
+      "Accounts",
+      "Account History",
+      "Audit",
+      "Operations",
+      "Administration",
+      "Transaction Detail",
+      "Batch Detail",
+      "Quarantine Detail"
+    ],
+    "dataset_sequence": "A -> B -> exact A replay",
+    "upload_counts": {
+      "A": {
+        "accepted": 29,
+        "quarantined": 12,
+        "duplicates": 1
+      },
+      "B": {
+        "accepted": 7,
+        "quarantined": 4,
+        "duplicates": 1
+      }
+    },
+    "invalid_file_rejected": true,
+    "notice_persists_until_acknowledged": true,
+    "review_mutation": "OPEN -> UNDER_REVIEW -> CLEARED",
+    "quarantine_mutation": "RESUBMITTED (worker revalidation pending)",
+    "roles_verified": [
+      "Admin",
+      "Risk/Compliance Analyst",
+      "Read-only/Auditor",
+      "Maintainer"
+    ],
+    "loading_error_empty_verified": true,
+    "auditor_mutation_buttons": 0,
+    "maintainer_compliance_pages": 0,
+    "maintainer_technical_actions_visible": true,
+    "page_errors": [],
+    "aws_access": false
+  },
+  "application_changes_require_new_linux_zip": true,
+  "linux_rebuild_or_upload_performed": false,
+  "business_rules_and_schema_changed": false,
+  "frontend_blockers": [],
+  "deployment_prerequisites": [
+    "New Linux CPython 3.12 x86_64 package and release gates before upload",
+    "Separately approved migration operator and private bootstrap path",
+    "Live migration / deployment / cloud admission controller remain unexecuted"
+  ],
+  "limits": [
+    "Notifications are authenticated-session events; intake receipts remain durable in existing local S3 audit adapter",
+    "Cloud intake/history remains separately gated",
+    "Missing individual pipeline timestamps are stated; never invented",
+    "Workflow counters are explicitly bounded; audit SQL sources bounded to 1000 each"
+  ],
+  "screenshots": [
+    {
+      "file": "browser/A-upload-warning.png",
+      "sha256": "5ba670d3fda1de8b2fc87fe865d8b08e2f2ad1c37791afa61f11826a2d845f72"
+    },
+    {
+      "file": "browser/A-whole-file-replay.png",
+      "sha256": "b1516f8333333308346a5959256e546cd97d7913237ebd5f8c4f3894dba1c9d8"
+    },
+    {
+      "file": "browser/analyst-quarantine-resubmitted.png",
+      "sha256": "64aa1915cd30c0f6a84e59b0149fe21ac22a16cb706173786a9c5914145be361"
+    },
+    {
+      "file": "browser/analyst-review-cleared.png",
+      "sha256": "b40b23bb4d599cf07092f3a8a80f0e7eea79b1d63d7fb081980962d4fc7886da"
+    },
+    {
+      "file": "browser/api-unavailable.png",
+      "sha256": "2e9cad153e43844deac59543fe9f38a86ec15647b9f5fdcfd22bf8a92df85fc1"
+    },
+    {
+      "file": "browser/audit-trail.png",
+      "sha256": "e4af94798312944e9d0299d3b9869f0e2ff27a26d8a918e82bf1460883904a39"
+    },
+    {
+      "file": "browser/B-upload-warning.png",
+      "sha256": "2d2268447ff81f2e57a6b28b5bd4f0280c62a51fa2fbc0866abe2c9b47097349"
+    },
+    {
+      "file": "browser/batch-reconciliation.png",
+      "sha256": "21c3282dc80f4d4e6dd8b4a6516737253518af69f03f5f45b73e1cfb5d95d9a4"
+    },
+    {
+      "file": "browser/duplicate-occurrences.png",
+      "sha256": "d57a7a85147aa643db2cd64f2ec6a7cedd602c1009c175990f407b526d6edd8e"
+    },
+    {
+      "file": "browser/high-risk-transaction.png",
+      "sha256": "72659d261481b06504b57262d9c320e2a1b968f86a28b97ece296abcbc15a980"
+    },
+    {
+      "file": "browser/ingestion-batches.png",
+      "sha256": "b1516f8333333308346a5959256e546cd97d7913237ebd5f8c4f3894dba1c9d8"
+    },
+    {
+      "file": "browser/invalid-file-rejection.png",
+      "sha256": "91e864de412026235f7fc5137a19ffc8824b9c802f4dd7b3f181e8e0a9e76164"
+    },
+    {
+      "file": "browser/notification-center.png",
+      "sha256": "53ee698e4eea51c2ac1f8d4fe6f032c5231c7d946ee81320fd91d517d1b19095"
+    },
+    {
+      "file": "browser/overview.png",
+      "sha256": "1d20db29d863ec7712e35da9d4d9feddeaf2967c5afa924d0be94768a8abd224"
+    },
+    {
+      "file": "browser/possible-duplicate-charge.png",
+      "sha256": "441e419bda1f668efce45be210bf4511bb0527fe4abd61d323551537d96655ce"
+    },
+    {
+      "file": "browser/quarantine-detail.png",
+      "sha256": "f89562b36e9d992681c0dc1124c767274f50c8e561f4f8517f3db1aa40c065ae"
+    },
+    {
+      "file": "browser/quarantine.png",
+      "sha256": "983cb87529e038065c4212a24b5eadd2e44b021ad8dac005db3c2196144b0556"
+    },
+    {
+      "file": "browser/rejected-uploads-history.png",
+      "sha256": "5a47036d45f3913ed66bfdf29f4e52c6c62a54b88189c2048809c3afa4598040"
+    },
+    {
+      "file": "browser/release1-auditor-review-queue.png",
+      "sha256": "68e8531abd3490e2bf37707782dfc52c107bb349efd655710a96fa4a414b6e5c"
+    },
+    {
+      "file": "browser/release1-maintainer-operations.png",
+      "sha256": "51720686a765404b91f9ba2f6e62ce242ae2689228dc3c122684e0553e3a8c5d"
+    },
+    {
+      "file": "browser/release1-transaction-detail.png",
+      "sha256": "0d0749d793d2b69dfbdc34e62e911e190e6099f7f39e861173dbf85dbde36904"
+    },
+    {
+      "file": "browser/review-queue.png",
+      "sha256": "b59c9de70c41866650759c7bf55a1fe5f781beba6c2c9f2cd744f104608831ec"
+    },
+    {
+      "file": "browser/review-workflow.png",
+      "sha256": "2dbad554c475b9dcc411e360eddb98185e7b2cb98d247621ba3dfd781c2982a3"
+    },
+    {
+      "file": "browser/risk-events.png",
+      "sha256": "4d7f434edbea9ab906c2f38648875d4ae98cb25f6ea8cd00574ab34937229a6d"
+    },
+    {
+      "file": "browser/transactions.png",
+      "sha256": "d0db6cf0eae8994e7cd93bc57e93f91383cdd15eb8198d937edd51741cc75ce4"
+    }
+  ]
+}

@@ -50,3 +50,15 @@ Browser gate uses real isolated PostgreSQL and the actual A/B fixtures, with S3/
 Focused and full regression results, source commit and screenshot manifest are recorded in `docs/EVIDENCE/12-e2e/release1-lifecycle/frontend-freeze-result.json` after the final gates. Screenshots remain in the existing `release1-lifecycle/browser/` evidence folder. No new evidence hierarchy is introduced.
 
 Application/API code and packaged frontend changed. A NEW Linux CPython 3.12 x86_64 release ZIP and CI/import/content/role gates are required before any upload/deployment; the prior verified ZIP remains historical evidence and is not silently relabelled. No rebuild/upload/push is authorized by this frontend phase. Live migration 002/operator/Secrets Manager endpoint approval and deployment prerequisites remain separate from this local frontend freeze.
+
+## Final local verification result
+
+Source commit: `b517e78c566426ebef9c57951b1cb1d2c2a7e3f3`.
+
+- Browser gate: PASSED on this source commit; all four roles, 25 synthetic screenshots, no page errors, no external/AWS transport.
+- Focused frontend/workflow subset: 55 passed, 0 failed, 0 skipped within the final full run. The 11 new presentation contract tests also passed separately.
+- Full local regression: 603 passed, 0 failed, 1 expected skip, 0 unexpected skips. The skipped test is `tests.data_quality.test_processing.test_database_roles_can_execute_pipeline_without_owner_privileges`: it requires a disposable database administrator, while this local test identity is deliberately not an administrator. This is not a claim of a newly executed PG16 administrator role proof; that remains part of the new Linux/CI release gate.
+- Backend/test sources in the full run match this source commit; final frontend browser verification ran after the last JavaScript change.
+- Detailed results and sanitized JUnit/output: `EVIDENCE/12-e2e/release1-lifecycle/frontend-freeze-result.json` and `frontend-freeze-{full-regression,focused,browser}.{xml,txt}`.
+- Visual inspection: overview, batch reconciliation, possible duplicate-charge comparison and Maintainer operations reviewed. Presentation screenshots include upload warnings/replay, rejection history, duplicate occurrences, quarantine detail/resubmission, High risk, review to CLEARED, notifications, audit, Auditor and API-unavailable states.
+- No frontend blockers remain for this local freeze. A new Linux package and separate deployment/security approvals remain required; this result is not authorization to mutate AWS.

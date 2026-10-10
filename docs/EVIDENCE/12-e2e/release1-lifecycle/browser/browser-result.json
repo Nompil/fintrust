@@ -1,9 +1,12 @@
 {
   "status": "PASSED",
+  "source_commit": "b517e78c566426ebef9c57951b1cb1d2c2a7e3f3",
   "browser": "C:/Program Files/Google/Chrome/Application/chrome.exe",
   "pages": [
     "Login",
-    "Dashboard",
+    "Overview",
+    "Rejected Uploads",
+    "Notifications",
     "Transactions",
     "Risk Events",
     "Review Queue",
@@ -15,7 +18,9 @@
     "Audit",
     "Operations",
     "Administration",
-    "Transaction Detail"
+    "Transaction Detail",
+    "Batch Detail",
+    "Quarantine Detail"
   ],
   "dataset_sequence": "A -> B -> exact A replay",
   "upload_counts": {
@@ -32,7 +37,15 @@
   },
   "invalid_file_rejected": true,
   "notice_persists_until_acknowledged": true,
-  "review_mutation": "UNDER_REVIEW",
+  "review_mutation": "OPEN -> UNDER_REVIEW -> CLEARED",
+  "quarantine_mutation": "RESUBMITTED (worker revalidation pending)",
+  "roles_verified": [
+    "Admin",
+    "Risk/Compliance Analyst",
+    "Read-only/Auditor",
+    "Maintainer"
+  ],
+  "loading_error_empty_verified": true,
   "auditor_mutation_buttons": 0,
   "maintainer_compliance_pages": 0,
   "maintainer_technical_actions_visible": true,
