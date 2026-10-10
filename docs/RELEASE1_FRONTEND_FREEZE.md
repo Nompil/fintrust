@@ -53,9 +53,9 @@ Application/API code and packaged frontend changed. A NEW Linux CPython 3.12 x86
 
 ## Final local verification result
 
-Source commit: `b517e78c566426ebef9c57951b1cb1d2c2a7e3f3`.
+Source commit: `3234ba5139ed354943098ecbb81080802baad9f3`.
 
-- Browser gate: PASSED on this source commit; all four roles, 25 synthetic screenshots, no page errors, no external/AWS transport.
+- Browser gate: PASSED on this source commit; all four roles, 25 synthetic screenshots, no page errors, no external/AWS transport. A delayed Admin financial response was discarded after Maintainer sign-in; duplicate-tab evidence waits for the filtered response.
 - Focused frontend/workflow subset: 55 passed, 0 failed, 0 skipped within the final full run. The 11 new presentation contract tests also passed separately.
 - Full local regression: 603 passed, 0 failed, 1 expected skip, 0 unexpected skips. The skipped test is `tests.data_quality.test_processing.test_database_roles_can_execute_pipeline_without_owner_privileges`: it requires a disposable database administrator, while this local test identity is deliberately not an administrator. This is not a claim of a newly executed PG16 administrator role proof; that remains part of the new Linux/CI release gate.
 - Backend/test sources in the full run match this source commit; final frontend browser verification ran after the last JavaScript change.

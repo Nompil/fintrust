@@ -1,6 +1,6 @@
 {
   "status": "PASSED",
-  "source_commit": "b517e78c566426ebef9c57951b1cb1d2c2a7e3f3",
+  "source_commit": "3234ba5139ed354943098ecbb81080802baad9f3",
   "browser": "C:/Program Files/Google/Chrome/Application/chrome.exe",
   "pages": [
     "Login",
@@ -46,6 +46,7 @@
     "Maintainer"
   ],
   "loading_error_empty_verified": true,
+  "old_role_response_discarded": true,
   "auditor_mutation_buttons": 0,
   "maintainer_compliance_pages": 0,
   "maintainer_technical_actions_visible": true,
