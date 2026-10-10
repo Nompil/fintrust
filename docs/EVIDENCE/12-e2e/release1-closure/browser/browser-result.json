@@ -1,0 +1,21 @@
+{
+  "status": "PASSED",
+  "browser": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+  "pages": [
+    "Login",
+    "Dashboard",
+    "Transactions",
+    "Risk Events",
+    "Review Queue",
+    "Quarantine",
+    "Ingestion Batches",
+    "Reports",
+    "Account History",
+    "Admin/Audit",
+    "Transaction Detail"
+  ],
+  "review_mutation": "UNDER_REVIEW",
+  "auditor_mutation_buttons": 0,
+  "page_errors": [],
+  "aws_access": false
+}

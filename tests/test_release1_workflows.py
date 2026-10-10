@@ -82,7 +82,7 @@ def test_review_rbac_and_transitions():
 
 def test_reconciliation_pending_technical_and_business_failures():
     mixed=["ACCEPTED","QUARANTINED","DUPLICATE","QUEUED"]
-    assert contract.reconcile(mixed,total=4,publication_complete=True)["status"]=="PUBLISHED"
+    assert contract.reconcile(mixed,total=4,publication_complete=True)["status"]=="QUEUED"
     assert contract.reconcile(mixed[:3],total=3,publication_complete=True)["status"]=="COMPLETED"
     assert contract.reconcile(mixed[:3]+["FAILED_TECHNICAL"],total=4,publication_complete=True)["status"]=="PARTIAL"
     assert contract.reconcile(["FAILED_TECHNICAL"],total=1,publication_complete=False)["status"]=="FAILED"
@@ -149,7 +149,7 @@ def test_sql_reconciliation_and_terminal_immutability(operational_db):
     for number,state,canonical,reason in [(2,"ACCEPTED",tx,None),(3,"QUARANTINED",None,"INVALID_AMOUNT"),(4,"QUEUED",None,None)]:
         query(c,"INSERT INTO ingestion_records(batch_id,source_row,disposition,canonical_tx_id,reason_code,source_attempt_id) VALUES(%s,%s,%s,%s,%s,%s)",(b,number,state,canonical,reason,b))
     query(c,"UPDATE ingestion_batches SET publication_complete=TRUE WHERE batch_id=%s",(b,));c.commit()
-    assert query(c,"SELECT status,pending,accepted,quarantined FROM batch_reconciliation WHERE batch_id=%s",(b,))==[("PUBLISHED",1,1,1)]
+    assert query(c,"SELECT status,pending,accepted,quarantined FROM batch_reconciliation WHERE batch_id=%s",(b,))==[("QUEUED",1,1,1)]
     query(c,"UPDATE ingestion_records SET disposition='DUPLICATE',canonical_tx_id=%s,reason_code='DUPLICATE_TRANSACTION' WHERE batch_id=%s AND source_row=4",(tx,b));c.commit()
     assert query(c,"SELECT status,pending FROM batch_reconciliation WHERE batch_id=%s",(b,))==[("COMPLETED",0)]
     with pytest.raises(psycopg2.Error): query(c,"UPDATE ingestion_records SET disposition='QUEUED' WHERE batch_id=%s AND source_row=2",(b,))

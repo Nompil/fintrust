@@ -1,0 +1,565 @@
+{
+  "date": "2026-10-10",
+  "baseline_commit": "3a5d97920071f586dd8ed6d38147691e0cf670ed",
+  "aws_access": "NONE_AUTHORIZED",
+  "findings": [
+    {
+      "identifier": "R1-01",
+      "description": "Strict CSV schema, complete parsing and bounded size",
+      "impact": "Shifted columns could become financial entries",
+      "failure_scenario": "Shifted columns could become financial entries",
+      "affected_components": [
+        "fintrust/release_ingest.py"
+      ],
+      "current_status": "FIXED_LOCAL",
+      "release_classification": "BLOCKER",
+      "proposed_fix": "Reject file schema drift, parse all before queueing; 1 MiB/5000 rows/32 KiB row",
+      "test_evidence_required": "tests/test_release1_end_to_end.py::test_csv_shape_quotes_bom_reorder_and_late_malformed",
+      "schema_change_needed": false
+    },
+    {
+      "identifier": "R1-02",
+      "description": "Durable first receipt clock",
+      "impact": "Retry changes future-time validation outcome",
+      "failure_scenario": "Retry changes future-time validation outcome",
+      "affected_components": [
+        "fintrust/batches.py"
+      ],
+      "current_status": "FIXED_LOCAL",
+      "release_classification": "RELEASE_1",
+      "proposed_fix": "Conditional immutable receipt marker reused on retries",
+      "test_evidence_required": "tests/test_idempotency.py; first-receipt regression",
+      "schema_change_needed": false
+    },
+    {
+      "identifier": "R1-03",
+      "description": "Trusted versioned input bucket/prefix/event",
+      "impact": "Wrong source or replacement version enters feed",
+      "failure_scenario": "Wrong source or replacement version enters feed",
+      "affected_components": [
+        "fintrust/ingest.py"
+      ],
+      "current_status": "FIXED_LOCAL",
+      "release_classification": "BLOCKER",
+      "proposed_fix": "Release 1 requires configured bucket/prefix/ObjectCreated/version",
+      "test_evidence_required": "strict intake event-boundary tests",
+      "schema_change_needed": false
+    },
+    {
+      "identifier": "R1-04",
+      "description": "Row outcome and financial commit atomicity",
+      "impact": "Ledger succeeds but batch reports a lost row",
+      "failure_scenario": "Ledger succeeds but batch reports a lost row",
+      "affected_components": [
+        "fintrust/score.py",
+        "fintrust/release_workflow.py"
+      ],
+      "current_status": "FIXED_LOCAL",
+      "release_classification": "BLOCKER",
+      "proposed_fix": "Commit hook writes outcome, review and projection outbox atomically",
+      "test_evidence_required": "mixed, concurrent and projection-failure integration tests",
+      "schema_change_needed": true
+    },
+    {
+      "identifier": "R1-05",
+      "description": "Unambiguous batch state and disjoint accounting",
+      "impact": "Publication advertised as ledger completion or duplicate double counted",
+      "failure_scenario": "Publication advertised as ledger completion or duplicate double counted",
+      "affected_components": [
+        "sql/migrations/002_operational_workflows.sql"
+      ],
+      "current_status": "FIXED_LOCAL",
+      "release_classification": "BLOCKER",
+      "proposed_fix": "QUEUED replaces PUBLISHED; terminal outcomes plus pending equal parsed total",
+      "test_evidence_required": "test_sql_reconciliation_and_terminal_immutability; mixed end-to-end test",
+      "schema_change_needed": true
+    },
+    {
+      "identifier": "R1-06",
+      "description": "Multi-error deterministic strict validation wired to worker",
+      "impact": "Invalid country, naive/future time or missing identity admitted",
+      "failure_scenario": "Invalid country, naive/future time or missing identity admitted",
+      "affected_components": [
+        "fintrust/release_contract.py",
+        "fintrust/release_workflow.py"
+      ],
+      "current_status": "FIXED_LOCAL",
+      "release_classification": "RELEASE_1",
+      "proposed_fix": "Validate strict normal feed; preserve labelled v1/v2 compatibility",
+      "test_evidence_required": "validation scenarios and worker business-rejection tests",
+      "schema_change_needed": false
+    },
+    {
+      "identifier": "R1-07",
+      "description": "Inactive/closed account admission",
+      "impact": "Closed account becomes a newly accepted transaction",
+      "failure_scenario": "Closed account becomes a newly accepted transaction",
+      "affected_components": [
+        "fintrust/score.py"
+      ],
+      "current_status": "FIXED_LOCAL",
+      "release_classification": "RELEASE_1",
+      "proposed_fix": "Account status checked under account lock after benign replay lookup",
+      "test_evidence_required": "test_unknown_inactive_and_invalid_rows_are_quarantine_not_dlq",
+      "schema_change_needed": false
+    },
+    {
+      "identifier": "R1-08",
+      "description": "Identity-content conflict is explicit",
+      "impact": "Changed values under same source ID mistaken for benign retry",
+      "failure_scenario": "Changed values under same source ID mistaken for benign retry",
+      "affected_components": [
+        "fintrust/release_workflow.py"
+      ],
+      "current_status": "FIXED_LOCAL",
+      "release_classification": "RELEASE_1",
+      "proposed_fix": "DUPLICATE_IDENTITY_CONFLICT; immutable row candidate digest",
+      "test_evidence_required": "mixed-file and changed-occurrence tests",
+      "schema_change_needed": true
+    },
+    {
+      "identifier": "R1-09",
+      "description": "Concurrent financial identity protection",
+      "impact": "Parallel replay creates financial/risk duplicates",
+      "failure_scenario": "Parallel replay creates financial/risk duplicates",
+      "affected_components": [
+        "fintrust/ledger.py",
+        "fintrust/score.py"
+      ],
+      "current_status": "VERIFIED_EXISTING",
+      "release_classification": "ALREADY_COVERED",
+      "proposed_fix": "Retain account locks, source unique index and immutable frozen results",
+      "test_evidence_required": "tests/data_quality/test_processing.py::test_concurrent_duplicates_produce_one_ledger_event",
+      "schema_change_needed": false
+    },
+    {
+      "identifier": "R1-10",
+      "description": "Genuine similar charge remains a financial entry",
+      "impact": "Amount/time dedup collapses a real second charge",
+      "failure_scenario": "Amount/time dedup collapses a real second charge",
+      "affected_components": [
+        "fintrust/score.py",
+        "fintrust/rules.py"
+      ],
+      "current_status": "VERIFIED_EXISTING",
+      "release_classification": "ALREADY_COVERED",
+      "proposed_fix": "Distinct references retained; POSSIBLE_DUPLICATE_CHARGE adds risk only",
+      "test_evidence_required": "tests/test_release1_workflows.py::test_duplicate_charge_closed_window_edges",
+      "schema_change_needed": false
+    },
+    {
+      "identifier": "R1-11",
+      "description": "Five-minute velocity and risk boundaries",
+      "impact": "Late rule drift changes risk and test expectations",
+      "failure_scenario": "Late rule drift changes risk and test expectations",
+      "affected_components": [
+        "fintrust/rules.py",
+        "docs/RELEASE1_BUSINESS_PROCESS.md"
+      ],
+      "current_status": "VERIFIED_EXISTING",
+      "release_classification": "ALREADY_COVERED",
+      "proposed_fix": "Retain >5 within closed 300-second window including current accepted event",
+      "test_evidence_required": "test_velocity_count_edges; velocity time-edge integration tests",
+      "schema_change_needed": false
+    },
+    {
+      "identifier": "R1-12",
+      "description": "Hourly velocity exploration",
+      "impact": "12 per hour incorrectly advertised as current risk rule",
+      "failure_scenario": "12 per hour incorrectly advertised as current risk rule",
+      "affected_components": [
+        "docs/RELEASE1_E2E_MANIFEST.md"
+      ],
+      "current_status": "DEFERRED",
+      "release_classification": "DEFERRED",
+      "proposed_fix": "User explicitly retained five-minute rule; hour rule is future exploration",
+      "test_evidence_required": "exploratory 10/11/12 spread over hour tests",
+      "schema_change_needed": false
+    },
+    {
+      "identifier": "R1-13",
+      "description": "Explainable frozen rule version",
+      "impact": "Result lacks version/config explanation",
+      "failure_scenario": "Result lacks version/config explanation",
+      "affected_components": [
+        "fintrust/rules.py",
+        "fintrust/score.py"
+      ],
+      "current_status": "FIXED_LOCAL",
+      "release_classification": "RELEASE_1",
+      "proposed_fix": "Explicit rule version plus immutable scoring config/reasons",
+      "test_evidence_required": "existing frozen replay and rule tests",
+      "schema_change_needed": false
+    },
+    {
+      "identifier": "R1-14",
+      "description": "Review API with identity/version/history",
+      "impact": "Concurrent/stale analyst edits overwrite audit or financial facts",
+      "failure_scenario": "Concurrent/stale analyst edits overwrite audit or financial facts",
+      "affected_components": [
+        "fintrust/workflow_api.py",
+        "sql/migrations/002_operational_workflows.sql"
+      ],
+      "current_status": "FIXED_LOCAL",
+      "release_classification": "RELEASE_1",
+      "proposed_fix": "Scoped transitions, notes, server actor, optimistic version and immutable trigger history",
+      "test_evidence_required": "test_review_api_stale_idempotent_audit_and_ledger_immutable",
+      "schema_change_needed": true
+    },
+    {
+      "identifier": "R1-15",
+      "description": "Quarantine correction and reprocessing",
+      "impact": "Correction approves invalid data directly or loses original evidence",
+      "failure_scenario": "Correction approves invalid data directly or loses original evidence",
+      "affected_components": [
+        "fintrust/workflow_api.py",
+        "fintrust/release_workflow.py"
+      ],
+      "current_status": "FIXED_LOCAL",
+      "release_classification": "RELEASE_1",
+      "proposed_fix": "Versioned safe candidate, immutable history, durable outbox and same worker",
+      "test_evidence_required": "test_correction_api_revalidates_deduplicates_and_preserves_original",
+      "schema_change_needed": true
+    },
+    {
+      "identifier": "R1-16",
+      "description": "Request idempotency/content mismatch",
+      "impact": "Reused request ID changes prior mutation",
+      "failure_scenario": "Reused request ID changes prior mutation",
+      "affected_components": [
+        "fintrust/workflow_api.py"
+      ],
+      "current_status": "FIXED_LOCAL",
+      "release_classification": "RELEASE_1",
+      "proposed_fix": "Actor/object/payload digest must match stored request",
+      "test_evidence_required": "review and correction API replay/conflict tests",
+      "schema_change_needed": true
+    },
+    {
+      "identifier": "R1-17",
+      "description": "Business quarantine versus technical DLQ",
+      "impact": "Validation rejection retried forever as poison",
+      "failure_scenario": "Validation rejection retried forever as poison",
+      "affected_components": [
+        "fintrust/release_workflow.py",
+        "fintrust/score.py"
+      ],
+      "current_status": "FIXED_LOCAL",
+      "release_classification": "RELEASE_1",
+      "proposed_fix": "Version 3 business-invalid rows acknowledge only after evidence and outcome commit",
+      "test_evidence_required": "unknown/inactive/future tests; FIFO partial failure tests",
+      "schema_change_needed": false
+    },
+    {
+      "identifier": "R1-18",
+      "description": "FIFO partial retry and DLQ limit",
+      "impact": "Later FIFO records ACK after preceding failure",
+      "failure_scenario": "Later FIFO records ACK after preceding failure",
+      "affected_components": [
+        "fintrust/score.py",
+        "infrastructure/processing.py"
+      ],
+      "current_status": "VERIFIED_EXISTING",
+      "release_classification": "ALREADY_COVERED",
+      "proposed_fix": "Stop at first failure, return unprocessed IDs; maxReceiveCount=5",
+      "test_evidence_required": "tests/test_processing.py::test_fifo_exhausted_retries_move_to_dlq",
+      "schema_change_needed": false
+    },
+    {
+      "identifier": "R1-19",
+      "description": "Controlled operator redrive",
+      "impact": "Unbounded redrive produces endless poison replay",
+      "failure_scenario": "Unbounded redrive produces endless poison replay",
+      "affected_components": [
+        "docs/RELEASE1_OPERATIONS.md"
+      ],
+      "current_status": "DOCUMENTED_LOCAL_GATE",
+      "release_classification": "RELEASE_1",
+      "proposed_fix": "Bounded inspected incident IDs, corrected root cause, max 3 operator cycles; no automatic redrive",
+      "test_evidence_required": "FIFO replay/poison tests; live redrive deferred until AWS approval",
+      "schema_change_needed": false
+    },
+    {
+      "identifier": "R1-20",
+      "description": "RDS-authoritative projection recovery",
+      "impact": "RDS commit followed by Dynamo failure appears lost or rescored",
+      "failure_scenario": "RDS commit followed by Dynamo failure appears lost or rescored",
+      "affected_components": [
+        "fintrust/release_workflow.py",
+        "fintrust/dynamo.py"
+      ],
+      "current_status": "FIXED_LOCAL",
+      "release_classification": "RELEASE_1",
+      "proposed_fix": "Projection outbox and frozen-result rebuild; conflict fails closed",
+      "test_evidence_required": "test_partial_batch_and_dynamo_failure_after_sql_retries",
+      "schema_change_needed": true
+    },
+    {
+      "identifier": "R1-21",
+      "description": "Conservative logical alert delivery",
+      "impact": "SES timeout causes duplicate automatic email",
+      "failure_scenario": "SES timeout causes duplicate automatic email",
+      "affected_components": [
+        "fintrust/alert.py",
+        "fintrust/alert_delivery.py"
+      ],
+      "current_status": "VERIFIED_EXISTING",
+      "release_classification": "ALREADY_COVERED",
+      "proposed_fix": "Retain PENDING/SENDING/SENT/FAILED/UNKNOWN; RETRYING is an operational label, not permission to reclaim UNKNOWN",
+      "test_evidence_required": "tests/data_quality/test_processing.py::test_uncertain_ses_response_blocks_duplicate_delivery; stream delivery tests",
+      "schema_change_needed": false
+    },
+    {
+      "identifier": "R1-22",
+      "description": "Backend authentication and account/role authorization",
+      "impact": "Header role spoof or direct endpoint bypasses UI restrictions",
+      "failure_scenario": "Header role spoof or direct endpoint bypasses UI restrictions",
+      "affected_components": [
+        "fintrust/auth.py",
+        "fintrust/api.py",
+        "fintrust/workflow_api.py"
+      ],
+      "current_status": "FIXED_LOCAL",
+      "release_classification": "BLOCKER",
+      "proposed_fix": "Fail-closed hashed local opaque tokens; assigned accounts checked by backend",
+      "test_evidence_required": "authentication and object-scope API tests",
+      "schema_change_needed": false
+    },
+    {
+      "identifier": "R1-23",
+      "description": "Mass assignment, filters, pagination and safe errors",
+      "impact": "Client changes amount/reviewer or injects unbounded SQL",
+      "failure_scenario": "Client changes amount/reviewer or injects unbounded SQL",
+      "affected_components": [
+        "fintrust/workflow_api.py",
+        "fintrust/api.py"
+      ],
+      "current_status": "FIXED_LOCAL",
+      "release_classification": "RELEASE_1",
+      "proposed_fix": "Exact mutation fields, bound SQL, max100 workflow pages, safe errors/request IDs",
+      "test_evidence_required": "review mass-assignment/filter/page tests; existing API error tests",
+      "schema_change_needed": false
+    },
+    {
+      "identifier": "R1-24",
+      "description": "Minimal analyst frontend and scoped reporting",
+      "impact": "Designed review/correction pages cannot operate",
+      "failure_scenario": "Designed review/correction pages cannot operate",
+      "affected_components": [
+        "frontend/release1.html",
+        "frontend/release1.js",
+        "fintrust/workflow_api.py"
+      ],
+      "current_status": "VERIFIED_LOCAL_BROWSER",
+      "release_classification": "RELEASE_1",
+      "proposed_fix": "Local login, eleven views/actions, pagination, current status, version conflict handling, audit details",
+      "test_evidence_required": "HTTP contract tests; browser verification still required",
+      "schema_change_needed": false
+    },
+    {
+      "identifier": "R1-25",
+      "description": "Ordered migration tracking and drift detection",
+      "impact": "Rerun/partial migration or source/catalog drift silently passes",
+      "failure_scenario": "Rerun/partial migration or source/catalog drift silently passes",
+      "affected_components": [
+        "fintrust/migrations.py"
+      ],
+      "current_status": "FIXED_LOCAL",
+      "release_classification": "RELEASE_1",
+      "proposed_fix": "Local-only transactional ordered checksum/catalog tracking; 001 unchanged",
+      "test_evidence_required": "test_migration_order_rerun_and_catalog_drift; fresh/legacy/order/rollback tests",
+      "schema_change_needed": true
+    },
+    {
+      "identifier": "R1-26",
+      "description": "PostgreSQL 16 and least-privilege service-role gate",
+      "impact": "Local PG18 owner success mistaken for target PG16 service-role success",
+      "failure_scenario": "Local PG18 owner success mistaken for target PG16 service-role success",
+      "affected_components": [
+        "infrastructure/rds/release1_permissions.sql",
+        ".github/workflows/ci.yml"
+      ],
+      "current_status": "BLOCKED_EXTERNAL_VERIFICATION",
+      "release_classification": "BLOCKER",
+      "proposed_fix": "Dedicated PG16 administrator tests and Linux CI on exact new source, separately approved push",
+      "test_evidence_required": "New migration/privilege tests must pass on PG16; prior runner CI is not evidence for changed 002",
+      "schema_change_needed": true
+    },
+    {
+      "identifier": "R1-27",
+      "description": "Lambda connection/concurrency safety",
+      "impact": "Connection storm or orphaned transaction",
+      "failure_scenario": "Connection storm or orphaned transaction",
+      "affected_components": [
+        "fintrust/db.py",
+        "fintrust/score.py",
+        "infrastructure/processing.py"
+      ],
+      "current_status": "VERIFIED_EXISTING",
+      "release_classification": "ALREADY_COVERED",
+      "proposed_fix": "Connection cleanup/10-second connect timeout; existing disabled deployment and bounded future concurrency",
+      "test_evidence_required": "database failure/retry tests; infrastructure concurrency tests",
+      "schema_change_needed": false
+    },
+    {
+      "identifier": "R1-28",
+      "description": "Safe S3 evidence and native dependency release gate",
+      "impact": "KMS failure acknowledged or Windows wheel deployed",
+      "failure_scenario": "KMS failure acknowledged or Windows wheel deployed",
+      "affected_components": [
+        "fintrust/quarantine.py",
+        "tools/verify_lambda_linux.py"
+      ],
+      "current_status": "VERIFIED_EXISTING",
+      "release_classification": "ALREADY_COVERED",
+      "proposed_fix": "Allowlisted safe evidence; KMS errors retry; Linux artifact source/import verification",
+      "test_evidence_required": "existing hardened-release and migration package CI evidence; new-source package not yet verified",
+      "schema_change_needed": false
+    },
+    {
+      "identifier": "R1-29",
+      "description": "Operational metrics, backlog visibility and runbooks",
+      "impact": "Financial completion masks projection/review backlog or zero-row file",
+      "failure_scenario": "Financial completion masks projection/review backlog or zero-row file",
+      "affected_components": [
+        "fintrust/workflow_api.py",
+        "fintrust/release_ingest.py",
+        "docs/RELEASE1_OPERATIONS.md"
+      ],
+      "current_status": "FIXED_LOCAL",
+      "release_classification": "RELEASE_1",
+      "proposed_fix": "Scoped metrics endpoint, failed zero-row intake, explicit cloud metrics/alarm runbook",
+      "test_evidence_required": "zero-row and projection-backlog tests",
+      "schema_change_needed": false
+    },
+    {
+      "identifier": "R1-30",
+      "description": "Governance and retention truthfulness",
+      "impact": "Designed lifecycle or PII policy presented as implemented",
+      "failure_scenario": "Designed lifecycle or PII policy presented as implemented",
+      "affected_components": [
+        "docs/RELEASE1_OPERATIONS.md"
+      ],
+      "current_status": "DOCUMENTED_LOCAL_GATE",
+      "release_classification": "RELEASE_1",
+      "proposed_fix": "Synthetic only; safe fields; explicit SQL audit retention versus deployed S3 lifecycle status",
+      "test_evidence_required": "existing governance docs and quarantine tests; cloud retention not re-audited",
+      "schema_change_needed": false
+    },
+    {
+      "identifier": "R1-31",
+      "description": "Runtime/schema rollout ordering",
+      "impact": "Version 3 messages reach unmigrated worker or triggers activate early",
+      "failure_scenario": "Version 3 messages reach unmigrated worker or triggers activate early",
+      "affected_components": [
+        "docs/RELEASE1_OPERATIONS.md"
+      ],
+      "current_status": "DOCUMENTED_LOCAL_GATE",
+      "release_classification": "BLOCKER",
+      "proposed_fix": "PG16->freeze->backend/UI/E2E->approved preflight/snapshot/001/002/grants->new runtime->smoke->activation->triggers",
+      "test_evidence_required": "compatibility test and protected 001/artifact checksum tests",
+      "schema_change_needed": false
+    },
+    {
+      "identifier": "R1-32",
+      "description": "Actual external CSV A/B acceptance evidence",
+      "impact": "Invented fixtures mistaken for the prepared downloaded CSVs",
+      "failure_scenario": "Invented fixtures mistaken for the prepared downloaded CSVs",
+      "affected_components": [
+        "docs/RELEASE1_E2E_MANIFEST.md"
+      ],
+      "current_status": "PENDING_EXTERNAL_FIXTURE_ONLY",
+      "release_classification": "BLOCKER",
+      "proposed_fix": "Scenario manifest now; import exact user artifacts later, record hashes and concrete expected rows",
+      "test_evidence_required": "Actual A/B files are absent; generated scenario tests do not prove their contents",
+      "schema_change_needed": false
+    },
+    {
+      "identifier": "R1-33",
+      "description": "Cloud federation/Cognito and production identity management",
+      "impact": "Local token integration claimed as production federated identity",
+      "failure_scenario": "Local token integration claimed as production federated identity",
+      "affected_components": [
+        "docs/RELEASE1_OPERATIONS.md"
+      ],
+      "current_status": "DEFERRED",
+      "release_classification": "DEFERRED",
+      "proposed_fix": "No Cognito deployment; production identity issuer separately approved",
+      "test_evidence_required": "Local authentication tested; cloud federation future scope",
+      "schema_change_needed": false
+    },
+    {
+      "identifier": "R1-34",
+      "description": "Multi-region/HA/autoscaling and RDS Proxy",
+      "impact": "Costly maturity architecture added before demo need",
+      "failure_scenario": "Costly maturity architecture added before demo need",
+      "affected_components": [
+        "docs/RELEASE1_OPERATIONS.md"
+      ],
+      "current_status": "DEFERRED",
+      "release_classification": "DEFERRED",
+      "proposed_fix": "Keep Single-AZ/no NAT/no proxy/current region",
+      "test_evidence_required": "Existing architecture and stage cost plan",
+      "schema_change_needed": false
+    },
+    {
+      "identifier": "R1-35",
+      "description": "Refund/reversal/chargeback ledger semantics",
+      "impact": "Negative payment coerced into normal debit",
+      "failure_scenario": "Negative payment coerced into normal debit",
+      "affected_components": [
+        "fintrust/release_contract.py"
+      ],
+      "current_status": "DEFERRED",
+      "release_classification": "DEFERRED",
+      "proposed_fix": "Reject with UNSUPPORTED_FINANCIAL_OPERATION; no accounting invention",
+      "test_evidence_required": "reference validation scenarios",
+      "schema_change_needed": false
+    },
+    {
+      "identifier": "R1-36",
+      "description": "FX aggregation and actual balance accounting",
+      "impact": "Cross-currency totals presented as money balance",
+      "failure_scenario": "Cross-currency totals presented as money balance",
+      "affected_components": [
+        "fintrust/workflow_api.py",
+        "sql/monthly_summary.sql"
+      ],
+      "current_status": "DEFERRED",
+      "release_classification": "DEFERRED",
+      "proposed_fix": "Group currency; label net movement from zero; no FX/balance update",
+      "test_evidence_required": "existing report tests and scoped report API tests",
+      "schema_change_needed": false
+    },
+    {
+      "identifier": "R1-37",
+      "description": "Automatic ambiguous SES reclamation",
+      "impact": "SENDING/UNKNOWN blindly retried",
+      "failure_scenario": "SENDING/UNKNOWN blindly retried",
+      "affected_components": [
+        "fintrust/alert_delivery.py"
+      ],
+      "current_status": "DEFERRED",
+      "release_classification": "DEFERRED",
+      "proposed_fix": "Manual provider evidence required; do not add unsafe RETRYING transition",
+      "test_evidence_required": "uncertain SES tests",
+      "schema_change_needed": false
+    },
+    {
+      "identifier": "R1-38",
+      "description": "New-source Linux runtime package verification",
+      "impact": "Old verified ZIP presented as matching changed Release 1 source",
+      "failure_scenario": "Old verified ZIP presented as matching changed Release 1 source",
+      "affected_components": [
+        "tools/package_hardened_lambda.py",
+        ".github/workflows/ci.yml"
+      ],
+      "current_status": "BLOCKED_EXTERNAL_VERIFICATION",
+      "release_classification": "BLOCKER",
+      "proposed_fix": "Keep historical ZIP unchanged; separately approved CI builds/verifies new source",
+      "test_evidence_required": "New exact-source Linux CPython3.12 import/source-binding gate",
+      "schema_change_needed": false
+    }
+  ],
+  "verification_authorization": "Focused origin/main push and disposable PostgreSQL 16 CI approved; no AWS actions"
+}

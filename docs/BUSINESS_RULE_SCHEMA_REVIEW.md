@@ -1,3 +1,8 @@
+> 2026-10-10 continuation: local gap closure implements the review/correction and
+> strict runtime contract. See [gap register](RELEASE1_GAP_REGISTER.md) and
+> [operations/release gates](RELEASE1_OPERATIONS.md). This earlier review is
+> historical design evidence, not a claim of new AWS/PG16 verification.
+
 # FinTrust first-release business-rule and schema review
 
 Review date: 2026-10-09 (Africa/Johannesburg). Source checkpoint: `a136467`.

@@ -269,3 +269,10 @@ def test_unversioned_object_replacement_changes_legacy_identity(monkeypatch):
         monkeypatch.setattr(ingest.s3, "get_object", lambda **kw: {"Body": io.BytesIO(b"data"), "ETag": etag})
         ingest.lambda_handler({"Records": [{"s3": {"bucket": {"name": "bucket"}, "object": {"key": "raw/a.csv"}}}]}, None)
     assert sources[0] == sources[1] and sources[0] != sources[2]
+
+
+@pytest.fixture(autouse=True)
+def authenticated_test_caller(monkeypatch):
+    from fintrust import auth
+    accounts=tuple("20000000-0000-4000-8000-00000000000"+str(i) for i in range(1,6))
+    monkeypatch.setattr(auth,"authenticate",lambda:auth.Principal("test-admin","Admin",accounts))

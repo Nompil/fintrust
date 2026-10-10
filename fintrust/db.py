@@ -27,6 +27,7 @@ def get_connection():
         user=cfg["db_user"],
         password=password,
         connect_timeout=10,
+        options="-c statement_timeout=20000 -c lock_timeout=5000 -c idle_in_transaction_session_timeout=20000",
         **ssl_options,
         port=cfg["db_port"],
     )

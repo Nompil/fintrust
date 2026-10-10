@@ -228,3 +228,10 @@ def test_real_ingestion_retains_source_key(prepared_database_url, monkeypatch):
         with psycopg2.connect(prepared_database_url) as connection:
             with connection.cursor() as cursor:
                 cursor.execute('DELETE FROM transactions WHERE raw_file=%s', (source,))
+
+
+@pytest.fixture(autouse=True)
+def authenticated_test_caller(monkeypatch):
+    from fintrust import auth
+    accounts=tuple("20000000-0000-4000-8000-00000000000"+str(i) for i in range(1,6))
+    monkeypatch.setattr(auth,"authenticate",lambda:auth.Principal("test-admin","Admin",accounts))

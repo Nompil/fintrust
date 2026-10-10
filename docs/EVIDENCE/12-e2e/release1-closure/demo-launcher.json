@@ -1,0 +1,25 @@
+{
+  "status": "PASSED",
+  "aws_access": false,
+  "real_sql": true,
+  "service_mocks": true,
+  "bind_host": "127.0.0.1",
+  "session": {
+    "http_status": 200
+  },
+  "overview": {
+    "http_status": 200
+  },
+  "workflows/batches": {
+    "http_status": 200
+  },
+  "workflows/quarantine": {
+    "http_status": 200
+  },
+  "workflows/reviews": {
+    "http_status": 200
+  },
+  "reports": {
+    "http_status": 200
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "scope": "local Release1 before approved CI",
+  "aws_access": false,
+  "historical_zip_unchanged": true,
+  "migration001_unchanged": true,
+  "local_environment": {
+    "python": "3.14.7",
+    "postgresql": "18.6",
+    "os": "Windows AMD64"
+  },
+  "completed_local_full_before_final_race_fix": {
+    "passed": 539,
+    "skipped": 1,
+    "failures": 0
+  },
+  "local_skip": "Disposable administrator-dependent service-role test; prepared mandatory PG16 CI gate",
+  "browser": {
+    "passed": 1,
+    "failures": 0,
+    "evidence": "browser/browser-result.json"
+  },
+  "demo_launcher": "demo-launcher.json",
+  "real_csv_a_b": "not imported; external fixtures pending only",
+  "regressions_caught": [
+    "SQL batch-scope alias error corrected",
+    "Concurrent batch insert secondary-unique conflict corrected; immutable receipt verified after conflict"
+  ],
+  "target_ci": "pending approved focused push; no claims until run evidence"
+}

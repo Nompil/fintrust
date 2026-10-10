@@ -78,6 +78,8 @@ jobs:
           python3.12 tools/verify_lambda_linux.py build/hardened-release/fintrust-hardened-linux-py312.zip --all-production 2>&1 | tee build/linux-verification.txt
       - name: Install approved test dependencies
         run: python3.12 -m pip install -r requirements.txt
+      - name: Verify Release 1 PostgreSQL 16 service roles
+        run: python3.12 tools/check_release1_roles_pg16.py
       - name: Run full suite with disposable PostgreSQL
         run: python3.12 -m pytest -q --junitxml=test-results/pytest.xml
       - name: Record release gate evidence
@@ -94,6 +96,7 @@ jobs:
             build/linux-verification.txt
             build/hardened-release/fintrust-hardened-linux-py312.manifest.json
             test-results/pytest.xml
+            docs/EVIDENCE/12-e2e/release1-closure/postgres16-roles.json
           if-no-files-found: error
           retention-days: 30
       - name: Publish only the verified release
@@ -107,5 +110,6 @@ jobs:
             docs/EVIDENCE/11-ci/hardened-release-linux-ci.md
             build/linux-verification.txt
             test-results/pytest.xml
+            docs/EVIDENCE/12-e2e/release1-closure/postgres16-roles.json
           if-no-files-found: error
           retention-days: 30

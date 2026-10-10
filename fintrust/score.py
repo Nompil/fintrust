@@ -24,6 +24,10 @@ class UnknownAccount(ValueError):
     """A valid job references an account absent from the authoritative ledger."""
 
 
+class InactiveAccount(UnknownAccount):
+    """Account exists but is not active/monitoring."""
+
+
 def score_transaction(record, velocity=1, config=None, *, duplicate_matches=()):
     result = evaluate(record, velocity, config, duplicate_matches=duplicate_matches)
     return {"account_id": record.get("account_id"),
@@ -32,7 +36,7 @@ def score_transaction(record, velocity=1, config=None, *, duplicate_matches=()):
             "decision": "hold" if result["risk_level"] in {"High", "Medium"} else "approve"}
 
 
-def persist_score(job):
+def persist_score(job, *, commit_hook=None):
     """Serialize per account; commit ledger, risk event and frozen result together.
 
     Retries use the original result, never rescore against changed configuration
@@ -49,10 +53,18 @@ def persist_score(job):
             if existing:
                 if existing[3] is None:
                     raise IdentityConflict("Transaction ID already exists outside the scoring pipeline")
+                if commit_hook:
+                    commit_hook(cur, existing[3], True)
                 conn.commit()
                 return existing[3]
+            if commit_hook:
+                cur.execute("SELECT status FROM accounts WHERE account_id=%s", (job["account_id"],))
+                if cur.fetchone()[0] not in {"active", "monitoring"}:
+                    raise InactiveAccount("Account is not open for ingestion")
             insert_transaction(cur, job)
             cfg = ScoringConfig.from_env()
+            if commit_hook and cfg != ScoringConfig():
+                raise ValueError("Release 1 scoring configuration differs from the frozen rule version")
             when = parse_transaction_date(job["transaction_timestamp"])
             cur.execute("SELECT count(*) FROM transactions WHERE account_id=%s AND tx_date BETWEEN %s AND %s",
                         (job["account_id"], when - timedelta(seconds=cfg.velocity_seconds), when))
@@ -80,6 +92,8 @@ def persist_score(job):
             result["risk_event_id"] = cur.fetchone()[0]
             cur.execute("INSERT INTO processed_transactions(tx_id,fingerprint,result) VALUES(%s,%s,%s)",
                         (job["transaction_id"], digest, Json(result)))
+            if commit_hook:
+                commit_hook(cur, result, False)
         conn.commit()
         return result
     except Exception:
@@ -90,6 +104,10 @@ def persist_score(job):
 
 
 def process_job(payload):
+    candidate = json.loads(payload) if isinstance(payload, str) else payload
+    if isinstance(candidate, dict) and candidate.get("schema_version") == 3:
+        from .release_workflow import process_envelope
+        return process_envelope(candidate)
     job = parse_job(payload)
     delivery = os.getenv("ALERT_DELIVERY_MODE", "direct")
     if delivery not in {"direct", "stream"}:

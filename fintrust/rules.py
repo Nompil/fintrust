@@ -71,7 +71,7 @@ def evaluate(record, velocity=1, config=None, *, duplicate_matches=()):
         rules[-1]["matching_transaction_ids"] = list(duplicate_matches)
         rules[-1]["window_seconds"] = cfg.duplicate_charge_seconds
     score = min(sum(rule["points"] for rule in rules), 100)
-    return {"score": score, "risk_level": classify_risk(score, cfg), "triggered_rules": rules}
+    return {"rule_version": "fintrust-r1-rules-2026-10-09", "score": score, "risk_level": classify_risk(score, cfg), "triggered_rules": rules}
 
 
 def classify_risk(score, config=None):

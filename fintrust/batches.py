@@ -26,6 +26,22 @@ class BatchAudit:
         self.source = {"source_bucket": source_bucket, "source_file": key,
                        "source_version": version, "source_etag": etag}
 
+    def first_receipt(self):
+        """Freeze the receipt clock before validation, including failed retries."""
+        key=self.prefix+"receipt.json"
+        try:
+            self.client.put_object(Bucket=self.bucket,Key=key,IfNoneMatch="*",
+                Body=json.dumps(self.batch).encode(),ContentType="application/json")
+        except ClientError as error:
+            if error.response["Error"]["Code"]!="PreconditionFailed": raise
+            body=self.client.get_object(Bucket=self.bucket,Key=key)["Body"]
+            try: saved=json.loads(body.read())
+            finally: body.close()
+            if saved.get("batch_id")!=self.batch["batch_id"] or saved.get("file_sha256")!=self.batch["file_sha256"]:
+                raise ValueError("Receipt identity mismatch")
+            self.batch.update(saved)
+        return self.batch
+
     def completed(self):
         # List only the exact marker prefix; a Get on an absent object can be 403
         # without unrestricted ListBucket. Never interpret AccessDenied as absent.
@@ -39,7 +55,7 @@ class BatchAudit:
             body.close()
         if result["batch_id"] != self.batch["batch_id"] or result["file_sha256"] != self.batch["file_sha256"]:
             raise ValueError("Batch marker identity mismatch")
-        if (result.get("status") != "PUBLISHED" or not isinstance(result.get("counts"), dict)
+        if (result.get("status") not in {"PUBLISHED", "QUEUED"} or not isinstance(result.get("counts"), dict)
                 or any(type(result["counts"].get(k)) is not int or result["counts"][k] < 0
                        for k in ("rows_received", "rows_valid", "rows_quarantined"))):
             raise ValueError("Invalid batch completion marker")
@@ -47,7 +63,7 @@ class BatchAudit:
 
     def record(self, status, counts=None, reason=None):
         summary = {} if counts is None else {
-            "total_rows": counts["rows_received"], "accepted_rows": counts["rows_valid"],
+            "total_rows": counts["rows_received"], "queued_rows": counts["rows_valid"],
             "duplicate_rows": counts.get("rows_duplicate", 0),
             "rejected_rows": max(0, counts["rows_quarantined"] - counts.get("rows_duplicate", 0))}
         value = {**self.batch, **self.source, **summary, "status": status, "counts": counts,
@@ -57,7 +73,7 @@ class BatchAudit:
         return value
 
     def complete(self, counts):
-        value = self.record("PUBLISHED", counts)
+        value = self.record("QUEUED", counts)
         try:
             self.client.put_object(Bucket=self.bucket, Key=self.key, IfNoneMatch="*",
                                    Body=json.dumps(value).encode(), ContentType="application/json")

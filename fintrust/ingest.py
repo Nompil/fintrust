@@ -89,6 +89,10 @@ def _load_rows(rows: list[tuple[Any, ...]]) -> list[tuple[Any, ...]]:
 def process_csv(bucket, key, raw_text, source_identity=None, *, queue_url=None, version=None,
                 etag=None, check_accounts=True, track_batches=False, file_bytes=None, source_filename=None):
     payload = file_bytes if file_bytes is not None else raw_text.encode("utf-8")
+    if os.getenv("FINTRUST_RELEASE1")=="1":
+        if not queue_url: raise RuntimeError("Release 1 intake requires the FIFO worker path")
+        from .release_ingest import publish
+        return publish(s3,sqs,queue_url,bucket,key,payload,version=version,etag=etag)
     if len(payload) > MAX_FILE_BYTES:
         raise ValueError("CSV exceeds the 1 MiB file limit")
     if file_bytes is not None and payload.decode("utf-8-sig") != raw_text:
@@ -96,6 +100,7 @@ def process_csv(bucket, key, raw_text, source_identity=None, *, queue_url=None, 
     batch = metadata(bucket, payload)
     audit = BatchAudit(s3, os.getenv("QUARANTINE_BUCKET", bucket), bucket, key, batch, version, etag) if track_batches else None
     if audit:
+        audit.first_receipt()
         audit.source["original_filename"] = source_filename or key.rsplit("/", 1)[-1]
         completed = audit.completed()
         if completed:
@@ -246,6 +251,13 @@ def _process_record(record):
     started = perf_counter()
     bucket = record["s3"]["bucket"]["name"]
     key = unquote_plus(record["s3"]["object"]["key"])
+    if os.getenv("FINTRUST_RELEASE1")=="1":
+        if bucket!=os.environ["INPUT_BUCKET"] or not key.startswith(os.environ.get("INPUT_PREFIX","raw/")) or not key.lower().endswith(".csv"):
+            raise ValueError("Input is outside the approved CSV feed")
+        if record.get("eventName", "").split(":")[0]!="ObjectCreated":
+            raise ValueError("Only completed ObjectCreated events are accepted")
+        if not record["s3"]["object"].get("versionId"):
+            raise ValueError("Versioned input is required")
     encoded_version_id = record["s3"]["object"].get("versionId")
     version_id = encoded_version_id
     request = {"Bucket": bucket, "Key": key}

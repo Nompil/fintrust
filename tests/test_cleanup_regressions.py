@@ -94,3 +94,10 @@ def test_shared_validator_rejects_nonfinite_money(amount):
     })
     assert not valid
     assert reason == "amount must be greater than zero"
+
+
+@pytest.fixture(autouse=True)
+def authenticated_test_caller(monkeypatch):
+    from fintrust import auth
+    accounts=tuple("20000000-0000-4000-8000-00000000000"+str(i) for i in range(1,6))
+    monkeypatch.setattr(auth,"authenticate",lambda:auth.Principal("test-admin","Admin",accounts))

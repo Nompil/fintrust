@@ -76,3 +76,10 @@ def test_gateway_routes_and_restricted_invocation():
     assert any(s['Effect'] == 'Deny' for s in resources['Api']['Properties']['Policy']['Statement'])
     permissions = [v['Properties'] for v in resources.values() if v['Type'] == 'AWS::Lambda::Permission']
     assert all('SourceArn' in p and 'SourceAccount' in p for p in permissions)
+
+
+@pytest.fixture(autouse=True)
+def authenticated_test_caller(monkeypatch):
+    from fintrust import auth
+    accounts=tuple("20000000-0000-4000-8000-00000000000"+str(i) for i in range(1,6))
+    monkeypatch.setattr(auth,"authenticate",lambda:auth.Principal("test-admin","Admin",accounts))

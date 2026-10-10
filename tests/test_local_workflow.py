@@ -117,3 +117,9 @@ def test_local_api_uses_a_labelled_mock_score(practice_settings, monkeypatch):
     assert data["risk_score"] == "45"
     assert data["flags"] == ["practice_fixture"]
     assert "ttl" not in data
+
+
+@pytest.fixture(autouse=True)
+def authenticated_test_caller(monkeypatch):
+    from fintrust import auth
+    monkeypatch.setattr(auth,"authenticate",lambda:auth.Principal("test-admin","Admin",("20000000-0000-4000-8000-000000000001",)))

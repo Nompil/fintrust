@@ -102,3 +102,10 @@ def test_request_log_has_status_duration_and_request_id(caplog):
     assert records[-1]["status"] == 404
     assert records[-1]["request_id"] == response.headers["X-Request-ID"]
     assert records[-1]["duration_ms"] >= 0
+
+
+@pytest.fixture(autouse=True)
+def authenticated_test_caller(monkeypatch):
+    from fintrust import auth
+    accounts=tuple("20000000-0000-4000-8000-00000000000"+str(i) for i in range(1,6))
+    monkeypatch.setattr(auth,"authenticate",lambda:auth.Principal("test-admin","Admin",accounts))

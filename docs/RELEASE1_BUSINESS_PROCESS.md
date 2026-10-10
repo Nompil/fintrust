@@ -1,11 +1,11 @@
 # FinTrust Release 1 process and schema contract
 
 Prepared 2026-10-09 from checkpoint 49f919a and the user's Release 1 decisions.
-Status: **READY FOR REVIEW; NOT APPROVAL FOR LIVE MIGRATION OR DEPLOYMENT**.
+Status: **LOCAL RELEASE 1 IMPLEMENTATION; NOT APPROVAL FOR LIVE MIGRATION OR DEPLOYMENT**.
 The user approved minimal working analyst review and manual quarantine correction
 as release scope; refunds, reversals and chargebacks are deferred. Migration 001
-stays identity/idempotency-only. This document specifies those workflows; the
-HTTP/UI integrations are not implemented by this schema/design milestone.
+stays identity/idempotency-only. The workflows now have local backend/UI implementations and synthetic acceptance tests;
+PostgreSQL16/service-role and exact new-source Linux verification remain pending.
 
 ## Process and transaction meaning
 
@@ -51,7 +51,7 @@ at 2, not physical line number. Historical null identity data is not fabricated.
 |---|---|
 | Same identity and equal content repeated in a file | First eligible row proceeds; later occurrence DUPLICATE_ROW_IN_FILE |
 | Same source reference/account/system across files | DUPLICATE_TRANSACTION linked to canonical ledger result |
-| Changed financial content under accepted identity | TRANSACTION_IDENTITY_CONFLICT, quarantined; no overwrite |
+| Changed financial content under accepted identity | DUPLICATE_IDENTITY_CONFLICT, quarantined; no overwrite |
 | Byte-identical completed file reuploaded in same bucket | New DUPLICATE_FILE attempt, original batch unchanged; no republish |
 | Partial publication or worker/queue retry | Same occurrence/request identity, replay frozen result and external effects; not another row in business counters |
 | Similar distinct references | Both retained; potential double-charge review signal, not duplicate-data deletion |
@@ -84,7 +84,7 @@ fields stay in original source only; they are not copied into safe quarantine.
 | Bad country syntax | INVALID_COUNTRY |
 | Country outside supported demo set | UNSUPPORTED_COUNTRY; ZA, US, GB, KE, DE, FR only in this proposed bounded contract |
 | Currency outside supported set | UNSUPPORTED_CURRENCY; ZAR, USD, EUR, GBP, KES |
-| Missing/oversize source identity or disagreeing aliases | MISSING_SOURCE_IDENTITY / INVALID_SOURCE_IDENTITY / TRANSACTION_IDENTITY_CONFLICT |
+| Missing/oversize source identity or disagreeing aliases | MISSING_SOURCE_IDENTITY / INVALID_SOURCE_IDENTITY / DUPLICATE_IDENTITY_CONFLICT |
 | Supplied invalid internal UUID | INVALID_TRANSACTION_ID |
 | Unlabelled extra CSV value/nontext contract field | MALFORMED_ROW |
 
@@ -215,7 +215,7 @@ linked to the original; the original batch is never rewritten to erase rejects.
 |---|---|
 | RECEIVED | file/attempt registered, parsed total not yet known |
 | PROCESSING | known total, publication not complete, records pending |
-| PUBLISHED (UI: queued) | publication complete, final ledger outcomes still pending |
+| QUEUED (UI: queued) | publication complete, final ledger outcomes still pending |
 | COMPLETED | every row resolved, pending0 and failed_technical0; may include business quarantine/duplicates |
 | PARTIAL | some business outcomes resolved but file/technical failure remains |
 | FAILED | file failure before any business resolution, or only technical failures |
@@ -268,7 +268,7 @@ customer identifiers/contact details exposed merely because SQL contains them.
 | Risk events | immutable event score/reasons/config/version, manual/automatic distinction, matched charge links |
 | Review queue | risk_reviews joined event/transaction; GET list/detail; POST transition with expected version/request_id |
 | Quarantine | case/status/safe payload/source detail; POST correction or rejection with request_id |
-| Batches | batch_reconciliation, attempts and record outcomes; original vs correction links; no PUBLISHED=accepted label |
+| Batches | batch_reconciliation, attempts and record outcomes; original vs correction links; no QUEUED=accepted label |
 | Reports | existing UTC/month/per-currency movement; controlled list/download and separate risk/review summaries |
 | Account history | ledger plus authorized review/delivery links, monetary movement labelled accurately |
 | Admin/Audit | append-only review/correction history, pending/failed record recovery and delivery reconciliation receipts |
@@ -352,3 +352,48 @@ Final focused run: **94 passed, 0 failed, 0 skipped**. Evidence:
 All isolated workflow schemas were removed; migration001 and verified application
 ZIP hashes are unchanged. These are local design/schema and existing pipeline
 checks, not proof of production API/RBAC/CSV execution or live deployment.
+
+
+## End-to-end closure continuation ? 2026-10-10
+
+The authoritative implementation/status evidence is in `RELEASE1_GAP_REGISTER`
+(JSON full fields; Markdown review table), `RELEASE1_OPERATIONS.md`,
+`RELEASE1_E2E_MANIFEST.md` and `RELEASE1_FAILURE_INJECTION.md`. Earlier design-only
+statements in this document are superseded where the continuation implements them.
+The executable strict contract is `fintrust/release_contract.py`; the tools import
+is compatibility for earlier tests. Normal Release1 intake/worker is version3;
+legacy teaching/v1/v2 processing remains explicitly distinct.
+
+Batch states are exactly RECEIVED, PROCESSING, QUEUED, COMPLETED, PARTIAL, FAILED.
+Whole-file replay is an attempt disposition DUPLICATE_FILE, not a second financial
+batch. Each parsed occurrence belongs to exactly one disjoint terminal outcome or
+pending: received=accepted+quarantined+duplicate+technical_failed+pending. COMPLETED
+means the financial/business partition is complete; pending projections/alerts
+are operational backlogs and remain visible separately. Failed infrastructure is
+not reclassified as accepted merely to reconcile totals.
+
+**User freeze confirmed:** HIGH_VELOCITY remains >5 accepted transactions in the
+closed preceding300 seconds including the current accepted transaction. A 10/11/12
+one-hour scenario is deferred exploration, not a new rule. No risk threshold was
+changed. Rule version `fintrust-r1-rules-2026-10-09` and config are frozen into each
+new accepted result. Strict Release1 refuses a changed environment rule config
+rather than labelling altered thresholds with the same version.
+
+Migration002 now has immutable candidate/request digests, review trigger history,
+quarantine correction/projection outboxes and durable local migration tracking.
+No columns in migration001 changed. The local migration harness is restricted to
+loopback dedicated test DBs; it is not approval or implementation of the live002
+runner. Proposed workflow grants use a separate history-writer non-login owner
+and deny API financial/history writes. PostgreSQL16 privilege proof is a hard gate.
+
+Review/correction backend and `/release1` local workspace are implemented and
+browser-tested with synthetic data. Actor, role and account scope come from the
+backend's local hashed-token registry, never browser fields. Cognito/federation is
+not deployed. Only Admin may inspect/correct unassigned-account cases; corrected
+values must target an assigned account and must pass the same worker pipeline.
+The original record and all previous correction/review history remain immutable.
+No direct approve-into-ledger action exists.
+
+The actual named CSV A/B files remain external and unexecuted. Constructed cases
+verify the scenario contract; do not present them as evidence for unseen files.
+No AWS access, schema mutation, deployment, trigger activation or Git push occurred.

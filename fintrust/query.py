@@ -58,10 +58,12 @@ def get_accounts() -> list[dict[str, Any]]:
     return run_query("SELECT account_id::text, account_type, status FROM accounts ORDER BY account_id")
 
 
-def get_overview() -> dict:
-    counts = run_query("SELECT count(*) AS transactions, count(DISTINCT account_id) AS active_accounts, count(*) FILTER (WHERE cross_border) AS cross_border FROM transactions")[0]
-    totals = run_query("SELECT currency, count(*) AS transactions, sum(amount)::text AS gross_amount FROM transactions GROUP BY currency ORDER BY currency")
-    trend = run_query("SELECT (tx_date AT TIME ZONE 'UTC')::date::text AS day, count(*) AS transactions FROM transactions GROUP BY 1 ORDER BY 1")
+def get_overview(account_scope=None) -> dict:
+    scope=" WHERE account_id=ANY(%s::uuid[])" if account_scope is not None else ""
+    params=(list(account_scope),) if account_scope is not None else ()
+    counts = run_query("SELECT count(*) AS transactions, count(DISTINCT account_id) AS active_accounts, count(*) FILTER (WHERE cross_border) AS cross_border FROM transactions"+scope,params)[0]
+    totals = run_query("SELECT currency, count(*) AS transactions, sum(amount)::text AS gross_amount FROM transactions"+scope+" GROUP BY currency ORDER BY currency",params)
+    trend = run_query("SELECT (tx_date AT TIME ZONE 'UTC')::date::text AS day, count(*) AS transactions FROM transactions"+scope+" GROUP BY 1 ORDER BY 1",params)
     return {"counts": counts, "totals_by_currency": totals, "daily_transactions": trend}
 
 

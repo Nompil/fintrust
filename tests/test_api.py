@@ -1,3 +1,4 @@
+import pytest
 from datetime import datetime, timezone
 from decimal import Decimal
 
@@ -92,3 +93,9 @@ def test_health_returns_degraded_when_database_is_unavailable(monkeypatch):
     assert response.json["data"] == {"db": "error"}
     assert connection.rolled_back is True
     assert connection.closed is True
+
+
+@pytest.fixture(autouse=True)
+def authenticated_test_caller(monkeypatch):
+    from fintrust import auth
+    monkeypatch.setattr(auth,"authenticate",lambda:auth.Principal("test-admin","Admin",("20000000-0000-4000-8000-000000000001",)))

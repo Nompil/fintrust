@@ -73,3 +73,47 @@ access. Existing routes above are unchanged. New list/detail and state-changing
 routes are designed, not implemented; require verified actor/role, expected review
 version and durable request idempotency. No frontend button may imply working
 review/reprocessing until those backend contracts are implemented and tested.
+
+
+## Release1 local implemented contract (2026-10-10)
+
+All `/v1` data/mutations require `Authorization: Bearer <local opaque token>`;
+only `/v1/health` and static pages are public. Token registry is server-controlled,
+hash-only, ignored, and assigns subject/role/account scope. No X-Role/X-Subject or
+JSON actor values confer authority. Cloud federation is deferred, not deployed.
+Errors return safe messages/status/request IDs; malformed exact-field mutations400,
+unauthenticated401, denied403, inaccessible transaction404, stale/reused request409.
+All SQL filters are bound; duplicate/unsupported parameters fail400.
+
+| Endpoint | Permission / contract |
+|---|---|
+| GET /v1/session | Authenticated own subject/role/scopes |
+| GET /v1/accounts, /v1/overview | Assigned accounts only, no customer PII |
+| GET /v1/workflows/{transactions,risk-events,reviews,quarantine,batches,audit} | Bounded limit1..100, offset0..100000, validated status/account; audit Admin/Auditor only |
+| GET /v1/transactions/{UUID} | Assigned account financial facts, frozen score, review audit and separate SQL/cloud alert claims |
+| GET /v1/quarantine/{UUID} | Scoped exact versioned safe candidate/source and correction history (max100); unassigned case Admin only |
+| POST /v1/reviews/{event}/transition | Admin/Analyst: exact request_id UUID, expected_version integer>0, status, notes<=2000, resolution_code; backend actor/assignment/version enforced |
+| POST /v1/quarantine/{UUID}/corrections | Admin/Analyst: exact request_id, action RESUBMIT/REJECT, notes, candidate; no mass assignment or direct ledger approval |
+| GET /v1/reports | Assigned-account totals/net movement grouped by currency, not balances/FX |
+| GET /v1/metrics | Admin/Auditor scoped financial/review/projection counts; global feed health Admin only |
+
+Allowed review graph: OPEN->UNDER_REVIEW->CLEARED/CONFIRMED_RISK/ESCALATED;
+ESCALATED->UNDER_REVIEW. Reopening CLEARED/CONFIRMED is Admin-only. Terminal codes
+VALID_ACTIVITY/CONFIRMED_SUSPICIOUS/SPECIALIST_REVIEW must match. Client sends no
+reviewer identity or reviewed timestamp. Versioned trigger history cannot be
+rewritten, and request replay must match the original actor/object/content digest.
+
+Corrections preserve original evidence, create a safe versioned replacement and
+new occurrence with durable worker outbox, then rerun strict validation, trusted
+identity checks and scoring. A repeated invalid correction quarantines again;
+a replay against existing financial identity resolves DUPLICATE. Infrastructure
+failure remains PENDING for safe worker retry. The local callable drain path and
+future private-worker invocation gate are described in RELEASE1_OPERATIONS.md.
+
+UI is `/release1`: local Login, Dashboard, Transactions/Detail, Risk Events, Review
+Queue, Quarantine, Ingestion Batches, Reports, Account History, Admin/Audit. Loading
+clears stale values; later responses cannot overwrite a newer page/detail request.
+Role-based button hiding complements backend checks. Pagination is bounded; each
+page is a current snapshot and refresh is required after a409 version conflict.
+Ledger amount/date/account cannot be changed through any workflow endpoint.
+The old public page is a teaching shell; it does not bypass API authentication.

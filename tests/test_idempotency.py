@@ -73,7 +73,7 @@ def test_exact_file_replay_renamed_or_new_version_is_audited_without_republicati
     assert len(messages) == 1
     audits = records(client, "quarantine/batches/")
     assert any(a["status"] == "DUPLICATE_FILE" and a["source_file"] == "raw/renamed.csv" for a in audits)
-    assert any(a["status"] == "PUBLISHED" and a["counts"]["rows_received"] == 1 for a in audits)
+    assert any(a["status"] == "QUEUED" and a["counts"]["rows_received"] == 1 for a in audits)
 
 
 def test_repeated_identity_within_file_has_structured_reason(transport):
@@ -112,7 +112,7 @@ def test_partial_publish_never_marks_complete_and_retry_reuses_ids(transport, mo
     text = csv_text([row()])
     with pytest.raises(RuntimeError, match="publish"):
         publish(text)
-    assert not any(r["status"] == "PUBLISHED" for r in records(client, "quarantine/batches/"))
+    assert not any(r.get("status") == "QUEUED" for r in records(client, "quarantine/batches/"))
     monkeypatch.setattr(ingest.sqs, "send_message_batch", actual)
     publish(text)
     assert captured[0]["MessageDeduplicationId"] == messages[0]["MessageDeduplicationId"]

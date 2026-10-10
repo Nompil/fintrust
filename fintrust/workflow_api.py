@@ -1,0 +1,213 @@
+"""Bounded, scoped analyst workflow service. No financial UPDATE endpoints."""
+import hashlib
+import json
+import uuid
+from datetime import datetime, timezone
+from psycopg2.extras import RealDictCursor, Json
+from . import release_workflow as workflow
+from .release_contract import review_transition
+from .quarantine import FIELDS
+
+class Conflict(ValueError): pass
+class NotFound(LookupError): pass
+
+def connection(): return workflow.get_connection()
+
+def _query(statement,params=()):
+    conn=connection()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute(statement,params);return [dict(x) for x in cur.fetchall()]
+    finally: conn.close()
+
+def page_args(args,allowed=()):
+    if hasattr(args,"getlist") and any(len(args.getlist(k))!=1 for k in args): raise ValueError("Duplicate filter")
+    if set(args)-{"limit","offset",*allowed}: raise ValueError("Unsupported filter")
+    try: limit=int(args.get("limit",25));offset=int(args.get("offset",0))
+    except ValueError: raise ValueError("Pagination must be integer") from None
+    if not 1<=limit<=100 or not 0<=offset<=100000: raise ValueError("Pagination outside allowed range")
+    return limit,offset
+
+def list_page(kind,principal,args):
+    limit,offset=page_args(args,{"status","account_id"})
+    scope=list(principal.accounts)
+    if args.get("account_id"): scope=[principal.account(args["account_id"])]
+    selects={
+      "transactions":("SELECT t.*,p.result AS risk FROM transactions t LEFT JOIN processed_transactions p USING(tx_id)","t.account_id=ANY(%s::uuid[])","t.tx_date DESC,t.tx_id DESC"),
+      "risk-events":("SELECT r.*,t.account_id,w.review_status,w.version FROM risk_events r JOIN transactions t USING(tx_id) LEFT JOIN risk_reviews w USING(risk_event_id)","t.account_id=ANY(%s::uuid[])","r.risk_event_id DESC"),
+      "reviews":("SELECT w.*,r.tx_id,r.risk_score,t.account_id FROM risk_reviews w JOIN risk_events r USING(risk_event_id) JOIN transactions t USING(tx_id)","t.account_id=ANY(%s::uuid[])","w.created_at,w.risk_event_id"),
+      "quarantine":("SELECT q.* FROM quarantine_workflow q","(q.candidate_account_id=ANY(%s::uuid[]) OR (%s AND NOT EXISTS(SELECT 1 FROM accounts a WHERE a.account_id=q.candidate_account_id)))","q.quarantined_at,q.quarantine_id"),
+      "batches":("SELECT b.*,r.* FROM ingestion_batches b JOIN batch_reconciliation r USING(batch_id)","(NOT EXISTS(SELECT 1 FROM ingestion_records i LEFT JOIN transactions t ON t.tx_id=i.canonical_tx_id LEFT JOIN quarantine_cases q ON q.batch_id=i.batch_id AND q.source_row=i.source_row WHERE i.batch_id=b.batch_id AND (COALESCE(t.account_id,q.candidate_account_id) IS NULL OR NOT (COALESCE(t.account_id,q.candidate_account_id)=ANY(%s::uuid[])))) AND EXISTS(SELECT 1 FROM ingestion_records i WHERE i.batch_id=b.batch_id) OR %s)","b.received_at DESC,b.batch_id"),
+      "audit":("SELECT h.*,t.account_id FROM risk_review_history h JOIN risk_events r USING(risk_event_id) JOIN transactions t USING(tx_id)","t.account_id=ANY(%s::uuid[])","h.changed_at DESC,h.risk_event_id,h.version"),
+    }
+    if kind not in selects: raise NotFound()
+    if kind=="audit": principal.require("audit")
+    select,where,order=selects[kind];params=[scope]
+    if kind in {"quarantine","batches"}: params.append(principal.role=="Admin")
+    status=args.get("status")
+    if status:
+        valid={"reviews":{"OPEN","UNDER_REVIEW","CLEARED","CONFIRMED_RISK","ESCALATED"},"quarantine":{"OPEN","RESUBMITTED","RESOLVED","REJECTED"},"batches":{"RECEIVED","PROCESSING","QUEUED","COMPLETED","PARTIAL","FAILED"}}
+        if status not in valid.get(kind,set()): raise ValueError("Unsupported status filter")
+        field={"reviews":"w.review_status","quarantine":"q.workflow_status","batches":"r.status"}[kind]
+        where+=" AND "+field+"=%s";params.append(status)
+    rows=_query(select+" WHERE "+where+" ORDER BY "+order+" LIMIT %s OFFSET %s",tuple(params+[limit+1,offset]))
+    return {"data":rows[:limit],"meta":{"count":len(rows[:limit]),"limit":limit,"offset":offset,"has_more":len(rows)>limit}}
+
+def detail(identifier,principal):
+    identifier=str(uuid.UUID(identifier))
+    rows=_query("SELECT t.*,p.result AS risk FROM transactions t LEFT JOIN processed_transactions p USING(tx_id) WHERE t.tx_id=%s AND t.account_id=ANY(%s::uuid[])",(identifier,list(principal.accounts)))
+    if not rows: raise NotFound()
+    result=rows[0]
+    result["review_history"]=_query("SELECT h.* FROM risk_review_history h JOIN risk_events r USING(risk_event_id) WHERE r.tx_id=%s ORDER BY h.changed_at,h.version",(identifier,))
+    result["alert_delivery"]=_query("SELECT delivery_key,delivery_state,sent_at,provider_message_id FROM alerts a JOIN risk_events r USING(risk_event_id) WHERE r.tx_id=%s",(identifier,))
+    from .dynamo import get_item
+    import os
+    claim=get_item(os.environ.get("DYNAMODB_TABLE","risk_scores"),{"account_id":str(result["account_id"]),"score_date":"ALERT#"+identifier})
+    allowed=("delivery_state","risk_event_id","provider_message_id","updated_at")
+    result["cloud_alert"]={k:claim[k] for k in allowed if k in claim} if claim else {"delivery_state":"PENDING" if (result.get("risk") or {}).get("risk_level")=="High" else "NOT_REQUIRED"}
+    result["cloud_alert_note"]="SQL delivery entries are local/legacy evidence; cloud claims are read separately. SENDING/UNKNOWN require provider reconciliation."
+    return result
+
+def _body(body,fields):
+    if not isinstance(body,dict) or set(body)!=set(fields): raise ValueError("Exact mutation fields required")
+    if not isinstance(body["request_id"],str): raise ValueError("Request identity must be UUID text")
+    identifier=str(uuid.UUID(body["request_id"]))
+    notes=body["notes"]
+    if not isinstance(notes,str) or not 1<=len(notes.strip())<=2000: raise ValueError("A bounded review note is required")
+    digest=hashlib.sha256(json.dumps(body,sort_keys=True).encode()).hexdigest()
+    return identifier,digest
+
+def update_review(event,body,principal):
+    principal.require("review")
+    if type(event) is not int or event<1: raise ValueError("Invalid risk event identifier")
+    request,digest=_body(body,{"request_id","expected_version","status","notes","resolution_code"})
+    if not isinstance(body["status"],str) or body["resolution_code"] is not None and not isinstance(body["resolution_code"],str): raise ValueError("Invalid review state values")
+    if type(body["expected_version"]) is not int or body["expected_version"]<1: raise ValueError("Integer expected version required")
+    conn=connection()
+    try:
+        with conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute("SELECT w.*,t.account_id::text FROM risk_reviews w JOIN risk_events r USING(risk_event_id) JOIN transactions t USING(tx_id) WHERE w.risk_event_id=%s FOR UPDATE OF w",(event,));row=cur.fetchone()
+                if not row: raise NotFound()
+                principal.account(row["account_id"])
+                cur.execute("SELECT * FROM risk_review_history WHERE request_id=%s",(request,));prior=cur.fetchone()
+                if prior:
+                    if prior["risk_event_id"]!=event or prior["actor_subject"]!=principal.subject or prior["request_digest"]!=digest: raise Conflict("Request identifier reused")
+                    return {"risk_event_id":event,"version":prior["version"],"review_status":prior["after_status"],"replayed":True}
+                if row["version"]!=body["expected_version"]: raise Conflict("Review changed; refresh before retry")
+                review_transition(row["review_status"],body["status"],role=principal.role,notes=body["notes"],resolution_code=body["resolution_code"])
+                if row["review_status"]=="UNDER_REVIEW" and row["reviewer_subject"]!=principal.subject and principal.role!="Admin": raise PermissionError("Review is assigned to another analyst")
+                terminal=body["status"] in {"CLEARED","CONFIRMED_RISK","ESCALATED"}
+                cur.execute("""UPDATE risk_reviews SET review_status=%s,reviewer_subject=%s,reviewed_by=%s,reviewed_at=%s,
+                    review_notes=%s,resolution_code=%s,change_actor=%s,change_request_id=%s,request_digest=%s,version=version+1
+                    WHERE risk_event_id=%s RETURNING version""",
+                    (body["status"],principal.subject,principal.subject if terminal else None,datetime.now(timezone.utc) if terminal else None,
+                     body["notes"],body["resolution_code"] if terminal else None,principal.subject,request,digest,event))
+                return {"risk_event_id":event,"version":cur.fetchone()["version"],"review_status":body["status"]}
+    finally: conn.close()
+
+def correct_case(identifier,body,principal):
+    identifier=str(uuid.UUID(identifier))
+    request,digest=_body(body,{"request_id","action","notes","candidate"})
+    action=body["action"]
+    principal.require("reject_quarantine" if action=="REJECT" else "correct")
+    if not isinstance(action,str) or action not in {"RESUBMIT","REJECT"}: raise ValueError("Invalid correction action")
+    candidate=body["candidate"]
+    if action=="REJECT" and candidate is not None: raise ValueError("Rejection cannot contain replacement values")
+    if action=="RESUBMIT":
+        if not isinstance(candidate,dict) or set(candidate)-FIELDS or not all(isinstance(v,str) for v in candidate.values()):
+            raise ValueError("Only named transaction candidate fields are allowed")
+        # Corrections must target assigned real accounts; all other validation is repeated by the worker.
+        principal.account(candidate.get("account_id",""))
+    conn=connection()
+    try:
+        with conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute("SELECT quarantine_id FROM quarantine_cases WHERE quarantine_id=%s FOR UPDATE",(identifier,))
+                cur.execute("SELECT q.*,EXISTS(SELECT 1 FROM accounts a WHERE a.account_id=q.candidate_account_id) AS account_known FROM quarantine_workflow q WHERE quarantine_id=%s",(identifier,))
+                # Views with lateral joins cannot be locked: lock the immutable parent separately below.
+                row=cur.fetchone()
+                if not row: raise NotFound()
+                if row["account_known"]: principal.account(row["candidate_account_id"])
+                elif principal.role!="Admin": raise PermissionError("Unassigned account corrections require Admin")
+                cur.execute("SELECT quarantine_id FROM quarantine_cases WHERE quarantine_id=%s FOR UPDATE",(identifier,))
+                cur.execute("SELECT * FROM quarantine_corrections WHERE request_id=%s",(request,));prior=cur.fetchone()
+                if prior:
+                    if str(prior["quarantine_id"])!=identifier or prior["submitted_by"]!=principal.subject or prior["request_digest"]!=digest: raise Conflict("Request identifier reused")
+                    return {"correction_id":str(prior["correction_id"]),"status":"REPLAYED"}
+                if row["workflow_status"]!="OPEN": raise Conflict("Case is resolved or awaiting processing")
+                correction=str(uuid.uuid5(uuid.UUID(identifier),request))
+                envelope=None;key=None;version=None;batch=None
+                if action=="RESUBMIT":
+                    from .release_ingest import envelopes
+                    import os
+                    from .batches import metadata
+                    payload=json.dumps({"correction_id":correction,"candidate":candidate},sort_keys=True).encode()
+                    bucket=os.environ["QUARANTINE_BUCKET"]
+                    key="quarantine/corrections/"+correction+".json"
+                    response=workflow.score.s3.put_object(Bucket=bucket,Key=key,Body=payload,ContentType="application/json")
+                    version=response.get("VersionId")
+                    if not version: raise RuntimeError("Versioned correction evidence required")
+                    b=metadata(bucket,payload)
+                    # Different correction attempts are distinct batch occurrences, even for identical candidate values.
+                    b["batch_id"]=correction
+                    batch=b["batch_id"]
+                    envelope={"schema_version":3,"kind":"ROW","batch":b,"attempt_id":correction,"rows_received":1,
+                              "source_system":"manual-correction","source":{"bucket":bucket,"key":key,"version":version,"etag":None,"row":2},"row":candidate,"parse_error":None}
+                    cur.execute("INSERT INTO ingestion_batches(batch_id,source_system,source_bucket,file_sha256,received_at,rows_received,publication_complete) VALUES(%s,'manual-correction',%s,%s,%s,1,TRUE)",(batch,bucket,b["file_sha256"],b["ingested_at"]))
+                    cur.execute("INSERT INTO ingestion_attempts(attempt_id,batch_id,source_bucket,source_file,source_version,received_at,status) VALUES(%s,%s,%s,%s,%s,%s,'QUEUED')",(correction,batch,bucket,key,version,b["ingested_at"]))
+                    cur.execute("INSERT INTO ingestion_records(batch_id,source_row,source_attempt_id,disposition) VALUES(%s,2,%s,'QUEUED')",(batch,correction))
+                cur.execute("""INSERT INTO quarantine_corrections(correction_id,quarantine_id,request_id,request_digest,submitted_by,submitted_at,correction_notes,
+                    corrected_payload_key,corrected_payload_version,action,reprocess_batch_id,reprocess_source_row)
+                    VALUES(%s,%s,%s,%s,%s,NOW(),%s,%s,%s,%s,%s,%s)""",
+                    (correction,identifier,request,digest,principal.subject,body["notes"],key,version,action,batch,2 if batch else None))
+                if envelope: cur.execute("INSERT INTO correction_outbox(correction_id,envelope) VALUES(%s,%s)",(correction,Json(envelope)))
+                return {"correction_id":correction,"status":"RESUBMITTED" if envelope else "REJECTED"}
+    finally: conn.close()
+
+
+def report(principal,args):
+    limit,offset=page_args(args,{"account_id"})
+    scope=[principal.account(args["account_id"])] if args.get("account_id") else list(principal.accounts)
+    rows=_query("""SELECT account_id::text,currency,count(*) AS transactions,
+        sum(CASE WHEN tx_type='credit' THEN amount ELSE -amount END)::text AS net_movement,
+        sum(amount)::text AS gross_amount FROM transactions WHERE account_id=ANY(%s::uuid[])
+        GROUP BY account_id,currency ORDER BY account_id,currency LIMIT %s OFFSET %s""",(scope,limit+1,offset))
+    return {"data":rows[:limit],"meta":{"limit":limit,"offset":offset,"has_more":len(rows)>limit},"meaning":"Net movement from zero by account/currency; not current balances; no FX conversion"}
+
+
+def metrics(principal):
+    principal.require("audit")
+    scope=list(principal.accounts)
+    feeds=_query("""SELECT status,count(*) AS batches,sum(rows_received) AS rows_received,sum(accepted) AS accepted,
+        sum(quarantined) AS quarantined,sum(duplicate) AS duplicate,sum(failed_technical) AS technical_failed,
+        sum(pending) AS pending FROM batch_reconciliation GROUP BY status ORDER BY status""") if principal.role=="Admin" else []
+    return {"feed_metrics":feeds,"feed_scope":"Global feed health is Admin-only; financial/review metrics are assigned-account scoped", "projection_backlog":_query("SELECT count(*) AS pending FROM projection_outbox p JOIN transactions t USING(tx_id) WHERE p.state='PENDING' AND t.account_id=ANY(%s::uuid[])",(scope,)),"reviews":_query("""SELECT w.review_status,count(*) AS count,min(w.created_at) AS oldest
+        FROM risk_reviews w JOIN risk_events r USING(risk_event_id) JOIN transactions t USING(tx_id)
+        WHERE t.account_id=ANY(%s::uuid[]) GROUP BY w.review_status""",(scope,)),
+        "financial":_query("""SELECT count(*) AS accepted_transactions,
+        count(*) FILTER(WHERE (p.result->>'risk_level')='High') AS high_risk
+        FROM transactions t LEFT JOIN processed_transactions p USING(tx_id) WHERE t.account_id=ANY(%s::uuid[])""",(scope,)),
+        "scope":"Assigned accounts only; SQS/DLQ/SES CloudWatch metrics require separately approved cloud verification"}
+
+
+def quarantine_detail(identifier,principal):
+    identifier=str(uuid.UUID(identifier))
+    rows=_query("""SELECT q.*,EXISTS(SELECT 1 FROM accounts a WHERE a.account_id=q.candidate_account_id) AS account_known
+        FROM quarantine_workflow q WHERE quarantine_id=%s""",(identifier,))
+    if not rows: raise NotFound()
+    case=rows[0]
+    if case["account_known"]: principal.account(case["candidate_account_id"])
+    elif principal.role!="Admin": raise PermissionError("Unassigned case requires Admin")
+    import os
+    body=workflow.score.s3.get_object(Bucket=os.environ["QUARANTINE_BUCKET"],Key=case["safe_payload_key"],VersionId=case["safe_payload_version"])["Body"]
+    try: evidence=json.loads(body.read(262144))
+    finally: body.close()
+    candidate={k:v for k,v in evidence.get("record",{}).items() if k in FIELDS and isinstance(v,str)}
+    case["candidate"]=candidate
+    case["source"]=evidence.get("source")
+    case["correction_history"]=_query("""SELECT correction_id,request_id,correction_version,submitted_by,submitted_at,
+        correction_notes,action,reprocess_batch_id,reprocess_source_row FROM quarantine_corrections
+        WHERE quarantine_id=%s ORDER BY correction_version DESC LIMIT 100""",(identifier,))
+    case["history_limit"]=100
+    return case

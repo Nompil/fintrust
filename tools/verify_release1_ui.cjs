@@ -1,0 +1,33 @@
+// Automated local browser acceptance test. All navigation/network stays loopback.
+const fs=require('node:fs');
+const path=require('node:path');
+const {chromium}=require(process.env.FINTRUST_PLAYWRIGHT_MODULE);
+(async()=>{
+ const url=process.argv[2];const output=process.argv[3];
+ if(!/^http:\/\/127\.0\.0\.1:\d+$/.test(url))throw Error('Dedicated loopback server required');
+ const candidates=[chromium.executablePath(),'C:/Program Files/Google/Chrome/Application/chrome.exe','C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'];
+ const executablePath=candidates.find(p=>fs.existsSync(p));if(!executablePath)throw Error('No installed headless browser; no tooling installation attempted');
+ const browser=await chromium.launch({executablePath,headless:true,args:['--disable-background-networking','--no-first-run']});
+ try{
+  const context=await browser.newContext({viewport:{width:1440,height:1000}});
+  await context.route('**/*',route=>{const target=new URL(route.request().url());return target.origin===url?route.continue():route.abort();});
+  const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.goto(url+'/release1');
+  await page.locator('#token').fill('a'.repeat(64));await page.getByRole('button',{name:'Sign in',exact:true}).click();
+  await page.locator('#workspace').waitFor({state:'visible'});await page.locator('#status').filter({hasText:'Current assigned-account data'}).waitFor();
+  const pages=['Transactions','Risk Events','Review Queue','Quarantine','Ingestion Batches','Reports','Account History','Admin/Audit'];
+  for(const name of pages){await page.locator('#navigation').getByRole('button',{name,exact:true}).click();await page.waitForFunction(()=>!document.querySelector('#status').textContent.startsWith('Loading'));if(await page.locator('#error').isVisible())throw Error(name+': '+await page.locator('#error').textContent());}
+  await page.locator('#navigation').getByRole('button',{name:'Review Queue',exact:true}).click();await page.getByRole('button',{name:'Open action'}).first().click();await page.locator('#notes').fill('Browser acceptance: assigned for investigation');await page.getByRole('button',{name:'Submit',exact:true}).click();
+  await page.waitForFunction(()=>!document.querySelector('#submit-action').disabled && document.querySelector('#action').hidden);
+  if(await page.locator('#error').isVisible())throw Error(await page.locator('#error').textContent());
+  await page.locator('#navigation').getByRole('button',{name:'Transactions',exact:true}).click();await page.getByRole('button',{name:'Details / audit timeline'}).first().click();await page.locator('#title').filter({hasText:'Transaction Detail'}).waitFor();
+  await page.screenshot({path:path.join(output,'release1-transaction-detail.png'),fullPage:true});
+  await page.getByRole('button',{name:'Sign out',exact:true}).click();await page.locator('#login').waitFor({state:'visible'});
+  await page.locator('#token').fill('c'.repeat(64));await page.getByRole('button',{name:'Sign in',exact:true}).click();await page.locator('#workspace').waitFor({state:'visible'});
+  await page.locator('#navigation').getByRole('button',{name:'Review Queue',exact:true}).click();await page.waitForFunction(()=>!document.querySelector('#status').textContent.startsWith('Loading'));
+  if(await page.getByRole('button',{name:'Open action'}).count())throw Error('Auditor sees mutation buttons');
+  await page.screenshot({path:path.join(output,'release1-auditor-review-queue.png'),fullPage:true});
+  if(errors.length)throw Error(errors.join('; '));
+  fs.writeFileSync(path.join(output,'browser-result.json'),JSON.stringify({status:'PASSED',browser:executablePath,pages:['Login','Dashboard',...pages,'Transaction Detail'],review_mutation:'UNDER_REVIEW',auditor_mutation_buttons:0,page_errors:errors,aws_access:false},null,2));
+ }finally{await browser.close();}
+})().catch(e=>{console.error(e.message);process.exitCode=1;});

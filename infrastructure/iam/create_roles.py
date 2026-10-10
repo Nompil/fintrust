@@ -7,7 +7,7 @@ TRUST_POLICY = {"Version": "2012-10-17", "Statement": [{"Effect": "Allow",
     "Principal": {"Service": "lambda.amazonaws.com"}, "Action": "sts:AssumeRole"}]}
 
 
-def build_policies(account, region, stage, bucket, table, db_resource_id, sender, dlq_arn=None, *, queue_arn=None, reports_bucket=None, recipient=None, quarantine_bucket=None, kms_key_arn=None):
+def build_policies(account, region, stage, bucket, table, db_resource_id, sender, dlq_arn=None, *, queue_arn=None, reports_bucket=None, recipient=None, quarantine_bucket=None, kms_key_arn=None, release1=False):
     if stage not in {"dev", "staging", "prod"}:
         raise ValueError("stage must be dev, staging or prod")
     if len(account) != 12 or not account.isdigit():
@@ -83,8 +83,14 @@ def build_policies(account, region, stage, bucket, table, db_resource_id, sender
         if service == "report":
             statements += [allow(["s3:PutObject"], f"{arn}:s3:::{reports_bucket}/monthly/*"),
                            allow(["sqs:SendMessage"], f"{arn}:sqs:{region}:{account}:fintrust-report-failures-{stage}")]
+        if release1 and service=="scoring":
+            statements.append(allow(["s3:PutObject"],f"{arn}:s3:::{quarantine_bucket}/quarantine/release1/*"))
+        if release1 and service=="api":
+            statements += [allow(["s3:GetObjectVersion"],f"{arn}:s3:::{quarantine_bucket}/quarantine/release1/*"),
+                           allow(["s3:PutObject"],f"{arn}:s3:::{quarantine_bucket}/quarantine/corrections/*")]
         encrypted_buckets = {"ingest": [bucket, quarantine_bucket], "scoring": [quarantine_bucket],
                              "report": [reports_bucket]}.get(service, [])
+        if release1 and service=="api": encrypted_buckets=[quarantine_bucket]
         if kms_key_arn and encrypted_buckets:
             statements.append(allow(["kms:GenerateDataKey", "kms:Decrypt"], kms_key_arn,
                 Condition={"StringEquals": {"kms:ViaService": f"s3.{region}.amazonaws.com",
@@ -99,6 +105,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ("account", "bucket", "table", "db-resource-id", "sender"):
         parser.add_argument('--' + name, required=True)
+    parser.add_argument("--release1",action="store_true",help="Propose Release 1 quarantine/correction scope; no deployment")
     parser.add_argument("--queue-arn", required=True)
     parser.add_argument("--reports-bucket", required=True)
     parser.add_argument("--recipient", required=True)
@@ -112,7 +119,7 @@ def main():
     policies = build_policies(args.account, args.region, args.stage, args.bucket, args.table,
                               args.db_resource_id, args.sender, args.dlq_arn,
                               queue_arn=args.queue_arn, reports_bucket=args.reports_bucket, recipient=args.recipient,
-                              quarantine_bucket=args.quarantine_bucket, kms_key_arn=args.kms_key_arn)
+                              quarantine_bucket=args.quarantine_bucket, kms_key_arn=args.kms_key_arn,release1=args.release1)
     args.output.mkdir(parents=True, exist_ok=True)
     for service, policy in policies.items():
         (args.output / f'{service}.json').write_text(json.dumps(policy, indent=2) + '\n')

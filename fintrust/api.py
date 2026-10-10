@@ -32,10 +32,14 @@ def request_context():
     allowed.add(request.host_url.rstrip("/"))
     if origin and origin not in allowed:
         return jsonify({"error": "origin is not allowed"}), 403
+    if request.path.startswith("/v1/") and request.method!="OPTIONS" and request.path!="/v1/health":
+        from .auth import authenticate
+        try: g.principal=authenticate()
+        except PermissionError: return jsonify({"error":"authentication required"}),401
     if request.method == "OPTIONS":
         method = request.headers.get("Access-Control-Request-Method", "GET")
         headers = {h.strip().lower() for h in request.headers.get("Access-Control-Request-Headers", "").split(",") if h.strip()}
-        if method not in {"GET", "POST"} or not headers <= {"content-type"}:
+        if method not in {"GET", "POST"} or not headers <= {"content-type","authorization"}:
             return jsonify({"error": "preflight method or headers are not allowed"}), 403
         return "", 204
 
@@ -61,7 +65,7 @@ def finish_request(response):
     if origin and (origin in allowed or origin == request.host_url.rstrip("/")):
         response.headers["Access-Control-Allow-Origin"] = origin
         response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
-        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
         response.vary.add("Origin")
     logger.info(json.dumps({"event": "api_request", "request_id": getattr(g, "request_id", ""),
         "method": request.method, "path": request.path, "status": response.status_code,
@@ -76,6 +80,8 @@ def http_error(error):
 
 @app.errorhandler(Exception)
 def unexpected_error(error):
+    if isinstance(error,psycopg2.IntegrityError):
+        return jsonify({"error":"state or constraint conflict"}),409
     unavailable = isinstance(error, (psycopg2.Error, BotoCoreError, ClientError))
     logger.error(json.dumps({"event": "api_error", "request_id": getattr(g, "request_id", ""), "error_type": type(error).__name__}))
     return jsonify({"error": "service temporarily unavailable" if unavailable else "internal server error",
@@ -95,19 +101,20 @@ def frontend_asset(name):
 @app.get("/v1/accounts")
 def accounts():
     from .query import get_accounts
-    return jsonify({"status": "ok", "data": get_accounts()})
+    return jsonify({"status": "ok", "data": [r for r in get_accounts() if r["account_id"] in g.principal.accounts]})
 
 
 @app.get("/v1/overview")
 def overview():
     from .query import get_overview
-    return jsonify({"status": "ok", "data": get_overview(), "mode": "local practice" if os.getenv("FINTRUST_LOCAL_DEMO") == "1" else "application"})
+    return jsonify({"status": "ok", "data": get_overview(g.principal.accounts), "mode": "local practice" if os.getenv("FINTRUST_LOCAL_DEMO") == "1" else "application"})
 
 
 @app.post("/v1/upload")
 def upload():
     if os.getenv("FINTRUST_LOCAL_DEMO") != "1":
         return jsonify({"error": "local upload is disabled"}), 404
+    if g.principal.role!="Admin": raise PermissionError("Local teaching uploads require Admin")
     from .local_upload import receive_upload
     file = request.files.get("file")
     if file is None:
@@ -123,7 +130,7 @@ def _account_id_arg() -> str:
     if not value:
         raise ValueError("account_id is required")
     try:
-        return str(UUID(value))
+        return g.principal.account(str(UUID(value)))
     except ValueError as error:
         raise ValueError("account_id must be a UUID") from error
 
@@ -152,6 +159,8 @@ def health():
 @app.get("/v1/transactions")
 def transactions():
     try:
+        allowed={"account_id","from","to","limit","offset","cursor"} if request.path=="/v1/transactions" else {"account_id","date","transaction_id"}
+        if set(request.args)-allowed or any(len(request.args.getlist(k))!=1 for k in request.args): raise ValueError("Unsupported or duplicate filter")
         account_id = _account_id_arg()
         from_value = request.args.get("from")
         to_value = request.args.get("to")
@@ -198,6 +207,8 @@ def transactions():
 @app.get("/v1/insights")
 def insights():
     try:
+        allowed={"account_id","from","to","limit","offset","cursor"} if request.path=="/v1/transactions" else {"account_id","date","transaction_id"}
+        if set(request.args)-allowed or any(len(request.args.getlist(k))!=1 for k in request.args): raise ValueError("Unsupported or duplicate filter")
         account_id = _account_id_arg()
         date_value = request.args.get("date")
         try:
@@ -228,6 +239,79 @@ def insights():
             "error_type": type(error).__name__,
         }))
         return jsonify({"error": "insights service temporarily unavailable"}), 503
+
+
+@app.errorhandler(PermissionError)
+def denied(error):
+    return jsonify({"error":"action or object is not authorized"}),403
+
+
+@app.errorhandler(ValueError)
+def bad_input(error):
+    return jsonify({"error":"invalid request"}),400
+
+
+@app.get("/release1")
+def release1_dashboard():
+    return send_from_directory(FRONTEND,"release1.html")
+
+
+@app.get("/v1/reports")
+def workflow_report():
+    from .workflow_api import report
+    return jsonify(report(g.principal,request.args))
+
+
+@app.get("/v1/metrics")
+def workflow_metrics():
+    from .workflow_api import metrics
+    return jsonify({"data":metrics(g.principal)})
+
+
+@app.get("/v1/session")
+def session():
+    return jsonify({"data":{"subject":g.principal.subject,"role":g.principal.role,"accounts":g.principal.accounts}})
+
+
+@app.get("/v1/workflows/<kind>")
+def workflow_list(kind):
+    from .workflow_api import list_page
+    return jsonify(list_page(kind,g.principal,request.args))
+
+
+@app.get("/v1/transactions/<identifier>")
+def transaction_detail(identifier):
+    from .workflow_api import detail
+    return jsonify({"data":detail(identifier,g.principal)})
+
+
+@app.post("/v1/reviews/<int:event>/transition")
+def transition(event):
+    from .workflow_api import update_review
+    return jsonify({"data":update_review(event,request.get_json(),g.principal)})
+
+
+@app.get("/v1/quarantine/<identifier>")
+def quarantine_detail(identifier):
+    from .workflow_api import quarantine_detail as read
+    return jsonify({"data":read(identifier,g.principal)})
+
+
+@app.post("/v1/quarantine/<identifier>/corrections")
+def correction(identifier):
+    from .workflow_api import correct_case
+    return jsonify({"data":correct_case(identifier,request.get_json(),g.principal)}),202
+
+
+from .workflow_api import Conflict,NotFound
+@app.errorhandler(Conflict)
+def conflicting_request(error):
+    return jsonify({"error":"state or request identity conflict; refresh before retry"}),409
+
+
+@app.errorhandler(NotFound)
+def absent_object(error):
+    return jsonify({"error":"resource not found"}),404
 
 
 def lambda_handler(event, context):

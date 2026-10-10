@@ -20,7 +20,7 @@ CREATE TABLE public.ingestion_attempts (
     source_version TEXT,
     source_etag TEXT,
     received_at TIMESTAMPTZ NOT NULL,
-    status TEXT NOT NULL CHECK (status IN ('RECEIVED','PROCESSING','PUBLISHED','DUPLICATE_FILE','FAILED')),
+    status TEXT NOT NULL CHECK (status IN ('RECEIVED','PROCESSING','QUEUED','DUPLICATE_FILE','FAILED')),
     error_code TEXT,
     -- Whole-file replay belongs to an attempt, never a new batch of money.
     UNIQUE(batch_id,attempt_id)
@@ -30,6 +30,7 @@ CREATE TABLE public.ingestion_records (
     source_row INTEGER NOT NULL CHECK (source_row>=2),
     source_attempt_id UUID NOT NULL,
     disposition TEXT NOT NULL CHECK (disposition IN ('RECEIVED','QUEUED','ACCEPTED','QUARANTINED','DUPLICATE','FAILED_TECHNICAL')),
+    candidate_digest CHAR(64),
     canonical_tx_id UUID REFERENCES public.transactions(tx_id),
     reason_code TEXT,
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -43,6 +44,9 @@ LANGUAGE plpgsql SET search_path=pg_catalog,pg_temp AS $$
 BEGIN
     IF NEW.batch_id<>OLD.batch_id OR NEW.source_row<>OLD.source_row OR NEW.source_attempt_id<>OLD.source_attempt_id THEN
         RAISE EXCEPTION 'Record occurrence identity is immutable';
+    END IF;
+    IF OLD.candidate_digest IS NOT NULL AND NEW.candidate_digest IS DISTINCT FROM OLD.candidate_digest THEN
+        RAISE EXCEPTION 'Candidate payload is immutable';
     END IF;
     IF OLD.disposition IN ('ACCEPTED','QUARANTINED','DUPLICATE') AND NEW IS DISTINCT FROM OLD THEN
         RAISE EXCEPTION 'Terminal outcome is immutable; correction requires new occurrence';
@@ -63,6 +67,7 @@ CREATE TABLE public.risk_reviews (
     resolution_code TEXT,
     change_actor TEXT NOT NULL CHECK (length(btrim(change_actor))>0),
     change_request_id UUID NOT NULL DEFAULT gen_random_uuid(),
+    request_digest CHAR(64),
     version INTEGER NOT NULL DEFAULT 1 CHECK (version>0),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     CHECK (review_status='OPEN' OR length(btrim(reviewer_subject))>0 AND reviewer_subject IS NOT NULL),
@@ -77,6 +82,7 @@ CREATE TABLE public.risk_review_history (
     risk_event_id BIGINT NOT NULL REFERENCES public.risk_reviews(risk_event_id),
     version INTEGER NOT NULL,
     request_id UUID NOT NULL UNIQUE,
+    request_digest CHAR(64),
     before_status TEXT,
     after_status TEXT NOT NULL,
     actor_subject TEXT NOT NULL,
@@ -108,11 +114,11 @@ BEGIN
     RETURN NEW;
 END $$;
 CREATE FUNCTION public.record_review_history() RETURNS trigger
-LANGUAGE plpgsql SET search_path=pg_catalog,pg_temp AS $$
+LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$
 BEGIN
-    INSERT INTO public.risk_review_history(risk_event_id,version,request_id,before_status,after_status,actor_subject,reviewer_subject,notes,resolution_code)
+    INSERT INTO public.risk_review_history(risk_event_id,version,request_id,before_status,after_status,actor_subject,reviewer_subject,notes,resolution_code,request_digest)
     VALUES(NEW.risk_event_id,NEW.version,NEW.change_request_id,CASE WHEN TG_OP='UPDATE' THEN OLD.review_status ELSE NULL END,
-        NEW.review_status,NEW.change_actor,NEW.reviewer_subject,NEW.review_notes,NEW.resolution_code);
+        NEW.review_status,NEW.change_actor,NEW.reviewer_subject,NEW.review_notes,NEW.resolution_code,NEW.request_digest);
     RETURN NEW;
 END $$;
 CREATE FUNCTION public.reject_history_change() RETURNS trigger
@@ -131,6 +137,8 @@ CREATE TABLE public.quarantine_cases (
     source_row INTEGER NOT NULL,
     reason_code TEXT NOT NULL CHECK (length(btrim(reason_code))>0),
     reason_detail TEXT NOT NULL CHECK (length(btrim(reason_detail))>0),
+    validation_errors JSONB NOT NULL DEFAULT '[]'::jsonb CHECK (jsonb_typeof(validation_errors)='array'),
+    candidate_account_id UUID,
     safe_payload_key TEXT NOT NULL CHECK (length(safe_payload_key)>0),
     safe_payload_version TEXT NOT NULL CHECK (length(safe_payload_version)>0),
     source_reference TEXT,
@@ -145,6 +153,7 @@ CREATE TABLE public.quarantine_corrections (
     correction_id UUID PRIMARY KEY,
     quarantine_id UUID NOT NULL REFERENCES public.quarantine_cases(quarantine_id),
     request_id UUID NOT NULL UNIQUE,
+    request_digest CHAR(64),
     correction_version INTEGER NOT NULL DEFAULT 1 CHECK (correction_version>0),
     UNIQUE(quarantine_id,correction_version),
     submitted_by TEXT NOT NULL CHECK (length(btrim(submitted_by))>0),
@@ -189,7 +198,7 @@ SELECT *,CASE
     WHEN NOT counts_consistent THEN CASE WHEN file_failure_code IS NOT NULL THEN 'FAILED' ELSE 'RECEIVED' END
     WHEN file_failure_code IS NOT NULL OR failed_technical>0 THEN
         CASE WHEN accepted+quarantined+duplicate>0 THEN 'PARTIAL' ELSE 'FAILED' END
-    WHEN pending>0 THEN CASE WHEN publication_complete THEN 'PUBLISHED' ELSE 'PROCESSING' END
+    WHEN pending>0 THEN CASE WHEN publication_complete THEN 'QUEUED' ELSE 'PROCESSING' END
     ELSE 'COMPLETED' END AS status
 FROM reconciled;
 -- No alert table duplication: cloud delivery claims remain DynamoDB ALERT#canonical_tx.
@@ -274,4 +283,18 @@ FOR EACH ROW EXECUTE FUNCTION public.guard_quarantine_origin();
 REVOKE ALL ON FUNCTION public.guard_quarantine_origin() FROM PUBLIC;
 CREATE TRIGGER ingestion_record_no_delete BEFORE DELETE ON public.ingestion_records
 FOR EACH ROW EXECUTE FUNCTION public.reject_history_change();
+-- Durable local/worker correction outbox: API cannot directly approve into the ledger.
+CREATE TABLE public.correction_outbox (
+    correction_id UUID PRIMARY KEY REFERENCES public.quarantine_corrections(correction_id),
+    envelope JSONB NOT NULL CHECK (jsonb_typeof(envelope)='object'),
+    state TEXT NOT NULL DEFAULT 'PENDING' CHECK (state IN ('PENDING','COMPLETED')),
+    attempts INTEGER NOT NULL DEFAULT 0 CHECK (attempts>=0),
+    last_error_type TEXT,
+    completed_at TIMESTAMPTZ
+);
+CREATE TABLE public.projection_outbox (
+    tx_id UUID PRIMARY KEY REFERENCES public.processed_transactions(tx_id),
+    state TEXT NOT NULL DEFAULT 'PENDING' CHECK(state IN ('PENDING','COMPLETED')),
+    completed_at TIMESTAMPTZ
+);
 COMMIT;
