@@ -29,13 +29,13 @@ def page_args(args,allowed=()):
     return limit,offset
 
 def list_page(kind,principal,args):
-    limit,offset=page_args(args,{"status","account_id"})
+    limit,offset=page_args(args,{"status","account_id",*( {"tx_id","source_id","country","risk_level","batch_id","from","to","min_amount","max_amount"} if kind=="transactions" else {"batch_id"} if kind=="batches" else set())})
     scope=list(principal.accounts)
     if args.get("account_id"): scope=[principal.account(args["account_id"])]
     selects={
       "transactions":("SELECT t.*,p.result AS risk FROM transactions t LEFT JOIN processed_transactions p USING(tx_id)","t.account_id=ANY(%s::uuid[])","t.tx_date DESC,t.tx_id DESC"),
       "risk-events":("SELECT r.*,t.account_id,w.review_status,w.version FROM risk_events r JOIN transactions t USING(tx_id) LEFT JOIN risk_reviews w USING(risk_event_id)","t.account_id=ANY(%s::uuid[])","r.risk_event_id DESC"),
-      "reviews":("SELECT w.*,r.tx_id,r.risk_score,t.account_id FROM risk_reviews w JOIN risk_events r USING(risk_event_id) JOIN transactions t USING(tx_id)","t.account_id=ANY(%s::uuid[])","w.created_at,w.risk_event_id"),
+      "reviews":("SELECT w.*,r.tx_id,r.risk_score,t.account_id,p.result AS risk FROM risk_reviews w JOIN risk_events r USING(risk_event_id) JOIN transactions t USING(tx_id) LEFT JOIN processed_transactions p USING(tx_id)","t.account_id=ANY(%s::uuid[])","w.created_at,w.risk_event_id"),
       "quarantine":("SELECT q.* FROM quarantine_workflow q","(q.candidate_account_id=ANY(%s::uuid[]) OR (%s AND NOT EXISTS(SELECT 1 FROM accounts a WHERE a.account_id=q.candidate_account_id)))","q.quarantined_at,q.quarantine_id"),
       "batches":("SELECT b.*,r.* FROM ingestion_batches b JOIN batch_reconciliation r USING(batch_id)","(NOT EXISTS(SELECT 1 FROM ingestion_records i LEFT JOIN transactions t ON t.tx_id=i.canonical_tx_id LEFT JOIN quarantine_cases q ON q.batch_id=i.batch_id AND q.source_row=i.source_row WHERE i.batch_id=b.batch_id AND (COALESCE(t.account_id,q.candidate_account_id) IS NULL OR NOT (COALESCE(t.account_id,q.candidate_account_id)=ANY(%s::uuid[])))) AND EXISTS(SELECT 1 FROM ingestion_records i WHERE i.batch_id=b.batch_id) OR %s)","b.received_at DESC,b.batch_id"),
       "audit":("SELECT h.*,t.account_id FROM risk_review_history h JOIN risk_events r USING(risk_event_id) JOIN transactions t USING(tx_id)","t.account_id=ANY(%s::uuid[])","h.changed_at DESC,h.risk_event_id,h.version"),
@@ -44,6 +44,25 @@ def list_page(kind,principal,args):
     if kind=="audit": principal.require("audit")
     select,where,order=selects[kind];params=[scope]
     if kind in {"quarantine","batches"}: params.append(principal.role=="Admin")
+    if kind=="transactions":
+        from decimal import Decimal, InvalidOperation
+        for key,column,operator in (("tx_id","t.tx_id","="),("source_id","t.source_transaction_id","="),("country","t.country","="),("risk_level","p.result->>'risk_level'","="),("from","t.tx_date",">="),("to","t.tx_date","<="),("min_amount","t.amount",">="),("max_amount","t.amount","<=")):
+            value=args.get(key)
+            if not value: continue
+            if key=="tx_id": value=str(uuid.UUID(value))
+            elif key in {"from","to"}:
+                value=datetime.fromisoformat(value.replace("Z","+00:00"))
+                if value.tzinfo is None: raise ValueError("Timezone required")
+            elif key in {"min_amount","max_amount"}:
+                try: value=Decimal(value)
+                except InvalidOperation: raise ValueError("Invalid amount") from None
+                if not value.is_finite(): raise ValueError("Invalid amount")
+            elif len(value)>200: raise ValueError("Filter too long")
+            where+=" AND "+column+operator+"%s";params.append(value)
+        if args.get("batch_id"):
+            where+=" AND EXISTS(SELECT 1 FROM ingestion_records i WHERE i.canonical_tx_id=t.tx_id AND i.batch_id=%s)";params.append(str(uuid.UUID(args["batch_id"])))
+    if kind=="batches" and args.get("batch_id"):
+        where+=" AND b.batch_id=%s";params.append(str(uuid.UUID(args["batch_id"])))
     status=args.get("status")
     if status:
         valid={"reviews":{"OPEN","UNDER_REVIEW","CLEARED","CONFIRMED_RISK","ESCALATED"},"quarantine":{"OPEN","RESUBMITTED","RESOLVED","REJECTED"},"batches":{"RECEIVED","PROCESSING","QUEUED","COMPLETED","PARTIAL","FAILED"}}
@@ -51,6 +70,17 @@ def list_page(kind,principal,args):
         field={"reviews":"w.review_status","quarantine":"q.workflow_status","batches":"r.status"}[kind]
         where+=" AND "+field+"=%s";params.append(status)
     rows=_query(select+" WHERE "+where+" ORDER BY "+order+" LIMIT %s OFFSET %s",tuple(params+[limit+1,offset]))
+    if kind=="batches":
+        import os
+        if os.getenv("FINTRUST_MODE")=="local" and principal.role!="Maintainer":
+            from .frontend_workflows import upload_history
+            receipts=upload_history(principal)
+            for row in rows:
+                events=[e for e in receipts if e.get("batch_id")==str(row["batch_id"])]
+                row["filename"]=events[-1]["filename"] if events else None
+                row["actor"]=events[-1]["actor"] if events else None
+        for row in rows:
+            row["display_status"]=row["status"] if row["counts_consistent"] else "AWAITING_RECONCILIATION" if row["rows_received"] is None else "RECONCILIATION_FAILED"
     return {"data":rows[:limit],"meta":{"count":len(rows[:limit]),"limit":limit,"offset":offset,"has_more":len(rows)>limit}}
 
 def detail(identifier,principal):

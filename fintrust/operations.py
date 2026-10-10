@@ -141,4 +141,6 @@ def upload_csv(filename,payload,principal):
     state=api._query("SELECT * FROM batch_reconciliation WHERE batch_id=%s",(batch["batch_id"],))[0]
     from .upload_notifications import notification
     status="DUPLICATE_FILE" if exists else state["status"]
+    from .frontend_workflows import record_upload
+    record_upload(principal,filename,"UPLOAD_REPLAY" if exists else "UPLOAD_ACCEPTED",status,batch_id=batch["batch_id"])
     return {"filename":filename,"batch_id":batch["batch_id"],"upload_status":status,"reconciliation":state,"notification":notification(status,state),"execution":"local synchronous real worker; AWS services mocked"}

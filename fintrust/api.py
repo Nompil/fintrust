@@ -130,7 +130,11 @@ def upload():
             return jsonify({"status":"ok","data":upload_csv(name,payload,g.principal)}),200
         return jsonify({"status": "ok", "data": receive_upload(file)}), 200
     except AdmissionError as error:
-        return jsonify({"error":"Upload rejected: this file does not match the FinTrust transaction CSV format.","reason_code":error.code}),400
+        event=None
+        if os.getenv("FINTRUST_RELEASE1_UPLOAD")=="1":
+            from .frontend_workflows import record_upload
+            event=record_upload(g.principal,file.filename,"UPLOAD_REJECTED","REJECTED",reason_code=error.code)
+        return jsonify({"error":"Upload rejected: this file does not match the FinTrust transaction CSV format.","reason_code":error.code,"rejection":event}),400
     except ValueError as error:
         return jsonify({"error": "Invalid CSV request"}), 400
 
@@ -346,3 +350,29 @@ def administration():
     if g.principal.role!="Admin":raise PermissionError("Admin required")
     from .release_contract import VERSION
     return jsonify({"data":{"contract_version":VERSION,"identity":"operator-controlled hashed-token registry","user_management":"Not exposed through HTTP; approved operator administration only","live_deployment":"Separate approval required"}})
+
+@app.get("/v1/upload-history")
+def upload_history_read():
+    from .frontend_workflows import upload_history
+    from .workflow_api import page_args
+    limit,offset=page_args(request.args,{"action"})
+    rows=upload_history(g.principal)
+    if request.args.get("action"):
+        if request.args["action"] not in {"UPLOAD_REJECTED","UPLOAD_ACCEPTED","UPLOAD_REPLAY"}: raise ValueError("Invalid action filter")
+        rows=[r for r in rows if r["action"]==request.args["action"]]
+    return jsonify({"data":rows[offset:offset+limit],"meta":{"count":len(rows[offset:offset+limit]),"has_more":len(rows)>offset+limit}})
+
+@app.get("/v1/batches/<identifier>")
+def batch_detail_read(identifier):
+    from .frontend_workflows import batch_detail
+    return jsonify({"data":batch_detail(identifier,g.principal,request.args)})
+
+@app.get("/v1/audit-events")
+def frontend_audit_read():
+    from .frontend_workflows import audit_events
+    return jsonify(audit_events(g.principal,request.args))
+
+@app.get("/v1/release1/overview")
+def release1_overview_read():
+    from .frontend_workflows import overview as read
+    return jsonify({"data":read(g.principal)})
