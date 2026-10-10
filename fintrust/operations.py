@@ -139,4 +139,6 @@ def upload_csv(filename,payload,principal):
     else:
         for item in items:worker.process_envelope(item)
     state=api._query("SELECT * FROM batch_reconciliation WHERE batch_id=%s",(batch["batch_id"],))[0]
-    return {"filename":filename,"batch_id":batch["batch_id"],"upload_status":"DUPLICATE_FILE" if exists else state["status"],"reconciliation":state,"execution":"local synchronous real worker; AWS services mocked"}
+    from .upload_notifications import notification
+    status="DUPLICATE_FILE" if exists else state["status"]
+    return {"filename":filename,"batch_id":batch["batch_id"],"upload_status":status,"reconciliation":state,"notification":notification(status,state),"execution":"local synchronous real worker; AWS services mocked"}

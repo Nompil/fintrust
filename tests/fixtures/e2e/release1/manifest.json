@@ -1,0 +1,23 @@
+{
+  "source_namespace": "fintrust-e2e-release1",
+  "receipt_clock": "2026-10-09T22:00:00+00:00",
+  "seed_clock": "2020-01-01T00:00:00Z",
+  "files": {
+    "A": {
+      "filename": "fintrust_release1_transactions_A.csv",
+      "sha256": "02e72ce290842bed2b03088daec5bfc87a18f17fd858c6128d205714765c829e",
+      "rows": 42,
+      "original": "fintrust_e2e_mixed_transactions.csv",
+      "original_sha256": "1b2a3a1fa424b7c4e320b2fc9d0f13154945d0dc370a0aaa5a0e44f0573ff8df",
+      "original_rows": 33
+    },
+    "B": {
+      "filename": "fintrust_release1_transactions_B.csv",
+      "sha256": "c71d9a6862eed230cf4e0c72c961bbede3b5f36b4d8c3f3374532a1f1194f386",
+      "rows": 12,
+      "original": "fintrust_e2e_companion_transactions_B.csv",
+      "original_sha256": "7d981dd595b0ba56dbedbe683fd991ad5cec41f49fc68b7d5e7e1a8b96da60b6",
+      "original_rows": 11
+    }
+  }
+}

@@ -22,21 +22,23 @@ from werkzeug.serving import make_server
 from tests.conftest import prohibit_unmocked_aws_transport
 from tests.test_release1_end_to_end import release_db,authenticated_client,feed,run,row
 from tests.test_release1_candidate import maintainer_headers
+from tests.test_release1_dataset_lifecycle import dataset_db
 from fintrust import api
 
-def test_browser_release1(release_db,authenticated_client,maintainer_headers,monkeypatch):
+def test_browser_release1(dataset_db,authenticated_client,maintainer_headers,monkeypatch):
+    release_db=dataset_db
     from fintrust import db
     monkeypatch.setattr(db,"get_connection",release_db[2])
     monkeypatch.setenv("FINTRUST_RELEASE1_UPLOAD","1");monkeypatch.setenv("FINTRUST_MODE","local");monkeypatch.setenv("INPUT_BUCKET","browser-input")
     s3=release_db[4];s3.create_bucket(Bucket="browser-input",CreateBucketConfiguration={"LocationConstraint":"af-south-1"});s3.put_bucket_versioning(Bucket="browser-input",VersioningConfiguration={"Status":"Enabled"})
-    run(feed([row(amount="200000.01",country="US"),row(source_transaction_id="INVALID",amount="bad")]))
+    monkeypatch.setenv("FINTRUST_DATASET_FIXTURES",str(Path(__file__).resolve().parents[1]/"tests/fixtures/e2e/release1"))
     root=Path(__file__).resolve().parents[1]
-    evidence=root/"docs/EVIDENCE/12-e2e/release1-closure/browser"
+    evidence=root/"docs/EVIDENCE/12-e2e/release1-lifecycle/browser"
     evidence.mkdir(parents=True,exist_ok=True)
     server=make_server("127.0.0.1",0,api.app,threaded=True)
     thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
     try:
-        result=subprocess.run([os.environ["FINTRUST_NODE"],str(root/"tools/verify_release1_ui.cjs"),f"http://127.0.0.1:{server.server_port}",str(evidence)],capture_output=True,text=True,timeout=100)
+        result=subprocess.run([os.environ["FINTRUST_NODE"],str(root/"tools/verify_release1_ui.cjs"),f"http://127.0.0.1:{server.server_port}",str(evidence)],capture_output=True,text=True,timeout=180)
         assert result.returncode==0,result.stderr
     finally:
         server.shutdown();thread.join(timeout=10);server.server_close()

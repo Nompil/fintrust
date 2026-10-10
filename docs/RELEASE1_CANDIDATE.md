@@ -51,3 +51,8 @@ Source d648dd0a77b6906daa94ec7ade7b2ff3e3158ed0, CI38058750009:571 passed,0 fail
 ## Original fixtures now imported
 
 Actual A/B originals have been located and imported unchanged (33/11 rows). Their headers and identity/account/type semantics mismatch the frozen contract; both fail file admission. Acceptance is still BLOCKED, now by compatibility rather than missing files. See docs/EVIDENCE/12-e2e/original-fixture-acceptance/RESULT.md and contract-audit.json. The verified application/ZIP remain unchanged; no AWS readiness gate was advanced.
+
+
+## Derived ingestion lifecycle continuation
+
+The original legacy CSV rejection is expected and preserved. User-authorized derived Release 1 A/B fixtures now map explicitly to the frozen contract; see RELEASE1_INGESTION_LIFECYCLE.md and tests/fixtures/e2e/release1/MAPPING.md. All 54 row outcomes passed against actual local SQL: 36 accepted, 16 quarantined and two duplicates. Source-bound Linux CI is required for the new persistent upload notification implementation; its final result will be recorded under EVIDENCE/12-e2e/release1-lifecycle. No AWS action was performed.

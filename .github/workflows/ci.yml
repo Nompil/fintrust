@@ -108,7 +108,8 @@ jobs:
             build/release1-candidate/fintrust-release1-linux-py312.manifest.json
             test-results/pytest.xml
             docs/EVIDENCE/12-e2e/release1-closure/postgres16-roles.json
-            docs/EVIDENCE/12-e2e/release1-closure/browser/
+            docs/EVIDENCE/12-e2e/release1-lifecycle/browser/
+            build/release1-lifecycle/row-results.json
           if-no-files-found: error
           retention-days: 30
       - name: Publish only the verified release
@@ -123,6 +124,7 @@ jobs:
             build/linux-verification.txt
             test-results/pytest.xml
             docs/EVIDENCE/12-e2e/release1-closure/postgres16-roles.json
-            docs/EVIDENCE/12-e2e/release1-closure/browser/
+            docs/EVIDENCE/12-e2e/release1-lifecycle/browser/
+            build/release1-lifecycle/row-results.json
           if-no-files-found: error
           retention-days: 30

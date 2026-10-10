@@ -15,9 +15,30 @@ const {chromium}=require(process.env.FINTRUST_PLAYWRIGHT_MODULE);
   await page.goto(url+'/release1');
   await page.locator('#token').fill('a'.repeat(64));await page.getByRole('button',{name:'Sign in',exact:true}).click();
   await page.locator('#workspace').waitFor({state:'visible'});await page.locator('#status').filter({hasText:'Current assigned-account data'}).waitFor();
+  await page.locator('#navigation').getByRole('button',{name:'Ingestion Batches',exact:true}).click();
+  async function admit(input,expected,screenshot){
+   await page.locator('#csv-file').setInputFiles(input);
+   await page.getByRole('button',{name:'Upload and process locally',exact:true}).click();
+   await page.waitForFunction(text=>document.querySelector('#upload-notice-message').textContent.includes(text),expected);
+   await page.getByRole('button',{name:'Upload and process locally',exact:true}).waitFor({state:'visible'});
+   await page.waitForFunction(()=>!document.querySelector('#upload-form button').disabled);
+   await page.screenshot({path:path.join(output,screenshot),fullPage:true});
+  }
+  const fixtures=process.env.FINTRUST_DATASET_FIXTURES;
+  if(!fixtures)throw Error('Actual derived fixtures required');
+  await admit({name:'wrong.csv',mimeType:'text/csv',buffer:Buffer.from('wrong,headers\n1,2')},'Upload rejected:','invalid-file-rejection.png');
+  await page.locator('#navigation').getByRole('button',{name:'Dashboard',exact:true}).click();
+  await page.locator('#upload-notice').waitFor({state:'visible'});
+  if(!(await page.locator('#upload-notice-message').textContent()).includes('Upload rejected:'))throw Error('Serious notice lost on navigation');
+  await page.getByRole('button',{name:'Acknowledge',exact:true}).click();await page.locator('#upload-notice').waitFor({state:'hidden'});
+  await page.locator('#navigation').getByRole('button',{name:'Ingestion Batches',exact:true}).click();
+  await admit(path.join(fixtures,'fintrust_release1_transactions_A.csv'),'29 accepted, 12 quarantined, 1 duplicates','A-upload-warning.png');
+  await admit(path.join(fixtures,'fintrust_release1_transactions_B.csv'),'7 accepted, 4 quarantined, 1 duplicates','B-upload-warning.png');
+  if(!(await page.locator('#upload-notice-message').textContent()).includes('29 accepted, 12 quarantined'))throw Error('Unacknowledged A warning was lost after B');
+  await admit(path.join(fixtures,'fintrust_release1_transactions_A.csv'),'File already processed','A-whole-file-replay.png');
   const pages=['Transactions','Risk Events','Review Queue','Quarantine','Ingestion Batches','Reports','Accounts','Account History','Audit','Operations','Administration'];
-  for(const name of pages){await page.locator('#navigation').getByRole('button',{name,exact:true}).click();await page.waitForFunction(()=>!document.querySelector('#status').textContent.startsWith('Loading'));if(await page.locator('#error').isVisible())throw Error(name+': '+await page.locator('#error').textContent());}
-  await page.locator('#navigation').getByRole('button',{name:'Review Queue',exact:true}).click();await page.getByRole('button',{name:'Open action'}).first().click();await page.locator('#notes').fill('Browser acceptance: assigned for investigation');await page.getByRole('button',{name:'Submit',exact:true}).click();
+  for(const name of pages){await page.locator('#navigation').getByRole('button',{name,exact:true}).click();await page.waitForFunction(()=>!document.querySelector('#status').textContent.startsWith('Loading'));if(await page.locator('#error').isVisible())throw Error(name+': '+await page.locator('#error').textContent());if(['Transactions','Risk Events','Review Queue','Quarantine','Ingestion Batches'].includes(name))await page.screenshot({path:path.join(output,name.toLowerCase().replaceAll(' ','-')+'.png'),fullPage:true});}
+  await page.locator('#navigation').getByRole('button',{name:'Review Queue',exact:true}).click();await page.locator('#content tr').filter({hasText:/\b70\b/}).getByRole('button',{name:'Open action'}).first().click();await page.locator('#notes').fill('Browser acceptance: assigned for investigation');await page.getByRole('button',{name:'Submit',exact:true}).click();
   await page.waitForFunction(()=>!document.querySelector('#submit-action').disabled && document.querySelector('#action').hidden);
   if(await page.locator('#error').isVisible())throw Error(await page.locator('#error').textContent());
   await page.locator('#navigation').getByRole('button',{name:'Transactions',exact:true}).click();await page.getByRole('button',{name:'Details / audit timeline'}).first().click();await page.locator('#title').filter({hasText:'Transaction Detail'}).waitFor();
@@ -38,6 +59,6 @@ const {chromium}=require(process.env.FINTRUST_PLAYWRIGHT_MODULE);
 
   await page.screenshot({path:path.join(output,'release1-maintainer-operations.png'),fullPage:true});
   if(errors.length)throw Error(errors.join('; '));
-  fs.writeFileSync(path.join(output,'browser-result.json'),JSON.stringify({status:'PASSED',browser:executablePath,pages:['Login','Dashboard',...pages,'Transaction Detail'],review_mutation:'UNDER_REVIEW',auditor_mutation_buttons:0,maintainer_compliance_pages:0,maintainer_technical_actions_visible:true,page_errors:errors,aws_access:false},null,2));
+  fs.writeFileSync(path.join(output,'browser-result.json'),JSON.stringify({status:'PASSED',browser:executablePath,pages:['Login','Dashboard',...pages,'Transaction Detail'],dataset_sequence:'A -> B -> exact A replay',upload_counts:{A:{accepted:29,quarantined:12,duplicates:1},B:{accepted:7,quarantined:4,duplicates:1}},invalid_file_rejected:true,notice_persists_until_acknowledged:true,review_mutation:'UNDER_REVIEW',auditor_mutation_buttons:0,maintainer_compliance_pages:0,maintainer_technical_actions_visible:true,page_errors:errors,aws_access:false},null,2));
  }finally{await browser.close();}
 })().catch(e=>{console.error(e.message);process.exitCode=1;});

@@ -1,0 +1,16 @@
+{
+  "fixture_specific": {
+    "passed": 19,
+    "failed": 0,
+    "skipped": 0,
+    "path": "build/release1-closure/c4cedb90e5944a0cb63f86df13deb7b0/results.xml"
+  },
+  "full_initial": {
+    "passed": 588,
+    "failed": 0,
+    "expected_skipped": 1,
+    "note": "Full run collected before the additional all-valid notification test; final fixture run includes that test and alert-consumer filtering. Final Linux CI must run the complete final source.",
+    "path": "build/release1-closure/631a8af3f1d444e0800bcca0709239c7/results.xml"
+  },
+  "aws_access": false
+}

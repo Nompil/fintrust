@@ -130,7 +130,7 @@ def upload():
             return jsonify({"status":"ok","data":upload_csv(name,payload,g.principal)}),200
         return jsonify({"status": "ok", "data": receive_upload(file)}), 200
     except AdmissionError as error:
-        return jsonify({"error":error.detail,"reason_code":error.code}),400
+        return jsonify({"error":"Upload rejected: this file does not match the FinTrust transaction CSV format.","reason_code":error.code}),400
     except ValueError as error:
         return jsonify({"error": "Invalid CSV request"}), 400
 

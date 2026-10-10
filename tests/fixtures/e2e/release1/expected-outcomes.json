@@ -1,0 +1,546 @@
+{
+  "A": [
+    {
+      "source_row": 2,
+      "source_transaction_id": "TX-E2E-001",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 0,
+        "risk_level": "Low",
+        "rules": []
+      }
+    },
+    {
+      "source_row": 3,
+      "source_transaction_id": "TX-E2E-002",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 0,
+        "risk_level": "Low",
+        "rules": []
+      }
+    },
+    {
+      "source_row": 4,
+      "source_transaction_id": "TX-E2E-003",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 0,
+        "risk_level": "Low",
+        "rules": []
+      }
+    },
+    {
+      "source_row": 5,
+      "source_transaction_id": "TX-E2E-004",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 30,
+        "risk_level": "Low",
+        "rules": [
+          "HIGH_AMOUNT"
+        ]
+      }
+    },
+    {
+      "source_row": 6,
+      "source_transaction_id": "TX-E2E-005",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 30,
+        "risk_level": "Low",
+        "rules": [
+          "HIGH_AMOUNT"
+        ]
+      }
+    },
+    {
+      "source_row": 7,
+      "source_transaction_id": "TX-E2E-006",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 15,
+        "risk_level": "Low",
+        "rules": [
+          "CROSS_BORDER"
+        ]
+      }
+    },
+    {
+      "source_row": 8,
+      "source_transaction_id": "TX-E2E-007",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 45,
+        "risk_level": "Medium",
+        "rules": [
+          "HIGH_AMOUNT",
+          "CROSS_BORDER"
+        ]
+      }
+    },
+    {
+      "source_row": 9,
+      "source_transaction_id": "TX-VEL-001",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 0,
+        "risk_level": "Low",
+        "rules": []
+      }
+    },
+    {
+      "source_row": 10,
+      "source_transaction_id": "TX-VEL-002",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 0,
+        "risk_level": "Low",
+        "rules": []
+      }
+    },
+    {
+      "source_row": 11,
+      "source_transaction_id": "TX-VEL-003",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 0,
+        "risk_level": "Low",
+        "rules": []
+      }
+    },
+    {
+      "source_row": 12,
+      "source_transaction_id": "TX-VEL-004",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 0,
+        "risk_level": "Low",
+        "rules": []
+      }
+    },
+    {
+      "source_row": 13,
+      "source_transaction_id": "TX-VEL-005",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 0,
+        "risk_level": "Low",
+        "rules": []
+      }
+    },
+    {
+      "source_row": 14,
+      "source_transaction_id": "TX-VEL-006",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 0,
+        "risk_level": "Low",
+        "rules": []
+      }
+    },
+    {
+      "source_row": 15,
+      "source_transaction_id": "TX-VEL-007",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 0,
+        "risk_level": "Low",
+        "rules": []
+      }
+    },
+    {
+      "source_row": 16,
+      "source_transaction_id": "TX-VEL-008",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 0,
+        "risk_level": "Low",
+        "rules": []
+      }
+    },
+    {
+      "source_row": 17,
+      "source_transaction_id": "TX-VEL-009",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 0,
+        "risk_level": "Low",
+        "rules": []
+      }
+    },
+    {
+      "source_row": 18,
+      "source_transaction_id": "TX-VEL-010",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 0,
+        "risk_level": "Low",
+        "rules": []
+      }
+    },
+    {
+      "source_row": 19,
+      "source_transaction_id": "TX-VEL-011",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 0,
+        "risk_level": "Low",
+        "rules": []
+      }
+    },
+    {
+      "source_row": 20,
+      "source_transaction_id": "TX-VEL-012",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 45,
+        "risk_level": "Medium",
+        "rules": [
+          "HIGH_AMOUNT",
+          "CROSS_BORDER"
+        ]
+      }
+    },
+    {
+      "source_row": 21,
+      "source_transaction_id": "TX-E2E-001",
+      "expected": {
+        "status": "DUPLICATE",
+        "score": 0,
+        "risk_level": "Low",
+        "rules": []
+      }
+    },
+    {
+      "source_row": 22,
+      "source_transaction_id": "TX-DOUBLE-001",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 0,
+        "risk_level": "Low",
+        "rules": []
+      }
+    },
+    {
+      "source_row": 23,
+      "source_transaction_id": "TX-DOUBLE-002",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 40,
+        "risk_level": "Medium",
+        "rules": [
+          "POSSIBLE_DUPLICATE_CHARGE"
+        ]
+      }
+    },
+    {
+      "source_row": 24,
+      "source_transaction_id": "TX-INV-001",
+      "expected": {
+        "status": "QUARANTINED",
+        "reason_code": "MISSING_REQUIRED_FIELD"
+      }
+    },
+    {
+      "source_row": 25,
+      "source_transaction_id": "TX-INV-002",
+      "expected": {
+        "status": "QUARANTINED",
+        "reason_code": "INVALID_AMOUNT"
+      }
+    },
+    {
+      "source_row": 26,
+      "source_transaction_id": "TX-INV-003",
+      "expected": {
+        "status": "QUARANTINED",
+        "reason_code": "NEGATIVE_AMOUNT"
+      }
+    },
+    {
+      "source_row": 27,
+      "source_transaction_id": "TX-INV-004",
+      "expected": {
+        "status": "QUARANTINED",
+        "reason_code": "ZERO_AMOUNT"
+      }
+    },
+    {
+      "source_row": 28,
+      "source_transaction_id": "TX-INV-005",
+      "expected": {
+        "status": "QUARANTINED",
+        "reason_code": "INVALID_TIMESTAMP"
+      }
+    },
+    {
+      "source_row": 29,
+      "source_transaction_id": "TX-INV-006",
+      "expected": {
+        "status": "QUARANTINED",
+        "reason_code": "FUTURE_TIMESTAMP"
+      }
+    },
+    {
+      "source_row": 30,
+      "source_transaction_id": "TX-INV-007",
+      "expected": {
+        "status": "QUARANTINED",
+        "reason_code": "UNKNOWN_ACCOUNT"
+      }
+    },
+    {
+      "source_row": 31,
+      "source_transaction_id": "TX-INV-008",
+      "expected": {
+        "status": "QUARANTINED",
+        "reason_code": "UNSUPPORTED_CURRENCY"
+      }
+    },
+    {
+      "source_row": 32,
+      "source_transaction_id": "TX-INV-009",
+      "expected": {
+        "status": "QUARANTINED",
+        "reason_code": "UNSUPPORTED_COUNTRY"
+      }
+    },
+    {
+      "source_row": 33,
+      "source_transaction_id": "",
+      "expected": {
+        "status": "QUARANTINED",
+        "reason_code": "MISSING_SOURCE_IDENTITY"
+      }
+    },
+    {
+      "source_row": 34,
+      "source_transaction_id": "TX-INV-011",
+      "expected": {
+        "status": "QUARANTINED",
+        "reason_code": "MISSING_REQUIRED_FIELD"
+      }
+    },
+    {
+      "source_row": 35,
+      "source_transaction_id": "R1-VEL-001",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 0,
+        "risk_level": "Low",
+        "rules": []
+      }
+    },
+    {
+      "source_row": 36,
+      "source_transaction_id": "R1-VEL-002",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 0,
+        "risk_level": "Low",
+        "rules": []
+      }
+    },
+    {
+      "source_row": 37,
+      "source_transaction_id": "R1-VEL-003",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 0,
+        "risk_level": "Low",
+        "rules": []
+      }
+    },
+    {
+      "source_row": 38,
+      "source_transaction_id": "R1-VEL-004",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 0,
+        "risk_level": "Low",
+        "rules": []
+      }
+    },
+    {
+      "source_row": 39,
+      "source_transaction_id": "R1-VEL-005",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 0,
+        "risk_level": "Low",
+        "rules": []
+      }
+    },
+    {
+      "source_row": 40,
+      "source_transaction_id": "R1-VEL-006",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 30,
+        "risk_level": "Low",
+        "rules": [
+          "HIGH_VELOCITY"
+        ]
+      }
+    },
+    {
+      "source_row": 41,
+      "source_transaction_id": "R1-VEL-OUTSIDE",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 0,
+        "risk_level": "Low",
+        "rules": []
+      }
+    },
+    {
+      "source_row": 42,
+      "source_transaction_id": "R1-HIGH-001",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 70,
+        "risk_level": "High",
+        "rules": [
+          "HIGH_AMOUNT",
+          "VERY_HIGH_AMOUNT",
+          "CROSS_BORDER"
+        ]
+      }
+    },
+    {
+      "source_row": 43,
+      "source_transaction_id": "R1-INVALID-COUNTRY",
+      "expected": {
+        "status": "QUARANTINED",
+        "reason_code": "INVALID_COUNTRY"
+      }
+    }
+  ],
+  "B": [
+    {
+      "source_row": 2,
+      "source_transaction_id": "TX-B-001",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 0,
+        "risk_level": "Low",
+        "rules": []
+      }
+    },
+    {
+      "source_row": 3,
+      "source_transaction_id": "TX-B-002",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 0,
+        "risk_level": "Low",
+        "rules": []
+      }
+    },
+    {
+      "source_row": 4,
+      "source_transaction_id": "TX-E2E-005",
+      "expected": {
+        "status": "DUPLICATE",
+        "score": 30,
+        "risk_level": "Low",
+        "rules": [
+          "HIGH_AMOUNT"
+        ]
+      }
+    },
+    {
+      "source_row": 5,
+      "source_transaction_id": "TX-B-SIMILAR-001",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 70,
+        "risk_level": "High",
+        "rules": [
+          "HIGH_AMOUNT",
+          "POSSIBLE_DUPLICATE_CHARGE"
+        ]
+      }
+    },
+    {
+      "source_row": 6,
+      "source_transaction_id": "TX-B-003",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 15,
+        "risk_level": "Low",
+        "rules": [
+          "CROSS_BORDER"
+        ]
+      }
+    },
+    {
+      "source_row": 7,
+      "source_transaction_id": "TX-B-004",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 30,
+        "risk_level": "Low",
+        "rules": [
+          "HIGH_AMOUNT"
+        ]
+      }
+    },
+    {
+      "source_row": 8,
+      "source_transaction_id": "TX-B-005",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 45,
+        "risk_level": "Medium",
+        "rules": [
+          "HIGH_AMOUNT",
+          "CROSS_BORDER"
+        ]
+      }
+    },
+    {
+      "source_row": 9,
+      "source_transaction_id": "TX-B-006",
+      "expected": {
+        "status": "ACCEPTED",
+        "score": 0,
+        "risk_level": "Low",
+        "rules": []
+      }
+    },
+    {
+      "source_row": 10,
+      "source_transaction_id": "TX-B-INV-001",
+      "expected": {
+        "status": "QUARANTINED",
+        "reason_code": "MISSING_REQUIRED_FIELD"
+      }
+    },
+    {
+      "source_row": 11,
+      "source_transaction_id": "TX-B-INV-002",
+      "expected": {
+        "status": "QUARANTINED",
+        "reason_code": "INVALID_AMOUNT"
+      }
+    },
+    {
+      "source_row": 12,
+      "source_transaction_id": "TX-B-INV-003",
+      "expected": {
+        "status": "QUARANTINED",
+        "reason_code": "UNKNOWN_ACCOUNT"
+      }
+    },
+    {
+      "source_row": 13,
+      "source_transaction_id": "TX-E2E-005",
+      "expected": {
+        "status": "QUARANTINED",
+        "reason_code": "DUPLICATE_IDENTITY_CONFLICT"
+      }
+    }
+  ]
+}
