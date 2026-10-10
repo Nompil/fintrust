@@ -1,0 +1,103 @@
+{
+  "captured_at": "2026-10-10T18:02:08.522815+00:00",
+  "profile": "fintrust-inventory",
+  "region": "af-south-1",
+  "aws_mutations": false,
+  "results": {
+    "rules": {
+      "status": "OK",
+      "operation": "events:list_rules",
+      "data": {
+        "Rules": []
+      }
+    },
+    "targets": {},
+    "log_groups": {
+      "status": "OK",
+      "operation": "logs:describe_log_groups",
+      "data": {
+        "logGroups": [
+          {
+            "logGroupName": "/aws/lambda/fintrust-ingest-dev",
+            "creationTime": 1791490487519,
+            "retentionInDays": 14,
+            "metricFilterCount": 0,
+            "arn": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+            "storedBytes": 0,
+            "logGroupClass": "STANDARD",
+            "logGroupArn": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev",
+            "deletionProtectionEnabled": false,
+            "bearerTokenAuthenticationEnabled": false
+          }
+        ]
+      }
+    },
+    "log_tags": {
+      "/aws/lambda/fintrust-ingest-dev": {
+        "status": "OK",
+        "operation": "logs:list_tags_for_resource",
+        "data": {
+          "tags": {
+            "Project": "FinTrust",
+            "aws:cloudformation:stack-name": "fintrust-ingest-dev",
+            "aws:cloudformation:stack-id": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-ingest-dev/def1be10-c354-11f1-ae9c-0a2f2e0d1f0f",
+            "Environment": "dev",
+            "aws:cloudformation:logical-id": "IngestLogs"
+          }
+        }
+      }
+    },
+    "alarms": {
+      "status": "OK",
+      "operation": "cloudwatch:describe_alarms",
+      "data": {
+        "MetricAlarms": []
+      }
+    },
+    "composite_alarms": {
+      "status": "OK",
+      "operation": "cloudwatch:describe_alarms",
+      "data": {
+        "CompositeAlarms": []
+      }
+    },
+    "dashboards": {
+      "status": "OK",
+      "operation": "cloudwatch:list_dashboards",
+      "data": {
+        "DashboardEntries": []
+      }
+    },
+    "ses_account": {
+      "status": "OK",
+      "operation": "sesv2:get_account",
+      "data": {
+        "DedicatedIpAutoWarmupEnabled": true,
+        "EnforcementStatus": "HEALTHY",
+        "ProductionAccessEnabled": false,
+        "SendQuota": {
+          "Max24HourSend": 200.0,
+          "MaxSendRate": 1.0,
+          "SentLast24Hours": 0.0
+        },
+        "SendingEnabled": true,
+        "SuppressionAttributes": {
+          "SuppressedReasons": [
+            "BOUNCE",
+            "COMPLAINT"
+          ]
+        },
+        "PricingAttributes": {
+          "CurrentPlan": "ESSENTIALS"
+        }
+      }
+    },
+    "ses_identities": {
+      "status": "OK",
+      "operation": "sesv2:list_email_identities",
+      "data": {
+        "EmailIdentities": []
+      }
+    }
+  }
+}

@@ -1,0 +1,142 @@
+{
+  "captured_at": "2026-10-10T18:10:32.829864+00:00",
+  "profile": "fintrust-inventory",
+  "region": "af-south-1",
+  "aws_mutations": false,
+  "results": {
+    "discovery_status": "OK",
+    "functions": {
+      "fintrust-ingest-dev": {
+        "configuration": {
+          "status": "OK",
+          "operation": "lambda:get_function_configuration",
+          "data": {
+            "FunctionName": "fintrust-ingest-dev",
+            "FunctionArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::966467878406:role/fintrust-ingest-dev",
+            "Handler": "fintrust.ingest.lambda_handler",
+            "CodeSize": 21646562,
+            "Description": "",
+            "Timeout": 120,
+            "MemorySize": 256,
+            "LastModified": "2026-10-08T20:14:57.941+0000",
+            "CodeSha256": "1kXYlJ7lsSiytcTBVY3WGhpcD9PN6s5gNjsZ9w0WfWI=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+              "Mode": "PassThrough"
+            },
+            "RevisionId": "1492aeed-c074-4932-b7ec-1addd6f0e316",
+            "State": "Active",
+            "LastUpdateStatus": "Successful",
+            "PackageType": "Zip",
+            "Architectures": [
+              "x86_64"
+            ],
+            "EphemeralStorage": {
+              "Size": 512
+            },
+            "SnapStart": {
+              "ApplyOn": "None",
+              "OptimizationStatus": "Off"
+            },
+            "RuntimeVersionConfig": {
+              "RuntimeVersionArn": "arn:aws:lambda:af-south-1::runtime:36aeb19f3326e129d9f096dea0a3c6a9ca8dce2610e62d2b2060747602d863ae"
+            },
+            "LoggingConfig": {
+              "LogFormat": "Text",
+              "LogGroup": "/aws/lambda/fintrust-ingest-dev"
+            },
+            "EnvironmentNames": [
+              "FINTRUST_SERVICE",
+              "FINTRUST_STAGE",
+              "QUARANTINE_BUCKET",
+              "TRANSACTION_QUEUE_URL"
+            ]
+          }
+        },
+        "concurrency": {
+          "status": "OK",
+          "operation": "lambda:get_function_concurrency",
+          "data": {
+            "ReservedConcurrentExecutions": 0
+          }
+        },
+        "async": {
+          "status": "OK",
+          "operation": "lambda:get_function_event_invoke_config",
+          "data": {
+            "LastModified": "2026-10-08T22:15:05.510000+02:00",
+            "FunctionArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev:$LATEST",
+            "MaximumRetryAttempts": 2,
+            "MaximumEventAgeInSeconds": 21600,
+            "DestinationConfig": {
+              "OnSuccess": {},
+              "OnFailure": {
+                "Destination": "arn:aws:sqs:af-south-1:966467878406:fintrust-ingest-failures-dev"
+              }
+            }
+          }
+        },
+        "mappings": {
+          "status": "OK",
+          "operation": "lambda:list_event_source_mappings",
+          "data": {
+            "EventSourceMappings": []
+          }
+        },
+        "tags": {
+          "status": "OK",
+          "operation": "lambda:list_tags",
+          "data": {
+            "Tags": {
+              "Environment": "dev",
+              "Project": "FinTrust",
+              "aws:cloudformation:logical-id": "IngestFunction",
+              "aws:cloudformation:stack-id": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-ingest-dev/def1be10-c354-11f1-ae9c-0a2f2e0d1f0f",
+              "aws:cloudformation:stack-name": "fintrust-ingest-dev"
+            }
+          }
+        },
+        "versions": {
+          "status": "OK",
+          "operation": "lambda:list_versions_by_function",
+          "data": {
+            "Versions": [
+              {
+                "Runtime": "python3.12",
+                "Handler": "fintrust.ingest.lambda_handler",
+                "CodeSize": 21646562,
+                "LastModified": "2026-10-08T20:14:57.941+0000",
+                "CodeSha256": "1kXYlJ7lsSiytcTBVY3WGhpcD9PN6s5gNjsZ9w0WfWI=",
+                "Version": "$LATEST",
+                "Architectures": [
+                  "x86_64"
+                ]
+              }
+            ]
+          }
+        },
+        "resource_policy": {
+          "status": "UNVERIFIED",
+          "operation": "lambda:get_policy",
+          "error_code": "ResourceNotFoundException",
+          "error": "aws: [ERROR]: An error occurred (ResourceNotFoundException) when calling the GetPolicy operation: The resource you requested does not exist.\n\nAdditional error details:\nType: User"
+        },
+        "function_url": {
+          "status": "UNVERIFIED",
+          "operation": "lambda:get_function_url_config",
+          "error_code": "ResourceNotFoundException",
+          "error": "aws: [ERROR]: An error occurred (ResourceNotFoundException) when calling the GetFunctionUrlConfig operation: The resource you requested does not exist.\n\nAdditional error details:\nType: User"
+        },
+        "aliases": {
+          "status": "OK",
+          "operation": "lambda:list_aliases",
+          "data": {
+            "Aliases": []
+          }
+        }
+      }
+    }
+  }
+}

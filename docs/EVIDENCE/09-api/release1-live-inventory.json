@@ -1,0 +1,14 @@
+{
+  "captured_at": "2026-10-10T18:08:06.326744+00:00",
+  "profile": "fintrust-inventory",
+  "region": "af-south-1",
+  "aws_mutations": false,
+  "results": {
+    "rest": {},
+    "http": {},
+    "discovery_status": {
+      "rest": "OK",
+      "http": "OK"
+    }
+  }
+}

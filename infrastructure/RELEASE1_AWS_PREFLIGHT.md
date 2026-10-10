@@ -1,8 +1,9 @@
 # Release 1 AWS inventory and private RDS preflight checkpoint
 
-Status: **BLOCKED pending fintrust-inventory login**. No live identity, resource state,
-AWS drift, migration state or MFA assertion has been established in this checkpoint.
-Historical resource IDs below are targets for fresh verification, not live evidence.
+Status: **READ-ONLY AWS INVENTORY COMPLETE, 2026-10-10**. Live resource metadata now
+confirms the existing infrastructure and the undeployed Release 1 components. Database
+schema/migration state remains unknown: no live SQL or private runner invocation occurred.
+The IAM user ARN does not independently prove MFA for the current inventory login.
 No AWS mutation, secret retrieval, live SQL, application change, artifact rebuild or push.
 
 Continues source `12b0c94844b6ff1a6389beb99e1f87a51fedb598`, evidence `8fb2c6e`,
@@ -12,8 +13,10 @@ These historical test results do not prove any live AWS state.
 
 ## Identity and inventory execution boundary
 
-The approved inventory profile exists but its browser login has expired. The elevated
-read-only STS retry returned: `Your session has expired. Please reauthenticate using aws login`.
+The initial browser login expired; the user reauthenticated and the subsequent STS
+call succeeded as `arn:aws:iam::966467878406:user/fintrust-inventory`, account
+`966467878406`, with all workload inspections explicitly in `af-south-1`. The initial
+read-only retry returned: `Your session has expired. Please reauthenticate using aws login`.
 Evidence: `docs/EVIDENCE/02-iam/release1-inventory-session-check.json`.
 User reauthentication: `aws login --profile fintrust-inventory`.
 Then resume with:
@@ -63,22 +66,53 @@ Queue names: `fintrust-transactions-dev.fifo`, `fintrust-transactions-dlq-dev.fi
 
 ## Expected versus actual Release 1
 
-Every actual field is currently UNVERIFIED because authentication failed. Missing
-future Release 1 components are deployment gaps, not evidence of drift in earlier stages.
+Actual states below come from fresh approved read-only CLI responses. Each existing
+evidence folder contains `release1-live-inventory.json`. No inspection was denied.
+Authorized not-found responses establish absence of the exact temporary roles/stacks
+and ingest resource policy/function URL; they are not permission failures. Missing
+future Release 1 components are deployment gaps, not unexplained earlier-stage drift.
 
 | Component | Expected Release 1 state | Actual AWS state | Match | Action required |
 | --- | --- | --- | --- | --- |
-| Identity | Approved read-only profile/account966467878406/af-south-1 | Session expired | Unknown | Login then STS/account guard |
-| Network | Stage1 four private subnets/two AZs; app-to-DB5432; S3/Dynamo gateway endpoints; no NAT/public route | Unverified | Unknown | Scoped network inventory |
-| S3/KMS | Stage2 three private/versioned CMK-encrypted buckets | Unverified | Unknown | Verify policies/public blocks/key administration |
-| RDS | PG16.15 t4g.micro Single-AZ20GiB gp3/private/IAM auth/force_ssl/aws-rds encryption/managed secret/one-day backups/deletion protection | Unverified | Unknown | Inspect DB and secret metadata; no secret values |
-| DynamoDB | Stage4 fintrust-risk-dev, on-demand, exact keys, intended stream and encryption | Unverified | Unknown | Compare Stage4 template |
-| SQS | Five named queues; transaction FIFO and FIFO DLQ with scoped redrive | Unverified | Unknown | Inspect attributes/counts; never receive/redrive |
-| Ingest | Version-pinned verified release; bounded activation separately approved; S3 trigger separately approved | Unverified; historical Stage5 ingest differs from candidate | Unknown | Hash/concurrency/trigger inventory, no replacement |
-| Scoring | FIFO mapping, private DB TLS/IAM privileges, projections | Unverified | Unknown | Identify deployed vs prepared resources |
-| Reports/alerts | Intended EventBridge/stream triggers and destinations; idempotent alerts | Unverified | Unknown | Verify runtime/trigger/SES readiness |
-| API/frontend/auth | Real backend; reviewed cloud identity; least-privilege operations path | Unverified; local identity is not AWS provisioning | Unknown | Inventory and separate auth/controller approval |
-| Schema001/002 | Exact ordered versions, catalog/ownership/grants and preserved financial rows | Not inspected live | Unknown | Approved private read-only runner first |
+| Identity | Approved read-only inventory/account/region; no keys | fintrust-inventory IAM user; account966467878406; af-south-1; zero keys; MFA device configured | Yes; session MFA not independently proven | Retain user/profile evidence |
+| Existing stacks | Stages1-4 verified and historical ingest | All five stacks CREATE_COMPLETE | Yes | No resource changes |
+| Network | Four private subnets/two AZs, narrow DB5432, S3/Dynamo gateways, no NAT/public route | Four subnets af-south-1a/1b; public-IP mapping false; app443 gateway prefixes and DB5432 only; no NAT/IGW; two gateways available | Yes | Proposed temporary Secrets endpoint separately approved |
+| S3/KMS | Three private/versioned CMK-encrypted buckets | All three versioned, SSE-KMS+bucket keys, all public blocks, nonpublic policies; enabled365-day-rotation CMK | Yes | Screenshot controls; no upload |
+| RDS | PG16.15 t4g.micro20GiB gp3/private/Single-AZ/IAM/TLS/aws-rds key | available; all settings match; deletion protection; backups1day; TLS group in-sync | Yes | Live SQL still separate gate |
+| Secret | RDS-managed credential through private endpoint for runner | Active RDS-owned secret; AWSCURRENT; seven-day rotation; aws/secretsmanager key; no Secrets endpoint | Credential exists; retrieval path not deployed | Create approved private path later; never retrieve value now |
+| Dynamo | fintrust-risk-dev on-demand account_id/score_date, NEW_IMAGE stream | ACTIVE, PAY_PER_REQUEST, exact keys, stream enabled; default AWS-owned encryption; approximate ItemCount0 | Yes | Scoring/stream consumer not deployed |
+| SQS | Five queues, transaction FIFO+FIFO DLQ, managed encryption | All five exist, SSE-SQS; transaction visibility720s/retention4days/maxReceive5; DLQ14days/byQueue; all three approximate counts0 per queue | Yes | No receive/redrive |
+| Ingest | Verified new candidate, separate runtime/activation gates | Historical SHA d645d8949ee5b128b2b5c4c1558dd61a1a5c0fd3cdeace60363b19f70d167d62, Python3.12/x86_64/256MiB/120s, outside VPC, concurrency0 | Historical stage matches; Release1 not deployed | Review code/runtime policy update later |
+| Triggers | Controlled activation after schema/runtime approval | All bucket notification configs empty; no event mappings/resource policy/function URL/aliases; async failure points to ingest-failures | Safe inactive state | Do not wire/activate |
+| Other functions/API | Scoring/report/alert/API deployment later | Only named ingest function exists; no FinTrust REST/HTTP APIs | Deployment gap | Separate deployment/auth/controller review |
+| Monitoring/SES | Release1 alerts/reports/observability | Ingest logs14days/storedBytes0, PassThrough tracing; no named schedules/alarms/dashboards; SES sandbox200/day1/sec, zero verified identities | Deployment gap | Observability/notification setup later |
+| Private preflight | Separately approved single-AZ runner/endpoint | No interface endpoint, no migration stacks, no migration execution/operator roles | Not deployed | Approve scoped operator bootstrap/network/runner plan |
+| Schema001/002 | Ordered exact versions/catalog/owners/grants and preserved rows | Not inspected live | Unknown | Approved private read-only preflight first |
+
+Live DB subnet group `fintrust-db-dev` contains database subnets
+`subnet-04dc0f576867d7a6c` (af-south-1a) and `subnet-084deb13f49a36064` (af-south-1b).
+Application subnets remain `subnet-0c2d87e8a83361e30` and `subnet-0328276227fa30ead`.
+DB endpoint `fintrust-ledger-dev.cv84aee6u6up.af-south-1.rds.amazonaws.com:5432`, DB `fintrust`,
+resource ID `db-QZ3JN4H22YOMU7VLI22RL2IUYQ` and pinned secret ARN match runner configuration.
+Master credential value was never retrieved. `rds.force_ssl=1`, `ssl=1`, parameter group
+`fintrust-postgres16-dev` familypostgres16 and instance parameter apply statusin-sync.
+Instance metadata/parameter settings do not substitute for future TLS-session verification.
+
+IAM comparison: 14 of15 mapped Stage1-5 local policy documents match the current live
+policy documents. The one expected prepared-release difference is ingest runtime:
+live lacks proposed `ReadBatchAudit`/`ListBatchMarkers` and quarantine batch-read KMS context.
+Do not apply candidate code without its separately reviewed policy update. No automatic
+IAM correction was made. The deployer user's additional `FinTrustWellArchitectedReview`
+inline policy grants Well-Architected metadata writes with Resource*. This means the user
+is not literally assume-role-only across all AWS services; infrastructure deployment still
+uses the MFA-controlled role. Flag for owner review, not unsolicited removal. Inventory
+has ReadOnlyAccess plus SignInLocalDevelopmentAccess (OAuth login token actions); no
+infrastructure write grant was found in its user/group policy scope. Both users have
+zero access keys and one configured MFA device. Validation of all eight inventory files found no unexpected failed reads and no secret
+values/environment value fields. See02-iam/release1-inventory-verification.json.
+Account SCP/session-policy constraints
+and actual MFA context were not independently evaluated. No formal CloudFormation drift
+detection operation was run; these are read-only resource/policy comparisons.
 
 ## Private database access: implemented locally, not deployed
 
@@ -88,7 +122,7 @@ Authoritative design: `PRIVATE_RDS_RUNNER.md`, `infrastructure/migration.py`,
 That CI verifies PG16/Python3.12 Linux x86_64 packages and migration **001 only**.
 No live endpoint, runner, bootstrap identity or migration state is claimed here.
 
-Historical target: VPC `vpc-0aba008bb360f5147`, single application subnet
+Live-verified target: VPC `vpc-0aba008bb360f5147`, single application subnet
 `subnet-0c2d87e8a83361e30` in af-south-1a. Runner uses app SG
 `sg-0850bd798bb9505e2` to DB SG `sg-01644a4c9f2c44162` TCP5432.
 Temporary client SG permits HTTPS to temporary endpoint SG; endpoint ingress443 only
@@ -97,7 +131,8 @@ ClientSecurityGroup, EndpointIngress, SecretsEndpoint (private DNS, Secrets Mana
 one AZ). Three runner resources: RunnerLogs (14-day retention, Retain), RunnerLambda,
 RunnerVersion. Execution role/boundary and artifact authorization are separate bootstrap.
 Existing app SG also allows S3/Dynamo gateway traffic: this is not DB-only isolation.
-Fresh inventory must confirm DNS/routes/SGs and no existing private Secrets Manager path.
+Fresh inventory confirms DNS support/hostnames true, the pinned routes/SGs and no
+interface endpoint/private Secrets Manager path in the FinTrust VPC.
 
 Preflight/bootstrap/cleanup phases retrieve only the pinned RDS master secret AWSCURRENT
 through the actual private endpoint. IAM phase explicitly denies master-secret retrieval,
@@ -108,9 +143,10 @@ Preflight is read-only; bootstrap, IAM migrate and cleanup are separate mutation
 No invocation now. Numeric qualified version, synchronous invocation, no LogType Tail,
 no trigger/URL/async configuration; concurrency stays0 until separately approved1.
 
-Historical regional quote: one-AZ endpoint $0.01309/hour, four hours $0.05236,
+Fresh AWS Pricing GetProducts quote (SKU8ZMGRUS7QT5EM7NR, published2026-09-17,
+effective2026-09-01): one-AZ endpoint $0.01309/hour, four hours $0.05236,
 24hours $0.31416,730hours $9.55570 plus processing (first PB $0.01/GB), Lambda/log/S3
-usage. Regional hourly quote needs fresh verification before approval. Endpoint hours
+usage. Quote confirmed on2026-10-10; credits/tax excluded. Endpoint hours
 continue while idle and partial hours round up; see https://aws.amazon.com/privatelink/pricing/.
 Existing RDS/CMK/secret storage costs continue independently; this task adds none.
 Cleanup after approved DB work: revoke qualified invocation/drain runner; remove DB
@@ -198,7 +234,7 @@ local role grants are already live. The002 live runner is still NOT IMPLEMENTED/
 | Inventory | fintrust-inventory | Scoped read-only describe/get/list; no secret values |
 | Temporary IAM bootstrap | controlled fintrust-admin | FinTrustMigrationBootstrap: exact migration role/boundary/policies, mandatory boundary; content reviewed |
 | Endpoint/runner deployment | separate scoped migration operator | FinTrustMigrationDeployment: exact two stacks/resource types, owned tempSG/endpoint/service, function/log/PassRole; artifact-version S3/KMS code fetch |
-| Preflight invocation | separate MFA-backed qualified invoker | lambda:InvokeFunction exact approved numeric RunnerVersion; no deploy/secret privilege |
+| Preflight invocation | existing MFA-backed fintrust-deployer-role with a separately approved temporary invoke-only addition | lambda:InvokeFunction exact approved numeric RunnerVersion; no deploy/secret privilege |
 | Runner execution | fintrust-migration-dev + FinTrustMigrationBoundary | Phase-specific FinTrustMigrationRuntime; exact secret via actual vpce/AWSCURRENT or exact DB IAM user; exact logs/ENI controls |
 | Snapshot later | separately reviewed snapshot operator | rds:CreateDBSnapshot exact source DB and approved snapshot name/tag scope; describe only, no DB deletion |
 | Migration001 later | qualified invoker + IAM-phase runner | Approved fixed001 operation and temporary PostgreSQL role, no master secret |
@@ -268,13 +304,40 @@ have null provenance. Compare with canonical001 nullability and approved legacy 
 
 ## Next gate
 
-First possible AWS mutation is administrator bootstrap of the exact bounded migration
-operator/execution role if absent; only then the reviewed single-AZ Secrets Manager
-network change set and runner deployment. Which resource is first depends on fresh
-inventory. None is authorized now. Approve cost and exact policies/templates separately.
+Fresh inventory confirms the exact migration operator role does not exist. First
+proposed AWS mutation is controlled administrator `iam:CreateRole` for
+`fintrust-migration-operator-dev`, after review of this temporary trust:
 
-Current blockers: expired inventory login; live resource/schema state unknown; proposed
-002 supplement not in verified runner;002 live executor not implemented. No drift detected
-means no drift assessment was possible, not that the account is compliant.
+```json
+{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"AWS":"arn:aws:iam::966467878406:root"},"Action":"sts:AssumeRole","Condition":{"ArnEquals":{"aws:PrincipalArn":"arn:aws:iam::966467878406:user/fintrust_deployer"},"Bool":{"aws:MultiFactorAuthPresent":"true"}}}]}
+```
 
-**FINTRUST AWS PREFLIGHT BLOCKED — fintrust-inventory session expired; live inventory pending**
+Operator receives only generated FinTrustMigrationDeployment and exact preflight
+artifact/version authorization, no managed administrator policy, IAM management, secret
+read, snapshot or invocation grant. Direct human assumption requires a separately approved
+temporary `sts:AssumeRole` allow on only
+`arn:aws:iam::966467878406:role/fintrust-migration-operator-dev`, with MFA condition,
+added to the named human identity and removed on cleanup. Do not chain from the existing
+deployer role or weaken its interface-endpoint deny. Require a short MFA role session (proposed maximum3600seconds); Project=FinTrust,
+Environment=dev and Purpose=temporary-migration tags on the role.
+The existing FinTrustMigrationBootstrap proposal covers the bounded Lambda execution
+role/boundary, not creation of this human operator; administrator performs that separate
+reviewed bootstrap. It is never attached to the deployer/operator.
+
+Then review exact network change set/cost before any execution; obtain actual endpoint ID
+before creating endpoint-bound execution boundary/role; upload only verified phase archive
+under separate artifact-upload approval; deploy immutable preflight version with concurrency0.
+Separately approve qualified invoke/concurrency1 for the fixed READ ONLY operation, then
+return to0 and stop to compare actual SQL. No mutation command was run or authorized by
+this report. Exact artifact version, operator bootstrap/deployment JSON and endpoint-bound
+policies remain a separate concrete approval checkpoint; do not attach placeholder policies.
+
+Remaining later gates: live schema001/002 state unknown;002 catalog supplement not in
+verified runner;002 live executor not implemented; candidate ingest/runtime policy not
+live; scoring/report/alert/API/auth/controller/SES/monitoring not ready for activation.
+These do not prevent review of controlled read-only preflight infrastructure. They do
+prevent migration or full Release1 activation. Existing source, artifact and historical
+uploaded VersionId remain untouched. Ten focused local SQL tests remain passed; no
+application suite, ZIP build or CI run was repeated for metadata/documentation changes.
+
+**FINTRUST READ-ONLY AWS PREFLIGHT COMPLETE — READY FOR CONTROLLED RDS PREFLIGHT INFRASTRUCTURE**

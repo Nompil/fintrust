@@ -1,0 +1,28 @@
+{
+  "verified_at": "2026-10-10T18:15:26.555320+00:00",
+  "sections": [
+    "02-iam",
+    "04-network",
+    "05-rds",
+    "06-s3-kms",
+    "07-sqs-dynamodb",
+    "08-lambda",
+    "09-api",
+    "10-monitoring"
+  ],
+  "unexpected_read_failures": [],
+  "confirmed_absence_response_count": 12,
+  "secret_values_stored": false,
+  "lambda_environment_values_stored": false,
+  "aws_mutations": false,
+  "formal_cloudformation_drift_detection_run": false,
+  "policy_comparison": {
+    "mapped_policy_count": 15,
+    "exact_local_matches": 14,
+    "prepared_release_difference": "FinTrustStage5IngestRuntime: batch audit reads/list prefix and quarantine batch KMS read context not yet live"
+  },
+  "extra_user_permission_to_review": "FinTrustWellArchitectedReview permits Well-Architected metadata writes; no IAM change performed",
+  "session_mfa_proven": false,
+  "mfa_devices_configured_both_users": true,
+  "access_key_count_both_users": 0
+}

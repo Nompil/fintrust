@@ -1,0 +1,17 @@
+{
+  "observed_at": "2026-10-10T18:14:22.852898+00:00",
+  "source": "AWS Pricing GetProducts via fintrust-inventory, pricing endpoint us-east-1",
+  "service_code": "AmazonVPC",
+  "sku": "8ZMGRUS7QT5EM7NR",
+  "region_code": "af-south-1",
+  "usage_type": "AFS1-VpcEndpoint-Hours",
+  "unit": "Hrs",
+  "usd": "0.0130900000",
+  "publication_date": "2026-09-17T19:05:28Z",
+  "effective_date": "2026-09-01T00:00:00Z",
+  "hours_4_usd": 0.05236,
+  "hours_24_usd": 0.31416,
+  "hours_730_usd": 9.5557,
+  "credits_applied": false,
+  "aws_resource_mutations": false
+}
