@@ -20,7 +20,12 @@ def migration_body():
     return source.split("\nBEGIN;\n",1)[1][:-len("COMMIT;\n")]
 
 def baseline(cur):
-    c,d,a=common.inspect(cur)
+    from .contract import assess
+    c=common.catalog(cur)
+    # 001 stays conservative. Only 002-owned workflow triggers are separately
+    # assessed by verify()/the saved catalog signature, never ignored globally.
+    c["triggers"]=[t for t in c.get("triggers") or [] if t["table"] not in TABLES]
+    a=assess(c);d=common.data(cur) if a["base_valid"] else None;a=assess(c,d)
     if a["state"]!="correct":raise common.Refused("verified_001_required")
     return d["row_counts"]
 
