@@ -5,3 +5,4 @@
 # Actual E2E originals are immutable bytes; do not normalize line endings.
 tests/fixtures/e2e/fintrust_e2e_mixed_transactions.csv -text whitespace=cr-at-eol
 tests/fixtures/e2e/fintrust_e2e_companion_transactions_B.csv -text whitespace=cr-at-eol
+tests/fixtures/e2e/release1/*.csv -text
