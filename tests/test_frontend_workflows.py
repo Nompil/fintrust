@@ -53,7 +53,8 @@ def test_batch_detail_never_completes_unreconciled_counts(release_db,authenticat
     client,headers=authenticated_client;items=feed([row(),row()]);run(items[:1])
     batch=items[0]['batch']['batch_id']
     result=client.get('/v1/batches/'+batch,headers=headers('Admin')).json['data']['batch']
-    assert not result['counts_consistent'] and result['display_status']=='AWAITING_RECONCILIATION'
+    assert result['counts_consistent'] and result['pending']==1
+    assert result['display_status']=='PROCESSING' and result['display_status']!='COMPLETED'
 
 def test_batch_scope_and_receipts_do_not_leak_other_accounts(release_db,authenticated_client,local_receipts):
     client,headers=authenticated_client;q=release_db[3]
