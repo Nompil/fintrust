@@ -1,0 +1,225 @@
+{
+  "captured_at": "2026-10-10T21:32:30.105203+00:00",
+  "profile": "fintrust-inventory",
+  "region": "af-south-1",
+  "aws_mutations": false,
+  "secret_values_retrieved": false,
+  "results": {
+    "fintrust-network-dev": {
+      "status": "OK",
+      "data": [
+        {
+          "StackName": "fintrust-network-dev",
+          "Status": "CREATE_COMPLETE"
+        }
+      ]
+    },
+    "fintrust-storage-dev": {
+      "status": "OK",
+      "data": [
+        {
+          "StackName": "fintrust-storage-dev",
+          "Status": "CREATE_COMPLETE"
+        }
+      ]
+    },
+    "fintrust-database-dev": {
+      "status": "OK",
+      "data": [
+        {
+          "StackName": "fintrust-database-dev",
+          "Status": "CREATE_COMPLETE"
+        }
+      ]
+    },
+    "fintrust-messaging-dev": {
+      "status": "OK",
+      "data": [
+        {
+          "StackName": "fintrust-messaging-dev",
+          "Status": "CREATE_COMPLETE"
+        }
+      ]
+    },
+    "fintrust-ingest-dev": {
+      "status": "OK",
+      "data": [
+        {
+          "StackName": "fintrust-ingest-dev",
+          "Status": "CREATE_COMPLETE"
+        }
+      ]
+    },
+    "subnets": {
+      "status": "OK",
+      "data": [
+        {
+          "SubnetId": "subnet-0328276227fa30ead",
+          "AvailabilityZone": "af-south-1b",
+          "VpcId": "vpc-0aba008bb360f5147",
+          "MapPublicIpOnLaunch": false
+        },
+        {
+          "SubnetId": "subnet-084deb13f49a36064",
+          "AvailabilityZone": "af-south-1b",
+          "VpcId": "vpc-0aba008bb360f5147",
+          "MapPublicIpOnLaunch": false
+        },
+        {
+          "SubnetId": "subnet-0c2d87e8a83361e30",
+          "AvailabilityZone": "af-south-1a",
+          "VpcId": "vpc-0aba008bb360f5147",
+          "MapPublicIpOnLaunch": false
+        },
+        {
+          "SubnetId": "subnet-04dc0f576867d7a6c",
+          "AvailabilityZone": "af-south-1a",
+          "VpcId": "vpc-0aba008bb360f5147",
+          "MapPublicIpOnLaunch": false
+        }
+      ]
+    },
+    "endpoints": {
+      "status": "OK",
+      "data": [
+        {
+          "VpcEndpointId": "vpce-0647afafb32f34e6d",
+          "VpcEndpointType": "Gateway",
+          "ServiceName": "com.amazonaws.af-south-1.dynamodb",
+          "SubnetIds": [],
+          "State": "available"
+        },
+        {
+          "VpcEndpointId": "vpce-0b59921927bd0e852",
+          "VpcEndpointType": "Gateway",
+          "ServiceName": "com.amazonaws.af-south-1.s3",
+          "SubnetIds": [],
+          "State": "available"
+        }
+      ]
+    },
+    "routes": {
+      "status": "OK",
+      "data": [
+        {
+          "RouteTableId": "rtb-0dfc9b122ba5932a0",
+          "Routes": [
+            {
+              "DestinationCidrBlock": "10.42.0.0/16",
+              "GatewayId": "local",
+              "Origin": "CreateRouteTable",
+              "State": "active"
+            }
+          ]
+        },
+        {
+          "RouteTableId": "rtb-008ec3760f6ccd9f0",
+          "Routes": [
+            {
+              "DestinationCidrBlock": "10.42.0.0/16",
+              "GatewayId": "local",
+              "Origin": "CreateRouteTable",
+              "State": "active"
+            }
+          ]
+        },
+        {
+          "RouteTableId": "rtb-01b4916c13d2894a5",
+          "Routes": [
+            {
+              "DestinationCidrBlock": "10.42.0.0/16",
+              "GatewayId": "local",
+              "Origin": "CreateRouteTable",
+              "State": "active"
+            },
+            {
+              "DestinationPrefixListId": "pl-a3ac49ca",
+              "GatewayId": "vpce-0b59921927bd0e852",
+              "Origin": "CreateRoute",
+              "State": "active"
+            },
+            {
+              "DestinationPrefixListId": "pl-d6ae4bbf",
+              "GatewayId": "vpce-0647afafb32f34e6d",
+              "Origin": "CreateRoute",
+              "State": "active"
+            }
+          ]
+        }
+      ]
+    },
+    "sgs": {
+      "status": "OK",
+      "data": [
+        {
+          "GroupId": "sg-0850bd798bb9505e2",
+          "IpPermissions": [],
+          "IpPermissionsEgress": [
+            {
+              "IpProtocol": "tcp",
+              "FromPort": 5432,
+              "ToPort": 5432,
+              "UserIdGroupPairs": [
+                {
+                  "UserId": "966467878406",
+                  "GroupId": "sg-01644a4c9f2c44162"
+                }
+              ],
+              "IpRanges": [],
+              "Ipv6Ranges": [],
+              "PrefixListIds": []
+            },
+            {
+              "IpProtocol": "tcp",
+              "FromPort": 443,
+              "ToPort": 443,
+              "UserIdGroupPairs": [],
+              "IpRanges": [],
+              "Ipv6Ranges": [],
+              "PrefixListIds": [
+                {
+                  "PrefixListId": "pl-a3ac49ca"
+                },
+                {
+                  "PrefixListId": "pl-d6ae4bbf"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "GroupId": "sg-01644a4c9f2c44162",
+          "IpPermissions": [
+            {
+              "IpProtocol": "tcp",
+              "FromPort": 5432,
+              "ToPort": 5432,
+              "UserIdGroupPairs": [
+                {
+                  "UserId": "966467878406",
+                  "GroupId": "sg-0850bd798bb9505e2"
+                }
+              ],
+              "IpRanges": [],
+              "Ipv6Ranges": [],
+              "PrefixListIds": []
+            }
+          ],
+          "IpPermissionsEgress": [
+            {
+              "IpProtocol": "-1",
+              "UserIdGroupPairs": [],
+              "IpRanges": [
+                {
+                  "CidrIp": "127.0.0.1/32"
+                }
+              ],
+              "Ipv6Ranges": [],
+              "PrefixListIds": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

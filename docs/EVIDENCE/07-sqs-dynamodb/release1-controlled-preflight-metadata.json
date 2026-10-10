@@ -1,0 +1,101 @@
+{
+  "prior_capture_at": "2026-10-10T21:32:30.110061+00:00",
+  "captured_at": "2026-10-10T21:44:51.513890+00:00",
+  "profile": "fintrust-inventory",
+  "region": "af-south-1",
+  "aws_mutations": false,
+  "secret_values_retrieved": false,
+  "results": {
+    "table": {
+      "status": "OK",
+      "data": {
+        "TableName": "fintrust-risk-dev",
+        "TableStatus": "ACTIVE",
+        "KeySchema": [
+          {
+            "AttributeName": "account_id",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "score_date",
+            "KeyType": "RANGE"
+          }
+        ],
+        "BillingModeSummary": {
+          "BillingMode": "PAY_PER_REQUEST",
+          "LastUpdateToPayPerRequestDateTime": "2026-10-08T10:19:35.208000+02:00"
+        },
+        "StreamSpecification": {
+          "StreamEnabled": true,
+          "StreamViewType": "NEW_IMAGE"
+        },
+        "SSEDescription": null,
+        "ItemCount": 0
+      }
+    },
+    "fintrust-transactions-dev.fifo": {
+      "status": "OK",
+      "data": {
+        "Attributes": {
+          "QueueArn": "arn:aws:sqs:af-south-1:966467878406:fintrust-transactions-dev.fifo",
+          "FifoQueue": "true",
+          "SqsManagedSseEnabled": "true",
+          "RedrivePolicy": "{\"deadLetterTargetArn\":\"arn:aws:sqs:af-south-1:966467878406:fintrust-transactions-dlq-dev.fifo\",\"maxReceiveCount\":5}",
+          "MessageRetentionPeriod": "345600",
+          "VisibilityTimeout": "720",
+          "ApproximateNumberOfMessages": "0"
+        }
+      }
+    },
+    "fintrust-transactions-dlq-dev.fifo": {
+      "status": "OK",
+      "data": {
+        "Attributes": {
+          "QueueArn": "arn:aws:sqs:af-south-1:966467878406:fintrust-transactions-dlq-dev.fifo",
+          "FifoQueue": "true",
+          "SqsManagedSseEnabled": "true",
+          "RedriveAllowPolicy": "{\"redrivePermission\":\"byQueue\",\"sourceQueueArns\":[\"arn:aws:sqs:af-south-1:966467878406:fintrust-transactions-dev.fifo\"]}",
+          "MessageRetentionPeriod": "1209600",
+          "VisibilityTimeout": "30",
+          "ApproximateNumberOfMessages": "0"
+        }
+      }
+    },
+    "fintrust-ingest-failures-dev": {
+      "status": "OK",
+      "data": {
+        "Attributes": {
+          "QueueArn": "arn:aws:sqs:af-south-1:966467878406:fintrust-ingest-failures-dev",
+          "SqsManagedSseEnabled": "true",
+          "MessageRetentionPeriod": "1209600",
+          "VisibilityTimeout": "30",
+          "ApproximateNumberOfMessages": "0"
+        }
+      }
+    },
+    "fintrust-report-failures-dev": {
+      "status": "OK",
+      "data": {
+        "Attributes": {
+          "QueueArn": "arn:aws:sqs:af-south-1:966467878406:fintrust-report-failures-dev",
+          "SqsManagedSseEnabled": "true",
+          "MessageRetentionPeriod": "1209600",
+          "VisibilityTimeout": "30",
+          "ApproximateNumberOfMessages": "0"
+        }
+      }
+    },
+    "fintrust-alert-failures-dev": {
+      "status": "OK",
+      "data": {
+        "Attributes": {
+          "QueueArn": "arn:aws:sqs:af-south-1:966467878406:fintrust-alert-failures-dev",
+          "SqsManagedSseEnabled": "true",
+          "MessageRetentionPeriod": "1209600",
+          "VisibilityTimeout": "30",
+          "ApproximateNumberOfMessages": "0"
+        }
+      }
+    }
+  }
+}

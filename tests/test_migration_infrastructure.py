@@ -124,3 +124,26 @@ def test_index_builder_never_granted_to_migration_or_table_owner():
     cleanup=Path("sql/bootstrap/remove_temporary_identity.sql").read_text()
     assert "DROP FUNCTION IF EXISTS public.fintrust_create_identity_indexes()" in cleanup
     assert "DROP ROLE fintrust_index_builder" in cleanup
+
+
+def test_operator_policy_parts_are_scoped_and_attachable(tmp_path):
+    parts=m.deployment_policies()
+    assert set(parts)=={"CloudFormation","Network","Runner"}
+    assert all(len(json.dumps(p,separators=(",",":")))<6144 for p in parts.values())
+    assert sum(len(p["Statement"]) for p in parts.values())==len(m.deployment_policy()["Statement"])
+    endpoint=next(s for s in parts["Network"]["Statement"] if s["Sid"]=="CreateSecretEndpoint")
+    assert endpoint["Condition"]["StringEquals"]["ec2:VpceServiceName"]=="com.amazonaws.af-south-1.secretsmanager"
+    assert "ec2:VpcEndpointType" not in json.dumps(parts)
+    assert m.network_template()["Resources"]["SecretsEndpoint"]["Properties"]["VpcEndpointType"]=="Interface"
+    rendered=m.render(tmp_path)
+    assert "deployment-policy.json" not in rendered
+    for name,policy in parts.items():
+        assert rendered[f"operator-{name.lower()}-policy.json"]==policy
+
+def test_operator_trust_requires_exact_human_and_mfa():
+    trust=m.operator_trust()["Statement"][0]
+    assert trust["Condition"]["Bool"]["aws:MultiFactorAuthPresent"]=="true"
+    assert trust["Condition"]["ArnEquals"]["aws:PrincipalArn"]=="arn:aws:iam::966467878406:user/fintrust_deployer"
+    with pytest.raises(ValueError):m.invoke_policy("$LATEST")
+    with pytest.raises(ValueError):m.snapshot_policy("*")
+    assert m.invoke_policy(3)["Statement"][0]["Resource"].endswith(":3")

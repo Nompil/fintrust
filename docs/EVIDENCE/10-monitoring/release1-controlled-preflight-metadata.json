@@ -1,0 +1,54 @@
+{
+  "prior_capture_at": "2026-10-10T21:32:30.113909+00:00",
+  "captured_at": "2026-10-10T21:44:51.529069+00:00",
+  "profile": "fintrust-inventory",
+  "region": "af-south-1",
+  "aws_mutations": false,
+  "secret_values_retrieved": false,
+  "results": {
+    "logs": {
+      "status": "OK",
+      "data": [
+        {
+          "logGroupName": "/aws/lambda/fintrust-ingest-dev",
+          "retentionInDays": 14,
+          "storedBytes": 0
+        }
+      ]
+    },
+    "rules": {
+      "status": "OK",
+      "data": []
+    },
+    "ses": {
+      "status": "OK",
+      "data": {
+        "ProductionAccessEnabled": false,
+        "SendQuota": {
+          "Max24HourSend": 200.0,
+          "MaxSendRate": 1.0,
+          "SentLast24Hours": 0.0
+        },
+        "SendingEnabled": true
+      }
+    },
+    "alarms": {
+      "status": "OK",
+      "data": {
+        "metric_alarms": [],
+        "composite_alarms": []
+      }
+    },
+    "dashboards": {
+      "status": "OK",
+      "data": []
+    },
+    "ses-identities": {
+      "status": "OK",
+      "data": {
+        "count": 0,
+        "verified_count": 0
+      }
+    }
+  }
+}

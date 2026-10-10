@@ -1,0 +1,168 @@
+{
+  "prior_capture_at": "2026-10-10T21:32:30.108634+00:00",
+  "captured_at": "2026-10-10T21:44:51.496584+00:00",
+  "profile": "fintrust-inventory",
+  "region": "af-south-1",
+  "aws_mutations": false,
+  "secret_values_retrieved": false,
+  "results": {
+    "raw-get_bucket_encryption": {
+      "status": "OK",
+      "data": {
+        "ServerSideEncryptionConfiguration": {
+          "Rules": [
+            {
+              "ApplyServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "aws:kms",
+                "KMSMasterKeyID": "arn:aws:kms:af-south-1:966467878406:key/598a4158-2cc6-4946-af24-512784a276c8"
+              },
+              "BucketKeyEnabled": true,
+              "BlockedEncryptionTypes": {
+                "EncryptionType": [
+                  "SSE-C"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "raw-get_bucket_versioning": {
+      "status": "OK",
+      "data": {
+        "Status": "Enabled"
+      }
+    },
+    "raw-get_public_access_block": {
+      "status": "OK",
+      "data": {
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": true,
+          "RestrictPublicBuckets": true
+        }
+      }
+    },
+    "raw-get_bucket_policy_status": {
+      "status": "OK",
+      "data": {
+        "PolicyStatus": {
+          "IsPublic": false
+        }
+      }
+    },
+    "quarantine-get_bucket_encryption": {
+      "status": "OK",
+      "data": {
+        "ServerSideEncryptionConfiguration": {
+          "Rules": [
+            {
+              "ApplyServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "aws:kms",
+                "KMSMasterKeyID": "arn:aws:kms:af-south-1:966467878406:key/598a4158-2cc6-4946-af24-512784a276c8"
+              },
+              "BucketKeyEnabled": true,
+              "BlockedEncryptionTypes": {
+                "EncryptionType": [
+                  "SSE-C"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "quarantine-get_bucket_versioning": {
+      "status": "OK",
+      "data": {
+        "Status": "Enabled"
+      }
+    },
+    "quarantine-get_public_access_block": {
+      "status": "OK",
+      "data": {
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": true,
+          "RestrictPublicBuckets": true
+        }
+      }
+    },
+    "quarantine-get_bucket_policy_status": {
+      "status": "OK",
+      "data": {
+        "PolicyStatus": {
+          "IsPublic": false
+        }
+      }
+    },
+    "reports-get_bucket_encryption": {
+      "status": "OK",
+      "data": {
+        "ServerSideEncryptionConfiguration": {
+          "Rules": [
+            {
+              "ApplyServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "aws:kms",
+                "KMSMasterKeyID": "arn:aws:kms:af-south-1:966467878406:key/598a4158-2cc6-4946-af24-512784a276c8"
+              },
+              "BucketKeyEnabled": true,
+              "BlockedEncryptionTypes": {
+                "EncryptionType": [
+                  "SSE-C"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reports-get_bucket_versioning": {
+      "status": "OK",
+      "data": {
+        "Status": "Enabled"
+      }
+    },
+    "reports-get_public_access_block": {
+      "status": "OK",
+      "data": {
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": true,
+          "RestrictPublicBuckets": true
+        }
+      }
+    },
+    "reports-get_bucket_policy_status": {
+      "status": "OK",
+      "data": {
+        "PolicyStatus": {
+          "IsPublic": false
+        }
+      }
+    },
+    "kms-key": {
+      "status": "OK",
+      "data": {
+        "Arn": "arn:aws:kms:af-south-1:966467878406:key/598a4158-2cc6-4946-af24-512784a276c8",
+        "KeyState": "Enabled",
+        "KeyManager": "CUSTOMER",
+        "KeySpec": "SYMMETRIC_DEFAULT",
+        "KeyUsage": "ENCRYPT_DECRYPT",
+        "MultiRegion": false
+      }
+    },
+    "kms-rotation": {
+      "status": "OK",
+      "data": {
+        "KeyRotationEnabled": true,
+        "KeyId": "arn:aws:kms:af-south-1:966467878406:key/598a4158-2cc6-4946-af24-512784a276c8",
+        "RotationPeriodInDays": 365,
+        "NextRotationDate": "2027-10-07T14:57:23.194000+02:00"
+      }
+    }
+  }
+}

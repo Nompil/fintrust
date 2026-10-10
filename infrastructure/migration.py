@@ -121,7 +121,7 @@ def deployment_policy():
        allow("OwnTemporarySgRules",["ec2:AuthorizeSecurityGroupIngress","ec2:AuthorizeSecurityGroupEgress","ec2:RevokeSecurityGroupIngress","ec2:RevokeSecurityGroupEgress","ec2:DeleteSecurityGroup"],ec2+"security-group/*",owned()),
        allow("RemoveEndpoint",["ec2:DeleteVpcEndpoints"],ec2+"vpc-endpoint/*",owned()),
        allow("CreationTags",["ec2:CreateTags"],[ec2+"security-group/*",ec2+"vpc-endpoint/*"],{**mediated(True),"StringLike":{"ec2:CreateAction":["CreateSecurityGroup","CreateVpcEndpoint"]}})]
-    next(s for s in statements if s["Sid"]=="CreateSecretEndpoint")["Condition"]["StringEquals"].update({"ec2:VpceServiceName":"com.amazonaws.af-south-1.secretsmanager","ec2:VpcEndpointType":"Interface"})
+    next(s for s in statements if s["Sid"]=="CreateSecretEndpoint")["Condition"]["StringEquals"].update({"ec2:VpceServiceName":"com.amazonaws.af-south-1.secretsmanager"})
     statements += [
        allow("PassOnlyRunner",["iam:PassRole"],ROLE,{**mediated(),"StringEquals":{"aws:RequestedRegion":REGION,"iam:PassedToService":"lambda.amazonaws.com"}}),
        allow("CreateFunction",["lambda:CreateFunction","lambda:TagResource"],FUNCTION,mediated(True)),
@@ -159,19 +159,15 @@ def render(out, endpoint="__VERIFIED_ENDPOINT_ID_REQUIRED__"):
     import re
     if endpoint!="__VERIFIED_ENDPOINT_ID_REQUIRED__" and not re.fullmatch(r"vpce-[a-f0-9]{8,17}",endpoint):raise ValueError("Invalid verified endpoint ID")
     out=Path(out);out.mkdir(parents=True,exist_ok=True)
-    documents={"network-template.json":network_template(),"deployment-policy.json":deployment_policy(),
+    documents={"network-template.json":network_template(),
                "bootstrap-policy.json":bootstrap_policy(),"execution-trust.json":trust(),
                "boundary-review.json":boundary(endpoint)}
+    documents.update({f"operator-{name.lower()}-policy.json":policy for name,policy in deployment_policies().items()})
     for phase in PHASES:
         documents[f"{phase}-template.json"]=runner_template(phase)
         documents[f"{phase}-runtime-policy-review.json"]=runtime_policy(phase,endpoint)
     for name,doc in documents.items():(out/name).write_text(json.dumps(doc,indent=2)+"\n",encoding="utf-8")
     return documents
-
-if __name__=="__main__":
-    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument("--output",default="build/migration-runner/review")
-    parser.add_argument("--endpoint-id",default="__VERIFIED_ENDPOINT_ID_REQUIRED__")
-    args=parser.parse_args();print("Rendered",len(render(args.output,args.endpoint_id)),"LOCAL REVIEW documents; no AWS calls")
 
 # Separate grants; never bundled into deployment policy or attached automatically.
 def operator_trust():
@@ -188,3 +184,18 @@ def snapshot_policy(snapshot_name):
     db=f"arn:aws:rds:{REGION}:{ACCOUNT}:db:fintrust-ledger-dev"
     snap=f"arn:aws:rds:{REGION}:{ACCOUNT}:snapshot:{snapshot_name}"
     return {"Version":"2012-10-17","Statement":[allow("SnapshotExactSource",["rds:CreateDBSnapshot"],db,regional()),allow("CreateExactSnapshot",["rds:CreateDBSnapshot","rds:AddTagsToResource"],snap,{"StringEquals":{"aws:RequestedRegion":REGION,"aws:RequestTag/Project":"FinTrust","aws:RequestTag/Environment":"dev"}}),allow("InspectSnapshots",["rds:DescribeDBSnapshots"],"*",regional())]}
+
+
+def deployment_policies():
+    """Same reviewed action set, divided below managed-policy size limits."""
+    groups={"CloudFormation":[],"Network":[],"Runner":[]}
+    for statement in deployment_policy()["Statement"]:
+        service=statement["Action"][0].split(":")[0]
+        group="CloudFormation" if service=="cloudformation" else "Network" if service=="ec2" else "Runner"
+        groups[group].append(statement)
+    return {name:{"Version":"2012-10-17","Statement":statements} for name,statements in groups.items()}
+
+if __name__=="__main__":
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument("--output",default="build/migration-runner/review")
+    parser.add_argument("--endpoint-id",default="__VERIFIED_ENDPOINT_ID_REQUIRED__")
+    args=parser.parse_args();print("Rendered",len(render(args.output,args.endpoint_id)),"LOCAL REVIEW documents; no AWS calls")

@@ -1,0 +1,4 @@
+{
+    "Parameters": [],
+    "Description": "REVIEW ONLY: temporary single-AZ Secrets Manager path; no existing DB SG changes"
+}

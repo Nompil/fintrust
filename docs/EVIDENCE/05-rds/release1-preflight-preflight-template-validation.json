@@ -1,0 +1,25 @@
+{
+    "Parameters": [
+        {
+            "ParameterKey": "EndpointId",
+            "NoEcho": false
+        },
+        {
+            "ParameterKey": "CodeKey",
+            "NoEcho": false
+        },
+        {
+            "ParameterKey": "CodeSha256",
+            "NoEcho": false
+        },
+        {
+            "ParameterKey": "ClientSecurityGroupId",
+            "NoEcho": false
+        },
+        {
+            "ParameterKey": "CodeObjectVersion",
+            "NoEcho": false
+        }
+    ],
+    "Description": "REVIEW ONLY: temporary migration preflight; concurrency zero; qualified version only"
+}

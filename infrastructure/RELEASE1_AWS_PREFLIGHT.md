@@ -81,11 +81,11 @@ future Release 1 components are deployment gaps, not unexplained earlier-stage d
 | RDS | PG16.15 t4g.micro20GiB gp3/private/Single-AZ/IAM/TLS/aws-rds key | available; all settings match; deletion protection; backups1day; TLS group in-sync | Yes | Live SQL still separate gate |
 | Secret | RDS-managed credential through private endpoint for runner | Active RDS-owned secret; AWSCURRENT; seven-day rotation; aws/secretsmanager key; no Secrets endpoint | Credential exists; retrieval path not deployed | Create approved private path later; never retrieve value now |
 | Dynamo | fintrust-risk-dev on-demand account_id/score_date, NEW_IMAGE stream | ACTIVE, PAY_PER_REQUEST, exact keys, stream enabled; default AWS-owned encryption; approximate ItemCount0 | Yes | Scoring/stream consumer not deployed |
-| SQS | Five queues, transaction FIFO+FIFO DLQ, managed encryption | All five exist, SSE-SQS; transaction visibility720s/retention4days/maxReceive5; DLQ14days/byQueue; all three approximate counts0 per queue | Yes | No receive/redrive |
-| Ingest | Verified new candidate, separate runtime/activation gates | Historical SHA d645d8949ee5b128b2b5c4c1558dd61a1a5c0fd3cdeace60363b19f70d167d62, Python3.12/x86_64/256MiB/120s, outside VPC, concurrency0 | Historical stage matches; Release1 not deployed | Review code/runtime policy update later |
+| SQS | Five queues, transaction FIFO+FIFO DLQ, managed encryption | All five exist, SSE-SQS; transaction visibility720s/retention4days/maxReceive5; DLQ14-days/byQueue; all three approximate counts0 per queue | Yes | No receive/redrive |
+| Ingest | Verified new candidate, separate runtime/activation gates | Historical SHA d645d8949ee5b128b2b5c4c1558dd61a1a5c0fd3cdeace60363b19f70d167d62, Python3.12/x86_64/256MiB/120s, outside VPC, concurrency 0 | Historical stage matches; Release1 not deployed | Review code/runtime policy update later |
 | Triggers | Controlled activation after schema/runtime approval | All bucket notification configs empty; no event mappings/resource policy/function URL/aliases; async failure points to ingest-failures | Safe inactive state | Do not wire/activate |
 | Other functions/API | Scoring/report/alert/API deployment later | Only named ingest function exists; no FinTrust REST/HTTP APIs | Deployment gap | Separate deployment/auth/controller review |
-| Monitoring/SES | Release1 alerts/reports/observability | Ingest logs14days/storedBytes0, PassThrough tracing; no named schedules/alarms/dashboards; SES sandbox200/day1/sec, zero verified identities | Deployment gap | Observability/notification setup later |
+| Monitoring/SES | Release1 alerts/reports/observability | Ingest logs14-days/storedBytes0, PassThrough tracing; no named schedules/alarms/dashboards; SES sandbox200/day1/sec, zero verified identities | Deployment gap | Observability/notification setup later |
 | Private preflight | Separately approved single-AZ runner/endpoint | No interface endpoint, no migration stacks, no migration execution/operator roles | Not deployed | Approve scoped operator bootstrap/network/runner plan |
 | Schema001/002 | Ordered exact versions/catalog/owners/grants and preserved rows | Not inspected live | Unknown | Approved private read-only preflight first |
 
@@ -145,7 +145,7 @@ no trigger/URL/async configuration; concurrency stays0 until separately approved
 
 Fresh AWS Pricing GetProducts quote (SKU8ZMGRUS7QT5EM7NR, published2026-09-17,
 effective2026-09-01): one-AZ endpoint $0.01309/hour, four hours $0.05236,
-24hours $0.31416,730hours $9.55570 plus processing (first PB $0.01/GB), Lambda/log/S3
+24 hours $0.31416,730 hours $9.55570 plus processing (first PB $0.01/GB), Lambda/log/S3
 usage. Quote confirmed on2026-10-10; credits/tax excluded. Endpoint hours
 continue while idle and partial hours round up; see https://aws.amazon.com/privatelink/pricing/.
 Existing RDS/CMK/secret storage costs continue independently; this task adds none.
@@ -326,8 +326,8 @@ reviewed bootstrap. It is never attached to the deployer/operator.
 
 Then review exact network change set/cost before any execution; obtain actual endpoint ID
 before creating endpoint-bound execution boundary/role; upload only verified phase archive
-under separate artifact-upload approval; deploy immutable preflight version with concurrency0.
-Separately approve qualified invoke/concurrency1 for the fixed READ ONLY operation, then
+under separate artifact-upload approval; deploy immutable preflight version with concurrency 0.
+Separately approve qualified invoke/concurrency 1 for the fixed READ ONLY operation, then
 return to0 and stop to compare actual SQL. No mutation command was run or authorized by
 this report. Exact artifact version, operator bootstrap/deployment JSON and endpoint-bound
 policies remain a separate concrete approval checkpoint; do not attach placeholder policies.
@@ -341,3 +341,7 @@ uploaded VersionId remain untouched. Ten focused local SQL tests remain passed; 
 application suite, ZIP build or CI run was repeated for metadata/documentation changes.
 
 **FINTRUST READ-ONLY AWS PREFLIGHT COMPLETE — READY FOR CONTROLLED RDS PREFLIGHT INFRASTRUCTURE**
+
+## Current controlled preflight gate — 2026-10-10
+
+The latest authoritative plan is [RELEASE1_CONTROLLED_PREFLIGHT_PLAN.md](RELEASE1_CONTROLLED_PREFLIGHT_PLAN.md). It supersedes earlier statements that the002 supplement/executor are missing and that a single combined deployment policy should be attached. Historical evidence remains unchanged. Runner source 20775e4, CI 38088022104:626 passed,zero failed/errors/skipped; seven Linux/Lambda3.12 archives verified, PG16 fixed-helper rehearsal passed. No AWS mutation or live SQL occurred. First pending approval is only empty migration-operator role creation. The frozen application ZIP remains unchanged.

@@ -1,0 +1,14 @@
+{
+  "status": "PASSED",
+  "001_then_002": true,
+  "002_rerun_noop": true,
+  "partial_refused": true,
+  "forced_postcheck_rollback": true,
+  "helper_removed": true,
+  "login_no_schema_create_or_owner_membership": true,
+  "arbitrary_sql_refused": true,
+  "financial_rows_preserved": 200,
+  "cleanup": true,
+  "aws_access": false,
+  "real_rds_iam_tls_tested": false
+}

@@ -1,0 +1,109 @@
+{
+  "captured_at": "2026-10-10T21:32:30.107064+00:00",
+  "profile": "fintrust-inventory",
+  "region": "af-south-1",
+  "aws_mutations": false,
+  "secret_values_retrieved": false,
+  "results": {
+    "instance": {
+      "status": "OK",
+      "data": [
+        {
+          "DBInstanceIdentifier": "fintrust-ledger-dev",
+          "DBInstanceStatus": "available",
+          "Engine": "postgres",
+          "EngineVersion": "16.15",
+          "DBInstanceClass": "db.t4g.micro",
+          "AllocatedStorage": 20,
+          "StorageType": "gp3",
+          "MultiAZ": false,
+          "PubliclyAccessible": false,
+          "StorageEncrypted": true,
+          "KmsKeyId": "arn:aws:kms:af-south-1:966467878406:key/9e378e95-2fe3-4f4a-b694-427a1c545d53",
+          "IAMDatabaseAuthenticationEnabled": true,
+          "DeletionProtection": true,
+          "BackupRetentionPeriod": 1,
+          "Endpoint": {
+            "Address": "fintrust-ledger-dev.cv84aee6u6up.af-south-1.rds.amazonaws.com",
+            "Port": 5432,
+            "HostedZoneId": "Z34PQSL3TPJI7P"
+          },
+          "DBSubnetGroup": {
+            "DBSubnetGroupName": "fintrust-db-dev",
+            "DBSubnetGroupDescription": "Private FinTrust database tier",
+            "VpcId": "vpc-0aba008bb360f5147",
+            "SubnetGroupStatus": "Complete",
+            "Subnets": [
+              {
+                "SubnetIdentifier": "subnet-04dc0f576867d7a6c",
+                "SubnetAvailabilityZone": {
+                  "Name": "af-south-1a"
+                },
+                "SubnetOutpost": {},
+                "SubnetStatus": "Active"
+              },
+              {
+                "SubnetIdentifier": "subnet-084deb13f49a36064",
+                "SubnetAvailabilityZone": {
+                  "Name": "af-south-1b"
+                },
+                "SubnetOutpost": {},
+                "SubnetStatus": "Active"
+              }
+            ]
+          },
+          "VpcSecurityGroups": [
+            {
+              "VpcSecurityGroupId": "sg-01644a4c9f2c44162",
+              "Status": "active"
+            }
+          ],
+          "DBParameterGroups": [
+            {
+              "DBParameterGroupName": "fintrust-postgres16-dev",
+              "ParameterApplyStatus": "in-sync"
+            }
+          ],
+          "MasterUserSecret": {
+            "SecretArn": "arn:aws:secretsmanager:af-south-1:966467878406:secret:rds!db-e93012ae-0d14-4225-bdc3-988f4d98f72a-BbEGMn",
+            "SecretStatus": "active",
+            "KmsKeyId": "arn:aws:kms:af-south-1:966467878406:key/c68acc77-115b-4da5-80be-9ea69291da19"
+          }
+        }
+      ]
+    },
+    "secret-metadata": {
+      "status": "OK",
+      "data": {
+        "ARN": "arn:aws:secretsmanager:af-south-1:966467878406:secret:rds!db-e93012ae-0d14-4225-bdc3-988f4d98f72a-BbEGMn",
+        "OwningService": "rds",
+        "KmsKeyId": null,
+        "RotationEnabled": true,
+        "RotationRules": {
+          "AutomaticallyAfterDays": 7
+        },
+        "VersionIdsToStages": {
+          "02c81f95-8988-4714-9598-50897d013b58": [
+            "AWSCURRENT"
+          ]
+        }
+      }
+    },
+    "tls": {
+      "status": "OK",
+      "data": [
+        {
+          "ParameterName": "rds.force_ssl",
+          "ParameterValue": "1",
+          "Description": "Force SSL connections.",
+          "Source": "system",
+          "ApplyType": "dynamic",
+          "DataType": "boolean",
+          "AllowedValues": "0,1",
+          "IsModifiable": true,
+          "ApplyMethod": "pending-reboot"
+        }
+      ]
+    }
+  }
+}

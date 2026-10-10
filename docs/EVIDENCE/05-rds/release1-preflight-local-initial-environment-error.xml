@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="2" failures="0" skipped="1" tests="38" time="1.792" timestamp="2026-10-10T23:48:36.473625+02:00" hostname="Lindiwe"><testcase classname="tests.test_migration_infrastructure" name="test_one_az_both_endpoint_and_runner" time="0.001" /><testcase classname="tests.test_migration_infrastructure" name="test_endpoint_https_and_no_db_sg_edit" time="0.001" /><testcase classname="tests.test_migration_infrastructure" name="test_disabled_phase_and_version_binding[preflight]" time="0.001" /><testcase classname="tests.test_migration_infrastructure" name="test_disabled_phase_and_version_binding[bootstrap]" time="0.001" /><testcase classname="tests.test_migration_infrastructure" name="test_disabled_phase_and_version_binding[iam]" time="0.001" /><testcase classname="tests.test_migration_infrastructure" name="test_disabled_phase_and_version_binding[cleanup]" time="0.001" /><testcase classname="tests.test_migration_infrastructure" name="test_disabled_phase_and_version_binding[bootstrap002]" time="0.001" /><testcase classname="tests.test_migration_infrastructure" name="test_disabled_phase_and_version_binding[iam002]" time="0.001" /><testcase classname="tests.test_migration_infrastructure" name="test_disabled_phase_and_version_binding[cleanup002]" time="0.001" /><testcase classname="tests.test_migration_infrastructure" name="test_iam_phase_cannot_read_master" time="0.001" /><testcase classname="tests.test_migration_infrastructure" name="test_master_policy_exact_endpoint_and_current_version" time="0.001" /><testcase classname="tests.test_migration_infrastructure" name="test_function_code_cannot_use_eni_permissions" time="0.001" /><testcase classname="tests.test_migration_infrastructure" name="test_deployer_cannot_change_boundary_or_create_roles" time="0.001" /><testcase classname="tests.test_migration_infrastructure" name="test_artifact_version_pinned" time="0.001" /><testcase classname="tests.test_migration_infrastructure" name="test_bootstrap_sql_does_not_grant_admin_to_migration" time="0.001" /><testcase classname="tests.test_migration_infrastructure" name="test_endpoint_binding_rejects_invalid_id" time="0.003"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Nompilo\\AppData\\Local\\Temp\\pytest-of-Nompilo'&quot;">cls = &lt;class '_pytest.runner.CallInfo'&gt;
+func = &lt;function call_and_report.&lt;locals&gt;.&lt;lambda&gt; at 0x000001C2131DB1C0&gt;
+when = 'setup'
+reraise = (&lt;class '_pytest.outcomes.Exit'&gt;, &lt;class 'KeyboardInterrupt'&gt;)
+
+    @classmethod
+    def from_call(
+        cls,
+        func: Callable[[], TResult],
+        when: Literal["collect", "setup", "call", "teardown"],
+        reraise: type[BaseException] | tuple[type[BaseException], ...] | None = None,
+    ) -&gt; CallInfo[TResult]:
+        """Call func, wrapping the result in a CallInfo.
+
+        :param func:
+            The function to call. Called without arguments.
+        :type func: Callable[[], _pytest.runner.TResult]
+        :param when:
+            The phase in which the function is called.
+        :param reraise:
+            Exception or exceptions that shall propagate if raised by the
+            function, instead of being wrapped in the CallInfo.
+        """
+        excinfo = None
+        instant = timing.Instant()
+        try:
+&gt;           result: TResult | None = func()
+                                     ^^^^^^
+
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\runner.py:361:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\runner.py:250: in &lt;lambda&gt;
+    lambda: runtest_hook(item=item, **kwds),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\pluggy\_hooks.py:512: in __call__
+    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\pluggy\_manager.py:120: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\logging.py:858: in pytest_runtest_setup
+    yield
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\capture.py:895: in pytest_runtest_setup
+    return (yield)
+            ^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\runner.py:170: in pytest_runtest_setup
+    item.session._setupstate.setup(item)
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\runner.py:536: in setup
+    col.setup()
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\python.py:1710: in setup
+    self._request._fillfixtures()
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\fixtures.py:806: in _fillfixtures
+    item.funcargs[argname] = self.getfixturevalue(argname)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\fixtures.py:630: in getfixturevalue
+    fixturedef = self._get_active_fixturedef(argname)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\fixtures.py:726: in _get_active_fixturedef
+    fixturedef.execute(request=subrequest)
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\fixtures.py:1232: in execute
+    result: FixtureValue = ihook.pytest_fixture_setup(
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\pluggy\_hooks.py:512: in __call__
+    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\pluggy\_manager.py:120: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\setuponly.py:36: in pytest_fixture_setup
+    return (yield)
+            ^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\fixtures.py:1328: in pytest_fixture_setup
+    result = call_fixture_func(fixturefunc, request, kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\fixtures.py:998: in call_fixture_func
+    fixture_result = next(generator)
+                     ^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\tmpdir.py:300: in tmp_path
+    path = _mk_tmp(request, tmp_path_factory)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\tmpdir.py:287: in _mk_tmp
+    return factory.mktemp(name, numbered=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\tmpdir.py:213: in getbasetemp
+    basetemp = make_numbered_dir_with_cleanup(
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\pathlib.py:420: in make_numbered_dir_with_cleanup
+    raise e
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\pathlib.py:401: in make_numbered_dir_with_cleanup
+    p = make_numbered_dir(root, prefix, mode)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\pathlib.py:228: in make_numbered_dir
+    max_existing = max(map(parse_num, find_suffixes(root, prefix)), default=-1)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\pathlib.py:187: in extract_suffixes
+    for entry in iter:
+                 ^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('C:/Users/Nompilo/AppData/Local/Temp/pytest-of-Nompilo')
+prefix = 'pytest-'
+
+    def find_prefixed(root: Path, prefix: str) -&gt; Iterator[os.DirEntry[str]]:
+        """Find all elements in root that begin with the prefix, case-insensitive."""
+        l_prefix = prefix.lower()
+&gt;       for x in os.scandir(root):
+                 ^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Nompilo\\AppData\\Local\\Temp\\pytest-of-Nompilo'
+
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\pathlib.py:175: PermissionError</error></testcase><testcase classname="tests.test_migration_infrastructure" name="test_creator_self_grants_control_set_without_admin_cycle" time="0.002" /><testcase classname="tests.test_migration_infrastructure" name="test_bootstrap_switches_to_owner_for_post_transfer_acl_change" time="0.001" /><testcase classname="tests.test_migration_infrastructure" name="test_index_helper_has_fixed_surface_and_exact_canonical_indexes" time="0.002" /><testcase classname="tests.test_migration_infrastructure" name="test_index_builder_never_granted_to_migration_or_table_owner" time="0.002" /><testcase classname="tests.test_migration_infrastructure" name="test_operator_policy_parts_are_scoped_and_attachable" time="0.001" /><testcase classname="tests.test_migration_infrastructure" name="test_operator_trust_requires_exact_human_and_mfa" time="0.001" /><testcase classname="tests.test_workflow_migration_runner" name="test_fixed_source_wrapper_and_hash" time="0.002" /><testcase classname="tests.test_workflow_migration_runner" name="test_modified_sql_refused" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Nompilo\\AppData\\Local\\Temp\\pytest-of-Nompilo'&quot;">cls = &lt;class '_pytest.runner.CallInfo'&gt;
+func = &lt;function call_and_report.&lt;locals&gt;.&lt;lambda&gt; at 0x000001C2131F81A0&gt;
+when = 'setup'
+reraise = (&lt;class '_pytest.outcomes.Exit'&gt;, &lt;class 'KeyboardInterrupt'&gt;)
+
+    @classmethod
+    def from_call(
+        cls,
+        func: Callable[[], TResult],
+        when: Literal["collect", "setup", "call", "teardown"],
+        reraise: type[BaseException] | tuple[type[BaseException], ...] | None = None,
+    ) -&gt; CallInfo[TResult]:
+        """Call func, wrapping the result in a CallInfo.
+
+        :param func:
+            The function to call. Called without arguments.
+        :type func: Callable[[], _pytest.runner.TResult]
+        :param when:
+            The phase in which the function is called.
+        :param reraise:
+            Exception or exceptions that shall propagate if raised by the
+            function, instead of being wrapped in the CallInfo.
+        """
+        excinfo = None
+        instant = timing.Instant()
+        try:
+&gt;           result: TResult | None = func()
+                                     ^^^^^^
+
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\runner.py:361:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\runner.py:250: in &lt;lambda&gt;
+    lambda: runtest_hook(item=item, **kwds),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\pluggy\_hooks.py:512: in __call__
+    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\pluggy\_manager.py:120: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\logging.py:858: in pytest_runtest_setup
+    yield
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\capture.py:895: in pytest_runtest_setup
+    return (yield)
+            ^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\runner.py:170: in pytest_runtest_setup
+    item.session._setupstate.setup(item)
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\runner.py:536: in setup
+    col.setup()
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\python.py:1710: in setup
+    self._request._fillfixtures()
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\fixtures.py:806: in _fillfixtures
+    item.funcargs[argname] = self.getfixturevalue(argname)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\fixtures.py:630: in getfixturevalue
+    fixturedef = self._get_active_fixturedef(argname)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\fixtures.py:726: in _get_active_fixturedef
+    fixturedef.execute(request=subrequest)
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\fixtures.py:1232: in execute
+    result: FixtureValue = ihook.pytest_fixture_setup(
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\pluggy\_hooks.py:512: in __call__
+    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\pluggy\_manager.py:120: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\setuponly.py:36: in pytest_fixture_setup
+    return (yield)
+            ^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\fixtures.py:1328: in pytest_fixture_setup
+    result = call_fixture_func(fixturefunc, request, kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\fixtures.py:998: in call_fixture_func
+    fixture_result = next(generator)
+                     ^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\tmpdir.py:300: in tmp_path
+    path = _mk_tmp(request, tmp_path_factory)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\tmpdir.py:287: in _mk_tmp
+    return factory.mktemp(name, numbered=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\tmpdir.py:213: in getbasetemp
+    basetemp = make_numbered_dir_with_cleanup(
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\pathlib.py:420: in make_numbered_dir_with_cleanup
+    raise e
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\pathlib.py:401: in make_numbered_dir_with_cleanup
+    p = make_numbered_dir(root, prefix, mode)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\pathlib.py:228: in make_numbered_dir
+    max_existing = max(map(parse_num, find_suffixes(root, prefix)), default=-1)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\pathlib.py:187: in extract_suffixes
+    for entry in iter:
+                 ^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('C:/Users/Nompilo/AppData/Local/Temp/pytest-of-Nompilo')
+prefix = 'pytest-'
+
+    def find_prefixed(root: Path, prefix: str) -&gt; Iterator[os.DirEntry[str]]:
+        """Find all elements in root that begin with the prefix, case-insensitive."""
+        l_prefix = prefix.lower()
+&gt;       for x in os.scandir(root):
+                 ^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Nompilo\\AppData\\Local\\Temp\\pytest-of-Nompilo'
+
+..\..\AppData\Local\Programs\Python\Python314\Lib\site-packages\_pytest\pathlib.py:175: PermissionError</error></testcase><testcase classname="tests.test_workflow_migration_runner" name="test_catalog_copy_matches_frozen_contract_ast" time="0.007" /><testcase classname="tests.test_workflow_migration_runner" name="test_real_catalog_signatures_match_both_migrations" time="0.001"><skipped type="pytest.skip" message="Disposable local PostgreSQL required">C:\Users\Nompilo\Desktop\fintrust\tests\test_workflow_migration_runner.py:28: Disposable local PostgreSQL required</skipped></testcase><testcase classname="tests.test_workflow_migration_runner" name="test_iam002_surface_rejects_other_operations[migrate]" time="0.001" /><testcase classname="tests.test_workflow_migration_runner" name="test_iam002_surface_rejects_other_operations[arbitrary-sql]" time="0.001" /><testcase classname="tests.test_workflow_migration_runner" name="test_iam002_surface_rejects_other_operations[bootstrap002]" time="0.001" /><testcase classname="tests.test_workflow_migration_runner" name="test_iam002_surface_rejects_other_operations[cleanup002]" time="0.002" /><testcase classname="tests.test_workflow_migration_runner" name="test_helper_has_no_user_sql_or_owner_set_path" time="0.002" /><testcase classname="tests.test_workflow_migration_runner" name="test_catalog_supplement_is_bound_in_preflight_package" time="0.001" /><testcase classname="tests.test_workflow_migration_runner" name="test_002_phase_is_separate_and_disabled[bootstrap002]" time="0.001" /><testcase classname="tests.test_workflow_migration_runner" name="test_002_phase_is_separate_and_disabled[iam002]" time="0.001" /><testcase classname="tests.test_workflow_migration_runner" name="test_002_phase_is_separate_and_disabled[cleanup002]" time="0.001" /><testcase classname="tests.test_release1_preflight_package" name="test_supplement_enforces_read_only" time="0.002" /><testcase classname="tests.test_release1_preflight_package" name="test_counts_never_execute_returned_sql" time="0.002" /><testcase classname="tests.test_release1_preflight_package" name="test_supplement_has_no_writes_or_secret_calls" time="0.001" /></testsuite></testsuites>

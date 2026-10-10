@@ -256,7 +256,7 @@ endpoint absence) without GetSecretValue. Finalize endpoint/IAM/template validat
    and Project=FinTrust Environment=dev Purpose=temporary-migration tags. Review exactly
    three additions and disabled concurrency; separate execution approval.
 5. Separately approve one qualified, synchronous preflight invocation and temporary
-   concurrency1. Immediately return concurrency0 after it completes. Save only
+   concurrency 1. Immediately return concurrency 0 after it completes. Save only
    sanitized JSON result. **STOP FOR REVIEW.** No snapshot, role creation or DDL yet.
 6. If live catalog/data agree with the design, separately approve snapshot and wait
    until available. Review its cost/retention. Approve bootstrap archive/version and
@@ -434,3 +434,7 @@ and type checks, existing-correct-index handling, migration/rerun and definition
 verification. Cleanup correctly refused the deliberately created hostile temp
 table still owned by the test login. The rehearsal now removes that test fixture
 as its owner before cleanup; the production owned-object refusal is unchanged.
+
+## Verified Release1 seven phase runner extension — 2026-10-10
+
+The latest authoritative plan is [RELEASE1_CONTROLLED_PREFLIGHT_PLAN.md](RELEASE1_CONTROLLED_PREFLIGHT_PLAN.md). It supersedes earlier statements that the002 supplement/executor are missing and that a single combined deployment policy should be attached. Historical evidence remains unchanged. Runner source 20775e4, CI 38088022104:626 passed,zero failed/errors/skipped; seven Linux/Lambda3.12 archives verified, PG16 fixed-helper rehearsal passed. No AWS mutation or live SQL occurred. First pending approval is only empty migration-operator role creation. The frozen application ZIP remains unchanged.

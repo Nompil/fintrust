@@ -1,0 +1,42 @@
+{
+  "captured_at": "2026-10-10T21:32:30.111279+00:00",
+  "profile": "fintrust-inventory",
+  "region": "af-south-1",
+  "aws_mutations": false,
+  "secret_values_retrieved": false,
+  "results": {
+    "ingest": {
+      "status": "OK",
+      "data": {
+        "FunctionName": "fintrust-ingest-dev",
+        "State": "Active",
+        "Runtime": "python3.12",
+        "Architectures": [
+          "x86_64"
+        ],
+        "Handler": "fintrust.ingest.lambda_handler",
+        "Role": "arn:aws:iam::966467878406:role/fintrust-ingest-dev",
+        "VpcConfig": null,
+        "CodeSha256": "1kXYlJ7lsSiytcTBVY3WGhpcD9PN6s5gNjsZ9w0WfWI=",
+        "EnvironmentNames": [
+          "FINTRUST_SERVICE",
+          "FINTRUST_STAGE",
+          "QUARANTINE_BUCKET",
+          "TRANSACTION_QUEUE_URL"
+        ]
+      }
+    },
+    "concurrency": {
+      "status": "OK",
+      "data": {
+        "ReservedConcurrentExecutions": 0
+      }
+    },
+    "mappings": {
+      "status": "OK",
+      "data": {
+        "count": 0
+      }
+    }
+  }
+}

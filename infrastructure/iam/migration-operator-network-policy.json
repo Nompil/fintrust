@@ -1,0 +1,201 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ReadNetwork",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:DescribeVpcs",
+        "ec2:DescribeSubnets",
+        "ec2:DescribeSecurityGroups",
+        "ec2:DescribeSecurityGroupRules",
+        "ec2:DescribeVpcEndpoints",
+        "ec2:DescribeVpcEndpointServices",
+        "ec2:GetSecurityGroupsForVpc"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    },
+    {
+      "Sid": "CreateTemporarySg",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:CreateSecurityGroup"
+      ],
+      "Resource": "arn:aws:ec2:af-south-1:966467878406:security-group/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:RequestTag/Project": "FinTrust",
+          "aws:RequestTag/Environment": "dev",
+          "aws:RequestTag/Purpose": "temporary-migration"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "UseExistingVpc",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:CreateSecurityGroup",
+        "ec2:CreateVpcEndpoint"
+      ],
+      "Resource": "arn:aws:ec2:af-south-1:966467878406:vpc/vpc-0aba008bb360f5147",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "UseSingleSubnet",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:CreateVpcEndpoint"
+      ],
+      "Resource": "arn:aws:ec2:af-south-1:966467878406:subnet/subnet-0c2d87e8a83361e30",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "UseOwnedEndpointSg",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:CreateVpcEndpoint"
+      ],
+      "Resource": "arn:aws:ec2:af-south-1:966467878406:security-group/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:ResourceTag/Project": "FinTrust",
+          "aws:ResourceTag/Environment": "dev",
+          "aws:ResourceTag/Purpose": "temporary-migration"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "CreateSecretEndpoint",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:CreateVpcEndpoint"
+      ],
+      "Resource": "arn:aws:ec2:af-south-1:966467878406:vpc-endpoint/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:RequestTag/Project": "FinTrust",
+          "aws:RequestTag/Environment": "dev",
+          "aws:RequestTag/Purpose": "temporary-migration",
+          "ec2:VpceServiceName": "com.amazonaws.af-south-1.secretsmanager"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "OwnTemporarySgRules",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:AuthorizeSecurityGroupIngress",
+        "ec2:AuthorizeSecurityGroupEgress",
+        "ec2:RevokeSecurityGroupIngress",
+        "ec2:RevokeSecurityGroupEgress",
+        "ec2:DeleteSecurityGroup"
+      ],
+      "Resource": "arn:aws:ec2:af-south-1:966467878406:security-group/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:ResourceTag/Project": "FinTrust",
+          "aws:ResourceTag/Environment": "dev",
+          "aws:ResourceTag/Purpose": "temporary-migration"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "RemoveEndpoint",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:DeleteVpcEndpoints"
+      ],
+      "Resource": "arn:aws:ec2:af-south-1:966467878406:vpc-endpoint/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:ResourceTag/Project": "FinTrust",
+          "aws:ResourceTag/Environment": "dev",
+          "aws:ResourceTag/Purpose": "temporary-migration"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "CreationTags",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:CreateTags"
+      ],
+      "Resource": [
+        "arn:aws:ec2:af-south-1:966467878406:security-group/*",
+        "arn:aws:ec2:af-south-1:966467878406:vpc-endpoint/*"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:RequestTag/Project": "FinTrust",
+          "aws:RequestTag/Environment": "dev",
+          "aws:RequestTag/Purpose": "temporary-migration"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        },
+        "StringLike": {
+          "ec2:CreateAction": [
+            "CreateSecurityGroup",
+            "CreateVpcEndpoint"
+          ]
+        }
+      }
+    }
+  ]
+}
