@@ -379,10 +379,10 @@
         "infrastructure/rds/release1_permissions.sql",
         ".github/workflows/ci.yml"
       ],
-      "current_status": "BLOCKED_EXTERNAL_VERIFICATION",
+      "current_status": "VERIFIED_POSTGRESQL16_SERVICE_ROLES",
       "release_classification": "BLOCKER",
       "proposed_fix": "Dedicated PG16 administrator tests and Linux CI on exact new source, separately approved push",
-      "test_evidence_required": "New migration/privilege tests must pass on PG16; prior runner CI is not evidence for changed 002",
+      "test_evidence_required": "docs/EVIDENCE/12-e2e/release1-closure/postgres16-roles.json; postgres16-junit.xml",
       "schema_change_needed": true
     },
     {
@@ -554,12 +554,14 @@
         "tools/package_hardened_lambda.py",
         ".github/workflows/ci.yml"
       ],
-      "current_status": "BLOCKED_EXTERNAL_VERIFICATION",
+      "current_status": "VERIFIED_LINUX_PYTHON312",
       "release_classification": "BLOCKER",
       "proposed_fix": "Keep historical ZIP unchanged; separately approved CI builds/verifies new source",
-      "test_evidence_required": "New exact-source Linux CPython3.12 import/source-binding gate",
+      "test_evidence_required": "docs/EVIDENCE/12-e2e/release1-closure/linux-ci.json; linux-import-verification.txt",
       "schema_change_needed": false
     }
   ],
-  "verification_authorization": "Focused origin/main push and disposable PostgreSQL 16 CI approved; no AWS actions"
+  "verification_authorization": "Focused origin/main push and disposable PostgreSQL 16 CI approved; no AWS actions",
+  "verified_ci_commit": "4d91c3d30cece5192db1afc22f71fb42e3e00413",
+  "verified_ci_run": "38050661063"
 }

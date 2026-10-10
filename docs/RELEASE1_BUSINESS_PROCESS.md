@@ -5,7 +5,7 @@ Status: **LOCAL RELEASE 1 IMPLEMENTATION; NOT APPROVAL FOR LIVE MIGRATION OR DEP
 The user approved minimal working analyst review and manual quarantine correction
 as release scope; refunds, reversals and chargebacks are deferred. Migration 001
 stays identity/idempotency-only. The workflows now have local backend/UI implementations and synthetic acceptance tests;
-PostgreSQL16/service-role and exact new-source Linux verification remain pending.
+PostgreSQL 16.15/service-role and exact new-source Linux CPython 3.12.15 verification passed in CI run 38050661063.
 
 ## Process and transaction meaning
 
@@ -397,3 +397,7 @@ No direct approve-into-ledger action exists.
 The actual named CSV A/B files remain external and unexecuted. Constructed cases
 verify the scenario contract; do not present them as evidence for unseen files.
 No AWS access, schema mutation, deployment, trigger activation or Git push occurred.
+
+## Monday verification closeout (2026-10-10)
+
+Release1 local workflows and browser demo are verified. PostgreSQL 16.15 migration/service-role and Linux Python 3.12.15 native-import gates passed at commit 4d91c3d in CI run 38050661063 (543 passed, zero skips/failures). HIGH_VELOCITY remains >5 accepted transactions in a closed 5-minute window. CSV A/B bytes remain external; only that fixture acceptance is pending. No live migration/new AWS runtime activation occurred. Use RELEASE1_MONDAY_DEMO.md and RELEASE1_PRESENTATION_STATUS.md for exact launch and capability boundaries.

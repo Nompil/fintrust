@@ -1,6 +1,6 @@
-# Release 1 gap register
+# Release1 gap register
 
-Continues checkpoint 3a5d979. Classification records the original release impact; status records actual progress. Local verification does not prove AWS deployment. Focused push/CI is approved; AWS actions remain prohibited. Actual CSV A/B import alone is pending external input.
+Continues checkpoint 3a5d979. Original classifications record impact, not unresolved counts. Focused local implementation and disposable PG16/Linux CI are verified at commit 4d91c3d30cece5192db1afc22f71fb42e3e00413. AWS remains untouched. CSV A/B acceptance alone awaits external fixture bytes and does not block the constructed-scenario demo.
 
 | ID | Finding | Classification | Current status | Evidence |
 |---|---|---|---|---|
@@ -29,7 +29,7 @@ Continues checkpoint 3a5d979. Classification records the original release impact
 | R1-23 | Mass assignment, filters, pagination and safe errors | RELEASE_1 | FIXED_LOCAL | review mass-assignment/filter/page tests; existing API error tests |
 | R1-24 | Minimal analyst frontend and scoped reporting | RELEASE_1 | VERIFIED_LOCAL_BROWSER | HTTP contract tests; browser verification still required |
 | R1-25 | Ordered migration tracking and drift detection | RELEASE_1 | FIXED_LOCAL | test_migration_order_rerun_and_catalog_drift; fresh/legacy/order/rollback tests |
-| R1-26 | PostgreSQL 16 and least-privilege service-role gate | BLOCKER | BLOCKED_EXTERNAL_VERIFICATION | New migration/privilege tests must pass on PG16; prior runner CI is not evidence for changed 002 |
+| R1-26 | PostgreSQL 16 and least-privilege service-role gate | BLOCKER | VERIFIED_POSTGRESQL16_SERVICE_ROLES | docs/EVIDENCE/12-e2e/release1-closure/postgres16-roles.json; postgres16-junit.xml |
 | R1-27 | Lambda connection/concurrency safety | ALREADY_COVERED | VERIFIED_EXISTING | database failure/retry tests; infrastructure concurrency tests |
 | R1-28 | Safe S3 evidence and native dependency release gate | ALREADY_COVERED | VERIFIED_EXISTING | existing hardened-release and migration package CI evidence; new-source package not yet verified |
 | R1-29 | Operational metrics, backlog visibility and runbooks | RELEASE_1 | FIXED_LOCAL | zero-row and projection-backlog tests |
@@ -41,6 +41,6 @@ Continues checkpoint 3a5d979. Classification records the original release impact
 | R1-35 | Refund/reversal/chargeback ledger semantics | DEFERRED | DEFERRED | reference validation scenarios |
 | R1-36 | FX aggregation and actual balance accounting | DEFERRED | DEFERRED | existing report tests and scoped report API tests |
 | R1-37 | Automatic ambiguous SES reclamation | DEFERRED | DEFERRED | uncertain SES tests |
-| R1-38 | New-source Linux runtime package verification | BLOCKER | BLOCKED_EXTERNAL_VERIFICATION | New exact-source Linux CPython3.12 import/source-binding gate |
+| R1-38 | New-source Linux runtime package verification | BLOCKER | VERIFIED_LINUX_PYTHON312 | docs/EVIDENCE/12-e2e/release1-closure/linux-ci.json; linux-import-verification.txt |
 
 Original classifications: {'BLOCKER': 9, 'RELEASE_1': 16, 'ALREADY_COVERED': 7, 'DEFERRED': 6}

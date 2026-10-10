@@ -1,8 +1,7 @@
 # Release 1 local workflows, recovery and release gates
 
 This milestone is LOCAL implementation and synthetic-data verification only.
-No AWS calls, live RDS changes, new artifact uploads, pushes or trigger/concurrency
-activation are authorized. Existing deployed Stage 1?5 state was not re-audited.
+No AWS calls, live RDS changes, artifact uploads or trigger/concurrency activation are authorized. The focused push/CI was explicitly approved and completed. Existing deployed Stage 1-5 state was not re-audited.
 AWS Integration remains In Progress. The historical verified ZIP is unchanged;
 it is not a deployable representation of the new source.
 
@@ -181,8 +180,8 @@ only after a new reviewed CI artifact exists. No new package was rebuilt here.
 | Reporting | IMPLEMENTED + VERIFIED (local) | RELEASE_1 | account/currency report tests; no balance/FX claim |
 | Observability | IMPLEMENTED + VERIFIED (local); cloud alarms DESIGNED | RELEASE_1 | metrics tests and runbooks |
 | Governance | DESIGNED; safe evidence IMPLEMENTED + VERIFIED | RELEASE_1 | safe payload tests; retention implementation limits above |
-| Migrations | IMPLEMENTED + VERIFIED (PG18.6); PG16 BLOCKED | BLOCKER | ordered local migration tests; pending dedicated PG16 gate |
-| CI/new runtime package | IMPLEMENTED + NOT VERIFIED | BLOCKER | prepared CI job; focused push/CI approved, result recorded in closeout evidence |
+| Migrations | IMPLEMENTED + VERIFIED (PG18.6); PG16 VERIFIED | BLOCKER | ordered local migration tests; PG16 service-role gate and543 zero-skip CI tests |
+| CI/new runtime package | IMPLEMENTED + VERIFIED | BLOCKER | CI run 38050661063 passed; downloaded artifact checksum matches exact verified source |
 | AWS Integration | BLOCKED for this release; prior stages verified | BLOCKER | no new AWS access/deploy authorized |
 
 Deferred: hourly velocity, refund/reversal/chargeback accounting, FX/current balance
@@ -212,3 +211,5 @@ reset a demo schema or discard its audit merely to hide missing mock evidence.
 The user approved the focused push/CI for PG16 service privileges and exact-source Linux package verification on 2026-10-10. Results are recorded in the closeout evidence. No AWS action is approved.
 
 Reports use bounded account/currency pagination. Non-admin batch views expose only batches whose every recorded row belongs to assigned accounts; unresolved/unknown and mixed-scope batches are Admin-only.
+
+Final gate: PostgreSQL 16.15, Linux CPython 3.12.15 x86_64,543 passed / zero skips in CI run 38050661063. Final local full regression542 passed/one expected local administrator skip, with that exact administrator test executed successfully in CI. Focused97 passed; local browser1 passed. See RELEASE1_PRESENTATION_STATUS.md and RELEASE1_MONDAY_DEMO.md. Live migrations and activation remain separately gated.

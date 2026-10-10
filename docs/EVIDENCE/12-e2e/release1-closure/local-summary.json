@@ -25,5 +25,38 @@
     "SQL batch-scope alias error corrected",
     "Concurrent batch insert secondary-unique conflict corrected; immutable receipt verified after conflict"
   ],
-  "target_ci": "pending approved focused push; no claims until run evidence"
+  "target_ci": {
+    "status": "PASSED",
+    "run_id": "38050661063",
+    "commit": "4d91c3d30cece5192db1afc22f71fb42e3e00413",
+    "postgresql": "16.15",
+    "python": "3.12.15",
+    "tests": {
+      "tests": 543,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 543
+    },
+    "privileges": "PASSED",
+    "downloaded_zip_sha256_verified": "e134f98d1d01447ecbaa79c433deaad3c40ea78e9b74868d16fdd063125a1c4d"
+  },
+  "final_local_full": {
+    "passed": 542,
+    "skipped": 1,
+    "failures": 0,
+    "evidence_run": "870bc5bcc0f24fdcbe0bc52be7841d3a"
+  },
+  "final_focused": {
+    "passed": 97,
+    "skipped": 0,
+    "failures": 0,
+    "evidence_run": "74a0906b1f9642c2a83b67ee939bbc39"
+  },
+  "prior_ci_failure": {
+    "run_id": "38048685288",
+    "reason": "Missing synthetic DYNAMODB_TABLE in privilege harness",
+    "correction_commit": "4d91c3d"
+  },
+  "launcher_verification": "Setup + real API smoke passed with only token prompt/server-loop substituted; actual local browser separately passed. An earlier piped Windows getpass startup probe timed out; interactive CLI uses hidden console prompt."
 }
