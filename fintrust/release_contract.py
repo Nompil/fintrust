@@ -80,7 +80,7 @@ def validation_errors(row, received_at, *, known_account=True):
 
 def authorize(role, action):
     permissions={
-        "Admin":{"read","review","correct","reject_quarantine","reopen","reconcile_alert","audit","operations","retry"},
+        "Admin":{"read","reconcile_alert","audit","operations","retry"},
         "Maintainer":{"read","operations","retry"},
         "Risk/Compliance Analyst":{"read","review","correct","reject_quarantine"},
         "Read-only/Auditor":{"read","audit"},

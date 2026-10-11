@@ -1,5 +1,8 @@
 # FinTrust Release 1 process and schema contract
 
+> Current local presentation behavior (2026-10-11): see [Release 1 presentation readiness](RELEASE1_PRESENTATION_READINESS.md). Its human operating model supersedes earlier local permissions described below: Admin handles governance/oversight, Analyst handles routine review/correction, Auditor reads, Maintainer handles technical recovery. Terminal reopening and unassigned-account correction are not exposed in the current local UI/API. Local user-record governance is now implemented; token provisioning and enterprise authentication remain separate. Historical test counts and frozen cloud artifacts below retain their original source scope.
+
+
 Prepared 2026-10-09 from checkpoint 49f919a and the user's Release 1 decisions.
 Status: **LOCAL RELEASE 1 IMPLEMENTATION; NOT APPROVAL FOR LIVE MIGRATION OR DEPLOYMENT**.
 The user approved minimal working analyst review and manual quarantine correction

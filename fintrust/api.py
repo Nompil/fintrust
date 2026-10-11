@@ -349,7 +349,7 @@ def operations_retry():
 def administration():
     if g.principal.role!="Admin":raise PermissionError("Admin required")
     from .release_contract import VERSION
-    return jsonify({"data":{"contract_version":VERSION,"identity":"operator-controlled hashed-token registry","user_management":"Not exposed through HTTP; approved operator administration only","live_deployment":"Separate approval required"}})
+    return jsonify({"data":{"contract_version":VERSION,"identity":"operator-controlled hashed-token registry","user_management":"Local records, role/status governance only; token provisioning remains controlled operator setup","live_deployment":"Separate approval required"}})
 
 @app.get("/v1/upload-history")
 def upload_history_read():
@@ -376,3 +376,18 @@ def frontend_audit_read():
 def release1_overview_read():
     from .frontend_workflows import overview as read
     return jsonify({"data":read(g.principal)})
+
+@app.get("/v1/release1/insights")
+def release1_visual_insights():
+    from .visual_insights import read
+    return jsonify({"data":read(g.principal,request.args)})
+
+@app.get("/v1/administration/users")
+def local_user_list():
+    from .local_users import listing
+    return jsonify({"data":listing(g.principal),"meaning":"Local hashed-token identity records; no password management or enterprise directory"})
+
+@app.post("/v1/administration/users")
+def local_user_change():
+    from .local_users import change
+    return jsonify({"data":change(g.principal,request.get_json())})

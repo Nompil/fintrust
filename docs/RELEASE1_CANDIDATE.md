@@ -1,5 +1,8 @@
 # FinTrust Release1 candidate checkpoint
 
+> Current local presentation behavior (2026-10-11): see [Release 1 presentation readiness](RELEASE1_PRESENTATION_READINESS.md). Its human operating model supersedes earlier local permissions described below: Admin handles governance/oversight, Analyst handles routine review/correction, Auditor reads, Maintainer handles technical recovery. Terminal reopening and unassigned-account correction are not exposed in the current local UI/API. Local user-record governance is now implemented; token provisioning and enterprise authentication remain separate. Historical test counts and frozen cloud artifacts below retain their original source scope.
+
+
 Continues verified source4d91c3d and evidence423f198. No settled network, RDS or risk decisions were reopened. This phase adds authoritative CSV-only upload, durable technical-operations receipts, Maintainer restrictions, bounded FIFO redrive/projection/correction retry, explicit alert PENDING/RETRYING and the compact vanilla frontend. Original historical ZIP remains untouched; new package is separately named `fintrust-release1-linux-py312.zip`.
 
 ## Actual external fixtures

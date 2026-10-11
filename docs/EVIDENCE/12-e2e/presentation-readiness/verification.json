@@ -1,0 +1,63 @@
+{
+  "status": "FINTRUST RELEASE 1 PRESENTATION READINESS VERIFIED",
+  "scope": "Local presentation, isolated PostgreSQL and mocked AWS adapters; not a live cloud release",
+  "baseline_commit": "6dc02668d0ce8a251e30a166e0a76bea84437d02",
+  "local_changes_uncommitted": true,
+  "tests": {
+    "full": {
+      "tests": 642,
+      "passed": 641,
+      "failed": 0,
+      "skipped": [
+        {
+          "test": "tests.data_quality.test_processing.test_database_roles_can_execute_pipeline_without_owner_privileges",
+          "reason": "Service-role execution check requires a disposable test database administrator"
+        }
+      ],
+      "unexpected_skipped": 0
+    },
+    "focused": {
+      "tests": 14,
+      "passed": 14,
+      "failed": 0,
+      "skipped": [],
+      "unexpected_skipped": 0
+    },
+    "browser": {
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": [],
+      "unexpected_skipped": 0
+    }
+  },
+  "browser_result": "browser/browser-result.json",
+  "source_sha256": {
+    "fintrust/api.py": "5b0a8dd33e9edc5a657e4c7eab0ae916b6b9b51ac170e5110af2534870663cc3",
+    "fintrust/auth.py": "870f1361c4d3e5dc80ae3e0cddd7b63125cca305dec60bad7af3d6ea3062a536",
+    "fintrust/frontend_workflows.py": "47c187d02824a1b1717b78d8289d7c42db79f636252fffa7191c7a1d0a72793c",
+    "fintrust/release_contract.py": "1990383fd41228e2ddfa34437c4b4fc757e94f5d9a8afcac0df2725daee0224e",
+    "fintrust/local_users.py": "0b71fcb2dcdd0b85733682a165e85ef43d36c1ca96794cce372d4f3254cf3911",
+    "fintrust/visual_insights.py": "7ca8f2c303feb9f72f7470dd2dc5da6f4d79a0f77adb3b304824ab04193479b3",
+    "frontend/release1.html": "7e541008f66892adcf88ddbf7b31dcb62a6de20bedea44f74bb684a3a08f02ea",
+    "frontend/release1.js": "e594f6bddaac3e637d5b6dd43c50851775268d13f5ee24305b6dddba1a0b5a20",
+    "frontend/release1.css": "5da3e4153a5624e7db97e577b90f3a028c0ffb70965f67e516a7928b3050f822",
+    "tools/serve_release1_demo.py": "b4b9eba19d12ff91349519ae85898ec0f9f71fed2101638c4008c5441ca9c5e0",
+    "tools/run_release1_browser.py": "17c623c24599a64f3d107a2c8ffa153f23dd77b1debc320d1994af9ef75c8a1a",
+    "tools/verify_release1_ui.cjs": "fe41f96ebf6d6958123024cd643be60a533bae40ab00aec9a0fbaee10e436547",
+    "tests/test_presentation_readiness.py": "212461ae2c074b05d0256063a40caecf2963057b9dea39ba3573febd46a8583a",
+    "tests/test_release1_workflows.py": "c3259abcd6337f83c3ee5986dcb1f5d83fa5303adaef5ab644d3a8e0930f384e",
+    "tests/test_release1_end_to_end.py": "742316b8e80837c6a84088bd486f624a729d2a50dbedd9cdc5c6d8c42b2832f8"
+  },
+  "aws_access": false,
+  "cloud_artifact_rebuilt": false,
+  "git_pushed": false,
+  "python": "3.14.7",
+  "limitation": "Service-role privilege execution requires a disposable database administrator and was intentionally skipped locally; no new runtime SQL-grant proof claimed.",
+  "verification_runs": {
+    "full": "1c30e9d6d687489da07aa9db385360ea",
+    "focused": "5d132d22ce2a47f382cc1682785bbf14",
+    "browser": "d9c402bc0d044b9b810cdb60c1f233ff"
+  },
+  "verification_context": "Tests run before the focused local freeze commit; source fingerprints identify the verified application tree."
+}

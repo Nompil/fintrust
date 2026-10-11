@@ -1,0 +1,1514 @@
+[
+  {
+    "file": "docs/RELEASE1_BUSINESS_PROCESS.md",
+    "status": " M",
+    "category": "documentation",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/RELEASE1_CANDIDATE.md",
+    "status": " M",
+    "category": "documentation",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/RELEASE1_E2E_MANIFEST.md",
+    "status": " M",
+    "category": "documentation",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/RELEASE1_FRONTEND_FREEZE.md",
+    "status": " M",
+    "category": "documentation",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/RELEASE1_MONDAY_DEMO.md",
+    "status": " M",
+    "category": "documentation",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/RELEASE1_OPERATIONS.md",
+    "status": " M",
+    "category": "documentation",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/diagrams/README.md",
+    "status": " M",
+    "category": "documentation",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "fintrust/api.py",
+    "status": " M",
+    "category": "intended Release 1 source",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "fintrust/auth.py",
+    "status": " M",
+    "category": "intended Release 1 source",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "fintrust/frontend_workflows.py",
+    "status": " M",
+    "category": "intended Release 1 source",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "fintrust/release_contract.py",
+    "status": " M",
+    "category": "intended Release 1 source",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "frontend/release1.css",
+    "status": " M",
+    "category": "intended Release 1 source",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "frontend/release1.html",
+    "status": " M",
+    "category": "intended Release 1 source",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "frontend/release1.js",
+    "status": " M",
+    "category": "intended Release 1 source",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "infrastructure/DEPLOYMENT_BOOTSTRAP.md",
+    "status": " M",
+    "category": "documentation",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "infrastructure/STAGE5_ASYNC_FIX.md",
+    "status": " M",
+    "category": "documentation",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "infrastructure/STAGE5_AUTHORIZATION_REVIEW.md",
+    "status": " M",
+    "category": "documentation",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "infrastructure/STAGE5_PERMANENT_FIX.md",
+    "status": " M",
+    "category": "documentation",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "tests/test_release1_end_to_end.py",
+    "status": " M",
+    "category": "test",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "tests/test_release1_workflows.py",
+    "status": " M",
+    "category": "test",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "tools/run_release1_browser.py",
+    "status": " M",
+    "category": "intended Release 1 source",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "tools/serve_release1_demo.py",
+    "status": " M",
+    "category": "intended Release 1 source",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "tools/verify_release1_ui.cjs",
+    "status": " M",
+    "category": "intended Release 1 source",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/26-stage5-deployer-policy-attached.png",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/27-stage5-diagnostic2-version-default.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/28-stage5-diagnostic2-v2-restored.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/29-stage5-authorization-review.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/30-stage5-diagnostic3-version-default.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/31-stage5-diagnostic3-v2-restored.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/32-stage5-direct-logs-v5-default.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/33-stage5-direct-logs-v2-restored.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/34-stage5-tagloggroup-v3-deleted.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/34-stage5-tagloggroup-version-created.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/35-stage5-tagloggroup-default.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/36-stage5-tagloggroup-v2-restored.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/37-stage5-v4-archived.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/38-stage5-permanent-version-created.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/39-stage5-permanent-default.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/40-stage5-permanent-failure-v2-restored.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/41-stage5-async-policy-attached.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/42-stage5-v7-async-base-default.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/migration-operator-empty-role.png",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/migration-operator-trust-mfa.png",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/release1-migration-operator-assume-user-grant.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/release1-migration-operator-cloudformation-attachment-action.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/release1-migration-operator-cloudformation-policy-created.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/release1-migration-operator-cloudformation-pre-attachment.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/release1-migration-operator-cloudtrail.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/release1-migration-operator-created.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/release1-migration-operator-creation-blocked.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/release1-migration-operator-infrastructure-permissions-cloudtrail.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/release1-migration-operator-infrastructure-permissions-result.md",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/release1-migration-operator-infrastructure-permissions-verification.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/release1-migration-operator-network-attachment-action.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/release1-migration-operator-network-cloudtrail.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/release1-migration-operator-network-deployer-deny-check.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/release1-migration-operator-network-permissions-result.md",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/release1-migration-operator-network-permissions-verification.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/release1-migration-operator-network-policy-created.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/release1-migration-operator-runner-attachment-action.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/release1-migration-operator-runner-cloudtrail.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/release1-migration-operator-runner-permissions-result.md",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/release1-migration-operator-runner-permissions-verification.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/release1-migration-operator-runner-policy-created.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/release1-migration-operator-shell-result.md",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/release1-migration-operator-shell-verification.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/02-iam/release1-migration-operator-trust-validation.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/04-network/release1-cleanup-endpoint-early-delete.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/04-network/release1-preflight-cleanup-release-progress.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/04-network/release1-temporary-endpoint-verified.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/04-network/release1-temporary-network-change-set-reviewed.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/04-network/release1-temporary-network-stack-complete.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/04-network/release1-temporary-preflight-network-cleaned.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/05-rds/release1-cleanup-fintrust-migration-network-dev-events.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/05-rds/release1-cleanup-fintrust-migration-runner-dev-events.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/05-rds/release1-live-readonly-alternative-invocation-verification.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/05-rds/release1-live-readonly-alternative-preflight-journal.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/05-rds/release1-live-readonly-alternative-preflight-response.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/05-rds/release1-live-readonly-alternative-preflight-result.md",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/05-rds/release1-live-readonly-invocation-policy.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/05-rds/release1-live-readonly-invocation-simulation.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/05-rds/release1-live-readonly-preflight-journal.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/05-rds/release1-live-readonly-preflight-login-blocker.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/05-rds/release1-live-readonly-preflight-quota-blocker.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/05-rds/release1-live-readonly-preflight-result.md",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/05-rds/release1-live-readonly-preflight-simulator-format-blocker.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/05-rds/release1-temporary-infrastructure-assumption-blocker.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/05-rds/release1-temporary-preflight-cleanup-journal.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/05-rds/release1-temporary-preflight-cleanup-result.md",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/05-rds/release1-temporary-preflight-infrastructure-initial-read-blocker.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/05-rds/release1-temporary-preflight-infrastructure-journal.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/05-rds/release1-temporary-preflight-infrastructure-result.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/05-rds/release1-temporary-preflight-infrastructure-result.md",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/02-stage5-package-version-checksum.png",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/03-stage5-change-set-reviewed.png",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/08-ingest01-stage5-package-and-versioning-check.png",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/19-stage5-diagnostic2-refreshed-preflight.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/19-stage5-diagnostic2-session-preflight.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/25-stage5-diagnostic2-change-set-reviewed.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/26-stage5-diagnostic2-stack-result.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/27-stage5-diagnostic2-stack-events.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/28-stage5-diagnostic2-create-failed.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/29-stage5-diagnostic2-stack-resources.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/30-stage5-diagnostic2-log-tags-retention.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/31-stage5-diagnostic2-summary.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/32-stage5-diagnostic2-lambda-async.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/32-stage5-diagnostic2-lambda-concurrency.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/32-stage5-diagnostic2-lambda-configuration.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/33-stage5-diagnostic2-result.md",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/34-stage5-authorization-review.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/35-stage5-diagnostic3-preflight-20261008T162817919621Z.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/35-stage5-diagnostic3-preflight.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/36-stage5-diagnostic3-clean-deletion.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/37-stage5-diagnostic3-change-set-reviewed.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/38-stage5-diagnostic3-stack-result.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/39-stage5-diagnostic3-stack-events.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/40-stage5-diagnostic3-stack-resources.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/41-stage5-diagnostic3-create-failed.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/42-stage5-diagnostic3-log-tags-retention.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/43-stage5-diagnostic3-lambda-async.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/43-stage5-diagnostic3-lambda-concurrency.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/43-stage5-diagnostic3-lambda-configuration.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/44-stage5-diagnostic3-summary-20261008T162923200633Z.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/44-stage5-diagnostic3-summary.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/45-stage5-diagnostic3-result.md",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/46-stage5-direct-logs-preflight.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/47-stage5-direct-logs-create-result.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/49-stage5-direct-logs-cleanup.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/50-stage5-direct-logs-summary.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/51-stage5-direct-logs-result.md",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/52-stage5-tagloggroup-direct-result.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/53-stage5-tagloggroup-inspection.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/54-stage5-tagloggroup-cleanup.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/55-stage5-tagloggroup-summary-completed.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/55-stage5-tagloggroup-summary.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/56-stage5-tagloggroup-preflight.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/57-stage5-tagloggroup-result.md",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/58-stage5-permanent-preflight.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/59-stage5-failed-stack-deleted.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/60-stage5-permanent-change-set-reviewed.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/62-stage5-permanent-stack-events.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/63-stage5-permanent-resources.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/64-stage5-permanent-log-settings.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/65-stage5-permanent-lambda-configuration.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/66-stage5-permanent-trigger-checks.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/67-stage5-permanent-recovery-summary.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/68-stage5-permanent-recovery-result.md",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/69-stage5-async-recovery-preflight.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/70-stage5-async-failed-stack-deleted.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/71-stage5-retained-log-reviewed.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/72-stage5-retained-log-cleanup.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/73-stage5-async-change-set-reviewed.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/74-stage5-async-stack-events.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/75-stage5-async-resources.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/76-stage5-async-lambda-configuration.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/77-stage5-async-config-and-logs.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/78-stage5-async-trigger-checks.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/79-stage5-async-recovery-summary.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/80-stage5-async-failure-events.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/81-stage5-async-verification-interruption.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/82-stage5-async-verification-result.md",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/release1-temporary-execution-boundary-verified.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/release1-temporary-preflight-artifact-version.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/release1-temporary-preflight-runner-cleaned.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/release1-temporary-runner-change-set-reviewed.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/release1-temporary-runner-stack-complete.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/08-lambda/release1-temporary-runner-verified.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/10-monitoring/release1-temporary-runner-empty-logs.json",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser-results.xml",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/A-upload-warning.png",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/A-whole-file-replay.png",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/B-upload-warning.png",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/administration-user-created.png",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/administration.png",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/analyst-quarantine-resubmitted.png",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/analyst-review-cleared.png",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/api-unavailable.png",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/audit-trail.png",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/batch-reconciliation.png",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/browser-result.json",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/duplicate-occurrences.png",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/high-risk-transaction.png",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/ingestion-batches.png",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/insights-all-dates.png",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/insights.png",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/invalid-file-rejection.png",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/notification-center.png",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/overview.png",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/possible-duplicate-charge.png",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/quarantine-detail.png",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/quarantine.png",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/rejected-uploads-history.png",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/release1-auditor-review-queue.png",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/release1-maintainer-operations.png",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/release1-transaction-detail.png",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/report-current-page.csv",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/report-current-page.json",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/review-queue.png",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/risk-events.png",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/transactions.png",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/focused-results.xml",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/full-results.xml",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/presentation-readiness/verification.json",
+    "status": "??",
+    "category": "evidence",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/EVIDENCE/12-e2e/release1-closure/browser/release1-maintainer-operations.png",
+    "status": "??",
+    "category": "evidence",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "docs/RELEASE1_PRESENTATION_READINESS.md",
+    "status": "??",
+    "category": "documentation",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "docs/diagrams/release1-operating-model.md",
+    "status": "??",
+    "category": "documentation",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "fintrust/local_users.py",
+    "status": "??",
+    "category": "intended Release 1 source",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "fintrust/visual_insights.py",
+    "status": "??",
+    "category": "intended Release 1 source",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  },
+  {
+    "file": "infrastructure/DEPLOYMENT_READINESS.md",
+    "status": "??",
+    "category": "documentation",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "infrastructure/rds/schema.sql",
+    "status": "??",
+    "category": "documentation",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "project-reference/completed_work.md",
+    "status": "??",
+    "category": "documentation",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "project-reference/component_guide.md",
+    "status": "??",
+    "category": "documentation",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "project-reference/live_demo_script.md",
+    "status": "??",
+    "category": "documentation",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "project-reference/local_software_setup.md",
+    "status": "??",
+    "category": "documentation",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "project-reference/presentation_notes.md",
+    "status": "??",
+    "category": "documentation",
+    "include": false,
+    "reason": "Pre-existing separate work/evidence; preserve outside this commit"
+  },
+  {
+    "file": "tests/test_presentation_readiness.py",
+    "status": "??",
+    "category": "test",
+    "include": true,
+    "reason": "Focused verified presentation scope"
+  }
+]

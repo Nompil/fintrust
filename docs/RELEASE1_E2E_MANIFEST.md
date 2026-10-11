@@ -1,5 +1,8 @@
 # Release 1 CSV acceptance manifest
 
+> Current local presentation behavior (2026-10-11): see [Release 1 presentation readiness](RELEASE1_PRESENTATION_READINESS.md). Its human operating model supersedes earlier local permissions described below: Admin handles governance/oversight, Analyst handles routine review/correction, Auditor reads, Maintainer handles technical recovery. Terminal reopening and unassigned-account correction are not exposed in the current local UI/API. Local user-record governance is now implemented; token provisioning and enterprise authentication remain separate. Historical test counts and frozen cloud artifacts below retain their original source scope.
+
+
 Actual external artifacts: CSV A `fintrust_e2e_mixed_transactions.csv` and CSV B
 `fintrust_e2e_companion_transactions_B.csv`. Both are outside the repository.
 **Their paths, bytes, hashes, transaction references and exact counts are unknown.**

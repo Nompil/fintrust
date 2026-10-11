@@ -1,5 +1,8 @@
 # Release 1 local workflows, recovery and release gates
 
+> Current local presentation behavior (2026-10-11): see [Release 1 presentation readiness](RELEASE1_PRESENTATION_READINESS.md). Its human operating model supersedes earlier local permissions described below: Admin handles governance/oversight, Analyst handles routine review/correction, Auditor reads, Maintainer handles technical recovery. Terminal reopening and unassigned-account correction are not exposed in the current local UI/API. Local user-record governance is now implemented; token provisioning and enterprise authentication remain separate. Historical test counts and frozen cloud artifacts below retain their original source scope.
+
+
 This milestone is LOCAL implementation and synthetic-data verification only.
 No AWS calls, live RDS changes, artifact uploads or trigger/concurrency activation are authorized. The focused push/CI was explicitly approved and completed. Existing deployed Stage 1-5 state was not re-audited.
 AWS Integration remains In Progress. The historical verified ZIP is unchanged;

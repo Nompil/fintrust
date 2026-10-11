@@ -150,7 +150,7 @@ def test_api_authentication_roles_and_no_header_escalation(authenticated_client)
     assert client.get("/v1/session",headers=headers("Read-only/Auditor")).json["data"]["role"]=="Read-only/Auditor"
     assert client.post("/v1/reviews/1/transition",json={},headers=headers("Read-only/Auditor")).status_code==403
     assert client.get("/v1/transactions?account_id="+str(uuid.uuid4()),headers=headers("Admin")).status_code==403
-    assert client.post("/v1/reviews/1/transition",data="bad",content_type="application/json",headers=headers("Admin")).status_code==400
+    assert client.post("/v1/reviews/1/transition",data="bad",content_type="application/json",headers=headers("Risk/Compliance Analyst")).status_code==400
 
 def test_review_api_stale_idempotent_audit_and_ledger_immutable(release_db,authenticated_client):
     _,_,_,q,_=release_db;client,headers=authenticated_client
@@ -161,7 +161,7 @@ def test_review_api_stale_idempotent_audit_and_ledger_immutable(release_db,authe
     response=client.post(path,json=body,headers=headers("Risk/Compliance Analyst"));assert response.status_code==200,response.json
     assert client.post(path,json=body,headers=headers("Risk/Compliance Analyst")).json["data"]["replayed"]
     assert client.post(path,json={**body,"request_id":str(uuid.uuid4())},headers=headers("Risk/Compliance Analyst")).status_code==409
-    assert client.post(path,json={**body,"amount":"1"},headers=headers("Admin")).status_code==400
+    assert client.post(path,json={**body,"amount":"1"},headers=headers("Risk/Compliance Analyst")).status_code==400
     cleared={**body,"request_id":str(uuid.uuid4()),"expected_version":2,"status":"CLEARED","notes":"Verified activity","resolution_code":"VALID_ACTIVITY"}
     assert client.post(path,json=cleared,headers=headers("Risk/Compliance Analyst")).status_code==200
     assert q("SELECT count(*) FROM risk_review_history")==[(3,)]
@@ -182,7 +182,7 @@ def test_correction_api_revalidates_deduplicates_and_preserves_original(release_
     assert q("SELECT workflow_status FROM quarantine_workflow WHERE quarantine_id=%s",(case,))==[("RESOLVED",)]
     assert q("SELECT disposition FROM ingestion_records WHERE batch_id=(SELECT batch_id FROM quarantine_cases WHERE quarantine_id=%s)",(case,))==[("QUARANTINED",)]
     assert q("SELECT count(*) FROM transactions")==[(201,)]
-    assert client.post(path,json={**body,"request_id":str(uuid.uuid4())},headers=headers("Admin")).status_code==409
+    assert client.post(path,json={**body,"request_id":str(uuid.uuid4())},headers=headers("Risk/Compliance Analyst")).status_code==409
 
 
 @pytest.mark.parametrize("seconds,expected",[(300,True),(300.000001,False)])
@@ -201,13 +201,13 @@ def test_correction_still_invalid_and_cross_file_duplicate(release_db,authentica
     run(feed([row(source_transaction_id="ORIGINAL",amount="bad")]))
     case=q("SELECT quarantine_id::text FROM quarantine_cases")[0][0];path=f"/v1/quarantine/{case}/corrections"
     invalid={"request_id":str(uuid.uuid4()),"action":"RESUBMIT","notes":"Still invalid candidate","candidate":row(source_transaction_id="ORIGINAL",amount="0")}
-    assert client.post(path,json=invalid,headers=headers("Admin")).status_code==202
+    assert client.post(path,json=invalid,headers=headers("Risk/Compliance Analyst")).status_code==202
     worker.drain_corrections()
     assert q("SELECT workflow_status FROM quarantine_workflow WHERE quarantine_id=%s",(case,))==[("OPEN",)]
     assert q("SELECT count(*) FROM transactions")==[(200,)]
     run(feed([row(source_transaction_id="ORIGINAL")],"raw/another.csv"))
     fixed={**invalid,"request_id":str(uuid.uuid4()),"candidate":row(source_transaction_id="ORIGINAL")}
-    assert client.post(path,json=fixed,headers=headers("Admin")).status_code==202
+    assert client.post(path,json=fixed,headers=headers("Risk/Compliance Analyst")).status_code==202
     worker.drain_corrections()
     assert q("SELECT workflow_status FROM quarantine_workflow WHERE quarantine_id=%s",(case,))==[("RESOLVED",)]
     assert q("SELECT disposition FROM ingestion_records i JOIN quarantine_corrections c ON i.batch_id=c.reprocess_batch_id ORDER BY c.correction_version")==[("QUARANTINED",),("DUPLICATE",)]
@@ -219,8 +219,8 @@ def test_correction_failure_outbox_retries_and_no_sensitive_fields(release_db,au
     run(feed([row(amount="bad")]))
     case=q("SELECT quarantine_id::text FROM quarantine_cases")[0][0];path=f"/v1/quarantine/{case}/corrections"
     body={"request_id":str(uuid.uuid4()),"action":"RESUBMIT","notes":"Corrected candidate","candidate":row(email="secret@example.com")}
-    assert client.post(path,json=body,headers=headers("Admin")).status_code==400
-    body["candidate"]=row();assert client.post(path,json=body,headers=headers("Admin")).status_code==202
+    assert client.post(path,json=body,headers=headers("Risk/Compliance Analyst")).status_code==400
+    body["candidate"]=row();assert client.post(path,json=body,headers=headers("Risk/Compliance Analyst")).status_code==202
     from fintrust import dynamo
     original=dynamo.publish_score
     monkeypatch.setattr(dynamo,"publish_score",lambda *a:(_ for _ in ()).throw(RuntimeError("Injected projection outage")))
@@ -238,7 +238,7 @@ def test_malformed_review_json_is_400(release_db,authenticated_client,changed):
     run(feed([row(amount="200000.01",country="US")]))
     event=q("SELECT risk_event_id FROM risk_reviews")[0][0]
     body={"request_id":str(uuid.uuid4()),"expected_version":1,"status":"UNDER_REVIEW","notes":"Investigating","resolution_code":None,**changed}
-    assert client.post(f"/v1/reviews/{event}/transition",json=body,headers=headers("Admin")).status_code==400
+    assert client.post(f"/v1/reviews/{event}/transition",json=body,headers=headers("Risk/Compliance Analyst")).status_code==400
 
 
 def test_object_scope_detail_report_and_metrics(release_db,authenticated_client):

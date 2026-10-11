@@ -14,7 +14,7 @@ def record_upload(principal, filename, action, result, *, reason_code=None, batc
     if os.getenv("FINTRUST_MODE") != "local":
         raise ValueError("Local intake receipt required")
     event = {"event_id":str(uuid.uuid4()), "filename":secure_filename(filename or "")[:200],
-        "actor":principal.subject, "accounts":list(principal.accounts),
+        "actor":principal.subject, "actor_role":principal.role, "accounts":list(principal.accounts),
         "attempted_at":datetime.now(timezone.utc).isoformat(), "action":action,
         "result":result, "reason_code":reason_code, "batch_id":batch_id,
         "rows_processed":0 if action=="UPLOAD_REJECTED" else None}
@@ -97,11 +97,13 @@ def audit_events(principal, args):
     principal.require("audit")
     limit,offset=api.page_args(args)
     scope=list(principal.accounts)
-    events=[{"timestamp":e["attempted_at"],"actor":e["actor"],"action":e["action"],"resource":e.get("batch_id") or e["event_id"],"result":e["result"],"details":e.get("reason_code") or e["filename"]} for e in upload_history(principal)]
+    events=[{"timestamp":e["attempted_at"],"actor":e["actor"],"action":e["action"],"resource":e.get("target") or e.get("batch_id") or e["event_id"],"result":e["result"],"actor_role":e.get("actor_role","Not captured"),"details":e.get("notes") or e.get("reason_code") or e["filename"]} for e in upload_history(principal)]
     events+=api._query("SELECT h.changed_at AS timestamp,h.actor_subject AS actor,'REVIEW_'||h.after_status AS action,h.risk_event_id::text AS resource,h.after_status AS result,h.notes AS details FROM risk_review_history h JOIN risk_events r USING(risk_event_id) JOIN transactions t USING(tx_id) WHERE t.account_id=ANY(%s::uuid[]) ORDER BY h.changed_at DESC LIMIT 1000",(scope,))
     events+=api._query("SELECT i.updated_at AS timestamp,'system' AS actor,'ROW_'||i.disposition AS action,i.batch_id::text||':'||i.source_row::text AS resource,i.disposition AS result,i.reason_code AS details FROM ingestion_records i LEFT JOIN transactions t ON t.tx_id=i.canonical_tx_id LEFT JOIN quarantine_cases q ON q.batch_id=i.batch_id AND q.source_row=i.source_row WHERE COALESCE(t.account_id,q.candidate_account_id)=ANY(%s::uuid[]) OR (%s AND i.disposition='QUARANTINED' AND NOT EXISTS(SELECT 1 FROM accounts a WHERE a.account_id=q.candidate_account_id)) ORDER BY i.updated_at DESC LIMIT 1000",(scope,principal.role=='Admin'))
     events+=api._query("SELECT c.submitted_at AS timestamp,c.submitted_by AS actor,'QUARANTINE_'||c.action AS action,c.quarantine_id::text AS resource,c.action AS result,c.correction_notes AS details FROM quarantine_corrections c JOIN quarantine_cases q USING(quarantine_id) WHERE q.candidate_account_id=ANY(%s::uuid[]) ORDER BY c.submitted_at DESC LIMIT 1000",(scope,))
     if principal.role=='Admin':
         events+=api._query("SELECT COALESCE(completed_at,created_at) AS timestamp,actor_subject AS actor,action,request_id::text AS resource,state AS result,result->>'notes' AS details FROM operations_requests ORDER BY created_at DESC LIMIT 1000")
+    for event in events:
+        event.setdefault('actor_role','SYSTEM' if event.get('actor')=='system' else 'Not captured')
     events.sort(key=lambda x:datetime.fromisoformat(x['timestamp'].replace('Z','+00:00')) if isinstance(x['timestamp'],str) else x['timestamp'],reverse=True)
     return {"data":events[offset:offset+limit],"meta":{"count":len(events[offset:offset+limit]),"has_more":len(events)>offset+limit,"bounded_per_source":1000}}

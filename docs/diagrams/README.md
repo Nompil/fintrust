@@ -25,3 +25,7 @@ AWS icon PNGs in `aws-icons/` are unmodified assets from the official AWS Archit
 The retained PDFs are [architecture and ERD](../../output/pdf/fintrust_architecture_and_erd.pdf) and [system documentation](../../output/pdf/fintrust_system_documentation.pdf). Both require content reconciliation and visual inspection before final presentation.
 
 Maintain these seven views rather than producing diagrams for every checkpoint. Update a view when a material architecture decision changes it. Label repository implementation, target design and unverified integration explicitly. After AWS verification, reconcile actual configuration against source, update canonical docs and generator content, rebuild exports, inspect every page and link supporting evidence. Do not label a target as deployed without that evidence.
+
+## Release 1 operating-model presentation
+
+Use [current operating-model diagrams](release1-operating-model.md) for the four current architecture/decision/recovery/role views. They label local verification and incomplete AWS integration explicitly. Historical SVG/PDF exports above remain historical and must not be presented as reconciled live architecture.

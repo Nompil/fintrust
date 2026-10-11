@@ -76,9 +76,9 @@ def test_review_rbac_and_transitions():
     assert contract.review_transition("UNDER_REVIEW","CLEARED",role="Risk/Compliance Analyst",notes="Verified",resolution_code="VALID_ACTIVITY")=="CLEARED"
     with pytest.raises(PermissionError): contract.review_transition("OPEN","UNDER_REVIEW",role="Read-only/Auditor",notes="Assigned")
     with pytest.raises(PermissionError): contract.review_transition("CLEARED","UNDER_REVIEW",role="Risk/Compliance Analyst",notes="Reopen")
-    assert contract.review_transition("CLEARED","UNDER_REVIEW",role="Admin",notes="New evidence")=="UNDER_REVIEW"
-    with pytest.raises(ValueError): contract.review_transition("OPEN","CLEARED",role="Admin",notes="skip",resolution_code="VALID_ACTIVITY")
-    with pytest.raises(ValueError): contract.review_transition("UNDER_REVIEW","CLEARED",role="Admin",notes="",resolution_code="VALID_ACTIVITY")
+    with pytest.raises(PermissionError): contract.review_transition("CLEARED","UNDER_REVIEW",role="Admin",notes="New evidence")
+    with pytest.raises(ValueError): contract.review_transition("OPEN","CLEARED",role="Risk/Compliance Analyst",notes="skip",resolution_code="VALID_ACTIVITY")
+    with pytest.raises(ValueError): contract.review_transition("UNDER_REVIEW","CLEARED",role="Risk/Compliance Analyst",notes="",resolution_code="VALID_ACTIVITY")
 
 def test_reconciliation_pending_technical_and_business_failures():
     mixed=["ACCEPTED","QUARANTINED","DUPLICATE","QUEUED"]

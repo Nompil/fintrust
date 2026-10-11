@@ -12,6 +12,7 @@ import os
 from pathlib import Path
 import sys
 import threading
+from datetime import datetime,timezone
 from unittest.mock import patch
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))
 SCHEMA="fintrust_release1_candidate"
@@ -19,6 +20,8 @@ SCHEMA="fintrust_release1_candidate"
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--role",choices=["Admin","Analyst","Auditor","Maintainer"],default="Admin")
+    parser.add_argument("--reset",action="store_true",help="Reset only the labelled synthetic candidate schema in the dedicated local test database")
+    parser.add_argument("--username",help="Synthetic named identity; token is still operator-provisioned")
     parser.add_argument("--port",type=int,default=5001)
     parser.add_argument("--seed-scenarios",action="store_true",help="Add labelled constructed scenarios; not the external CSV A/B")
     args=parser.parse_args()
@@ -41,6 +44,9 @@ def main():
                 cur.execute("SELECT pg_get_userbyid(nspowner),obj_description(oid,'pg_namespace') FROM pg_namespace WHERE nspname=%s",(SCHEMA,));existing=cur.fetchone()
                 if existing and existing!=(ROLE,"FinTrust isolated synthetic Release1 candidate"):
                     raise ValueError("Existing schema is unrelated and was left unchanged")
+                if existing and args.reset:
+                    cur.execute(sql.SQL("DROP SCHEMA {} CASCADE").format(sql.Identifier(SCHEMA)))
+                    existing=None
                 if not existing:
                     cur.execute(sql.SQL("CREATE SCHEMA {}").format(sql.Identifier(SCHEMA)))
                     cur.execute(sql.SQL("COMMENT ON SCHEMA {} IS 'FinTrust isolated synthetic Release1 candidate'").format(sql.Identifier(SCHEMA)))
@@ -54,12 +60,18 @@ def main():
     role={"Admin":"Admin","Analyst":"Risk/Compliance Analyst","Auditor":"Read-only/Auditor","Maintainer":"Maintainer"}[args.role]
     file=ROOT/".env.release1-auth.json"
     registry=json.loads(file.read_text()) if file.exists() else {"principals":[]}
-    subject="local-"+args.role.lower();digest=hashlib.sha256(token.encode()).hexdigest();token=None
+    subject=args.username or {"Admin":"admin01","Analyst":"analyst01","Auditor":"auditor01","Maintainer":"maintainer01"}[args.role]
+    import re
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{0,79}",subject):raise ValueError("Invalid synthetic username")
+    digest=hashlib.sha256(token.encode()).hexdigest();token=None
     registry["principals"]=[p for p in registry["principals"] if p["subject"]!=subject]
     if any(p["token_sha256"]==digest for p in registry["principals"]):raise ValueError("Use a different token for each local role")
-    registry["principals"].append({"subject":subject,"role":role,"accounts":["20000000-0000-4000-8000-00000000000"+str(i) for i in range(1,6)],"token_sha256":digest})
+    for name,assigned in (("admin01","Admin"),("analyst01","Risk/Compliance Analyst"),("analyst02","Risk/Compliance Analyst"),("auditor01","Read-only/Auditor"),("maintainer01","Maintainer")):
+        if name!=subject and not any(p["subject"]==name for p in registry["principals"]):
+            registry["principals"].append({"subject":name,"display_name":name,"status":"ACTIVE","role":assigned,"accounts":["20000000-0000-4000-8000-00000000000"+str(i) for i in range(1,6)],"token_sha256":"","created_at":datetime.now(timezone.utc).isoformat()})
+    registry["principals"].append({"subject":subject,"display_name":subject,"status":"ACTIVE","created_at":datetime.now(timezone.utc).isoformat(),"role":role,"accounts":["20000000-0000-4000-8000-00000000000"+str(i) for i in range(1,6)],"token_sha256":digest})
     file.write_text(json.dumps(registry,indent=2)+"\n",encoding="utf-8")
-    os.environ.update(FINTRUST_AUTH_FILE=str(file),FINTRUST_LOCAL_DEMO="0",FINTRUST_RELEASE1="1",FINTRUST_RELEASE1_UPLOAD="1",INPUT_BUCKET="release1-input",FINTRUST_ACCOUNT_ID="966467878406",DYNAMODB_TABLE="release1-scores",QUARANTINE_BUCKET="release1-demo-safe",AWS_ACCESS_KEY_ID="testing",AWS_SECRET_ACCESS_KEY="testing",AWS_SESSION_TOKEN="testing",AWS_DEFAULT_REGION="af-south-1",AWS_EC2_METADATA_DISABLED="true",AWS_IGNORE_CONFIGURED_ENDPOINT_URLS="true")
+    os.environ.update(FINTRUST_AUTH_FILE=str(file),FINTRUST_MODE="local",FINTRUST_LOCAL_DEMO="0",FINTRUST_RELEASE1="1",FINTRUST_RELEASE1_UPLOAD="1",INPUT_BUCKET="release1-input",FINTRUST_ACCOUNT_ID="966467878406",DYNAMODB_TABLE="release1-scores",QUARANTINE_BUCKET="release1-demo-safe",AWS_ACCESS_KEY_ID="testing",AWS_SECRET_ACCESS_KEY="testing",AWS_SESSION_TOKEN="testing",AWS_DEFAULT_REGION="af-south-1",AWS_EC2_METADATA_DISABLED="true",AWS_IGNORE_CONFIGURED_ENDPOINT_URLS="true")
     from moto import mock_aws
     from botocore.httpsession import URLLib3Session
     import boto3
@@ -78,7 +90,6 @@ def main():
         if args.seed_scenarios:
             from fintrust.release_ingest import envelopes
             import uuid
-            from datetime import datetime,timezone
             now=datetime.now(timezone.utc).isoformat();tag=uuid.uuid4().hex
             rows=[{"account_id":"20000000-0000-4000-8000-000000000001","amount":amount,"currency":"ZAR","country":country,"tx_date":now,"tx_type":"debit","source_system":"constructed-local-demo","source_transaction_id":tag+str(i)} for i,(amount,country) in enumerate([("10","ZA"),("200000.01","US"),("bad","ZA")])]
             text=io.StringIO(newline="");writer=csv.DictWriter(text,fieldnames=list(rows[0]));writer.writeheader();writer.writerows(rows)

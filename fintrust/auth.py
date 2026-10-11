@@ -36,6 +36,7 @@ def authenticate():
         found=[p for p in registry["principals"] if hmac.compare_digest(p["token_sha256"],digest)]
         if len(found)!=1: raise PermissionError("Authentication required")
         p=found[0]
+        if p.get("status","ACTIVE")!="ACTIVE": raise PermissionError("Authentication required")
         principal=Principal(p["subject"],p["role"],tuple(str(UUID(x)) for x in p["accounts"]))
         principal.require("read")
         if not principal.subject or len(principal.subject)>200: raise ValueError()
