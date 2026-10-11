@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="1" time="45.336" timestamp="2026-10-11T23:10:08.460326+02:00" hostname="Lindiwe"><testcase classname="build.release1-browser-check" name="test_browser_release1" time="44.284" /></testsuite></testsuites>

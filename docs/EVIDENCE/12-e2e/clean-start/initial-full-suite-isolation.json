@@ -1,0 +1,12 @@
+{
+  "result": "2 failed, 703 passed",
+  "causes": [
+    "Synthetic performance rows were committed into the shared test database",
+    "Launcher regression used host-specific database/role constants instead of disposable fixture target"
+  ],
+  "corrections": [
+    "Rollback benchmark-only additions before regression suites",
+    "Monkeypatch launcher target constants to the explicitly configured test DSN"
+  ],
+  "business_logic_changed": false
+}

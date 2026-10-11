@@ -1,0 +1,19 @@
+{
+  "results": {
+    "initdb": {
+      "exit_code": 0,
+      "seconds": 9.86
+    },
+    "status": "BLOCKED",
+    "blocker": "[WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\Nompilo\\\\Desktop\\\\fintrust\\\\build\\\\assurance-clean-start\\\\server-start-output.tmp'"
+  },
+  "source_commit": "8b86b699f7a9c2a492eb159b58fb35bf22c3fdcf",
+  "application_source": "Git archive; no prior runtime state or virtualenv copied",
+  "python": "Fresh Windows CPython 3.14 venv, no global/user site packages",
+  "browser": "Fresh CI-pinned Playwright 1.62.1; existing installed Chrome and Node are documented host prerequisites",
+  "aws_access": false,
+  "database": "Fresh PostgreSQL 16.15 loopback cluster, SCRAM random ephemeral credential; stopped afterward",
+  "live_rds": false,
+  "dotenv_discovery": "Disabled to prevent ancestor repository credentials being discovered",
+  "harness_changes": "Only explicit local disposable gate opt-in plus added catalogue/performance checker; business source unchanged"
+}

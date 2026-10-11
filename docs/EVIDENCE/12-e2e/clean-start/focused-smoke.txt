@@ -1,0 +1,5 @@
+........................................................................ [ 72%]
+............................                                             [100%]
+100 passed in 73.62s (0:01:13)
+
+Evidence: C:\Users\Nompilo\Desktop\fintrust\build\assurance-clean-start\source\build\release1-closure\4753eef6543f4d94a253a9035687cdc9

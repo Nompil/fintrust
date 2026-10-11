@@ -1,0 +1,61 @@
+{
+  "status": "PASSED",
+  "suites": {
+    "focused-smoke": {
+      "tests": 100,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 73.6
+    },
+    "fresh-browser": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 45.34
+    },
+    "fresh-full": {
+      "tests": 705,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 229.74
+    }
+  },
+  "postgresql": "16.15",
+  "schema_tables": 17,
+  "schema_views": 2,
+  "validated_constraints": 85,
+  "indexes": 36,
+  "unexplained_integrity_violations": 0,
+  "runtime_ddl_denials": 8,
+  "synthetic_scales": [
+    200,
+    1000,
+    10000
+  ],
+  "sql_10000_execution_ms": {
+    "transactions": 0.025,
+    "history": 0.022,
+    "risk_events": 0.21,
+    "reviews": 0.24,
+    "monthly_summary": 4.466,
+    "risk_report": 1.31,
+    "duplicate_lookup": 0.017,
+    "dashboard": 2.514
+  },
+  "production_capacity": "DEFERRED",
+  "preserved_unrelated_files": 157,
+  "owned_postgresql_cluster_stopped": true,
+  "aws_mutations": false,
+  "live_rds_contacted": false,
+  "business_source_changes": false,
+  "remaining_local_blockers": [],
+  "live_aws_pending": [
+    "Approved base bootstrap and migrations",
+    "Current verified Linux release artifact",
+    "Application deployment and event wiring",
+    "Live AWS end-to-end verification"
+  ]
+}

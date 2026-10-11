@@ -1,0 +1,4 @@
+.                                                                        [100%]
+1 passed in 45.34s
+
+Evidence: C:\Users\Nompilo\Desktop\fintrust\build\assurance-clean-start\source\build\release1-closure\d02ade0918fa48e7adfe6be4d83174ba

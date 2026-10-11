@@ -1,0 +1,15 @@
+{
+  "source_commit": "8b86b699f7a9c2a492eb159b58fb35bf22c3fdcf",
+  "verification_only_overlay": {
+    "tools/check_migration_roles_pg16.py": "9d57886d01a5782906dd1bfc9d6e8c407cd51f1d69e8f63a7891aaac4b94ed78",
+    "tools/check_workflows_pg16.py": "284d0b319b7f06fa92cd5e78d9219564ed046055d2714f02fe7d9d152f85f9f9",
+    "tools/check_local_pg16_assurance.py": "eb2bc1be90514f0bdec89211bf7abd554a1c86dc211a56f8a9bfe7e40f62e840",
+    "tests/test_presentation_readiness.py": "ab563b7b97f881de1774905dc2f6a1dec833eca52079ea185835b26bbe16253b"
+  },
+  "production_files_modified": [],
+  "portable_postgresql": {
+    "version": "16.15",
+    "download": "https://sbp.enterprisedb.com/getfile.jsp?fileid=1260623",
+    "sha256": "43bb45f173a6f08cf1d29a97a6d8deb119e8e8093a24c00d2d1001a0ccaa8281"
+  }
+}

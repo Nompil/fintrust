@@ -28,13 +28,13 @@ Four mutation handlers now check authorization before parsing JSON: review trans
 | Audit accountability | PARTIAL | Upload/replay, governance, review, correction and technical retry audit tested. Login, client-side download and notification acknowledgement are not claimed as audited actions. |
 | Reports and eight insights | PASS | Scoped SQL totals and date-filter tests; all eight browser tables and CSV/JSON values compared with their actual API data. Reports export current authorized account/page, not a date-period or all-pages report. No FX conversion or current-balance claim. |
 | Operations and DLQ | PASS | Mock queue redrive, replay and failures tested; technical DLQ is distinct from business quarantine. |
-| Database constraints and migrations locally | PARTIAL | Isolated empty-schema chain, rerun, drift, row preservation and constraints tested on local PostgreSQL 18.6. |
-| PostgreSQL 16 service-role/bootstrap integrity | BLOCKED | No available disposable PostgreSQL 16 administrator environment. PostgreSQL 18 does not prove PostgreSQL 16 membership/ownership behavior; expected service-role test skip remains visible. |
+| Database constraints and migrations locally | PASS | Fresh PostgreSQL 16.15 base -> 001 -> 002 -> approved synthetic seed, reruns and drift/rollback checks verified. |
+| PostgreSQL 16 service-role/bootstrap integrity | PASS | Disposable administrator catalogue: 17 tables, 2 views, 85 validated constraints, 36 indexes, zero unexplained violations; service/migration role rehearsals and eight actual runtime DDL denials. |
 | Smoke and frontend roles | PASS | Compact real-SQL smoke plus actual browser navigation, review/correction and downloads; four roles exercised across suites. |
-| Clean start with fresh dependencies / PG16 | BLOCKED | Existing installed Python dependencies and local database reused. Isolated schemas are fresh, but a fresh checkout + clean dependency installation + PostgreSQL 16 is not yet demonstrated. |
-| Performance sanity | PARTIAL | Parser measured at 1/100/1,000/5,000 rows; real SQL worker measured at 1/100. No 1,000/5,000-row SQL, N+1, memory or production capacity claim. |
+| Clean start with fresh dependencies / PG16 | PASS | Git archive of 8b86, newly created Windows Python 3.14.7 venv, fresh dependency installation, empty PostgreSQL 16.15 cluster, smoke/browser/full gates. Host prerequisites are explicit below. |
+| Performance sanity | PASS / DEFERRED | Eight representative SQL plans at 200/1,000/10,000 synthetic transactions. Query sanity verified; production load/capacity, throughput and memory testing deferred. |
 | Secret scan | PARTIAL | Pattern scan of tracked and relevant untracked text; markers, localhost disposable credentials and placeholders classified. No matched values emitted. Pattern scanning is not proof against every secret or personal-data format. |
-| Cleanup and preservation | BLOCKED | Proposal recorded; recursive deletion refused a Windows reparse-point child. No files deleted or archived; ignored caches remain. ZIPs, manifests, runner packages and forensic evidence intentionally retained. |
+| Cleanup and preservation | PASS | 102 verified ordinary bytecode files removed individually; 36 reparse points deliberately untouched. No recursive traversal/deletion; historical packages/evidence and unrelated files preserved. |
 | Live AWS end-to-end chain | BLOCKED | Pending approved base bootstrap/migrations, a current Linux artifact, application deployment, event wiring and live E2E. |
 | Enterprise identity, durable notification inbox, hour-velocity rule | DEFERRED | Outside frozen Release 1 scope. |
 
@@ -50,7 +50,7 @@ The public routes are `/`, `/release1`, `/assets/<path:name>` and `/v1/health`. 
 
 No broken migration reference should be inferred from a convenience filename: the authoritative ordered chain is the base prefix in `sql/schema.sql`, then `001_transaction_identity.sql`, then `002_operational_workflows.sql`. The source review and base manifest remain unmodified. Historical presentation ZIPs remain historical; the API fix requires a newly verified Linux package before any future deployment.
 
-## Reproducible commands and remaining local gates
+## Historical commands and original local gates
 
 With already configured dedicated loopback test database credentials (never print them):
 
@@ -63,9 +63,9 @@ Browser verification uses the existing Node, Playwright and Chrome paths through
 
 For a genuine clean start, use a fresh source checkout, a fresh Python 3.12 virtual environment with `pip install -r requirements.txt`, a disposable PostgreSQL 16 administrator service, and the existing PostgreSQL 16 role/bootstrap checks and full suite. Create only dedicated loopback test databases; local synthetic seed must never be applied to live RDS. `python tools/local.py setup` prompts for local database administration without persisting administrator credentials. Launch the isolated mock-cloud application with `python tools/serve_release1.py --role Admin --username admin01 --seed-scenarios`; token provisioning is controlled local setup, not enterprise login. This sequence is documented but not claimed executed in a new environment.
 
-Next work is local PostgreSQL 16/clean-start proof and safe cache handling, not AWS execution. Live writes still need their separate approval. No frozen commit was amended, no artifacts rebuilt and no push performed.
+That was the next work at the historical checkpoint; it is now completed below. AWS execution remains separately gated. Live writes still need their separate approval. No frozen commit was amended, no artifacts rebuilt and no push performed.
 
-## Final observed results
+## Historical results at 8b86 (superseded local blockers)
 
 - Full suite: **704 passed, 1 expected skip, 0 failures/errors**, 385.69 seconds. The service-role skip requires a disposable database administrator; it remains an unresolved gate.
 - Focused authorization/UX/readiness suite: **74 passed**. Final whole-route/security/smoke/two-user replay suite: **55 passed**. These counts overlap and must not be added together as unique scenarios.
@@ -79,4 +79,72 @@ Next work is local PostgreSQL 16/clean-start proof and safe cache handling, not 
 
 Evidence: `docs/EVIDENCE/12-e2e/system-assurance/verification.json`, XML results, component map, preservation hashes, cleanup proposal/refusal, sanitized scan and parser/SQL measurements; browser screenshots and actual exports are in its `browser/` subdirectory.
 
-**FINTRUST SYSTEM ASSURANCE BLOCKED — PostgreSQL 16 administrator integrity proof, fresh dependency clean-start proof and safe Windows cache cleanup remain incomplete. Full-scale SQL performance remains unverified.**
+The preceding results and cleanup refusal are historical evidence, not the current local status. See the closure below.
+
+
+## Local assurance closure (2026-10-11)
+
+### Verified locally
+
+The new proof uses PostgreSQL **16.15**, Windows x86_64, a disposable loopback-only SCRAM cluster on port 55416 and random in-memory administrator credentials. The server is stopped after verification. The installed PostgreSQL 18 service and live RDS are untouched. Catalogue evidence includes object owners, exact relation ACLs, role flags, functions, migration history, PK/FK/unique/CHECK/NOT NULL checks and the partial unique identity index. All 85 constraints are validated; all enforced relationship, identity and state checks return **zero unexplained integrity violations**. Actor strings without enforced foreign keys are explicitly excluded from a directory-integrity claim.
+
+The authoritative base prefix in `sql/schema.sql` is checked against the existing manifest, followed by migrations 001 and 002 and the approved 200-row synthetic seed. Reruns are no-ops. Existing PostgreSQL 16 service-role and migration rehearsals prove required DDL/data operations, owner/bootstrap separation, temporary privilege removal, row preservation, partial-state refusal and rollback. Runtime scoring/workflow roles are denied CREATE TABLE, DROP TABLE, ALTER TABLE and arbitrary function creation (eight actual denials). This verifies PostgreSQL grants, not live RDS IAM authentication.
+
+### Reproducibility verified
+
+Application source came from a clean Git archive of `8b86b699f7a9c2a492eb159b58fb35bf22c3fdcf`; no existing venv, bytecode, database or generated runtime state was copied. The supplemental verification-only changes are explicit local-disposable opt-in on the two existing PG16 rehearsal gates, the catalogue/benchmark checker, the clean-run orchestrator and a launcher test targeting its configured disposable database instead of host defaults. No production source, schema or business rule changed.
+
+A fresh **Windows CPython 3.14.7** venv installed project-pinned dependencies with no global/user site packages or pip-cache reuse; `pip check` passes. All 31 production modules and the API handler import. Production pins remain separate in `requirements-runtime.txt`; `requirements-verification-lock.txt` records every resolved installed package version for this Windows verification. It was captured from the successful fresh install and checked against it, rather than claiming a second independent install from that newly generated lock. Linux CPython 3.12 Lambda artifact verification remains a separate deployment gate.
+
+Fresh Playwright/playwright-core 1.62.1 packages were downloaded from the npm registry and their SHA512 metadata integrity checked. Existing Node and installed Chrome are declared host prerequisites. Windows AMD64, Python, Node, Chrome and a compatible Visual C++ runtime are required; this is not a claim that a bare machine needs no setup. Parent `.env` discovery and user/global Python packages are disabled. Cloud services are mocked and unmocked AWS transport is blocked by the test harness.
+
+Portable PostgreSQL binaries came from the official PostgreSQL-linked EDB Windows 16.15 archive (`https://sbp.enterprisedb.com/getfile.jsp?fileid=1260623`), SHA256 `43bb45f173a6f08cf1d29a97a6d8deb119e8e8093a24c00d2d1001a0ccaa8281`. Only `pgsql/bin`, `pgsql/lib` and `pgsql/share` were extracted under ignored build storage; no system installation/service was created.
+
+To reproduce after providing those host prerequisites:
+
+1. Create `build/assurance-clean-start/source` from `git archive 8b86b699f7a9c2a492eb159b58fb35bf22c3fdcf`; copy this closure's three verification scripts (`check_migration_roles_pg16.py`, `check_workflows_pg16.py`, `check_local_pg16_assurance.py`) and corrected `tests/test_presentation_readiness.py` into that source tree.
+2. Create `build/assurance-clean-env` with Python 3.14, then install `requirements-verification-lock.txt` with its Python and `--no-cache-dir`. The original observed install used `requirements.txt`; the exact resolved versions are now pinned in the verification lock.
+3. Extract the verified PostgreSQL archive so binaries are in `build/assurance-pg16/pgsql/bin`. Install fresh Playwright 1.62.1 into `build/assurance-clean-start/browser-tools` (for example, `npm install --prefix build/assurance-clean-start/browser-tools --no-save --ignore-scripts playwright@1.62.1` on a host with npm).
+4. Set `FINTRUST_NODE` to the installed Node executable and run `build/assurance-clean-env/Scripts/python.exe tools/run_clean_release1_assurance.py` from the repository. Port 55416 must be free. The helper refuses reused cluster state, bootstraps a new database, runs the gates and stops only its owned server in `finally`.
+
+Two full-suite failures exposed harness isolation assumptions: committed benchmark rows exceeded a pagination test's bounded fixture, and the launcher test used host-specific role/database constants. Benchmark additions now roll back before regression tests; the launcher test uses its explicit disposable fixture target. No application behavior was weakened. Initial diagnostic results are retained alongside the corrected run.
+
+### Performance boundary and safe cleanup
+
+Eight SQL operations were measured with `EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON)` at 200, 1,000 and 10,000 synthetic transactions (24 plans). Direct synthetic inserts measure SQL query sanity, not ingestion throughput. The trusted duplicate lookup uses an index scan. Small-table sequential scans and full-ledger aggregates are expected; no new index was justified by these single-run observations. Listing/history use bounded ordered queries; report/metrics/Insights source inspection found fixed joins/aggregate queries and bounded page processing, not a SQL query per returned transaction. This is a bounded source review, not comprehensive query-count instrumentation.
+
+Performance sanity verified at tested synthetic scale; **production load/capacity testing remains deferred**. No SLA, p95 latency, concurrent load, memory limit or million-row guarantee is claimed. The earlier parser and worker timings remain separate historical evidence.
+
+Cleanup inventoried ordinary files/directories and reparse points without following links. Exactly **102 ordinary bytecode files** were deleted with literal file paths after checking their parents and repository containment. **36 reparse points remain untouched**; ignored extraction/database folders and historical ZIPs/manifests/forensic evidence remain. An empty cache directory is not a release requirement. Subsequent tests may regenerate disposable bytecode.
+
+### Live AWS pending
+
+No AWS call, live RDS connection, policy change, snapshot, migration, application deployment, artifact rebuild/upload or Git push occurred in this closure. Live base-schema bootstrap, approved migrations, a current verified Linux release artifact, application deployment/event wiring and live end-to-end verification still need their controlled approval sequence. Enterprise identity, durable cross-device notifications and hour-based velocity exploration remain deferred as already frozen.
+
+Evidence is in `docs/EVIDENCE/05-rds/local-pg16-assurance/` and `docs/EVIDENCE/12-e2e/clean-start/`; existing historical evidence is preserved.
+
+
+### Final closure results
+
+- focused-smoke: **100 passed, 0 skipped, 0 failures, 0 errors**, 73.6 seconds. Counts overlap; do not add them as unique cases.
+- fresh-browser: **1 passed, 0 skipped, 0 failures, 0 errors**, 45.34 seconds. Counts overlap; do not add them as unique cases.
+- fresh-full: **705 passed, 0 skipped, 0 failures, 0 errors**, 229.74 seconds. Counts overlap; do not add them as unique cases.
+- Fresh dependencies: 34 resolved package versions match the verification lock; `pip check` and 31 production-module/handler imports pass.
+- All 157 unrelated file hashes still match; owned disposable PostgreSQL is stopped and port 55416 has no server response. No local blockers remain.
+
+Single-run 10,000-row SQL execution times (milliseconds):
+
+| Operation | ms |
+|---|---:|
+| transactions | 0.025 |
+| history | 0.022 |
+| risk_events | 0.210 |
+| reviews | 0.240 |
+| monthly_summary | 4.466 |
+| risk_report | 1.310 |
+| duplicate_lookup | 0.017 |
+| dashboard | 2.514 |
+
+These are local EXPLAIN ANALYZE execution measurements, not full HTTP latency or production throughput. XML, source provenance, dependency versions, catalogue/ACL proof and query plans are retained in the existing evidence folders.
+
+**FINTRUST LOCAL RELEASE 1 SYSTEM ASSURANCE PASSED — LIVE AWS E2E REMAINS**

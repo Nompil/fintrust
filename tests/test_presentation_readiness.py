@@ -110,6 +110,9 @@ def test_launcher_named_users_reset_and_unrelated_schema_protection(tmp_path,mon
     from tools import local,serve_release1_demo as launcher
     from fintrust import api,db,ingest,score,dynamo,release_workflow as worker
     dsn=os.environ["FINTRUST_TEST_DATABASE_URL"];settings=parse_dsn(dsn)
+    # Exercise the launcher against this disposable fixture, never host defaults.
+    monkeypatch.setattr(local,"TEST_DATABASE",settings["dbname"])
+    monkeypatch.setattr(local,"ROLE",settings["user"])
     monkeypatch.setattr(local,"local_settings",lambda:{"DB_HOST":settings["host"],"DB_PORT":settings.get("port","5432"),"DB_PASSWORD":settings["password"]})
     root=Path(__file__).resolve().parents[1]
     (tmp_path/"sql").mkdir()

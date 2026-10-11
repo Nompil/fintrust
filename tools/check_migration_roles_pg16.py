@@ -28,7 +28,7 @@ def memberships(cur):
 
 
 def run():
-    if os.getenv("GITHUB_ACTIONS")!="true" or os.getenv("CI")!="true":raise RuntimeError("Dedicated disposable CI service required")
+    if not (os.getenv("FINTRUST_DISPOSABLE_PG16_LOCAL")=="1" or (os.getenv("GITHUB_ACTIONS")=="true" and os.getenv("CI")=="true")):raise RuntimeError("Explicit disposable local PostgreSQL 16 or CI service required")
     dsn=os.environ["FINTRUST_TEST_DATABASE_URL"];v=parse_dsn(dsn)
     if v.get("host") not in {"localhost","127.0.0.1","::1"} or v.get("dbname")!="fintrust_test" or v.get("user")!="postgres":raise RuntimeError("Disposable target mismatch")
     admin=psycopg2.connect(dsn);admin.autocommit=True

@@ -1,0 +1,55 @@
+{
+  "results": {
+    "initdb": {
+      "exit_code": 0,
+      "seconds": 10.48
+    },
+    "server-start": {
+      "exit_code": 0,
+      "seconds": 0.61
+    },
+    "dependency-check": {
+      "exit_code": 0,
+      "seconds": 1.03
+    },
+    "dependency-freeze": {
+      "exit_code": 0,
+      "seconds": 0.71
+    },
+    "production-imports": {
+      "exit_code": 0,
+      "seconds": 2.01
+    },
+    "service-role-proof": {
+      "exit_code": 0,
+      "seconds": 2.08
+    },
+    "migration-identity-proof": {
+      "exit_code": 0,
+      "seconds": 1.7
+    },
+    "migration-workflows-proof": {
+      "exit_code": 0,
+      "seconds": 1.8
+    },
+    "catalog-integrity-performance": {
+      "exit_code": 1,
+      "seconds": 0.41
+    },
+    "status": "BLOCKED",
+    "blocker": "catalog-integrity-performance failed",
+    "server-stop": {
+      "exit_code": 0,
+      "seconds": 3.06
+    }
+  },
+  "source_commit": "8b86b699f7a9c2a492eb159b58fb35bf22c3fdcf",
+  "application_source": "Git archive; no prior runtime state or virtualenv copied",
+  "python": "Fresh Windows CPython 3.14 venv, no global/user site packages",
+  "browser": "Fresh CI-pinned Playwright 1.62.1; existing installed Chrome and Node are documented host prerequisites",
+  "aws_access": false,
+  "database": "Fresh PostgreSQL 16.15 loopback cluster, SCRAM random ephemeral credential; stopped afterward",
+  "live_rds": false,
+  "dotenv_discovery": "Disabled to prevent ancestor repository credentials being discovered",
+  "harness_changes": "Only explicit local disposable gate opt-in plus added catalogue/performance checker; business source unchanged"
+}

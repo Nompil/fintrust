@@ -8,7 +8,7 @@ from migration_runner import common,workflows
 from tools.check_migration_roles_pg16 import expect_denied
 
 def run():
-    if os.getenv("GITHUB_ACTIONS")!="true" or os.getenv("CI")!="true":raise RuntimeError("Disposable CI only")
+    if not (os.getenv("FINTRUST_DISPOSABLE_PG16_LOCAL")=="1" or (os.getenv("GITHUB_ACTIONS")=="true" and os.getenv("CI")=="true")):raise RuntimeError("Explicit disposable local PostgreSQL 16 or CI service required")
     target=parse_dsn(os.environ["FINTRUST_TEST_DATABASE_URL"])
     assert target['dbname']=='fintrust_test' and target['host'] in {'localhost','127.0.0.1','::1'} and target['user']=='postgres'
     target['dbname']='fintrust';conn=psycopg2.connect(**target)
