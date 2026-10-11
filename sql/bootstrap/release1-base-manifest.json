@@ -1,0 +1,28 @@
+{
+  "status": "PROPOSED_NOT_PG16_VERIFIED",
+  "presentation_parent": "5b5bb50f4bf02bca518940675f9b476bd8750a67",
+  "base": {
+    "path": "sql/schema.sql",
+    "section": "content before -- Additive identity hardening.",
+    "sha256": "1232b4a79fa601ab2f376fae575842d7a1caf009e2b542d2f0d845ed97f8d519"
+  },
+  "order": [
+    "base",
+    "sql/migrations/001_transaction_identity.sql",
+    "sql/migrations/002_operational_workflows.sql"
+  ],
+  "seed_in_production": false,
+  "optional_synthetic_seed": "sql/seed.sql",
+  "base_tables": [
+    "customers",
+    "accounts",
+    "transactions",
+    "risk_events",
+    "alerts",
+    "processed_transactions"
+  ],
+  "migration_hashes": {
+    "sql/migrations/001_transaction_identity.sql": "0ff06ca8c43596ac9b8651f4bd851bfb0487343f4c9eccb198849e3e59772bd6",
+    "sql/migrations/002_operational_workflows.sql": "5b2c04440eea244bfce150347dfa1953dd2a7e7ddb6af7e3a66e187d1c912f02"
+  }
+}

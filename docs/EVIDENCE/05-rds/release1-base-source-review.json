@@ -1,0 +1,65 @@
+{
+  "status": "SOURCE_INVENTORY_NOT_PG16_OBSERVATION",
+  "base_tables": [
+    "customers",
+    "accounts",
+    "transactions",
+    "risk_events",
+    "alerts",
+    "processed_transactions"
+  ],
+  "workflow_tables": [
+    "ingestion_batches",
+    "ingestion_attempts",
+    "ingestion_records",
+    "risk_reviews",
+    "risk_review_history",
+    "quarantine_cases",
+    "quarantine_corrections",
+    "correction_outbox",
+    "projection_outbox",
+    "operations_requests"
+  ],
+  "history_table": "schema_migrations (created by fintrust.migrations.apply_local, not raw SQL)",
+  "workflow_views": [
+    "batch_reconciliation",
+    "quarantine_workflow"
+  ],
+  "workflow_functions": [
+    "guard_ingestion_record",
+    "guard_review_transition",
+    "record_review_history",
+    "reject_history_change",
+    "guard_batch_identity",
+    "check_batch_record_count",
+    "guard_correction_submission",
+    "guard_quarantine_origin",
+    "guard_operations_receipt"
+  ],
+  "workflow_triggers": [
+    "ingestion_record_guard",
+    "review_transition_guard",
+    "review_history_record",
+    "review_history_immutable",
+    "quarantine_evidence_immutable",
+    "correction_evidence_immutable",
+    "batch_identity_guard",
+    "batch_record_count",
+    "batch_total_count",
+    "correction_submission_guard",
+    "quarantine_origin_guard",
+    "ingestion_record_no_delete",
+    "operations_receipt_immutable"
+  ],
+  "migration_sha256": {
+    "sql/migrations/001_transaction_identity.sql": "0ff06ca8c43596ac9b8651f4bd851bfb0487343f4c9eccb198849e3e59772bd6",
+    "sql/migrations/002_operational_workflows.sql": "5b2c04440eea244bfce150347dfa1953dd2a7e7ddb6af7e3a66e187d1c912f02"
+  },
+  "base_section_sha256": "1232b4a79fa601ab2f376fae575842d7a1caf009e2b542d2f0d845ed97f8d519",
+  "base_constraints_and_columns": "sql/schema.sql authoritative definitions; exact observed catalog requires PostgreSQL 16 run",
+  "local_postgresql_version_num": 180006,
+  "local_disposable_admin": false,
+  "aws_access": false,
+  "live_sql_executed": false,
+  "live_readiness": "BLOCKED"
+}
