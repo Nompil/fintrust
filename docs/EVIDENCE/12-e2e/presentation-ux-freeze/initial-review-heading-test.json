@@ -1,0 +1,5 @@
+{
+  "finding": "Browser test parsed a numeric database ID from the old visible heading. Readable RISK reference now replaces that heading.",
+  "correction": "Select the visible risk reference from the chosen row, assert the heading matches, and retain OPEN -> UNDER_REVIEW -> CLEARED checks on the same reference.",
+  "assertions_weakened": false
+}

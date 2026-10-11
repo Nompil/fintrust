@@ -86,6 +86,7 @@ def overview(principal):
     # Counts share list scoping; exact counters are marked bounded when paginated.
     batches=api.list_page("batches",principal,{"limit":100})
     data.update({"quarantined_rows":len(q["data"]),"duplicate_occurrences":sum(b["duplicate"] for b in batches["data"]),
+        "technical_failures":sum(b["failed_technical"] for b in batches["data"]),
         "partial_failed_batches":sum(b["status"] in ('PARTIAL','FAILED') or (b["rows_received"] is not None and not b["counts_consistent"]) for b in batches["data"]),
         "rejected_uploads":sum(e["action"]=='UPLOAD_REJECTED' for e in upload_history(principal)),
         "bounded_counts":q["meta"]["has_more"] or batches["meta"]["has_more"],

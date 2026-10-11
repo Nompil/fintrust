@@ -1,0 +1,5 @@
+........................................................................ [ 76%]
+......................                                                   [100%]
+94 passed in 67.18s (0:01:07)
+
+Evidence: C:\Users\Nompilo\Desktop\fintrust\build\ux-clean\source\build\release1-closure\040afd1e296f40f8a728d15c94fe9f15

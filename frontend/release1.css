@@ -4,3 +4,5 @@
 .nav-group{color:#9eb5c0;font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin:16px 10px 4px}.attention,.export-tools{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.insights-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.insight-chart{margin:0;min-width:0}.insight-chart svg{width:100%;max-height:260px;font-size:13px}.insight-chart table{margin-top:12px}#role-context{max-width:470px}#user-governance-form{max-width:550px}#user-governance-form input,#user-governance-form select{display:block;width:100%}@media(max-width:950px){.insights-grid{grid-template-columns:1fr}}
 
 th{white-space:nowrap;overflow-wrap:normal;word-break:normal}#upload-notice-message .notification{margin:8px 0}#upload-panel{margin-top:0}
+
+.table-scroll{max-width:100%}table{width:max-content;min-width:100%;table-layout:auto}th{min-width:70px}td{overflow-wrap:normal;word-break:normal}td[data-internal-id]{white-space:nowrap;font-variant-numeric:tabular-nums}.notification strong{display:block}

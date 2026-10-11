@@ -1,0 +1,6 @@
+{
+  "focused_result": "93 passed, 1 failed",
+  "cause": "New upload RBAC test omitted the existing local-admission feature fixture; disabled endpoint intentionally returned 404",
+  "correction": "Enable local admission through the existing local_receipts fixture, then require the same 403 backend denial",
+  "application_authorization_changed": false
+}

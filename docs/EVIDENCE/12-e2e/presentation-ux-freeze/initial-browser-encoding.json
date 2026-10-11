@@ -1,0 +1,5 @@
+{
+  "cause": "Windows default-encoding edit changed the existing browser selector middle-dot character",
+  "correction": "Restore exact UTF-8 selectors; all subsequent reads/writes explicit UTF-8",
+  "application_or_assertions_weakened": false
+}

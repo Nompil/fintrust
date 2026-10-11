@@ -1,0 +1,62 @@
+{
+  "results": {
+    "initdb": {
+      "exit_code": 0,
+      "seconds": 9.23
+    },
+    "server-start": {
+      "exit_code": 0,
+      "seconds": 0.52
+    },
+    "dependency-check": {
+      "exit_code": 0,
+      "seconds": 0.76
+    },
+    "dependency-freeze": {
+      "exit_code": 0,
+      "seconds": 0.61
+    },
+    "production-imports": {
+      "exit_code": 0,
+      "seconds": 1.35
+    },
+    "service-role-proof": {
+      "exit_code": 0,
+      "seconds": 1.83
+    },
+    "migration-identity-proof": {
+      "exit_code": 0,
+      "seconds": 1.41
+    },
+    "migration-workflows-proof": {
+      "exit_code": 0,
+      "seconds": 1.25
+    },
+    "catalog-integrity-performance": {
+      "exit_code": 0,
+      "seconds": 1.58
+    },
+    "fresh-browser": {
+      "exit_code": 0,
+      "seconds": 60.3
+    },
+    "fresh-full": {
+      "exit_code": 0,
+      "seconds": 269.62
+    },
+    "status": "PASSED",
+    "server-stop": {
+      "exit_code": 0,
+      "seconds": 7.92
+    }
+  },
+  "source_commit": "37da9d418794afc80100962dd94801911176ac83",
+  "application_source": "Git archive of 37da9d4 plus hashed approved UX overlay; existing verified dependency venv reused; new empty PG16 cluster",
+  "python": "Windows CPython 3.14.7 isolated venv verified at 37da9d4; reused locked dependencies, no global/user site packages",
+  "browser": "Fresh CI-pinned Playwright 1.62.1; existing installed Chrome and Node are documented host prerequisites",
+  "aws_access": false,
+  "database": "Fresh PostgreSQL 16.15 loopback cluster, SCRAM random ephemeral credential; stopped afterward",
+  "live_rds": false,
+  "dotenv_discovery": "Disabled to prevent ancestor repository credentials being discovered",
+  "harness_changes": "Display aliases, safe error/notice states, readable role workflows; stored risk-result and existing technical-failure read adapters; schema/business rules unchanged"
+}

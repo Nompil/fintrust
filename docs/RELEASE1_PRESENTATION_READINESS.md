@@ -6,8 +6,8 @@ This checkpoint verifies a local internal operations application, not a complete
 
 | Identity | Responsibility | Allowed local actions | Boundary |
 |---|---|---|---|
-| admin01 | Platform governance and audit oversight | CSV admission, local user records/roles/status, technical recovery | No routine review decisions or quarantine correction |
-| analyst01, analyst02 | Risk/compliance decisions | Start/resolve assigned reviews; correct/reject assigned quarantine cases | Corrections revalidate and deduplicate; no direct ledger acceptance, user governance or technical recovery |
+| admin01 | Platform governance and audit oversight | Local user records/roles/status, authorized reads and audit oversight | No CSV upload, technical retry, routine review decisions or quarantine correction |
+| analyst01, analyst02 | Risk/compliance decisions | Upload CSVs; start/resolve assigned reviews; correct/reject assigned quarantine cases | Corrections revalidate and deduplicate; no direct ledger acceptance, user governance or technical recovery |
 | auditor01 | Independent oversight | Scoped financial, report and audit reads | No financial or operational mutations; acknowledgment changes browser session notices only |
 | maintainer01 | Technical operations | Inspect pending work/receipts, bounded recovery requests | No financial detail, user governance or compliance decisions |
 
@@ -121,3 +121,59 @@ The separately approved role/workflow correction makes Analyst the only upload r
 - No AWS actions, cloud artifact rebuild or push. This verified application state is frozen in one focused local commit; existing unrelated infrastructure-document/evidence changes are intentionally excluded and preserved. See `docs/EVIDENCE/12-e2e/presentation-readiness/freeze-report.md` for the final checks and file inventory.
 
 FINTRUST RELEASE 1 PRESENTATION READINESS VERIFIED
+
+
+## Final presentation UX freeze (continues 37da9d4)
+
+This is a presentation-only correction of the locally verified application. Schema, primary keys, foreign keys, API identity, deduplication, thresholds, review states, migration semantics, report calculations and chart calculations are unchanged. Backend read adapters add the sum of existing scoped batch technical-failure counters and the stored processing result on risk-event reads (using the same one-to-one join already used by reviews). Risk levels/rules come from that stored result; historical levels are never calculated from old scores. Verification uses a disposable PostgreSQL 16.15 database and mocked cloud services; it is not live AWS proof.
+
+### Display references and historical data
+
+The five approved synthetic accounts display `ACC-0001` through `ACC-0005`; selectors add the actual account type while option values remain UUIDs. Existing numeric risk-event IDs display as zero-padded `RISK-0091` without changing their numeric API/SQL identity. Other accounts and transactions/batches use deterministic typed aliases (`ACC-`, `TX-`, `BATCH-`, `RISK-`) with a 13-character base36 FNV-1a 64-bit suffix derived from the normalized UUID. Aliases remain stable across sorting, pagination and sessions; they are display aids, not financial account numbers, authorization handles or guaranteed globally unique primary keys. A 10,000-alias test checks the tested input set for collisions. Full UUIDs remain in Details, Audit/Operations and the primary-cell Internal ID tooltip/data attribute. Report downloads retain authoritative UUIDs for traceability. Optional advanced filters explicitly request internal IDs; aliases are never sent to a UUID API.
+
+Transactions without Release 1 scoring evidence show **Not assessed**, not Low. Missing historical source references show **Not recorded**. Batch detail connects File -> Batch -> Rows -> Transactions and labels accepted transactions separately from quarantined rows, duplicates and technical failures. Upload/current work precedes history; active notices precede acknowledged notices. Short page descriptions replace generic explanations. Primary tables use horizontal scrolling with unbroken headers.
+
+### Analyst demo route
+
+Open `/release1`, sign in as `analyst01` with its separately provisioned token. Review Queue is the landing page; the header says “Review risk, upload transactions and correct data issues.” Show Overview attention counts -> Ingestion Batches upload/latest receipt/history -> Batch detail -> Transactions and historical Not assessed -> Quarantine correction -> Risk Events/Review Queue -> Insights (all eight API-backed charts) -> Reports -> Notifications. Acknowledge notices only after reviewing the linked outcome. `analyst02` is a distinct identity with the same role, not a second role.
+
+### Auditor demo route
+
+Sign out, then sign in as `auditor01`. Overview emphasizes audit/report access and “Review transaction, risk and audit evidence. Changes are disabled.” Show Transactions -> Risk Events/Review Queue evidence -> Insights -> current-authorized-page CSV/JSON reports -> Audit. Upload, correction and review mutation controls are absent; direct requests remain backend-denied. Admin retains governance/read oversight; Maintainer retains technical Operations only.
+
+### Safe local role switching
+
+The chosen safe fallback is the existing **Sign out -> operator-issued token -> Sign in** mechanism. There is no frontend role flag, token-issuing endpoint or automatic impersonation dropdown. Registry entries contain only hashes, so the UI cannot derive another user's credential safely. Before a presentation, the operator must provision each named identity separately using the verified launcher, entering distinct tokens via its hidden prompt (never Git, logs or evidence):
+
+```powershell
+python tools/serve_release1.py --role Admin --username admin01
+python tools/serve_release1.py --role Analyst --username analyst01
+python tools/serve_release1.py --role Analyst --username analyst02
+python tools/serve_release1.py --role Auditor --username auditor01
+python tools/serve_release1.py --role Maintainer --username maintainer01
+```
+
+Run one at a time and stop it before provisioning the next; restart the final server afterward. The ignored hashed registry retains the provisioned identities. Browser sign-in establishes actual backend identity and scope. Sign-out clears tokens, notices, filters and pending UI context; the existing stale-response guard prevents old-role results leaking into a new session. Production identity remains a separate gate. The test harness uses controlled synthetic tokens for browser verification and never records their values in evidence.
+
+### Insights, metrics and notifications
+
+The verified source uses `/v1/release1/insights` with only `days` and optional `account_id`, not the generic workflow route. `/` still loads the older single-score learning interface; it now links explicitly to `/release1`. No reproducible 404 exists on the current Release 1 route. The screenshots' original upstream 404 cause cannot be established without their URL/request or matching historical runtime. What is proven from source is that the previous generic error handler displayed raw `body.error/detail` (including “Not Found”) and cleared failed content. The corrected adapter gives a contextual recovery message and a useful notice title without exception/route/request details. Versioned asset URLs refresh this release's HTML/JS/CSS combination. A forced-404 browser case must show the friendly message and recover to all eight charts after refresh; no hidden fallback or hardcoded chart values are used.
+
+Overview counters use backend values, including scoped technical failures. Missing values or an API failure show **Unavailable**, never an invented zero; Refresh retries the actual request. Normal notices contain a title, outcome, timestamp and next action/link, with active notices ordered before acknowledged history. Severity remains an internal CSS/state field, rather than the displayed title “ERROR.” No claim that technical support was automatically notified is made.
+
+### Verification boundary
+
+The extended browser gate compares all eight chart tables with their actual API values separately for Analyst and Auditor, checks readable references with UUID transport, historical missing values, role changes, Auditor mutation denial, metric failure versus zero, forced Insights failure/recovery, normal notice sanitization and existing report/download/review/correction/security behavior. Node is an explicit prerequisite for the display-adapter test (`FINTRUST_NODE`, or a Node executable on PATH). PostgreSQL schema/service-role assurance and the full suite are repeated against the source overlay of this checkpoint.
+
+Final results and source hashes are recorded under `docs/EVIDENCE/12-e2e/presentation-ux-freeze/`; PostgreSQL verification is under `docs/EVIDENCE/05-rds/presentation-ux-freeze/`. Earlier freezes and evidence remain historical. The existing Linux artifact is unchanged and is stale relative to this UX source: rebuild and verify it from the final commit only in the next approved task. No AWS action or push occurs here.
+
+### Final observed verification
+
+- Focused UX/API/RBAC/report gate: **94 passed, 0 failures, 0 skips**.
+- Extended browser gate: **1 passed, 0 failures, 0 skips**; four backend roles, all eight charts separately checked for Analyst/Auditor, historical labels, report downloads, actual review/correction flows, safe failure recovery and Auditor write denial. Screenshots visually reviewed.
+- Full local regression against the final source overlay: **713 passed, 0 failures, 0 skips**.
+- PostgreSQL 16.15 bootstrap -> 001 -> 002 -> seed and privilege checks passed unchanged: 17 tables, 2 views, 85 validated constraints, 36 indexes, 0 unexplained integrity violations. The disposable cluster was stopped afterward.
+- The isolated dependency environment from the prior verified checkpoint was reused and checked; this is not a claim of a new installation or Linux-runtime artifact verification.
+- All 157 unrelated files preserved. No AWS, live DB write, package rebuild or Git push. Application UX is frozen after this local commit; no remaining presentation blocker found in the tested scope.
+
+FINTRUST USER EXPERIENCE VERIFIED — ANALYST AND AUDITOR DEMO READY

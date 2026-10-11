@@ -1,0 +1,6 @@
+{
+  "cause": "New historical-state assertion assumed historical seed rows appear on first newest-first page after A/B upload",
+  "correction": "Traverse actual paginated transaction pages until historical records appear, then require Not assessed",
+  "application_sort_order_changed": false,
+  "assertion_preserved": true
+}

@@ -1,0 +1,48 @@
+{
+  "status": "PASSED",
+  "assurance_base": "37da9d418794afc80100962dd94801911176ac83",
+  "tests": {
+    "focused-smoke": {
+      "tests": 94,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "fresh-browser": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "fresh-full": {
+      "tests": 713,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "source_sha256": {
+    "frontend/release1-display.js": "595fbf194a71ede1e681534b326e4af57704431ae3c8271413f5c1da7e6245e3",
+    "frontend/release1.js": "f0bc81d738057e5a879af856aacf35dd4649c6854e7516015e35866015490681",
+    "frontend/release1.html": "b4123fb61d692583c423f0fb31c12b0ed6624866233189656c44c73ce4731f20",
+    "frontend/release1.css": "16a63a1c53150073d1ae70ce9ec7000811627aa0d4f47b703d6b75da5b1edef8",
+    "frontend/index.html": "638f3c87fd8aef7246ea494ef6efbcb6cff28b2d0035703245c4a49be1a6581c",
+    "fintrust/frontend_workflows.py": "9448b7446bf035147f643f70a77e245f0c808ddb460e6cae156969e6d29f62c1",
+    "fintrust/workflow_api.py": "02e99626a202165a889675c0d15ce59394ffe0e3e04e4e66fef309be00baea98",
+    "tests/test_presentation_ux_freeze.py": "9d952079d982d846f0d11bedbdf2fa5f01e41637c50fa95e32dca13c12c79193",
+    "tools/verify_release1_ui.cjs": "7bc328b590d1b1a0c707959737b1daa8606cf8e2ef748b6c302ced34365b95b8"
+  },
+  "unrelated_files_preserved": 157,
+  "schema_business_rules_changed": false,
+  "aws_access": false,
+  "live_rds": false,
+  "linux_artifact_rebuilt": false,
+  "artifact_state": "Previous Linux artifact unchanged and stale; separate rebuild/verification gate required",
+  "visual_review": [
+    "analyst01-insights-verified.png",
+    "analyst01-overview.png",
+    "risk-events.png"
+  ],
+  "role_switch": "Sign out and backend-authenticated operator-issued token; no impersonation endpoint",
+  "historical_insights_404": "Current route verified; raw provider error display fixed. Original screenshot upstream cause unproven."
+}

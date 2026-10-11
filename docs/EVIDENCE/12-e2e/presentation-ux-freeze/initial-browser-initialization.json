@@ -1,0 +1,6 @@
+{
+  "failure": "Upload button timed out after navigation during sign-in",
+  "root_cause": "Adding asynchronous account labels exposed workspace before initialization completed; late sign-in landing reset overwrote clicked page",
+  "fix": "Complete authenticated account-list initialization before revealing workspace",
+  "verification": "Browser and full regression rerun; previously passing 94 focused checks retained"
+}
