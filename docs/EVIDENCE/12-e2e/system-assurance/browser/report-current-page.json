@@ -1,0 +1,70 @@
+{
+  "scope": "Current authorized report page",
+  "account_id": null,
+  "offset": 0,
+  "rows": [
+    {
+      "account_id": "20000000-0000-4000-8000-000000000001",
+      "currency": "USD",
+      "gross_amount": "7846.49",
+      "net_movement": "-1135.31",
+      "transactions": 2
+    },
+    {
+      "account_id": "20000000-0000-4000-8000-000000000001",
+      "currency": "ZAR",
+      "gross_amount": "724354.51",
+      "net_movement": "-442356.75",
+      "transactions": 44
+    },
+    {
+      "account_id": "20000000-0000-4000-8000-000000000002",
+      "currency": "USD",
+      "gross_amount": "110521.96",
+      "net_movement": "-62025.40",
+      "transactions": 3
+    },
+    {
+      "account_id": "20000000-0000-4000-8000-000000000002",
+      "currency": "ZAR",
+      "gross_amount": "530517.90",
+      "net_movement": "-348479.78",
+      "transactions": 56
+    },
+    {
+      "account_id": "20000000-0000-4000-8000-000000000003",
+      "currency": "EUR",
+      "gross_amount": "5400.00",
+      "net_movement": "-5400.00",
+      "transactions": 1
+    },
+    {
+      "account_id": "20000000-0000-4000-8000-000000000003",
+      "currency": "USD",
+      "gross_amount": "26393.96",
+      "net_movement": "-26393.96",
+      "transactions": 2
+    },
+    {
+      "account_id": "20000000-0000-4000-8000-000000000003",
+      "currency": "ZAR",
+      "gross_amount": "476432.65",
+      "net_movement": "-256492.09",
+      "transactions": 42
+    },
+    {
+      "account_id": "20000000-0000-4000-8000-000000000004",
+      "currency": "USD",
+      "gross_amount": "255796.74",
+      "net_movement": "-255796.74",
+      "transactions": 5
+    },
+    {
+      "account_id": "20000000-0000-4000-8000-000000000004",
+      "currency": "ZAR",
+      "gross_amount": "770782.69",
+      "net_movement": "-514438.89",
+      "transactions": 41
+    }
+  ]
+}

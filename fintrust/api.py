@@ -301,6 +301,7 @@ def transaction_detail(identifier):
 
 @app.post("/v1/reviews/<int:event>/transition")
 def transition(event):
+    g.principal.require("review")
     from .workflow_api import update_review
     return jsonify({"data":update_review(event,request.get_json(),g.principal)})
 
@@ -313,6 +314,7 @@ def quarantine_detail(identifier):
 
 @app.post("/v1/quarantine/<identifier>/corrections")
 def correction(identifier):
+    g.principal.require("correct")
     from .workflow_api import correct_case
     return jsonify({"data":correct_case(identifier,request.get_json(),g.principal)}),202
 
@@ -342,6 +344,7 @@ def operations_read():
 
 @app.post("/v1/operations/retry")
 def operations_retry():
+    g.principal.require("retry")
     from .operations import retry
     return jsonify({"data":retry(request.get_json(),g.principal)})
 
@@ -389,5 +392,6 @@ def local_user_list():
 
 @app.post("/v1/administration/users")
 def local_user_change():
-    from .local_users import change
+    from .local_users import check, change
+    check(g.principal)
     return jsonify({"data":change(g.principal,request.get_json())})

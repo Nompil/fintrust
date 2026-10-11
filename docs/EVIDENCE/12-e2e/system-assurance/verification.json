@@ -1,0 +1,61 @@
+{
+  "unrelated_files_preserved": 157,
+  "aws_calls": false,
+  "live_sql": false,
+  "push": false,
+  "source_hashes": {
+    "fintrust/api.py": "461c6d1150f3af744c6eb78cb46b306abf77fc057a456bf5ef3a56bfa0386756",
+    "tools/verify_release1_ui.cjs": "73b756ff5f87e9301c06012a9ace9cb8e4f0a8604d19b98de2d02699b73d12b4",
+    "tests/test_system_assurance.py": "584772622c32cae7582a0e6d604d22b641489597d923c11759a126beff0c3560",
+    "tools/system_assurance_inventory.py": "38958c181a8caace086a4ba3ff3df5a35f37a7d17fd0733ed4a6cc67eff06873",
+    "sql/bootstrap/release1-base-manifest.json": "a0467e5ac3dfd378313b0230875eec9885676d3d463ae98bb2c6fda2234ef56e",
+    "sql/migrations/001_transaction_identity.sql": "34d5f1ede58117a90cad38e33060c8b3d9a9bc9523621f8d2d9c9ec25d618576",
+    "sql/migrations/002_operational_workflows.sql": "38edfc120c1ac53d0724c805efe9a396271b1099b616312c31c307e8626d7096",
+    "requirements.txt": "e40743316f0dcffc4bbb91fab8ad5354b461b93787245fbb4e0aff2ca5b52a7c",
+    "requirements-runtime.txt": "45de584c0e724c8916cf64e1ecf82cb84e304347abd38381aa1062dc469d0f25"
+  },
+  "reference_check": "Listed current source, requirements and ordered SQL artifacts exist; not a claim that every historical document reference resolves",
+  "browser_note": "Browser passed exact assertions; subsequent script edit removed only BOM/trailing blank line and node syntax check passed",
+  "results": {
+    "initial-regression": {
+      "tests": 54,
+      "failures": 9,
+      "errors": 0,
+      "skipped": 0
+    },
+    "focused": {
+      "tests": 74,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "api-smoke-replay": {
+      "tests": 55,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "browser": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sql-performance": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "full": {
+      "tests": 705,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1,
+      "passed": 704,
+      "seconds": 385.69
+    }
+  },
+  "expected_skip": "Service-role execution requires a disposable test database administrator; not silently treated as PASS",
+  "final_status": "BLOCKED: PostgreSQL 16 administrator integrity proof, fresh dependency clean-start proof and safe Windows cache cleanup remain incomplete; full-scale SQL performance remains partial"
+}

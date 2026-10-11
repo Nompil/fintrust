@@ -1,0 +1,30 @@
+{
+  "scope": "CSV parser only; no AWS/SQL calls, no end-to-end capacity claim",
+  "measurements": [
+    {
+      "rows": 1,
+      "bytes": 202,
+      "seconds": 0.0004,
+      "peak_bytes": 21286
+    },
+    {
+      "rows": 100,
+      "bytes": 10687,
+      "seconds": 0.0139,
+      "peak_bytes": 152644
+    },
+    {
+      "rows": 1000,
+      "bytes": 106987,
+      "seconds": 0.1378,
+      "peak_bytes": 1396405
+    },
+    {
+      "rows": 5000,
+      "bytes": 538987,
+      "seconds": 0.7246,
+      "peak_bytes": 6954509
+    }
+  ],
+  "database_1000_5000_throughput": "UNVERIFIED"
+}

@@ -1,0 +1,1962 @@
+{
+  "delete_only": [
+    {
+      "path": "build/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 2
+    },
+    {
+      "path": "fintrust/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 32
+    },
+    {
+      "path": "infrastructure/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 8
+    },
+    {
+      "path": "migration_runner/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 12
+    },
+    {
+      "path": "src/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "tests/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 54
+    },
+    {
+      "path": "tools/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 15
+    },
+    {
+      "path": "tests/data_quality/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 6
+    },
+    {
+      "path": "src/shared/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 2
+    },
+    {
+      "path": "infrastructure/dynamodb/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "infrastructure/iam/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "infrastructure/monitoring/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "infrastructure/s3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 2
+    },
+    {
+      "path": "infrastructure/sqs/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 2
+    },
+    {
+      "path": "infrastructure/ssm/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/aws-inventory/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/ff171ca27a41403c9b1e741a2a0996b9/tmp/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/ff171ca27a41403c9b1e741a2a0996b9/tmp/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/ff171ca27a41403c9b1e741a2a0996b9/tmp/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/ff171ca27a41403c9b1e741a2a0996b9/tmp/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/ff171ca27a41403c9b1e741a2a0996b9/tmp/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/ff171ca27a41403c9b1e741a2a0996b9/tmp/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/ff171ca27a41403c9b1e741a2a0996b9/tmp/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/ff171ca27a41403c9b1e741a2a0996b9/tmp/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/ff171ca27a41403c9b1e741a2a0996b9/tmp/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/ff171ca27a41403c9b1e741a2a0996b9/tmp/test_all_production_probe_chec0/fintrust/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 3
+    },
+    {
+      "path": "build/release1-closure/fba6af42d1b1401985c468868cd63483/tmp/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/fba6af42d1b1401985c468868cd63483/tmp/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/fba6af42d1b1401985c468868cd63483/tmp/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/fba6af42d1b1401985c468868cd63483/tmp/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/fba6af42d1b1401985c468868cd63483/tmp/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/fba6af42d1b1401985c468868cd63483/tmp/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/fba6af42d1b1401985c468868cd63483/tmp/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/fba6af42d1b1401985c468868cd63483/tmp/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/fba6af42d1b1401985c468868cd63483/tmp/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/fba6af42d1b1401985c468868cd63483/tmp/test_all_production_probe_chec0/fintrust/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 3
+    },
+    {
+      "path": "build/release1-closure/eeefb0e8f41d4e249959e5237334cdc6/tmp/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/eeefb0e8f41d4e249959e5237334cdc6/tmp/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/eeefb0e8f41d4e249959e5237334cdc6/tmp/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/eeefb0e8f41d4e249959e5237334cdc6/tmp/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/eeefb0e8f41d4e249959e5237334cdc6/tmp/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/eeefb0e8f41d4e249959e5237334cdc6/tmp/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/eeefb0e8f41d4e249959e5237334cdc6/tmp/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/eeefb0e8f41d4e249959e5237334cdc6/tmp/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/eeefb0e8f41d4e249959e5237334cdc6/tmp/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/eeefb0e8f41d4e249959e5237334cdc6/tmp/test_all_production_probe_chec0/fintrust/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 3
+    },
+    {
+      "path": "build/release1-closure/daafcff0ffab428d915526a26b2047d9/tmp/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/daafcff0ffab428d915526a26b2047d9/tmp/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/daafcff0ffab428d915526a26b2047d9/tmp/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/daafcff0ffab428d915526a26b2047d9/tmp/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/daafcff0ffab428d915526a26b2047d9/tmp/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/daafcff0ffab428d915526a26b2047d9/tmp/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/daafcff0ffab428d915526a26b2047d9/tmp/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/daafcff0ffab428d915526a26b2047d9/tmp/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/daafcff0ffab428d915526a26b2047d9/tmp/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/daafcff0ffab428d915526a26b2047d9/tmp/test_all_production_probe_chec0/fintrust/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 3
+    },
+    {
+      "path": "build/release1-closure/afd606868cd643a9bfe8c38b73da37c5/tmp/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/afd606868cd643a9bfe8c38b73da37c5/tmp/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/afd606868cd643a9bfe8c38b73da37c5/tmp/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/afd606868cd643a9bfe8c38b73da37c5/tmp/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/afd606868cd643a9bfe8c38b73da37c5/tmp/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/afd606868cd643a9bfe8c38b73da37c5/tmp/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/afd606868cd643a9bfe8c38b73da37c5/tmp/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/afd606868cd643a9bfe8c38b73da37c5/tmp/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/afd606868cd643a9bfe8c38b73da37c5/tmp/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/afd606868cd643a9bfe8c38b73da37c5/tmp/test_all_production_probe_chec0/fintrust/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 3
+    },
+    {
+      "path": "build/release1-closure/927cdbac4a10448d9247ef13d6cd44d4/tmp/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/927cdbac4a10448d9247ef13d6cd44d4/tmp/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/927cdbac4a10448d9247ef13d6cd44d4/tmp/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/927cdbac4a10448d9247ef13d6cd44d4/tmp/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/927cdbac4a10448d9247ef13d6cd44d4/tmp/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/927cdbac4a10448d9247ef13d6cd44d4/tmp/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/927cdbac4a10448d9247ef13d6cd44d4/tmp/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/927cdbac4a10448d9247ef13d6cd44d4/tmp/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/927cdbac4a10448d9247ef13d6cd44d4/tmp/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/927cdbac4a10448d9247ef13d6cd44d4/tmp/test_all_production_probe_chec0/fintrust/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 3
+    },
+    {
+      "path": "build/release1-closure/912a80a93e874b198f025812c798d1a1/tmp/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/912a80a93e874b198f025812c798d1a1/tmp/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/912a80a93e874b198f025812c798d1a1/tmp/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/912a80a93e874b198f025812c798d1a1/tmp/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/912a80a93e874b198f025812c798d1a1/tmp/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/912a80a93e874b198f025812c798d1a1/tmp/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/912a80a93e874b198f025812c798d1a1/tmp/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/912a80a93e874b198f025812c798d1a1/tmp/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/912a80a93e874b198f025812c798d1a1/tmp/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/912a80a93e874b198f025812c798d1a1/tmp/test_all_production_probe_chec0/fintrust/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 3
+    },
+    {
+      "path": "build/release1-closure/870bc5bcc0f24fdcbe0bc52be7841d3a/tmp/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/870bc5bcc0f24fdcbe0bc52be7841d3a/tmp/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/870bc5bcc0f24fdcbe0bc52be7841d3a/tmp/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/870bc5bcc0f24fdcbe0bc52be7841d3a/tmp/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/870bc5bcc0f24fdcbe0bc52be7841d3a/tmp/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/870bc5bcc0f24fdcbe0bc52be7841d3a/tmp/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/870bc5bcc0f24fdcbe0bc52be7841d3a/tmp/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/870bc5bcc0f24fdcbe0bc52be7841d3a/tmp/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/870bc5bcc0f24fdcbe0bc52be7841d3a/tmp/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/870bc5bcc0f24fdcbe0bc52be7841d3a/tmp/test_all_production_probe_chec0/fintrust/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 3
+    },
+    {
+      "path": "build/release1-closure/7a951ca6c63d453890d0d45b7772a34b/tmp/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/7a951ca6c63d453890d0d45b7772a34b/tmp/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/7a951ca6c63d453890d0d45b7772a34b/tmp/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/7a951ca6c63d453890d0d45b7772a34b/tmp/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/7a951ca6c63d453890d0d45b7772a34b/tmp/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/7a951ca6c63d453890d0d45b7772a34b/tmp/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/7a951ca6c63d453890d0d45b7772a34b/tmp/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/7a951ca6c63d453890d0d45b7772a34b/tmp/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/7a951ca6c63d453890d0d45b7772a34b/tmp/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/7a951ca6c63d453890d0d45b7772a34b/tmp/test_all_production_probe_chec0/fintrust/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 3
+    },
+    {
+      "path": "build/release1-closure/631a8af3f1d444e0800bcca0709239c7/tmp/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/631a8af3f1d444e0800bcca0709239c7/tmp/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/631a8af3f1d444e0800bcca0709239c7/tmp/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/631a8af3f1d444e0800bcca0709239c7/tmp/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/631a8af3f1d444e0800bcca0709239c7/tmp/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/631a8af3f1d444e0800bcca0709239c7/tmp/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/631a8af3f1d444e0800bcca0709239c7/tmp/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/631a8af3f1d444e0800bcca0709239c7/tmp/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/631a8af3f1d444e0800bcca0709239c7/tmp/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/631a8af3f1d444e0800bcca0709239c7/tmp/test_all_production_probe_chec0/fintrust/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 3
+    },
+    {
+      "path": "build/release1-closure/5b16c91210a44d669483a809b36b500a/tmp/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/5b16c91210a44d669483a809b36b500a/tmp/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/5b16c91210a44d669483a809b36b500a/tmp/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/5b16c91210a44d669483a809b36b500a/tmp/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/5b16c91210a44d669483a809b36b500a/tmp/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/5b16c91210a44d669483a809b36b500a/tmp/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/5b16c91210a44d669483a809b36b500a/tmp/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/5b16c91210a44d669483a809b36b500a/tmp/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/5b16c91210a44d669483a809b36b500a/tmp/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/5b16c91210a44d669483a809b36b500a/tmp/test_all_production_probe_chec0/fintrust/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 3
+    },
+    {
+      "path": "build/release1-closure/4a5c210516c742fd845797d55e2dce4f/tmp/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/4a5c210516c742fd845797d55e2dce4f/tmp/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/4a5c210516c742fd845797d55e2dce4f/tmp/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/4a5c210516c742fd845797d55e2dce4f/tmp/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/4a5c210516c742fd845797d55e2dce4f/tmp/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/4a5c210516c742fd845797d55e2dce4f/tmp/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/4a5c210516c742fd845797d55e2dce4f/tmp/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/4a5c210516c742fd845797d55e2dce4f/tmp/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/4a5c210516c742fd845797d55e2dce4f/tmp/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/4a5c210516c742fd845797d55e2dce4f/tmp/test_all_production_probe_chec0/fintrust/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 3
+    },
+    {
+      "path": "build/release1-closure/4a1df8939f0c496cb75eb940c0eea40d/tmp/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/4a1df8939f0c496cb75eb940c0eea40d/tmp/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/4a1df8939f0c496cb75eb940c0eea40d/tmp/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/4a1df8939f0c496cb75eb940c0eea40d/tmp/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/4a1df8939f0c496cb75eb940c0eea40d/tmp/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/4a1df8939f0c496cb75eb940c0eea40d/tmp/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/4a1df8939f0c496cb75eb940c0eea40d/tmp/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/4a1df8939f0c496cb75eb940c0eea40d/tmp/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/4a1df8939f0c496cb75eb940c0eea40d/tmp/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/4a1df8939f0c496cb75eb940c0eea40d/tmp/test_all_production_probe_chec0/fintrust/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 3
+    },
+    {
+      "path": "build/release1-closure/1c30e9d6d687489da07aa9db385360ea/tmp/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/1c30e9d6d687489da07aa9db385360ea/tmp/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/1c30e9d6d687489da07aa9db385360ea/tmp/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/1c30e9d6d687489da07aa9db385360ea/tmp/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/1c30e9d6d687489da07aa9db385360ea/tmp/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/1c30e9d6d687489da07aa9db385360ea/tmp/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/1c30e9d6d687489da07aa9db385360ea/tmp/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/1c30e9d6d687489da07aa9db385360ea/tmp/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/1c30e9d6d687489da07aa9db385360ea/tmp/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/1c30e9d6d687489da07aa9db385360ea/tmp/test_all_production_probe_chec0/fintrust/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 3
+    },
+    {
+      "path": "build/release1-closure/103a0c11aef141ffab6f7b7f66adc755/tmp/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/103a0c11aef141ffab6f7b7f66adc755/tmp/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/103a0c11aef141ffab6f7b7f66adc755/tmp/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/103a0c11aef141ffab6f7b7f66adc755/tmp/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/103a0c11aef141ffab6f7b7f66adc755/tmp/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/103a0c11aef141ffab6f7b7f66adc755/tmp/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/103a0c11aef141ffab6f7b7f66adc755/tmp/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/103a0c11aef141ffab6f7b7f66adc755/tmp/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/103a0c11aef141ffab6f7b7f66adc755/tmp/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/103a0c11aef141ffab6f7b7f66adc755/tmp/test_all_production_probe_chec0/fintrust/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 3
+    },
+    {
+      "path": "build/release1-closure/0774f0c4fbda43859bc1ac00822645d6/tmp/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/0774f0c4fbda43859bc1ac00822645d6/tmp/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/0774f0c4fbda43859bc1ac00822645d6/tmp/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/0774f0c4fbda43859bc1ac00822645d6/tmp/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/0774f0c4fbda43859bc1ac00822645d6/tmp/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/0774f0c4fbda43859bc1ac00822645d6/tmp/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/0774f0c4fbda43859bc1ac00822645d6/tmp/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/0774f0c4fbda43859bc1ac00822645d6/tmp/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/0774f0c4fbda43859bc1ac00822645d6/tmp/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release1-closure/0774f0c4fbda43859bc1ac00822645d6/tmp/test_all_production_probe_chec0/fintrust/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 3
+    },
+    {
+      "path": "build/release-ci-test-temp-final/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release-ci-test-temp-final/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release-ci-test-temp-final/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release-ci-test-temp-final/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release-ci-test-temp-final/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release-ci-test-temp-final/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release-ci-test-temp-final/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release-ci-test-temp-final/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release-ci-test-temp-final/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release-ci-test-temp-final/test_all_production_probe_chec0/fintrust/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 3
+    },
+    {
+      "path": "build/release-ci-test-temp/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release-ci-test-temp/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release-ci-test-temp/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release-ci-test-temp/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release-ci-test-temp/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release-ci-test-temp/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release-ci-test-temp/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release-ci-test-temp/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release-ci-test-temp/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/release-ci-test-temp/test_all_production_probe_chec0/fintrust/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 3
+    },
+    {
+      "path": "build/pytest-tagloggroup-final-08f998e5563d40ca8eee7f738c9c33c1/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-tagloggroup-final-08f998e5563d40ca8eee7f738c9c33c1/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-tagloggroup-final-08f998e5563d40ca8eee7f738c9c33c1/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-tagloggroup-final-08f998e5563d40ca8eee7f738c9c33c1/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-tagloggroup-final-08f998e5563d40ca8eee7f738c9c33c1/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-tagloggroup-final-08f998e5563d40ca8eee7f738c9c33c1/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-tagloggroup-final-08f998e5563d40ca8eee7f738c9c33c1/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-tagloggroup-final-08f998e5563d40ca8eee7f738c9c33c1/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-tagloggroup-final-08f998e5563d40ca8eee7f738c9c33c1/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-tagloggroup-8702e86bedc64bd0aa29730abcf594f6/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-tagloggroup-8702e86bedc64bd0aa29730abcf594f6/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-tagloggroup-8702e86bedc64bd0aa29730abcf594f6/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-tagloggroup-8702e86bedc64bd0aa29730abcf594f6/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-tagloggroup-8702e86bedc64bd0aa29730abcf594f6/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-tagloggroup-8702e86bedc64bd0aa29730abcf594f6/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-tagloggroup-8702e86bedc64bd0aa29730abcf594f6/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-tagloggroup-8702e86bedc64bd0aa29730abcf594f6/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-tagloggroup-8702e86bedc64bd0aa29730abcf594f6/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-permanent-final/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-permanent-final/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-permanent-final/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-permanent-final/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-permanent-final/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-permanent-final/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-permanent-final/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-permanent-final/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-permanent-final/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-permanent/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-permanent/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-permanent/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-permanent/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-permanent/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-permanent/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-permanent/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-permanent/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-permanent/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-ec55583a-13bd-42ac-b90c-48059c52e644/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-ec55583a-13bd-42ac-b90c-48059c52e644/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-ec55583a-13bd-42ac-b90c-48059c52e644/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-ec55583a-13bd-42ac-b90c-48059c52e644/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-ec55583a-13bd-42ac-b90c-48059c52e644/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-ec55583a-13bd-42ac-b90c-48059c52e644/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-ec55583a-13bd-42ac-b90c-48059c52e644/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-ec55583a-13bd-42ac-b90c-48059c52e644/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-ec55583a-13bd-42ac-b90c-48059c52e644/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-cd23a41cc2b84cc3a4be0ce8db9c45bd/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-cd23a41cc2b84cc3a4be0ce8db9c45bd/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-cd23a41cc2b84cc3a4be0ce8db9c45bd/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-cd23a41cc2b84cc3a4be0ce8db9c45bd/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-cd23a41cc2b84cc3a4be0ce8db9c45bd/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-cd23a41cc2b84cc3a4be0ce8db9c45bd/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-cd23a41cc2b84cc3a4be0ce8db9c45bd/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-cd23a41cc2b84cc3a4be0ce8db9c45bd/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-cd23a41cc2b84cc3a4be0ce8db9c45bd/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-async-final/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-async-final/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-async-final/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-async-final/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-async-final/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-async-final/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-async-final/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-async-final/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-async-final/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-788e6097-37f1-412e-b7f4-ab2f3a0bd81e/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-788e6097-37f1-412e-b7f4-ab2f3a0bd81e/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-788e6097-37f1-412e-b7f4-ab2f3a0bd81e/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-788e6097-37f1-412e-b7f4-ab2f3a0bd81e/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-788e6097-37f1-412e-b7f4-ab2f3a0bd81e/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-788e6097-37f1-412e-b7f4-ab2f3a0bd81e/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-788e6097-37f1-412e-b7f4-ab2f3a0bd81e/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-788e6097-37f1-412e-b7f4-ab2f3a0bd81e/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-788e6097-37f1-412e-b7f4-ab2f3a0bd81e/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-6f7d5e23-75c4-418f-826e-ba8d5d4c5c73/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-6f7d5e23-75c4-418f-826e-ba8d5d4c5c73/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-6f7d5e23-75c4-418f-826e-ba8d5d4c5c73/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-6f7d5e23-75c4-418f-826e-ba8d5d4c5c73/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-6f7d5e23-75c4-418f-826e-ba8d5d4c5c73/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-6f7d5e23-75c4-418f-826e-ba8d5d4c5c73/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-6f7d5e23-75c4-418f-826e-ba8d5d4c5c73/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-6f7d5e23-75c4-418f-826e-ba8d5d4c5c73/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-6f7d5e23-75c4-418f-826e-ba8d5d4c5c73/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-5950b1ba-24b3-416b-b9e9-cf34e8ceccc0/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-5950b1ba-24b3-416b-b9e9-cf34e8ceccc0/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-5950b1ba-24b3-416b-b9e9-cf34e8ceccc0/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-5950b1ba-24b3-416b-b9e9-cf34e8ceccc0/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-5950b1ba-24b3-416b-b9e9-cf34e8ceccc0/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-5950b1ba-24b3-416b-b9e9-cf34e8ceccc0/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-5950b1ba-24b3-416b-b9e9-cf34e8ceccc0/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-5950b1ba-24b3-416b-b9e9-cf34e8ceccc0/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-5950b1ba-24b3-416b-b9e9-cf34e8ceccc0/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-42edd855-9929-44d5-b63b-1065afb0f7b4/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-42edd855-9929-44d5-b63b-1065afb0f7b4/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-42edd855-9929-44d5-b63b-1065afb0f7b4/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-42edd855-9929-44d5-b63b-1065afb0f7b4/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-42edd855-9929-44d5-b63b-1065afb0f7b4/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-42edd855-9929-44d5-b63b-1065afb0f7b4/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-42edd855-9929-44d5-b63b-1065afb0f7b4/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-42edd855-9929-44d5-b63b-1065afb0f7b4/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-stage5-42edd855-9929-44d5-b63b-1065afb0f7b4/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-hardened-full/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-hardened-full/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-hardened-full/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-hardened-full/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-hardened-full/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-hardened-full/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-hardened-full/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-hardened-full/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-hardened-full/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-diagnostic2-c856d54da1724ec7b061377b66d618c1/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-diagnostic2-c856d54da1724ec7b061377b66d618c1/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-diagnostic2-c856d54da1724ec7b061377b66d618c1/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-diagnostic2-c856d54da1724ec7b061377b66d618c1/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-diagnostic2-c856d54da1724ec7b061377b66d618c1/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-diagnostic2-c856d54da1724ec7b061377b66d618c1/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-diagnostic2-c856d54da1724ec7b061377b66d618c1/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-diagnostic2-c856d54da1724ec7b061377b66d618c1/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-diagnostic2-c856d54da1724ec7b061377b66d618c1/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-authorization-ff58ea84e21d41f58db8b8600298230e/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-authorization-ff58ea84e21d41f58db8b8600298230e/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-authorization-ff58ea84e21d41f58db8b8600298230e/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-authorization-ff58ea84e21d41f58db8b8600298230e/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-authorization-ff58ea84e21d41f58db8b8600298230e/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-authorization-ff58ea84e21d41f58db8b8600298230e/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-authorization-ff58ea84e21d41f58db8b8600298230e/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-authorization-ff58ea84e21d41f58db8b8600298230e/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/pytest-authorization-ff58ea84e21d41f58db8b8600298230e/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/migration-runner/regression-temp/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/migration-runner/regression-temp/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/migration-runner/regression-temp/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/migration-runner/regression-temp/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/migration-runner/regression-temp/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/migration-runner/regression-temp/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/migration-runner/regression-temp/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/migration-runner/regression-temp/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/migration-runner/regression-temp/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/migration-runner/regression-temp/test_all_production_probe_chec0/fintrust/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 3
+    },
+    {
+      "path": "build/migration-runner/regression-final-temp/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/migration-runner/regression-final-temp/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/migration-runner/regression-final-temp/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/migration-runner/regression-final-temp/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/migration-runner/regression-final-temp/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/migration-runner/regression-final-temp/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/migration-runner/regression-final-temp/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/migration-runner/regression-final-temp/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/migration-runner/regression-final-temp/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/migration-runner/regression-final-temp/test_all_production_probe_chec0/fintrust/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 3
+    },
+    {
+      "path": "build/linux-build-pipeline-test-temp/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/linux-build-pipeline-test-temp/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/linux-build-pipeline-test-temp/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/linux-build-pipeline-test-temp/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/linux-build-pipeline-test-temp/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/linux-build-pipeline-test-temp/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/linux-build-pipeline-test-temp/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/linux-build-pipeline-test-temp/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/linux-build-pipeline-test-temp/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/linux-build-pipeline-test-temp/test_all_production_probe_chec0/fintrust/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 3
+    },
+    {
+      "path": "build/integrity-full-local-temp/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/integrity-full-local-temp/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/integrity-full-local-temp/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/integrity-full-local-temp/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/integrity-full-local-temp/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/integrity-full-local-temp/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/integrity-full-local-temp/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/integrity-full-local-temp/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/integrity-full-local-temp/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/integrity-full-local-temp/test_all_production_probe_chec0/fintrust/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 3
+    },
+    {
+      "path": "build/hardened-release/pytest-full-final/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/hardened-release/pytest-full-final/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/hardened-release/pytest-full-final/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/hardened-release/pytest-full-final/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/hardened-release/pytest-full-final/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/hardened-release/pytest-full-final/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/hardened-release/pytest-full-final/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/hardened-release/pytest-full-final/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/hardened-release/pytest-full-final/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/hardened-release/pytest-full/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/hardened-release/pytest-full/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/hardened-release/pytest-full/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/hardened-release/pytest-full/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/hardened-release/pytest-full/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/hardened-release/pytest-full/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/hardened-release/pytest-full/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/hardened-release/pytest-full/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/hardened-release/pytest-full/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/content-gate-fix-test-temp/test_caught_network_rejection_0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/content-gate-fix-test-temp/test_import_probe_blocks_netwo0/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/content-gate-fix-test-temp/test_import_probe_blocks_netwo1/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/content-gate-fix-test-temp/test_import_probe_blocks_netwo2/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/content-gate-fix-test-temp/test_import_probe_blocks_netwo3/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/content-gate-fix-test-temp/test_import_probe_blocks_netwo4/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/content-gate-fix-test-temp/test_import_probe_blocks_netwo5/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/content-gate-fix-test-temp/test_import_probe_blocks_netwo6/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/content-gate-fix-test-temp/test_import_probe_blocks_netwo7/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 1
+    },
+    {
+      "path": "build/content-gate-fix-test-temp/test_all_production_probe_chec0/fintrust/__pycache__",
+      "reason": "Ignored regenerable Python bytecode only",
+      "files": 3
+    }
+  ],
+  "preserve": [
+    "all historical ZIPs and manifests",
+    "all AWS failure/recovery evidence",
+    "build scripts and runner packages",
+    "test result XML and logs",
+    "157 unrelated worktree files"
+  ],
+  "authorization": "User-authorized safe cleanup; verify resolved paths and reparse points before deletion."
+}

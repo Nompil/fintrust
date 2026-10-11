@@ -1,0 +1,16 @@
+{
+  "server_version_num": "180006",
+  "scope": "Real isolated SQL processing with mocked cloud; 1 and 100 rows only",
+  "measurements": [
+    {
+      "rows": 1,
+      "seconds": 0.5565
+    },
+    {
+      "rows": 100,
+      "seconds": 31.8885
+    }
+  ],
+  "1000_and_5000_row_sql_throughput": "UNVERIFIED",
+  "postgresql16_integrity": "BLOCKED: local server is PostgreSQL 18"
+}

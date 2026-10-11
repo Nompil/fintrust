@@ -11,7 +11,7 @@ const {chromium}=require(process.env.FINTRUST_PLAYWRIGHT_MODULE);
  try{
   const context=await browser.newContext({viewport:{width:1440,height:1000}});
   await context.route('**/*',route=>{const target=new URL(route.request().url());return target.origin===url?route.continue():route.abort();});
-  const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
+  const page=await context.newPage();let reportResponse,insightsResponse;page.on('response',r=>{const p=new URL(r.url()).pathname;if(r.status()===200&&p==='/v1/reports')reportResponse=r.json();if(r.status()===200&&p==='/v1/release1/insights')insightsResponse=r.json();});const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(url+'/release1');
   await page.locator('#token').fill('b'.repeat(64));await page.getByRole('button',{name:'Sign in',exact:true}).click();
   await page.locator('#workspace').waitFor({state:'visible'});await page.waitForFunction(()=>!document.querySelector('#status').textContent.startsWith('Loading'));
@@ -46,12 +46,18 @@ const {chromium}=require(process.env.FINTRUST_PLAYWRIGHT_MODULE);
   if(await page.locator('.insight-chart').count()!==8)throw Error('Missing backend chart panels');
   if(!(await page.locator('#content').innerText()).includes('scored accepted'))throw Error('Unscored caveat missing');
   await page.locator('#insights-days').selectOption('all');await page.waitForFunction(()=>!document.querySelector('#status').textContent.startsWith('Loading'));
+  const insightData=(await insightsResponse).data;const chartKeys=['activity','risk','rules','accounts','cross_border','quality','reviews','batch_outcomes'];
+  for(let i=0;i<chartKeys.length;i++){const actual=await page.locator('.insight-chart').nth(i).locator('table tr').evaluateAll(rows=>rows.filter(r=>r.querySelector('td')).map(r=>Array.from(r.querySelectorAll('td')).map(c=>c.textContent)));const expected=insightData[chartKeys[i]].map(r=>[String(r.label),String(r.count)]);if(JSON.stringify(actual)!==JSON.stringify(expected))throw Error('Chart table disagrees with backend: '+chartKeys[i]);}
   await page.screenshot({path:path.join(output,'insights-all-dates.png'),fullPage:true});
   await page.locator('#navigation').getByRole('button',{name:'Reports',exact:true}).click();await page.getByRole('button',{name:'Download CSV · current page'}).waitFor();
   const downloadPromise=page.waitForEvent('download');await page.getByRole('button',{name:'Download CSV · current page'}).click();const download=await downloadPromise;await download.saveAs(path.join(output,'report-current-page.csv'));
   if(!fs.readFileSync(path.join(output,'report-current-page.csv'),'utf8').startsWith('account_id,currency,transactions,net_movement,gross_amount'))throw Error('Report export contract failed');
   const jsonPromise=page.waitForEvent('download');await page.getByRole('button',{name:'Download JSON · current page'}).click();const jsonDownload=await jsonPromise;await jsonDownload.saveAs(path.join(output,'report-current-page.json'));
   const exported=JSON.parse(fs.readFileSync(path.join(output,'report-current-page.json'),'utf8'));if(!exported.rows.length||exported.scope!=='Current authorized report page')throw Error('JSON report export invalid');
+  const reportRows=(await reportResponse).data;if(JSON.stringify(exported.rows)!==JSON.stringify(reportRows))throw Error('JSON export disagrees with backend report');
+  const csvText=fs.readFileSync(path.join(output,'report-current-page.csv'),'utf8');const lines=csvText.split(/\r?\n/);if(lines.length!==reportRows.length+1)throw Error('CSV row count disagrees with backend');
+  for(let i=0;i<reportRows.length;i++){const cells=Array.from(lines[i+1].matchAll(/"((?:[^"]|"")*)"(?:,|$)/g),m=>m[1].replaceAll('""','"'));const expected=['account_id','currency','transactions','net_movement','gross_amount'].map(k=>String(reportRows[i][k]));if(JSON.stringify(cells)!==JSON.stringify(expected))throw Error('CSV values disagree with backend report');}
+
   await page.locator('#navigation').getByRole('button',{name:'Accounts',exact:true}).click();await page.getByRole('button',{name:'View history'}).first().click();await page.locator('#title').filter({hasText:'Account History'}).waitFor();if(!await page.locator('#account').inputValue())throw Error('Account history not scoped');
   await page.locator('#account').selectOption('');
   await page.locator('#navigation').getByRole('button',{name:'Administration',exact:true}).click();await page.getByRole('button',{name:'Add local user record'}).click();

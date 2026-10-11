@@ -1,0 +1,6 @@
+{
+  "deleted": [],
+  "reason": "Candidate contains a Windows reparse-point child; safe cleanup refused recursive deletion",
+  "status": "BLOCKED",
+  "preserved": "All build artifacts and unrelated files"
+}

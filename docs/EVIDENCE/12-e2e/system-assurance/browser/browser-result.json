@@ -1,0 +1,62 @@
+{
+  "status": "PASSED",
+  "source_commit": "906b55537fcf02bb8c417bfbd90f84e93bc6a93d",
+  "browser": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+  "pages": [
+    "Login",
+    "Overview",
+    "Rejected Uploads",
+    "Notifications",
+    "Transactions",
+    "Risk Events",
+    "Review Queue",
+    "Quarantine",
+    "Ingestion Batches",
+    "Reports",
+    "Insights",
+    "Accounts",
+    "Account History",
+    "Audit",
+    "Operations",
+    "Administration",
+    "Transaction Detail",
+    "Batch Detail",
+    "Quarantine Detail"
+  ],
+  "dataset_sequence": "A -> B -> exact A replay",
+  "charts_verified": 8,
+  "user_creation_audited": true,
+  "report_csv_verified": true,
+  "report_json_verified": true,
+  "account_history_navigation_verified": true,
+  "admin_compliance_actions": 0,
+  "upload_counts": {
+    "A": {
+      "accepted": 29,
+      "quarantined": 12,
+      "duplicates": 1
+    },
+    "B": {
+      "accepted": 7,
+      "quarantined": 4,
+      "duplicates": 1
+    }
+  },
+  "invalid_file_rejected": true,
+  "notice_persists_until_acknowledged": true,
+  "review_mutation": "OPEN -> UNDER_REVIEW -> CLEARED",
+  "quarantine_mutation": "RESUBMITTED (worker revalidation pending)",
+  "roles_verified": [
+    "Admin",
+    "Risk/Compliance Analyst",
+    "Read-only/Auditor",
+    "Maintainer"
+  ],
+  "loading_error_empty_verified": true,
+  "old_role_response_discarded": true,
+  "auditor_mutation_buttons": 0,
+  "maintainer_compliance_pages": 0,
+  "maintainer_technical_actions_visible": true,
+  "page_errors": [],
+  "aws_access": false
+}
