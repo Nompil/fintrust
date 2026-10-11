@@ -1,0 +1,40 @@
+{
+  "status": "FINTRUST ROLE AND WORKFLOW UX VERIFIED",
+  "parent_commit": "5b5bb50f4bf02bca518940675f9b476bd8750a67",
+  "executed_before_commit": true,
+  "full_application_tests": {
+    "passed": 647,
+    "failed": 0,
+    "expected_skipped": 1
+  },
+  "existing_focused_tests": 122,
+  "new_role_error_checks": 6,
+  "separate_offline_bootstrap_checks": 2,
+  "browser_passed": 1,
+  "final_browser_after_layout_change": true,
+  "full_suite_before_bootstrap_tests_added": true,
+  "source_sha256": {
+    "fintrust/api.py": "522539f861f3be05a9a2de6b8426737586c18e76af959d6043127d847ca31f39",
+    "fintrust/file_admission.py": "e176e6c5b038bcc17e412804719106f7610c85d3e8fb85e3bc7ab642e8645e26",
+    "fintrust/operations.py": "9b204acd5070f3bc6f4757a6a60a26dcb50e7ee441d8e503c722ac19c9bfab2e",
+    "fintrust/release_contract.py": "e7126ae04321fe2f617aade3572f66e6c3f046a067136d5aab5119edae3fa7a0",
+    "frontend/release1.css": "1cf138f30e2a0af0639c36262d34dfc633fc71ad84269a6bca303972c3151fd9",
+    "frontend/release1.html": "b0002fcfe752f6701d7cee15e4f32d994447e4d1274501e60f29be383fa37081",
+    "frontend/release1.js": "448d938fd9af0f94777b9d8918d0427eb86ec99944be164f1985704d9714b2a6",
+    "tests/test_dashboard.py": "9e3d3a937bf179cc2e5e8d9eaa01fdde4e5caf7d3580068f6981ed3e003b845a",
+    "tests/test_frontend_workflows.py": "33baba4c781b3adfc6a59e187d1ea550a1afc874d41768d9bcf69cb45c3934c1",
+    "tests/test_original_fixture_admission.py": "25097a8a1fb5de898aa30375a44fd9d299143b6ffc766357787a96a57027cb45",
+    "tests/test_release1_candidate.py": "8e9af5c00637167e01e19f28a60e82025b200a51f96a20509fda2b8399656fbe",
+    "tests/test_release1_dataset_lifecycle.py": "51d9432a03f088ceabf81fab273117cbc9dbdc4200ab3dbc02294d735ae8ab99",
+    "tests/test_role_workflow_ux.py": "a1afdf67ba615127f7b28c117778cfed38a1446b94fb00fb72e805d71168eaba",
+    "tools/verify_release1_ui.cjs": "5e3bd23129ed59ac9221e79ecb5738ce669c1be96fde1b5bd9d0e5702c9a27a8",
+    "docs/RELEASE1_PRESENTATION_READINESS.md": "d5388f235bcc757b1b8f8f55f2f4b41638f0b9889d0022cffe5711f0156f4389",
+    "docs/diagrams/release1-operating-model.md": "f8ff31bccbcc01f860a2b20338a733a03d5b16e405be50bba37706269d2b50d5",
+    "docs/RELEASE1_ROLE_WORKFLOW_UX.md": "614bb2c842378e1ef5ce3a32b6c9c30543e2e53f719b907bbeee2eb46327c0ab"
+  },
+  "aws_access": false,
+  "artifact_rebuilt": false,
+  "pushed": false,
+  "remaining_ux_limit": "Unknown/unassigned account outcomes still restrict whole-batch details to Admin; no scope bypass added.",
+  "secret_scan": "No live credential pattern found; intentional synthetic rejection-test names in XML retained."
+}

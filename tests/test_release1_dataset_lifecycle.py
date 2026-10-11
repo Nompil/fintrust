@@ -30,7 +30,7 @@ def dataset_db(request,monkeypatch,authenticated_client):
 
 def upload(client,headers,label):
     name=f"fintrust_release1_transactions_{label}.csv"
-    response=client.post("/v1/upload",headers=headers("Admin"),data={"file":(io.BytesIO((FIXTURES/name).read_bytes()),name)})
+    response=client.post("/v1/upload",headers=headers("Risk/Compliance Analyst"),data={"file":(io.BytesIO((FIXTURES/name).read_bytes()),name)})
     assert response.status_code==200,response.json
     return response.json["data"]
 
@@ -113,7 +113,7 @@ def test_suspicious_valid_rows_are_ledger_not_quarantine(dataset_db,authenticate
 @pytest.mark.parametrize("payload,name",[(b"", "empty.csv"),(b"bad,headers\n1,2", "wrong.csv"),(b"\x00\xff", "binary.csv"),(b"data","unsupported.exe"),(b'source_system,source_transaction_id,account_id,amount,currency,country,tx_type,tx_date\n"unterminated',"malformed.csv")])
 def test_bad_file_rejected_before_any_row_work(dataset_db,authenticated_client,payload,name):
     client,headers=authenticated_client
-    response=client.post("/v1/upload",headers=headers("Admin"),data={"file":(io.BytesIO(payload),name)})
+    response=client.post("/v1/upload",headers=headers("Risk/Compliance Analyst"),data={"file":(io.BytesIO(payload),name)})
     assert response.status_code==400 and response.json["error"].startswith("Upload rejected:")
     q=dataset_db[3]
     assert q("SELECT count(*) FROM ingestion_batches")==[(0,)] and q("SELECT count(*) FROM quarantine_cases")==[(0,)] and q("SELECT count(*) FROM transactions")==[(200,)]
@@ -129,7 +129,7 @@ def test_valid_successful_batch_has_safe_success_notification(dataset_db,authent
     rows=list(csv.DictReader(io.StringIO((FIXTURES/"fintrust_release1_transactions_A.csv").read_text())))[:1]
     stream=io.StringIO();writer=csv.DictWriter(stream,fieldnames=list(rows[0]));writer.writeheader();writer.writerows(rows)
     client,headers=authenticated_client
-    response=client.post("/v1/upload",headers=headers("Admin"),data={"file":(io.BytesIO(stream.getvalue().encode()),"normal.csv")})
+    response=client.post("/v1/upload",headers=headers("Risk/Compliance Analyst"),data={"file":(io.BytesIO(stream.getvalue().encode()),"normal.csv")})
     assert response.status_code==200,response.json
     assert response.json["data"]["notification"]=={"severity":"success","message":"Upload completed successfully: 1 rows processed."}
     assert dataset_db[3]("SELECT count(*) FROM transactions")==[(201,)]

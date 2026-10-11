@@ -24,15 +24,15 @@ def test_candidate_upload_batch_duplicate_and_wrong_files(release_db,authenticat
     monkeypatch.setenv("FINTRUST_RELEASE1_UPLOAD","1");monkeypatch.setenv("FINTRUST_MODE","local");monkeypatch.setenv("INPUT_BUCKET","candidate-input")
     s3.create_bucket(Bucket="candidate-input",CreateBucketConfiguration={"LocationConstraint":"af-south-1"});s3.put_bucket_versioning(Bucket="candidate-input",VersioningConfiguration={"Status":"Enabled"})
     rows=[row(source_transaction_id="NORMAL"),row(amount="200000.01",country="US",source_transaction_id="RISK"),row(amount="bad",source_transaction_id="INVALID")];payload=file_bytes(rows)
-    send=lambda:client.post("/v1/upload",data={"file":(io.BytesIO(payload),"a.csv")},headers=headers("Admin"))
+    send=lambda:client.post("/v1/upload",data={"file":(io.BytesIO(payload),"a.csv")},headers=headers("Risk/Compliance Analyst"))
     response=send();assert response.status_code==200,response.json
     assert response.json["data"]["reconciliation"]["accepted"]==2
     assert response.json["data"]["reconciliation"]["quarantined"]==1
     assert send().json["data"]["upload_status"]=="DUPLICATE_FILE"
     assert q("SELECT count(*) FROM transactions")==[(202,)]
     before=q("SELECT count(*) FROM ingestion_batches")
-    response=client.post("/v1/upload",data={"file":(io.BytesIO(b"MZ\0"),"binary.csv")},headers=headers("Admin"));assert response.status_code==400 and response.json["reason_code"]=="INVALID_FILE_FORMAT"
-    response=client.post("/v1/upload",data={"file":[(io.BytesIO(payload),"a.csv"),(io.BytesIO(payload),"b.csv")]},headers=headers("Admin"));assert response.status_code==400 and response.json["reason_code"]=="INVALID_FILE_COUNT"
+    response=client.post("/v1/upload",data={"file":(io.BytesIO(b"MZ\0"),"binary.csv")},headers=headers("Risk/Compliance Analyst"));assert response.status_code==400 and response.json["reason_code"]=="INVALID_FILE_FORMAT"
+    response=client.post("/v1/upload",data={"file":[(io.BytesIO(payload),"a.csv"),(io.BytesIO(payload),"b.csv")]},headers=headers("Risk/Compliance Analyst"));assert response.status_code==400 and response.json["reason_code"]=="INVALID_FILE_COUNT"
     assert q("SELECT count(*) FROM ingestion_batches")==before
     assert client.post("/v1/upload",data={"file":(io.BytesIO(payload),"a.csv")},headers=headers("Read-only/Auditor")).status_code==403
 
@@ -110,7 +110,7 @@ def test_upload_denies_unassigned_known_account_before_storage(release_db,authen
     other=q("SELECT account_id::text FROM accounts WHERE account_id<>%s LIMIT 1",(ACCOUNT,))[0][0]
     monkeypatch.setenv("FINTRUST_RELEASE1_UPLOAD","1");monkeypatch.setenv("FINTRUST_MODE","local")
     upload=Mock();monkeypatch.setattr(score.s3,"put_object",upload)
-    response=client.post("/v1/upload",data={"file":(io.BytesIO(file_bytes([row(account_id=other)])),"scoped.csv")},headers=headers("Admin"))
+    response=client.post("/v1/upload",data={"file":(io.BytesIO(file_bytes([row(account_id=other)])),"scoped.csv")},headers=headers("Risk/Compliance Analyst"))
     assert response.status_code==403,response.json
     upload.assert_not_called()
     assert q("SELECT count(*) FROM ingestion_batches")==[(0,)]

@@ -27,7 +27,7 @@ def test_actual_a_then_b_then_a_rejected_before_sql_or_storage(release_db,authen
     worker=Mock(side_effect=AssertionError('Incompatible originals must never enter row worker'));monkeypatch.setattr(operations,'upload_csv',worker)
     for name in [NAMES[0],NAMES[1],NAMES[0]]:
         payload=(ROOT/'tests/fixtures/e2e'/name).read_bytes()
-        response=client.post('/v1/upload',data={'file':(io.BytesIO(payload),name,'text/csv')},headers=headers('Admin'))
+        response=client.post('/v1/upload',data={'file':(io.BytesIO(payload),name,'text/csv')},headers=headers('Risk/Compliance Analyst'))
         assert response.status_code==400 and response.json['reason_code']=='INVALID_CSV_SCHEMA'
     worker.assert_not_called()
     assert query('SELECT count(*) FROM transactions')==[(200,)]

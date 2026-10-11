@@ -18,7 +18,7 @@ Infrastructure stages 1–4 were verified previously. This local audit does not 
 
 ```mermaid
 flowchart TD
-  U["Admin admits bounded CSV"] --> F{"File contract valid?"}
+  U["Analyst admits bounded CSV"] --> F{"File contract valid?"}
   F -->|No| X["Reject file; safe receipt; no financial work"]
   F -->|Yes| R{"Row contract and identity valid?"}
   R -->|No| QC["Quarantine safe original and reasons"]

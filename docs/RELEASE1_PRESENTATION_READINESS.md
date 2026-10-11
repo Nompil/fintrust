@@ -30,15 +30,15 @@ All READY classifications below concern the local presentation environment and a
 | Risk events | Financial roles | Detection history / transaction navigation | Actual assessments and browser | READY — READ ONLY | Detection is not a human verdict |
 | Review queue | Analyst writes; Admin/Auditor reads | OPEN → UNDER_REVIEW → CLEARED/CONFIRMED_RISK/ESCALATED | Version conflict, replay/audit, browser | READY | Terminal reopening deferred; cannot reassign another analyst's review routinely |
 | Quarantine / correction | Analyst writes; financial roles read | Original safe payload/history; correction/rejection | Revalidation, deduplication, row preservation, browser | PARTIAL | Unknown-account cases can be visible to Admin but no bypass is provided |
-| CSV admission | Admin | File contract and bounded upload | Constructed fixtures A/B and browser | READY | Synthetic local admission; no live S3 trigger claim |
-| Rejected files | Financial reads / Admin admission | Persistent mock receipt separate from batch | Invalid-file test and browser | READY | Mock S3 persistence ends when local server stops |
+| CSV admission | Analyst | File contract and bounded upload | Constructed fixtures A/B and browser | READY | Synthetic local admission; no live S3 trigger claim |
+| Rejected files | Financial reads / Analyst admission | Persistent mock receipt separate from batch | Invalid-file test and browser | READY | Mock S3 persistence ends when local server stops |
 | Duplicate classification | Financial reads | Same-row, cross-file, exact-file replay, possible charge | Regression and browser | READY | Similar accepted charge is a risk flag, not silently deduplicated |
 | Ingestion batches / reconciliation | Financial reads; Maintainer diagnosis | Received, accepted, quarantine, duplicate, failure, pending | PostgreSQL reconciliation and browser | READY | Boundaries/unknown counts labelled; no silent disappearance |
 | Notifications | All appropriate sessions | Open related page / acknowledge | Browser persistence and acknowledgment | PARTIAL | Session-only; no durable inbox, live SES or login/logout audit claim |
 | Reports / CSV / JSON | Financial reads | Actual currency/account aggregates and current-page downloads | Backend report regression; browser CSV and JSON downloads | READY | Both CSV and JSON browser verified against current authorized rows. No bank balances, FX consolidation, scheduling or PDF contract |
 | Accounts / account history | Financial roles | Exact assigned accounts / scoped ledger | API scope and navigation | READY — READ ONLY | No customer/account administration |
 | Audit | Admin/Auditor | Reviews, row dispositions, correction, governance, recovery receipts | Database and mock receipts / browser | READY — READ ONLY | Bounded sources; older actor roles shown as Not captured, never inferred retrospectively |
-| Operations | Admin/Maintainer | Pending corrections/projections, receipts and controlled retries | Existing operational regression and browser | READY | Queued request is not claimed as completed repair; real cloud recovery still separate |
+| Operations | Admin/Maintainer | Pending corrections/projections and receipts; only Maintainer requests retries | Existing operational regression and browser | READY | Queued request is not claimed as completed repair; real cloud recovery still separate |
 | User lifecycle | Admin | Create metadata, change role, disable/reactivate | Live auth reload, validation, Admin-only, browser creation | READY | Local single-server registry only; no credential recovery, SSO, dual approval or distributed directory |
 | Migration/version visibility | Admin/Maintainer | Contract/source and operational state | Existing operational reads | PARTIAL | Live public schema remains unbootstrapped; this pass performs no migration |
 | User login/logout/failed-login ledger | — | No durable session event service | Explicitly absent | DEFERRED | Do not invent historical events |
@@ -99,7 +99,7 @@ Reset checks the exact candidate schema owner and identifying comment, then recr
 ## Five-minute presentation path
 
 1. **0:00–0:45 Admin:** show identity, local environment and responsibilities, Overview attention links, and Administration (records, credential-provisioned distinction). Explain governance versus financial decisions.
-2. **0:45–1:45 Admin:** admit constructed A, inspect accepted/quarantine/duplicate batch counts, upload B, replay A. Open the rejection/duplicate evidence; no extra ledger entries appear on exact replay.
+2. **0:45–1:45 Analyst:** sign in as analyst01 and admit constructed A, inspect accepted/quarantine/duplicate batch counts, upload B, replay A. Open the rejection/duplicate evidence; no extra ledger entries appear on exact replay.
 3. **1:45–2:30 Financial reads:** Insights risk/rule charts, high-risk accepted transaction and possible duplicate-charge detail. Explain valid high risk versus invalid quarantined data, and unscored historical rows.
 4. **2:30–3:45 Analyst:** sign out/in as analyst01; OPEN → UNDER_REVIEW → CLEARED with reason. Correct a numeric quarantine case; the worker revalidates and deduplicates rather than approving directly into the ledger. Original evidence remains.
 5. **3:45–4:30 Auditor:** sign in as auditor01; view review/audit/report and download a current-page CSV. Point out missing mutation controls and backend enforcement.
@@ -107,7 +107,11 @@ Reset checks the exact candidate schema owner and identifying comment, then recr
 
 The application sources changed in this pass. The previously frozen ZIP is unchanged and does not contain these changes. Any later cloud release must rebuild and repeat the Linux verification gate under a separate approved release task. No cloud artifact was rebuilt here.
 
-## Final verification
+## Correction after the original freeze
+
+The separately approved role/workflow correction makes Analyst the only upload role and Maintainer the only technical retry role; Admin retains read-only operations oversight. Analyst lands in Review Queue, Admin/Auditor in Overview, Maintainer in Operations. Upload, result and history are ordered accordingly. Structured rejection details identify missing CSV columns without showing request IDs. See `docs/RELEASE1_ROLE_WORKFLOW_UX.md`. The results below describe the original frozen checkpoint; current correction evidence is separate.
+
+## Original freeze verification
 
 - Full local regression: **641 passed, 0 failed, 1 expected environment skip, 0 unexpected skipped**.
 - Focused readiness checks: **14 passed, 0 failed, 0 skipped**, including actual named-user launcher/reset protection.

@@ -117,7 +117,7 @@ def overview():
 def upload():
     if os.getenv("FINTRUST_LOCAL_DEMO") != "1" and os.getenv("FINTRUST_RELEASE1_UPLOAD") != "1":
         return jsonify({"error": "local upload is disabled"}), 404
-    if g.principal.role!="Admin": raise PermissionError("Local teaching uploads require Admin")
+    g.principal.require("upload")
     from .file_admission import AdmissionError,admit
     from .local_upload import receive_upload
     file = request.files.get("file")
@@ -134,7 +134,7 @@ def upload():
         if os.getenv("FINTRUST_RELEASE1_UPLOAD")=="1":
             from .frontend_workflows import record_upload
             event=record_upload(g.principal,file.filename,"UPLOAD_REJECTED","REJECTED",reason_code=error.code)
-        return jsonify({"error":"Upload rejected: this file does not match the FinTrust transaction CSV format.","reason_code":error.code,"rejection":event}),400
+        return jsonify({"error":"Upload rejected: this file does not match the FinTrust transaction CSV format.","reason_code":error.code,"detail":error.detail,"rejection":event}),400
     except ValueError as error:
         return jsonify({"error": "Invalid CSV request"}), 400
 

@@ -12,10 +12,10 @@ def local_receipts(monkeypatch):
 
 def test_rejected_history_is_safe_durable_and_not_a_batch(release_db,authenticated_client,local_receipts):
     client,headers=authenticated_client;q=release_db[3]
-    result=client.post('/v1/upload',data={"file":(io.BytesIO(b'wrong,headers\n1,2'),'../../bad.csv')},headers=headers('Admin'))
+    result=client.post('/v1/upload',data={"file":(io.BytesIO(b'wrong,headers\n1,2'),'../../bad.csv')},headers=headers('Risk/Compliance Analyst'))
     assert result.status_code==400 and result.json['rejection']['rows_processed']==0
     assert q('SELECT count(*) FROM ingestion_batches')==[(0,)]
-    history=client.get('/v1/upload-history',headers=headers('Admin')).json['data']
+    history=client.get('/v1/upload-history',headers=headers('Risk/Compliance Analyst')).json['data']
     assert len(history)==1 and history[0]['filename']=='bad.csv' and history[0]['reason_code']=='INVALID_CSV_SCHEMA'
     assert 'wrong,headers' not in str(history) and 'Bearer' not in str(history)
     assert client.get('/v1/audit-events',headers=headers('Read-only/Auditor')).json['data'][0]['action']=='UPLOAD_REJECTED'
@@ -61,4 +61,4 @@ def test_batch_scope_and_receipts_do_not_leak_other_accounts(release_db,authenti
     other=q("SELECT account_id::text FROM accounts WHERE account_id<>%s LIMIT 1",(row()['account_id'],))[0][0]
     items=feed([row(account_id=other)]);run(items)
     assert client.get('/v1/batches/'+items[0]['batch']['batch_id'],headers=headers('Read-only/Auditor')).status_code==404
-    assert client.get('/v1/upload-history?action=unrecognized',headers=headers('Admin')).status_code==400
+    assert client.get('/v1/upload-history?action=unrecognized',headers=headers('Risk/Compliance Analyst')).status_code==400
