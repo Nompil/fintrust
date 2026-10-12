@@ -20,9 +20,9 @@ const FinTrustDisplay = (() => {
   function failure(status, page) {
     if (status === 401) return "Session expired. Sign in again to continue.";
     if (status === 403) return "You do not have permission for this action.";
-    if (status === 409) return "This record has changed. Refresh and try again.";
-    if (page === "Insights") return "The requested insight could not be loaded. Refresh and try again.";
-    return "The requested information is unavailable. Refresh and try again.";
+    if (status === 409) return "Record changed. Refresh and try again.";
+    if (page === "Insights") return "Insights unavailable. Refresh and try again.";
+    return "Data unavailable. Refresh and try again.";
   }
   function notice(message, severity, page) {
     const title = page === "Insights" && severity === "ERROR" ? "Insight unavailable" : /File rejected/i.test(message) ? "File rejected" : /already processed/i.test(message) ? "Duplicate file" : severity === "WARNING" ? "Rows need attention" : severity === "ERROR" ? "Action unavailable" : severity === "ACTION_REQUIRED" ? "Attention required" : severity === "SUCCESS" ? "Action completed" : "Workspace update";

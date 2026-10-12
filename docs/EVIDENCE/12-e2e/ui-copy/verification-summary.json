@@ -1,0 +1,21 @@
+{
+  "status": "PASSED",
+  "scope": "User-facing copy only; no API, database or business-rule changes",
+  "tests_passed": 18,
+  "tests_failed": 0,
+  "browser_gates": [
+    "investigation",
+    "multi-user"
+  ],
+  "javascript_non_literal_tokens_unchanged": [
+    "frontend/js/release1.js",
+    "frontend/js/release1-display.js"
+  ],
+  "backend_and_sql_unchanged": true,
+  "historical_evidence_preserved": true,
+  "running_server_not_restarted": true,
+  "aws_mutations": false,
+  "push": false,
+  "source_baseline": "81fcd25d96104b724ee003447faf96226bebcafa",
+  "cache_version": "ui-copy-1"
+}
