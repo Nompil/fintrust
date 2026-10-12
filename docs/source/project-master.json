@@ -1,7 +1,7 @@
 {
   "title": "FinTrust Project Master",
   "subtitle": "Transaction Monitoring & Risk Alert Platform",
-  "checkpoint": "48399b9",
+  "checkpoint": "d4e7653",
   "date": "13 October 2026",
   "sections": [
     {
@@ -9,7 +9,8 @@
       "status": "LOCAL VERIFIED",
       "paragraphs": [
         "FinTrust is a transaction monitoring and risk investigation platform. It accepts CSV files, preserves transaction identity and source evidence, scores risk and records each review decision. It does not move funds, reverse charges or establish fraud.",
-        "Current source checkpoint 48399b9: local E2E verified through 20 scenarios and 125 selected tests, real isolated PostgreSQL, authenticated UI/API checks and mocked AWS services. The historical workbench regression remains 811 passed / 1 expected skip. Existing monthly and zero-spend budget configuration is live verified and preserved; exact-source Linux verification and live AWS E2E remain pending."
+        "Earlier local E2E checkpoint 48399b9: local E2E verified through 20 scenarios and 125 selected tests, real isolated PostgreSQL, authenticated UI/API checks and mocked AWS services. The historical workbench regression remains 811 passed / 1 expected skip. Existing monthly and zero-spend budget configuration is live verified and preserved; exact-source Linux verification and live AWS E2E remain pending.",
+        "13 October 2026 | Analyst UX correction locally verified: 35 focused tests passed, full browser gate passed, final investigation browser passed. Regression: 823 full-suite passes / 1 expected administrator-only skip; one stale navigation harness failed, was corrected and its two checks passed on targeted rerun. Total: 824 checks verified. Quarantine correction stays in the investigation drawer through worker revalidation and accepted-transaction linkage. Risk review claim, note and Clear preserve queue context. Grouped navigation, Admin-only Users, batch rejected-upload history, business-first transaction details and ten backend-backed Insights charts are verified. Implementation commit: d4e7653."
       ],
       "references": [
         "docs/architecture/FINTRUST_FLOW_AUDIT.md",
@@ -737,7 +738,10 @@
         "DECISION: Actor and outcome audit without secrets | SOURCE: https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html | WHY IT APPLIES: Investigations require attributable history | HOW FINTRUST USES IT: Reuse append-only SQL history and versioned governance receipts; no credential logging.",
         "DECISION: list-preserving investigation drawer, compact filters and visible triage | SOURCE: https://docs.datadoghq.com/security/cloud_siem/triage_and_investigate/investigate_security_signals/ | WHY IT APPLIES: Analysts need evidence and next steps without losing queue context | HOW FINTRUST USES IT: Adapt interaction principles to transaction risk, with original branding and backend-enforced ownership; no copied icons, wording or pixel layout.",
         "DECISION: Reuse scoped aggregate and queue reads | SOURCE: backend/fintrust/frontend_workflows.py; visual_insights.py; workflow_api.py | WHY IT APPLIES: The brief requires evidence-backed triage without fabricated totals | HOW FINTRUST USES IT: Independent loading/error states, explicit count bounds and unconfigured SLA handling; no new risk or database model.",
-        "DECISION: Preserve existing monthly and zero-spend budget controls | SOURCE: AWS Budgets managing-costs and email-recipient guidance | WHY IT APPLIES: Avoid duplicate alerts while proving actual threshold/scope configuration | HOW FINTRUST USES IT: Account-wide read-only verification, masked configured subscriber evidence, periodic-notification limitations and separate live deployment approval."
+        "DECISION: Preserve existing monthly and zero-spend budget controls | SOURCE: AWS Budgets managing-costs and email-recipient guidance | WHY IT APPLIES: Avoid duplicate alerts while proving actual threshold/scope configuration | HOW FINTRUST USES IT: Account-wide read-only verification, masked configured subscriber evidence, periodic-notification limitations and separate live deployment approval.",
+        "Current UX proof: docs/EVIDENCE/12-e2e/analyst-ux-correction/verification-summary.json, isolated PostgreSQL regression results and authenticated browser screenshots. No AWS mutation, Linux gate, schema change or credential reset occurred in this phase. Restart the local server to load the updated read-only Insights endpoint. Live AWS E2E remains pending.",
+        "DECISION: Keep native tables and keyboard-operable action buttons | SOURCE: https://www.w3.org/WAI/ARIA/apg/patterns/table/ | WHY IT APPLIES: Analysts need dense lists without inaccessible custom grids | HOW FINTRUST USES IT: Native headings/cells, button entry, visible focus and drawer focus restoration.",
+        "DECISION: Aggregate authorized filtered rows before bounding the detail list | SOURCE: https://www.postgresql.org/docs/16/sql-select.html | WHY IT APPLIES: Analytical counts must not depend on the displayed page | HOW FINTRUST USES IT: Parameterized WHERE scope before GROUP BY; deterministic date/identity ordering for the latest 25 accepted entries."
       ],
       "references": [
         "docs/architecture/FINTRUST_FLOW_AUDIT.md",

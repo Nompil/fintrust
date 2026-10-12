@@ -17,7 +17,7 @@ tests\test_analyst_workflow_priority.py:28: in test_role_navigation_preserves_au
 E   AssertionError: [eval]:1
 E     const pages={Overview:1,Transactions:1,Accounts:1};let principal;function navigationPages(){return Object.values(navigationGroups).flat();}
 E                                                                                                                      ^
-E     
+E
 E     ReferenceError: navigationGroups is not defined
 E         at navigationPages ([eval]:1:114)
 E         at [eval]:3:50
@@ -28,9 +28,9 @@ E         at runScriptInContext (node:internal/process/execution:449:60)
 E         at evalFunction (node:internal/process/execution:283:30)
 E         at evalTypeScript (node:internal/process/execution:295:3)
 E         at node:internal/main/eval_string:71:3
-E     
+E
 E     Node.js v24.19.0
-E     
+E
 E   assert 1 == 0
 E    +  where 1 = CompletedProcess(args=['C:\\Users\\Nompilo\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\no...lTypeScript (node:internal/process/execution:295:3)\n    at node:internal/main/eval_string:71:3\n\nNode.js v24.19.0\n').returncode
 =========================== short test summary info ===========================

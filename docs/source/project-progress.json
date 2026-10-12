@@ -1,16 +1,17 @@
 {
   "title": "FinTrust Project Progress",
   "subtitle": "Single living status and milestone record",
-  "checkpoint": "48399b9",
+  "checkpoint": "d4e7653",
   "date": "13 October 2026",
   "sections": [
     {
       "title": "Current Snapshot",
       "status": "LOCAL VERIFIED",
       "paragraphs": [
-        "13 October 2026 | Implementation checkpoint 48399b9 | Local E2E verified; live AWS E2E pending. Existing budget controls verified and preserved.",
-        "20 scenarios have passing local evidence across 125 selected tests, real isolated PostgreSQL, authenticated UI/API checks and mocked AWS transports. Individual browser versus API evidence is labeled. Historical full regression remains 811 passed / 1 expected administrator-only skip; it was not rerun for this documentation phase.",
-        "Read-only AWS check verified fintrust-admin in account 966467878406 and infrastructure region af-south-1. The five foundation/ingest stacks remain CREATE_COMPLETE. Existing ingest concurrency remains 0; RDS remains private Single-AZ with 20 GiB gp3. No AWS mutation, deployment or push occurred."
+        "13 October 2026 | Implementation checkpoint d4e7653 | Local E2E verified; live AWS E2E pending. Existing budget controls verified and preserved.",
+        "20 scenarios have passing local evidence across 125 selected tests, real isolated PostgreSQL, authenticated UI/API checks and mocked AWS transports. Individual browser versus API evidence is labeled. Historical full regression remains 811 passed / 1 expected administrator-only skip; that result belongs to the prior workbench phase; current UX regression is recorded below.",
+        "Read-only AWS check verified fintrust-admin in account 966467878406 and infrastructure region af-south-1. The five foundation/ingest stacks remain CREATE_COMPLETE. Existing ingest concurrency remains 0; RDS remains private Single-AZ with 20 GiB gp3. No AWS mutation, deployment or push occurred.",
+        "13 October 2026 | Analyst UX correction locally verified: 35 focused tests passed, full browser gate passed, final investigation browser passed. Regression: 823 full-suite passes / 1 expected administrator-only skip; one stale navigation harness failed, was corrected and its two checks passed on targeted rerun. Total: 824 checks verified. Quarantine correction stays in the investigation drawer through worker revalidation and accepted-transaction linkage. Risk review claim, note and Clear preserve queue context. Grouped navigation, Admin-only Users, batch rejected-upload history, business-first transaction details and ten backend-backed Insights charts are verified. Implementation commit: d4e7653."
       ],
       "table": null
     },
@@ -221,7 +222,8 @@
       "paragraphs": [
         "Latest proof: docs/EVIDENCE/12-e2e/analyst-workbench/verification-summary.json, regression/affected output and browser screenshots. Prior UI-copy, investigation, multi-user and AWS evidence remains unchanged.",
         "Edit docs/source/project-progress.json and regenerate with python tools/build_project_docs.py. Keep historical results and explicit dates; do not overwrite evidence or mint another standalone status report.",
-        "Budget configuration: docs/EVIDENCE/01-budget/2026-10-13-budget-control-verification.json and masked settings evidence. Local scenarios: docs/EVIDENCE/12-e2e/scenario-verification/SCENARIO_RESULTS.md. Historical evidence remains unchanged."
+        "Budget configuration: docs/EVIDENCE/01-budget/2026-10-13-budget-control-verification.json and masked settings evidence. Local scenarios: docs/EVIDENCE/12-e2e/scenario-verification/SCENARIO_RESULTS.md. Historical evidence remains unchanged.",
+        "Current UX proof: docs/EVIDENCE/12-e2e/analyst-ux-correction/verification-summary.json, isolated PostgreSQL regression results and authenticated browser screenshots. No AWS mutation, Linux gate, schema change or credential reset occurred in this phase. Restart the local server to load the updated read-only Insights endpoint. Live AWS E2E remains pending."
       ],
       "table": null
     }

@@ -24,5 +24,14 @@
   "review_metrics": "Current review states of selected transactions, not decisions made today",
   "high_risk_rate": "High scored accepted transactions / all scored accepted transactions; unavailable when no scores",
   "credentials_changed": false,
-  "push_performed": false
+  "push_performed": false,
+  "implementation_commit": "d4e7653cd8643a5dad20301da330bb9737a9511e",
+  "source_files_sha256": {
+    "backend/fintrust/visual_insights.py": "0cc8dbc54118dbf837dd58f0d9d58e2fff6e7455349341f7f5b7df7290f0ac30",
+    "frontend/js/release1.js": "bfafa33375e91c95b4c934c0fea1878c8c6961813290decd092069f5f4d12dca",
+    "frontend/js/release1-display.js": "3d8876317dd8788b863406a94d1848c48075ed5751ee592375b1dd27a74c6888",
+    "frontend/css/release1.css": "0f48c980fcb57e969d7a5a3de8a49a0175efe8b05ce0d58e11dac06f512991ca",
+    "frontend/release1.html": "6fc7d01cb09aa5421bd303e473d1669abbeddacd134a2fc6373960879ef2d37e"
+  },
+  "evidence_text_normalization": "Trailing whitespace stripped in copied reports; original local runner outputs preserved under build/release1-closure."
 }

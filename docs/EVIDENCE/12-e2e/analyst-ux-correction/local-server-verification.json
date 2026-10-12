@@ -1,0 +1,14 @@
+{
+  "verified_at_utc": "2026-10-12T23:49:07.567771+00:00",
+  "url": "http://127.0.0.1:5001/release1",
+  "http_status": 200,
+  "updated_grouped_navigation_served": true,
+  "updated_empty_review_copy_served": true,
+  "startup": "tools/serve_release1_demo.py --role Analyst --username analyst01 --reuse-auth --port 5001",
+  "credential_registry_unchanged": true,
+  "credentials_retrieved": false,
+  "synthetic_data_reset": false,
+  "live_aws_access": false,
+  "live_rds_access": false,
+  "note": "Server reload proves updated assets are served; it does not prove the user knows the enrolled Analyst credential."
+}

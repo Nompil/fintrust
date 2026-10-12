@@ -59,3 +59,16 @@ Preserve candidate-before-validation transport, all-level risk records and durab
 ## Phase 2 verification
 
 62 focused lifecycle/domain/frozen-runner regression tests passed locally and 21 lifecycle tests passed on disposable PostgreSQL 16. Broader regression: 756 passed, 1 skipped, zero failures. The existing administrator-only role skip retains its separate prior PG16 proof. Existing domain/API focused run: 144 passed. SQL 001/002 and all 163 unrelated files preserved. See [sanitized evidence](../EVIDENCE/12-e2e/transaction-lifecycle/verification-summary.json).
+
+## Analyst workbench UX correction — 13 October 2026
+
+13 October 2026 | Analyst UX correction locally verified: 35 focused tests passed, full browser gate passed, final investigation browser passed. Regression: 823 full-suite passes / 1 expected administrator-only skip; one stale navigation harness failed, was corrected and its two checks passed on targeted rerun. Total: 824 checks verified. Quarantine correction stays in the investigation drawer through worker revalidation and accepted-transaction linkage. Risk review claim, note and Clear preserve queue context. Grouped navigation, Admin-only Users, batch rejected-upload history, business-first transaction details and ten backend-backed Insights charts are verified.
+
+No schema or business-rule changes. Immutable identity/provenance, role/owner checks, independent alert delivery and accepted Low/Medium/High ledger semantics remain intact. Insights adds only parameterized read filters/aggregates; high-risk rate uses scored entries and quality counts disclose their separate bounded intake scope.
+
+| Decision | Source | Why it applies | FinTrust use |
+| --- | --- | --- | --- |
+| Native tables with keyboard action buttons | https://www.w3.org/WAI/ARIA/apg/patterns/table/ | Dense investigation lists must remain accessible | Native table structure, visible focus, drawer focus restoration |
+| Filtered SQL aggregates before detail pagination | https://www.postgresql.org/docs/16/sql-select.html | Counts must reflect authorized matching rows | Parameterized WHERE/GROUP BY, deterministic detail ordering |
+
+Evidence: [verification summary](../EVIDENCE/12-e2e/analyst-ux-correction/verification-summary.json). Live AWS and current-source Linux gates remain separate.

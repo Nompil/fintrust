@@ -1,0 +1,143 @@
+{
+  "Master": {
+    "pages": 24,
+    "sha256": "5bfba503ac8ad56f38d35941c90c343e39b80f42ca421101f58465ea4ffd5073",
+    "outline_entries": 42,
+    "pages_checked": [
+      {
+        "page": 1,
+        "characters": 479
+      },
+      {
+        "page": 2,
+        "characters": 791
+      },
+      {
+        "page": 3,
+        "characters": 570
+      },
+      {
+        "page": 4,
+        "characters": 2687
+      },
+      {
+        "page": 5,
+        "characters": 2409
+      },
+      {
+        "page": 6,
+        "characters": 2695
+      },
+      {
+        "page": 7,
+        "characters": 1404
+      },
+      {
+        "page": 8,
+        "characters": 759
+      },
+      {
+        "page": 9,
+        "characters": 2814
+      },
+      {
+        "page": 10,
+        "characters": 2718
+      },
+      {
+        "page": 11,
+        "characters": 3014
+      },
+      {
+        "page": 12,
+        "characters": 3098
+      },
+      {
+        "page": 13,
+        "characters": 2653
+      },
+      {
+        "page": 14,
+        "characters": 917
+      },
+      {
+        "page": 15,
+        "characters": 822
+      },
+      {
+        "page": 16,
+        "characters": 2931
+      },
+      {
+        "page": 17,
+        "characters": 849
+      },
+      {
+        "page": 18,
+        "characters": 2440
+      },
+      {
+        "page": 19,
+        "characters": 2953
+      },
+      {
+        "page": 20,
+        "characters": 3381
+      },
+      {
+        "page": 21,
+        "characters": 2817
+      },
+      {
+        "page": 22,
+        "characters": 2952
+      },
+      {
+        "page": 23,
+        "characters": 2861
+      },
+      {
+        "page": 24,
+        "characters": 3383
+      }
+    ]
+  },
+  "Progress": {
+    "pages": 7,
+    "sha256": "799de0e4dfdc855100920565b073d9e4489b7a61dea72e62062284439acb4785",
+    "outline_entries": 10,
+    "pages_checked": [
+      {
+        "page": 1,
+        "characters": 480
+      },
+      {
+        "page": 2,
+        "characters": 312
+      },
+      {
+        "page": 3,
+        "characters": 3343
+      },
+      {
+        "page": 4,
+        "characters": 2417
+      },
+      {
+        "page": 5,
+        "characters": 3298
+      },
+      {
+        "page": 6,
+        "characters": 3248
+      },
+      {
+        "page": 7,
+        "characters": 2189
+      }
+    ]
+  },
+  "references_checked": 108,
+  "missing_references": [],
+  "visual_review": "PASSED: all 31 pages inspected; changed cover/snapshot pages inspected again after adding the implementation checkpoint."
+}
