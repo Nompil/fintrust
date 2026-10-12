@@ -13,15 +13,19 @@ const {chromium}=require(process.env.FINTRUST_PLAYWRIGHT_MODULE);
   const context=await browser.newContext({viewport:{width:1440,height:1000}});
   await context.route('**/*',route=>{const target=new URL(route.request().url());return target.origin===url?route.continue():route.abort();});
   const page=await context.newPage();let reportResponse,insightsResponse;page.on('response',r=>{const p=new URL(r.url()).pathname;if(r.status()===200&&p==='/v1/reports')reportResponse=r.json();if(r.status()===200&&p==='/v1/release1/insights')insightsResponse=r.json();});const errors=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.goto(url+'/release1');
+  await page.goto(url+'/');
+  if(await page.getByText('earlier learning interface',{exact:false}).count())throw Error('Legacy entry point exposed');
   await page.locator('#token').fill('b'.repeat(64));await page.getByRole('button',{name:'Sign in',exact:true}).click();
   await page.locator('#workspace').waitFor({state:'visible'});await page.waitForFunction(()=>!document.querySelector('#status').textContent.startsWith('Loading'));
-  await page.locator('#navigation').getByRole('button',{name:'Ingestion Batches',exact:true}).click();
+  if(await page.locator('#title').innerText()!=='Overview')throw Error('Analyst did not land on overview');
+  if(await page.locator('#account option').count()<2)throw Error('Assigned accounts did not load');
+  await page.locator('#navigation').getByRole('button',{name:'Upload Transactions',exact:true}).click();
+  if(!(await page.locator('#csv-contract').innerText()).includes('source_system'))throw Error('Current CSV contract missing');
   async function admit(input,expected,screenshot){
    await page.locator('#csv-file').setInputFiles(input);
-   await page.getByRole('button',{name:'Upload CSV',exact:true}).click();
+   await page.getByRole('button',{name:'Validate and process file',exact:true}).click();
    await page.waitForFunction(text=>document.querySelector('#upload-notice-message').textContent.includes(text),expected);
-   await page.getByRole('button',{name:'Upload CSV',exact:true}).waitFor({state:'visible'});
+   await page.getByRole('button',{name:'Validate and process file',exact:true}).waitFor({state:'visible'});
    await page.waitForFunction(()=>!document.querySelector('#upload-form button').disabled);
    await page.screenshot({path:path.join(output,screenshot),fullPage:true});
   }
@@ -34,6 +38,9 @@ const {chromium}=require(process.env.FINTRUST_PLAYWRIGHT_MODULE);
   await page.getByRole('button',{name:'Acknowledge',exact:true}).click();await page.locator('#upload-notice').waitFor({state:'hidden'});
   await page.locator('#navigation').getByRole('button',{name:'Ingestion Batches',exact:true}).click();
   await admit(path.join(fixtures,'fintrust_release1_transactions_A.csv'),'29 accepted, 12 quarantined, 1 duplicates','A-upload-warning.png');
+  await page.locator('#upload-notice').getByRole('button',{name:'View batch',exact:true}).first().click();await page.locator('#batch-receipt').waitFor();if(!(await page.locator('#batch-receipt').innerText()).includes('Submission receipt'))throw Error('Mixed batch receipt unavailable');
+  await page.locator('#batch-receipt').getByRole('button',{name:'View transactions',exact:true}).click();await page.getByRole('button',{name:'Details / audit timeline'}).first().waitFor();
+  await page.locator('#navigation').getByRole('button',{name:'Ingestion Batches',exact:true}).click();
   await admit(path.join(fixtures,'fintrust_release1_transactions_B.csv'),'7 accepted, 4 quarantined, 1 duplicates','B-upload-warning.png');
   if(!(await page.locator('#upload-notice-message').textContent()).includes('29 accepted, 12 quarantined'))throw Error('Unacknowledged A warning was lost after B');
   await admit(path.join(fixtures,'fintrust_release1_transactions_A.csv'),'File already processed','A-whole-file-replay.png');
@@ -138,7 +145,7 @@ const {chromium}=require(process.env.FINTRUST_PLAYWRIGHT_MODULE);
     await page.screenshot({path:path.join(output,user+'-insights-verified.png'),fullPage:true});
     await page.locator('#navigation').getByRole('button',{name:'Reports',exact:true}).click();await page.getByRole('button',{name:'Download CSV · current page'}).waitFor();
     if(user==='auditor01'){
-      for(const target of ['Review Queue','Quarantine','Ingestion Batches']){await page.locator('#navigation').getByRole('button',{name:target,exact:true}).click();await page.waitForFunction(()=>!document.querySelector('#status').textContent.startsWith('Loading'));if(await page.getByRole('button',{name:/Open action|Correct \/ reject|Upload CSV/}).count())throw Error('Auditor mutation control visible');}
+      for(const target of ['Review Queue','Quarantine','Ingestion Batches']){await page.locator('#navigation').getByRole('button',{name:target,exact:true}).click();await page.waitForFunction(()=>!document.querySelector('#status').textContent.startsWith('Loading'));if(await page.getByRole('button',{name:/Open action|Correct \/ reject|Validate and process file/}).count())throw Error('Auditor mutation control visible');}
       const status=await page.evaluate(async()=>{const r=await fetch('/v1/upload',{method:'POST',headers:{Authorization:'Bearer '+'c'.repeat(64)}});return r.status;});if(status!==403)throw Error('Auditor backend upload not denied');
     }
     await page.route('**/v1/release1/insights?**',route=>route.fulfill({status:404,contentType:'application/json',body:JSON.stringify({error:'Not Found',detail:'unsafe provider detail'})}));
@@ -155,7 +162,17 @@ const {chromium}=require(process.env.FINTRUST_PLAYWRIGHT_MODULE);
     if(await page.locator('#error').isVisible())throw Error('Metric refresh did not recover');
     await page.screenshot({path:path.join(output,user+'-overview.png'),fullPage:true});
   }
+  await page.route('**/v1/release1/overview',route=>route.fulfill({status:401,contentType:'application/json',body:'{"error":"authentication required"}'}));
+  await page.locator('#navigation').getByRole('button',{name:'Overview',exact:true}).click();await page.getByRole('heading',{name:'Session expired',exact:true}).waitFor();
+  if(!(await page.locator('#session-message').innerText()).includes('Sign in again'))throw Error('Session recovery missing');
+  if((await page.locator('body').innerText()).includes('401'))throw Error('Raw HTTP error leaked');
+  await page.unroute('**/v1/release1/overview');await page.locator('#token').fill('b'.repeat(64));await page.getByRole('button',{name:'Sign in',exact:true}).click();await page.locator('#workspace').waitFor({state:'visible'});
+  await page.locator('#navigation').getByRole('button',{name:'Upload Transactions',exact:true}).click();
+  await page.route('**/v1/upload',route=>route.fulfill({status:401,contentType:'application/json',body:'{"error":"authentication required"}'}));
+  await page.locator('#csv-file').setInputFiles(path.join(fixtures,'fintrust_release1_transactions_A.csv'));await page.getByRole('button',{name:'Validate and process file',exact:true}).click();
+  await page.getByRole('heading',{name:'Session expired',exact:true}).waitFor();await page.screenshot({path:path.join(output,'session-expired.png'),fullPage:true});
+  await page.unroute('**/v1/upload');
   if(errors.length)throw Error(errors.join('; '));
-  fs.writeFileSync(path.join(output,'browser-result.json'),JSON.stringify({status:'PASSED',source_commit:process.env.FINTRUST_RELEASE_COMMIT,browser:executablePath,pages:['Login',...pages,'Transaction Detail','Batch Detail','Quarantine Detail'],dataset_sequence:'A -> B -> exact A replay',charts_verified:8,analyst_and_auditor_chart_values_verified:true,display_uuid_transport_verified:true,metric_error_vs_zero_verified:true,friendly_insight_failure_recovery_verified:true,role_switch_method:"Sign out and backend-authenticated token sign in",user_creation_audited:true,report_csv_verified:true,report_json_verified:true,account_history_navigation_verified:true,admin_compliance_actions:0,upload_counts:{A:{accepted:29,quarantined:12,duplicates:1},B:{accepted:7,quarantined:4,duplicates:1}},invalid_file_rejected:true,notice_persists_until_acknowledged:true,review_mutation:'OPEN -> UNDER_REVIEW -> CLEARED',quarantine_mutation:'RESUBMITTED (worker revalidation pending)',roles_verified:['Admin','Risk/Compliance Analyst','Read-only/Auditor','Maintainer'],loading_error_empty_verified:true,old_role_response_discarded:true,auditor_mutation_buttons:0,maintainer_compliance_pages:0,maintainer_technical_actions_visible:true,page_errors:errors,aws_access:false},null,2));
+  fs.writeFileSync(path.join(output,'browser-result.json'),JSON.stringify({status:'PASSED',root_workspace_verified:true,analyst_upload_receipt_link_verified:true,session_expiry_on_read_and_upload_verified:true,source_commit:process.env.FINTRUST_RELEASE_COMMIT,browser:executablePath,pages:['Login',...pages,'Transaction Detail','Batch Detail','Quarantine Detail'],dataset_sequence:'A -> B -> exact A replay',charts_verified:8,analyst_and_auditor_chart_values_verified:true,display_uuid_transport_verified:true,metric_error_vs_zero_verified:true,friendly_insight_failure_recovery_verified:true,role_switch_method:"Sign out and backend-authenticated token sign in",user_creation_audited:true,report_csv_verified:true,report_json_verified:true,account_history_navigation_verified:true,admin_compliance_actions:0,upload_counts:{A:{accepted:29,quarantined:12,duplicates:1},B:{accepted:7,quarantined:4,duplicates:1}},invalid_file_rejected:true,notice_persists_until_acknowledged:true,review_mutation:'OPEN -> UNDER_REVIEW -> CLEARED',quarantine_mutation:'RESUBMITTED (worker revalidation pending)',roles_verified:['Admin','Risk/Compliance Analyst','Read-only/Auditor','Maintainer'],loading_error_empty_verified:true,old_role_response_discarded:true,auditor_mutation_buttons:0,maintainer_compliance_pages:0,maintainer_technical_actions_visible:true,page_errors:errors,aws_access:false},null,2));
  }finally{await browser.close();}
 })().catch(e=>{console.error(e.message);process.exitCode=1;});

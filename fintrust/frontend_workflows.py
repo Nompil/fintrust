@@ -90,6 +90,7 @@ def overview(principal):
         "partial_failed_batches":sum(b["status"] in ('PARTIAL','FAILED') or (b["rows_received"] is not None and not b["counts_consistent"]) for b in batches["data"]),
         "rejected_uploads":sum(e["action"]=='UPLOAD_REJECTED' for e in upload_history(principal)),
         "bounded_counts":q["meta"]["has_more"] or batches["meta"]["has_more"],
+        "recent_batches":batches["data"][:5],
         "recent_transactions":api.list_page("transactions",principal,{"limit":8})["data"],
         "attention":api.list_page("reviews",principal,{"limit":8,"status":"OPEN"})["data"]})
     return data

@@ -4,6 +4,20 @@ Current presentation diagrams and speaker notes: [Release 1 presentation pack](p
 
 This checkpoint verifies a local internal operations application, not a completed live AWS application deployment. Existing cloud stacks are preserved. No AWS request, secret retrieval, database migration, cloud package rebuild, deployment or push was performed in this pass. Financial amounts, duplicate identities and the frozen >5 accepted transactions within 5 minutes velocity rule are unchanged.
 
+## Analyst workspace correction (2026-10-12)
+
+The root URL `/`, `/index.html` and `/release1` now serve the same current workspace. The former root learning page did not send the authenticated Release 1 bearer token; its blank metrics and upload 401 were an entry-point defect. Earlier application freezes and cloud artifacts remain historical and do not include this local correction.
+
+Use the existing loopback launcher with `--role Analyst`, open `http://127.0.0.1:5001/`, and sign in with the same privately entered operator-issued token. The token stays in browser memory; reload requires sign-in. Backend identity, assigned accounts and role checks remain authoritative. Revoked/invalid sessions return to **Session expired / Sign in again to continue**, including failed uploads. No authentication bypass or token embedded in frontend source was introduced.
+
+Analyst lands on Overview with real scoped metrics, risk/activity charts and attention items. **Upload Transactions** exposes the CSV contract from the validator: required columns, alternate source-identity columns, optional columns, one UTF-8 CSV, 1 MiB and 5,000 rows. The button is **Validate and process file**. Results show recorded row totals, pending work and follow-up links; rejected files show the safe reason and that no rows were processed. Exact file replays link to the original batch without processing twice.
+
+Existing account restrictions are preserved. An Analyst cannot read full mixed-batch details containing unknown/unassigned-account rows. For a just-submitted file, the batch link can show the already-authorized **Submission receipt**, explicitly a snapshot rather than refreshed batch state. It reveals no new row data; scoped quarantine/transaction links remain available. Administrator oversight is required for restricted row detail. Receipts are session-local and clear on sign-out.
+
+Reads time out after 15 seconds; writes after 120 seconds. An uncertain upload outcome directs the user to check batch history before retrying. Failed dashboard reads display **Unavailable**, never fabricated zeros. Chart values remain available in expandable tables. Auditor still has no upload, correction or review-mutation controls, and backend denials remain enforced.
+
+Validation and sanitized screenshots: `docs/EVIDENCE/12-e2e/analyst-workspace/`. All verification uses the dedicated local PostgreSQL database and mocked AWS services; unmocked AWS transport is blocked. No AWS mutation, live RDS connection, artifact rebuild/upload or push is part of this correction. Previously frozen cloud ZIPs must not be represented as containing these new frontend/API changes.
+
 ## Human operating model
 
 | Identity | Responsibility | Allowed local actions | Boundary |

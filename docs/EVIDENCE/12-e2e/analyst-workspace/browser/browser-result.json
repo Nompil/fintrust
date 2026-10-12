@@ -1,0 +1,81 @@
+{
+  "status": "PASSED",
+  "root_workspace_verified": true,
+  "analyst_upload_receipt_link_verified": true,
+  "session_expiry_on_read_and_upload_verified": true,
+  "source_commit": "b298ef4f46f0c0283b5a225c7638a07a6c3678d1",
+  "browser": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+  "pages": [
+    "Login",
+    "Overview",
+    "Rejected Uploads",
+    "Notifications",
+    "Transactions",
+    "Risk Events",
+    "Review Queue",
+    "Quarantine",
+    "Ingestion Batches",
+    "Reports",
+    "Insights",
+    "Accounts",
+    "Account History",
+    "Audit",
+    "Operations",
+    "Administration",
+    "Transaction Detail",
+    "Batch Detail",
+    "Quarantine Detail"
+  ],
+  "dataset_sequence": "A -> B -> exact A replay",
+  "charts_verified": 8,
+  "analyst_and_auditor_chart_values_verified": true,
+  "display_uuid_transport_verified": true,
+  "metric_error_vs_zero_verified": true,
+  "friendly_insight_failure_recovery_verified": true,
+  "role_switch_method": "Sign out and backend-authenticated token sign in",
+  "user_creation_audited": true,
+  "report_csv_verified": true,
+  "report_json_verified": true,
+  "account_history_navigation_verified": true,
+  "admin_compliance_actions": 0,
+  "upload_counts": {
+    "A": {
+      "accepted": 29,
+      "quarantined": 12,
+      "duplicates": 1
+    },
+    "B": {
+      "accepted": 7,
+      "quarantined": 4,
+      "duplicates": 1
+    }
+  },
+  "invalid_file_rejected": true,
+  "notice_persists_until_acknowledged": true,
+  "review_mutation": "OPEN -> UNDER_REVIEW -> CLEARED",
+  "quarantine_mutation": "RESUBMITTED (worker revalidation pending)",
+  "roles_verified": [
+    "Admin",
+    "Risk/Compliance Analyst",
+    "Read-only/Auditor",
+    "Maintainer"
+  ],
+  "loading_error_empty_verified": true,
+  "old_role_response_discarded": true,
+  "auditor_mutation_buttons": 0,
+  "maintainer_compliance_pages": 0,
+  "maintainer_technical_actions_visible": true,
+  "page_errors": [],
+  "aws_access": false,
+  "verified_working_tree_sha256": {
+    "fintrust/api.py": "26a6768262bab58873e91e1bc6368a9bfe3cde33851a8648b7a09d845fb51b5e",
+    "fintrust/frontend_workflows.py": "ada2c7036e249cb2cf51c8591f78331fd64bf74c8a097576067d21801f424cc6",
+    "frontend/release1-display.js": "4cd86a5d9804b0faf7e0f67c84d54c915d528b98c8a7faddfd740ded1431a5f3",
+    "frontend/release1.html": "bc7bda5d2463d457c46e3f5cf3cb4a1173c190aab80fce4cdc23c4b459d8414b",
+    "frontend/release1.js": "29a460698317247d85e2451fd8d840ba0f7bbc10517aedc9cf546feed34a3b85",
+    "tests/test_workspace_entry.py": "b88a64865bb1302b9f37c7c3a3f4bdaff090a9d3797ef95e54f9d9ab13db0e04",
+    "tests/test_dashboard.py": "dc7664f906906ed032879312107ffcb3324926af4b6fa73bf049b995fd13f9ec",
+    "tests/test_presentation_ux_freeze.py": "4f266041f94a5f355de1d033c85aad8ef7c62358980ae82aee0afe67524040b1",
+    "tools/verify_release1_ui.cjs": "2887b99c4c7165439e0bf0fe2309b65c4f1f96e46a1d405e9338b8aa2dc96f5b"
+  }
+}

@@ -11,7 +11,9 @@ ACCOUNT = "20000000-0000-4000-8000-000000000001"
 
 def test_dashboard_and_static_assets_are_available():
     client = api.app.test_client()
-    assert b"FinTrust | Overview" in client.get("/").data
+    assert b"FinTrust | Transaction monitoring" in client.get("/").data
+    assert client.get("/").data == client.get("/release1").data
+    assert b"earlier learning interface" not in client.get("/").data
     assert client.get("/assets/app.js").status_code == 200
     assert client.get("/assets/styles.css").status_code == 200
 

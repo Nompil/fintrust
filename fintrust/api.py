@@ -92,8 +92,9 @@ def unexpected_error(error):
 
 
 @app.get("/")
+@app.get("/index.html")
 def dashboard():
-    return send_from_directory(FRONTEND, "index.html")
+    return send_from_directory(FRONTEND, "release1.html")
 
 
 @app.get("/assets/<path:name>")
@@ -111,6 +112,18 @@ def accounts():
 def overview():
     from .query import get_overview
     return jsonify({"status": "ok", "data": get_overview(g.principal.accounts), "mode": "local practice" if os.getenv("FINTRUST_LOCAL_DEMO") == "1" else "application"})
+
+
+@app.get("/v1/upload-contract")
+def upload_contract():
+    g.principal.require("upload")
+    from .release_ingest import REQUIRED
+    from .quarantine import FIELDS
+    from .file_admission import MAX_FILE_BYTES, MAX_FILES_PER_BATCH
+    identity={"source_transaction_id", "source_reference"}
+    return jsonify({"data": {"required": sorted(REQUIRED), "identity_one_of": sorted(identity),
+        "optional": sorted(FIELDS-REQUIRED-identity), "max_file_bytes": MAX_FILE_BYTES,
+        "max_rows": 5000, "max_files": MAX_FILES_PER_BATCH, "encoding": "UTF-8"}})
 
 
 @app.post("/v1/upload")

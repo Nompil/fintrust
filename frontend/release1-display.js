@@ -18,7 +18,7 @@ const FinTrustDisplay = (() => {
     return typeof raw === "object" ? JSON.stringify(raw, null, 2) : String(raw);
   }
   function failure(status, page) {
-    if (status === 401) return "Sign in again to continue.";
+    if (status === 401) return "Session expired. Sign in again to continue.";
     if (status === 403) return "You do not have permission for this action.";
     if (status === 409) return "This record has changed. Refresh and try again.";
     if (page === "Insights") return "The requested insight could not be loaded. Refresh and try again.";

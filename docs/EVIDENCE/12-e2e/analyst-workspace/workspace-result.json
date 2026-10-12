@@ -1,0 +1,45 @@
+{
+  "status": "PASSED",
+  "base_commit": "b298ef4f46f0c0283b5a225c7638a07a6c3678d1",
+  "verified_working_tree_sha256": {
+    "fintrust/api.py": "26a6768262bab58873e91e1bc6368a9bfe3cde33851a8648b7a09d845fb51b5e",
+    "fintrust/frontend_workflows.py": "ada2c7036e249cb2cf51c8591f78331fd64bf74c8a097576067d21801f424cc6",
+    "frontend/release1-display.js": "4cd86a5d9804b0faf7e0f67c84d54c915d528b98c8a7faddfd740ded1431a5f3",
+    "frontend/release1.html": "bc7bda5d2463d457c46e3f5cf3cb4a1173c190aab80fce4cdc23c4b459d8414b",
+    "frontend/release1.js": "29a460698317247d85e2451fd8d840ba0f7bbc10517aedc9cf546feed34a3b85",
+    "tests/test_workspace_entry.py": "b88a64865bb1302b9f37c7c3a3f4bdaff090a9d3797ef95e54f9d9ab13db0e04",
+    "tests/test_dashboard.py": "dc7664f906906ed032879312107ffcb3324926af4b6fa73bf049b995fd13f9ec",
+    "tests/test_presentation_ux_freeze.py": "4f266041f94a5f355de1d033c85aad8ef7c62358980ae82aee0afe67524040b1",
+    "tools/verify_release1_ui.cjs": "2887b99c4c7165439e0bf0fe2309b65c4f1f96e46a1d405e9338b8aa2dc96f5b"
+  },
+  "focused": {
+    "passed": 29,
+    "failed": 0
+  },
+  "full": {
+    "passed": 717,
+    "failed": 0,
+    "skipped": 1,
+    "skip_details": [
+      {
+        "test": "test_database_roles_can_execute_pipeline_without_owner_privileges",
+        "reason": "Service-role execution check requires a disposable test database administrator"
+      }
+    ]
+  },
+  "browser": {
+    "passed": 1,
+    "failed": 0,
+    "fresh_analyst_session": true,
+    "auditor_read_only": true,
+    "valid_invalid_replay_uploads": true,
+    "session_expiry_on_read_and_upload": true,
+    "existing_mixed_batch_scope_preserved": true
+  },
+  "aws_access": false,
+  "live_database_access": false,
+  "business_rule_changes": false,
+  "authentication_bypassed": false,
+  "unrelated_files_preserved": 157,
+  "known_limit": "Mixed unknown/unassigned-account batches retain existing row-detail restriction. The submitting session can view its already-authorized submission receipt; this is not refreshed batch state."
+}
