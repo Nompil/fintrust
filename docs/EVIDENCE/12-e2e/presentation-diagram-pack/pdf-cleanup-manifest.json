@@ -1,0 +1,75 @@
+{
+  "project_reference_unchanged": {
+    "project-reference/completed_work.md": "c5722b40844d882b5bc18a66eb59c1884f978ad5a6cf2d9c8f648b8f996c0263",
+    "project-reference/component_guide.md": "91d3e750f63d50c2d7460609ff4f86999cf25e4948a8ca98491ca8eb58d0c02c",
+    "project-reference/daily_log.md": "b25d71aa0bcf21520226eddcb4fbba7b30873cc859254aa572c7f6131937ee4e",
+    "project-reference/HANDOFF.md": "9dd8cbfe34a48f23a838c0b5d110a52b5ca6a2183deb534e856cf7aac028d244",
+    "project-reference/learning_guide.md": "6860692677051a4e4d1ea6ede9356aa90ba07e6ce0b55930ceac2b5eeafb6346",
+    "project-reference/live_demo_script.md": "8981953d0ac303e754a06dd222cd107bea15c41cf95800ea79552fc476b31278",
+    "project-reference/local_software_setup.md": "d547dc2f0f551f1ef73b385b1d42b9acc04ef159fab53008edc7fefc5f12445c",
+    "project-reference/presentation_notes.md": "dbb1f83240991ab1a6c1d4779dd80036d4ded9514c32d0587f6ff7cef4dcf393",
+    "project-reference/README.md": "f651db353a13a40544018506364f6d276b1e5042cb278e80e877ca7a4bd13dee",
+    "project-reference/requirements_day1_day3.md": "a5ba2dc2d8e4f365d5308559b84ae29b10fc094db838df102bb720a62661eb03",
+    "project-reference/upcoming_features.md": "df0be369b67be93e8e44b3a04e585a9f0faa2b037f208ac32810869d0e7708a1"
+  },
+  "sources_moved": [
+    {
+      "from": "docs/diagrams/fintrust-release1-erd.dot",
+      "to": "docs/presentation/diagram-source/fintrust-release1-erd.dot",
+      "sha256": "dffa8c13404e8817d7edb55c85e28120957500e1af5c040525290b29e04824d7"
+    },
+    {
+      "from": "docs/diagrams/fintrust-release1-aws-architecture.dot",
+      "to": "docs/presentation/diagram-source/fintrust-release1-aws-architecture.dot",
+      "sha256": "2104c11fe84ff3e5a90eef3b0824339095f35e7d1e272090240844ceffab0a31"
+    },
+    {
+      "from": "docs/diagrams/fintrust-release1-activity.dot",
+      "to": "docs/presentation/diagram-source/fintrust-release1-activity.dot",
+      "sha256": "1c166b350ce19491feb621d04fc270c011a67f220ec71cdb8223ceeebbd7ee44"
+    },
+    {
+      "from": "docs/diagrams/fintrust-release1-use-cases.dot",
+      "to": "docs/presentation/diagram-source/fintrust-release1-use-cases.dot",
+      "sha256": "3b9d813314978d52c84aaf00d06542bc09cb0a9bcf307946e920e67296b206db"
+    },
+    {
+      "from": "docs/diagrams/fintrust-release1-data-decisions.dot",
+      "to": "docs/presentation/diagram-source/fintrust-release1-data-decisions.dot",
+      "sha256": "d0a2ed3404bd329a8c320739b49cd2b74150524d3b4dd0d4bdc7e90f20020697"
+    },
+    {
+      "from": "docs/diagrams/fintrust-release1-duplicate-handling.dot",
+      "to": "docs/presentation/diagram-source/fintrust-release1-duplicate-handling.dot",
+      "sha256": "32037e527cac79295233aa94f85d8b5d37e1df2bf689e529958ffa8c467c705b"
+    },
+    {
+      "from": "docs/diagrams/fintrust-release1-role-separation.dot",
+      "to": "docs/presentation/diagram-source/fintrust-release1-role-separation.dot",
+      "sha256": "ffb521cec6fcadaf45bdba048bf96c39974be7d85457a7a2b059e4fa0a5de065"
+    }
+  ],
+  "duplicate_presentation_files_removed": [
+    "docs/diagrams/fintrust-release1-erd.svg",
+    "docs/diagrams/fintrust-release1-aws-architecture.svg",
+    "docs/diagrams/fintrust-release1-activity.svg",
+    "docs/diagrams/fintrust-release1-use-cases.svg",
+    "docs/diagrams/fintrust-release1-data-decisions.svg",
+    "docs/diagrams/fintrust-release1-duplicate-handling.svg",
+    "docs/diagrams/fintrust-release1-role-separation.svg",
+    "docs/presentation/FINTRUST_USE_CASE_SUMMARY.md",
+    "docs/presentation/LIVE_DEMO_SCRIPT.md",
+    "docs/presentation/DIAGRAM_REFERENCE_INVENTORY.md"
+  ],
+  "navigation_readme_retained": "Compatibility navigation only; no planning evidence duplicated",
+  "updated_documentation_links": [
+    "README.md",
+    "docs/architecture.md",
+    "docs/erd.md",
+    "docs/PRESENTATION_GUIDE.md",
+    "docs/RELEASE1_PRESENTATION_READINESS.md",
+    "docs/diagrams/README.md",
+    "docs/diagrams/release1-operating-model.md",
+    "docs/presentation/README.md"
+  ]
+}

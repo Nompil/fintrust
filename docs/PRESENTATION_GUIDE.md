@@ -1,6 +1,6 @@
 # FinTrust presentation guide
 
-Current presentation diagrams and speaker notes: [Release 1 presentation pack](presentation/README.md). Earlier milestone references below remain historical unless reconciled in that pack.
+Current presentation diagrams and speaker notes: [Release 1 presentation pack](presentation/FinTrust_Project_Planning_and_Design_Evidence.pdf). Earlier milestone references below remain historical unless reconciled in that pack.
 
 ## Explain the problem
 
@@ -38,7 +38,7 @@ The code and local tests implement these components. AWS foundation stages 1–4
 
 Use synthetic data and the local commands in [operations](OPERATIONS.md). Show a valid row, an invalid row with its rejection reason, account filtering and transaction pagination. Explain the local upload shortcut before demonstrating it: it is synchronous direct ingestion, not the deployed queue path. Do not present mocked email calls as delivered messages.
 
-Use the [seven authoritative diagrams and speaker notes](presentation/README.md) for technical discussion. Earlier SVG/draw.io/PDF exports are archive-only and are preserved in the existing evidence tree.
+Use the [seven authoritative diagrams and speaker notes](presentation/FinTrust_Project_Planning_and_Design_Evidence.pdf) for technical discussion. Earlier SVG/draw.io/PDF exports are archive-only and are preserved in the existing evidence tree.
 
 The frozen application checkpoint recorded 713 passing local tests plus focused and browser checks. Those checks were not rerun for this documentation-only pass. The final frozen release candidate still needs Linux execution verification; earlier Linux success does not validate a different artifact.
 

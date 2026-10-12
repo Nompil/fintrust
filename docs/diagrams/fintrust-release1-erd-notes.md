@@ -72,4 +72,4 @@ Transactions also have the partial unique source/account/transaction-identity in
 - Alerts: PENDING / SENDING / SENT / FAILED / UNKNOWN.
 - Outboxes: PENDING / COMPLETED. Operations requests: RUNNING / COMPLETED / FAILED.
 
-The full ERD is the technical appendix: open the SVG at native size/zoom for all keys. Use the data-decision flow for a screen-sized first explanation.
+The full ERD is the technical appendix: open the final A3 ERD PDF at native size/zoom for all keys. Use the data-decision flow for a screen-sized first explanation.

@@ -6,7 +6,7 @@ handler path is implemented in the repository; AWS Integration remains In Progre
 Stages 1-4 and the disabled Stage 5 ingest deployment are recorded as verified;
 the hardened release and private database migration have not been deployed.
 
-Current diagrams and presentation wording: [presentation pack](presentation/README.md). The full ERD and frozen local operating model take precedence over earlier milestone descriptions below. The final application release and live SQL bootstrap remain pending.
+Current diagrams and presentation wording: [presentation pack](presentation/FinTrust_Project_Planning_and_Design_Evidence.pdf). The full ERD and frozen local operating model take precedence over earlier milestone descriptions below. The final application release and live SQL bootstrap remain pending.
 
 ## Processing and storage
 
@@ -155,7 +155,7 @@ explainable teaching rules, not a validated fraud model.
 
 ## Duplicate-data admission and payment risk
 
-[Authoritative AWS architecture](diagrams/fintrust-release1-aws-architecture.svg)
+[Authoritative AWS architecture](presentation/diagrams/FinTrust_AWS_Architecture.pdf)
 
 Possible duplicate charges follow the valid branch: both distinct financial
 transactions remain, with `POSSIBLE_DUPLICATE_CHARGE` as a review signal.
