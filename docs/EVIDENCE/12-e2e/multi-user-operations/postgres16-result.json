@@ -1,0 +1,19 @@
+{
+  "initdb": {
+    "exit_code": 0,
+    "seconds": 10.39
+  },
+  "server-start": {
+    "exit_code": 0,
+    "seconds": 0.45
+  },
+  "multiuser-pg16-focused": {
+    "exit_code": 0,
+    "seconds": 84.81
+  },
+  "status": "PASSED",
+  "server-stop": {
+    "exit_code": 0,
+    "seconds": 3.6
+  }
+}

@@ -1,0 +1,4 @@
+................................................                         [100%]
+48 passed in 83.20s (0:01:23)
+
+Evidence: C:\Users\Nompilo\Desktop\fintrust\build\release1-closure\0bce96772f054dce911735a17bc3b083

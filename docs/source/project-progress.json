@@ -1,15 +1,15 @@
 {
   "title": "FinTrust Project Progress",
   "subtitle": "Single living status and milestone record",
-  "checkpoint": "7397f22",
+  "checkpoint": "636e4e5",
   "date": "12 October 2026",
   "sections": [
     {
       "title": "Current Snapshot",
       "status": "LOCAL VERIFIED",
       "paragraphs": [
-        "12 October 2026 | Source checkpoint 7397f22 | Release 1 local domain candidate. Documentation revision is a later commit and does not change the tested source.",
-        "756 passed / 1 skipped; focused 62 passed; disposable PostgreSQL 16 lifecycle 21 passed. Separate older role proof does not establish live migration 003 privileges.",
+        "12 October 2026 | Implementation checkpoint 636e4e5 | Local multi-user operations verified. Documentation revision follows the tested source.",
+        "789 regression passed / 1 administrator-only skip; 27 focused passed; 130 affected checks passed; 48 PostgreSQL 16 passed; browser passed. Full current-release AWS integration remains pending; no AWS action or push occurred.",
         "AWS unchanged in this phase. Foundation stages historically verified; full current-release integration pending. Latest live RDS evidence (11 October) found missing base schema. Temporary preflight endpoint/runner were cleaned up."
       ],
       "table": null
@@ -19,7 +19,8 @@
       "status": "LOCAL VERIFIED",
       "paragraphs": [
         "Repository structure and source-path contracts; Analyst-first navigation and credential-preserving local restart; identity/deduplication and frozen risk rules; local review/account/audit workflows; authoritative append-only lifecycle and read APIs.",
-        "Historical base bootstrap/001/002 and service-role PG16 checks retained. Current lifecycle proof adds 21 PG16 tests. No live write is implied."
+        "Historical base bootstrap/001/002 and service-role PG16 checks retained. Current lifecycle proof adds 21 PG16 tests. No live write is implied.",
+        "Named user governance, private local enrollment, active-role checks, immutable quarantine correction/outcome timeline, single-owner review claim/reassignment including escalated recovery, scoped queue filters and Admin/Analyst/Auditor browser controls."
       ],
       "table": null
     },
@@ -27,7 +28,7 @@
       "title": "In Progress",
       "status": "LOCAL VERIFIED",
       "paragraphs": [
-        "Domain lifecycle closure across correction, technical failures, risk delivery and business review. AWS Integration remains In Progress. Current source is not a production deployment."
+        "Next domain phase is Risk Investigation Workflow. AWS Integration remains In Progress; local verification is not live deployment."
       ],
       "table": null
     },
@@ -35,7 +36,7 @@
       "title": "Blocked",
       "status": "PENDING VERIFICATION",
       "paragraphs": [
-        "Live promotion requires reviewed empty-database bootstrap and 001/002/003 chain, correct service grants and fresh exact-source Linux artifact gate. Existing fixed live runner does not include 003.",
+        "Live promotion requires reviewed empty-database bootstrap and 001/002/003/004 chain, correct service grants and fresh exact-source Linux artifact gate. Existing fixed live runner does not include 003.",
         "Cloud intake, FIFO/Streams mappings, authenticated API, SES delivery and operational monitoring still require controlled live evidence. Historical Linux artifacts remain valid only for their source."
       ],
       "table": null
@@ -52,10 +53,9 @@
       "title": "Next Actions",
       "status": "PLANNED",
       "paragraphs": [
-        "1. Continue Quarantine Recovery: lineage, correction outbox, revalidation/dedupe, partial failure and durable completion.",
-        "2. Prove Risk Event -> Alert -> Review Queue with uncertain-send handling and independent review creation.",
-        "3. Run complete local scenarios; then exact-source Linux gate and separately approved bootstrap/cloud integration.",
-        "No AWS action, SQL rollout or push is authorized by documentation consolidation."
+        "1. Implement/verify Risk Investigation Workflow using existing transaction, signal, event, alert and review state.",
+        "2. Complete local business scenarios before fresh exact-source Linux packaging and separately approved live bootstrap/cloud wiring.",
+        "No AWS action, SQL rollout, AI integration or push is authorized by this phase."
       ],
       "table": null
     },
@@ -170,6 +170,16 @@
           "2026-10-12",
           "7397f22",
           "Wire authoritative transaction lifecycle audit and scoped API reads. Reason: Expose authoritative append-only lifecycle and scoped reads. Result: 756 passed / 1 skipped; focused 62; PG16 lifecycle 21."
+        ],
+        [
+          "2026-10-12",
+          "fb478fa",
+          "Named users, quarantine recovery and single-owner reviews. 789 regression passed / 1 administrator-only skip; 27 focused passed; 130 affected checks passed; 48 PostgreSQL 16 passed; browser passed. No AWS or push."
+        ],
+        [
+          "2026-10-12",
+          "636e4e5",
+          "Correct local identity-label encoding; explicit browser/source checks passed. Final regression: 789 regression passed / 1 administrator-only skip; 27 focused passed; 130 affected checks passed; 48 PostgreSQL 16 passed; browser passed."
         ]
       ]
     },
@@ -179,7 +189,8 @@
       "paragraphs": [
         "Retain candidate-before-DB-validation chronology; keep processing, risk, review and delivery separate; accept all valid risk levels; original quarantine is terminal and corrections are new linked occurrences.",
         "Retain >5 accepted transactions / 300 seconds, not >10/hour. Keep no-NAT/private RDS. Require in-memory bootstrap credential retrieval over a reviewed private endpoint and verify-full.",
-        "Master owns project explanation; Progress owns status/history; EVIDENCE owns proof. Technical contracts remain supporting sources, not alternative readiness declarations."
+        "Master owns project explanation; Progress owns status/history; EVIDENCE owns proof. Technical contracts remain supporting sources, not alternative readiness declarations.",
+        "Reuse existing immutable correction/review history and current state models. Explicit Admin reassignment preserves escalated decision evidence. Keep SLA configurable without inventing a deadline; retain controlled local authentication and no role inheritance."
       ],
       "table": null
     },
@@ -191,7 +202,7 @@
         "Live database missing base schema: read-only preflight stopped incremental migration; temporary billable infrastructure cleaned up, evidence retained.",
         "Stale local entry and login restart: authenticated workspace routing and existing hashed identity preservation fixed.",
         "Lifecycle recovery: distinguish durable financial STORED from external projection failure; compare latest failure/recovery sequence so multiple failed attempts recover correctly.",
-        "Unresolved: current-source Linux gate, live bootstrap/003 privileges and integration. No claim of production readiness."
+        "Unresolved: current-source Linux gate, live bootstrap/003/004 privileges and integration. No claim of production readiness."
       ],
       "table": null
     },
@@ -199,7 +210,7 @@
       "title": "Evidence and Maintenance",
       "status": "LOCAL VERIFIED",
       "paragraphs": [
-        "Latest test proof: docs/EVIDENCE/12-e2e/transaction-lifecycle/verification-summary.json. Live preflight and cleanup: docs/EVIDENCE/05-rds/release1-live-readonly-alternative-preflight-result.md and release1-temporary-preflight-cleanup-result.md.",
+        "Latest phase proof: docs/EVIDENCE/12-e2e/multi-user-operations/verification-summary.json, focused/regression output, PostgreSQL 16 result and browser screenshots. Earlier lifecycle and live preflight/cleanup evidence remains unchanged.",
         "Edit docs/source/project-progress.json and regenerate with python tools/build_project_docs.py. Keep historical results and explicit dates; do not overwrite evidence or mint another standalone status report."
       ],
       "table": null

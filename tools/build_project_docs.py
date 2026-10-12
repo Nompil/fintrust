@@ -35,7 +35,7 @@ class Doc(BaseDocTemplate):
 def header(c,d):
  w,h=A4;c.saveState();c.setFillColor(GREEN);c.rect(0,h-9,w,9,fill=1,stroke=0)
  c.setFont('FTB',9);c.setFillColor(GREEN);c.drawString(45,h-29,'fintrust.');c.setFont('FT',8);c.setFillColor(MUTED);c.drawRightString(w-45,h-29,d.project_title)
- c.setStrokeColor(PALE);c.line(45,36,w-45,36);c.setFont('FT',8);c.drawString(45,23,'Source 7397f22 | 12 October 2026 | Local proof != live deployment')
+ c.setStrokeColor(PALE);c.line(45,36,w-45,36);c.setFont('FT',8);c.drawString(45,23,'Source '+d.project_checkpoint+' | 12 October 2026 | Local proof != live deployment')
  c.drawRightString(w-45,23,str(d.page));c.restoreState()
 class Diagram(Flowable):
  def __init__(self,kind):super().__init__();self.kind=kind;self.width=A4[0]-90;self.height=440 if kind!='aws' else 520
@@ -80,7 +80,7 @@ class Diagram(Flowable):
    arrow(w/4,105,w/4,75);arrow(w*3/4,105,w*3/4,75)
 def build(source,out):
  data=json.loads(source.read_text(encoding='utf8'));doc=Doc(str(out),pagesize=A4,leftMargin=45,rightMargin=45,topMargin=48,bottomMargin=49,title=data['title'],author='FinTrust',pageCompression=1)
- doc.project_title=data['title'];doc.addPageTemplates(PageTemplate(id='main',frames=[Frame(45,49,A4[0]-90,A4[1]-97,id='body')],onPage=header))
+ doc.project_title=data['title'];doc.project_checkpoint=data['checkpoint'];doc.addPageTemplates(PageTemplate(id='main',frames=[Frame(45,49,A4[0]-90,A4[1]-97,id='body')],onPage=header))
  story=[Spacer(1,130),p('fintrust.','FTCover'),p(data['title'],'FTCover'),p(data['subtitle']),Spacer(1,25),p('RELEASE 1 | '+data['date'],'FTBadge'),p('Source checkpoint '+data['checkpoint']),p('Authoritative consolidated documentation. Explicitly separates local verification, historical deployment evidence and pending live gates.'),Spacer(1,25),p('Fictional client: Imbokodo Bank. No real bank adoption or production compliance certification is claimed.','FTSmall'),PageBreak(),p('Contents','FTHeading')]
  toc=TableOfContents();toc.levelStyles=[ParagraphStyle('toc',fontName='FT',fontSize=10,leading=14,textColor=INK,spaceBefore=3,leftIndent=0,firstLineIndent=0)];story.extend([toc,PageBreak()])
  for i,s in enumerate(data['sections'],1):

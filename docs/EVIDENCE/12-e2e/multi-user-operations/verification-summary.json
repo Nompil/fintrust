@@ -1,0 +1,32 @@
+{
+  "status": "PASSED",
+  "implementation_commit": "636e4e5e7d4c0414bc21819d2ac4b967e69137a1",
+  "focused_passed": 27,
+  "affected_passed": 130,
+  "lifecycle_integration_passed": 100,
+  "postgres16_passed": 48,
+  "browser": "PASSED",
+  "aws_mutations": false,
+  "pushed": false,
+  "original_evidence_preserved": true,
+  "feature_commit": "fb478fae1a80367b0419cd9176ef76924184d019",
+  "final_source_commit": "636e4e5e7d4c0414bc21819d2ac4b967e69137a1",
+  "regression": "789 regression passed / 1 administrator-only skip; 27 focused passed; 130 affected checks passed; 48 PostgreSQL 16 passed; browser passed",
+  "final_regression_run": "b7b9ebc529d84ddf96e9a86d61310064",
+  "scope": "Local only; isolated PostgreSQL and mocked AWS; no deployment",
+  "source_sha256": {
+    "backend/fintrust/api.py": "784bd45aa750fb5593176e1989d58e580d566c5e13a01a3c7f3e2509604e0ee5",
+    "backend/fintrust/auth.py": "dd42ed6b4058131f139a86544f8da8d8ed241571c7b3618484b07368cd7f1ca1",
+    "backend/fintrust/local_users.py": "b4dffc35a2f9b94a113b85e0f7a276205f0566e798780cbfc00068d5cc782eb3",
+    "backend/fintrust/identity_registry.py": "acc6d4982e1d98a552979a573a94601d31855239c460b63953532d2a586aa244",
+    "backend/fintrust/review_assignment.py": "b3c9b03c3ab2b72a42c0314bc2ba0c4f481c00ed2a5ba3c0a6921aad380a2414",
+    "backend/fintrust/quarantine_recovery.py": "5a9eed0601d24125c06b5c313a86c8d438764ed02b068879b607069a1e45acdc",
+    "backend/fintrust/frontend_workflows.py": "e87c5003bdbc4049d51c3fd1930100c0083a1fb0cc06742065ede8f0759ab9bf",
+    "backend/fintrust/migrations.py": "c1b2665725ec0d1123aba4cc33fb0f30e183a728d3db172867913dc8d3ef8a8e",
+    "backend/fintrust/release_contract.py": "0f851668616a2fd014dca6e01dcc53adde80dfd67ee0f26f43bbab65826148ea",
+    "backend/fintrust/workflow_api.py": "5e3d41598a488cf2db090efb3510678536754b38bd12d0e905e64c9352daf6b0",
+    "frontend/js/release1.js": "cab651f8772648a63ea5d8d3eed6513fb4ce72b9b984c607ff967162fd5480d6",
+    "frontend/release1.html": "9508e68d028441e75a71ccedb7cec30b35512c040d9266e58bf20fca9f063ea4",
+    "sql/migrations/004_review_assignment.sql": "0230eb81847185a04ae732bc8de09aa4552a816ecf224a63c9678755f601e37e"
+  }
+}

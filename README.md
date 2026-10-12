@@ -60,15 +60,22 @@ py tools/serve_release1_demo.py --role Analyst --reuse-auth
 ```
 Open **http://127.0.0.1:5001/release1**. Reuse preserves the existing local hashed identity; it does not issue a new credential. First-time setup and identity provisioning are documented in [local operations](docs/RELEASE1_OPERATIONS.md). Never publish access tokens or reset the schema to conceal a failure.
 
+## Local User Management
+Admin creates named records and manages role/status in Administration > Users. Records have no credential until enrolled. Use the hidden enrollment prompt for an existing active record:
+```powershell
+py tools/provision_local_user.py --username analyst03 --registry .env.release1-auth.json
+```
+Use a unique random credential of at least 32 characters; never put it in commands, Git or evidence. Enrollment preserves role/account scope and refuses credential replacement. Production authentication remains a separate deployment gate. Disabled users cannot sign in; Admin explicitly reassigns unresolved reviews. Optional `FINTRUST_REVIEW_SLA_SECONDS` configures queue deadlines; none is assumed by default.
+
 ## Testing
 ```powershell
 py tools/local.py test
 py tools/local.py test --database
 ```
-Latest source checkpoint `7397f22`: **756 passed, 1 skipped, zero failures**; focused gate **62 passed**; disposable PostgreSQL 16 lifecycle gate **21 passed**. The administrator-only skip has separate prior PG16 proof, not live migration-003 privilege proof. [Recorded results](docs/EVIDENCE/12-e2e/transaction-lifecycle/verification-summary.json).
+Latest implementation `636e4e5`: **789 regression passed / 1 administrator-only skip; 27 focused passed; 130 affected checks passed; 48 PostgreSQL 16 passed; browser passed**. [Recorded results](docs/EVIDENCE/12-e2e/multi-user-operations/verification-summary.json).
 
 ## Current Status
-[Project Progress](docs/FinTrust_Project_Progress.pdf) is the living status/history record. AWS foundation stages are historically verified; complete current-release integration, live schema bootstrap and a fresh Linux artifact gate remain pending. Next: Quarantine Recovery.
+[Project Progress](docs/FinTrust_Project_Progress.pdf) is the living status/history record. AWS foundation stages are historically verified; complete current-release integration, live schema bootstrap and a fresh Linux artifact gate remain pending. Next: Risk Investigation Workflow.
 
 ## Full Project Documentation
 [Project Master](docs/FinTrust_Project_Master.pdf) explains business rules, architecture, data, security, cost and limits. Editable sources are [Master](docs/source/project-master.json) and [Progress](docs/source/project-progress.json); regenerate both with `python tools/build_project_docs.py` (ReportLab and PyMuPDF required). [Documentation inventory](docs/source/documentation-inventory.json) records each disposition. Update these sources instead of creating new status documents. Active operational contracts remain in place; superseded narrative is under `docs/archive/`.
