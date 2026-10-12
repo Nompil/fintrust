@@ -324,6 +324,16 @@ def workflow_list(kind):
     return jsonify(list_page(kind,g.principal,request.args))
 
 
+@app.get("/v1/risk-events/<int:event>")
+def risk_investigation(event):
+    from .investigation import detail
+    return jsonify({"data":detail(event,g.principal)})
+
+@app.post("/v1/reviews/<int:event>/notes")
+def investigation_note(event):
+    from .investigation import add_note
+    return jsonify({"data":add_note(event,request.get_json(),g.principal)})
+
 @app.get("/v1/transactions/<identifier>")
 def transaction_detail(identifier):
     from .workflow_api import detail

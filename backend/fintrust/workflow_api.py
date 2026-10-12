@@ -29,13 +29,13 @@ def page_args(args,allowed=()):
     return limit,offset
 
 def list_page(kind,principal,args):
-    limit,offset=page_args(args,{"status","account_id",*( {"tx_id","source_id","country","risk_level","batch_id","from","to","min_amount","max_amount"} if kind=="transactions" else {"batch_id"} if kind=="batches" else {"queue"} if kind=="reviews" else set())})
+    limit,offset=page_args(args,{"status","account_id",*( {"tx_id","source_id","country","risk_level","batch_id","from","to","min_amount","max_amount"} if kind=="transactions" else {"batch_id"} if kind=="batches" else {"queue","scenario","risk_level","assignee","sort"} if kind=="reviews" else {"scenario","risk_level","assignee","sort"} if kind=="risk-events" else set())})
     scope=list(principal.accounts)
     if args.get("account_id"): scope=[principal.account(args["account_id"])]
     selects={
       "transactions":("SELECT t.*,p.result AS risk FROM transactions t LEFT JOIN processed_transactions p USING(tx_id)","t.account_id=ANY(%s::uuid[])","t.tx_date DESC,t.tx_id DESC"),
-      "risk-events":("SELECT r.*,t.account_id,w.review_status,w.version,p.result AS risk FROM risk_events r JOIN transactions t USING(tx_id) LEFT JOIN risk_reviews w USING(risk_event_id) LEFT JOIN processed_transactions p USING(tx_id)","t.account_id=ANY(%s::uuid[])","r.risk_event_id DESC"),
-      "reviews":("SELECT w.*,r.tx_id,r.risk_score,t.account_id,p.result AS risk FROM risk_reviews w JOIN risk_events r USING(risk_event_id) JOIN transactions t USING(tx_id) LEFT JOIN processed_transactions p USING(tx_id)","t.account_id=ANY(%s::uuid[])","w.created_at,w.risk_event_id"),
+      "risk-events":("SELECT r.*,t.account_id,t.amount,t.currency,t.tx_date,w.review_status,w.reviewer_subject,w.version,p.result AS risk FROM risk_events r JOIN transactions t USING(tx_id) LEFT JOIN risk_reviews w USING(risk_event_id) LEFT JOIN processed_transactions p USING(tx_id)","t.account_id=ANY(%s::uuid[])","r.risk_event_id DESC"),
+      "reviews":("SELECT w.*,r.tx_id,r.risk_score,t.account_id,t.amount,t.currency,t.tx_date,p.result AS risk FROM risk_reviews w JOIN risk_events r USING(risk_event_id) JOIN transactions t USING(tx_id) LEFT JOIN processed_transactions p USING(tx_id)","t.account_id=ANY(%s::uuid[])","w.created_at,w.risk_event_id"),
       "quarantine":("SELECT q.* FROM quarantine_workflow q","(q.candidate_account_id=ANY(%s::uuid[]) OR (%s AND NOT EXISTS(SELECT 1 FROM accounts a WHERE a.account_id=q.candidate_account_id)))","q.quarantined_at,q.quarantine_id"),
       "batches":("SELECT b.*,r.* FROM ingestion_batches b JOIN batch_reconciliation r USING(batch_id)","(NOT EXISTS(SELECT 1 FROM ingestion_records i LEFT JOIN transactions t ON t.tx_id=i.canonical_tx_id LEFT JOIN quarantine_cases q ON q.batch_id=i.batch_id AND q.source_row=i.source_row WHERE i.batch_id=b.batch_id AND (COALESCE(t.account_id,q.candidate_account_id) IS NULL OR NOT (COALESCE(t.account_id,q.candidate_account_id)=ANY(%s::uuid[])))) AND EXISTS(SELECT 1 FROM ingestion_records i WHERE i.batch_id=b.batch_id) OR %s)","b.received_at DESC,b.batch_id"),
       "audit":("SELECT h.*,t.account_id FROM risk_review_history h JOIN risk_events r USING(risk_event_id) JOIN transactions t USING(tx_id)","t.account_id=ANY(%s::uuid[])","h.changed_at DESC,h.risk_event_id,h.version"),
@@ -70,20 +70,37 @@ def list_page(kind,principal,args):
             where+=" AND w.review_status IN ('OPEN','UNDER_REVIEW','ESCALATED')"
             if queue=="mine":where+=" AND w.reviewer_subject=%s";params.append(principal.subject)
             elif queue=="unassigned":where+=" AND w.reviewer_subject IS NULL"
-            elif queue=="high":where+=" AND r.risk_score>=70"
+            elif queue=="high":where+=" AND p.result->>'risk_level'='High'"
             elif queue=="over_sla":
                 from .review_assignment import sla_seconds
                 seconds=sla_seconds()
                 if seconds is None:return {"data":[],"meta":{"count":0,"limit":limit,"offset":offset,"has_more":False,"sla_configured":False}}
                 where+=" AND w.created_at<=NOW()-(%s * INTERVAL '1 second')";params.append(seconds)
+    if kind in {"reviews","risk-events"}:
+        level=args.get("risk_level")
+        if level:
+            if level not in {"Low","Medium","High"}:raise ValueError("Invalid risk level")
+            where+=" AND p.result->>'risk_level'=%s";params.append(level)
+        scenario=args.get("scenario")
+        if scenario:
+            if scenario not in {"HIGH_AMOUNT","VERY_HIGH_AMOUNT","HIGH_VELOCITY","CROSS_BORDER","POSSIBLE_DUPLICATE_CHARGE","TRANSFER","MERCHANT_MARKER"}:raise ValueError("Invalid scenario")
+            where+=" AND EXISTS(SELECT 1 FROM jsonb_array_elements(p.result->'triggered_rules') signal WHERE signal->>'rule'=%s)";params.append(scenario)
+        assignee=args.get("assignee")
+        if assignee:
+            if len(assignee)>200:raise ValueError("Invalid assignee")
+            where+=" AND w.reviewer_subject=%s";params.append(assignee)
+        sorting=args.get("sort","oldest")
+        orders={"oldest":"r.created_at,r.risk_event_id","newest":"r.created_at DESC,r.risk_event_id DESC","severity":"r.risk_score DESC,r.created_at,r.risk_event_id","amount":"t.amount DESC,r.created_at,r.risk_event_id"}
+        if sorting not in orders:raise ValueError("Invalid investigation sort")
+        order=orders[sorting]
     status=args.get("status")
     if status:
-        valid={"reviews":{"OPEN","UNDER_REVIEW","CLEARED","CONFIRMED_RISK","ESCALATED"},"quarantine":{"OPEN","RESUBMITTED","RESOLVED","REJECTED"},"batches":{"RECEIVED","PROCESSING","QUEUED","COMPLETED","PARTIAL","FAILED"}}
+        valid={"risk-events":{"OPEN","UNDER_REVIEW","CLEARED","CONFIRMED_RISK","ESCALATED"},"reviews":{"OPEN","UNDER_REVIEW","CLEARED","CONFIRMED_RISK","ESCALATED"},"quarantine":{"OPEN","RESUBMITTED","RESOLVED","REJECTED"},"batches":{"RECEIVED","PROCESSING","QUEUED","COMPLETED","PARTIAL","FAILED"}}
         if status not in valid.get(kind,set()): raise ValueError("Unsupported status filter")
-        field={"reviews":"w.review_status","quarantine":"q.workflow_status","batches":"r.status"}[kind]
+        field={"risk-events":"w.review_status","reviews":"w.review_status","quarantine":"q.workflow_status","batches":"r.status"}[kind]
         where+=" AND "+field+"=%s";params.append(status)
     rows=_query(select+" WHERE "+where+" ORDER BY "+order+" LIMIT %s OFFSET %s",tuple(params+[limit+1,offset]))
-    if kind=="reviews":
+    if kind in {"reviews","risk-events"}:
         from .review_assignment import decorate
         rows=decorate(rows)
     if kind=="quarantine":
@@ -100,7 +117,11 @@ def list_page(kind,principal,args):
                 row["actor"]=events[-1]["actor"] if events else None
         for row in rows:
             row["display_status"]=row["status"] if row["counts_consistent"] else "AWAITING_RECONCILIATION" if row["rows_received"] is None else "RECONCILIATION_FAILED"
-    return {"data":rows[:limit],"meta":{"count":len(rows[:limit]),"limit":limit,"offset":offset,"has_more":len(rows)>limit}}
+    meta={"count":len(rows[:limit]),"limit":limit,"offset":offset,"has_more":len(rows)>limit}
+    if kind in {"reviews","risk-events"}:
+        counts=_query("SELECT count(*) AS total_count,count(*) FILTER(WHERE evidence.risk->>'risk_level'='High') AS high_count,count(*) FILTER(WHERE evidence.review_status IN ('OPEN','UNDER_REVIEW','ESCALATED')) AS active_count FROM ("+select+" WHERE "+where+") evidence",tuple(params))[0]
+        meta.update(counts)
+    return {"data":rows[:limit],"meta":meta}
 
 def detail(identifier,principal):
     identifier=str(uuid.UUID(identifier))

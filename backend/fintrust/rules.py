@@ -51,7 +51,17 @@ def evaluate(record, velocity=1, config=None, *, duplicate_matches=()):
         raise ValueError("amount must be finite and positive")
     rules = []
     def add(name, points, reason):
-        rules.append({"rule": name, "points": points, "reason": reason})
+        evidence={
+            "HIGH_AMOUNT":(str(amount),str(cfg.high_amount),"greater than; transaction currency"),
+            "VERY_HIGH_AMOUNT":(str(amount),str(cfg.very_high_amount),"greater than; transaction currency"),
+            "HIGH_VELOCITY":(velocity,cfg.velocity_count,f"greater than; closed {cfg.velocity_seconds}-second event-time window including current transaction"),
+            "CROSS_BORDER":(record.get("country","ZA"),"ZA","country differs from ZA or explicit cross-border flag"),
+            "POSSIBLE_DUPLICATE_CHARGE":(len(duplicate_matches),cfg.duplicate_charge_seconds,"distinct source references; matching account/merchant/amount/currency; seconds window"),
+            "TRANSFER":(record.get("transaction_type",record.get("tx_type")),"transfer","outgoing transfer"),
+            "MERCHANT_MARKER":(record.get("merchant"),"highrisk","synthetic merchant marker"),
+        }
+        value,threshold,context=evidence[name]
+        rules.append({"rule":name,"points":points,"reason":reason,"triggered_value":value,"threshold":threshold,"context":context})
     if amount > cfg.high_amount:
         add("HIGH_AMOUNT", cfg.amount_points, f"Amount exceeds {cfg.high_amount} in transaction currency")
     if amount > cfg.very_high_amount:

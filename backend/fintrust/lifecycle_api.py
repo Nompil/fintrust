@@ -57,7 +57,7 @@ def transaction(identifier,principal):
     for o in value['occurrences']:timeline.extend(dict(e,batch_id=o['batch_id'],source_row=o['source_row']) for e in o['timeline'])
     risk=api._query('SELECT risk_event_id,created_at FROM risk_events WHERE tx_id=%s ORDER BY risk_event_id',(identifier,))
     timeline.extend(dict(event_type='RISK_EVENT',occurred_at=e['created_at'],actor_subject='scoring-worker',actor_type='SYSTEM',risk_event_id=e['risk_event_id']) for e in risk)
-    timeline.extend(dict(event_type=h['after_status'],occurred_at=h['changed_at'],actor_subject=h['actor_subject'],actor_type='SYSTEM' if h['actor_subject']=='scoring-worker' and h['before_status'] is None else 'HUMAN',version=h['version']) for h in history)
+    timeline.extend(dict(event_type='INVESTIGATION_NOTE' if h['before_status']==h['after_status']=='UNDER_REVIEW' and any(previous['version']==h['version']-1 and previous['reviewer_subject']==h['reviewer_subject'] for previous in history) else h['after_status'],occurred_at=h['changed_at'],actor_subject=h['actor_subject'],actor_type='SYSTEM' if h['actor_subject']=='scoring-worker' and h['before_status'] is None else 'HUMAN',version=h['version']) for h in history)
     # Never call an unsent or uncertain delivery ALERTED. Existing SQL receipts and cloud claim are distinct evidence sources.
     from .dynamo import get_item
     import os

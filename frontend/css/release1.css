@@ -8,3 +8,17 @@ th{white-space:nowrap;overflow-wrap:normal;word-break:normal}#upload-notice-mess
 .table-scroll{max-width:100%}table{width:max-content;min-width:100%;table-layout:auto}th{min-width:70px}td{overflow-wrap:normal;word-break:normal}td[data-internal-id]{white-space:nowrap;font-variant-numeric:tabular-nums}.notification strong{display:block}
 
 .business-metrics{grid-template-columns:repeat(3,minmax(140px,1fr))}.ingestion-metrics>div{border-top:1px solid #d5dfe3;background:#f8faf9}.ingestion-metrics strong{font-size:20px}.secondary-action{background:transparent;border-color:#d5dfe3;color:#536674}#upload-notice-message .secondary-action{margin-left:12px}@media(max-width:650px){.business-metrics{grid-template-columns:repeat(2,minmax(100px,1fr))}}
+
+/* FinTrust investigation console: bounded evidence alongside the queue. */
+.investigation-drawer{position:fixed;right:0;top:0;bottom:0;width:min(760px,90vw);background:#fff;border-left:2px solid #cad6df;padding:20px;overflow:auto;z-index:30;box-shadow:-4px 0 12px #142d3914}
+.drawer-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:-20px;background:white;z-index:1;border-bottom:1px solid #dae2e8;padding:12px 0}
+.investigation-drawer section{padding:12px 0;border-bottom:1px solid #e2e8ee}.investigation-drawer h3{font-size:13px;letter-spacing:.06em;color:#147260}.investigation-drawer .detail{font-size:13px}
+.investigation-filters{display:flex;flex-wrap:wrap;gap:8px;align-items:end;background:#f7f9fb;border:1px solid #dde4e9;padding:10px;margin-bottom:10px}.investigation-filters label{font-size:12px}.investigation-filters select,.investigation-filters input{max-width:180px;font-size:13px;padding:7px}.quick-counts{font-size:13px;color:#3b5364}
+#content table{font-size:13px;border-collapse:collapse;box-shadow:none}#content tbody tr:nth-child(even),#content table>tr:nth-child(odd){background:#f7f9fb}#content th,#content td{padding:9px 10px;border-bottom:1px solid #e1e7ed}#content tr:hover{background:#eef5f9}#content button,.investigation-drawer button{padding:7px 10px;font-size:13px;background:#1769aa;color:#fff;border:1px solid #1769aa;border-radius:4px}.status-high{background:#fee8e5;color:#9b2119}.status-medium{background:#fff1ce;color:#795200}.status-low{background:#e4f3ed;color:#176a4e}
+.investigation-drawer button:focus-visible,#content button:focus-visible{outline:3px solid #d18b20;outline-offset:2px}
+@media(max-width:700px){.investigation-drawer{width:100vw;padding:14px;box-sizing:border-box}.investigation-filters label{flex:1 1 130px}}
+
+#content button.table-sort,.investigation-drawer button.table-sort{color:#28445a;background:transparent;border:0;padding:0;text-align:left;font-weight:600}.investigation-drawer .table-scroll{max-width:100%}
+
+.investigation-drawer>section{padding:12px 0!important;margin:0!important;border:0!important;border-bottom:1px solid #e1e7ed!important;background:white!important;border-radius:0!important;box-shadow:none!important}.investigation-drawer h3{margin:8px 0}.investigation-drawer .detail{margin:8px 0;grid-template-columns:150px minmax(0,1fr);gap:8px}.investigation-drawer .detail dd{margin:0;overflow-wrap:anywhere}.investigation-drawer .detail dt{font-size:12px}.investigation-drawer p{font-size:13px;line-height:1.5}
+@media(max-width:700px){.investigation-drawer .detail{grid-template-columns:110px minmax(0,1fr)}}
