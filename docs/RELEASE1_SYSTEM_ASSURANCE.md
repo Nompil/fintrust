@@ -1,3 +1,5 @@
+> Supporting source retained for traceability. Use [Project Master](FinTrust_Project_Master.pdf) for consolidated project information and [Project Progress](FinTrust_Project_Progress.pdf) for current status. Historical counts and deployment statements below apply to their original checkpoint.
+
 # Release 1 local system assurance
 
 This continues the frozen presentation release and the subsequent UX and base-schema review; it does not restart the project audit. No AWS calls, live SQL, deployment, package upload or Git push were performed. All 157 pre-existing unrelated worktree files and historical artifacts are preserved.

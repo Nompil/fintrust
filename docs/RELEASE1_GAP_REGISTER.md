@@ -1,3 +1,5 @@
+> Supporting source retained for traceability. Use [Project Master](FinTrust_Project_Master.pdf) for consolidated project information and [Project Progress](FinTrust_Project_Progress.pdf) for current status. Historical counts and deployment statements below apply to their original checkpoint.
+
 # Release1 gap register
 
 Continues checkpoint 3a5d979. Original classifications record impact, not unresolved counts. Focused local implementation and disposable PG16/Linux CI are verified at commit 4d91c3d30cece5192db1afc22f71fb42e3e00413. AWS remains untouched. CSV A/B acceptance alone awaits external fixture bytes and does not block the constructed-scenario demo.

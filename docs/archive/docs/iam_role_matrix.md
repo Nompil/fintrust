@@ -1,4 +1,4 @@
-> Historical reference retained in place. Some implementation/status descriptions are superseded. Use the [current canonical guide](SECURITY.md) and [documentation inventory](../README.md) for current behavior and proposed disposition. No archive or deletion has occurred.
+> Archived historical narrative. Current project authority: [Master PDF](../../FinTrust_Project_Master.pdf); current status: [Progress PDF](../../FinTrust_Project_Progress.pdf). Original assumptions below are not deployment instructions.
 
 # IAM Role Matrix
 

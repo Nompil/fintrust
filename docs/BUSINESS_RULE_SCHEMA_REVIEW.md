@@ -1,3 +1,5 @@
+> Supporting source retained for traceability. Use [Project Master](FinTrust_Project_Master.pdf) for consolidated project information and [Project Progress](FinTrust_Project_Progress.pdf) for current status. Historical counts and deployment statements below apply to their original checkpoint.
+
 > 2026-10-10 continuation: local gap closure implements the review/correction and
 > strict runtime contract. See [gap register](RELEASE1_GAP_REGISTER.md) and
 > [operations/release gates](RELEASE1_OPERATIONS.md). This earlier review is
@@ -38,8 +40,8 @@ release rejects those types explicitly rather than disguising them as credits.
 
 ## 1. Transaction identity
 
-Sources: [jobs.py](../fintrust/jobs.py), [ledger.py](../fintrust/ledger.py),
-[batches.py](../fintrust/batches.py), [migration 001](../sql/migrations/001_transaction_identity.sql).
+Sources: [jobs.py](../backend/fintrust/jobs.py), [ledger.py](../backend/fintrust/ledger.py),
+[batches.py](../backend/fintrust/batches.py), [migration 001](../sql/migrations/001_transaction_identity.sql).
 
 | Identity | Current implementation | Proposed business contract / decision |
 |---|---|---|
@@ -78,7 +80,7 @@ must not point to different accepted transactions.
 
 ## 3. Validation rules
 
-Sources: [validators.py](../fintrust/validators.py), ingest.py, score.py, schema.sql.
+Sources: [validators.py](../backend/fintrust/validators.py), ingest.py, score.py, schema.sql.
 
 | Rule | Current behaviour | Proposed release decision / gap |
 |---|---|---|
@@ -97,7 +99,7 @@ unless the upstream contract supplies that meaning. Do not claim automatic detec
 
 ## 4. Quarantine process
 
-Sources: [quarantine.py](../fintrust/quarantine.py), ingest.py, score.py.
+Sources: [quarantine.py](../backend/fintrust/quarantine.py), ingest.py, score.py.
 Current S3 records retain reason_code/detail, validation_errors, allowlisted row
 payload, source bucket/key/version/ETag, record number, batch and timestamps.
 Unknown columns are omitted and raw_row_redacted indicates omission. The allowed
@@ -129,7 +131,7 @@ only after the business contract is approved. No raw-payload SQL duplication nee
 
 ## 5. Risk rules and boundaries
 
-Source: [rules.py](../fintrust/rules.py), score.py,
+Source: [rules.py](../backend/fintrust/rules.py), score.py,
 [boundary tests](../tests/test_processing.py), tests/data_quality/test_processing.py.
 All are configurable demonstration rules, not business-approved fraud predictions.
 
@@ -229,7 +231,7 @@ nothing disappears without an operator recovery procedure and overdue-batch view
 
 ## 9. Alert idempotency
 
-Sources: [alert_delivery.py](../fintrust/alert_delivery.py), alert.py, dynamo.py.
+Sources: [alert_delivery.py](../backend/fintrust/alert_delivery.py), alert.py, dynamo.py.
 Cloud stream path uses canonical account/transaction key ALERT#tx_id, conditional
 SENDING claim, then SENT/FAILED/UNKNOWN. SENT retries return without sending.
 SENDING/UNKNOWN are not automatically reclaimed. Definite rejection can retry;

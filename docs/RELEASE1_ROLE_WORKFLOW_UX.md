@@ -1,3 +1,5 @@
+> Supporting source retained for traceability. Use [Project Master](FinTrust_Project_Master.pdf) for consolidated project information and [Project Progress](FinTrust_Project_Progress.pdf) for current status. Historical counts and deployment statements below apply to their original checkpoint.
+
 # Release 1 role and workflow correction
 
 Separate correction after the immutable presentation parent `5b5bb50f4bf02bca518940675f9b476bd8750a67`. Application source changed; the historical Linux artifact remains unchanged and a new source-bound build is still required before cloud deployment. No AWS, live SQL, seed changes, scoring changes or deployment occurred.

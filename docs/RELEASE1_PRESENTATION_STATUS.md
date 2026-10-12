@@ -1,3 +1,5 @@
+> Supporting source retained for traceability. Use [Project Master](FinTrust_Project_Master.pdf) for consolidated project information and [Project Progress](FinTrust_Project_Progress.pdf) for current status. Historical counts and deployment statements below apply to their original checkpoint.
+
 # Release1 presentation truth matrix
 
 This table describes the local prototype, not AWS deployment. PostgreSQL 16.15 and exact-source Linux CPython 3.12.15 x86_64 verification passed in CI run 38050661063 (543 passed, zero skips/failures). Actual external CSV A/B import is pending; constructed scenarios are tested.

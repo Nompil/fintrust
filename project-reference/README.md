@@ -1,3 +1,5 @@
+> Supporting source retained for traceability. Use [Project Master](../docs/FinTrust_Project_Master.pdf) for consolidated project information and [Project Progress](../docs/FinTrust_Project_Progress.pdf) for current status. Historical counts and deployment statements below apply to their original checkpoint.
+
 # Project references
 
 Current presentation diagrams and speaker notes: [Release 1 presentation pack](../docs/presentation/README.md). Earlier milestone references below remain historical unless reconciled in that pack.

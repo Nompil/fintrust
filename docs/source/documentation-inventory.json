@@ -1,0 +1,1627 @@
+{
+  "checkpoint": "7397f22",
+  "scope": "All authored tracked/nonignored Markdown, text and PDF files; generated build/vendor copies excluded. Content read for classification; primary current contracts used for synthesis.",
+  "documents": [
+    {
+      "path": "README.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "README.md",
+      "sha256": "03fa450d9fa3e94d3590a8ccce1789b621ab513372f8b69efe593fbee00eeeed",
+      "characters_reviewed": 10333,
+      "heading_or_title": "FinTrust: Transaction Insights and Risk Monitoring"
+    },
+    {
+      "path": "docs/BUSINESS_RULE_SCHEMA_REVIEW.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "docs/BUSINESS_RULE_SCHEMA_REVIEW.md",
+      "sha256": "e1b199a0ad94c1821790b4e9bba3ba5d016bff57c6a42a60001b0861cec6be2a",
+      "characters_reviewed": 27160,
+      "heading_or_title": "> 2026-10-10 continuation: local gap closure implements the review/correction and"
+    },
+    {
+      "path": "docs/EVIDENCE/02-iam/release1-migration-operator-infrastructure-permissions-result.md",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte. Existing user changes remain untouched.",
+      "destination": "docs/EVIDENCE/02-iam/release1-migration-operator-infrastructure-permissions-result.md",
+      "sha256": "8547a93d174a6e8602fceaa58673e7739426ee4de585f7741a17b87e3d562360",
+      "characters_reviewed": 1681,
+      "heading_or_title": "CloudFormation-only operator attachment verified"
+    },
+    {
+      "path": "docs/EVIDENCE/02-iam/release1-migration-operator-network-permissions-result.md",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte. Existing user changes remain untouched.",
+      "destination": "docs/EVIDENCE/02-iam/release1-migration-operator-network-permissions-result.md",
+      "sha256": "0ea42da6aedb9fc5881579b3c7fe08d059ddeb348b6fb4be9f94d09828eab421",
+      "characters_reviewed": 1515,
+      "heading_or_title": "Migration operator Network permissions verified"
+    },
+    {
+      "path": "docs/EVIDENCE/02-iam/release1-migration-operator-runner-permissions-result.md",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte. Existing user changes remain untouched.",
+      "destination": "docs/EVIDENCE/02-iam/release1-migration-operator-runner-permissions-result.md",
+      "sha256": "520ac080a4f69c8845a04587681b3a97598b51aa4779194e7c63be0a07500c00",
+      "characters_reviewed": 2289,
+      "heading_or_title": "Runner permissions verified \u2014 infrastructure approval pending"
+    },
+    {
+      "path": "docs/EVIDENCE/02-iam/release1-migration-operator-shell-result.md",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte. Existing user changes remain untouched.",
+      "destination": "docs/EVIDENCE/02-iam/release1-migration-operator-shell-result.md",
+      "sha256": "f49d4771b4b5bfd370842f12c85cd2057fab844f442fd8462f9693d958a2f8f6",
+      "characters_reviewed": 1309,
+      "heading_or_title": "Empty migration operator shell verified"
+    },
+    {
+      "path": "docs/EVIDENCE/05-rds/migration-runner-ci/37898074673/failure.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/05-rds/migration-runner-ci/37898074673/failure.txt",
+      "sha256": "faf676f02a9f0c1532ab539e977eefdc6cd379e091ffe563a25da6751f4a1142",
+      "characters_reviewed": 770,
+      "heading_or_title": "Run 37898074673, source ab0a70e30606378f15b1662f2af804592e8499e7"
+    },
+    {
+      "path": "docs/EVIDENCE/05-rds/migration-runner-ci/37931518056/RESULT.md",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/05-rds/migration-runner-ci/37931518056/RESULT.md",
+      "sha256": "434b3a7de2fbb456a58a27259092cf9cf084482206a470c97696cc2fe8b3ef00",
+      "characters_reviewed": 2614,
+      "heading_or_title": "Private RDS index privilege path verified"
+    },
+    {
+      "path": "docs/EVIDENCE/05-rds/release1-live-readonly-alternative-preflight-result.md",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte. Existing user changes remain untouched.",
+      "destination": "docs/EVIDENCE/05-rds/release1-live-readonly-alternative-preflight-result.md",
+      "sha256": "288ab099823885ca67f39cf58a62b45af8d78f4be89d333b34389ae0920dedeb",
+      "characters_reviewed": 4580,
+      "heading_or_title": "Live RDS read-only preflight verified"
+    },
+    {
+      "path": "docs/EVIDENCE/05-rds/release1-live-readonly-preflight-result.md",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte. Existing user changes remain untouched.",
+      "destination": "docs/EVIDENCE/05-rds/release1-live-readonly-preflight-result.md",
+      "sha256": "ab81be052127b2596ed519c5d081d0583a0ff56284ffbdf7adc17dfd2c7a2ddc",
+      "characters_reviewed": 2400,
+      "heading_or_title": "Live read-only RDS preflight \u2014 activation blocked"
+    },
+    {
+      "path": "docs/EVIDENCE/05-rds/release1-preflight-final-local-output.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/05-rds/release1-preflight-final-local-output.txt",
+      "sha256": "333af8f357e96d48535d8d0082ab7725fc6100ab705bcefc26ae73cab2a051bc",
+      "characters_reviewed": 101,
+      "heading_or_title": "......................................                                   [100%]"
+    },
+    {
+      "path": "docs/EVIDENCE/05-rds/release1-preflight-iam-local-test-output.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/05-rds/release1-preflight-iam-local-test-output.txt",
+      "sha256": "54035ae5281c05fc4896702cfae8cb6da82eb843c28ec69712d9a24c8c07c424",
+      "characters_reviewed": 101,
+      "heading_or_title": "......................................                                   [100%]"
+    },
+    {
+      "path": "docs/EVIDENCE/05-rds/release1-preflight-local-test-output.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/05-rds/release1-preflight-local-test-output.txt",
+      "sha256": "10deef0e3f9ca2c2f880ac4f8b36cdf775cabe3001a14708cddf9b2f0c18a0f1",
+      "characters_reviewed": 101,
+      "heading_or_title": "..........                                                               [100%]"
+    },
+    {
+      "path": "docs/EVIDENCE/05-rds/release1-preflight-tooling-local-test-output.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/05-rds/release1-preflight-tooling-local-test-output.txt",
+      "sha256": "ed8a938fded7d335504550bcd460311d1eba679fb87e68bb811987858ee3f7a1",
+      "characters_reviewed": 183,
+      "heading_or_title": "........................................................................ [ 79%]"
+    },
+    {
+      "path": "docs/EVIDENCE/05-rds/release1-temporary-preflight-cleanup-result.md",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte. Existing user changes remain untouched.",
+      "destination": "docs/EVIDENCE/05-rds/release1-temporary-preflight-cleanup-result.md",
+      "sha256": "b493cf10753f7d482308a910a9204e6980b773217ccf688108c65abed07e543d",
+      "characters_reviewed": 2587,
+      "heading_or_title": "Temporary RDS preflight infrastructure cleanup verified"
+    },
+    {
+      "path": "docs/EVIDENCE/05-rds/release1-temporary-preflight-infrastructure-result.md",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte. Existing user changes remain untouched.",
+      "destination": "docs/EVIDENCE/05-rds/release1-temporary-preflight-infrastructure-result.md",
+      "sha256": "63a874cf40fdfe08d8110a1b4ac5e85366cd034e4aeceb3699d4fab2b2c8a1f1",
+      "characters_reviewed": 9881,
+      "heading_or_title": "Temporary private preflight infrastructure verified"
+    },
+    {
+      "path": "docs/EVIDENCE/08-lambda/33-stage5-diagnostic2-result.md",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte. Existing user changes remain untouched.",
+      "destination": "docs/EVIDENCE/08-lambda/33-stage5-diagnostic2-result.md",
+      "sha256": "42adc87f5521347632203116369881adbfb5f83904a85d9a1d1d373032edc4ec",
+      "characters_reviewed": 3271,
+      "heading_or_title": "Stage 5 second diagnostic live result"
+    },
+    {
+      "path": "docs/EVIDENCE/08-lambda/45-stage5-diagnostic3-result.md",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte. Existing user changes remain untouched.",
+      "destination": "docs/EVIDENCE/08-lambda/45-stage5-diagnostic3-result.md",
+      "sha256": "34829a41240fca4cb90acf11ce27cdbaa08a02375a9e7284231867747bdc4a0d",
+      "characters_reviewed": 3897,
+      "heading_or_title": "Stage 5 diagnostic three live result"
+    },
+    {
+      "path": "docs/EVIDENCE/08-lambda/51-stage5-direct-logs-result.md",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte. Existing user changes remain untouched.",
+      "destination": "docs/EVIDENCE/08-lambda/51-stage5-direct-logs-result.md",
+      "sha256": "f58edcd2e36f490527a235541bad88b7801dd92d3d40d4fbbfcdfbe1592b8631",
+      "characters_reviewed": 3392,
+      "heading_or_title": "Stage 5 direct CloudWatch Logs test"
+    },
+    {
+      "path": "docs/EVIDENCE/08-lambda/57-stage5-tagloggroup-result.md",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte. Existing user changes remain untouched.",
+      "destination": "docs/EVIDENCE/08-lambda/57-stage5-tagloggroup-result.md",
+      "sha256": "43b14ce55eb7330bc99d1eae71d4ef04e66e344b8315f752dd525e507d8ea767",
+      "characters_reviewed": 3966,
+      "heading_or_title": "Stage 5 one-shot TagLogGroup diagnostic result"
+    },
+    {
+      "path": "docs/EVIDENCE/08-lambda/68-stage5-permanent-recovery-result.md",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte. Existing user changes remain untouched.",
+      "destination": "docs/EVIDENCE/08-lambda/68-stage5-permanent-recovery-result.md",
+      "sha256": "6266fc317413de8a3e3b1fc9744188cffa7ad083b507a3754944b805f74473a2",
+      "characters_reviewed": 5317,
+      "heading_or_title": "Stage 5 historical deployment recovery result"
+    },
+    {
+      "path": "docs/EVIDENCE/08-lambda/82-stage5-async-verification-result.md",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte. Existing user changes remain untouched.",
+      "destination": "docs/EVIDENCE/08-lambda/82-stage5-async-verification-result.md",
+      "sha256": "27ca09ddc99c6b6cbafd82763992f91a3afc3b0618697d1f28b276f70b755e4e",
+      "characters_reviewed": 3713,
+      "heading_or_title": "Stage 5 ingest infrastructure verified"
+    },
+    {
+      "path": "docs/EVIDENCE/11-ci/37850256137/checksums.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/11-ci/37850256137/checksums.txt",
+      "sha256": "bfea6c805ea55524a029aabc68f48217489f422a480741b109216df78cd57dca",
+      "characters_reviewed": 184,
+      "heading_or_title": "cf9c18a5f267373e2fc2e22331987bb6dce8e2e65366b2d1f5651bb035dd6654  fintrust-hardened-linux-py312.zip"
+    },
+    {
+      "path": "docs/EVIDENCE/11-ci/37850256137/hardened-release-linux-ci.md",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/11-ci/37850256137/hardened-release-linux-ci.md",
+      "sha256": "fba6269bd1630616fe00fd812b789943ce40a5ef82bbcfd305da1b97ba3d07e0",
+      "characters_reviewed": 531,
+      "heading_or_title": "Exact hardened ZIP Linux gate: PASSED"
+    },
+    {
+      "path": "docs/EVIDENCE/11-ci/37850256137/linux-verification.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/11-ci/37850256137/linux-verification.txt",
+      "sha256": "181d029c9d0030bf6bff8430e03ff63f19de1a8e87ac95d930fcd4f8d63468af",
+      "characters_reviewed": 59,
+      "heading_or_title": "All five archived handlers imported on Linux CPython 3.12."
+    },
+    {
+      "path": "docs/EVIDENCE/11-ci/release1-10eb378-artifact-status.md",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte. Existing user changes remain untouched.",
+      "destination": "docs/EVIDENCE/11-ci/release1-10eb378-artifact-status.md",
+      "sha256": "9393e0b3ac38cda86319122ea1c94acbbd9bc6cadfd00603fbca0ba86245628e",
+      "characters_reviewed": 1304,
+      "heading_or_title": "Frozen Release 1 artifact candidate"
+    },
+    {
+      "path": "docs/EVIDENCE/11-ci/release1-38084833273-ci.md",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/11-ci/release1-38084833273-ci.md",
+      "sha256": "1bf694cbfd4a8022c6c81fb19394b898825f7b6c6ca6bcfb4ae2d76e5f5356f9",
+      "characters_reviewed": 531,
+      "heading_or_title": "Exact hardened ZIP Linux gate: PASSED"
+    },
+    {
+      "path": "docs/EVIDENCE/11-ci/release1-38084833273-imports.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/11-ci/release1-38084833273-imports.txt",
+      "sha256": "181d029c9d0030bf6bff8430e03ff63f19de1a8e87ac95d930fcd4f8d63468af",
+      "characters_reviewed": 59,
+      "heading_or_title": "All five archived handlers imported on Linux CPython 3.12."
+    },
+    {
+      "path": "docs/EVIDENCE/11-ci/release1-38084833273-summary.md",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/11-ci/release1-38084833273-summary.md",
+      "sha256": "e38493f2d7da1190036b8640b588321c818ae6e3ce9a3429af2a4b776e4a1f72",
+      "characters_reviewed": 2710,
+      "heading_or_title": "Release 1 Linux artifact verification"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/analyst-workspace/browser-test-output.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/analyst-workspace/browser-test-output.txt",
+      "sha256": "f7c91066fc54f330055bba44178f81c621a884e59e307a7ddebfcf083ba9a552",
+      "characters_reviewed": 101,
+      "heading_or_title": ".                                                                        [100%]"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/analyst-workspace/focused-test-output.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/analyst-workspace/focused-test-output.txt",
+      "sha256": "6b7ac0d108cd67eb1d4d58a0db6ad7a12202ec160a4f3e4c303285a80dcbf27b",
+      "characters_reviewed": 102,
+      "heading_or_title": ".............................                                            [100%]"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/analyst-workspace/full-test-output.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/analyst-workspace/full-test-output.txt",
+      "sha256": "14e25f034e7bfff2af0522ca30b3b44fb06219b1e0d00cd8cbcd031902548260",
+      "characters_reviewed": 854,
+      "heading_or_title": "............................................s........................... [ 10%]"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/clean-start/catalog-integrity-performance.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/clean-start/catalog-integrity-performance.txt",
+      "sha256": "bf35a63b7b6e9889a80fa861185d1124573ac999e8acd878af3e4b2483f63d09",
+      "characters_reviewed": 105,
+      "heading_or_title": "PostgreSQL 16 catalogue/integrity passed; zero violations; query plans measured at 200/1000/10000 rows."
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/clean-start/dependency-check.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/clean-start/dependency-check.txt",
+      "sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+      "characters_reviewed": 31,
+      "heading_or_title": "No broken requirements found."
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/clean-start/dependency-freeze.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/clean-start/dependency-freeze.txt",
+      "sha256": "3f16f471d8ab5b00cb68c37ca16d9bccb17cdf328fd088017b11f41c1d69831a",
+      "characters_reviewed": 607,
+      "heading_or_title": "aws-wsgi==0.2.7"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/clean-start/focused-smoke.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/clean-start/focused-smoke.txt",
+      "sha256": "9b2bb0dce109da76ef277bb961b2ff9d41c42318d40f43c9780eb752d44ad881",
+      "characters_reviewed": 332,
+      "heading_or_title": "........................................................................ [ 72%]"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/clean-start/fresh-browser.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/clean-start/fresh-browser.txt",
+      "sha256": "aac90b5cc7f298ee6a1a482875cf55a39440bedf2365cb843506190e064cad90",
+      "characters_reviewed": 239,
+      "heading_or_title": ".                                                                        [100%]"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/clean-start/fresh-full.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/clean-start/fresh-full.txt",
+      "sha256": "c8dc4b38a650bcd5c55352ebb9e5c68181819dbf7ef591acb024337f7250e1f1",
+      "characters_reviewed": 981,
+      "heading_or_title": "........................................................................ [ 10%]"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/clean-start/initdb.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/clean-start/initdb.txt",
+      "sha256": "7d3679a9d8c9566aa1dff005dad41954dc45704ef9fe05f8fa544d8f972aa445",
+      "characters_reviewed": 1067,
+      "heading_or_title": "The files belonging to this database system will be owned by user \"Nompilo\"."
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/clean-start/installed-dependencies.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/clean-start/installed-dependencies.txt",
+      "sha256": "3f16f471d8ab5b00cb68c37ca16d9bccb17cdf328fd088017b11f41c1d69831a",
+      "characters_reviewed": 607,
+      "heading_or_title": "aws-wsgi==0.2.7"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/clean-start/migration-identity-proof.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/clean-start/migration-identity-proof.txt",
+      "sha256": "36caadb38643eafb53e335e3a7a9d3fec4d1b527e1808c2d7a439c83991f8a99",
+      "characters_reviewed": 2033,
+      "heading_or_title": "{\"postgresql_major\": 16, \"postgresql_version_num\": 160015, \"helper_security_and_cleanup_verified\": true, \"helper_full_transaction_rollback_verified\": true, \"helper_existing_correct_index_verified\": true, \"helper_conflicting_index_rejected\": true, \"helper_conflicting_column_type_rejected\": true, \"helper_no_public_execute_verified\": true, \"helper_no_role_membership_verified\": true, \"helper_dropped_after_success\": true, \"schema_create_requirement_reproduced\": true, \"owner_preserving_lock_verified\": true, \"original_admin_self_grant_reproduced\": true, \"bootstrap_memberships\": [[\"fintrust_admin\", \"fintrust_index_builder\", \"fintrust_admin\", false, false, false], [\"fintrust_admin\", \"fintrust_transactions_owner\", \"fintrust_admin\", false, false, false], [\"fintrust_admin\", \"fintrust_transactions_owner\", \"fintrust_index_builder\", false, true, false], [\"fintrust_admin\", \"fintrust_transactions_owner\", \"fintrust_migrate_dev\", false, false, true], [\"fintrust_admin\", \"rds_iam\", \"fintrust_migrate_dev\", false, false, true], [\"postgres\", \"fintrust_index_builder\", \"fintrust_admin\", true, false, false], [\"postgres\", \"fintrust_migrate_dev\", \"fintrust_admin\", true, false, false], [\"postgres\", \"fintrust_transactions_owner\", \"fintrust_admin\", true, false, false], [\"postgres\", \"pg_read_all_settings\", \"pg_monitor\", false, true, true], [\"postgres\", \"pg_read_all_stats\", \"pg_monitor\", false, true, true], [\"postgres\", \"pg_stat_scan_tables\", \"pg_monitor\", false, true, true], [\"postgres\", \"rds_iam\", \"fintrust_admin\", true, false, false]], \"migration_admin_delegation_denied\": true, \"unrelated_ddl_denied\": true, \"set_role_required\": true, \"ddl_rollback_verified\": true, \"partial_indexes_verified\": true, \"runtime_permissions_unchanged\": true, \"temporary_login_removed\": true, \"administrator_set_access_removed\": true, \"bootstrap_migrate_rerun_cleanup_passed\": true, \"legacy_rows_preserved\": 200, \"aws_rds_iam_auth_tested\": false, \"note\": \"Local placeholder rds_iam role tests membership/SQL only; real RDS IAM/TLS remains live preflight.\"}"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/clean-start/migration-workflows-proof.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/clean-start/migration-workflows-proof.txt",
+      "sha256": "7d1c514eece5b3dc54bee5b300b17c875d8cb725854aa820240c8760f540576a",
+      "characters_reviewed": 340,
+      "heading_or_title": "{\"status\": \"PASSED\", \"001_then_002\": true, \"002_rerun_noop\": true, \"partial_refused\": true, \"forced_postcheck_rollback\": true, \"helper_removed\": true, \"login_no_schema_create_or_owner_membership\": true, \"arbitrary_sql_refused\": true, \"financial_rows_preserved\": 200, \"cleanup\": true, \"aws_access\": false, \"real_rds_iam_tls_tested\": false}"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/clean-start/production-imports.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/clean-start/production-imports.txt",
+      "sha256": "682d1aff18d0f7cb3bd4ab7cba4494a81b2c181083dc953eda3b2820ae09afaf",
+      "characters_reviewed": 55,
+      "heading_or_title": "Major production modules and API handler imported: 31"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/clean-start/server-start.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/clean-start/server-start.txt",
+      "sha256": "46038efb813fbca18a92272496901190638dea3f97b51f7af0daa1ca2eb13818",
+      "characters_reviewed": 54,
+      "heading_or_title": "waiting for server to start.... done"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/clean-start/server-stop.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/clean-start/server-stop.txt",
+      "sha256": "c80135c33667079be5f58bda85776e1279a704a3e20e8056ff64e28eb8e93ab1",
+      "characters_reviewed": 67,
+      "heading_or_title": "waiting for server to shut down............. done"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/clean-start/service-role-proof.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/clean-start/service-role-proof.txt",
+      "sha256": "393128d52e5fefdbf266e7ee3de57d17ae84e578e7906d2dd314a4507c0d8e1f",
+      "characters_reviewed": 714,
+      "heading_or_title": "{"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/historical-design-diagrams/fintrust_architecture_and_erd.pdf",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/historical-design-diagrams/fintrust_architecture_and_erd.pdf",
+      "sha256": "39680f0040803638df9dd9dc98d8cd5980df912136c0f70e39990a9fc4e83f6b",
+      "characters_reviewed": 3295,
+      "heading_or_title": "01 / Day 1-3 implementation"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/historical-design-diagrams/fintrust_system_documentation.pdf",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/historical-design-diagrams/fintrust_system_documentation.pdf",
+      "sha256": "bf4933a9696e78b3033a52d3524b7a59bfcb33bbb4e724fffbdf39f594fdd096",
+      "characters_reviewed": 32824,
+      "heading_or_title": "FINTRUST  |  Engineering record  |  Local implementation"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/original-fixture-acceptance/RESULT.md",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/original-fixture-acceptance/RESULT.md",
+      "sha256": "c8994fa9d3ad96bee4fa0807053696f11b738b953c0969b19b3ca0bf516aea7e",
+      "characters_reviewed": 5747,
+      "heading_or_title": "Original CSV A/B acceptance checkpoint"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/presentation-readiness/freeze-report.md",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/presentation-readiness/freeze-report.md",
+      "sha256": "86b79f94a2ed251f2d3920d85680aea78d96d531f91014331a4a4fb87abca1a9",
+      "characters_reviewed": 7098,
+      "heading_or_title": "Release 1 presentation freeze"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/catalog-integrity-performance.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/catalog-integrity-performance.txt",
+      "sha256": "bf35a63b7b6e9889a80fa861185d1124573ac999e8acd878af3e4b2483f63d09",
+      "characters_reviewed": 105,
+      "heading_or_title": "PostgreSQL 16 catalogue/integrity passed; zero violations; query plans measured at 200/1000/10000 rows."
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/dependency-check.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/dependency-check.txt",
+      "sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+      "characters_reviewed": 31,
+      "heading_or_title": "No broken requirements found."
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/dependency-freeze.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/dependency-freeze.txt",
+      "sha256": "3f16f471d8ab5b00cb68c37ca16d9bccb17cdf328fd088017b11f41c1d69831a",
+      "characters_reviewed": 607,
+      "heading_or_title": "aws-wsgi==0.2.7"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/focused-smoke.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/focused-smoke.txt",
+      "sha256": "e6a0d453a7e1c662f1014cc8e95ce16ab757be66c4aa370204be0902681ed9cc",
+      "characters_reviewed": 318,
+      "heading_or_title": "........................................................................ [ 76%]"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/fresh-browser.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/fresh-browser.txt",
+      "sha256": "f262daf4d8cfd7e5fb5943afd869886f7b23ac1ec2469e011df2109df605148e",
+      "characters_reviewed": 226,
+      "heading_or_title": ".                                                                        [100%]"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/fresh-full.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/fresh-full.txt",
+      "sha256": "d4976c255872e63d2fd3f0287d0ca1a17bfffbf79e49e808a453a1ef64be19f0",
+      "characters_reviewed": 968,
+      "heading_or_title": "........................................................................ [ 10%]"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/initdb.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/initdb.txt",
+      "sha256": "1ae38f5c52560c4a88a66d45399c8881751c6209f097c53391b49a0223554335",
+      "characters_reviewed": 1067,
+      "heading_or_title": "The files belonging to this database system will be owned by user \"Nompilo\"."
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/installed-dependencies.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/installed-dependencies.txt",
+      "sha256": "3f16f471d8ab5b00cb68c37ca16d9bccb17cdf328fd088017b11f41c1d69831a",
+      "characters_reviewed": 607,
+      "heading_or_title": "aws-wsgi==0.2.7"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/migration-identity-proof.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/migration-identity-proof.txt",
+      "sha256": "36caadb38643eafb53e335e3a7a9d3fec4d1b527e1808c2d7a439c83991f8a99",
+      "characters_reviewed": 2033,
+      "heading_or_title": "{\"postgresql_major\": 16, \"postgresql_version_num\": 160015, \"helper_security_and_cleanup_verified\": true, \"helper_full_transaction_rollback_verified\": true, \"helper_existing_correct_index_verified\": true, \"helper_conflicting_index_rejected\": true, \"helper_conflicting_column_type_rejected\": true, \"helper_no_public_execute_verified\": true, \"helper_no_role_membership_verified\": true, \"helper_dropped_after_success\": true, \"schema_create_requirement_reproduced\": true, \"owner_preserving_lock_verified\": true, \"original_admin_self_grant_reproduced\": true, \"bootstrap_memberships\": [[\"fintrust_admin\", \"fintrust_index_builder\", \"fintrust_admin\", false, false, false], [\"fintrust_admin\", \"fintrust_transactions_owner\", \"fintrust_admin\", false, false, false], [\"fintrust_admin\", \"fintrust_transactions_owner\", \"fintrust_index_builder\", false, true, false], [\"fintrust_admin\", \"fintrust_transactions_owner\", \"fintrust_migrate_dev\", false, false, true], [\"fintrust_admin\", \"rds_iam\", \"fintrust_migrate_dev\", false, false, true], [\"postgres\", \"fintrust_index_builder\", \"fintrust_admin\", true, false, false], [\"postgres\", \"fintrust_migrate_dev\", \"fintrust_admin\", true, false, false], [\"postgres\", \"fintrust_transactions_owner\", \"fintrust_admin\", true, false, false], [\"postgres\", \"pg_read_all_settings\", \"pg_monitor\", false, true, true], [\"postgres\", \"pg_read_all_stats\", \"pg_monitor\", false, true, true], [\"postgres\", \"pg_stat_scan_tables\", \"pg_monitor\", false, true, true], [\"postgres\", \"rds_iam\", \"fintrust_admin\", true, false, false]], \"migration_admin_delegation_denied\": true, \"unrelated_ddl_denied\": true, \"set_role_required\": true, \"ddl_rollback_verified\": true, \"partial_indexes_verified\": true, \"runtime_permissions_unchanged\": true, \"temporary_login_removed\": true, \"administrator_set_access_removed\": true, \"bootstrap_migrate_rerun_cleanup_passed\": true, \"legacy_rows_preserved\": 200, \"aws_rds_iam_auth_tested\": false, \"note\": \"Local placeholder rds_iam role tests membership/SQL only; real RDS IAM/TLS remains live preflight.\"}"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/migration-workflows-proof.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/migration-workflows-proof.txt",
+      "sha256": "7d1c514eece5b3dc54bee5b300b17c875d8cb725854aa820240c8760f540576a",
+      "characters_reviewed": 340,
+      "heading_or_title": "{\"status\": \"PASSED\", \"001_then_002\": true, \"002_rerun_noop\": true, \"partial_refused\": true, \"forced_postcheck_rollback\": true, \"helper_removed\": true, \"login_no_schema_create_or_owner_membership\": true, \"arbitrary_sql_refused\": true, \"financial_rows_preserved\": 200, \"cleanup\": true, \"aws_access\": false, \"real_rds_iam_tls_tested\": false}"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/production-imports.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/production-imports.txt",
+      "sha256": "682d1aff18d0f7cb3bd4ab7cba4494a81b2c181083dc953eda3b2820ae09afaf",
+      "characters_reviewed": 55,
+      "heading_or_title": "Major production modules and API handler imported: 31"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/server-start.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/server-start.txt",
+      "sha256": "46038efb813fbca18a92272496901190638dea3f97b51f7af0daa1ca2eb13818",
+      "characters_reviewed": 54,
+      "heading_or_title": "waiting for server to start.... done"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/server-stop.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/server-stop.txt",
+      "sha256": "6ac5acb09a88c91a0d0aaf425a895bd89d0d726ac7b1ad98b9b9ff56db1c843e",
+      "characters_reviewed": 65,
+      "heading_or_title": "waiting for server to shut down........... done"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/service-role-proof.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/service-role-proof.txt",
+      "sha256": "393128d52e5fefdbf266e7ee3de57d17ae84e578e7906d2dd314a4507c0d8e1f",
+      "characters_reviewed": 714,
+      "heading_or_title": "{"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/release1-candidate/RESULT.md",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/release1-candidate/RESULT.md",
+      "sha256": "5dbd952832e11de552dbf44a217e4d688b9f98ae14cbdb28d08843fe1005c39e",
+      "characters_reviewed": 3826,
+      "heading_or_title": "FinTrust Release 1 candidate verification"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/release1-candidate/linux-verification.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/release1-candidate/linux-verification.txt",
+      "sha256": "181d029c9d0030bf6bff8430e03ff63f19de1a8e87ac95d930fcd4f8d63468af",
+      "characters_reviewed": 59,
+      "heading_or_title": "All five archived handlers imported on Linux CPython 3.12."
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/release1-candidate/truth-matrix.md",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/release1-candidate/truth-matrix.md",
+      "sha256": "ce876802d08aef73c84e9fdeb1c2fc3f16d95deacfb6968ce513925a23a6b471",
+      "characters_reviewed": 5090,
+      "heading_or_title": "Release 1 final capability truth matrix"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/release1-closure/RESULT.md",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/release1-closure/RESULT.md",
+      "sha256": "5e2f8c67be91bf34b907ab3aa0e0bb3fe689bfe7fe324d2c45f6460b225e0bac",
+      "characters_reviewed": 3193,
+      "heading_or_title": "Monday local Release1 verification"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/release1-closure/linux-ci.md",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/release1-closure/linux-ci.md",
+      "sha256": "234d4d5a2c00a4b45bbd5b2908037afa62bc1b90cd1bfe149b07cd871aeb2ee5",
+      "characters_reviewed": 531,
+      "heading_or_title": "Exact hardened ZIP Linux gate: PASSED"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/release1-closure/linux-import-verification.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/release1-closure/linux-import-verification.txt",
+      "sha256": "181d029c9d0030bf6bff8430e03ff63f19de1a8e87ac95d930fcd4f8d63468af",
+      "characters_reviewed": 59,
+      "heading_or_title": "All five archived handlers imported on Linux CPython 3.12."
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/release1-lifecycle/RESULT.md",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/release1-lifecycle/RESULT.md",
+      "sha256": "e93139a868215eb75241e97cf45f0cb39346838eba33d7e099f6dc983c8419fb",
+      "characters_reviewed": 4734,
+      "heading_or_title": "Release 1 dataset and ingestion lifecycle: VERIFIED"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/release1-lifecycle/frontend-freeze-browser.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/release1-lifecycle/frontend-freeze-browser.txt",
+      "sha256": "7930af7498b25901b7405ce28df6f68a004c5f209f42b2a8e88a01613b9c79de",
+      "characters_reviewed": 111,
+      "heading_or_title": ".                                                                        [100%]"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/release1-lifecycle/frontend-freeze-focused.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/release1-lifecycle/frontend-freeze-focused.txt",
+      "sha256": "06c966a30b37367e6bf2bbeed554affa365ca243762e88aecc2cc2cf83e2e967",
+      "characters_reviewed": 102,
+      "heading_or_title": "...........                                                              [100%]"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/release1-lifecycle/frontend-freeze-full-regression.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/release1-lifecycle/frontend-freeze-full-regression.txt",
+      "sha256": "04d3fb713cc63119c956394552da0025ff33dcfe6f8fc803bb921da6ee6cf179",
+      "characters_reviewed": 774,
+      "heading_or_title": "............................................s........................... [ 11%]"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/repository-hardening/base-catalog-integrity.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/repository-hardening/base-catalog-integrity.txt",
+      "sha256": "bf35a63b7b6e9889a80fa861185d1124573ac999e8acd878af3e4b2483f63d09",
+      "characters_reviewed": 105,
+      "heading_or_title": "PostgreSQL 16 catalogue/integrity passed; zero violations; query plans measured at 200/1000/10000 rows."
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/repository-hardening/final-regression.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/repository-hardening/final-regression.txt",
+      "sha256": "13a2f4a8bd3455eb460179c6f64eee06726b56bd287b6a1d9faea12d4dcdfb18",
+      "characters_reviewed": 935,
+      "heading_or_title": "............................................s........................... [  9%]"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/repository-hardening/full-regression.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/repository-hardening/full-regression.txt",
+      "sha256": "7a9e853add12400f2428985cc0156d352bd6284489a5ebf5c754caf4d318d68d",
+      "characters_reviewed": 12907,
+      "heading_or_title": "........................................................................ [  9%]"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/repository-hardening/initdb.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/repository-hardening/initdb.txt",
+      "sha256": "2d023f1a580fbfcb3156fc1ae3cc466047f351627e8d1be8c2137309da72bdcb",
+      "characters_reviewed": 1083,
+      "heading_or_title": "The files belonging to this database system will be owned by user \"Nompilo\"."
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/repository-hardening/migration-001-proof.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/repository-hardening/migration-001-proof.txt",
+      "sha256": "36caadb38643eafb53e335e3a7a9d3fec4d1b527e1808c2d7a439c83991f8a99",
+      "characters_reviewed": 2033,
+      "heading_or_title": "{\"postgresql_major\": 16, \"postgresql_version_num\": 160015, \"helper_security_and_cleanup_verified\": true, \"helper_full_transaction_rollback_verified\": true, \"helper_existing_correct_index_verified\": true, \"helper_conflicting_index_rejected\": true, \"helper_conflicting_column_type_rejected\": true, \"helper_no_public_execute_verified\": true, \"helper_no_role_membership_verified\": true, \"helper_dropped_after_success\": true, \"schema_create_requirement_reproduced\": true, \"owner_preserving_lock_verified\": true, \"original_admin_self_grant_reproduced\": true, \"bootstrap_memberships\": [[\"fintrust_admin\", \"fintrust_index_builder\", \"fintrust_admin\", false, false, false], [\"fintrust_admin\", \"fintrust_transactions_owner\", \"fintrust_admin\", false, false, false], [\"fintrust_admin\", \"fintrust_transactions_owner\", \"fintrust_index_builder\", false, true, false], [\"fintrust_admin\", \"fintrust_transactions_owner\", \"fintrust_migrate_dev\", false, false, true], [\"fintrust_admin\", \"rds_iam\", \"fintrust_migrate_dev\", false, false, true], [\"postgres\", \"fintrust_index_builder\", \"fintrust_admin\", true, false, false], [\"postgres\", \"fintrust_migrate_dev\", \"fintrust_admin\", true, false, false], [\"postgres\", \"fintrust_transactions_owner\", \"fintrust_admin\", true, false, false], [\"postgres\", \"pg_read_all_settings\", \"pg_monitor\", false, true, true], [\"postgres\", \"pg_read_all_stats\", \"pg_monitor\", false, true, true], [\"postgres\", \"pg_stat_scan_tables\", \"pg_monitor\", false, true, true], [\"postgres\", \"rds_iam\", \"fintrust_admin\", true, false, false]], \"migration_admin_delegation_denied\": true, \"unrelated_ddl_denied\": true, \"set_role_required\": true, \"ddl_rollback_verified\": true, \"partial_indexes_verified\": true, \"runtime_permissions_unchanged\": true, \"temporary_login_removed\": true, \"administrator_set_access_removed\": true, \"bootstrap_migrate_rerun_cleanup_passed\": true, \"legacy_rows_preserved\": 200, \"aws_rds_iam_auth_tested\": false, \"note\": \"Local placeholder rds_iam role tests membership/SQL only; real RDS IAM/TLS remains live preflight.\"}"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/repository-hardening/migration-002-proof.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/repository-hardening/migration-002-proof.txt",
+      "sha256": "7d1c514eece5b3dc54bee5b300b17c875d8cb725854aa820240c8760f540576a",
+      "characters_reviewed": 340,
+      "heading_or_title": "{\"status\": \"PASSED\", \"001_then_002\": true, \"002_rerun_noop\": true, \"partial_refused\": true, \"forced_postcheck_rollback\": true, \"helper_removed\": true, \"login_no_schema_create_or_owner_membership\": true, \"arbitrary_sql_refused\": true, \"financial_rows_preserved\": 200, \"cleanup\": true, \"aws_access\": false, \"real_rds_iam_tls_tested\": false}"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/repository-hardening/server-start.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/repository-hardening/server-start.txt",
+      "sha256": "46038efb813fbca18a92272496901190638dea3f97b51f7af0daa1ca2eb13818",
+      "characters_reviewed": 54,
+      "heading_or_title": "waiting for server to start.... done"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/repository-hardening/server-stop.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/repository-hardening/server-stop.txt",
+      "sha256": "268591bb8333f58eb7c4f23ebca0c06ed2f697c5454a8d6f75771abdf46e859b",
+      "characters_reviewed": 68,
+      "heading_or_title": "waiting for server to shut down.............. done"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/repository-hardening/service-role-proof.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/repository-hardening/service-role-proof.txt",
+      "sha256": "393128d52e5fefdbf266e7ee3de57d17ae84e578e7906d2dd314a4507c0d8e1f",
+      "characters_reviewed": 714,
+      "heading_or_title": "{"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/transaction-lifecycle/focused.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/transaction-lifecycle/focused.txt",
+      "sha256": "fe235d073b7c2c02f5ef3c1f0e8fa50c7a8efc7f77b015b5597acd99fee7d5be",
+      "characters_reviewed": 102,
+      "heading_or_title": "..............................................................           [100%]"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/transaction-lifecycle/initdb.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/transaction-lifecycle/initdb.txt",
+      "sha256": "5f5bd8ca8a600e7bc1b854fcaf515c797f645c9f8e34961802f3e7a8dc73c2cf",
+      "characters_reviewed": 1085,
+      "heading_or_title": "The files belonging to this database system will be owned by user \"Nompilo\"."
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/transaction-lifecycle/lifecycle-pg16-focused.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/transaction-lifecycle/lifecycle-pg16-focused.txt",
+      "sha256": "c85b8b672a1cbb8ac3ceff3f07d892cd993b475bb04194ef1765377853974ce3",
+      "characters_reviewed": 205,
+      "heading_or_title": ".....................                                                    [100%]"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/transaction-lifecycle/postgres16-focused.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/transaction-lifecycle/postgres16-focused.txt",
+      "sha256": "bed4e4f098b087d1b0585303952d16b78e0d4469a5c8d8fbf0de727c9103c4f4",
+      "characters_reviewed": 102,
+      "heading_or_title": ".....................                                                    [100%]"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/transaction-lifecycle/regression.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/transaction-lifecycle/regression.txt",
+      "sha256": "54dc9020e93ae5fea892908deccd1fc3333f753626ff9ca80d5e7a72e415d01a",
+      "characters_reviewed": 935,
+      "heading_or_title": "............................................s........................... [  9%]"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/transaction-lifecycle/server-start.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/transaction-lifecycle/server-start.txt",
+      "sha256": "46038efb813fbca18a92272496901190638dea3f97b51f7af0daa1ca2eb13818",
+      "characters_reviewed": 54,
+      "heading_or_title": "waiting for server to start.... done"
+    },
+    {
+      "path": "docs/EVIDENCE/12-e2e/transaction-lifecycle/server-stop.txt",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/12-e2e/transaction-lifecycle/server-stop.txt",
+      "sha256": "3a6747065de8c2dbc66a6baa73d5ab09c2c03eb8851704f973ac4b886e6805f2",
+      "characters_reviewed": 59,
+      "heading_or_title": "waiting for server to shut down..... done"
+    },
+    {
+      "path": "docs/EVIDENCE/README.md",
+      "classification": "EVIDENCE",
+      "reason": "Immutable historical proof; preserved byte-for-byte.",
+      "destination": "docs/EVIDENCE/README.md",
+      "sha256": "25c8d5503ee052b5b0dd43593bbdf39819e14e503430821c4e23151969ee0734",
+      "characters_reviewed": 3777,
+      "heading_or_title": "Verification evidence"
+    },
+    {
+      "path": "docs/FinTrust_User_SOP.pdf",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability. Existing user changes remain untouched.",
+      "destination": "docs/FinTrust_User_SOP.pdf",
+      "sha256": "af2c61e59962e431db4fcd2c700d5ae7ed66258d7e81e2ac546b95af074fe3ff",
+      "characters_reviewed": 15225,
+      "heading_or_title": "FINTRUST  /  USER OPERATIONS  /  RELEASE 1"
+    },
+    {
+      "path": "docs/IDEMPOTENCY.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "docs/IDEMPOTENCY.md",
+      "sha256": "45dbbb88e0b01bce3376712cd6623e32d9576fbfeb85f44384c5eaa2b10bcbd2",
+      "characters_reviewed": 15817,
+      "heading_or_title": "Transaction identity and duplicate handling"
+    },
+    {
+      "path": "docs/OPERATIONS.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "docs/OPERATIONS.md",
+      "sha256": "811730904710d1037e44cd0b5247cf81529aea710570e22a318571429c880b32",
+      "characters_reviewed": 8775,
+      "heading_or_title": "FinTrust operations"
+    },
+    {
+      "path": "docs/PRESENTATION_GUIDE.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "docs/PRESENTATION_GUIDE.md",
+      "sha256": "b939b4864a347c5e811fdd9c8c99fd211a5bcdb85f6dd9fd5a21be55028d40f5",
+      "characters_reviewed": 6108,
+      "heading_or_title": "FinTrust presentation guide"
+    },
+    {
+      "path": "docs/RELEASE1_BUSINESS_PROCESS.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "docs/RELEASE1_BUSINESS_PROCESS.md",
+      "sha256": "bfe97546f8e3aed99f7184388df660e204c7610f6f3f4cd60e47a426fbf15b74",
+      "characters_reviewed": 28337,
+      "heading_or_title": "FinTrust Release 1 process and schema contract"
+    },
+    {
+      "path": "docs/RELEASE1_CANDIDATE.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "docs/RELEASE1_CANDIDATE.md",
+      "sha256": "fdc27b1bd65ffccaf0aeb903dda3386122adc10d04d69d0729ceea9b4faf37c1",
+      "characters_reviewed": 8835,
+      "heading_or_title": "FinTrust Release1 candidate checkpoint"
+    },
+    {
+      "path": "docs/RELEASE1_E2E_MANIFEST.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "docs/RELEASE1_E2E_MANIFEST.md",
+      "sha256": "034259e7f5190dbb69f64a557dcf40a196b46c0ca3dd3e85c7048fc7ec5b62fa",
+      "characters_reviewed": 7168,
+      "heading_or_title": "Release 1 CSV acceptance manifest"
+    },
+    {
+      "path": "docs/RELEASE1_FAILURE_INJECTION.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "docs/RELEASE1_FAILURE_INJECTION.md",
+      "sha256": "b5041e4f16d620569af9ba16a11110e48544b230acd83c082fa51831759a0e0c",
+      "characters_reviewed": 4522,
+      "heading_or_title": "Release 1 failure injection and evidence"
+    },
+    {
+      "path": "docs/RELEASE1_FRONTEND_FREEZE.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "docs/RELEASE1_FRONTEND_FREEZE.md",
+      "sha256": "e94c0f05df286a0103a81eae3478f339e0bdbe783b69f825eee5157dbff57865",
+      "characters_reviewed": 11156,
+      "heading_or_title": "FinTrust Release 1 frontend and user workflows"
+    },
+    {
+      "path": "docs/RELEASE1_GAP_REGISTER.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "docs/RELEASE1_GAP_REGISTER.md",
+      "sha256": "392896a694b91cb3c7afdcdf509a706d60f5dab708ed94c0d5e1add42e0e37dd",
+      "characters_reviewed": 6217,
+      "heading_or_title": "Release1 gap register"
+    },
+    {
+      "path": "docs/RELEASE1_INGESTION_LIFECYCLE.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "docs/RELEASE1_INGESTION_LIFECYCLE.md",
+      "sha256": "50de8b32e4fdee3575d21cc73ba467fd069f5ddf2116db92177d911d54bfacbe",
+      "characters_reviewed": 3230,
+      "heading_or_title": "Release 1 ingestion contract and dataset gate"
+    },
+    {
+      "path": "docs/RELEASE1_MIGRATION_VERIFICATION.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "docs/RELEASE1_MIGRATION_VERIFICATION.md",
+      "sha256": "a52a50c59ecdc18e59d3b633735f11a1d2e71df9aaa5ade7f4f7e990861b9dba",
+      "characters_reviewed": 1672,
+      "heading_or_title": "Release1 migration verification"
+    },
+    {
+      "path": "docs/RELEASE1_MONDAY_DEMO.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "docs/RELEASE1_MONDAY_DEMO.md",
+      "sha256": "3518d3ae179458ad1da177d22ea3e292649000d359eab8fad220012ba8a403d4",
+      "characters_reviewed": 3746,
+      "heading_or_title": "Monday local demonstration"
+    },
+    {
+      "path": "docs/RELEASE1_OPERATIONS.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "docs/RELEASE1_OPERATIONS.md",
+      "sha256": "bb1902b493e7d470838ec51ce40bb29f4d638eb630a8ff71474bb05067abd769",
+      "characters_reviewed": 16362,
+      "heading_or_title": "Release 1 local workflows, recovery and release gates"
+    },
+    {
+      "path": "docs/RELEASE1_PRESENTATION_READINESS.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "docs/RELEASE1_PRESENTATION_READINESS.md",
+      "sha256": "c8f29bd5286e1ef0d0d1b0fcde279fd3a822c05ed616e157276d6fee0acf9c12",
+      "characters_reviewed": 32409,
+      "heading_or_title": "Release 1 local presentation and operating model"
+    },
+    {
+      "path": "docs/RELEASE1_PRESENTATION_STATUS.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "docs/RELEASE1_PRESENTATION_STATUS.md",
+      "sha256": "17538e9a8222f777866a8c7142ef3644c09386bd5d04600cb467774b6792bd89",
+      "characters_reviewed": 3106,
+      "heading_or_title": "Release1 presentation truth matrix"
+    },
+    {
+      "path": "docs/RELEASE1_ROLE_WORKFLOW_UX.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "docs/RELEASE1_ROLE_WORKFLOW_UX.md",
+      "sha256": "614bb2c842378e1ef5ce3a32b6c9c30543e2e53f719b907bbeee2eb46327c0ab",
+      "characters_reviewed": 3375,
+      "heading_or_title": "Release 1 role and workflow correction"
+    },
+    {
+      "path": "docs/RELEASE1_SYSTEM_ASSURANCE.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "docs/RELEASE1_SYSTEM_ASSURANCE.md",
+      "sha256": "5064f108b8e2030d4a9e73259a32f5d7ad45148d540c65055411aa1ae187d666",
+      "characters_reviewed": 20183,
+      "heading_or_title": "Release 1 local system assurance"
+    },
+    {
+      "path": "docs/SECURITY.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "docs/SECURITY.md",
+      "sha256": "eb86cab48e4454487010ee097da72a66e1f82c367c3e3420406b8c853e354654",
+      "characters_reviewed": 7211,
+      "heading_or_title": "FinTrust security"
+    },
+    {
+      "path": "docs/api_design.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "docs/api_design.md",
+      "sha256": "d5ff8eb4f377538e77c247bc7a895a0f73efba35ef31f1a0b8d5fb266cae52ef",
+      "characters_reviewed": 8830,
+      "heading_or_title": "FinTrust API Design"
+    },
+    {
+      "path": "docs/architecture.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "docs/architecture.md",
+      "sha256": "497a2ee89445e7112bdff67f68feb812b655a6668051a8badd4c5872d1a5d86d",
+      "characters_reviewed": 10365,
+      "heading_or_title": "FinTrust architecture"
+    },
+    {
+      "path": "docs/architecture/FINTRUST_FLOW_AUDIT.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "docs/architecture/FINTRUST_FLOW_AUDIT.md",
+      "sha256": "f7038d9c442ddc2a406b9f1a850359153dff083d3d7ba4af419deb68e54827cf",
+      "characters_reviewed": 12208,
+      "heading_or_title": "FinTrust authoritative flow audit and implementation gap plan"
+    },
+    {
+      "path": "docs/architecture/REPOSITORY_STRUCTURE.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "docs/architecture/REPOSITORY_STRUCTURE.md",
+      "sha256": "0f205c3d8cb38a12a5a970d995f5c187601c1141f1926ccbb7c062a07314a7cf",
+      "characters_reviewed": 9069,
+      "heading_or_title": "Repository structure and safe path contract"
+    },
+    {
+      "path": "docs/architecture/TRANSACTION_LIFECYCLE.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "docs/architecture/TRANSACTION_LIFECYCLE.md",
+      "sha256": "f12e93730870ab594902063a48cf50d1e4bea012fa699f20ebfe09121b7b3c7f",
+      "characters_reviewed": 7198,
+      "heading_or_title": "Phase 2 transaction lifecycle contract"
+    },
+    {
+      "path": "docs/data_governance.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "docs/data_governance.md",
+      "sha256": "cc2fc3532c06febfac5cfed77b2a88ada0517fa1041afa4a1490630c34b611c3",
+      "characters_reviewed": 4908,
+      "heading_or_title": "> Historical reference retained in place. Some implementation/status descriptions are superseded. Use the [current canonical guide](OPERATIONS.md) and [documentation inventory](../README.md) for current behavior and proposed disposition. No archive or deletion has occurred."
+    },
+    {
+      "path": "docs/day3_resilience.md",
+      "classification": "ARCHIVE",
+      "reason": "Superseded narrative retained with repaired relative links.",
+      "destination": "docs/archive/docs/day3_resilience.md",
+      "sha256": "e20ea773374458d13bbb26677b9641a3588ce764f703230d4f5f2763052677d0",
+      "characters_reviewed": 3777,
+      "heading_or_title": "> Historical reference retained in place. Some implementation/status descriptions are superseded. Use the [current canonical guide](OPERATIONS.md) and [documentation inventory](../README.md) for current behavior and proposed disposition. No archive or deletion has occurred."
+    },
+    {
+      "path": "docs/diagrams/README.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "docs/diagrams/README.md",
+      "sha256": "d6568f19aeb89908da245bcc4d7e8add5cae1377c517773b630bab1b10bfefb4",
+      "characters_reviewed": 2888,
+      "heading_or_title": "Release 1 diagram maintenance"
+    },
+    {
+      "path": "docs/diagrams/fintrust-release1-erd-notes.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "docs/diagrams/fintrust-release1-erd-notes.md",
+      "sha256": "62d0ce8824a1021eff786aed88bad8ec0aca3c4ce594b1a0010244f9fa572822",
+      "characters_reviewed": 5780,
+      "heading_or_title": "Physical ERD notes"
+    },
+    {
+      "path": "docs/diagrams/release1-operating-model.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "docs/diagrams/release1-operating-model.md",
+      "sha256": "fd274501e0bfe4187ebe800bb8ffb52082f1da25eb68f563be1741cdaa0b78ab",
+      "characters_reviewed": 1664,
+      "heading_or_title": "Current Release 1 presentation diagrams"
+    },
+    {
+      "path": "docs/erd.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "docs/erd.md",
+      "sha256": "d4c97d3336f761a0f77ac81fdeb09e9aa44a4fd55abd0c8081ff8421988df240",
+      "characters_reviewed": 1053,
+      "heading_or_title": "FinTrust Release 1 PostgreSQL schema"
+    },
+    {
+      "path": "docs/iam_role_matrix.md",
+      "classification": "ARCHIVE",
+      "reason": "Superseded narrative retained with repaired relative links.",
+      "destination": "docs/archive/docs/iam_role_matrix.md",
+      "sha256": "1d51bf375ac222aba34bb49861ae3bb60d30be7896e43f7f8e9013d9b03d7c66",
+      "characters_reviewed": 2549,
+      "heading_or_title": "> Historical reference retained in place. Some implementation/status descriptions are superseded. Use the [current canonical guide](SECURITY.md) and [documentation inventory](../README.md) for current behavior and proposed disposition. No archive or deletion has occurred."
+    },
+    {
+      "path": "docs/presentation/FinTrust_Project_Planning_and_Design_Evidence.pdf",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "docs/presentation/FinTrust_Project_Planning_and_Design_Evidence.pdf",
+      "sha256": "3d870d6f2df0b7af230b992e9691e4004549de870e97fa651438039a92aa3fd3",
+      "characters_reviewed": 23681,
+      "heading_or_title": "FinTrust | Planning and design"
+    },
+    {
+      "path": "docs/presentation/README.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "docs/presentation/README.md",
+      "sha256": "cb3c393ebb54a180bb1a416a68819fd36d2eb54a525bdf6d073ad5e65aa2b340",
+      "characters_reviewed": 427,
+      "heading_or_title": "FinTrust presentation evidence"
+    },
+    {
+      "path": "docs/presentation/diagrams/FinTrust_AWS_Architecture.pdf",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "docs/presentation/diagrams/FinTrust_AWS_Architecture.pdf",
+      "sha256": "0a564b3925cbfbf3728babf990ca81c0e75cbd92f0f7ad949799f3e642c21692",
+      "characters_reviewed": 1977,
+      "heading_or_title": "FinTrust | Core processing and failures"
+    },
+    {
+      "path": "docs/presentation/diagrams/FinTrust_Activity_Diagram.pdf",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "docs/presentation/diagrams/FinTrust_Activity_Diagram.pdf",
+      "sha256": "3570e0305886cea8aaeb514553aa2563cc90fc02736123b441991bbc270c453a",
+      "characters_reviewed": 2117,
+      "heading_or_title": "FinTrust | Admission and reconciliation"
+    },
+    {
+      "path": "docs/presentation/diagrams/FinTrust_Data_Decision_Flow.pdf",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "docs/presentation/diagrams/FinTrust_Data_Decision_Flow.pdf",
+      "sha256": "17aa1a485972478bccfff6e5d3d43c469fbf306c1f697d4d15a9dfd10ba1c1d2",
+      "characters_reviewed": 741,
+      "heading_or_title": "FinTrust | Data Decisions"
+    },
+    {
+      "path": "docs/presentation/diagrams/FinTrust_Duplicate_Handling.pdf",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "docs/presentation/diagrams/FinTrust_Duplicate_Handling.pdf",
+      "sha256": "8b35ecd9cc31fd2bc674f69900a938df5958b705f43769966d329bc67ea92ce3",
+      "characters_reviewed": 915,
+      "heading_or_title": "FinTrust | Duplicate Handling"
+    },
+    {
+      "path": "docs/presentation/diagrams/FinTrust_ERD.pdf",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "docs/presentation/diagrams/FinTrust_ERD.pdf",
+      "sha256": "000f5eccd668c265c135e8b313c6c88ce2548258f6f7837d35107ace3b96c97f",
+      "characters_reviewed": 3828,
+      "heading_or_title": "FinTrust | Conceptual domain overview"
+    },
+    {
+      "path": "docs/presentation/diagrams/FinTrust_Role_Separation.pdf",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "docs/presentation/diagrams/FinTrust_Role_Separation.pdf",
+      "sha256": "14db6eb945bbb512ce6676bda33b20d711dac7298829c5f243306143c1619d10",
+      "characters_reviewed": 749,
+      "heading_or_title": "FinTrust | Role Separation"
+    },
+    {
+      "path": "docs/presentation/diagrams/FinTrust_Use_Case_Diagram.pdf",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "docs/presentation/diagrams/FinTrust_Use_Case_Diagram.pdf",
+      "sha256": "4c1967323162041fae6bb92287fc5755d62d39a9f30c1db1e7de961e95c44c1e",
+      "characters_reviewed": 1028,
+      "heading_or_title": "FinTrust | Role-grouped use cases"
+    },
+    {
+      "path": "docs/rubric_checklist.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "docs/rubric_checklist.md",
+      "sha256": "37fbc48fdb23b6c305cd54aae74f07d298b51c4f78287a81d33d7a68b8647acb",
+      "characters_reviewed": 2786,
+      "heading_or_title": "FinTrust Capstone Submission Checklist"
+    },
+    {
+      "path": "docs/system_design.md",
+      "classification": "KEEP",
+      "reason": "Source consumed by tools/build_system_document.py; preserved as a supporting tooling contract.",
+      "destination": "docs/system_design.md",
+      "sha256": "1773a9686ce4b0846bbd5327288707a2b302c4e36c90008a40b248db3014d56c",
+      "characters_reviewed": 28112,
+      "heading_or_title": "> Historical reference retained in place. Some implementation/status descriptions are superseded. Use the [current canonical guide](architecture.md) and [documentation inventory](../README.md) for current behavior and proposed disposition. No archive or deletion has occurred."
+    },
+    {
+      "path": "infrastructure/BUDGET_FIRST.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "infrastructure/BUDGET_FIRST.md",
+      "sha256": "53a501ce0906ac9c0eaf2990502d6be50a3a15996e808e555a391d9a2d08ed92",
+      "characters_reviewed": 16034,
+      "heading_or_title": "> Historical reference retained in place. Some implementation/status descriptions are superseded. Use the [current canonical guide](../docs/OPERATIONS.md) and [documentation inventory](../README.md) for current behavior and proposed disposition. No archive or deletion has occurred."
+    },
+    {
+      "path": "infrastructure/DEPLOYMENT_BOOTSTRAP.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "infrastructure/DEPLOYMENT_BOOTSTRAP.md",
+      "sha256": "0ab04f6562b370bea363913e66d38d952169419b36831b99b45d982067a62a7b",
+      "characters_reviewed": 117261,
+      "heading_or_title": "Deployment bootstrap and cost gate"
+    },
+    {
+      "path": "infrastructure/DEPLOYMENT_READINESS.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source. Existing user changes remain untouched.",
+      "destination": "infrastructure/DEPLOYMENT_READINESS.md",
+      "sha256": "5a3138b9443f4d46212e656dbd79888017cb97b6c23ba9c1ec9900c899149635",
+      "characters_reviewed": 17821,
+      "heading_or_title": "FinTrust deployment readiness"
+    },
+    {
+      "path": "infrastructure/FINAL_VERIFICATION.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "infrastructure/FINAL_VERIFICATION.md",
+      "sha256": "c5a968bf562999556c4a20661f9b14ea06d8f4857522380eb8c5c197664d7c26",
+      "characters_reviewed": 11409,
+      "heading_or_title": "> Retained engineering evidence and procedure snapshot. Current navigation: [operations](../docs/OPERATIONS.md) and [evidence register](../docs/EVIDENCE/README.md). Preparation does not establish execution."
+    },
+    {
+      "path": "infrastructure/HARDENED_RUNTIME_RELEASE.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "infrastructure/HARDENED_RUNTIME_RELEASE.md",
+      "sha256": "a9148c2528e7636b396eda9ba865c5932096c34d974282b23e4e5da4653d4e35",
+      "characters_reviewed": 36978,
+      "heading_or_title": "Hardened ingest release - LINUX RELEASE VERIFIED; AWS RELEASE BLOCKED"
+    },
+    {
+      "path": "infrastructure/LINUX_CI_GATE.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "infrastructure/LINUX_CI_GATE.md",
+      "sha256": "5aba76e73214e658bae8232f02415091d71dac3726ba824ac237bb0895937876",
+      "characters_reviewed": 8645,
+      "heading_or_title": "> Retained engineering evidence and procedure snapshot. Current navigation: [operations](../docs/OPERATIONS.md) and [evidence register](../docs/EVIDENCE/README.md). Preparation does not establish execution."
+    },
+    {
+      "path": "infrastructure/OPERATOR_PARAMETERS.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "infrastructure/OPERATOR_PARAMETERS.md",
+      "sha256": "b819568eec51153e7097a654d7e392b78d0c0a5c1ea438bbbbc01a3c4db49bb6",
+      "characters_reviewed": 3151,
+      "heading_or_title": "Deployment parameter worksheet"
+    },
+    {
+      "path": "infrastructure/PRIVATE_RDS_MIGRATION_PLAN.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "infrastructure/PRIVATE_RDS_MIGRATION_PLAN.md",
+      "sha256": "2fccf79e72db61705a0fdf8e8c5e02d0a59c32aa3fb8ea7e58598fb3fe10a1ab",
+      "characters_reviewed": 48245,
+      "heading_or_title": "> Current checkpoint: [CI 37931518056](https://github.com/Nompil/fintrust/actions/runs/37931518056)"
+    },
+    {
+      "path": "infrastructure/PRIVATE_RDS_RUNNER.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "infrastructure/PRIVATE_RDS_RUNNER.md",
+      "sha256": "5764a47a6ae283af3c36b498f0938dcf29d2fe15cf1b4de5191c4ba2d3c8b60e",
+      "characters_reviewed": 31325,
+      "heading_or_title": "Temporary private RDS runner \u2014 CI VERIFIED; AWS NOT APPROVED"
+    },
+    {
+      "path": "infrastructure/README.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "infrastructure/README.md",
+      "sha256": "ec97defdfa36c951200b3423c43c2547c49ee306fa546817ebf2f7867c05e1e7",
+      "characters_reviewed": 3156,
+      "heading_or_title": "Infrastructure preparation"
+    },
+    {
+      "path": "infrastructure/READ_ONLY_INVENTORY.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "infrastructure/READ_ONLY_INVENTORY.md",
+      "sha256": "4dbc03cc8133302d8856d5f69570c5596ea2d093ca22a2db6c02c09e9c487a97",
+      "characters_reviewed": 12264,
+      "heading_or_title": "Read-only inventory procedure"
+    },
+    {
+      "path": "infrastructure/RELEASE1_AWS_PREFLIGHT.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "infrastructure/RELEASE1_AWS_PREFLIGHT.md",
+      "sha256": "9b75ee21e7d79979e07bab0de9e3ddf457e507e766403385c7a25fc42b7240dd",
+      "characters_reviewed": 29629,
+      "heading_or_title": "Release 1 AWS inventory and private RDS preflight checkpoint"
+    },
+    {
+      "path": "infrastructure/RELEASE1_CONTROLLED_PREFLIGHT_PLAN.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "infrastructure/RELEASE1_CONTROLLED_PREFLIGHT_PLAN.md",
+      "sha256": "fca17bd2cdeddea2057d0a3ed86790c857a6d109a5126968b9caba025c35121c",
+      "characters_reviewed": 25840,
+      "heading_or_title": "Controlled Release 1 private RDS preflight approval plan"
+    },
+    {
+      "path": "infrastructure/RELEASE1_DATABASE_BOOTSTRAP_REVIEW.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "infrastructure/RELEASE1_DATABASE_BOOTSTRAP_REVIEW.md",
+      "sha256": "69bc87e1b0626f5099e0381cbbff4b16c6003e1e81912477f92dea4c9426b23f",
+      "characters_reviewed": 8119,
+      "heading_or_title": "Release 1 base-schema bootstrap review"
+    },
+    {
+      "path": "infrastructure/RELEASE1_DEPLOYMENT_CHECKPOINT.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "infrastructure/RELEASE1_DEPLOYMENT_CHECKPOINT.md",
+      "sha256": "746ffc3bc019be6c2c4261fd771cd1c7ce16a088a12454ddf33dee56d91bb862",
+      "characters_reviewed": 4349,
+      "heading_or_title": "Release1 controlled AWS execution plan \ufffd not executable approval"
+    },
+    {
+      "path": "infrastructure/STAGE5_ASYNC_FIX.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source. Existing user changes remain untouched.",
+      "destination": "infrastructure/STAGE5_ASYNC_FIX.md",
+      "sha256": "39e1332905e83230f6d5e636c900a03c6b6cc6af7877a6ab5d4e69cd31ea233b",
+      "characters_reviewed": 18008,
+      "heading_or_title": "Stage 5 async IAM correction and CREATE rollback recovery"
+    },
+    {
+      "path": "infrastructure/STAGE5_AUTHORIZATION_REVIEW.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source. Existing user changes remain untouched.",
+      "destination": "infrastructure/STAGE5_AUTHORIZATION_REVIEW.md",
+      "sha256": "4913346aaf5edce36154c4784b64c4a9d769e6e4f9465337d0584dfb5c4357d0",
+      "characters_reviewed": 21485,
+      "heading_or_title": "Stage 5 complete tagged-log creation authorization review"
+    },
+    {
+      "path": "infrastructure/STAGE5_DIAGNOSTIC.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "infrastructure/STAGE5_DIAGNOSTIC.md",
+      "sha256": "200b909d921b6fbe4055bb65fd0e30ef9e1c583d699e606b8f06a950501c7c22",
+      "characters_reviewed": 17635,
+      "heading_or_title": "Stage 5 temporary CalledVia diagnostic plan"
+    },
+    {
+      "path": "infrastructure/STAGE5_DIAGNOSTIC2.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "infrastructure/STAGE5_DIAGNOSTIC2.md",
+      "sha256": "a51e5d4478834f53d2d96413d597b7f357c09ac3e3e9bb0d27b771a995c1408f",
+      "characters_reviewed": 26317,
+      "heading_or_title": "Stage 5 second temporary tagging-context diagnostic"
+    },
+    {
+      "path": "infrastructure/STAGE5_PERMANENT_FIX.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source. Existing user changes remain untouched.",
+      "destination": "infrastructure/STAGE5_PERMANENT_FIX.md",
+      "sha256": "9890e2ba1cfe050fff8beac775a897989f0c38dee3e948b853c52d081d749dab",
+      "characters_reviewed": 23382,
+      "heading_or_title": "Stage 5 permanent Logs authorization correction and recovery"
+    },
+    {
+      "path": "infrastructure/STAGE5_TAGLOGGROUP_DIAGNOSTIC.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "infrastructure/STAGE5_TAGLOGGROUP_DIAGNOSTIC.md",
+      "sha256": "3e38b9f3d4a4bfec679d18cee95d2d476c7d62315a91a257f5e2b45532c46503",
+      "characters_reviewed": 16913,
+      "heading_or_title": "Stage 5 targeted TagLogGroup diagnostic proposal"
+    },
+    {
+      "path": "infrastructure/iam/DEPLOYER_DESIGN.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "infrastructure/iam/DEPLOYER_DESIGN.md",
+      "sha256": "60fa724019a1bbbb4c2c818e7e3db863c873766af4f6c956884b8cda156718ff",
+      "characters_reviewed": 30413,
+      "heading_or_title": "FinTrust deployment identity"
+    },
+    {
+      "path": "project-reference/HANDOFF.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "project-reference/HANDOFF.md",
+      "sha256": "9dd8cbfe34a48f23a838c0b5d110a52b5ca6a2183deb534e856cf7aac028d244",
+      "characters_reviewed": 3330,
+      "heading_or_title": "FinTrust project handoff"
+    },
+    {
+      "path": "project-reference/README.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "project-reference/README.md",
+      "sha256": "f651db353a13a40544018506364f6d276b1e5042cb278e80e877ca7a4bd13dee",
+      "characters_reviewed": 1124,
+      "heading_or_title": "Project references"
+    },
+    {
+      "path": "project-reference/completed_work.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability. Existing user changes remain untouched.",
+      "destination": "project-reference/completed_work.md",
+      "sha256": "c5722b40844d882b5bc18a66eb59c1884f978ad5a6cf2d9c8f648b8f996c0263",
+      "characters_reviewed": 1855,
+      "heading_or_title": "Completed work and evidence"
+    },
+    {
+      "path": "project-reference/component_guide.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability. Existing user changes remain untouched.",
+      "destination": "project-reference/component_guide.md",
+      "sha256": "91d3e750f63d50c2d7460609ff4f86999cf25e4948a8ca98491ca8eb58d0c02c",
+      "characters_reviewed": 10248,
+      "heading_or_title": "FinTrust Component Guide"
+    },
+    {
+      "path": "project-reference/daily_log.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "project-reference/daily_log.md",
+      "sha256": "b25d71aa0bcf21520226eddcb4fbba7b30873cc859254aa572c7f6131937ee4e",
+      "characters_reviewed": 14780,
+      "heading_or_title": "> Historical engineering log. Current behavior and outstanding gates are maintained in the [canonical documentation](../README.md) and [evidence register](../docs/EVIDENCE/README.md)."
+    },
+    {
+      "path": "project-reference/learning_guide.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "project-reference/learning_guide.md",
+      "sha256": "6860692677051a4e4d1ea6ede9356aa90ba07e6ce0b55930ceac2b5eeafb6346",
+      "characters_reviewed": 26465,
+      "heading_or_title": "> Historical reference retained in place. Some implementation/status descriptions are superseded. Use the [current canonical guide](../docs/OPERATIONS.md) and [documentation inventory](../README.md) for current behavior and proposed disposition. No archive or deletion has occurred."
+    },
+    {
+      "path": "project-reference/live_demo_script.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability. Existing user changes remain untouched.",
+      "destination": "project-reference/live_demo_script.md",
+      "sha256": "8981953d0ac303e754a06dd222cd107bea15c41cf95800ea79552fc476b31278",
+      "characters_reviewed": 2383,
+      "heading_or_title": "Day 1-3 technical demonstration"
+    },
+    {
+      "path": "project-reference/local_software_setup.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability. Existing user changes remain untouched.",
+      "destination": "project-reference/local_software_setup.md",
+      "sha256": "d547dc2f0f551f1ef73b385b1d42b9acc04ef159fab53008edc7fefc5f12445c",
+      "characters_reviewed": 4623,
+      "heading_or_title": "Local Software Setup"
+    },
+    {
+      "path": "project-reference/presentation_notes.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability. Existing user changes remain untouched.",
+      "destination": "project-reference/presentation_notes.md",
+      "sha256": "dbb1f83240991ab1a6c1d4779dd80036d4ded9514c32d0587f6ff7cef4dcf393",
+      "characters_reviewed": 1167,
+      "heading_or_title": "Business presentation notes"
+    },
+    {
+      "path": "project-reference/requirements_day1_day3.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "project-reference/requirements_day1_day3.md",
+      "sha256": "a5ba2dc2d8e4f365d5308559b84ae29b10fc094db838df102bb720a62661eb03",
+      "characters_reviewed": 6590,
+      "heading_or_title": "> Historical reference retained in place. Some implementation/status descriptions are superseded. Use the [current canonical guide](../README.md) and [documentation inventory](../README.md) for current behavior and proposed disposition. No archive or deletion has occurred."
+    },
+    {
+      "path": "project-reference/upcoming_features.md",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "project-reference/upcoming_features.md",
+      "sha256": "df0be369b67be93e8e44b3a04e585a9f0faa2b037f208ac32810869d0e7708a1",
+      "characters_reviewed": 3159,
+      "heading_or_title": "> Historical reference retained in place. Some implementation/status descriptions are superseded. Use the [current canonical guide](../docs/architecture.md) and [documentation inventory](../README.md) for current behavior and proposed disposition. No archive or deletion has occurred."
+    },
+    {
+      "path": "requirements-lambda.txt",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "requirements-lambda.txt",
+      "sha256": "55f769f96cb84169a4a3a6eed46dc48e7367a91b9d622f3e0627ede3333d3204",
+      "characters_reviewed": 281,
+      "heading_or_title": "Complete runtime dependency set for CPython 3.12, Linux x86_64."
+    },
+    {
+      "path": "requirements-migration.txt",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "requirements-migration.txt",
+      "sha256": "df2103a76fd03a451e2065b052b6d4cdcc5cc5c0e6fa6ed4385b49800d795f2c",
+      "characters_reviewed": 237,
+      "heading_or_title": "Minimal pinned runtime for the separate CPython 3.12 / Linux x86_64 runner."
+    },
+    {
+      "path": "requirements-runtime.txt",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "requirements-runtime.txt",
+      "sha256": "45de584c0e724c8916cf64e1ecf82cb84e304347abd38381aa1062dc469d0f25",
+      "characters_reviewed": 109,
+      "heading_or_title": "boto3==1.43.104"
+    },
+    {
+      "path": "requirements-verification-lock.txt",
+      "classification": "CONSOLIDATE",
+      "reason": "Narrative absorbed by Master/Progress; originals retained for traceability.",
+      "destination": "requirements-verification-lock.txt",
+      "sha256": "2eb24a9b720b6635e9c0fd0b29527f30fc7e5970bc5f4b32e2877410a922c7ae",
+      "characters_reviewed": 738,
+      "heading_or_title": "Exact successful local assurance install (Windows CPython 3.14)."
+    },
+    {
+      "path": "requirements.txt",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "requirements.txt",
+      "sha256": "e40743316f0dcffc4bbb91fab8ad5354b461b93787245fbb4e0aff2ca5b52a7c",
+      "characters_reviewed": 56,
+      "heading_or_title": "-r requirements-runtime.txt"
+    },
+    {
+      "path": "tests/data_quality/README.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "tests/data_quality/README.md",
+      "sha256": "ad10b1b4b4acf3e1cd95c63f9c0e43d9e4f81d709aeca43e8d29911fe16ade10",
+      "characters_reviewed": 692,
+      "heading_or_title": "PostgreSQL Data Quality Checks"
+    },
+    {
+      "path": "tests/fixtures/e2e/release1/MAPPING.md",
+      "classification": "KEEP",
+      "reason": "Operational/schema/tooling contract or maintained supporting source.",
+      "destination": "tests/fixtures/e2e/release1/MAPPING.md",
+      "sha256": "a2fcc2679ab154fbef414d8df10f62e6e0b9e358f9d04540033a1965cf9425c7",
+      "characters_reviewed": 2991,
+      "heading_or_title": "Release 1 fixture derivation"
+    }
+  ],
+  "navigation_updates": [
+    "docs/BUSINESS_RULE_SCHEMA_REVIEW.md",
+    "docs/PRESENTATION_GUIDE.md",
+    "docs/RELEASE1_BUSINESS_PROCESS.md",
+    "docs/RELEASE1_CANDIDATE.md",
+    "docs/RELEASE1_E2E_MANIFEST.md",
+    "docs/RELEASE1_FAILURE_INJECTION.md",
+    "docs/RELEASE1_FRONTEND_FREEZE.md",
+    "docs/RELEASE1_GAP_REGISTER.md",
+    "docs/RELEASE1_INGESTION_LIFECYCLE.md",
+    "docs/RELEASE1_MIGRATION_VERIFICATION.md",
+    "docs/RELEASE1_MONDAY_DEMO.md",
+    "docs/RELEASE1_PRESENTATION_READINESS.md",
+    "docs/RELEASE1_PRESENTATION_STATUS.md",
+    "docs/RELEASE1_ROLE_WORKFLOW_UX.md",
+    "docs/RELEASE1_SYSTEM_ASSURANCE.md",
+    "docs/architecture.md",
+    "docs/data_governance.md",
+    "docs/diagrams/fintrust-release1-erd-notes.md",
+    "docs/diagrams/release1-operating-model.md",
+    "docs/rubric_checklist.md",
+    "project-reference/HANDOFF.md",
+    "project-reference/README.md",
+    "project-reference/daily_log.md",
+    "project-reference/learning_guide.md",
+    "project-reference/requirements_day1_day3.md",
+    "project-reference/upcoming_features.md"
+  ],
+  "consolidation_validation": {
+    "Master": {
+      "pages": 19,
+      "sha256": "788c948c155360268d9b888ca6aa1ec263aae7c24b4845bacc2fe0c13ffc97ad",
+      "outline_entries": 42
+    },
+    "Progress": {
+      "pages": 6,
+      "sha256": "f7fc9d2ce2d2af1f5ede06038ab7a47cdc132c8998e413e8025c8b02b62d2c6d",
+      "outline_entries": 10
+    },
+    "protected_files_unchanged": 1081,
+    "reviewed_documents": 173,
+    "classification_counts": {
+      "KEEP": 39,
+      "CONSOLIDATE": 43,
+      "EVIDENCE": 89,
+      "ARCHIVE": 2
+    },
+    "navigation_links_checked": 144,
+    "visual_review": "All 25 rendered pages inspected in contact sheets; all diagrams and milestone tables additionally inspected at full resolution. No clipping, unreadable labels, accidental blank pages or page-number/TOC defects.",
+    "aws_access": false,
+    "application_behavior_changed": false,
+    "sql_changed": false,
+    "push": false,
+    "archive_files": [
+      "docs/archive/docs/day3_resilience.md",
+      "docs/archive/docs/iam_role_matrix.md"
+    ],
+    "links": "All README/archive/supporting-source navigation targets and all 42 section references exist. Archive relative links repaired; no broken checked targets remain. Immutable evidence links not rewritten."
+  },
+  "broken_links_fixed": {
+    "count": 7,
+    "file": "docs/BUSINESS_RULE_SCHEMA_REVIEW.md",
+    "change": "Legacy ../fintrust/ links now use ../backend/fintrust/ after the verified source move."
+  }
+}

@@ -1,3 +1,5 @@
+> Supporting source retained for traceability. Use [Project Master](../docs/FinTrust_Project_Master.pdf) for consolidated project information and [Project Progress](../docs/FinTrust_Project_Progress.pdf) for current status. Historical counts and deployment statements below apply to their original checkpoint.
+
 > Historical reference retained in place. Some implementation/status descriptions are superseded. Use the [current canonical guide](../docs/architecture.md) and [documentation inventory](../README.md) for current behavior and proposed disposition. No archive or deletion has occurred.
 
 # Upcoming features and next steps

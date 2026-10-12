@@ -1,0 +1,208 @@
+{
+  "title": "FinTrust Project Progress",
+  "subtitle": "Single living status and milestone record",
+  "checkpoint": "7397f22",
+  "date": "12 October 2026",
+  "sections": [
+    {
+      "title": "Current Snapshot",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "12 October 2026 | Source checkpoint 7397f22 | Release 1 local domain candidate. Documentation revision is a later commit and does not change the tested source.",
+        "756 passed / 1 skipped; focused 62 passed; disposable PostgreSQL 16 lifecycle 21 passed. Separate older role proof does not establish live migration 003 privileges.",
+        "AWS unchanged in this phase. Foundation stages historically verified; full current-release integration pending. Latest live RDS evidence (11 October) found missing base schema. Temporary preflight endpoint/runner were cleaned up."
+      ],
+      "table": null
+    },
+    {
+      "title": "Completed",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "Repository structure and source-path contracts; Analyst-first navigation and credential-preserving local restart; identity/deduplication and frozen risk rules; local review/account/audit workflows; authoritative append-only lifecycle and read APIs.",
+        "Historical base bootstrap/001/002 and service-role PG16 checks retained. Current lifecycle proof adds 21 PG16 tests. No live write is implied."
+      ],
+      "table": null
+    },
+    {
+      "title": "In Progress",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "Domain lifecycle closure across correction, technical failures, risk delivery and business review. AWS Integration remains In Progress. Current source is not a production deployment."
+      ],
+      "table": null
+    },
+    {
+      "title": "Blocked",
+      "status": "PENDING VERIFICATION",
+      "paragraphs": [
+        "Live promotion requires reviewed empty-database bootstrap and 001/002/003 chain, correct service grants and fresh exact-source Linux artifact gate. Existing fixed live runner does not include 003.",
+        "Cloud intake, FIFO/Streams mappings, authenticated API, SES delivery and operational monitoring still require controlled live evidence. Historical Linux artifacts remain valid only for their source."
+      ],
+      "table": null
+    },
+    {
+      "title": "Deferred",
+      "status": "PLANNED",
+      "paragraphs": [
+        "Hourly velocity exploration; refunds/reversals/chargebacks; FX and current-balance engine; HA/Multi-AZ/proxy; enterprise federation; durable notifications; full report-object catalogue; archival deletion; automatic DLQ lifecycle observation; AI Investigation Assistant."
+      ],
+      "table": null
+    },
+    {
+      "title": "Next Actions",
+      "status": "PLANNED",
+      "paragraphs": [
+        "1. Continue Quarantine Recovery: lineage, correction outbox, revalidation/dedupe, partial failure and durable completion.",
+        "2. Prove Risk Event -> Alert -> Review Queue with uncertain-send handling and independent review creation.",
+        "3. Run complete local scenarios; then exact-source Linux gate and separately approved bootstrap/cloud integration.",
+        "No AWS action, SQL rollout or push is authorized by documentation consolidation."
+      ],
+      "table": null
+    },
+    {
+      "title": "Milestone History",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "Selected major milestones from Git history and dated AWS evidence. Historical proof applies to its source; it is not rerun or promoted to the current candidate. Source paths resolve under docs/EVIDENCE where noted."
+      ],
+      "table": [
+        [
+          "Date",
+          "Commit / proof",
+          "Change / reason / validation"
+        ],
+        [
+          "2026-09-29",
+          "cb729ea",
+          "docs: document FinTrust capstone design and presentation. Reason: Establish the capstone business and design baseline. Result: Historical design; not deployment evidence."
+        ],
+        [
+          "2026-09-29",
+          "2c98aa7",
+          "feat: implement Day 2 transaction data layer. Reason: Introduce the PostgreSQL transaction data layer. Result: Original implementation; current schema later extended."
+        ],
+        [
+          "2026-10-02",
+          "8d2cf05",
+          "docs: record budget-first dependency and network decisions. Reason: Avoid unmanaged standing cost and choose private service paths. Result: Budget-first decision recorded."
+        ],
+        [
+          "2026-10-06",
+          "04276f9",
+          "Prepare isolated four-subnet Stage 1 network template. Reason: Isolate the Stage 1 private network. Result: Template preparation; later foundation evidence retained."
+        ],
+        [
+          "2026-10-08",
+          "3c53ab1",
+          "Record Stage 3 completion and Stage 4 costs and recovery. Reason: Record Stage 3 completion and next-stage cost/recovery gates. Result: Historical RDS deployment evidence; not current schema bootstrap."
+        ],
+        [
+          "2026-10-08",
+          "8745ad7",
+          "Record successful Stage 4 policy and template validation. Reason: Validate the isolated DynamoDB/SQS stage. Result: Policy/template validation recorded; later foundation verified."
+        ],
+        [
+          "2026-10-08",
+          "e14b6af",
+          "Add scoped legacy Logs tagging permission to canonical Stage 5 policy. Reason: Resolve provider-side tagged log creation authorization. Result: Scoped legacy tagging correction; diagnostics retained."
+        ],
+        [
+          "2026-10-08",
+          "e52ca2d",
+          "Prepare exact-qualified Stage 5 async permissions and rollback recovery. Reason: Separate qualified async configuration permissions. Result: Scoped fix and rollback procedure recorded."
+        ],
+        [
+          "2026-10-09",
+          "f118aa9",
+          "Record verified hardened Linux release and CI evidence. Reason: Close the earlier hardened release Linux gate. Result: Historical exact-source CI proof; not 7397f22 artifact proof."
+        ],
+        [
+          "2026-10-09",
+          "24ef12e",
+          "Define secure private RDS bootstrap through temporary Secrets Manager endpoint. Reason: Secure private master-credential access without NAT. Result: Temporary endpoint bootstrap design; later read-only proof."
+        ],
+        [
+          "2026-10-09",
+          "a136467",
+          "Record verified PostgreSQL 16 index helper and Linux runner artifacts. Reason: Prove narrow PostgreSQL 16 index-helper privileges. Result: PG16 helper and Linux runner evidence recorded."
+        ],
+        [
+          "2026-10-10",
+          "8fb2c6e",
+          "Record verified Release 1 lifecycle and exact Linux CI artifact. Reason: Bind dataset behavior and CI artifact to source. Result: Historical Release 1 lifecycle/package proof."
+        ],
+        [
+          "2026-10-11",
+          "906b555",
+          "Review authoritative Release 1 base schema and verification boundary. Reason: Detect the empty-live-database bootstrap gap. Result: Base source review; subsequent local proof retained."
+        ],
+        [
+          "2026-10-11",
+          "AWS evidence",
+          "Read-only private RDS preflight: secure TLS path and bounded read-only SQL. Result: missing base schema; no writes. Evidence: 05-rds/release1-live-readonly-alternative-preflight-result.md."
+        ],
+        [
+          "2026-10-11",
+          "AWS evidence",
+          "Temporary preflight cleanup to stop endpoint standing cost. Result: runner/network stacks, endpoint and temporary SG/ENIs removed; existing five stacks unchanged. Evidence: 05-rds/release1-temporary-preflight-cleanup-result.md."
+        ],
+        [
+          "2026-10-12",
+          "c6f4274",
+          "Use official AWS icons and surface the presentation ERD. Reason: Make architecture presentation accurate and readable. Result: Official AWS icons and ERD surfaced."
+        ],
+        [
+          "2026-10-12",
+          "9baae3f",
+          "Preserve existing local credentials when restarting Analyst workspace. Reason: Avoid replacing Analyst credentials on restart. Result: Credential-preserving local restart verified."
+        ],
+        [
+          "2026-10-12",
+          "a558051",
+          "Prioritize Analyst transactions and risk workflows. Reason: Prioritize Analyst work over presentation charts. Result: Transactions/risk workflow UX verified."
+        ],
+        [
+          "2026-10-12",
+          "6fbe773",
+          "Organize runtime source and audit FinTrust flow contracts. Reason: Make runtime boundaries clear without changing handlers. Result: 731 passed / 1 skipped; separate PG16 role proof."
+        ],
+        [
+          "2026-10-12",
+          "7397f22",
+          "Wire authoritative transaction lifecycle audit and scoped API reads. Reason: Expose authoritative append-only lifecycle and scoped reads. Result: 756 passed / 1 skipped; focused 62; PG16 lifecycle 21."
+        ]
+      ]
+    },
+    {
+      "title": "Decision Log",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "Retain candidate-before-DB-validation chronology; keep processing, risk, review and delivery separate; accept all valid risk levels; original quarantine is terminal and corrections are new linked occurrences.",
+        "Retain >5 accepted transactions / 300 seconds, not >10/hour. Keep no-NAT/private RDS. Require in-memory bootstrap credential retrieval over a reviewed private endpoint and verify-full.",
+        "Master owns project explanation; Progress owns status/history; EVIDENCE owns proof. Technical contracts remain supporting sources, not alternative readiness declarations."
+      ],
+      "table": null
+    },
+    {
+      "title": "Issues and Resolutions",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "Tagged-create IAM failures: controlled diagnostics and provider-specific permission corrections recorded; static validation alone was insufficient.",
+        "Live database missing base schema: read-only preflight stopped incremental migration; temporary billable infrastructure cleaned up, evidence retained.",
+        "Stale local entry and login restart: authenticated workspace routing and existing hashed identity preservation fixed.",
+        "Lifecycle recovery: distinguish durable financial STORED from external projection failure; compare latest failure/recovery sequence so multiple failed attempts recover correctly.",
+        "Unresolved: current-source Linux gate, live bootstrap/003 privileges and integration. No claim of production readiness."
+      ],
+      "table": null
+    },
+    {
+      "title": "Evidence and Maintenance",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "Latest test proof: docs/EVIDENCE/12-e2e/transaction-lifecycle/verification-summary.json. Live preflight and cleanup: docs/EVIDENCE/05-rds/release1-live-readonly-alternative-preflight-result.md and release1-temporary-preflight-cleanup-result.md.",
+        "Edit docs/source/project-progress.json and regenerate with python tools/build_project_docs.py. Keep historical results and explicit dates; do not overwrite evidence or mint another standalone status report."
+      ],
+      "table": null
+    }
+  ]
+}

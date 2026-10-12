@@ -1,3 +1,5 @@
+> Supporting source retained for traceability. Use [Project Master](FinTrust_Project_Master.pdf) for consolidated project information and [Project Progress](FinTrust_Project_Progress.pdf) for current status. Historical counts and deployment statements below apply to their original checkpoint.
+
 # Release1 migration verification
 
 Migration001 is unchanged (normalized LF SHA256 `0ff06ca8c43596ac9b8651f4bd851bfb0487343f4c9eccb198849e3e59772bd6`). Migration002 adds operational batch/attempt/row accounting, review/history, quarantine/correction and correction/projection outboxes. Financial facts remain append-only.

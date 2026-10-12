@@ -1,3 +1,5 @@
+> Supporting source retained for traceability. Use [Project Master](../docs/FinTrust_Project_Master.pdf) for consolidated project information and [Project Progress](../docs/FinTrust_Project_Progress.pdf) for current status. Historical counts and deployment statements below apply to their original checkpoint.
+
 > Historical engineering log. Current behavior and outstanding gates are maintained in the [canonical documentation](../README.md) and [evidence register](../docs/EVIDENCE/README.md).
 
 # Daily progress

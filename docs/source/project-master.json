@@ -1,0 +1,688 @@
+{
+  "title": "FinTrust Project Master",
+  "subtitle": "Transaction Monitoring & Risk Alert Platform",
+  "checkpoint": "7397f22",
+  "date": "12 October 2026",
+  "sections": [
+    {
+      "title": "Executive Summary",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "FinTrust is a transaction monitoring and risk investigation platform. It admits CSV files, preserves financial identity and provenance, calculates explainable risk signals and gives authorized staff accountable review workflows. It does not move funds, reverse charges or establish fraud.",
+        "The current local source checkpoint is 7397f22. The lifecycle regression passed 756 tests with one expected local administrator-only skip. AWS foundation deployment is historical evidence; complete current-release cloud integration remains pending."
+      ],
+      "references": [
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md",
+        "docs/architecture/TRANSACTION_LIFECYCLE.md"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "Imbokodo Bank Case Study",
+      "status": "PLANNED",
+      "paragraphs": [
+        "Imbokodo Bank is a fictional client created for this project case study. Its operations team needs to reconcile transaction exports and investigate exceptions without losing the source evidence or confusing invalid data with financial risk.",
+        "The case study provides business context, not a claim of a real bank engagement, production adoption or regulatory approval."
+      ],
+      "references": [
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "Problem Statement",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "Manual file inspection can overlook invalid rows, repeated source transactions and unexplained risk decisions. Retrying partial processing can duplicate financial records or notifications unless identity and recovery are deliberate.",
+        "FinTrust separates data-quality decisions, ledger acceptance, risk assessment, investigation and technical recovery. Every submitted row needs a recorded outcome; technical failure must not silently erase accepted financial activity."
+      ],
+      "references": [
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "Product North Star",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "What happened? Why is it risky? What should I do next?",
+        "FinTrust helps a Risk Analyst answer these questions quickly, consistently and with evidence. The interface prioritizes Transactions, risk details and Review Queue. Insights and reports support investigation rather than replacing it."
+      ],
+      "references": [
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md",
+        "frontend/release1.html"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "Project Scope",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "Release 1 covers CSV admission, exact duplicate protection, positive-amount transaction validation, quarantine correction, deterministic scoring, durable review and scoped read/report/audit workflows.",
+        "Refund/reversal accounting, foreign-exchange conversion, live account balances, enterprise federation, durable notification inboxes and AI investigation are outside the implemented first release. Local direct processing does not establish cloud transport completion."
+      ],
+      "references": [
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md",
+        "docs/RELEASE1_OPERATIONS.md"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "Assumptions and Constraints",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "Use synthetic data for practice. Region remains af-south-1. The database is private; no NAT Gateway or public RDS access is part of the approved architecture. Lambda targets Python 3.12 / Linux x86_64.",
+        "Amount thresholds operate per transaction currency, with no implied FX normalization. Late arrivals do not retroactively rescore previous transactions. Historical package verification is tied to its exact source and checksum."
+      ],
+      "references": [
+        "docs/RELEASE1_OPERATIONS.md",
+        "backend/fintrust/rules.py"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "Stakeholders",
+      "status": "PLANNED",
+      "paragraphs": [
+        "The fictional bank operations sponsor owns business scope and approves risk policy. Analysts investigate transactions; Auditors examine evidence; Administrators govern access; Maintainers handle technical recovery.",
+        "A data owner must approve retention and disposal. A deployment owner controls account mutations and cost acceptance. These accountability assignments are the intended operating model, not evidence that real organizational appointments exist."
+      ],
+      "references": [
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md",
+        "docs/SECURITY.md"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "Users and Role Separation",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "Backend role and account checks enforce local access. Financial investigation is separate from infrastructure maintenance. Admin oversight does not automatically authorize routine Analyst mutations.",
+        "Local opaque credentials are operator-provisioned and stored as hashes. Browser labels do not confer authority. Production identity deployment remains a separate gate."
+      ],
+      "references": [
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md",
+        "backend/fintrust/auth.py"
+      ],
+      "table": [
+        [
+          "Role",
+          "Responsibility"
+        ],
+        [
+          "Analyst",
+          "Upload, correct quarantine, investigate and decide reviews within scope"
+        ],
+        [
+          "Auditor",
+          "Read-only scoped evidence, reports and audit"
+        ],
+        [
+          "Administrator",
+          "User/account governance, oversight and unknown-account cases"
+        ],
+        [
+          "Maintainer",
+          "Technical diagnosis/recovery; no financial review decisions"
+        ]
+      ],
+      "diagram": null
+    },
+    {
+      "title": "Functional Requirements",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "Record source system/reference, canonical transaction identity, fingerprint, file/batch and row provenance. Reject invalid files; quarantine invalid rows; retain all accepted risk levels.",
+        "Expose transaction/risk/review/delivery states, correction lineage and actor-attributed history. Reconcile accepted, quarantined, duplicate, pending and failed outcomes. Prevent blind duplicate notification retries."
+      ],
+      "references": [
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md",
+        "docs/architecture/TRANSACTION_LIFECYCLE.md"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "Non-functional Requirements",
+      "status": "PENDING VERIFICATION",
+      "paragraphs": [
+        "Private networking, verified TLS, least privilege and account-scoped access are required. Atomic financial commits, immutable evidence, bounded reads and deterministic scoring protect correctness.",
+        "Throughput, availability SLA, load capacity and production incident response are not established by functional test counts. No production-grade performance claim is made."
+      ],
+      "references": [
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md",
+        "docs/SECURITY.md"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "Planning and Development Approach",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "Development uses phased local verification followed by separately approved live account steps. Domain rules and artifacts are frozen before deployment; read-only preflight checks assumptions before writes.",
+        "The current sequence is clean structure, audit actual flow, wire lifecycle, prove quarantine recovery, prove risk/alert/review interactions, run full scenarios, then Linux packaging and controlled cloud integration."
+      ],
+      "references": [
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md",
+        "docs/architecture/REPOSITORY_STRUCTURE.md"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "End-to-End Business Flow",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "Cloud target: Analyst CSV upload -> input S3 -> ingest parsing/admission -> SQS FIFO candidates -> private consumer database-aware validation -> quarantine OR accepted ledger and frozen scoring -> DynamoDB projection. Medium/High review work is committed independently of High-only email delivery.",
+        "The local demonstration uses mocked S3 and a direct SQL consumer helper. It does not prove live FIFO, Streams or SES. The following original process diagrams are historical supporting views; the explicit chronology above and lifecycle contract are authoritative."
+      ],
+      "references": [
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md"
+      ],
+      "table": null,
+      "diagram": "FinTrust_Activity_Diagram.pdf"
+    },
+    {
+      "title": "Transaction Lifecycle",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "Actual processing order: RECEIVED -> QUEUED -> VALIDATED -> SCORED -> STORED. Ingest is outside the VPC; account-aware validation happens in the private consumer after candidate handoff.",
+        "Migration 003 adds transaction_lifecycle_events as append-only observations, not a competing mutable status model. Meaningful events record sequence, time and system actor. Human correction/review events retain their authenticated actor. Old rows are not backfilled with invented history.",
+        "Risk, review, delivery and processing are separate dimensions. Reads expose provenance and a bounded timeline; timeline_complete=false discloses missing or truncated history. The runtime must not be deployed before migration 003 and its service grants are approved."
+      ],
+      "references": [
+        "docs/architecture/TRANSACTION_LIFECYCLE.md",
+        "sql/migrations/003_transaction_lifecycle.sql"
+      ],
+      "table": [
+        [
+          "Branch",
+          "Authority / meaning"
+        ],
+        [
+          "Quarantine",
+          "Original occurrence terminal; correction creates linked new occurrence"
+        ],
+        [
+          "Review",
+          "OPEN -> UNDER_REVIEW -> CLEARED / CONFIRMED_RISK / ESCALATED"
+        ],
+        [
+          "Recovery",
+          "TECHNICAL_FAILURE -> RETRY -> RECOVERED; DLQ needs observed evidence"
+        ],
+        [
+          "Projection failure",
+          "Financial state remains STORED; pending external projection is recoverable"
+        ]
+      ],
+      "diagram": null
+    },
+    {
+      "title": "Risk Monitoring Model",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "Scoring is deterministic and records rule version, score and triggered explanations with the financial outcome. Scores are capped at 100. Low is below 40, Medium is 40 through 69, and High is 70 or above.",
+        "HIGH is valid accepted data requiring attention, not quarantine. Every accepted scored transaction has a risk_events record; only Medium/High open routine reviews. Signals are teaching rules, not a validated bank fraud model. Risk outcomes do not authorize money movement."
+      ],
+      "references": [
+        "backend/fintrust/rules.py",
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "Risk Scenarios and Rules",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "Frozen Release 1 velocity is more than 5 accepted transactions in the closed 300-second event-time window, including the current transaction. Test 5 versus 6 and the exact window boundary. The 10/11/12-per-hour rule is exploratory and deferred.",
+        "For ZAR examples, 49,999.99 and 50,000.00 do not trigger HIGH_AMOUNT; 50,000.01 does. Thresholds apply numerically per currency. Distinct similar charges stay in the ledger and can add a possible-duplicate signal; exact repeats are deduplicated."
+      ],
+      "references": [
+        "backend/fintrust/rules.py",
+        "docs/RELEASE1_E2E_MANIFEST.md"
+      ],
+      "table": [
+        [
+          "Signal",
+          "Default points / boundary"
+        ],
+        [
+          "HIGH_AMOUNT",
+          "30; amount > 50,000"
+        ],
+        [
+          "VERY_HIGH_AMOUNT",
+          "25 additional; amount > 200,000"
+        ],
+        [
+          "TRANSFER",
+          "20; transfer type"
+        ],
+        [
+          "CROSS_BORDER",
+          "15; country differs from ZA / explicit cross-border"
+        ],
+        [
+          "MERCHANT_MARKER",
+          "20; synthetic highrisk marker"
+        ],
+        [
+          "HIGH_VELOCITY",
+          "30; accepted count > 5 within 300 seconds"
+        ],
+        [
+          "POSSIBLE_DUPLICATE_CHARGE",
+          "40; distinct references match facts within 120 seconds"
+        ]
+      ],
+      "diagram": null
+    },
+    {
+      "title": "Quarantine and Recovery",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "Invalid rows retain reason code/detail and restricted safe payload evidence plus source version, batch and row. Missing/unknown accounts, malformed values, non-positive amounts, invalid currency/type/country, time errors and identity conflicts are data-quality failures. File rejection and row quarantine are distinct.",
+        "A human correction preserves the original case and creates a versioned correction/outbox request. Processing revalidates and reruns identity checks; correction is not direct ledger approval. Original evidence is not overwritten. Durable S3 payload and SQL case are separate retryable effects.",
+        "The next local phase will stress correction lineage, retries, publication and worker completion across partial failures before cloud activation."
+      ],
+      "references": [
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md",
+        "backend/fintrust/release_workflow.py",
+        "backend/fintrust/workflow_api.py"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "Risk Events",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "risk_events accompanies every accepted scored transaction, including Low. A risk event is evidence of assessment; it is not synonymous with a High alert or confirmed fraud.",
+        "A transaction links its frozen score and rule explanations, risk event, review state, delivery state and source occurrences. Similar charges with distinct identity remain separate ledger records for investigation."
+      ],
+      "references": [
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md",
+        "sql/schema.sql"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "Alerts",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "High risk enters the email path. Conditional DynamoDB claims coordinate delivery and durable SQL receipts support visibility. SENT evidence permits ALERTED; PENDING, SENDING or UNKNOWN must not be displayed as sent.",
+        "A provider timeout may mean the email was sent without a recorded response. UNKNOWN is held for reconciliation, not blindly resent. Exactly-once email is not guaranteed. Medium/High review work remains visible even if delivery fails."
+      ],
+      "references": [
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md",
+        "backend/fintrust/alert_delivery.py"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "Analyst Review Workflow",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "Analysts inspect the transaction, source, triggered risk rules and prior history, then begin an OPEN review. Allowed workflow states include UNDER_REVIEW, CLEARED, CONFIRMED_RISK and ESCALATED under existing transition rules.",
+        "Decisions require the authenticated actor and preserve immutable review history with concurrency/version checks. A technical Maintainer retry does not clear a risk review. Escalation is a business outcome; external case-management integration is not implemented."
+      ],
+      "references": [
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md",
+        "backend/fintrust/workflow_api.py"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "Accounts and Transaction History",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "Transactions and account history use scoped authorized reads, time and currency context, and stable transaction identity. Stored historical rows without assessment remain Not assessed rather than receiving invented scores.",
+        "Customer/account foreign keys protect reference integrity. Unknown accounts are quarantined, not silently created. The balance column is not a real-time banking balance engine; transaction totals are not available funds."
+      ],
+      "references": [
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md",
+        "sql/schema.sql"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "Insights and Reporting",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "Insights expose scoped SQL aggregates and exact tabular equivalents. Transaction/currency context must remain visible; cross-border activity alone is not suspicious.",
+        "Reports UI exports the current authorized query page. Backend scheduled monthly JSON/CSV outputs to S3 exist but are not a complete generated-report catalogue in the UI. A monthly summary is not a full ledger archive."
+      ],
+      "references": [
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md",
+        "backend/fintrust/report.py"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "Audit and Traceability",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "Trace from source system/reference and fingerprint through file SHA256, batch, row, canonical tx_id, frozen assessment and human decision. Ingestion outcomes and reconciliation disclose duplicates and pending failures.",
+        "Append-only lifecycle and review histories prevent silent overwrites. Local governance records are not CloudTrail or enterprise identity proof. Evidence is sanitized: no tokens, credentials or secret values belong in logs or screenshots."
+      ],
+      "references": [
+        "docs/architecture/TRANSACTION_LIFECYCLE.md",
+        "docs/SECURITY.md"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "Technical Failure / Retry / DLQ",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "A failed projection after financial commit leaves the SQL ledger STORED. Replay uses immutable identity and the frozen result, then marks RECOVERED only after durable completion. RETRY_REQUESTED by an operator is different from an executed worker retry.",
+        "FIFO batch processing stops at the first failure and reports failed plus unprocessed IDs. The transaction DLQ and async failure queues hold technical failures; they are not quarantine. Automatic lifecycle DLQ transport/reconciliation remains deferred.",
+        "A SQL outage before occurrence registration cannot create a SQL audit event. Worker transport evidence remains authority; the API never fabricates missing observations."
+      ],
+      "references": [
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md",
+        "docs/architecture/TRANSACTION_LIFECYCLE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "AWS Architecture",
+      "status": "PENDING VERIFICATION",
+      "paragraphs": [
+        "af-south-1 is preserved. Private application subnets reach the database security group on TCP 5432 only from the approved application security group. S3 and DynamoDB gateway endpoints support the private workers without NAT.",
+        "Ingest and alert run outside the VPC because their selected cloud handlers do not require SQL. Scoring, API and report are private SQL clients. SES and trigger wiring need separate live verification.",
+        "Official AWS icons in the retained diagrams identify services; they do not prove that current-release wiring is deployed. Diagram colors reflect their historical presentation checkpoint. Temporary Secrets Manager migration networking was deleted after read-only preflight."
+      ],
+      "references": [
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md",
+        "docs/diagrams/README.md"
+      ],
+      "table": null,
+      "diagram": "FinTrust_AWS_Architecture.pdf"
+    },
+    {
+      "title": "Architecture Decisions and Trade-offs",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "FIFO preserves per-account processing order; immutable IDs and SQL uniqueness address replay beyond FIFO deduplication windows. PostgreSQL owns financial truth; DynamoDB serves immutable projections and conditional delivery state.",
+        "No NAT avoids standing cost and narrows egress. Private bootstrap credentials require an explicit Secrets Manager path. A temporary interface endpoint supported the historical read-only preflight and was cleaned up afterward.",
+        "Single-AZ RDS, disabled consumers and small capacity prioritize controlled development cost over high availability. Adoption, scale and HA need independent production review."
+      ],
+      "references": [
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md",
+        "infrastructure/PRIVATE_RDS_MIGRATION_PLAN.md"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "S3 Storage Model",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "Raw input, quarantine and report buckets separate operational data classes. Stage 2 uses private, versioned buckets with SSE-KMS, secure-transport policy and a shared regional customer-managed key. Object version/checksum pinning ties package evidence to the exact uploaded artifact.",
+        "Quarantine safe payloads remain sensitive. Retained bucket/key resources and noncurrent versions can continue costing money after stack deletion. Current reports do not replace archival exports."
+      ],
+      "references": [
+        "infrastructure/storage.py",
+        "docs/OPERATIONS.md"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "PostgreSQL Design",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "The authoritative base is the checksum-bound section of sql/schema.sql before the Additive identity hardening marker, rendered by tools/render_release1_base.py using sql/bootstrap/release1-base-manifest.json. It includes six base tables and Phase 1 alert upgrades; excludes the convenience identity tail. Apply reviewed 001 identity and 002 workflow migrations in order; 003 adds lifecycle observations. Checksummed history and prerequisite catalog checks reject drift. Seeds are synthetic local data, not a live bootstrap prerequisite.",
+        "Core domains: customers/accounts; transactions and frozen processed_transactions; ingestion batches/records/attempts/reconciliation; quarantine/corrections/outbox; risk events/reviews/history; alerts; projection and operations recovery.",
+        "The retained ERD predates migration 003: its 17-table views are historical baseline supporting diagrams. Add transaction_lifecycle_events linked to ingestion occurrence as described in the current contract; do not misread the baseline ERD as the full current catalog. Latest historical live preflight found the base schema absent. Live bootstrap, 001/002/003 and grants are not yet approved."
+      ],
+      "references": [
+        "sql/schema.sql",
+        "sql/migrations/003_transaction_lifecycle.sql",
+        "infrastructure/RELEASE1_DATABASE_BOOTSTRAP_REVIEW.md",
+        "docs/architecture/TRANSACTION_LIFECYCLE.md"
+      ],
+      "table": null,
+      "diagram": "FinTrust_ERD.pdf"
+    },
+    {
+      "title": "DynamoDB Role",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "DynamoDB holds immutable transaction projections for stream-driven delivery and conditional alert claims. It does not replace the PostgreSQL financial ledger or analyst review authority.",
+        "SQL projection_outbox coordinates retries when the secondary write fails after commit. The current foundation uses on-demand billing, AWS-owned encryption and no automatic TTL for this delivery state. Mocked tests do not prove live stream processing."
+      ],
+      "references": [
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md",
+        "infrastructure/messaging.py"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "Security / IAM / RBAC",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "Separate execution roles, scoped actions/resources, account authorization and service-specific database grants limit exposure. IAM rds-db:connect grants connection authority, not SQL table privileges. Database clients require TLS verify-full with the bundled RDS CA.",
+        "RDS storage uses AWS-managed aws/rds encryption; the Stage 2 S3 key is not automatically the RDS key. Managed master credentials are for reviewed bootstrap, not application environment variables or browser payloads.",
+        "Future 003 rollout must give scoring INSERT/SELECT plus sequence USAGE, API SELECT only, and no UPDATE/DELETE on lifecycle audit. The fixed live runner still supports only its reviewed phases. No broad grants should mask missing permissions."
+      ],
+      "references": [
+        "docs/architecture/TRANSACTION_LIFECYCLE.md",
+        "docs/SECURITY.md",
+        "infrastructure/iam/DEPLOYER_DESIGN.md"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "POPIA / Data Governance",
+      "status": "PLANNED",
+      "paragraphs": [
+        "Names and identity numbers are direct identifiers; accounts and transaction details are linkable personal financial information. Synthetic examples, restricted reads, encryption and sanitized evidence reduce exposure.",
+        "This document records design controls, not a legal opinion or certification of POPIA compliance. A data owner must approve purposes, access, retention, disposal and incident procedures before real personal data is processed. No legal retention period is asserted."
+      ],
+      "references": [
+        "docs/data_governance.md",
+        "docs/SECURITY.md"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "Retention Strategy",
+      "status": "PLANNED",
+      "paragraphs": [
+        "Current processing logs use 14-day retention; queues have finite retention and need investigation before expiration. The current DynamoDB delivery state has no TTL. Retained S3 versions/quarantine and RDS backups/snapshots require explicit disposal authorization.",
+        "The design proposes 12 months in the ledger, closed-period full exports in S3 Standard for 3 years and Glacier Flexible Retrieval for 7 years. This is not a legal determination and the export/purge job is not implemented. The archive/ transition after 1,095 days does not apply to monthly/ report summaries.",
+        "Older governance files describe different assumptions. Current templates and these stated limits take precedence; never delete ledger rows without reconciliation, checksum/count proof, restore test and approved policy."
+      ],
+      "references": [
+        "docs/OPERATIONS.md",
+        "infrastructure/storage.py"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "Cost Governance",
+      "status": "PENDING VERIFICATION",
+      "paragraphs": [
+        "Standing costs include RDS compute and 20 GiB gp3 storage, the S3 customer-managed KMS key and retained data/backups/logs. Lambda, SQS, DynamoDB, SES, requests and transfer add usage-dependent charges.",
+        "No NAT is proposed. Temporary interface endpoints charge per endpoint/AZ-hour and usage; historical temporary preflight endpoint deletion is recorded on 11 October 2026. Retained artifacts/logs may still incur storage charges.",
+        "Prices in old stage plans are dated estimates, not current bills. No fresh pricing or Cost Explorer query was performed for consolidation. Re-price af-south-1 and confirm credits/allowances before each spending approval."
+      ],
+      "references": [
+        "infrastructure/DEPLOYMENT_BOOTSTRAP.md",
+        "docs/OPERATIONS.md",
+        "docs/EVIDENCE/05-rds/release1-temporary-preflight-cleanup-result.md"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "AWS Budgets",
+      "status": "PENDING VERIFICATION",
+      "paragraphs": [
+        "Budgets is an early-warning control, not a spending cap. Deployment approval should identify the budget owner, monthly threshold, recipients and response procedure. Missing notification evidence must remain pending rather than be inferred from a budget-first plan.",
+        "Before activation, check account/region, budget notification delivery, concurrency, report scheduling and endpoint/RDS cleanup ownership. This documentation task performs no budget creation, billing lookup or notification test."
+      ],
+      "references": [
+        "infrastructure/BUDGET_FIRST.md",
+        "docs/EVIDENCE/01-budget"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "Testing Strategy",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "Latest source gate: 756 passed, 1 skipped, zero failures. Focused lifecycle/domain/frozen-runner gate: 62 passed. Disposable PostgreSQL 16 lifecycle gate: 21 passed. The administrator-only skip has separate prior PG16 role evidence; migration 003 live grants are not established by that older proof.",
+        "Tests cover identity, threshold boundaries, immutable outcomes, rejected/quarantined rows, correction lineage, partial-write recovery, delivery claims, role/account authorization and browser workflows. Local mocks intentionally avoid AWS. Counts establish tested behavior, not availability, live service permissions or performance."
+      ],
+      "references": [
+        "docs/EVIDENCE/12-e2e/transaction-lifecycle/verification-summary.json",
+        "tests/test_transaction_lifecycle.py"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "CI/CD",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "GitHub Actions provides exact-source Linux Python 3.12 packaging/import and disposable PostgreSQL 16 gates. Dependency wheels, handlers, native PostgreSQL imports, CA loading, archive contents and checksum are tied to the release manifest.",
+        "Build/test workflows do not authorize deployment. A push and current-source CI run require their own scope. Historical green runs and artifacts are preserved; source movement and lifecycle changes require a fresh gate before promotion."
+      ],
+      "references": [
+        "infrastructure/LINUX_CI_GATE.md",
+        ".github/workflows"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "Release Verification",
+      "status": "PENDING VERIFICATION",
+      "paragraphs": [
+        "Freeze source commit, build inputs, package digest, manifest, Linux imports and test proof together. Verify uploaded VersionId and checksum before a change set. Never reuse an old Linux result for changed application source.",
+        "Current checkpoint is local verified, not a frozen deployable artifact. Live schema bootstrap and migration 003 privileges, authenticated API, cloud queue/stream paths, SES, alarm delivery and recovery exercise remain gates. Approval is scoped and sequential."
+      ],
+      "references": [
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md",
+        "infrastructure/HARDENED_RUNTIME_RELEASE.md"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "Challenges and Failures",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "Live Stage 3 exposed missing DescribeEngineDefaultParameters and retained named parameter-group cleanup concerns. Stage 5 exposed provider-side tagged log creation authorization requirements that static validation could not prove; one-variable diagnostics narrowed the cause.",
+        "The read-only RDS preflight proved private verified TLS connectivity and found missing base schema, preventing an unsafe incremental migration. Quota constraints required a separately approved one-shot activation with finally restoration and revocation.",
+        "Local lifecycle verification caught retry/recovery state defects; financial storage and processing failure now remain separate. Historical outputs stay in EVIDENCE, including failures rather than only successes."
+      ],
+      "references": [
+        "infrastructure/STAGE5_PERMANENT_FIX.md",
+        "docs/EVIDENCE/05-rds/release1-live-readonly-alternative-preflight-result.md",
+        "docs/architecture/TRANSACTION_LIFECYCLE.md"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "Lessons Learned",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "A valid CloudFormation template does not prove live provider authorization. Simulated IAM context does not guarantee identical runtime context. Change one variable and capture both failure and recovery evidence.",
+        "Preflight must confirm the actual database baseline. Retained named resources can collide with fresh CREATE attempts. Disabled concurrency is a deployment safety control, not evidence of runtime correctness.",
+        "Financial acceptance, risk, review and notification delivery must remain independent. Never hide gaps with fabricated timestamps, UI-only labels, silent resets or indiscriminate permission broadening."
+      ],
+      "references": [
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md",
+        "docs/architecture/TRANSACTION_LIFECYCLE.md"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "Current Deployment State",
+      "status": "PENDING VERIFICATION",
+      "paragraphs": [
+        "Historical evidence/user-verified stages: network, S3/KMS, RDS PostgreSQL and DynamoDB/SQS stacks CREATE_COMPLETE. Historical ingest deployment/diagnostics are distinct from the current source. No AWS inventory or mutation occurred in this consolidation.",
+        "The 11 October 2026 live read-only check used PostgreSQL 16.15 with TLS verify-full and found the application base schema missing. Cleanup then removed temporary runner/network stacks and billable endpoint, preserving the five existing stacks and retained evidence.",
+        "Current application source is local verified. Complete cloud integration, current-source Linux packaging and live SQL bootstrap are pending. Do not call the whole application deployed."
+      ],
+      "references": [
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md",
+        "docs/EVIDENCE/05-rds/release1-live-readonly-alternative-preflight-result.md",
+        "docs/EVIDENCE/05-rds/release1-temporary-preflight-cleanup-result.md"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "Future Roadmap",
+      "status": "PLANNED",
+      "paragraphs": [
+        "Next: prove Quarantine Recovery locally, then Risk Event -> Alert -> Review Queue and complete A/B/replay/error outcomes. Update these two living documents rather than creating new milestone status files.",
+        "After local closure: current Linux artifact gate, separately reviewed base bootstrap and 001/002/003 privilege/catalog chain, controlled live integration and recovery evidence. HA, federation, accounting extensions, archival automation and production capacity review are later scope."
+      ],
+      "references": [
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "AI Investigation Assistant",
+      "status": "PLANNED",
+      "paragraphs": [
+        "PLANNED / NOT IMPLEMENTED. A future assistant could summarize existing authorized evidence and explain deterministic signals, with sources and human approval. It must not change ledger identity, authorize funds movement or decide confirmed fraud automatically.",
+        "No model integration, autonomous investigation, accuracy evaluation or production data transfer exists in the current release. Privacy, access boundaries, audit, quality and cost require a separate approved design."
+      ],
+      "references": [
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "References",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "Primary source authority: the current flow audit and lifecycle contract, SQL schema/migrations, frozen scoring implementation and service templates. Historical narrative is subordinate to current code and evidence.",
+        "The document inventory classifies every authored Markdown/text/PDF. Active deployment/tooling contracts remain supporting references. Historical evidence remains unchanged; superseded clean narrative is archived where safe.",
+        "Regenerate both PDFs with python tools/build_project_docs.py after editing docs/source/project-master.json and project-progress.json. Rendering dependencies are reportlab and PyMuPDF. Update explanatory material in Master, status/history in Progress, and actual proof in EVIDENCE."
+      ],
+      "references": [
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md",
+        "docs/architecture/TRANSACTION_LIFECYCLE.md",
+        "docs/source/documentation-inventory.json"
+      ],
+      "table": null,
+      "diagram": null
+    }
+  ]
+}

@@ -1,3 +1,5 @@
+> Supporting source retained for traceability. Use [Project Master](FinTrust_Project_Master.pdf) for consolidated project information and [Project Progress](FinTrust_Project_Progress.pdf) for current status. Historical counts and deployment statements below apply to their original checkpoint.
+
 # FinTrust Capstone Submission Checklist
 
 The eight numbered criteria total 100 points: Cloud 20, SQL 15, Python 15, Testing 10, Governance 10, Documentation 10, Technical demo 10, Business presentation 10. The source's 70/30 section headings conflict with this 80/20 split.

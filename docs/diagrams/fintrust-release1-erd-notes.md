@@ -1,3 +1,5 @@
+> Supporting source retained for traceability. Use [Project Master](../FinTrust_Project_Master.pdf) for consolidated project information and [Project Progress](../FinTrust_Project_Progress.pdf) for current status. Historical counts and deployment statements below apply to their original checkpoint.
+
 # Physical ERD notes
 
 Source: frozen application `10eb378abf6a4a256043cd56617378cc17ae505c`, verified local PostgreSQL 16.15 catalog. This describes the locally verified schema, not a claim that live RDS is bootstrapped.

@@ -1,3 +1,5 @@
+> Supporting source retained for traceability. Use [Project Master](../FinTrust_Project_Master.pdf) for consolidated project information and [Project Progress](../FinTrust_Project_Progress.pdf) for current status. Historical counts and deployment statements below apply to their original checkpoint.
+
 # Current Release 1 presentation diagrams
 
 These views distinguish implemented local behavior from the AWS target. Existing historical SVG/PDF exports are not proof of live integration. The local UI uses real isolated PostgreSQL with mocked S3/DynamoDB; it does not run the cloud FIFO/Streams/SES chain.
