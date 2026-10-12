@@ -1,4 +1,7 @@
 """Disposable GitHub CI PostgreSQL 16 privilege rehearsal; never RDS."""
+import sys as _runtime_sys
+from pathlib import Path as _RuntimePath
+_runtime_sys.path.insert(0, str(_RuntimePath(__file__).resolve().parents[1]/"backend"))
 import json
 import os
 import sys

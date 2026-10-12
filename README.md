@@ -1,10 +1,38 @@
 # FinTrust: Transaction Insights and Risk Monitoring
 
-FinTrust validates transaction CSVs, maintains a PostgreSQL ledger, calculates repeatable risk results and prepares high-risk email alerts and monthly reports. The repository implements the processing components and local analyst dashboard. AWS foundation stages 1–4 are recorded as verified; complete application integration and live SQL bootstrap remain pending. The frozen application passed local assurance; its final release candidate still needs Linux execution verification.
+FinTrust validates transaction CSVs, maintains a PostgreSQL ledger, calculates repeatable risk results and prepares high-risk email alerts and monthly reports. The repository implements the processing components and local analyst dashboard. AWS foundation stages 1–4 are recorded as verified; complete application integration and live SQL bootstrap remain pending. The restructured application passed local assurance. Historical artifacts remain preserved; a new candidate built from the current source requires a fresh Linux Python 3.12 execution gate before deployment.
 
 The configured cloud path is S3 ? ingest ? SQS FIFO ? private scoring ? PostgreSQL and immutable DynamoDB projections ? DynamoDB Streams ? alert delivery through SES. The local CSV demonstration uses a direct SQL helper. It does not demonstrate the cloud queue path.
 
 Open the [current presentation pack](docs/presentation/FinTrust_Project_Planning_and_Design_Evidence.pdf) for the seven authoritative diagrams, speaker notes and live script.
+
+## Repository architecture
+
+```text
+frontend/       browser UI; entries, js/, css/
+backend/        fintrust/, migration_runner/, src/ runtime packages
+sql/            PostgreSQL schema, migrations, seeds and reporting SQL
+infrastructure/ AWS definitions and scoped IAM policies
+tests/          automated verification and test fixtures
+tools/          local operational/developer tools
+docs/           architecture, operations, presentation and existing EVIDENCE/
+build/          generated deployment artifacts and isolated verification output
+```
+
+The Python package names and Lambda handlers remain stable; source location changes do not constitute deployment. Local tools select backend/ explicitly; for direct module use set PYTHONPATH to the absolute backend directory. Pytest and CI declare the same source root. See the [exact move map and path contracts](docs/architecture/REPOSITORY_STRUCTURE.md) and [authoritative flow/gap matrix](docs/architecture/FINTRUST_FLOW_AUDIT.md).
+
+```text
+Risk Analyst -> CSV -> input S3 -> ingest parsing -> SQS FIFO candidates
+  -> consumer validation -> invalid: quarantine -> correct/revalidate
+  -> valid: SQL transaction + frozen Low/Medium/High risk result
+       -> DynamoDB projection -> High-risk alert -> SES
+       -> Medium/High durable review -> Analyst decision
+SQL/DynamoDB -> authenticated query API -> Transactions / Insights / Reports / Audit
+EventBridge -> report Lambda -> report S3
+Technical failure -> bounded retry / DLQ -> Maintainer investigation / redrive
+```
+
+This describes implemented components and intended cloud wiring. The local upload path uses mocked AWS and direct consumer processing, so it is not proof of live queue transport. Review creation does not depend on successful email. No new domain semantics were introduced by the structure cleanup.
 
 ## Canonical documentation
 
@@ -35,7 +63,7 @@ py tools/local.py serve
 
 Setup prompts for the local administrator password without storing it; application settings go into ignored `.env`. Practice uses `fintrust_local`, tests use `fintrust_local_test`, and AWS exercises are mocked. Use the local helper's displayed browser address. See operations for the Linux verification and cloud authorization boundaries.
 
-Last recorded full local result: **158 passed, zero failed, one skipped**. The skipped database-role check requires an administrator. These results precede the documentation consolidation; no new test execution or Linux success is claimed.
+Repository hardening regression: **731 passed, zero failed, 1 skipped**. The administrator-only role test is covered separately by the disposable PostgreSQL 16 service-role proof. Browser workflow, module imports, moved asset URLs, SQL bootstrap/migrations and offline packaging/source binding passed. See [verification evidence](docs/EVIDENCE/12-e2e/repository-hardening/verification-summary.json). No new Linux execution or live AWS integration success is claimed.
 
 ## Documentation inventory and disposition
 

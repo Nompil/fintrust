@@ -1,0 +1,1474 @@
+{
+  "status": "PASSED",
+  "postgresql": "PostgreSQL 16.15, compiled by Visual C++ build 1944, 64-bit",
+  "schemas": [
+    "public"
+  ],
+  "objects": [
+    [
+      "accounts",
+      "r",
+      "postgres"
+    ],
+    [
+      "alerts",
+      "r",
+      "postgres"
+    ],
+    [
+      "batch_reconciliation",
+      "v",
+      "postgres"
+    ],
+    [
+      "correction_outbox",
+      "r",
+      "postgres"
+    ],
+    [
+      "customers",
+      "r",
+      "postgres"
+    ],
+    [
+      "ingestion_attempts",
+      "r",
+      "postgres"
+    ],
+    [
+      "ingestion_batches",
+      "r",
+      "postgres"
+    ],
+    [
+      "ingestion_records",
+      "r",
+      "postgres"
+    ],
+    [
+      "operations_requests",
+      "r",
+      "postgres"
+    ],
+    [
+      "processed_transactions",
+      "r",
+      "postgres"
+    ],
+    [
+      "projection_outbox",
+      "r",
+      "postgres"
+    ],
+    [
+      "quarantine_cases",
+      "r",
+      "postgres"
+    ],
+    [
+      "quarantine_corrections",
+      "r",
+      "postgres"
+    ],
+    [
+      "quarantine_workflow",
+      "v",
+      "postgres"
+    ],
+    [
+      "risk_events",
+      "r",
+      "postgres"
+    ],
+    [
+      "risk_review_history",
+      "r",
+      "postgres"
+    ],
+    [
+      "risk_reviews",
+      "r",
+      "postgres"
+    ],
+    [
+      "schema_migrations",
+      "r",
+      "postgres"
+    ],
+    [
+      "transactions",
+      "r",
+      "postgres"
+    ]
+  ],
+  "constraints": [
+    [
+      "accounts",
+      "accounts_account_type_check",
+      "c",
+      "CHECK (((account_type)::text = ANY ((ARRAY['cheque'::character varying, 'savings'::character varying, 'credit'::character varying, 'business'::character varying])::text[])))",
+      true
+    ],
+    [
+      "accounts",
+      "accounts_customer_id_fkey",
+      "f",
+      "FOREIGN KEY (customer_id) REFERENCES customers(customer_id) ON DELETE RESTRICT",
+      true
+    ],
+    [
+      "accounts",
+      "accounts_pkey",
+      "p",
+      "PRIMARY KEY (account_id)",
+      true
+    ],
+    [
+      "alerts",
+      "alerts_delivery_key_key",
+      "u",
+      "UNIQUE (delivery_key)",
+      true
+    ],
+    [
+      "alerts",
+      "alerts_delivery_state_check",
+      "c",
+      "CHECK (((delivery_state)::text = ANY ((ARRAY['PENDING'::character varying, 'SENDING'::character varying, 'SENT'::character varying, 'FAILED'::character varying, 'UNKNOWN'::character varying])::text[])))",
+      true
+    ],
+    [
+      "alerts",
+      "alerts_pkey",
+      "p",
+      "PRIMARY KEY (alert_id)",
+      true
+    ],
+    [
+      "alerts",
+      "alerts_risk_event_id_fkey",
+      "f",
+      "FOREIGN KEY (risk_event_id) REFERENCES risk_events(risk_event_id)",
+      true
+    ],
+    [
+      "correction_outbox",
+      "correction_outbox_attempts_check",
+      "c",
+      "CHECK ((attempts >= 0))",
+      true
+    ],
+    [
+      "correction_outbox",
+      "correction_outbox_correction_id_fkey",
+      "f",
+      "FOREIGN KEY (correction_id) REFERENCES quarantine_corrections(correction_id)",
+      true
+    ],
+    [
+      "correction_outbox",
+      "correction_outbox_envelope_check",
+      "c",
+      "CHECK ((jsonb_typeof(envelope) = 'object'::text))",
+      true
+    ],
+    [
+      "correction_outbox",
+      "correction_outbox_pkey",
+      "p",
+      "PRIMARY KEY (correction_id)",
+      true
+    ],
+    [
+      "correction_outbox",
+      "correction_outbox_state_check",
+      "c",
+      "CHECK ((state = ANY (ARRAY['PENDING'::text, 'COMPLETED'::text])))",
+      true
+    ],
+    [
+      "customers",
+      "customers_id_number_key",
+      "u",
+      "UNIQUE (id_number)",
+      true
+    ],
+    [
+      "customers",
+      "customers_kyc_status_check",
+      "c",
+      "CHECK (((kyc_status)::text = ANY ((ARRAY['pending'::character varying, 'verified'::character varying, 'rejected'::character varying, 'frozen'::character varying])::text[])))",
+      true
+    ],
+    [
+      "customers",
+      "customers_pkey",
+      "p",
+      "PRIMARY KEY (customer_id)",
+      true
+    ],
+    [
+      "ingestion_attempts",
+      "ingestion_attempts_batch_id_attempt_id_key",
+      "u",
+      "UNIQUE (batch_id, attempt_id)",
+      true
+    ],
+    [
+      "ingestion_attempts",
+      "ingestion_attempts_batch_id_fkey",
+      "f",
+      "FOREIGN KEY (batch_id) REFERENCES ingestion_batches(batch_id)",
+      true
+    ],
+    [
+      "ingestion_attempts",
+      "ingestion_attempts_pkey",
+      "p",
+      "PRIMARY KEY (attempt_id)",
+      true
+    ],
+    [
+      "ingestion_attempts",
+      "ingestion_attempts_status_check",
+      "c",
+      "CHECK ((status = ANY (ARRAY['RECEIVED'::text, 'PROCESSING'::text, 'QUEUED'::text, 'DUPLICATE_FILE'::text, 'FAILED'::text])))",
+      true
+    ],
+    [
+      "ingestion_batches",
+      "batch_total_count",
+      "t",
+      "TRIGGER DEFERRABLE INITIALLY DEFERRED",
+      true
+    ],
+    [
+      "ingestion_batches",
+      "ingestion_batches_file_sha256_check",
+      "c",
+      "CHECK ((file_sha256 ~ '^[0-9a-f]{64}$'::text))",
+      true
+    ],
+    [
+      "ingestion_batches",
+      "ingestion_batches_pkey",
+      "p",
+      "PRIMARY KEY (batch_id)",
+      true
+    ],
+    [
+      "ingestion_batches",
+      "ingestion_batches_rows_received_check",
+      "c",
+      "CHECK ((rows_received >= 0))",
+      true
+    ],
+    [
+      "ingestion_batches",
+      "ingestion_batches_source_bucket_check",
+      "c",
+      "CHECK ((length(source_bucket) > 0))",
+      true
+    ],
+    [
+      "ingestion_batches",
+      "ingestion_batches_source_bucket_file_sha256_key",
+      "u",
+      "UNIQUE (source_bucket, file_sha256)",
+      true
+    ],
+    [
+      "ingestion_batches",
+      "ingestion_batches_source_system_check",
+      "c",
+      "CHECK ((length(btrim((source_system)::text)) > 0))",
+      true
+    ],
+    [
+      "ingestion_records",
+      "batch_record_count",
+      "t",
+      "TRIGGER DEFERRABLE INITIALLY DEFERRED",
+      true
+    ],
+    [
+      "ingestion_records",
+      "ingestion_records_batch_id_fkey",
+      "f",
+      "FOREIGN KEY (batch_id) REFERENCES ingestion_batches(batch_id)",
+      true
+    ],
+    [
+      "ingestion_records",
+      "ingestion_records_batch_id_source_attempt_id_fkey",
+      "f",
+      "FOREIGN KEY (batch_id, source_attempt_id) REFERENCES ingestion_attempts(batch_id, attempt_id)",
+      true
+    ],
+    [
+      "ingestion_records",
+      "ingestion_records_canonical_tx_id_fkey",
+      "f",
+      "FOREIGN KEY (canonical_tx_id) REFERENCES transactions(tx_id)",
+      true
+    ],
+    [
+      "ingestion_records",
+      "ingestion_records_check",
+      "c",
+      "CHECK (((disposition <> 'ACCEPTED'::text) OR (canonical_tx_id IS NOT NULL)))",
+      true
+    ],
+    [
+      "ingestion_records",
+      "ingestion_records_check1",
+      "c",
+      "CHECK (((disposition <> ALL (ARRAY['QUARANTINED'::text, 'DUPLICATE'::text, 'FAILED_TECHNICAL'::text])) OR ((length(btrim(reason_code)) > 0) AND (reason_code IS NOT NULL))))",
+      true
+    ],
+    [
+      "ingestion_records",
+      "ingestion_records_disposition_check",
+      "c",
+      "CHECK ((disposition = ANY (ARRAY['RECEIVED'::text, 'QUEUED'::text, 'ACCEPTED'::text, 'QUARANTINED'::text, 'DUPLICATE'::text, 'FAILED_TECHNICAL'::text])))",
+      true
+    ],
+    [
+      "ingestion_records",
+      "ingestion_records_pkey",
+      "p",
+      "PRIMARY KEY (batch_id, source_row)",
+      true
+    ],
+    [
+      "ingestion_records",
+      "ingestion_records_source_row_check",
+      "c",
+      "CHECK ((source_row >= 2))",
+      true
+    ],
+    [
+      "operations_requests",
+      "operations_requests_action_check",
+      "c",
+      "CHECK ((action = ANY (ARRAY['REBUILD_PROJECTION'::text, 'RETRY_CORRECTION'::text, 'REDRIVE'::text])))",
+      true
+    ],
+    [
+      "operations_requests",
+      "operations_requests_actor_subject_check",
+      "c",
+      "CHECK (((length(actor_subject) >= 1) AND (length(actor_subject) <= 200)))",
+      true
+    ],
+    [
+      "operations_requests",
+      "operations_requests_pkey",
+      "p",
+      "PRIMARY KEY (request_id)",
+      true
+    ],
+    [
+      "operations_requests",
+      "operations_requests_state_check",
+      "c",
+      "CHECK ((state = ANY (ARRAY['RUNNING'::text, 'COMPLETED'::text, 'FAILED'::text])))",
+      true
+    ],
+    [
+      "processed_transactions",
+      "processed_transactions_pkey",
+      "p",
+      "PRIMARY KEY (tx_id)",
+      true
+    ],
+    [
+      "processed_transactions",
+      "processed_transactions_tx_id_fkey",
+      "f",
+      "FOREIGN KEY (tx_id) REFERENCES transactions(tx_id)",
+      true
+    ],
+    [
+      "projection_outbox",
+      "projection_outbox_pkey",
+      "p",
+      "PRIMARY KEY (tx_id)",
+      true
+    ],
+    [
+      "projection_outbox",
+      "projection_outbox_state_check",
+      "c",
+      "CHECK ((state = ANY (ARRAY['PENDING'::text, 'COMPLETED'::text])))",
+      true
+    ],
+    [
+      "projection_outbox",
+      "projection_outbox_tx_id_fkey",
+      "f",
+      "FOREIGN KEY (tx_id) REFERENCES processed_transactions(tx_id)",
+      true
+    ],
+    [
+      "quarantine_cases",
+      "quarantine_cases_batch_id_source_row_fkey",
+      "f",
+      "FOREIGN KEY (batch_id, source_row) REFERENCES ingestion_records(batch_id, source_row)",
+      true
+    ],
+    [
+      "quarantine_cases",
+      "quarantine_cases_batch_id_source_row_key",
+      "u",
+      "UNIQUE (batch_id, source_row)",
+      true
+    ],
+    [
+      "quarantine_cases",
+      "quarantine_cases_pkey",
+      "p",
+      "PRIMARY KEY (quarantine_id)",
+      true
+    ],
+    [
+      "quarantine_cases",
+      "quarantine_cases_reason_code_check",
+      "c",
+      "CHECK ((length(btrim(reason_code)) > 0))",
+      true
+    ],
+    [
+      "quarantine_cases",
+      "quarantine_cases_reason_detail_check",
+      "c",
+      "CHECK ((length(btrim(reason_detail)) > 0))",
+      true
+    ],
+    [
+      "quarantine_cases",
+      "quarantine_cases_safe_payload_key_check",
+      "c",
+      "CHECK ((length(safe_payload_key) > 0))",
+      true
+    ],
+    [
+      "quarantine_cases",
+      "quarantine_cases_safe_payload_version_check",
+      "c",
+      "CHECK ((length(safe_payload_version) > 0))",
+      true
+    ],
+    [
+      "quarantine_cases",
+      "quarantine_cases_validation_errors_check",
+      "c",
+      "CHECK ((jsonb_typeof(validation_errors) = 'array'::text))",
+      true
+    ],
+    [
+      "quarantine_corrections",
+      "quarantine_corrections_action_check",
+      "c",
+      "CHECK ((action = ANY (ARRAY['RESUBMIT'::text, 'REJECT'::text])))",
+      true
+    ],
+    [
+      "quarantine_corrections",
+      "quarantine_corrections_check",
+      "c",
+      "CHECK ((((action = 'REJECT'::text) AND (corrected_payload_key IS NULL) AND (corrected_payload_version IS NULL) AND (reprocess_batch_id IS NULL) AND (reprocess_source_row IS NULL)) OR ((action = 'RESUBMIT'::text) AND (length(corrected_payload_key) > 0) AND (corrected_payload_key IS NOT NULL) AND (length(corrected_payload_version) > 0) AND (corrected_payload_version IS NOT NULL) AND (reprocess_batch_id IS NOT NULL) AND (reprocess_source_row IS NOT NULL))))",
+      true
+    ],
+    [
+      "quarantine_corrections",
+      "quarantine_corrections_correction_notes_check",
+      "c",
+      "CHECK ((length(btrim(correction_notes)) > 0))",
+      true
+    ],
+    [
+      "quarantine_corrections",
+      "quarantine_corrections_correction_version_check",
+      "c",
+      "CHECK ((correction_version > 0))",
+      true
+    ],
+    [
+      "quarantine_corrections",
+      "quarantine_corrections_pkey",
+      "p",
+      "PRIMARY KEY (correction_id)",
+      true
+    ],
+    [
+      "quarantine_corrections",
+      "quarantine_corrections_quarantine_id_correction_version_key",
+      "u",
+      "UNIQUE (quarantine_id, correction_version)",
+      true
+    ],
+    [
+      "quarantine_corrections",
+      "quarantine_corrections_quarantine_id_fkey",
+      "f",
+      "FOREIGN KEY (quarantine_id) REFERENCES quarantine_cases(quarantine_id)",
+      true
+    ],
+    [
+      "quarantine_corrections",
+      "quarantine_corrections_reprocess_batch_id_reprocess_source_fkey",
+      "f",
+      "FOREIGN KEY (reprocess_batch_id, reprocess_source_row) REFERENCES ingestion_records(batch_id, source_row)",
+      true
+    ],
+    [
+      "quarantine_corrections",
+      "quarantine_corrections_request_id_key",
+      "u",
+      "UNIQUE (request_id)",
+      true
+    ],
+    [
+      "quarantine_corrections",
+      "quarantine_corrections_submitted_by_check",
+      "c",
+      "CHECK ((length(btrim(submitted_by)) > 0))",
+      true
+    ],
+    [
+      "risk_events",
+      "risk_events_pkey",
+      "p",
+      "PRIMARY KEY (risk_event_id)",
+      true
+    ],
+    [
+      "risk_events",
+      "risk_events_risk_score_check",
+      "c",
+      "CHECK (((risk_score >= 0) AND (risk_score <= 100)))",
+      true
+    ],
+    [
+      "risk_events",
+      "risk_events_tx_id_fkey",
+      "f",
+      "FOREIGN KEY (tx_id) REFERENCES transactions(tx_id)",
+      true
+    ],
+    [
+      "risk_review_history",
+      "risk_review_history_pkey",
+      "p",
+      "PRIMARY KEY (risk_event_id, version)",
+      true
+    ],
+    [
+      "risk_review_history",
+      "risk_review_history_request_id_key",
+      "u",
+      "UNIQUE (request_id)",
+      true
+    ],
+    [
+      "risk_review_history",
+      "risk_review_history_risk_event_id_fkey",
+      "f",
+      "FOREIGN KEY (risk_event_id) REFERENCES risk_reviews(risk_event_id)",
+      true
+    ],
+    [
+      "risk_reviews",
+      "risk_reviews_change_actor_check",
+      "c",
+      "CHECK ((length(btrim(change_actor)) > 0))",
+      true
+    ],
+    [
+      "risk_reviews",
+      "risk_reviews_check",
+      "c",
+      "CHECK (((review_status = 'OPEN'::text) OR ((length(btrim(reviewer_subject)) > 0) AND (reviewer_subject IS NOT NULL))))",
+      true
+    ],
+    [
+      "risk_reviews",
+      "risk_reviews_check1",
+      "c",
+      "CHECK (((review_status <> ALL (ARRAY['CLEARED'::text, 'CONFIRMED_RISK'::text, 'ESCALATED'::text])) OR ((reviewed_by IS NOT NULL) AND (reviewed_at IS NOT NULL) AND\nCASE review_status\n    WHEN 'CLEARED'::text THEN (resolution_code = 'VALID_ACTIVITY'::text)\n    WHEN 'CONFIRMED_RISK'::text THEN (resolution_code = 'CONFIRMED_SUSPICIOUS'::text)\n    ELSE (resolution_code = 'SPECIALIST_REVIEW'::text)\nEND AND (resolution_code IS NOT NULL))))",
+      true
+    ],
+    [
+      "risk_reviews",
+      "risk_reviews_pkey",
+      "p",
+      "PRIMARY KEY (risk_event_id)",
+      true
+    ],
+    [
+      "risk_reviews",
+      "risk_reviews_review_status_check",
+      "c",
+      "CHECK ((review_status = ANY (ARRAY['OPEN'::text, 'UNDER_REVIEW'::text, 'CLEARED'::text, 'CONFIRMED_RISK'::text, 'ESCALATED'::text])))",
+      true
+    ],
+    [
+      "risk_reviews",
+      "risk_reviews_risk_event_id_fkey",
+      "f",
+      "FOREIGN KEY (risk_event_id) REFERENCES risk_events(risk_event_id)",
+      true
+    ],
+    [
+      "risk_reviews",
+      "risk_reviews_version_check",
+      "c",
+      "CHECK ((version > 0))",
+      true
+    ],
+    [
+      "schema_migrations",
+      "schema_migrations_pkey",
+      "p",
+      "PRIMARY KEY (version)",
+      true
+    ],
+    [
+      "transactions",
+      "transactions_account_id_fkey",
+      "f",
+      "FOREIGN KEY (account_id) REFERENCES accounts(account_id) ON DELETE RESTRICT",
+      true
+    ],
+    [
+      "transactions",
+      "transactions_amount_check",
+      "c",
+      "CHECK ((amount > (0)::numeric))",
+      true
+    ],
+    [
+      "transactions",
+      "transactions_currency_check",
+      "c",
+      "CHECK ((currency = ANY (ARRAY['ZAR'::bpchar, 'USD'::bpchar, 'EUR'::bpchar, 'GBP'::bpchar, 'KES'::bpchar])))",
+      true
+    ],
+    [
+      "transactions",
+      "transactions_file_sha256_check",
+      "c",
+      "CHECK ((file_sha256 ~ '^[0-9a-f]{64}$'::text))",
+      true
+    ],
+    [
+      "transactions",
+      "transactions_pkey",
+      "p",
+      "PRIMARY KEY (tx_id)",
+      true
+    ],
+    [
+      "transactions",
+      "transactions_source_identity_check",
+      "c",
+      "CHECK (((source_transaction_id IS NULL) OR ((length(btrim((source_transaction_id)::text)) > 0) AND (length(btrim((source_system)::text)) > 0) AND (source_system IS NOT NULL))))",
+      true
+    ],
+    [
+      "transactions",
+      "transactions_source_row_check",
+      "c",
+      "CHECK ((source_row >= 2))",
+      true
+    ],
+    [
+      "transactions",
+      "transactions_transaction_fingerprint_check",
+      "c",
+      "CHECK ((transaction_fingerprint ~ '^[0-9a-f]{64}$'::text))",
+      true
+    ],
+    [
+      "transactions",
+      "transactions_tx_type_check",
+      "c",
+      "CHECK (((tx_type)::text = ANY ((ARRAY['debit'::character varying, 'credit'::character varying, 'transfer'::character varying, 'fee'::character varying])::text[])))",
+      true
+    ]
+  ],
+  "indexes": [
+    [
+      "accounts_pkey",
+      "CREATE UNIQUE INDEX accounts_pkey ON public.accounts USING btree (account_id)"
+    ],
+    [
+      "alerts_delivery_key_key",
+      "CREATE UNIQUE INDEX alerts_delivery_key_key ON public.alerts USING btree (delivery_key)"
+    ],
+    [
+      "alerts_pkey",
+      "CREATE UNIQUE INDEX alerts_pkey ON public.alerts USING btree (alert_id)"
+    ],
+    [
+      "correction_case_time",
+      "CREATE INDEX correction_case_time ON public.quarantine_corrections USING btree (quarantine_id, submitted_at, correction_id)"
+    ],
+    [
+      "correction_outbox_pkey",
+      "CREATE UNIQUE INDEX correction_outbox_pkey ON public.correction_outbox USING btree (correction_id)"
+    ],
+    [
+      "customers_id_number_key",
+      "CREATE UNIQUE INDEX customers_id_number_key ON public.customers USING btree (id_number)"
+    ],
+    [
+      "customers_pkey",
+      "CREATE UNIQUE INDEX customers_pkey ON public.customers USING btree (customer_id)"
+    ],
+    [
+      "idx_risk_events_tx_date",
+      "CREATE INDEX idx_risk_events_tx_date ON public.risk_events USING btree (tx_id, created_at DESC)"
+    ],
+    [
+      "idx_tx_account_cursor",
+      "CREATE INDEX idx_tx_account_cursor ON public.transactions USING btree (account_id, tx_date DESC, tx_id DESC)"
+    ],
+    [
+      "idx_tx_account_date",
+      "CREATE INDEX idx_tx_account_date ON public.transactions USING btree (account_id, tx_date DESC)"
+    ],
+    [
+      "idx_tx_crossborder",
+      "CREATE INDEX idx_tx_crossborder ON public.transactions USING btree (cross_border) WHERE (cross_border = true)"
+    ],
+    [
+      "idx_tx_duplicate_charge",
+      "CREATE INDEX idx_tx_duplicate_charge ON public.transactions USING btree (account_id, merchant, currency, amount, tx_date) WHERE (source_transaction_id IS NOT NULL)"
+    ],
+    [
+      "idx_tx_high_amount",
+      "CREATE INDEX idx_tx_high_amount ON public.transactions USING btree (amount) WHERE (amount > (50000)::numeric)"
+    ],
+    [
+      "idx_tx_source_identity",
+      "CREATE UNIQUE INDEX idx_tx_source_identity ON public.transactions USING btree (source_system, account_id, source_transaction_id) WHERE (source_transaction_id IS NOT NULL)"
+    ],
+    [
+      "ingestion_attempts_batch_id_attempt_id_key",
+      "CREATE UNIQUE INDEX ingestion_attempts_batch_id_attempt_id_key ON public.ingestion_attempts USING btree (batch_id, attempt_id)"
+    ],
+    [
+      "ingestion_attempts_pkey",
+      "CREATE UNIQUE INDEX ingestion_attempts_pkey ON public.ingestion_attempts USING btree (attempt_id)"
+    ],
+    [
+      "ingestion_batches_pkey",
+      "CREATE UNIQUE INDEX ingestion_batches_pkey ON public.ingestion_batches USING btree (batch_id)"
+    ],
+    [
+      "ingestion_batches_source_bucket_file_sha256_key",
+      "CREATE UNIQUE INDEX ingestion_batches_source_bucket_file_sha256_key ON public.ingestion_batches USING btree (source_bucket, file_sha256)"
+    ],
+    [
+      "ingestion_records_pkey",
+      "CREATE UNIQUE INDEX ingestion_records_pkey ON public.ingestion_records USING btree (batch_id, source_row)"
+    ],
+    [
+      "ingestion_records_tx",
+      "CREATE INDEX ingestion_records_tx ON public.ingestion_records USING btree (canonical_tx_id) WHERE (canonical_tx_id IS NOT NULL)"
+    ],
+    [
+      "operations_requests_pkey",
+      "CREATE UNIQUE INDEX operations_requests_pkey ON public.operations_requests USING btree (request_id)"
+    ],
+    [
+      "processed_transactions_pkey",
+      "CREATE UNIQUE INDEX processed_transactions_pkey ON public.processed_transactions USING btree (tx_id)"
+    ],
+    [
+      "projection_outbox_pkey",
+      "CREATE UNIQUE INDEX projection_outbox_pkey ON public.projection_outbox USING btree (tx_id)"
+    ],
+    [
+      "quarantine_cases_batch_id_source_row_key",
+      "CREATE UNIQUE INDEX quarantine_cases_batch_id_source_row_key ON public.quarantine_cases USING btree (batch_id, source_row)"
+    ],
+    [
+      "quarantine_cases_pkey",
+      "CREATE UNIQUE INDEX quarantine_cases_pkey ON public.quarantine_cases USING btree (quarantine_id)"
+    ],
+    [
+      "quarantine_corrections_pkey",
+      "CREATE UNIQUE INDEX quarantine_corrections_pkey ON public.quarantine_corrections USING btree (correction_id)"
+    ],
+    [
+      "quarantine_corrections_quarantine_id_correction_version_key",
+      "CREATE UNIQUE INDEX quarantine_corrections_quarantine_id_correction_version_key ON public.quarantine_corrections USING btree (quarantine_id, correction_version)"
+    ],
+    [
+      "quarantine_corrections_request_id_key",
+      "CREATE UNIQUE INDEX quarantine_corrections_request_id_key ON public.quarantine_corrections USING btree (request_id)"
+    ],
+    [
+      "quarantine_one_active_resolution",
+      "CREATE UNIQUE INDEX quarantine_one_active_resolution ON public.quarantine_corrections USING btree (quarantine_id) WHERE (action = 'REJECT'::text)"
+    ],
+    [
+      "risk_events_pkey",
+      "CREATE UNIQUE INDEX risk_events_pkey ON public.risk_events USING btree (risk_event_id)"
+    ],
+    [
+      "risk_review_history_pkey",
+      "CREATE UNIQUE INDEX risk_review_history_pkey ON public.risk_review_history USING btree (risk_event_id, version)"
+    ],
+    [
+      "risk_review_history_request_id_key",
+      "CREATE UNIQUE INDEX risk_review_history_request_id_key ON public.risk_review_history USING btree (request_id)"
+    ],
+    [
+      "risk_reviews_pkey",
+      "CREATE UNIQUE INDEX risk_reviews_pkey ON public.risk_reviews USING btree (risk_event_id)"
+    ],
+    [
+      "risk_reviews_queue",
+      "CREATE INDEX risk_reviews_queue ON public.risk_reviews USING btree (review_status, created_at, risk_event_id)"
+    ],
+    [
+      "schema_migrations_pkey",
+      "CREATE UNIQUE INDEX schema_migrations_pkey ON public.schema_migrations USING btree (version)"
+    ],
+    [
+      "transactions_pkey",
+      "CREATE UNIQUE INDEX transactions_pkey ON public.transactions USING btree (tx_id)"
+    ]
+  ],
+  "functions": [
+    [
+      "armor",
+      "postgres",
+      false
+    ],
+    [
+      "armor",
+      "postgres",
+      false
+    ],
+    [
+      "check_batch_record_count",
+      "postgres",
+      false
+    ],
+    [
+      "crypt",
+      "postgres",
+      false
+    ],
+    [
+      "dearmor",
+      "postgres",
+      false
+    ],
+    [
+      "decrypt",
+      "postgres",
+      false
+    ],
+    [
+      "decrypt_iv",
+      "postgres",
+      false
+    ],
+    [
+      "digest",
+      "postgres",
+      false
+    ],
+    [
+      "digest",
+      "postgres",
+      false
+    ],
+    [
+      "encrypt",
+      "postgres",
+      false
+    ],
+    [
+      "encrypt_iv",
+      "postgres",
+      false
+    ],
+    [
+      "gen_random_bytes",
+      "postgres",
+      false
+    ],
+    [
+      "gen_random_uuid",
+      "postgres",
+      false
+    ],
+    [
+      "gen_salt",
+      "postgres",
+      false
+    ],
+    [
+      "gen_salt",
+      "postgres",
+      false
+    ],
+    [
+      "guard_batch_identity",
+      "postgres",
+      false
+    ],
+    [
+      "guard_correction_submission",
+      "postgres",
+      false
+    ],
+    [
+      "guard_ingestion_record",
+      "postgres",
+      false
+    ],
+    [
+      "guard_operations_receipt",
+      "postgres",
+      false
+    ],
+    [
+      "guard_quarantine_origin",
+      "postgres",
+      false
+    ],
+    [
+      "guard_review_transition",
+      "postgres",
+      false
+    ],
+    [
+      "hmac",
+      "postgres",
+      false
+    ],
+    [
+      "hmac",
+      "postgres",
+      false
+    ],
+    [
+      "pgp_armor_headers",
+      "postgres",
+      false
+    ],
+    [
+      "pgp_key_id",
+      "postgres",
+      false
+    ],
+    [
+      "pgp_pub_decrypt",
+      "postgres",
+      false
+    ],
+    [
+      "pgp_pub_decrypt",
+      "postgres",
+      false
+    ],
+    [
+      "pgp_pub_decrypt",
+      "postgres",
+      false
+    ],
+    [
+      "pgp_pub_decrypt_bytea",
+      "postgres",
+      false
+    ],
+    [
+      "pgp_pub_decrypt_bytea",
+      "postgres",
+      false
+    ],
+    [
+      "pgp_pub_decrypt_bytea",
+      "postgres",
+      false
+    ],
+    [
+      "pgp_pub_encrypt",
+      "postgres",
+      false
+    ],
+    [
+      "pgp_pub_encrypt",
+      "postgres",
+      false
+    ],
+    [
+      "pgp_pub_encrypt_bytea",
+      "postgres",
+      false
+    ],
+    [
+      "pgp_pub_encrypt_bytea",
+      "postgres",
+      false
+    ],
+    [
+      "pgp_sym_decrypt",
+      "postgres",
+      false
+    ],
+    [
+      "pgp_sym_decrypt",
+      "postgres",
+      false
+    ],
+    [
+      "pgp_sym_decrypt_bytea",
+      "postgres",
+      false
+    ],
+    [
+      "pgp_sym_decrypt_bytea",
+      "postgres",
+      false
+    ],
+    [
+      "pgp_sym_encrypt",
+      "postgres",
+      false
+    ],
+    [
+      "pgp_sym_encrypt",
+      "postgres",
+      false
+    ],
+    [
+      "pgp_sym_encrypt_bytea",
+      "postgres",
+      false
+    ],
+    [
+      "pgp_sym_encrypt_bytea",
+      "postgres",
+      false
+    ],
+    [
+      "record_review_history",
+      "postgres",
+      true
+    ],
+    [
+      "reject_history_change",
+      "postgres",
+      false
+    ]
+  ],
+  "migration_history": [
+    [
+      1,
+      "0ff06ca8c43596ac9b8651f4bd851bfb0487343f4c9eccb198849e3e59772bd6",
+      "2ab3bc0855fe455221e28e52c24d6c8891438fc466068317d9c9af44b8e1fa17"
+    ],
+    [
+      2,
+      "5b2c04440eea244bfce150347dfa1953dd2a7e7ddb6af7e3a66e187d1c912f02",
+      "8fc702db979009801e257accc83e62ce631d89366d38e086a22871ff0eee92ec"
+    ]
+  ],
+  "violations": {
+    "not_null:accounts.account_id": 0,
+    "not_null:accounts.customer_id": 0,
+    "not_null:accounts.account_type": 0,
+    "not_null:accounts.balance": 0,
+    "not_null:accounts.status": 0,
+    "not_null:accounts.opened_at": 0,
+    "not_null:alerts.alert_id": 0,
+    "not_null:alerts.risk_event_id": 0,
+    "not_null:alerts.severity": 0,
+    "not_null:alerts.message": 0,
+    "not_null:alerts.delivery_state": 0,
+    "not_null:correction_outbox.correction_id": 0,
+    "not_null:correction_outbox.envelope": 0,
+    "not_null:correction_outbox.state": 0,
+    "not_null:correction_outbox.attempts": 0,
+    "not_null:customers.customer_id": 0,
+    "not_null:customers.full_name": 0,
+    "not_null:customers.id_number": 0,
+    "not_null:customers.kyc_status": 0,
+    "not_null:customers.created_at": 0,
+    "not_null:ingestion_attempts.attempt_id": 0,
+    "not_null:ingestion_attempts.source_bucket": 0,
+    "not_null:ingestion_attempts.source_file": 0,
+    "not_null:ingestion_attempts.received_at": 0,
+    "not_null:ingestion_attempts.status": 0,
+    "not_null:ingestion_batches.batch_id": 0,
+    "not_null:ingestion_batches.source_system": 0,
+    "not_null:ingestion_batches.source_bucket": 0,
+    "not_null:ingestion_batches.file_sha256": 0,
+    "not_null:ingestion_batches.received_at": 0,
+    "not_null:ingestion_batches.publication_complete": 0,
+    "not_null:ingestion_records.batch_id": 0,
+    "not_null:ingestion_records.source_row": 0,
+    "not_null:ingestion_records.source_attempt_id": 0,
+    "not_null:ingestion_records.disposition": 0,
+    "not_null:ingestion_records.updated_at": 0,
+    "not_null:operations_requests.request_id": 0,
+    "not_null:operations_requests.actor_subject": 0,
+    "not_null:operations_requests.action": 0,
+    "not_null:operations_requests.target": 0,
+    "not_null:operations_requests.request_digest": 0,
+    "not_null:operations_requests.state": 0,
+    "not_null:operations_requests.created_at": 0,
+    "not_null:processed_transactions.tx_id": 0,
+    "not_null:processed_transactions.fingerprint": 0,
+    "not_null:processed_transactions.result": 0,
+    "not_null:processed_transactions.processed_at": 0,
+    "not_null:projection_outbox.tx_id": 0,
+    "not_null:projection_outbox.state": 0,
+    "not_null:quarantine_cases.quarantine_id": 0,
+    "not_null:quarantine_cases.batch_id": 0,
+    "not_null:quarantine_cases.source_row": 0,
+    "not_null:quarantine_cases.reason_code": 0,
+    "not_null:quarantine_cases.reason_detail": 0,
+    "not_null:quarantine_cases.validation_errors": 0,
+    "not_null:quarantine_cases.safe_payload_key": 0,
+    "not_null:quarantine_cases.safe_payload_version": 0,
+    "not_null:quarantine_cases.quarantined_at": 0,
+    "not_null:quarantine_corrections.correction_id": 0,
+    "not_null:quarantine_corrections.quarantine_id": 0,
+    "not_null:quarantine_corrections.request_id": 0,
+    "not_null:quarantine_corrections.correction_version": 0,
+    "not_null:quarantine_corrections.submitted_by": 0,
+    "not_null:quarantine_corrections.submitted_at": 0,
+    "not_null:quarantine_corrections.correction_notes": 0,
+    "not_null:quarantine_corrections.action": 0,
+    "not_null:risk_events.risk_event_id": 0,
+    "not_null:risk_events.tx_id": 0,
+    "not_null:risk_events.risk_score": 0,
+    "not_null:risk_events.reason": 0,
+    "not_null:risk_events.created_at": 0,
+    "not_null:risk_review_history.risk_event_id": 0,
+    "not_null:risk_review_history.version": 0,
+    "not_null:risk_review_history.request_id": 0,
+    "not_null:risk_review_history.after_status": 0,
+    "not_null:risk_review_history.actor_subject": 0,
+    "not_null:risk_review_history.notes": 0,
+    "not_null:risk_review_history.changed_at": 0,
+    "not_null:risk_reviews.risk_event_id": 0,
+    "not_null:risk_reviews.review_status": 0,
+    "not_null:risk_reviews.review_notes": 0,
+    "not_null:risk_reviews.change_actor": 0,
+    "not_null:risk_reviews.change_request_id": 0,
+    "not_null:risk_reviews.version": 0,
+    "not_null:risk_reviews.created_at": 0,
+    "not_null:schema_migrations.version": 0,
+    "not_null:schema_migrations.source_sha256": 0,
+    "not_null:schema_migrations.catalog_sha256": 0,
+    "not_null:schema_migrations.applied_at": 0,
+    "not_null:transactions.tx_id": 0,
+    "not_null:transactions.account_id": 0,
+    "not_null:transactions.amount": 0,
+    "not_null:transactions.currency": 0,
+    "not_null:transactions.tx_date": 0,
+    "not_null:transactions.tx_type": 0,
+    "not_null:transactions.cross_border": 0,
+    "not_null:transactions.raw_file": 0,
+    "orphan:processed_transactions_tx_id_fkey": 0,
+    "orphan:ingestion_attempts_batch_id_fkey": 0,
+    "orphan:ingestion_records_batch_id_fkey": 0,
+    "orphan:ingestion_records_canonical_tx_id_fkey": 0,
+    "orphan:ingestion_records_batch_id_source_attempt_id_fkey": 0,
+    "orphan:accounts_customer_id_fkey": 0,
+    "orphan:transactions_account_id_fkey": 0,
+    "orphan:risk_events_tx_id_fkey": 0,
+    "orphan:alerts_risk_event_id_fkey": 0,
+    "orphan:risk_reviews_risk_event_id_fkey": 0,
+    "orphan:risk_review_history_risk_event_id_fkey": 0,
+    "orphan:quarantine_cases_batch_id_source_row_fkey": 0,
+    "orphan:quarantine_corrections_quarantine_id_fkey": 0,
+    "orphan:quarantine_corrections_reprocess_batch_id_reprocess_source_fkey": 0,
+    "orphan:correction_outbox_correction_id_fkey": 0,
+    "orphan:projection_outbox_tx_id_fkey": 0,
+    "duplicate:alerts_delivery_key_key": 0,
+    "duplicate:processed_transactions_pkey": 0,
+    "duplicate:schema_migrations_pkey": 0,
+    "duplicate:ingestion_batches_pkey": 0,
+    "duplicate:ingestion_batches_source_bucket_file_sha256_key": 0,
+    "duplicate:ingestion_attempts_pkey": 0,
+    "duplicate:ingestion_attempts_batch_id_attempt_id_key": 0,
+    "duplicate:ingestion_records_pkey": 0,
+    "duplicate:customers_pkey": 0,
+    "duplicate:customers_id_number_key": 0,
+    "duplicate:accounts_pkey": 0,
+    "duplicate:transactions_pkey": 0,
+    "duplicate:risk_events_pkey": 0,
+    "duplicate:alerts_pkey": 0,
+    "duplicate:risk_reviews_pkey": 0,
+    "duplicate:risk_review_history_pkey": 0,
+    "duplicate:risk_review_history_request_id_key": 0,
+    "duplicate:quarantine_cases_pkey": 0,
+    "duplicate:quarantine_cases_batch_id_source_row_key": 0,
+    "duplicate:quarantine_corrections_pkey": 0,
+    "duplicate:quarantine_corrections_request_id_key": 0,
+    "duplicate:quarantine_corrections_quarantine_id_correction_version_key": 0,
+    "duplicate:correction_outbox_pkey": 0,
+    "duplicate:projection_outbox_pkey": 0,
+    "duplicate:operations_requests_pkey": 0,
+    "check:accounts_account_type_check": 0,
+    "check:alerts_delivery_state_check": 0,
+    "check:correction_outbox_attempts_check": 0,
+    "check:correction_outbox_envelope_check": 0,
+    "check:correction_outbox_state_check": 0,
+    "check:customers_kyc_status_check": 0,
+    "check:ingestion_attempts_status_check": 0,
+    "check:ingestion_batches_file_sha256_check": 0,
+    "check:ingestion_batches_rows_received_check": 0,
+    "check:ingestion_batches_source_bucket_check": 0,
+    "check:ingestion_batches_source_system_check": 0,
+    "check:ingestion_records_check": 0,
+    "check:ingestion_records_check1": 0,
+    "check:ingestion_records_disposition_check": 0,
+    "check:ingestion_records_source_row_check": 0,
+    "check:operations_requests_action_check": 0,
+    "check:operations_requests_actor_subject_check": 0,
+    "check:operations_requests_state_check": 0,
+    "check:projection_outbox_state_check": 0,
+    "check:quarantine_cases_reason_code_check": 0,
+    "check:quarantine_cases_reason_detail_check": 0,
+    "check:quarantine_cases_safe_payload_key_check": 0,
+    "check:quarantine_cases_safe_payload_version_check": 0,
+    "check:quarantine_cases_validation_errors_check": 0,
+    "check:quarantine_corrections_action_check": 0,
+    "check:quarantine_corrections_check": 0,
+    "check:quarantine_corrections_correction_notes_check": 0,
+    "check:quarantine_corrections_correction_version_check": 0,
+    "check:quarantine_corrections_submitted_by_check": 0,
+    "check:risk_events_risk_score_check": 0,
+    "check:risk_reviews_change_actor_check": 0,
+    "check:risk_reviews_check": 0,
+    "check:risk_reviews_check1": 0,
+    "check:risk_reviews_review_status_check": 0,
+    "check:risk_reviews_version_check": 0,
+    "check:transactions_amount_check": 0,
+    "check:transactions_currency_check": 0,
+    "check:transactions_file_sha256_check": 0,
+    "check:transactions_source_identity_check": 0,
+    "check:transactions_source_row_check": 0,
+    "check:transactions_transaction_fingerprint_check": 0,
+    "check:transactions_tx_type_check": 0,
+    "trusted_identity": 0,
+    "batch_reconciliation": 0
+  },
+  "unexplained_violations": 0,
+  "actor_references": "Only SQL-enforced constraints checked; actor strings are not enterprise-directory foreign keys",
+  "seed_rows": 200,
+  "order": "empty \u00c3\u00a2\u00e2\u20ac\u00a0\u00e2\u20ac\u2122 authoritative base \u00c3\u00a2\u00e2\u20ac\u00a0\u00e2\u20ac\u2122 001 \u00c3\u00a2\u00e2\u20ac\u00a0\u00e2\u20ac\u2122 002 \u00c3\u00a2\u00e2\u20ac\u00a0\u00e2\u20ac\u2122 synthetic seed",
+  "aws_access": false,
+  "runtime_ddl_denials": [
+    {
+      "role": "fintrust_scoring",
+      "statement": "CREATE TABLE public.assurance_denied(id int)",
+      "result": "DENIED"
+    },
+    {
+      "role": "fintrust_scoring",
+      "statement": "DROP TABLE public.transactions",
+      "result": "DENIED"
+    },
+    {
+      "role": "fintrust_scoring",
+      "statement": "ALTER TABLE public.transactions ADD COLUMN assurance_denied int",
+      "result": "DENIED"
+    },
+    {
+      "role": "fintrust_scoring",
+      "statement": "CREATE FUNCTION public.assurance_denied() RETURNS int LANGUAGE sql AS $$SELECT 1$$",
+      "result": "DENIED"
+    },
+    {
+      "role": "fintrust_workflow_api",
+      "statement": "CREATE TABLE public.assurance_denied(id int)",
+      "result": "DENIED"
+    },
+    {
+      "role": "fintrust_workflow_api",
+      "statement": "DROP TABLE public.transactions",
+      "result": "DENIED"
+    },
+    {
+      "role": "fintrust_workflow_api",
+      "statement": "ALTER TABLE public.transactions ADD COLUMN assurance_denied int",
+      "result": "DENIED"
+    },
+    {
+      "role": "fintrust_workflow_api",
+      "statement": "CREATE FUNCTION public.assurance_denied() RETURNS int LANGUAGE sql AS $$SELECT 1$$",
+      "result": "DENIED"
+    }
+  ],
+  "exact_relation_grants": [
+    [
+      "accounts",
+      "{postgres=arwdDxt/postgres,fintrust_workflow_api=r/postgres}"
+    ],
+    [
+      "alerts",
+      "{postgres=arwdDxt/postgres,fintrust_alert=arw/postgres,fintrust_workflow_api=r/postgres}"
+    ],
+    [
+      "batch_reconciliation",
+      "{postgres=arwdDxt/postgres,fintrust_workflow_api=r/postgres}"
+    ],
+    [
+      "correction_outbox",
+      "{postgres=arwdDxt/postgres,fintrust_workflow_api=ar/postgres,fintrust_scoring=arw/postgres}"
+    ],
+    [
+      "customers",
+      "{postgres=arwdDxt/postgres}"
+    ],
+    [
+      "ingestion_attempts",
+      "{postgres=arwdDxt/postgres,fintrust_workflow_api=ar/postgres,fintrust_scoring=arw/postgres}"
+    ],
+    [
+      "ingestion_batches",
+      "{postgres=arwdDxt/postgres,fintrust_workflow_api=ar/postgres,fintrust_scoring=arw/postgres}"
+    ],
+    [
+      "ingestion_records",
+      "{postgres=arwdDxt/postgres,fintrust_workflow_api=ar/postgres,fintrust_scoring=arw/postgres}"
+    ],
+    [
+      "operations_requests",
+      "{postgres=arwdDxt/postgres,fintrust_workflow_api=ar/postgres}"
+    ],
+    [
+      "processed_transactions",
+      "{postgres=arwdDxt/postgres,fintrust_scoring=ar/postgres,fintrust_alert=r/postgres,fintrust_workflow_api=r/postgres}"
+    ],
+    [
+      "projection_outbox",
+      "{postgres=arwdDxt/postgres,fintrust_workflow_api=r/postgres,fintrust_scoring=arw/postgres}"
+    ],
+    [
+      "quarantine_cases",
+      "{postgres=arwdDxt/postgres,fintrust_workflow_api=r/postgres,fintrust_scoring=ar/postgres}"
+    ],
+    [
+      "quarantine_corrections",
+      "{postgres=arwdDxt/postgres,fintrust_workflow_api=ar/postgres}"
+    ],
+    [
+      "quarantine_workflow",
+      "{postgres=arwdDxt/postgres,fintrust_workflow_api=r/postgres}"
+    ],
+    [
+      "risk_events",
+      "{postgres=arwdDxt/postgres,fintrust_scoring=ar/postgres,fintrust_workflow_api=r/postgres}"
+    ],
+    [
+      "risk_review_history",
+      "{postgres=arwdDxt/postgres,fintrust_workflow_api=r/postgres,fintrust_workflows_owner=a/postgres}"
+    ],
+    [
+      "risk_reviews",
+      "{postgres=arwdDxt/postgres,fintrust_workflow_api=r/postgres,fintrust_scoring=ar/postgres}"
+    ],
+    [
+      "schema_migrations",
+      "{postgres=arwdDxt/postgres,fintrust_workflow_api=r/postgres}"
+    ],
+    [
+      "transactions",
+      "{postgres=arwdDxt/postgres,fintrust_scoring=ar/postgres,fintrust_api=r/postgres,fintrust_report=r/postgres,fintrust_workflow_api=r/postgres}"
+    ]
+  ],
+  "role_flags": [
+    [
+      "fintrust_admin",
+      false,
+      true,
+      false,
+      false
+    ],
+    [
+      "fintrust_alert",
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      "fintrust_api",
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      "fintrust_ingest",
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      "fintrust_report",
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      "fintrust_runtime_probe",
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      "fintrust_scoring",
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      "fintrust_transactions_owner",
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      "fintrust_workflow_api",
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      "fintrust_workflow_owner",
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      "fintrust_workflows_owner",
+      false,
+      false,
+      false,
+      false
+    ]
+  ]
+}

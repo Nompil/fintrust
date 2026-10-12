@@ -55,14 +55,15 @@ if __name__ == "__main__":
     # Tests from this checkout must represent the supplied first-party code.
     with zipfile.ZipFile(source) as archive:
         for package in ("fintrust", "src", "frontend"):
-            local = {str(path.relative_to(Path.cwd())).replace("\\", "/")
-                     for path in (Path.cwd() / package).rglob("*" if package=="frontend" else "*.py") if path.is_file()}
+            base = Path.cwd() / package if package == "frontend" else Path.cwd() / "backend" / package
+            local = {package + "/" + path.relative_to(base).as_posix(): path
+                     for path in base.rglob("*" if package == "frontend" else "*.py") if path.is_file()}
             packaged = {name for name in archive.namelist()
-                        if name.startswith(package + "/") and (package=="frontend" or name.endswith(".py"))}
-            if local != packaged:
+                        if name.startswith(package + "/") and (package == "frontend" or name.endswith(".py"))}
+            if set(local) != packaged:
                 raise ValueError(f"Release source file set differs: {package}")
-            for name in local:
-                if archive.read(name).replace(b"\r\n", b"\n") != Path(name).read_bytes().replace(b"\r\n", b"\n"):
+            for name, path in local.items():
+                if archive.read(name).replace(b"\r\n", b"\n") != path.read_bytes().replace(b"\r\n", b"\n"):
                     raise ValueError(f"Release source differs from tested checkout: {name}")
     with zipfile.ZipFile(source) as archive:
         info=json.loads(archive.read("release-info.json"))

@@ -1,6 +1,9 @@
 """Disposable PG16 service-role gate. No AWS or live database access.
 Explicit execution required in the approved CI/test environment; never skip this gate.
 """
+import sys as _runtime_sys
+from pathlib import Path as _RuntimePath
+_runtime_sys.path.insert(0, str(_RuntimePath(__file__).resolve().parents[1]/"backend"))
 import os
 import sys
 import json

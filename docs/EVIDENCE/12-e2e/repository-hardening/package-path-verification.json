@@ -1,0 +1,32 @@
+{
+  "status": "PASSED",
+  "application_handlers": {
+    "ingest": "fintrust.ingest.lambda_handler",
+    "scoring": "fintrust.score.lambda_handler",
+    "alert": "fintrust.alert_delivery.lambda_handler",
+    "api": "fintrust.api.lambda_handler",
+    "report": "fintrust.report.lambda_handler"
+  },
+  "archive_layout": "Stable flat Python package names; nested frontend assets",
+  "source_binding_verified": true,
+  "migration_archive_sha256": {
+    "preflight": "7429aa48dde0b823dba384f986f8f9d0fcb2040275b21b6f7d2eac91f27d470b",
+    "bootstrap": "c72ed7c17d0dd309073fbbfb7ac12451f8a0bf53fbab2c61accbe6c3f18bc96a",
+    "iam": "bfcf556fa7c55b62b36c8788a52877d1b39ac204a16c8cdcf6ba65379dc29d50",
+    "cleanup": "843452a256b1c0ae71547e5a892fe4edd7a24f2a6209439ab17cb389eae692ca",
+    "bootstrap002": "f2d0a04f3d162125d734d9150d4cc29281f0011ef4783cb6274d53c0a6fb5ccd",
+    "iam002": "74637d94cafae72c2ba1fb4c5685ac5a8c5b58310e5a5cb0d51b5a9b50202185",
+    "cleanup002": "56a023c8b8f3056b0b401cace41b1b0b3b524b73774b1a52cb9a3b73465807e0"
+  },
+  "application_layout_check_sha256": "50f71b64315e5a8d81f9cd3c6f17eaebb6b79781351691d8c1eaefcbc4b72c52",
+  "linux_execution_verified": false,
+  "offline_only": true,
+  "native_abi": "Static Linux CPython 3.12 x86_64 ELF checks; execution not claimed",
+  "preserved_files": 163,
+  "runtime_modules_checked": 58,
+  "runtime_function_changes": [
+    "fintrust/operations.py:release_info"
+  ],
+  "function_change_reason": "Read release-info from explicit resource root; no business function changed",
+  "existing_artifacts_modified": false
+}

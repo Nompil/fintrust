@@ -11,6 +11,7 @@ def main():
     from tools.local import local_settings,TEST_DATABASE,ROLE
     from psycopg2.extensions import make_dsn
     environment=os.environ.copy()
+    environment["PYTHONPATH"]=os.pathsep.join([str(ROOT/"backend"),str(ROOT)])
     if environment.get("FINTRUST_TEST_DATABASE_URL"):
         from psycopg2.extensions import parse_dsn
         dsn=environment["FINTRUST_TEST_DATABASE_URL"];target=parse_dsn(dsn)

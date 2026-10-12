@@ -1,7 +1,7 @@
 // Automated local browser acceptance test. All navigation/network stays loopback.
 const fs=require('node:fs');
 const path=require('node:path');
-const display=require('../frontend/release1-display.js');
+const display=require('../frontend/js/release1-display.js');
 const {chromium}=require(process.env.FINTRUST_PLAYWRIGHT_MODULE);
 (async()=>{
  const url=process.argv[2];const output=process.argv[3];

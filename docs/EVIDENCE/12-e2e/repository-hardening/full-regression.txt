@@ -1,0 +1,101 @@
+........................................................................ [  9%]
+.........F.............................................................. [ 19%]
+........................................................................ [ 29%]
+.....................................................FFF................ [ 39%]
+........................................................................ [ 49%]
+........................................................................ [ 59%]
+........................................................................ [ 68%]
+........................................................................ [ 78%]
+........................................................................ [ 88%]
+..............................................................F......... [ 98%]
+............                                                             [100%]
+================================== FAILURES ===================================
+_______________ test_dashboard_and_static_assets_are_available ________________
+tests\test_dashboard.py:17: in test_dashboard_and_static_assets_are_available
+    assert client.get("/assets/app.js").status_code == 200
+E   AssertionError: assert 404 == 200
+E    +  where 404 = <WrapperTestResponse streamed [404 NOT FOUND]>.status_code
+E    +    where <WrapperTestResponse streamed [404 NOT FOUND]> = get('/assets/app.js')
+E    +      where get = <FlaskClient <Flask 'fintrust-api'>>.get
+---------------------------- Captured stderr call -----------------------------
+{"event":"api_request","request_id":"ccb80e8f-2d1f-4d8d-8475-a627b9f6e562","method":"GET","path":"/","status":200,"duration_ms":154.06,"timestamp":"2026-10-12T17:23:08.960974+00:00","level":"INFO","service":"api"}
+{"event":"api_request","request_id":"5cc84a15-2bca-43d2-a9b3-0ed2e3c2e136","method":"GET","path":"/","status":200,"duration_ms":0.97,"timestamp":"2026-10-12T17:23:08.963500+00:00","level":"INFO","service":"api"}
+{"event":"api_request","request_id":"4e331a72-a8f3-4a57-8616-01611482524c","method":"GET","path":"/release1","status":200,"duration_ms":0.91,"timestamp":"2026-10-12T17:23:08.965633+00:00","level":"INFO","service":"api"}
+{"event":"api_request","request_id":"5433f486-8d3a-40b5-83c3-31d4332e5127","method":"GET","path":"/","status":200,"duration_ms":1.18,"timestamp":"2026-10-12T17:23:08.968271+00:00","level":"INFO","service":"api"}
+{"event":"api_request","request_id":"4c80c01c-e4bc-46d7-ae64-b24534c7b087","method":"GET","path":"/assets/app.js","status":404,"duration_ms":0.68,"timestamp":"2026-10-12T17:23:08.970843+00:00","level":"INFO","service":"api"}
+------------------------------ Captured log call ------------------------------
+INFO     api:api.py:74 {"event": "api_request", "request_id": "ccb80e8f-2d1f-4d8d-8475-a627b9f6e562", "method": "GET", "path": "/", "status": 200, "duration_ms": 154.06}
+INFO     api:api.py:74 {"event": "api_request", "request_id": "5cc84a15-2bca-43d2-a9b3-0ed2e3c2e136", "method": "GET", "path": "/", "status": 200, "duration_ms": 0.97}
+INFO     api:api.py:74 {"event": "api_request", "request_id": "4e331a72-a8f3-4a57-8616-01611482524c", "method": "GET", "path": "/release1", "status": 200, "duration_ms": 0.91}
+INFO     api:api.py:74 {"event": "api_request", "request_id": "5433f486-8d3a-40b5-83c3-31d4332e5127", "method": "GET", "path": "/", "status": 200, "duration_ms": 1.18}
+INFO     api:api.py:74 {"event": "api_request", "request_id": "4c80c01c-e4bc-46d7-ae64-b24534c7b087", "method": "GET", "path": "/assets/app.js", "status": 404, "duration_ms": 0.68}
+___ test_overview_zero_and_actual_technical_counts[Risk/Compliance Analyst] ___
+tests\test_presentation_ux_freeze.py:45: in test_overview_zero_and_actual_technical_counts
+    assert data['technical_failures']==0 and data['open_reviews']==0 and data['duplicate_occurrences']==0
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'NoneType' object is not subscriptable
+---------------------------- Captured stderr call -----------------------------
+{"event":"api_error","request_id":"cb13e0bb-23e1-43e4-8e4e-726a2ba8a877","error_type":"RuntimeError","timestamp":"2026-10-12T17:24:15.257290+00:00","level":"ERROR","service":"api"}
+{"event":"api_request","request_id":"cb13e0bb-23e1-43e4-8e4e-726a2ba8a877","method":"GET","path":"/v1/release1/overview","status":500,"duration_ms":4.52,"timestamp":"2026-10-12T17:24:15.258016+00:00","level":"INFO","service":"api"}
+------------------------------ Captured log call ------------------------------
+ERROR    api:api.py:90 {"event": "api_error", "request_id": "cb13e0bb-23e1-43e4-8e4e-726a2ba8a877", "error_type": "RuntimeError"}
+INFO     api:api.py:74 {"event": "api_request", "request_id": "cb13e0bb-23e1-43e4-8e4e-726a2ba8a877", "method": "GET", "path": "/v1/release1/overview", "status": 500, "duration_ms": 4.52}
+______ test_overview_zero_and_actual_technical_counts[Read-only/Auditor] ______
+tests\test_presentation_ux_freeze.py:45: in test_overview_zero_and_actual_technical_counts
+    assert data['technical_failures']==0 and data['open_reviews']==0 and data['duplicate_occurrences']==0
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'NoneType' object is not subscriptable
+---------------------------- Captured stderr call -----------------------------
+{"event":"api_error","request_id":"3652f78d-5951-45ce-ae6c-f8c28dd82607","error_type":"RuntimeError","timestamp":"2026-10-12T17:24:16.136242+00:00","level":"ERROR","service":"api"}
+{"event":"api_request","request_id":"3652f78d-5951-45ce-ae6c-f8c28dd82607","method":"GET","path":"/v1/release1/overview","status":500,"duration_ms":3.35,"timestamp":"2026-10-12T17:24:16.136966+00:00","level":"INFO","service":"api"}
+------------------------------ Captured log call ------------------------------
+ERROR    api:api.py:90 {"event": "api_error", "request_id": "3652f78d-5951-45ce-ae6c-f8c28dd82607", "error_type": "RuntimeError"}
+INFO     api:api.py:74 {"event": "api_request", "request_id": "3652f78d-5951-45ce-ae6c-f8c28dd82607", "method": "GET", "path": "/v1/release1/overview", "status": 500, "duration_ms": 3.35}
+____________ test_overview_zero_and_actual_technical_counts[Admin] ____________
+tests\test_presentation_ux_freeze.py:45: in test_overview_zero_and_actual_technical_counts
+    assert data['technical_failures']==0 and data['open_reviews']==0 and data['duplicate_occurrences']==0
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'NoneType' object is not subscriptable
+---------------------------- Captured stderr call -----------------------------
+{"event":"api_error","request_id":"edc9899b-4d70-48a8-a93b-0c6dc09e5623","error_type":"RuntimeError","timestamp":"2026-10-12T17:24:16.920075+00:00","level":"ERROR","service":"api"}
+{"event":"api_request","request_id":"edc9899b-4d70-48a8-a93b-0c6dc09e5623","method":"GET","path":"/v1/release1/overview","status":500,"duration_ms":2.9,"timestamp":"2026-10-12T17:24:16.920671+00:00","level":"INFO","service":"api"}
+------------------------------ Captured log call ------------------------------
+ERROR    api:api.py:90 {"event": "api_error", "request_id": "edc9899b-4d70-48a8-a93b-0c6dc09e5623", "error_type": "RuntimeError"}
+INFO     api:api.py:74 {"event": "api_request", "request_id": "edc9899b-4d70-48a8-a93b-0c6dc09e5623", "method": "GET", "path": "/v1/release1/overview", "status": 500, "duration_ms": 2.9}
+_______ test_system_smoke_sql_reconciliation_reports_and_failure_safety _______
+tests\test_system_assurance.py:62: in test_system_smoke_sql_reconciliation_reports_and_failure_safety
+    assert response.status_code==200,(path,response.json)
+E   AssertionError: ('/v1/release1/overview', {'data': None, 'error': 'internal server error', 'meta': {'count': 0, 'page': 1, 'total': 0}, 'request_id': 'f1920899-949b-4e90-8435-3612b52c57cf', ...})
+E   assert 500 == 200
+E    +  where 500 = <WrapperTestResponse streamed [500 INTERNAL SERVER ERROR]>.status_code
+---------------------------- Captured stderr call -----------------------------
+{"event":"api_request","request_id":"d1b996a0-b508-489e-958b-e92225fb3886","method":"GET","path":"/v1/health","status":200,"duration_ms":66.0,"timestamp":"2026-10-12T17:26:37.800796+00:00","level":"INFO","service":"api"}
+{"event":"api_request","request_id":"e85994dd-92ac-466f-9c78-63cd7cc54d94","method":"GET","path":"/v1/session","status":200,"duration_ms":3.82,"timestamp":"2026-10-12T17:26:37.806274+00:00","level":"INFO","service":"api"}
+{"event":"api_request","request_id":"197ff25c-cf6d-40a6-9853-15ee24b9b2fb","method":"GET","path":"/v1/session","status":200,"duration_ms":1.0,"timestamp":"2026-10-12T17:26:37.808810+00:00","level":"INFO","service":"api"}
+{"event":"api_request","request_id":"a7ad8217-4cf3-41e3-b079-a70d6d5194d7","method":"GET","path":"/v1/session","status":200,"duration_ms":1.06,"timestamp":"2026-10-12T17:26:37.811222+00:00","level":"INFO","service":"api"}
+{"event":"api_request","request_id":"d04f5678-3416-45ca-8c10-ce98f2ee0c3d","method":"GET","path":"/v1/workflows/transactions","status":200,"duration_ms":67.96,"timestamp":"2026-10-12T17:26:39.503449+00:00","level":"INFO","service":"api"}
+{"event":"api_request","request_id":"572a9c7c-b93a-4f36-b77e-93b7004fbfb5","method":"GET","path":"/v1/workflows/reviews","status":200,"duration_ms":94.59,"timestamp":"2026-10-12T17:26:39.600826+00:00","level":"INFO","service":"api"}
+{"event":"api_request","request_id":"fcdd7ae2-9520-4e2d-a848-ca2c25b6b818","method":"GET","path":"/v1/workflows/quarantine","status":200,"duration_ms":90.8,"timestamp":"2026-10-12T17:26:39.693377+00:00","level":"INFO","service":"api"}
+{"event":"api_request","request_id":"4c6a37d8-29a3-42b3-8ff2-74851f302299","method":"GET","path":"/v1/workflows/batches","status":200,"duration_ms":247.21,"timestamp":"2026-10-12T17:26:39.942080+00:00","level":"INFO","service":"api"}
+{"event":"api_error","request_id":"f1920899-949b-4e90-8435-3612b52c57cf","error_type":"RuntimeError","timestamp":"2026-10-12T17:26:39.944269+00:00","level":"ERROR","service":"api"}
+{"event":"api_request","request_id":"f1920899-949b-4e90-8435-3612b52c57cf","method":"GET","path":"/v1/release1/overview","status":500,"duration_ms":1.49,"timestamp":"2026-10-12T17:26:39.944892+00:00","level":"INFO","service":"api"}
+------------------------------ Captured log call ------------------------------
+INFO     api:api.py:74 {"event": "api_request", "request_id": "d1b996a0-b508-489e-958b-e92225fb3886", "method": "GET", "path": "/v1/health", "status": 200, "duration_ms": 66.0}
+INFO     api:api.py:74 {"event": "api_request", "request_id": "e85994dd-92ac-466f-9c78-63cd7cc54d94", "method": "GET", "path": "/v1/session", "status": 200, "duration_ms": 3.82}
+INFO     api:api.py:74 {"event": "api_request", "request_id": "197ff25c-cf6d-40a6-9853-15ee24b9b2fb", "method": "GET", "path": "/v1/session", "status": 200, "duration_ms": 1.0}
+INFO     api:api.py:74 {"event": "api_request", "request_id": "a7ad8217-4cf3-41e3-b079-a70d6d5194d7", "method": "GET", "path": "/v1/session", "status": 200, "duration_ms": 1.06}
+INFO     api:api.py:74 {"event": "api_request", "request_id": "d04f5678-3416-45ca-8c10-ce98f2ee0c3d", "method": "GET", "path": "/v1/workflows/transactions", "status": 200, "duration_ms": 67.96}
+INFO     api:api.py:74 {"event": "api_request", "request_id": "572a9c7c-b93a-4f36-b77e-93b7004fbfb5", "method": "GET", "path": "/v1/workflows/reviews", "status": 200, "duration_ms": 94.59}
+INFO     api:api.py:74 {"event": "api_request", "request_id": "fcdd7ae2-9520-4e2d-a848-ca2c25b6b818", "method": "GET", "path": "/v1/workflows/quarantine", "status": 200, "duration_ms": 90.8}
+INFO     api:api.py:74 {"event": "api_request", "request_id": "4c6a37d8-29a3-42b3-8ff2-74851f302299", "method": "GET", "path": "/v1/workflows/batches", "status": 200, "duration_ms": 247.21}
+ERROR    api:api.py:90 {"event": "api_error", "request_id": "f1920899-949b-4e90-8435-3612b52c57cf", "error_type": "RuntimeError"}
+INFO     api:api.py:74 {"event": "api_request", "request_id": "f1920899-949b-4e90-8435-3612b52c57cf", "method": "GET", "path": "/v1/release1/overview", "status": 500, "duration_ms": 1.49}
+=========================== short test summary info ===========================
+FAILED tests/test_dashboard.py::test_dashboard_and_static_assets_are_available
+FAILED tests/test_presentation_ux_freeze.py::test_overview_zero_and_actual_technical_counts[Risk/Compliance Analyst]
+FAILED tests/test_presentation_ux_freeze.py::test_overview_zero_and_actual_technical_counts[Read-only/Auditor]
+FAILED tests/test_presentation_ux_freeze.py::test_overview_zero_and_actual_technical_counts[Admin]
+FAILED tests/test_system_assurance.py::test_system_smoke_sql_reconciliation_reports_and_failure_safety
+5 failed, 727 passed in 262.65s (0:04:22)
+
+Evidence: C:\Users\Nompilo\Desktop\fintrust\build\release1-closure\dec8c6f42c6d417aae180888c6d3bec7

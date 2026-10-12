@@ -14,6 +14,6 @@ def test_counts_never_execute_returned_sql():
     assert cur.execute.call_count==1
 
 def test_supplement_has_no_writes_or_secret_calls():
-    source=Path('migration_runner/release1_preflight.py').read_text(encoding='utf-8')
+    source=Path('backend/migration_runner/release1_preflight.py').read_text(encoding='utf-8')
     assert 'GetSecretValue' not in source and 'pg_authid' not in source
     assert 'schema_migrations ORDER BY version LIMIT 10' in source

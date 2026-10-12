@@ -11,7 +11,7 @@ ROOT=Path(__file__).resolve().parents[1]
 def test_phase_source_is_separated(phase):
     from tools.package_migration import build
     # Package inventory assertions also run below when testing the real output.
-    source=(ROOT/f"migration_runner/{phase}_entry.py").read_text()
+    source=(ROOT/f"backend/migration_runner/{phase}_entry.py").read_text()
     assert "event[" not in source
     if phase=="iam":assert "admin" not in source
 

@@ -10,7 +10,7 @@ ROOT=Path(__file__).resolve().parents[1]
 def test_display_reference_and_safe_message_contract():
     node=os.environ.get("FINTRUST_NODE") or shutil.which("node")
     assert node and Path(node).is_file(), "Explicit Node prerequisite required for UX gate"
-    program=r'''const d=require('./frontend/release1-display.js');const assert=require('node:assert/strict');
+    program=r'''const d=require('./frontend/js/release1-display.js');const assert=require('node:assert/strict');
 const id='20000000-0000-4000-8000-000000000005';assert.equal(d.reference('account_id',id),'ACC-0005');assert.equal(d.reference('risk_event_id',91),'RISK-0091');assert.equal(d.reference('risk_event_id','9007199254740993'),'RISK-9007199254740993');
 for(const kind of ['tx_id','batch_id','risk_event_id']){const raw='aabbccdd-1234-4567-89ab-112233445566';const ref=d.reference(kind,raw);assert.equal(ref,d.reference(kind,raw.toUpperCase()));assert.notEqual(ref,raw);assert.equal(raw,'aabbccdd-1234-4567-89ab-112233445566');}
 const ids=Array.from({length:10000},(_,i)=>'aabbccdd-1234-4567-89ab-'+i.toString(16).padStart(12,'0'));assert.equal(new Set(ids.map(x=>d.reference('tx_id',x))).size,10000);

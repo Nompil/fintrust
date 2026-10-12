@@ -1,12 +1,13 @@
 """Ordered, checksummed local migration harness. Not a live RDS runner.
 Only dedicated loopback test databases are permitted. Live runner approval remains separate.
 """
+from .paths import RESOURCE_ROOT
 import hashlib
 import json
 from pathlib import Path
 from psycopg2 import sql
 from psycopg2.extensions import parse_dsn
-ROOT=Path(__file__).resolve().parents[1]
+ROOT=RESOURCE_ROOT
 IDENTITY_COLUMNS={"source_system":"character varying(100)","source_transaction_id":"character varying(200)",
  "transaction_fingerprint":"character(64)","batch_id":"uuid","file_sha256":"character(64)","source_row":"integer","country":"character(2)"}
 TABLES=("ingestion_batches","ingestion_attempts","ingestion_records","risk_reviews","risk_review_history","quarantine_cases","quarantine_corrections","correction_outbox","projection_outbox","operations_requests")

@@ -1,4 +1,5 @@
 """Monthly UTC reports; deterministic keys make a scheduled retry replace outputs."""
+from .paths import RESOURCE_ROOT
 import csv
 import io
 import json
@@ -10,7 +11,7 @@ from .db import run_query
 from .config import AWS_REGION
 
 s3 = boto3.client("s3", region_name=AWS_REGION)
-SQL_PATH = Path(__file__).resolve().parents[1] / "sql" / "monthly_summary.sql"
+SQL_PATH = RESOURCE_ROOT / "sql" / "monthly_summary.sql"
 
 
 def month_bounds(month=None, now=None):

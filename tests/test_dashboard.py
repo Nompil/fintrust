@@ -14,8 +14,8 @@ def test_dashboard_and_static_assets_are_available():
     assert b"FinTrust | Transaction monitoring" in client.get("/").data
     assert client.get("/").data == client.get("/release1").data
     assert b"earlier learning interface" not in client.get("/").data
-    assert client.get("/assets/app.js").status_code == 200
-    assert client.get("/assets/styles.css").status_code == 200
+    assert client.get("/assets/js/app.js").status_code == 200
+    assert client.get("/assets/css/styles.css").status_code == 200
 
 
 def test_cors_blocks_unknown_origin_before_upload(monkeypatch):

@@ -9,7 +9,7 @@ E=ROOT/'docs/EVIDENCE/12-e2e/clean-start';RDS=ROOT/'docs/EVIDENCE/05-rds/local-p
 E.mkdir(parents=True,exist_ok=True);RDS.mkdir(parents=True,exist_ok=True)
 password=secrets.token_urlsafe(32);env=os.environ.copy()
 env.update(AWS_ACCESS_KEY_ID='testing',AWS_SECRET_ACCESS_KEY='testing',AWS_SESSION_TOKEN='testing',AWS_DEFAULT_REGION='af-south-1',AWS_EC2_METADATA_DISABLED='true',AWS_IGNORE_CONFIGURED_ENDPOINT_URLS='true',PYTHONNOUSERSITE='1',PYTHON_DOTENV_DISABLED='1',FINTRUST_DISPOSABLE_PG16_LOCAL='1',DB_HOST='127.0.0.1',DB_PORT='55416',DB_NAME='fintrust_test',DB_USER='postgres',DB_PASSWORD=password)
-env.pop('PYTHONPATH',None)
+env['PYTHONPATH']=str(SOURCE/'backend')
 started=False;results={}
 def safe(value):return value.replace(password,'[REDACTED_DISPOSABLE_CREDENTIAL]').replace(env.get('FINTRUST_TEST_DATABASE_URL','nevermatch'),'[REDACTED_DISPOSABLE_DSN]')
 def run(label,args,cwd=SOURCE,timeout=900):

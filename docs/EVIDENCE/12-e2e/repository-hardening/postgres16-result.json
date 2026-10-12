@@ -1,0 +1,36 @@
+{
+  "initdb": {
+    "exit_code": 0,
+    "seconds": 10.61
+  },
+  "server-start": {
+    "exit_code": 0,
+    "seconds": 0.67
+  },
+  "service-role-proof": {
+    "exit_code": 0,
+    "seconds": 2.29
+  },
+  "migration-001-proof": {
+    "exit_code": 0,
+    "seconds": 1.8
+  },
+  "migration-002-proof": {
+    "exit_code": 0,
+    "seconds": 1.33
+  },
+  "base-catalog-integrity": {
+    "exit_code": 0,
+    "seconds": 2.24
+  },
+  "full-regression": {
+    "exit_code": 1,
+    "seconds": 265.02
+  },
+  "status": "BLOCKED",
+  "blocker": "full-regression failed",
+  "server-stop": {
+    "exit_code": 0,
+    "seconds": 11.61
+  }
+}

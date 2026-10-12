@@ -2,6 +2,9 @@
 Uses the dedicated fintrust_local_test database, an isolated labelled schema,
 and in-process S3/DynamoDB mocks. Does not claim cloud/least-privilege proof.
 """
+import sys as _runtime_sys
+from pathlib import Path as _RuntimePath
+_runtime_sys.path.insert(0, str(_RuntimePath(__file__).resolve().parents[1]/"backend"))
 import argparse
 import csv
 from getpass import getpass

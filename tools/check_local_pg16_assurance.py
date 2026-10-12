@@ -1,6 +1,9 @@
 """Disposable loopback PostgreSQL 16 catalogue/integrity and bounded SQL plans.
 No AWS calls. Requires a fresh fintrust_test database and an administrator.
 """
+import sys as _runtime_sys
+from pathlib import Path as _RuntimePath
+_runtime_sys.path.insert(0, str(_RuntimePath(__file__).resolve().parents[1]/"backend"))
 import os,json,hashlib,time,sys
 from pathlib import Path
 import psycopg2

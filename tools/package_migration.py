@@ -74,7 +74,8 @@ def build(phase,out,ca,dependency_archive=None):
         elif phase=="cleanup":sources.append("sql/bootstrap/remove_temporary_identity.sql")
         bindings={}
         for name in sources:
-            content=(ROOT/name).read_bytes().replace(b"\r\n",b"\n")
+            source=ROOT/"backend"/name if name.startswith("migration_runner/") else ROOT/name
+            content=source.read_bytes().replace(b"\r\n",b"\n")
             target=package/name;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(content)
             bindings[name]=hashlib.sha256(content).hexdigest()
         (package/"certs").mkdir();shutil.copyfile(ca,package/"certs/global-bundle.pem")

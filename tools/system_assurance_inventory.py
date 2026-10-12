@@ -1,4 +1,7 @@
 """Offline assurance inventory: no AWS, no database, no credential output."""
+import sys as _runtime_sys
+from pathlib import Path as _RuntimePath
+_runtime_sys.path.insert(0, str(_RuntimePath(__file__).resolve().parents[1]/"backend"))
 import ast, hashlib, json, re, subprocess, time, tracemalloc
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
@@ -12,7 +15,7 @@ def main():
     prior=json.loads((ROOT/'docs/EVIDENCE/12-e2e/presentation-readiness/freeze-worktree-classification.json').read_text())
     preserved=[r['file'] for r in prior if not r['include']]
     save('preserved-files.json',{'files':[{'path':p,'sha256':digest(ROOT/p)} for p in preserved if (ROOT/p).is_file()], 'policy':'Preserve unrelated work and forensic evidence; no archiving or deletion.'})
-    tree=ast.parse((ROOT/'fintrust/api.py').read_text(encoding='utf-8'))
+    tree=ast.parse((ROOT/'backend/fintrust/api.py').read_text(encoding='utf-8'))
     routes=[]
     for node in tree.body:
         if isinstance(node,(ast.FunctionDef,ast.AsyncFunctionDef)):
@@ -20,9 +23,9 @@ def main():
                 if isinstance(deco,ast.Call) and isinstance(deco.func,ast.Attribute) and deco.func.attr in {'get','post','route'}:
                     routes.append({'method':deco.func.attr.upper(),'route':ast.literal_eval(deco.args[0]),'handler':node.name,'line':node.lineno})
     save('component-map.json',{'source_commit':git('rev-parse','HEAD').decode().strip(),'api_routes':routes,
-        'file_inventory':{category:[p for p in tracked if p.startswith(prefix)] for category,prefix in {'frontend':'frontend/','production':'fintrust/','sql':'sql/','iam':'infrastructure/iam/','fixtures':'tests/fixtures/','deployment':'infrastructure/','workflows':'.github/workflows/'}.items()},
+        'file_inventory':{category:[p for p in tracked if p.startswith(prefix)] for category,prefix in {'frontend':'frontend/','production':'backend/fintrust/','sql':'sql/','iam':'infrastructure/iam/','fixtures':'tests/fixtures/','deployment':'infrastructure/','workflows':'.github/workflows/'}.items()},
         'roles':['Admin','Risk/Compliance Analyst','Read-only/Auditor','Maintainer'],
-        'pages_source':'frontend/release1.js','flow':['authenticated UI','CSV admission','file/row identity','validation/quarantine','SQL ledger and scoring','projection outbox','mock DynamoDB/alerts','review/correction audit','SQL reports and eight insights'],
+        'pages_source':'frontend/js/release1.js','flow':['authenticated UI','CSV admission','file/row identity','validation/quarantine','SQL ledger and scoring','projection outbox','mock DynamoDB/alerts','review/correction audit','SQL reports and eight insights'],
         'sql':['sql/bootstrap/release1-base-manifest.json','sql/schema.sql (base prefix only)','sql/migrations/001_transaction_identity.sql','sql/migrations/002_operational_workflows.sql'],
         'test_files':[p for p in tracked if p.startswith('tests/') and p.endswith('.py')],
         'cloud_boundary':'No AWS calls. Local real PostgreSQL and mocked cloud services. Live E2E unverified.'})

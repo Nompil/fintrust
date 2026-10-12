@@ -1,4 +1,7 @@
 """Inspect and copy supplied synthetic CSV A/B bytes unchanged; no AWS or SQL."""
+import sys as _runtime_sys
+from pathlib import Path as _RuntimePath
+_runtime_sys.path.insert(0, str(_RuntimePath(__file__).resolve().parents[1]/"backend"))
 import argparse,csv,hashlib,io,json,sys
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))

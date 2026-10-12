@@ -20,8 +20,8 @@ def test_modified_sql_refused(tmp_path,monkeypatch):
     with pytest.raises(common.Refused,match='hash_mismatch'):workflows.migration_body()
 
 def test_catalog_copy_matches_frozen_contract_ast():
-    original=ast.parse((ROOT/'fintrust/migrations.py').read_text(encoding='utf-8'))
-    copied=ast.parse((ROOT/'migration_runner/workflow_catalog.py').read_text(encoding='utf-8'))
+    original=ast.parse((ROOT/'backend/fintrust/migrations.py').read_text(encoding='utf-8'))
+    copied=ast.parse((ROOT/'backend/migration_runner/workflow_catalog.py').read_text(encoding='utf-8'))
     fn=lambda tree:next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='_catalog')
     assert ast.dump(fn(original),include_attributes=False)==ast.dump(fn(copied),include_attributes=False)
 
@@ -42,7 +42,7 @@ def test_iam002_surface_rejects_other_operations(op):
     conn.cursor.assert_not_called()
 
 def test_helper_has_no_user_sql_or_owner_set_path():
-    source=(ROOT/'migration_runner/workflows.py').read_text(encoding='utf-8')
+    source=(ROOT/'backend/migration_runner/workflows.py').read_text(encoding='utf-8')
     executor=source[source.index('def operate'):source.index('def bootstrap')]
     assert 'SELECT public.fintrust_create_release1_workflows()' in executor
     assert 'SET LOCAL ROLE fintrust_workflow_owner' not in executor

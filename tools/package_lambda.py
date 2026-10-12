@@ -60,7 +60,8 @@ def build(ca_bundle, output, wheelhouse=None):
             command += ["--no-index", "--find-links", str(Path(wheelhouse).resolve())]
         subprocess.run(command, check=True)
         for directory in ("fintrust", "src", "frontend"):
-            shutil.copytree(ROOT / directory, package / directory,
+            source = ROOT / directory if directory == "frontend" else ROOT / "backend" / directory
+            shutil.copytree(source, package / directory,
                             ignore=shutil.ignore_patterns("__pycache__", "*.pyc", ".env*"))
         (package / "release-info.json").write_text(json.dumps({"source_commit":os.getenv("GITHUB_SHA",os.getenv("FINTRUST_RELEASE_COMMIT","UNDECLARED")),"runtime":"python3.12","architecture":"x86_64"})+"\n")
         (package / "sql").mkdir()

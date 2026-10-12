@@ -1,3 +1,4 @@
+from .paths import RESOURCE_ROOT
 import json
 import os
 from pathlib import Path
@@ -20,7 +21,7 @@ from src.shared.logger import get_logger
 logger = get_logger("api")
 app = Flask("fintrust-api")
 app.config["MAX_CONTENT_LENGTH"] = 1024 * 1024 + 65536
-FRONTEND = Path(__file__).resolve().parents[1] / "frontend"
+FRONTEND = RESOURCE_ROOT / "frontend"
 
 
 @app.before_request

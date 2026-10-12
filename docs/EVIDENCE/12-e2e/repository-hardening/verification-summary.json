@@ -1,0 +1,30 @@
+{
+  "status": "PASSED",
+  "baseline_commit": "a55805155590a733b8c37227ccc03094992749b1",
+  "files_moved": 63,
+  "preserved_unrelated_files": 163,
+  "final_regression": {
+    "passed": 731,
+    "failed": 0,
+    "skipped": 1,
+    "source": "build\\release1-closure\\1879151009834cc490751314b7299754\\results.xml"
+  },
+  "focused_checks": [
+    "119 passed",
+    "10 import/resource checks passed",
+    "9 asset/layout checks passed",
+    "1 extended browser journey passed"
+  ],
+  "startup_http": {
+    "/release1": 200,
+    "/assets/js/release1.js": 200,
+    "/assets/css/release1.css": 200
+  },
+  "postgres16": "Fresh disposable PG16: service roles, base schema, 001, 002, rerun, rollback, row preservation and catalog integrity passed; cluster stopped",
+  "initial_full_run": "Five failures: two outdated asset URLs in one test and four overview calls with missing DB settings in isolated harness. Asset test corrected; known local configuration rerun passed. One intermediate focused rerun needed explicit Node path. Original evidence retained.",
+  "lambda": "Stable handler/module imports and source/archive binding passed; seven fixed-phase migration archives inspected offline",
+  "linux_execution_verified": false,
+  "deployment_warning": "Current source requires fresh Linux CPython 3.12 CI execution before promotion; historical gate not reused",
+  "aws_mutations": false,
+  "push": false
+}

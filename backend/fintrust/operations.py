@@ -1,4 +1,5 @@
 """Bounded, authenticated technical operations; no compliance decision endpoints."""
+from .paths import RESOURCE_ROOT
 import hashlib,json,os,uuid
 from datetime import datetime,timezone
 from psycopg2.extras import RealDictCursor,Json
@@ -7,7 +8,7 @@ from .release_contract import VERSION
 
 def release_info():
     from pathlib import Path
-    path=Path(__file__).resolve().parents[1]/"release-info.json"
+    path=RESOURCE_ROOT/"release-info.json"
     return json.loads(path.read_text()) if path.exists() else {"source_commit":os.getenv("FINTRUST_RELEASE_COMMIT","UNDECLARED")}
 
 def alert_states(principal):

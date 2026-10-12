@@ -1,4 +1,7 @@
 """Local learning commands. Run from the project root: py tools/local.py --help."""
+import sys as _runtime_sys
+from pathlib import Path as _RuntimePath
+_runtime_sys.path.insert(0, str(_RuntimePath(__file__).resolve().parents[1]/"backend"))
 import argparse
 from contextlib import contextmanager
 from datetime import date, datetime, timezone
