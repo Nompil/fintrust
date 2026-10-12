@@ -29,3 +29,11 @@ def test_csv_contract_matches_validator_and_is_analyst_scoped(authenticated_clie
 def test_csv_contract_requires_real_session(monkeypatch):
     monkeypatch.delenv('FINTRUST_AUTH_FILE',raising=False)
     assert api.app.test_client().get('/v1/upload-contract').status_code==401
+
+
+def test_legacy_entry_redirects_even_for_already_running_servers():
+    entry = (Path(__file__).resolve().parents[1] / 'frontend' / 'index.html').read_text(encoding='utf-8')
+    assert '<meta http-equiv="refresh" content="0; url=/release1">' in entry
+    assert '<a href="/release1">Continue to sign in</a>' in entry
+    assert '/assets/app.js' not in entry
+    assert 'Demo workspace' not in entry

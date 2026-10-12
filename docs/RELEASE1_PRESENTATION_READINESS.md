@@ -193,3 +193,7 @@ Final results and source hashes are recorded under `docs/EVIDENCE/12-e2e/present
 - All 157 unrelated files preserved. No AWS, live DB write, package rebuild or Git push. Application UX is frozen after this local commit; no remaining presentation blocker found in the tested scope.
 
 FINTRUST USER EXPERIENCE VERIFIED — ANALYST AND AUDITOR DEMO READY
+
+### Running-server entry compatibility (2026-10-12)
+
+The user's existing port-5001 process was still serving `frontend/index.html` from the previous Python route, while `/release1` served the current authenticated workspace. A running server does not reload Python route changes automatically. The legacy HTML now redirects to `/release1`, with an accessible sign-in link as a fallback. This fixes the already-running process without stopping it, resetting synthetic data, replacing tokens, or bypassing authentication. The local HTTP check confirmed the redirect and the user's in-app browser reached the current sign-in screen. Authenticated data still requires the existing privately entered operator-issued token; no token was retrieved or provisioned for this correction.
