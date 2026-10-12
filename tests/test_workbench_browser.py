@@ -13,7 +13,7 @@ def test_workbench_browser(release_db, people, monkeypatch):
     monkeypatch.setattr(db,'get_connection',release_db[2])
     monkeypatch.delenv('FINTRUST_REVIEW_SLA_SECONDS', raising=False)
     root=Path(__file__).resolve().parents[1]
-    out=root/'docs/EVIDENCE/12-e2e/analyst-workbench/browser';out.mkdir(parents=True,exist_ok=True)
+    out=Path(os.getenv('FINTRUST_UI_COPY_EVIDENCE',str(root/'docs/EVIDENCE/12-e2e/analyst-workbench')))/'workbench';out.mkdir(parents=True,exist_ok=True)
     server=make_server('127.0.0.1',0,api.app,threaded=True)
     t=threading.Thread(target=server.serve_forever,daemon=True);t.start()
     try:

@@ -1,0 +1,28 @@
+{
+  "status": "PASSED",
+  "source_parent": "53754fcda1b8a84c798b7ba6046a0e556defa118",
+  "focused": {
+    "passed": 35,
+    "skipped": 0
+  },
+  "regression": {
+    "passed": 824,
+    "skipped": 1,
+    "full_run_passed": 823,
+    "full_run_failed": 1,
+    "corrected_harness": "Navigation extraction lacked navigationGroups; updated for approved grouped routes",
+    "navigation_rerun_passed": 2,
+    "verified_after_targeted_rerun": 824,
+    "clarification": "824 checks verified across full suite and targeted harness rerun; not a single clean full-suite invocation"
+  },
+  "full_browser": "PASSED",
+  "aws_mutated": false,
+  "linux_verification_run": false,
+  "schema_changed": false,
+  "backend_change": "Read-only scoped analytical filters and aggregates only",
+  "quality_scope": "Latest 100 authorized batch/quarantine records, filtered by account/intake date; accepted risk filters do not apply to invalid rows",
+  "review_metrics": "Current review states of selected transactions, not decisions made today",
+  "high_risk_rate": "High scored accepted transactions / all scored accepted transactions; unavailable when no scores",
+  "credentials_changed": false,
+  "push_performed": false
+}

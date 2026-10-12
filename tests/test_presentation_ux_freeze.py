@@ -14,7 +14,7 @@ def test_display_reference_and_safe_message_contract():
 const id='20000000-0000-4000-8000-000000000005';assert.equal(d.reference('account_id',id),'ACC-0005');assert.equal(d.reference('risk_event_id',91),'RISK-0091');assert.equal(d.reference('risk_event_id','9007199254740993'),'RISK-9007199254740993');
 for(const kind of ['tx_id','batch_id','risk_event_id']){const raw='aabbccdd-1234-4567-89ab-112233445566';const ref=d.reference(kind,raw);assert.equal(ref,d.reference(kind,raw.toUpperCase()));assert.notEqual(ref,raw);assert.equal(raw,'aabbccdd-1234-4567-89ab-112233445566');}
 const ids=Array.from({length:10000},(_,i)=>'aabbccdd-1234-4567-89ab-'+i.toString(16).padStart(12,'0'));assert.equal(new Set(ids.map(x=>d.reference('tx_id',x))).size,10000);
-assert.equal(d.value('risk_level',null),'Not assessed');assert.equal(d.value('source_transaction_id',null),'Not recorded');assert.equal(d.value('count',0),'0');
+assert.equal(d.value('risk_level',null),'Not assessed');assert.equal(d.value('source_transaction_id',null),'Not provided in source');assert.equal(d.value('count',0),'0');
 assert.equal(d.notice('File already processed','INFO','Ingestion Batches').title,'Duplicate file');
 assert.equal(d.notice('File rejected. Bad CSV','ERROR','Rejected Uploads').title,'File rejected');
 assert.equal(d.notice('Could not load','ERROR','Insights').title,'Insight unavailable');
@@ -51,7 +51,7 @@ def test_overview_zero_and_actual_technical_counts(role,release_db,authenticated
 def test_no_frontend_identity_switch_endpoint_and_current_assets(authenticated_client,local_receipts):
     client,headers=authenticated_client
     html=client.get('/release1').data.decode()
-    assert 'release1-display.js?v=workbench-1' in html
+    assert 'release1-display.js?v=workbench-2' in html
     assert 'operator-issued access token' in html
     assert not any('switch' in rule.rule or 'impersonat' in rule.rule for rule in client.application.url_map.iter_rules())
     for role in ('Risk/Compliance Analyst','Read-only/Auditor'):

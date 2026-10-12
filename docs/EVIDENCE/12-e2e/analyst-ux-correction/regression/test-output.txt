@@ -1,0 +1,38 @@
+............................................s.F......................... [  8%]
+........................................................................ [ 17%]
+........................................................................ [ 26%]
+........................................................................ [ 34%]
+........................................................................ [ 43%]
+........................................................................ [ 52%]
+........................................................................ [ 61%]
+........................................................................ [ 69%]
+........................................................................ [ 78%]
+........................................................................ [ 87%]
+........................................................................ [ 96%]
+.................................                                        [100%]
+================================== FAILURES ===================================
+__________ test_role_navigation_preserves_auditor_evidence_priority ___________
+tests\test_analyst_workflow_priority.py:28: in test_role_navigation_preserves_auditor_evidence_priority
+    assert result.returncode == 0, result.stderr
+E   AssertionError: [eval]:1
+E     const pages={Overview:1,Transactions:1,Accounts:1};let principal;function navigationPages(){return Object.values(navigationGroups).flat();}
+E                                                                                                                      ^
+E     
+E     ReferenceError: navigationGroups is not defined
+E         at navigationPages ([eval]:1:114)
+E         at [eval]:3:50
+E         at runScriptInThisContext (node:internal/vm:219:10)
+E         at node:internal/process/execution:451:12
+E         at [eval]-wrapper:6:24
+E         at runScriptInContext (node:internal/process/execution:449:60)
+E         at evalFunction (node:internal/process/execution:283:30)
+E         at evalTypeScript (node:internal/process/execution:295:3)
+E         at node:internal/main/eval_string:71:3
+E     
+E     Node.js v24.19.0
+E     
+E   assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['C:\\Users\\Nompilo\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\no...lTypeScript (node:internal/process/execution:295:3)\n    at node:internal/main/eval_string:71:3\n\nNode.js v24.19.0\n').returncode
+=========================== short test summary info ===========================
+FAILED tests/test_analyst_workflow_priority.py::test_role_navigation_preserves_auditor_evidence_priority
+1 failed, 823 passed, 1 skipped in 391.95s (0:06:31)

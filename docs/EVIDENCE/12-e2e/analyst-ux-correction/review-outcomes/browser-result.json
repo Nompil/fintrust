@@ -1,0 +1,11 @@
+{
+  "status": "PASSED",
+  "checks": [
+    "claim then clear",
+    "claim then confirm risk",
+    "claim then escalate",
+    "decision visible in investigation drawer"
+  ],
+  "external_network": "blocked",
+  "aws_access": false
+}

@@ -2,10 +2,11 @@
 // Display aliases only: never used as database keys, lookup parameters or exports.
 const FinTrustDisplay = (() => {
   const uuid = value => typeof value === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
-  const prefixes = {account_id:"ACC",tx_id:"TX",canonical_tx_id:"TX",batch_id:"BATCH",reprocess_batch_id:"BATCH",risk_event_id:"RISK",quarantine_id:"CASE"};
+  const prefixes = {account_id:"ACC",candidate_account_id:"ACC",tx_id:"TX",canonical_tx_id:"TX",batch_id:"BATCH",reprocess_batch_id:"BATCH",risk_event_id:"RISK",quarantine_id:"CASE"};
   function reference(kind, value) {
+    if (kind === "candidate_account_id") kind = "account_id";
     if (kind === "risk_event_id" && /^[0-9]+$/.test(String(value))) return "RISK-" + String(value).padStart(4,"0");
-    if (!uuid(value)) return value == null ? "Not recorded" : String(value);
+    if (!uuid(value)) return value == null ? "Not provided in source" : String(value);
     if (kind === "account_id" && /^20000000-0000-4000-8000-00000000000[1-5]$/i.test(value)) return "ACC-" + value.slice(-4);
     // FNV-1a 64-bit, encoded as 13 base36 characters: stable across sort/page/session.
     let hash = 14695981039346656037n;
@@ -13,8 +14,9 @@ const FinTrustDisplay = (() => {
     return (prefixes[kind] || "REF") + "-" + hash.toString(36).toUpperCase().padStart(13,"0");
   }
   function value(kind, raw) {
-    if (raw === null || raw === undefined || raw === "") return kind === "risk_level" ? "Not assessed" : "Not recorded";
+    if (raw === null || raw === undefined || raw === "") return kind === "risk_level" ? "Not assessed" : ["merchant","source_system","source_transaction_id","source_reference"].includes(kind)?"Not provided in source":kind.startsWith("before_")?"No previous value":["resolution_code","review_notes"].includes(kind)?"No decision yet":kind==="canonical_tx_id"?"No accepted transaction": "Not available";
     if (prefixes[kind]) return reference(kind, raw);
+    if (kind === "amount" && Number.isFinite(Number(raw))) return Number(raw).toLocaleString("en-ZA",{minimumFractionDigits:2,maximumFractionDigits:2});
     return typeof raw === "object" ? JSON.stringify(raw, null, 2) : String(raw);
   }
   function failure(status, page) {

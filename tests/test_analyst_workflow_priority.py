@@ -17,12 +17,17 @@ assert.equal(riskCount({risk_distribution:[]},'Low'),0);assert.equal(riskCount({
     result = subprocess.run([os.environ["FINTRUST_NODE"], "-e", program], capture_output=True, text=True)
     assert result.returncode == 0, result.stderr
 
-def test_role_navigation_preserves_auditor_evidence_priority():
+def test_grouped_navigation_preserves_workflow_routes():
     source = (ROOT / "frontend/js/release1.js").read_text(encoding="utf-8")
+    groups = re.search(r"const navigationGroups=.*?\n", source).group(0)
     helper = re.search(r"function navigationPages\(.*?\n", source).group(0)
-    program = "const pages={Overview:1,Transactions:1,Accounts:1};let principal;" + helper + r'''const assert=require('node:assert/strict');
-principal={role:'Read-only/Auditor'};const audit=navigationPages();assert.ok(audit.indexOf('Audit')<audit.indexOf('Ingestion Batches'));assert.ok(audit.indexOf('Reports')<audit.indexOf('Ingestion Batches'));assert.ok(!audit.includes('Upload Transactions'));assert.ok(audit.includes('Accounts')&&audit.includes('Account History'));
-principal={role:'Risk/Compliance Analyst'};assert.deepEqual(navigationPages(),Object.keys(pages));
+    program = groups + helper + r'''const assert=require('node:assert/strict');
+assert.deepEqual(Object.keys(navigationGroups),['Monitoring','Data quality','Analysis','System']);
+const routes=navigationPages();
+assert.deepEqual(routes.slice(0,4),['Overview','Transactions','Risk Events','Review Queue']);
+for(const route of ['Quarantine','Ingestion Batches','Accounts','Insights','Reports','Audit','Operations','Administration'])assert.ok(routes.includes(route));
+assert.ok(!routes.includes('Account History')&&!routes.includes('Rejected Uploads'));
+assert.equal(new Set(routes).size,routes.length);
 '''
     result = subprocess.run([os.environ["FINTRUST_NODE"], "-e", program], capture_output=True, text=True)
     assert result.returncode == 0, result.stderr
