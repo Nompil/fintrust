@@ -15,9 +15,9 @@ from reportlab.graphics import renderPDF
 from svglib.svglib import svg2rlg
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "output/pdf"
+OUT = ROOT / "docs/EVIDENCE/12-e2e/historical-design-diagrams"
 TMP = ROOT / "tmp/pdfs"
-DIAGRAMS = ROOT / "docs/diagrams"
+DIAGRAMS = OUT
 for directory in (OUT, TMP, DIAGRAMS):
     directory.mkdir(parents=True, exist_ok=True)
 

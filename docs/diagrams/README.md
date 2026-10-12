@@ -1,31 +1,25 @@
-# Diagram register
+# Authoritative Release 1 diagrams
 
-The current behavior is documented in [architecture](../architecture.md), [ERD](../erd.md) and [security](../SECURITY.md). Existing graphic exports predate the FIFO/Streams design and schema additions. They are retained as historical design artifacts and are not deployment evidence or reconciled final presentation material.
+Open the [presentation index](../presentation/README.md). These seven views replace the older current-directory exports and duplicate inline diagrams.
 
-## Seven final views
-
-| Required view | Retained source / asset | Reconciliation required |
+| View | Rendered export | Source |
 |---|---|---|
-| AWS architecture | `fintrust.drawio`, `architecture_target.svg` | Show five functions, FIFO, immutable projections, Streams and current VPC placement. |
-| PostgreSQL ERD | [Current Markdown ERD](../erd.md), `erd.svg`, draw.io ERD page | Export the additive schema including processed transactions and legacy alert fields. |
-| End-to-end transaction sequence | `upload_sequence.svg` | Existing view is local upload; replace its final presentation scope with queue/scoring/projection/alert retries. |
-| Quarantine versus DLQ | `activity.svg` | Existing local activity view does not cover the complete cloud failure routes. |
-| Network and security | No dedicated current asset | Show shared private subnets, database grants, gateways and external ingest/alert placement; no NAT. |
-| Data lifecycle | No dedicated current asset | Distinguish monthly summaries, proposed full archive and blocked deletion. |
-| Use cases | `use_cases.svg` | Reconcile analyst, operator and system actions; label unavailable cloud browser integration. |
+| PostgreSQL ERD | [SVG](fintrust-release1-erd.svg) | [DOT](fintrust-release1-erd.dot) |
+| AWS Architecture | [SVG](fintrust-release1-aws-architecture.svg) | [DOT](fintrust-release1-aws-architecture.dot) |
+| Activity Diagram | [SVG](fintrust-release1-activity.svg) | [DOT](fintrust-release1-activity.dot) |
+| Use Cases | [SVG](fintrust-release1-use-cases.svg) | [DOT](fintrust-release1-use-cases.dot) |
+| Data Decision Flow | [SVG](fintrust-release1-data-decisions.svg) | [DOT](fintrust-release1-data-decisions.dot) |
+| Duplicate Handling | [SVG](fintrust-release1-duplicate-handling.svg) | [DOT](fintrust-release1-duplicate-handling.dot) |
+| Role Separation | [SVG](fintrust-release1-role-separation.svg) | [DOT](fintrust-release1-role-separation.dot) |
 
-Retain `architecture_day1_day3.svg` as the early direct-SQL design. Do not use its historical implementation label as current status. The three draw.io pages also need reconciliation. No new graphic exports were generated during documentation consolidation.
+[ERD notes](fintrust-release1-erd-notes.md) document physical keys/cardinality and the two derived views. The schema has 17 tables; users and browser notifications are not invented SQL entities. MEDIUM and HIGH open reviews according to the frozen application.
 
-## Sources and export policy
+## Rebuild and verification
 
-AWS icon PNGs in `aws-icons/` are unmodified assets from the official AWS Architecture Icons package (July 2026 version). They identify services and do not imply endorsement. Preserve attribution and the existing assets.
+`tools/render_release1_diagrams.cjs` renders the seven DOT sources using an installed `@viz-js/viz` package. Set `FINTRUST_VIZ_MODULE` to that package directory and run the renderer with Node. No application or AWS operation occurs. Run `tools/verify_release1_diagrams.cjs` for the browser checks; set `FINTRUST_PLAYWRIGHT_MODULE` and `FINTRUST_CHROME_PATH` if their installed locations differ. Viz.js 3.25.0 / Graphviz WASM rendered the current pack; installed Chrome/Playwright checked all exports for blank output, clipped labels and overlapping nodes at 1600×1050. [Validation evidence](../EVIDENCE/12-e2e/presentation-diagram-pack/render-validation.json) includes screenshots. Inspect the full ERD at native size when explaining individual keys.
 
-`tools/build_diagrams.py` writes AWS architecture, ERD, draw.io and PDF outputs. `tools/build_system_document.py` writes behavior diagrams and the system PDF. Their hardcoded content must be updated before regeneration. Regeneration can overwrite manual draw.io edits; review the source first. The documentation environment uses reportlab, pillow, pymupdf and svglib; these are not Lambda runtime requirements.
+## Historical exports
 
-The retained PDFs are [architecture and ERD](../../output/pdf/fintrust_architecture_and_erd.pdf) and [system documentation](../../output/pdf/fintrust_system_documentation.pdf). Both require content reconciliation and visual inspection before final presentation.
+Nine older SVG/draw.io/PDF exports are preserved under [historical design evidence](../EVIDENCE/12-e2e/historical-design-diagrams/). [Move manifest](../EVIDENCE/12-e2e/presentation-diagram-pack/historical-export-moves.json) records original paths, hashes and references. They are archive-only and must not be used to claim current implementation or deployment.
 
-Maintain these seven views rather than producing diagrams for every checkpoint. Update a view when a material architecture decision changes it. Label repository implementation, target design and unverified integration explicitly. After AWS verification, reconcile actual configuration against source, update canonical docs and generator content, rebuild exports, inspect every page and link supporting evidence. Do not label a target as deployed without that evidence.
-
-## Release 1 operating-model presentation
-
-Use [current operating-model diagrams](release1-operating-model.md) for the four current architecture/decision/recovery/role views. They label local verification and incomplete AWS integration explicitly. Historical SVG/PDF exports above remain historical and must not be presented as reconciled live architecture.
+The two older Python diagram builders now write only into that historical folder; their hardcoded content remains historical. Current diagrams are maintained as DOT sources. Official AWS icon assets in `aws-icons/` are retained unchanged. See the [complete inventory](../presentation/DIAGRAM_REFERENCE_INVENTORY.md).

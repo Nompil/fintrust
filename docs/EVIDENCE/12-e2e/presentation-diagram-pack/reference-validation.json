@@ -1,0 +1,14 @@
+{
+  "status": "PASSED",
+  "markdown_links_checked": 98,
+  "broken_links": [],
+  "unrelated_files_preserved": 157,
+  "preservation_failures": [],
+  "historical_exports_archived": 9,
+  "archive_hashes_unchanged": true,
+  "deleted_files": 0,
+  "duplicate_inline_diagrams_removed": 6,
+  "application_commit": "10eb378abf6a4a256043cd56617378cc17ae505c",
+  "aws_access": false,
+  "push": false
+}

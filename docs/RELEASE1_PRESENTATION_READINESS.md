@@ -1,5 +1,7 @@
 # Release 1 local presentation and operating model
 
+Current presentation diagrams and speaker notes: [Release 1 presentation pack](presentation/README.md). Earlier milestone references below remain historical unless reconciled in that pack.
+
 This checkpoint verifies a local internal operations application, not a completed live AWS application deployment. Existing cloud stacks are preserved. No AWS request, secret retrieval, database migration, cloud package rebuild, deployment or push was performed in this pass. Financial amounts, duplicate identities and the frozen >5 accepted transactions within 5 minutes velocity rule are unchanged.
 
 ## Human operating model
@@ -56,7 +58,7 @@ All READY classifications below concern the local presentation environment and a
 | Data quality | Primary reason per authorized quarantine case | READY | Latest 100 bounded cases; not the number of every validation error |
 | Review outcomes | Current review state joined to ledger | READY | Current state, not transitions over time |
 | Batch outcomes / reconciliation | Actual reconciliation view | READY | Admin all-account oversight includes unknown cases; filtered/non-Admin charts include only wholly authorized batches |
-| Architecture, decisions, recovery, role diagrams | [Current operating-model diagrams](diagrams/release1-operating-model.md) | READY | Local implementation and AWS target distinguished; historical graphic exports remain historical |
+| Architecture, decisions, recovery, role diagrams | [Seven authoritative diagrams](presentation/README.md) | READY | Local implementation and AWS target distinguished; historical graphic exports remain historical |
 
 Financial charts enforce assigned accounts and reject foreign account IDs. Admin unfiltered batch/quarantine oversight follows the existing authorized oversight scope and is labelled separately. Selecting one account narrows to wholly authorized batches, excluding mixed/unassigned batches; therefore those totals may differ from Admin's unfiltered oversight. Batch timestamps use received_at, quarantine uses quarantined_at, financial charts use tx_date. Exact numbers are supplied below each chart, with empty states and bounded-data warnings. A filtered transaction period is not automatically a report-export period: Reports currently supports account/pagination only.
 

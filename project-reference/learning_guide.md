@@ -278,7 +278,7 @@ Try a missing account parameter, an unknown route and a POST to the health route
 
 CI is the automatic test station after a GitHub push or pull request. CD is the delivery path into AWS. The repository has a manual API delivery workflow, but AWS identity, protected environments and deployment evidence remain to be configured. A workflow file alone does not prove that deployment works.
 
-The formal reference is [the system design](../docs/system_design.md), with a [PDF edition](../output/pdf/fintrust_system_documentation.pdf). The diagrams explain the storage relationships, processing decisions, users and upload conversation.
+The formal reference is [the system design](../docs/system_design.md), with a [PDF edition](../docs/EVIDENCE/12-e2e/historical-design-diagrams/fintrust_system_documentation.pdf). The diagrams explain the storage relationships, processing decisions, users and upload conversation.
 
 ## Component reference
 

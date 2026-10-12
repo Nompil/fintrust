@@ -6,6 +6,8 @@ handler path is implemented in the repository; AWS Integration remains In Progre
 Stages 1-4 and the disabled Stage 5 ingest deployment are recorded as verified;
 the hardened release and private database migration have not been deployed.
 
+Current diagrams and presentation wording: [presentation pack](presentation/README.md). The full ERD and frozen local operating model take precedence over earlier milestone descriptions below. The final application release and live SQL bootstrap remain pending.
+
 ## Processing and storage
 
 S3 raw CSV -> ingest -> SQS FIFO -> scoring -> PostgreSQL ledger -> DynamoDB
@@ -18,7 +20,7 @@ work per account. An unknown account is quarantined; a database outage is retrie
 
 File hashing and durable batch audit precede row admission. Completed identical
 uploads are audited rather than republished; repeated reliable row identities
-are quarantined with structured reasons. Similar events without reliable identity
+are recorded as duplicates without a new ledger entry; identity conflicts are quarantined with structured reasons. Similar events without reliable identity
 remain separate. See [identity and duplicate handling](IDEMPOTENCY.md) for the
 exact source-reference scope, publication/retry boundaries and deployment gates.
 
@@ -153,18 +155,7 @@ explainable teaching rules, not a validated fraud model.
 
 ## Duplicate-data admission and payment risk
 
-```mermaid
-flowchart LR
-    Upload[S3 CSV upload] --> Batch[Byte hash and batch audit]
-    Batch --> Validation[Row validation and reliable identity checks]
-    Validation -->|Invalid or repeated identity| Quarantine[Structured quarantine and audit]
-    Validation -->|Valid transaction| FIFO[SQS FIFO grouped by account]
-    FIFO --> Score[Score and SQL identity admission]
-    Score --> Ledger[RDS ledger and frozen result]
-    Score --> Projection[DynamoDB canonical projection]
-    Projection --> Alerts[Alerts]
-    Ledger --> Reads[API and reports]
-```
+[Authoritative AWS architecture](diagrams/fintrust-release1-aws-architecture.svg)
 
 Possible duplicate charges follow the valid branch: both distinct financial
 transactions remain, with `POSSIBLE_DUPLICATE_CHARGE` as a review signal.

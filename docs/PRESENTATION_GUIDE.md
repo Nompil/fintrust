@@ -1,5 +1,7 @@
 # FinTrust presentation guide
 
+Current presentation diagrams and speaker notes: [Release 1 presentation pack](presentation/README.md). Earlier milestone references below remain historical unless reconciled in that pack.
+
 ## Explain the problem
 
 FinTrust turns transaction files into a searchable ledger and repeatable risk decisions. Invalid records remain traceable, analysts can inspect transactions, and high-risk results can initiate an email alert. Business effectiveness, fraud reduction and financial savings have not been measured.
@@ -15,7 +17,7 @@ Start with [architecture](architecture.md), then the [ERD](erd.md), [security](S
 5. DynamoDB Streams supplies high-risk projections to the alert function. A conditional delivery record controls retries around SES.
 6. The read API supports the dashboard. A separate scheduled function produces monthly reports.
 
-The code and local tests implement these components. AWS deployment and end-to-end behavior remain unverified. The existing browser does not sign AWS_IAM requests, so authenticated cloud dashboard access still needs integration.
+The code and local tests implement these components. AWS foundation stages 1–4 are recorded as verified; full cloud application wiring and end-to-end behavior remain pending. The existing browser does not sign AWS_IAM requests, so authenticated cloud dashboard access still needs integration.
 
 ## Service choices
 
@@ -36,9 +38,9 @@ The code and local tests implement these components. AWS deployment and end-to-e
 
 Use synthetic data and the local commands in [operations](OPERATIONS.md). Show a valid row, an invalid row with its rejection reason, account filtering and transaction pagination. Explain the local upload shortcut before demonstrating it: it is synchronous direct ingestion, not the deployed queue path. Do not present mocked email calls as delivered messages.
 
-Use the current Markdown architecture and ERD sources for technical discussion. The [diagram register](diagrams/README.md) marks older SVG/PDF exports that need reconciliation. Open PDFs in a PDF viewer; raw `%PDF` text in an editor is the file encoding, not its reading view. Do not use stale exports as the final submission.
+Use the [seven authoritative diagrams and speaker notes](presentation/README.md) for technical discussion. Earlier SVG/draw.io/PDF exports are archive-only and are preserved in the existing evidence tree.
 
-The last recorded local run was 158 passed, zero failed and one skipped. The skipped database-role test requires an administrator. CI is prepared to run all 159 tests with a disposable administrator, but has not run. Explain the Windows/Linux native dependency issue and the package verifier without claiming a successful Linux result.
+The frozen application checkpoint recorded 713 passing local tests plus focused and browser checks. Those checks were not rerun for this documentation-only pass. The final frozen release candidate still needs Linux execution verification; earlier Linux success does not validate a different artifact.
 
 ## Questions to prepare for
 

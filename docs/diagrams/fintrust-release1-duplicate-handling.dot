@@ -1,0 +1,20 @@
+digraph FinTrust {
+graph [bgcolor="#ffffff",fontname="Arial",fontsize=22,pad=0.3,nodesep=0.45,ranksep=0.65]; node [shape=box,style="rounded,filled",fillcolor="#edf5f3",color="#2b6557",fontname="Arial",fontsize=17,margin="0.18,0.13"]; edge [color="#607d8b",fontname="Arial",fontsize=13,arrowsize=0.7];
+rankdir=TB; label="DUPLICATE HANDLING | Ledger protection and customer-risk detection differ"; labelloc=t;
+{rank=same;f;s;c;i;g;} {rank=same;fr;sr;cr;ir;gr;}
+f [label="Exact same file\nSame source-bucket + byte hash",shape=box];
+fr [label="Replay attempt\nView original; no second processing",shape=box];
+s [label="Same row identity / facts\nRepeated in one file",shape=box];
+sr [label="First accepted; repeat recorded\nNo second ledger entry",shape=box];
+c [label="Same identity / facts\nRepeated in another file",shape=box];
+cr [label="New file continues\nRepeated row is duplicate",shape=box];
+i [label="Same source ID\nChanged financial facts",shape=box];
+ir [label="Identity conflict quarantine\nNo silent overwrite",shape=box];
+g [label="Different source IDs\nSimilar genuine transactions",shape=box];
+gr [label="Keep both valid entries\nPossible duplicate-charge rule",shape=box];
+f -> fr;
+s -> sr;
+c -> cr;
+i -> ir;
+g -> gr;
+}

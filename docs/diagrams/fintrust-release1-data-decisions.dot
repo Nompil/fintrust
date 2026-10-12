@@ -1,0 +1,30 @@
+digraph FinTrust {
+graph [bgcolor="#ffffff",fontname="Arial",fontsize=22,pad=0.3,nodesep=0.45,ranksep=0.65]; node [shape=box,style="rounded,filled",fillcolor="#edf5f3",color="#2b6557",fontname="Arial",fontsize=17,margin="0.18,0.13"]; edge [color="#607d8b",fontname="Arial",fontsize=13,arrowsize=0.7];
+rankdir=TB; label="DATA DECISIONS | Validity, identity and risk are separate"; labelloc=t;
+
+file [label="File valid?",shape=diamond];
+reject [label="Reject upload\nSafe receipt",shape=box];
+row [label="Row valid?",shape=diamond];
+quar [label="Quarantine\nOriginal + reason",shape=box];
+dup [label="Identity and facts?",shape=diamond];
+same [label="Record duplicate\nNo new ledger entry",shape=box];
+conflict [label="Identity conflict\nQuarantine + investigate",shape=box];
+score [label="Score unique row",shape=box];
+store [label="Store ledger + assessment",shape=box];
+level [label="Risk level?",shape=diamond];
+low [label="LOW\nNo routine review",shape=box];
+medium [label="MEDIUM\nOpen review",shape=box];
+high [label="HIGH\nReview + alert",shape=box];
+file -> reject [label="No"];
+file -> row [label="Yes"];
+row -> quar [label="No"];
+row -> dup [label="Yes"];
+dup -> same [label="Same identity / facts"];
+dup -> conflict [label="Same identity / changed facts"];
+dup -> score [label="New identity"];
+score -> store;
+store -> level;
+level -> low;
+level -> medium;
+level -> high;
+}

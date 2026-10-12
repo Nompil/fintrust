@@ -1,0 +1,17 @@
+digraph FinTrust {
+graph [bgcolor="#ffffff",fontname="Arial",fontsize=22,pad=0.3,nodesep=0.45,ranksep=0.65]; node [shape=box,style="rounded,filled",fillcolor="#edf5f3",color="#2b6557",fontname="Arial",fontsize=17,margin="0.18,0.13"]; edge [color="#607d8b",fontname="Arial",fontsize=13,arrowsize=0.7];
+rankdir=TB; label="SEPARATION OF DUTIES | Named identities; backend enforcement"; labelloc=t;
+{rank=same;admin;analyst;auditor;maint;} {rank=same;gov;risk;read;ops;}
+admin [label="ADMIN\nGovernance / access / oversight",shape=box];
+analyst [label="ANALYST\nUpload / correction / risk decisions",shape=box];
+auditor [label="AUDITOR\nRead-only scoped evidence",shape=box];
+maint [label="MAINTAINER\nTechnical recovery",shape=box];
+gov [label="User roles and status\nAudit / platform visibility",shape=box];
+risk [label="Validate corrections again\nResolve or escalate reviews",shape=box];
+read [label="Transactions / batches / risk\nReports / Insights / Audit",shape=box];
+ops [label="Retry / redrive / outbox\nNo compliance decision",shape=box];
+admin -> gov;
+analyst -> risk;
+auditor -> read;
+maint -> ops;
+}

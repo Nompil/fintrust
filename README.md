@@ -1,8 +1,10 @@
 # FinTrust: Transaction Insights and Risk Monitoring
 
-FinTrust validates transaction CSVs, maintains a PostgreSQL ledger, calculates repeatable risk results and prepares high-risk email alerts and monthly reports. The repository implements the processing components and local analyst dashboard. AWS deployment and integration remain unverified; Linux CI is prepared but has not run.
+FinTrust validates transaction CSVs, maintains a PostgreSQL ledger, calculates repeatable risk results and prepares high-risk email alerts and monthly reports. The repository implements the processing components and local analyst dashboard. AWS foundation stages 1–4 are recorded as verified; complete application integration and live SQL bootstrap remain pending. The frozen application passed local assurance; its final release candidate still needs Linux execution verification.
 
 The configured cloud path is S3 ? ingest ? SQS FIFO ? private scoring ? PostgreSQL and immutable DynamoDB projections ? DynamoDB Streams ? alert delivery through SES. The local CSV demonstration uses a direct SQL helper. It does not demonstrate the cloud queue path.
+
+Open the [current presentation pack](docs/presentation/README.md) for the seven authoritative diagrams, speaker notes and live script.
 
 ## Canonical documentation
 
@@ -64,7 +66,7 @@ Historical files remain in place. ARCHIVE below is a proposed disposition, not a
 | `project-reference/live_demo_script.md`; `project-reference/presentation_notes.md` (untracked) | MERGE INTO CANONICAL | Presentation guide; preserve original material |
 | `project-reference/local_software_setup.md` (untracked) | MERGE INTO CANONICAL | README/operations command summary; original machine-specific instructions retained |
 | `infrastructure/DEPLOYMENT_READINESS.md` (untracked) | ARCHIVE | Earlier audit with superseded placement assumptions |
-| `docs/diagrams/*.svg`; `fintrust.drawio`; `output/pdf/*.pdf` | KEEP AS EVIDENCE | Historical design artifacts; register identifies reconciliation needed |
+| `docs/diagrams/fintrust-release1-*`; `docs/EVIDENCE/12-e2e/historical-design-diagrams/` | KEEP | Current seven views and separately archived historical exports |
 | `docs/diagrams/aws-icons/` | CANONICAL | Reusable source assets with attribution |
 | `infrastructure/rds/schema.sql` (untracked) | REMOVE LATER AFTER REVIEW | Older duplicate; runtime schema authority is `sql/schema.sql`. No deletion performed. |
 

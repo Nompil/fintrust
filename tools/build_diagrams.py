@@ -15,9 +15,9 @@ from reportlab.lib.colors import HexColor
 import pymupdf as fitz
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "docs/diagrams"
-ICONS = OUT / "aws-icons"
-PDF = ROOT / "output/pdf/fintrust_architecture_and_erd.pdf"
+OUT = ROOT / "docs/EVIDENCE/12-e2e/historical-design-diagrams"
+ICONS = ROOT / "docs/diagrams/aws-icons"
+PDF = OUT / "fintrust_architecture_and_erd.pdf"
 W, H = 1440, 900
 SERVICES = {
     "s3": "Amazon-Simple-Storage-Service", "lambda": "AWS-Lambda",

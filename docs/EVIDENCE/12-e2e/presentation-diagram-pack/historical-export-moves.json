@@ -1,0 +1,79 @@
+[
+  {
+    "from": "docs/diagrams/architecture_day1_day3.svg",
+    "to": "docs/EVIDENCE/12-e2e/historical-design-diagrams/architecture_day1_day3.svg",
+    "sha256": "81f33d338b1ca11c8f1c16a17037b0b705be6ce4199152320a0270e3edfdfd52",
+    "referenced_by": [
+      "docs/diagrams/README.md"
+    ]
+  },
+  {
+    "from": "docs/diagrams/architecture_target.svg",
+    "to": "docs/EVIDENCE/12-e2e/historical-design-diagrams/architecture_target.svg",
+    "sha256": "92449b00afdc36598864ec0d708e38ecd4b057f648de30dc11857a38e27d0621",
+    "referenced_by": [
+      "docs/diagrams/README.md"
+    ]
+  },
+  {
+    "from": "docs/diagrams/erd.svg",
+    "to": "docs/EVIDENCE/12-e2e/historical-design-diagrams/erd.svg",
+    "sha256": "f037b05dc5b37373db6dd6326efb4b277216c77000a011e43c7ae13d59022583",
+    "referenced_by": [
+      "docs/erd.md",
+      "docs/diagrams/README.md"
+    ]
+  },
+  {
+    "from": "docs/diagrams/activity.svg",
+    "to": "docs/EVIDENCE/12-e2e/historical-design-diagrams/activity.svg",
+    "sha256": "c5bd800a11a815e05f8d8a30d9ab8324931ebd9e7897dee052a91c885bc69cab",
+    "referenced_by": [
+      "docs/diagrams/README.md"
+    ]
+  },
+  {
+    "from": "docs/diagrams/use_cases.svg",
+    "to": "docs/EVIDENCE/12-e2e/historical-design-diagrams/use_cases.svg",
+    "sha256": "09f0e9538def5ea0f64f4faf2d69753c1d11e34e990c47f37d85824fa287e604",
+    "referenced_by": [
+      "docs/diagrams/README.md"
+    ]
+  },
+  {
+    "from": "docs/diagrams/upload_sequence.svg",
+    "to": "docs/EVIDENCE/12-e2e/historical-design-diagrams/upload_sequence.svg",
+    "sha256": "70e5e75dccb387fc32a37cba1d5383b7485f4478be3a202ba653d0271684cd1d",
+    "referenced_by": [
+      "docs/diagrams/README.md"
+    ]
+  },
+  {
+    "from": "docs/diagrams/fintrust.drawio",
+    "to": "docs/EVIDENCE/12-e2e/historical-design-diagrams/fintrust.drawio",
+    "sha256": "e455c0f069fa4bdb21694d32f69cf19ca46ecbdf9b6352aeca88f524d7a56384",
+    "referenced_by": [
+      "README.md",
+      "docs/erd.md",
+      "docs/diagrams/README.md"
+    ]
+  },
+  {
+    "from": "output/pdf/fintrust_architecture_and_erd.pdf",
+    "to": "docs/EVIDENCE/12-e2e/historical-design-diagrams/fintrust_architecture_and_erd.pdf",
+    "sha256": "39680f0040803638df9dd9dc98d8cd5980df912136c0f70e39990a9fc4e83f6b",
+    "referenced_by": [
+      "docs/erd.md",
+      "docs/diagrams/README.md"
+    ]
+  },
+  {
+    "from": "output/pdf/fintrust_system_documentation.pdf",
+    "to": "docs/EVIDENCE/12-e2e/historical-design-diagrams/fintrust_system_documentation.pdf",
+    "sha256": "bf4933a9696e78b3033a52d3524b7a59bfcb33bbb4e724fffbdf39f594fdd096",
+    "referenced_by": [
+      "docs/diagrams/README.md",
+      "project-reference/learning_guide.md"
+    ]
+  }
+]

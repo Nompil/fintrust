@@ -1,0 +1,30 @@
+digraph FinTrust {
+graph [bgcolor="#ffffff",fontname="Arial",fontsize=22,pad=0.3,nodesep=0.45,ranksep=0.65]; node [shape=box,style="rounded,filled",fillcolor="#edf5f3",color="#2b6557",fontname="Arial",fontsize=17,margin="0.18,0.13"]; edge [color="#607d8b",fontname="Arial",fontsize=13,arrowsize=0.7];
+rankdir=LR; label="USE CASES | Four roles; no permission inheritance"; labelloc=t;
+{rank=same;admin;analyst;auditor;maint;}
+admin [label="Administrator",shape=box];
+analyst [label="Risk / Compliance Analyst",shape=box];
+auditor [label="Auditor",shape=box];
+maint [label="Technical Maintainer",shape=box];
+users [label="Manage local users\nAssign role; disable / reactivate",shape=box];
+view [label="View assigned transactions / batches\nRisk evidence / Reports / Insights",shape=box];
+audit [label="Read audit history",shape=box];
+upload [label="Upload CSV\nReview batch result",shape=box];
+correct [label="Correct / reject quarantine\nWorker revalidates",shape=box];
+review [label="Investigate / resolve / escalate\nRisk review with notes",shape=box];
+state [label="Read platform state",shape=box];
+recover [label="Monitor technical failures\nControlled retry / redrive",shape=box];
+runtime [label="Read operations receipts\nAlert / projection failures",shape=box];
+admin -> users;
+admin -> view;
+admin -> audit;
+admin -> state;
+analyst -> view;
+analyst -> upload;
+analyst -> correct;
+analyst -> review;
+auditor -> view;
+auditor -> audit;
+maint -> recover;
+maint -> runtime;
+}
