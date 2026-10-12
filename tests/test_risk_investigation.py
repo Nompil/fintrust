@@ -115,5 +115,5 @@ def test_baseline_same_currency_preceding_window_and_frozen_source(release_db,pe
     e=release_db[3]('SELECT max(risk_event_id) FROM risk_events')[0][0];c,h,_=people
     d=get(c,h,e).json['data'];context=d['account_context']
     expected=release_db[3]('SELECT count(*),avg(amount) FROM transactions WHERE account_id=%s AND currency=%s AND tx_date>=%s AND tx_date<%s',(ACCOUNT,'ZAR',context['window_start'],context['window_end']))[0]
-    assert context['transaction_count']==expected[0] and float(context['average_amount'])==float(expected[1]) and context['currency']=='ZAR' 
+    assert context['transaction_count']==expected[0] and float(context['average_amount'])==float(expected[1]) and context['currency']=='ZAR'
     assert any(float(t['amount'])==999 and t['currency']=='USD' for t in d['related_transactions']) and d['source_system']=='synthetic-demo'

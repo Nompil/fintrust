@@ -81,7 +81,7 @@ def test_multiple_rules_and_configurable_classification(monkeypatch):
                              "merchant": "HighRisk Shop"}, 6, cfg)
     assert result["score"] == 100 and result["risk_level"] == "High"
     assert len(result["triggered_rules"]) == 6
-    assert all(set(r) == {"rule", "points", "reason"} for r in result["triggered_rules"])
+    assert all(set(r) == {"rule", "points", "reason", "triggered_value", "threshold", "context"} for r in result["triggered_rules"])
     assert rules.classify_risk(79, cfg) == "Medium"
 
 
