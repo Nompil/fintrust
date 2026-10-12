@@ -1,0 +1,18 @@
+{
+  "status": "PASSED",
+  "checks": [
+    "scoped scenario filter",
+    "queue retained",
+    "North Star evidence drawer",
+    "claim",
+    "append notes",
+    "immutable history",
+    "Escape close",
+    "quarantine split detail",
+    "wrong Analyst read-only",
+    "Auditor read-only",
+    "mobile",
+    "user filter"
+  ],
+  "external_network": "blocked"
+}

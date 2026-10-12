@@ -1,0 +1,24 @@
+{
+  "status": "PASSED",
+  "base_commit": "68b731a",
+  "application_implementation_commit": "7f2ddce3f27195377e61edbecaed7e0ede4d700e",
+  "tested_source_commit": "9e49a2f1bf97a3c1356bef6e7060eebead63d59d",
+  "focused_new_tests": 16,
+  "affected_tests": 65,
+  "regression_passed": 810,
+  "regression_skipped": 1,
+  "failures": 0,
+  "postgresql16_tests": 64,
+  "postgresql16_server": "STOPPED",
+  "browser": "PASSED",
+  "aws_mutations": false,
+  "push": false,
+  "protected_files_unchanged": 167,
+  "limits": [
+    "Historical missing rule measurements are not reconstructed",
+    "Related history and timelines are bounded",
+    "Single-host hashed bearer authentication; production federation pending",
+    "Live schema and release deployment remain separately gated",
+    "No AI, saved filters or autonomous decisions"
+  ]
+}

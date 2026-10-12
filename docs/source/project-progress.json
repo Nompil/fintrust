@@ -1,15 +1,15 @@
 {
   "title": "FinTrust Project Progress",
   "subtitle": "Single living status and milestone record",
-  "checkpoint": "636e4e5",
+  "checkpoint": "9e49a2f",
   "date": "12 October 2026",
   "sections": [
     {
       "title": "Current Snapshot",
       "status": "LOCAL VERIFIED",
       "paragraphs": [
-        "12 October 2026 | Implementation checkpoint 636e4e5 | Local multi-user operations verified. Documentation revision follows the tested source.",
-        "789 regression passed / 1 administrator-only skip; 27 focused passed; 130 affected checks passed; 48 PostgreSQL 16 passed; browser passed. Full current-release AWS integration remains pending; no AWS action or push occurred.",
+        "12 October 2026 | Implementation checkpoint 9e49a2f | Risk investigation, signals, independent alerts and accountable Analyst notes verified locally.",
+        "810 regression passed / 1 expected administrator-only skip; 65 affected passed; 64 disposable PostgreSQL 16 passed; both browser gates passed. No AWS mutation or push.",
         "AWS unchanged in this phase. Foundation stages historically verified; full current-release integration pending. Latest live RDS evidence (11 October) found missing base schema. Temporary preflight endpoint/runner were cleaned up."
       ],
       "table": null
@@ -20,7 +20,8 @@
       "paragraphs": [
         "Repository structure and source-path contracts; Analyst-first navigation and credential-preserving local restart; identity/deduplication and frozen risk rules; local review/account/audit workflows; authoritative append-only lifecycle and read APIs.",
         "Historical base bootstrap/001/002 and service-role PG16 checks retained. Current lifecycle proof adds 21 PG16 tests. No live write is implied.",
-        "Named user governance, private local enrollment, active-role checks, immutable quarantine correction/outcome timeline, single-owner review claim/reassignment including escalated recovery, scoped queue filters and Admin/Analyst/Auditor browser controls."
+        "Named user governance, private local enrollment, active-role checks, immutable quarantine correction/outcome timeline, single-owner review claim/reassignment including escalated recovery, scoped queue filters and Admin/Analyst/Auditor browser controls.",
+        "Scoped Risk Event investigation, measured frozen rule evidence, same-currency account context, related transactions, filtered counts/sort, list-preserving detail, append-only Analyst notes, independent delivery state and compact user search. Existing quarantine/assignment controls remain verified."
       ],
       "table": null
     },
@@ -28,7 +29,7 @@
       "title": "In Progress",
       "status": "LOCAL VERIFIED",
       "paragraphs": [
-        "Next domain phase is Risk Investigation Workflow. AWS Integration remains In Progress; local verification is not live deployment."
+        "Next is focused Analyst Workbench / Dashboard review. AWS Integration remains In Progress; local investigation verification is not live deployment."
       ],
       "table": null
     },
@@ -36,7 +37,7 @@
       "title": "Blocked",
       "status": "PENDING VERIFICATION",
       "paragraphs": [
-        "Live promotion requires reviewed empty-database bootstrap and 001/002/003/004 chain, correct service grants and fresh exact-source Linux artifact gate. Existing fixed live runner does not include 003.",
+        "Live promotion requires reviewed empty-database bootstrap and 001/002/003/004/005 chain, correct service grants and fresh exact-source Linux artifact gate. Existing fixed live runner does not include 003.",
         "Cloud intake, FIFO/Streams mappings, authenticated API, SES delivery and operational monitoring still require controlled live evidence. Historical Linux artifacts remain valid only for their source."
       ],
       "table": null
@@ -53,9 +54,8 @@
       "title": "Next Actions",
       "status": "PLANNED",
       "paragraphs": [
-        "1. Implement/verify Risk Investigation Workflow using existing transaction, signal, event, alert and review state.",
-        "2. Complete local business scenarios before fresh exact-source Linux packaging and separately approved live bootstrap/cloud wiring.",
-        "No AWS action, SQL rollout, AI integration or push is authorized by this phase."
+        "Review the Analyst Workbench / Dashboard against the verified investigation workflow; saved filters remain future scope. Do not introduce AI or autonomous decisions.",
+        "Separately approve fresh current-source Linux packaging, reviewed live schema/bootstrap/003/004/005 privileges and AWS integration. No deployment is authorized by local verification."
       ],
       "table": null
     },
@@ -63,7 +63,8 @@
       "title": "Milestone History",
       "status": "LOCAL VERIFIED",
       "paragraphs": [
-        "Selected major milestones from Git history and dated AWS evidence. Historical proof applies to its source; it is not rerun or promoted to the current candidate. Source paths resolve under docs/EVIDENCE where noted."
+        "Selected major milestones from Git history and dated AWS evidence. Historical proof applies to its source; it is not rerun or promoted to the current candidate. Source paths resolve under docs/EVIDENCE where noted.",
+        "9e49a2f | Risk investigation implementation | 65 affected and 64 PG16 checks passed; complete regression 810 passed / 1 expected skip. Documentation/evidence commit follows tested source."
       ],
       "table": [
         [
@@ -190,7 +191,8 @@
         "Retain candidate-before-DB-validation chronology; keep processing, risk, review and delivery separate; accept all valid risk levels; original quarantine is terminal and corrections are new linked occurrences.",
         "Retain >5 accepted transactions / 300 seconds, not >10/hour. Keep no-NAT/private RDS. Require in-memory bootstrap credential retrieval over a reviewed private endpoint and verify-full.",
         "Master owns project explanation; Progress owns status/history; EVIDENCE owns proof. Technical contracts remain supporting sources, not alternative readiness declarations.",
-        "Reuse existing immutable correction/review history and current state models. Explicit Admin reassignment preserves escalated decision evidence. Keep SLA configurable without inventing a deadline; retain controlled local authentication and no role inheritance."
+        "Reuse existing immutable correction/review history and current state models. Explicit Admin reassignment preserves escalated decision evidence. Keep SLA configurable without inventing a deadline; retain controlled local authentication and no role inheritance.",
+        "Datadog official investigation guidance informs information density and side-panel interactions only; the original FinTrust brief, RBAC and frozen risk rules remain authoritative. Reuse immutable review history for notes through additive 005; no second review model."
       ],
       "table": null
     },
@@ -202,7 +204,7 @@
         "Live database missing base schema: read-only preflight stopped incremental migration; temporary billable infrastructure cleaned up, evidence retained.",
         "Stale local entry and login restart: authenticated workspace routing and existing hashed identity preservation fixed.",
         "Lifecycle recovery: distinguish durable financial STORED from external projection failure; compare latest failure/recovery sequence so multiple failed attempts recover correctly.",
-        "Unresolved: current-source Linux gate, live bootstrap/003/004 privileges and integration. No claim of production readiness."
+        "Unresolved: current-source Linux gate, live bootstrap/003/004/005 privileges and integration. No claim of production readiness."
       ],
       "table": null
     },
@@ -210,7 +212,7 @@
       "title": "Evidence and Maintenance",
       "status": "LOCAL VERIFIED",
       "paragraphs": [
-        "Latest phase proof: docs/EVIDENCE/12-e2e/multi-user-operations/verification-summary.json, focused/regression output, PostgreSQL 16 result and browser screenshots. Earlier lifecycle and live preflight/cleanup evidence remains unchanged.",
+        "Latest proof: docs/EVIDENCE/12-e2e/risk-investigation/verification-summary.json, regression/affected output, PostgreSQL 16 result and browser screenshots. Prior multi-user evidence and historical AWS proof are preserved.",
         "Edit docs/source/project-progress.json and regenerate with python tools/build_project_docs.py. Keep historical results and explicit dates; do not overwrite evidence or mint another standalone status report."
       ],
       "table": null

@@ -1,7 +1,7 @@
 {
   "title": "FinTrust Project Master",
   "subtitle": "Transaction Monitoring & Risk Alert Platform",
-  "checkpoint": "636e4e5",
+  "checkpoint": "9e49a2f",
   "date": "12 October 2026",
   "sections": [
     {
@@ -9,7 +9,7 @@
       "status": "LOCAL VERIFIED",
       "paragraphs": [
         "FinTrust is a transaction monitoring and risk investigation platform. It admits CSV files, preserves financial identity and provenance, calculates explainable risk signals and gives authorized staff accountable review workflows. It does not move funds, reverse charges or establish fraud.",
-        "Current local implementation checkpoint 636e4e5. Multi-user operations, quarantine recovery and review assignment are locally verified: 789 regression passed / 1 administrator-only skip; 27 focused passed; 130 affected checks passed; 48 PostgreSQL 16 passed; browser passed. AWS foundation evidence remains historical; current-release cloud integration is pending."
+        "Current implementation checkpoint 9e49a2f. Risk investigation is locally verified: 810 regression passed / 1 expected administrator-only skip; 65 affected passed; 64 PostgreSQL 16 passed; both browser gates passed. Prior multi-user checkpoint remains recorded. Current-release cloud integration is pending."
       ],
       "references": [
         "docs/architecture/FINTRUST_FLOW_AUDIT.md",
@@ -106,7 +106,8 @@
       "paragraphs": [
         "Named local users have a stable user ID and immutable username/subject, display name, optional email, role, ACTIVE/DISABLED status, creation time and actual last sign-in time. Legacy user IDs derive deterministically from the existing subject. Unknown historical creation times remain unknown.",
         "Admin creates named records and changes role/status with a mandatory reason and governance audit. Creation does not issue a credential. Private local enrollment uses a hidden prompt, stores only a SHA256 hash, cannot create an identity or change its role/account scope, and cannot silently replace an existing credential. The registry is operator-controlled and ignored by Git; production federation/password authentication remains a separate gate.",
-        "Backend checks deny unsupported actions on each request. Analyst investigates, corrects assigned-account quarantine and claims/completes owned reviews. Admin governs users and review assignment, never clears/confirms risk or edits financial evidence. Auditor is read-only with audit access; Maintainer handles technical recovery only. Disable blocks subsequent authentication but preserves identity, ownership and audit. Admin must explicitly reassign unresolved work; no automatic role inheritance."
+        "Backend checks deny unsupported actions on each request. Analyst investigates, corrects assigned-account quarantine and claims/completes owned reviews. Admin governs users and review assignment, never clears/confirms risk or edits financial evidence. Auditor is read-only with audit access; Maintainer handles technical recovery only. Disable blocks subsequent authentication but preserves identity, ownership and audit. Admin must explicitly reassign unresolved work; no automatic role inheritance.",
+        "Admin Users remains a compact table with name, username, explicit role/status, last sign-in and credential readiness. Search filters only the already-authorized registry list; sorting never widens authority. No Datadog assets or proprietary branding are used."
       ],
       "references": [
         "docs/architecture/FINTRUST_FLOW_AUDIT.md",
@@ -232,7 +233,8 @@
       "status": "LOCAL VERIFIED",
       "paragraphs": [
         "Scoring is deterministic and records rule version, score and triggered explanations with the financial outcome. Scores are capped at 100. Low is below 40, Medium is 40 through 69, and High is 70 or above.",
-        "HIGH is valid accepted data requiring attention, not quarantine. Every accepted scored transaction has a risk_events record; only Medium/High open routine reviews. Signals are teaching rules, not a validated bank fraud model. Risk outcomes do not authorize money movement."
+        "HIGH is valid accepted data requiring attention, not quarantine. Every accepted scored transaction has a risk_events record; only Medium/High open routine reviews. Signals are teaching rules, not a validated bank fraud model. Risk outcomes do not authorize money movement.",
+        "New frozen results record each triggered rule name, points, explanation, measured value, threshold and context. Signal creation time is the authoritative processed_transactions.processed_at timestamp. Existing historical results are never rescored or assigned invented measurements. Frozen scoring semantics and rule version remain unchanged."
       ],
       "references": [
         "backend/fintrust/rules.py",
@@ -295,7 +297,8 @@
         "Original restricted safe evidence, reason code/detail, source version, batch and row remain immutable. Corrections are independently versioned, attributed to the named Analyst and linked to a new occurrence. The existing validator, identity checks and normal processing run again; correction never approves a ledger write directly.",
         "Backend recovery detail exposes OPEN, CORRECTED, REVALIDATION_FAILED, ACCEPTED or REJECTED derived from existing workflow and durable outcome records. No competing status table was added. Failed attempts retain latest reason and every prior correction. Accepted and duplicate resolutions link to the canonical transaction; duplicates do not add a ledger entry.",
         "The detail screen shows original and latest corrected values, correcting Analyst/time, attempt count, outcome and human/system audit timeline. Evidence reads are version-pinned, bounded and account-scoped; incomplete history is explicitly marked. Missing/unknown-account cases remain Admin-visible for access resolution; Admin cannot perform the correction, and Analysts are not given blanket access to unassigned financial data.",
-        "Local correction/projection outbox retry remains durable in PostgreSQL. Mock S3 evidence is session-limited, as before; this is not a live retention proof. No credential or sensitive raw payload is logged."
+        "Local correction/projection outbox retry remains durable in PostgreSQL. Mock S3 evidence is session-limited, as before; this is not a live retention proof. No credential or sensitive raw payload is logged.",
+        "Quarantine now opens a list-preserving recovery drawer with original and corrected values, issue, attempts/outcome, immutable correction history and recorded timeline. Existing account-scoped correction/revalidation actions are reused. Missing/unknown-account cases remain fail-closed under the established access model."
       ],
       "references": [
         "docs/architecture/FINTRUST_FLOW_AUDIT.md",
@@ -310,7 +313,10 @@
       "status": "LOCAL VERIFIED",
       "paragraphs": [
         "risk_events accompanies every accepted scored transaction, including Low. A risk event is evidence of assessment; it is not synonymous with a High alert or confirmed fraud.",
-        "A transaction links its frozen score and rule explanations, risk event, review state, delivery state and source occurrences. Similar charges with distinct identity remain separate ledger records for investigation."
+        "A transaction links its frozen score and rule explanations, risk event, review state, delivery state and source occurrences. Similar charges with distinct identity remain separate ledger records for investigation.",
+        "GET /v1/risk-events/{event} assembles account-scoped transaction/source, frozen signals, owner/review, independent alert state, related history and actual audit timeline. Event data stays authoritative in PostgreSQL; delivery claims stay independent in DynamoDB. No competing risk-event state table is introduced.",
+        "Investigation drawer retains the queue and follows WHAT HAPPENED / WHEN / WHERE / WHY IS IT RISKY / NEXT STEPS. The displayed last update is the latest review-history change. Compact severity/scenario/assignee/account/status controls, server-side sorting and filtered total/HIGH/active counts operate before pagination. Related history is limited to 20 rows and explicitly reports truncation.",
+        "Account baseline is current-ledger, same-currency accepted transactions in the preceding 30 event-time days, strictly before the investigated transaction. It is labelled as contextual data, not the original scoring snapshot; there is no FX aggregation or fabricated comparison. Prior risk/review counts and related transactions come from scoped SQL."
       ],
       "references": [
         "docs/architecture/FINTRUST_FLOW_AUDIT.md",
@@ -324,7 +330,8 @@
       "status": "LOCAL VERIFIED",
       "paragraphs": [
         "High risk enters the email path. Conditional DynamoDB claims coordinate delivery and durable SQL receipts support visibility. SENT evidence permits ALERTED; PENDING, SENDING or UNKNOWN must not be displayed as sent.",
-        "A provider timeout may mean the email was sent without a recorded response. UNKNOWN is held for reconciliation, not blindly resent. Exactly-once email is not guaranteed. Medium/High review work remains visible even if delivery fails."
+        "A provider timeout may mean the email was sent without a recorded response. UNKNOWN is held for reconciliation, not blindly resent. Exactly-once email is not guaranteed. Medium/High review work remains visible even if delivery fails.",
+        "Investigation displays the existing logical HIGH intent and independent PENDING / SENT / FAILED / RETRYING delivery evidence. SENDING and UNKNOWN remain conservative reconciliation states. Missing delivery evidence is not proof of sending; delivery failure does not rollback the ledger or review. SQL legacy receipts and DynamoDB delivery claims remain explicitly distinguished."
       ],
       "references": [
         "docs/architecture/FINTRUST_FLOW_AUDIT.md",
@@ -340,7 +347,10 @@
         "Each Medium/High review is initially unassigned, with at most one named Analyst owner. Analysts may self-claim an OPEN review; a second claim or stale version is rejected. Only the current owner can make a business decision. Admin may assign, reassign or release an active review with a mandatory reason, never make its decision.",
         "Migration 004 extends the existing transition guard for reassignment/release and adds a reviewer/status/created-time queue index. It reuses reviewer_subject, version and immutable risk_review_history. Escalated reassignment preserves the previous decision, actor, time and resolution; escalation cannot be unassigned. The new owner may resume investigation through the existing transition workflow.",
         "PostgreSQL SELECT FOR UPDATE serializes competing mutations; expected_version rejects stale requests and request IDs support safe replay. A single-host cross-process registry lock and fresh active-role checks prevent a concurrent disable/role change from slipping into a new assignment or human mutation.",
-        "My Reviews, Unassigned, All Open, High Risk and Over SLA filters run on the scoped backend before pagination. Age is calculated from creation time. FINTRUST_REVIEW_SLA_SECONDS is optional (60 through 31536000); absent configuration yields an explicit unconfigured result, not an invented business deadline."
+        "My Reviews, Unassigned, All Open, High Risk and Over SLA filters run on the scoped backend before pagination. Age is calculated from creation time. FINTRUST_REVIEW_SLA_SECONDS is optional (60 through 31536000); absent configuration yields an explicit unconfigured result, not an invented business deadline.",
+        "POST /v1/reviews/{event}/notes appends an investigation note only for the currently assigned active Analyst in UNDER_REVIEW. Expected version, row lock, request digest and replay protection reuse risk_review_history. The current note projection can change, but each prior note remains immutable in history.",
+        "Local additive migration 005_investigation_notes.sql evolves only the existing transition guard to allow a same-owner UNDER_REVIEW note append. It adds no table/column/state. Base -> 001 -> 002 -> 003 -> 004 -> 005 is tested locally; frozen 001-004 files remain unchanged. Current live runner approval does not implicitly include 003-005.",
+        "Clear / Confirm Risk / Escalate require notes, actor and resolution evidence. Wrong Analyst, Admin, Auditor and Maintainer cannot decide or append notes. Administration can assign but cannot substitute for Analyst judgment. Existing terminal/escalated recovery and ownership rules remain authoritative."
       ],
       "references": [
         "docs/architecture/FINTRUST_FLOW_AUDIT.md",
@@ -459,7 +469,7 @@
       "paragraphs": [
         "Authoritative base: the checksum-bound section of sql/schema.sql before Additive identity hardening, rendered by tools/render_release1_base.py with sql/bootstrap/release1-base-manifest.json. Six base tables include Phase 1 alert upgrades. Apply verified identity 001, workflows 002 and lifecycle 003 in order. Catalog prerequisites reject drift. Synthetic seeds are not required for live bootstrap.",
         "Core domains: customers/accounts; transactions and frozen processed_transactions; ingestion batches/records/attempts/reconciliation; quarantine/corrections/outbox; risk events/reviews/history; alerts; projection and operations recovery.",
-        "The 17-table baseline ERD predates 003, which adds transaction_lifecycle_events. Migration 004 changes only review guard/index; no new tables. Its checksums preserve earlier history and validate the current catalog. Latest live preflight found no base schema. Live bootstrap, 001/002/003/004 and grants remain unapproved."
+        "The 17-table baseline ERD predates 003, which adds transaction_lifecycle_events. Migration 004 changes only review guard/index; no new tables. Its checksums preserve earlier history and validate the current catalog. Latest live preflight found no base schema. Live bootstrap, 001/002/003/004/005 and grants remain unapproved."
       ],
       "references": [
         "sql/schema.sql",
@@ -565,9 +575,10 @@
       "title": "Testing Strategy",
       "status": "LOCAL VERIFIED",
       "paragraphs": [
-        "Historical lifecycle checkpoint 7397f22: 756 passed, 1 skipped, zero failures; focused 62 and PostgreSQL 16 lifecycle 21. The administrator-only skip has separate prior PG16 evidence. Current multi-user verification is recorded below; neither result proves live migration 003/004 privileges.",
+        "Historical lifecycle checkpoint 7397f22: 756 passed, 1 skipped, zero failures; focused 62 and PostgreSQL 16 lifecycle 21. The administrator-only skip has separate prior PG16 evidence. Current multi-user verification is recorded below; neither result proves live migration 003/004/005 privileges.",
         "Tests cover identity, threshold boundaries, immutable outcomes, rejected/quarantined rows, correction lineage, partial-write recovery, delivery claims, role/account authorization and browser workflows. Local mocks intentionally avoid AWS. Counts establish tested behavior, not availability, live service permissions or performance.",
-        "Multi-user phase: 789 regression passed / 1 administrator-only skip; 27 focused passed; 130 affected checks passed; 48 PostgreSQL 16 passed; browser passed. Focused coverage includes immutable correction lineage, failed/successful/duplicate revalidation, named onboarding and disable/reactivate, role separation, concurrent claims, wrong-owner denial, assignment replay/scope, escalated recovery and browser role/action visibility. Evidence: docs/EVIDENCE/12-e2e/multi-user-operations/."
+        "Multi-user phase: 789 regression passed / 1 administrator-only skip; 27 focused passed; 130 affected checks passed; 48 PostgreSQL 16 passed; browser passed. Focused coverage includes immutable correction lineage, failed/successful/duplicate revalidation, named onboarding and disable/reactivate, role separation, concurrent claims, wrong-owner denial, assignment replay/scope, escalated recovery and browser role/action visibility. Evidence: docs/EVIDENCE/12-e2e/multi-user-operations/.",
+        "Risk investigation: 16 new backend tests plus a real loopback browser gate; 65 affected tests; 64 on disposable PostgreSQL 16; full regression 810 passed / 1 expected administrator-only skip. Evidence: docs/EVIDENCE/12-e2e/risk-investigation/. No live AWS transport occurred."
       ],
       "references": [
         "docs/EVIDENCE/12-e2e/transaction-lifecycle/verification-summary.json",
@@ -655,8 +666,8 @@
       "title": "Future Roadmap",
       "status": "PLANNED",
       "paragraphs": [
-        "Next: Risk Investigation Workflow - Transaction -> Risk Signals -> Risk Event -> Alert -> Review Queue -> Analyst Investigation -> Decision. Keep frozen deterministic rules and independent delivery/review outcomes. No AI or unrelated frontend redesign was introduced.",
-        "After local closure: current Linux artifact gate, separately reviewed base bootstrap and 001/002/003/004 privilege/catalog chain, controlled live integration and recovery evidence. HA, federation, accounting extensions, archival automation and production capacity review are later scope."
+        "Next: focused Analyst Workbench / Dashboard review; investigation workflow is now locally verified. Keep frozen deterministic rules and independent delivery/review outcomes. No AI or unrelated frontend redesign was introduced.",
+        "After local closure: current Linux artifact gate, separately reviewed base bootstrap and 001/002/003/004/005 privilege/catalog chain, controlled live integration and recovery evidence. HA, federation, accounting extensions, archival automation and production capacity review are later scope."
       ],
       "references": [
         "docs/architecture/FINTRUST_FLOW_AUDIT.md"
@@ -687,7 +698,8 @@
         "DECISION: Single owner with row lock and version | SOURCE: https://www.postgresql.org/docs/16/explicit-locking.html | WHY IT APPLIES: Concurrent staff must not overwrite ownership | HOW FINTRUST USES IT: SELECT FOR UPDATE plus expected_version and immutable history.",
         "DECISION: Server-side role, ownership and account checks | SOURCE: https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html | WHY IT APPLIES: The brief requires accountable separation of duties | HOW FINTRUST USES IT: Deny unsupported actions and validate owner/account/active role.",
         "DECISION: Controlled local credential enrollment | SOURCE: https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html | WHY IT APPLIES: Named sign-in must not expose credentials or imply production federation | HOW FINTRUST USES IT: Private prompt, unique opaque credentials, hashes only, disable checks.",
-        "DECISION: Actor and outcome audit without secrets | SOURCE: https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html | WHY IT APPLIES: Investigations require attributable history | HOW FINTRUST USES IT: Reuse append-only SQL history and versioned governance receipts; no credential logging."
+        "DECISION: Actor and outcome audit without secrets | SOURCE: https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html | WHY IT APPLIES: Investigations require attributable history | HOW FINTRUST USES IT: Reuse append-only SQL history and versioned governance receipts; no credential logging.",
+        "DECISION: list-preserving investigation drawer, compact filters and visible triage | SOURCE: https://docs.datadoghq.com/security/cloud_siem/triage_and_investigate/investigate_security_signals/ | WHY IT APPLIES: Analysts need evidence and next steps without losing queue context | HOW FINTRUST USES IT: Adapt interaction principles to transaction risk, with original branding and backend-enforced ownership; no copied icons, wording or pixel layout."
       ],
       "references": [
         "docs/architecture/FINTRUST_FLOW_AUDIT.md",
@@ -696,7 +708,11 @@
         "https://www.postgresql.org/docs/16/explicit-locking.html",
         "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
         "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
-        "https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html"
+        "https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html",
+        "https://docs.datadoghq.com/security/cloud_siem/triage_and_investigate/investigate_security_signals/",
+        "sql/migrations/005_investigation_notes.sql",
+        "backend/fintrust/investigation.py",
+        "docs/EVIDENCE/12-e2e/risk-investigation/verification-summary.json"
       ],
       "table": null,
       "diagram": null

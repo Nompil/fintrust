@@ -72,10 +72,10 @@ Use a unique random credential of at least 32 characters; never put it in comman
 py tools/local.py test
 py tools/local.py test --database
 ```
-Latest implementation `636e4e5`: **789 regression passed / 1 administrator-only skip; 27 focused passed; 130 affected checks passed; 48 PostgreSQL 16 passed; browser passed**. [Recorded results](docs/EVIDENCE/12-e2e/multi-user-operations/verification-summary.json).
+Latest implementation `9e49a2f`: **810 regression passed / 1 expected administrator-only skip; 65 affected passed; 64 PostgreSQL 16 passed; both browser gates passed**. [Recorded results](docs/EVIDENCE/12-e2e/risk-investigation/verification-summary.json).
 
 ## Current Status
-[Project Progress](docs/FinTrust_Project_Progress.pdf) is the living status/history record. AWS foundation stages are historically verified; complete current-release integration, live schema bootstrap and a fresh Linux artifact gate remain pending. Next: Risk Investigation Workflow.
+[Project Progress](docs/FinTrust_Project_Progress.pdf) is the living status/history record. AWS foundation stages are historically verified; complete current-release integration, live schema bootstrap and a fresh Linux artifact gate remain pending. Next: focused Analyst Workbench / Dashboard review.
 
 ## Full Project Documentation
 [Project Master](docs/FinTrust_Project_Master.pdf) explains business rules, architecture, data, security, cost and limits. Editable sources are [Master](docs/source/project-master.json) and [Progress](docs/source/project-progress.json); regenerate both with `python tools/build_project_docs.py` (ReportLab and PyMuPDF required). [Documentation inventory](docs/source/documentation-inventory.json) records each disposition. Update these sources instead of creating new status documents. Active operational contracts remain in place; superseded narrative is under `docs/archive/`.

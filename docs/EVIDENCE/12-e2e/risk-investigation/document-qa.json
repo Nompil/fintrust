@@ -1,0 +1,167 @@
+{
+  "Master": {
+    "pages": 22,
+    "sha256": "0478985643f435a664f360c2db7233bea05148ccea1b187ce4bb87a428c70df1",
+    "outline_entries": 42,
+    "pages_checked": [
+      {
+        "page": 1,
+        "characters": 479,
+        "render": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\risk-investigation-doc-qa\\Master-01.png"
+      },
+      {
+        "page": 2,
+        "characters": 791,
+        "render": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\risk-investigation-doc-qa\\Master-02.png"
+      },
+      {
+        "page": 3,
+        "characters": 570,
+        "render": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\risk-investigation-doc-qa\\Master-03.png"
+      },
+      {
+        "page": 4,
+        "characters": 2229,
+        "render": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\risk-investigation-doc-qa\\Master-04.png"
+      },
+      {
+        "page": 5,
+        "characters": 2552,
+        "render": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\risk-investigation-doc-qa\\Master-05.png"
+      },
+      {
+        "page": 6,
+        "characters": 2738,
+        "render": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\risk-investigation-doc-qa\\Master-06.png"
+      },
+      {
+        "page": 7,
+        "characters": 848,
+        "render": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\risk-investigation-doc-qa\\Master-07.png"
+      },
+      {
+        "page": 8,
+        "characters": 759,
+        "render": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\risk-investigation-doc-qa\\Master-08.png"
+      },
+      {
+        "page": 9,
+        "characters": 2804,
+        "render": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\risk-investigation-doc-qa\\Master-09.png"
+      },
+      {
+        "page": 10,
+        "characters": 2575,
+        "render": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\risk-investigation-doc-qa\\Master-10.png"
+      },
+      {
+        "page": 11,
+        "characters": 3151,
+        "render": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\risk-investigation-doc-qa\\Master-11.png"
+      },
+      {
+        "page": 12,
+        "characters": 2811,
+        "render": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\risk-investigation-doc-qa\\Master-12.png"
+      },
+      {
+        "page": 13,
+        "characters": 2678,
+        "render": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\risk-investigation-doc-qa\\Master-13.png"
+      },
+      {
+        "page": 14,
+        "characters": 822,
+        "render": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\risk-investigation-doc-qa\\Master-14.png"
+      },
+      {
+        "page": 15,
+        "characters": 2942,
+        "render": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\risk-investigation-doc-qa\\Master-15.png"
+      },
+      {
+        "page": 16,
+        "characters": 849,
+        "render": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\risk-investigation-doc-qa\\Master-16.png"
+      },
+      {
+        "page": 17,
+        "characters": 2380,
+        "render": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\risk-investigation-doc-qa\\Master-17.png"
+      },
+      {
+        "page": 18,
+        "characters": 2400,
+        "render": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\risk-investigation-doc-qa\\Master-18.png"
+      },
+      {
+        "page": 19,
+        "characters": 2828,
+        "render": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\risk-investigation-doc-qa\\Master-19.png"
+      },
+      {
+        "page": 20,
+        "characters": 2756,
+        "render": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\risk-investigation-doc-qa\\Master-20.png"
+      },
+      {
+        "page": 21,
+        "characters": 2673,
+        "render": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\risk-investigation-doc-qa\\Master-21.png"
+      },
+      {
+        "page": 22,
+        "characters": 1855,
+        "render": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\risk-investigation-doc-qa\\Master-22.png"
+      }
+    ]
+  },
+  "Progress": {
+    "pages": 6,
+    "sha256": "377c3b831ec5810b4473d3b7265d758fe0b281e76d7452da4de45458a5f507f4",
+    "outline_entries": 10,
+    "pages_checked": [
+      {
+        "page": 1,
+        "characters": 480,
+        "render": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\risk-investigation-doc-qa\\Progress-01.png"
+      },
+      {
+        "page": 2,
+        "characters": 312,
+        "render": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\risk-investigation-doc-qa\\Progress-02.png"
+      },
+      {
+        "page": 3,
+        "characters": 2273,
+        "render": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\risk-investigation-doc-qa\\Progress-03.png"
+      },
+      {
+        "page": 4,
+        "characters": 2646,
+        "render": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\risk-investigation-doc-qa\\Progress-04.png"
+      },
+      {
+        "page": 5,
+        "characters": 3323,
+        "render": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\risk-investigation-doc-qa\\Progress-05.png"
+      },
+      {
+        "page": 6,
+        "characters": 2464,
+        "render": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\risk-investigation-doc-qa\\Progress-06.png"
+      }
+    ]
+  },
+  "protected_files_unchanged": 167,
+  "reviewed_documents": 173,
+  "classification_counts": {
+    "KEEP": 39,
+    "CONSOLIDATE": 43,
+    "EVIDENCE": 89,
+    "ARCHIVE": 2
+  },
+  "navigation_links_checked": 144,
+  "missing_links": [],
+  "visual_review": "PASSED: all 28 rendered pages reviewed on contact sheets; full-size investigation, references and official AWS-icon pages checked"
+}

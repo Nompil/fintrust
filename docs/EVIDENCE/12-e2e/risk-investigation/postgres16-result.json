@@ -1,0 +1,19 @@
+{
+  "initdb": {
+    "exit_code": 0,
+    "seconds": 10.22
+  },
+  "server-start": {
+    "exit_code": 0,
+    "seconds": 0.53
+  },
+  "investigation-pg16-focused": {
+    "exit_code": 0,
+    "seconds": 148.92
+  },
+  "status": "PASSED",
+  "server-stop": {
+    "exit_code": 0,
+    "seconds": 5.06
+  }
+}
