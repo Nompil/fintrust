@@ -1,0 +1,141 @@
+﻿{
+    "Master":  {
+                   "pages":  23,
+                   "sha256":  "9504bf10f39ac3778a9c700b48f421ded5dd6b42f1f48f2c3e571e9981bb82ce",
+                   "outline_entries":  42,
+                   "pages_checked":  [
+                                         {
+                                             "page":  1,
+                                             "characters":  479
+                                         },
+                                         {
+                                             "page":  2,
+                                             "characters":  791
+                                         },
+                                         {
+                                             "page":  3,
+                                             "characters":  570
+                                         },
+                                         {
+                                             "page":  4,
+                                             "characters":  2195
+                                         },
+                                         {
+                                             "page":  5,
+                                             "characters":  2552
+                                         },
+                                         {
+                                             "page":  6,
+                                             "characters":  2693
+                                         },
+                                         {
+                                             "page":  7,
+                                             "characters":  931
+                                         },
+                                         {
+                                             "page":  8,
+                                             "characters":  759
+                                         },
+                                         {
+                                             "page":  9,
+                                             "characters":  2814
+                                         },
+                                         {
+                                             "page":  10,
+                                             "characters":  2718
+                                         },
+                                         {
+                                             "page":  11,
+                                             "characters":  3014
+                                         },
+                                         {
+                                             "page":  12,
+                                             "characters":  3098
+                                         },
+                                         {
+                                             "page":  13,
+                                             "characters":  2653
+                                         },
+                                         {
+                                             "page":  14,
+                                             "characters":  917
+                                         },
+                                         {
+                                             "page":  15,
+                                             "characters":  822
+                                         },
+                                         {
+                                             "page":  16,
+                                             "characters":  2931
+                                         },
+                                         {
+                                             "page":  17,
+                                             "characters":  849
+                                         },
+                                         {
+                                             "page":  18,
+                                             "characters":  2440
+                                         },
+                                         {
+                                             "page":  19,
+                                             "characters":  2400
+                                         },
+                                         {
+                                             "page":  20,
+                                             "characters":  2878
+                                         },
+                                         {
+                                             "page":  21,
+                                             "characters":  2947
+                                         },
+                                         {
+                                             "page":  22,
+                                             "characters":  2697
+                                         },
+                                         {
+                                             "page":  23,
+                                             "characters":  2421
+                                         }
+                                     ]
+               },
+    "Progress":  {
+                     "pages":  7,
+                     "sha256":  "61c6b823501732760cb83c2dfe4ea76190618a484d4c6a15529f451ff073c1a3",
+                     "outline_entries":  10,
+                     "pages_checked":  [
+                                           {
+                                               "page":  1,
+                                               "characters":  480
+                                           },
+                                           {
+                                               "page":  2,
+                                               "characters":  312
+                                           },
+                                           {
+                                               "page":  3,
+                                               "characters":  2510
+                                           },
+                                           {
+                                               "page":  4,
+                                               "characters":  2569
+                                           },
+                                           {
+                                               "page":  5,
+                                               "characters":  3475
+                                           },
+                                           {
+                                               "page":  6,
+                                               "characters":  2780
+                                           },
+                                           {
+                                               "page":  7,
+                                               "characters":  564
+                                           }
+                                       ]
+                 },
+    "references_checked":  104,
+    "missing_references":  [
+
+                           ],
+    "visual_review":  "PASSED: all 30 rendered pages inspected; dense reference and history pages checked at full size"
+}

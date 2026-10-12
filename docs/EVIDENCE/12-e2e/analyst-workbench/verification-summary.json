@@ -1,0 +1,24 @@
+{
+  "status": "PASSED",
+  "base_commit": "58fa83f",
+  "implementation_commit": "c35e41b0967d3e20946aa245ac444bc90f5cf5d1",
+  "focused_passed": 19,
+  "affected_passed": 82,
+  "regression_passed": 811,
+  "regression_skipped": 1,
+  "failures": 0,
+  "browser": "PASSED",
+  "final_responsive_adjustment_verified_by_focused_browser_rerun": true,
+  "scope": "Documentation and frontend; backend/API/SQL/rules unchanged",
+  "aws_mutations": false,
+  "push": false,
+  "running_server_restarted": false,
+  "limits": [
+    "SLA deadline is configurable, absent configuration remains Not configured",
+    "High-risk alerts are flags, not email delivery receipts",
+    "Scenario counts overlap",
+    "Quarantine and batch counters are bounded to existing API scopes",
+    "Correcting Analyst appears in detail; list API has no assignee field",
+    "Current-source Linux verification and live bootstrap/integration remain separately gated"
+  ]
+}
