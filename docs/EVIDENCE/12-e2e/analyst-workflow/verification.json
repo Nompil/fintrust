@@ -1,0 +1,21 @@
+{
+  "status": "VERIFIED",
+  "scope": "Local interface workflow only",
+  "focused_passed": 25,
+  "regression_passed": 726,
+  "regression_failed": 0,
+  "regression_skipped": 1,
+  "skip_reason": "Service-role execution check requires a disposable test database administrator",
+  "browser_passed": true,
+  "business_rules_changed": false,
+  "rbac_changed": false,
+  "aws_access": false,
+  "source_sha256": {
+    "frontend/release1.js": "6bec81b9453110beff4c2b8ee3d3ecdd59df789f4ac6826df06e16e13a141513",
+    "frontend/release1.css": "f0f3e7b92aa9965b40f50abd6937c1f08c892e763963e7457d90f208defd2d42",
+    "tools/verify_release1_ui.cjs": "a2e4b9a360d1fafd221d578e52cf10b811649d8e07013a74d2ee3baafeb82992",
+    "tests/test_analyst_workflow_priority.py": "b477d4bf58a2e7e96451125757f4390d7c65b1e673851da5a3160e26ea997eb5"
+  },
+  "related_lookup_limit": 1000,
+  "related_lookup_scope": "Existing authorized account filter; exact transaction match; explicit limit message"
+}

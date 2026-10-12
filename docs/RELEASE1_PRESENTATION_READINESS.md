@@ -209,3 +209,17 @@ python tools/serve_release1.py --role Analyst --reuse-auth
 ```
 
 Stop the previous local server first; run only one instance on port 5001. Enter the existing token privately in the browser. Evidence: `docs/EVIDENCE/12-e2e/analyst-workspace/analyst-login-live-verified.png`.
+
+### Analyst workflow priority verified (2026-10-12)
+
+Transactions and risk now lead the Analyst navigation and Overview. The first eleven navigation entries are Overview, Transactions, Risk Events, Review Queue, Quarantine, Insights, Reports, Upload Transactions, Ingestion Batches, Rejected Uploads and Notifications. Accounts and Account History remain available. Auditor navigation prioritizes transactions, risk, reports and audit evidence; backend authorization is unchanged.
+
+Overview leads with accepted transactions, scored Low/Medium/High totals, active reviews, quarantine, attention and transaction/risk charts. Historical Not assessed entries are not inferred as Low risk. Recent ingestion activity follows transaction and review activity. Upload summaries retain all reconciliation outcomes; accepted transactions, quarantined rows and risk events are primary next actions, with View batch details secondary.
+
+Financial transaction facts precede source provenance. Related risk/review links use the existing authorized account-scoped API and exact transaction identity; lookup is bounded to 1,000 records and explicitly offers the full page if that bound is reached. Source-batch links preserve existing account restrictions, including mixed-file submission receipts. Quarantine remains invalid rows requiring revalidation, and Batch Detail remains file-processing/reconciliation evidence. Insights charts prioritize transaction activity, risk, rule frequency, quarantine and review outcomes.
+
+Verification: 25 focused tests passed; full regression 726 passed, zero failed, one skipped because a disposable database administrator is required for the existing service-role execution check. The isolated browser gate verified real fixture uploads A/B/replay, all three business outcome links, related risk/review/source-batch navigation, backend chart values, Analyst review/correction, Auditor write denial and safe error/session recovery. Screenshots and source checksums are in docs/EVIDENCE/12-e2e/analyst-workflow/. No backend, schema, business rule, AWS or live RDS change; no package rebuild or push.
+
+Refresh the current workspace to load the updated static interface, then sign in with the existing privately held Analyst token. Refreshing clears the in-memory browser sign-in; it does not replace the token or reset local data.
+
+FINTRUST ANALYST WORKFLOW VERIFIED — TRANSACTIONS AND RISK PRIORITIZED

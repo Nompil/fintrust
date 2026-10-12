@@ -6,3 +6,5 @@
 th{white-space:nowrap;overflow-wrap:normal;word-break:normal}#upload-notice-message .notification{margin:8px 0}#upload-panel{margin-top:0}
 
 .table-scroll{max-width:100%}table{width:max-content;min-width:100%;table-layout:auto}th{min-width:70px}td{overflow-wrap:normal;word-break:normal}td[data-internal-id]{white-space:nowrap;font-variant-numeric:tabular-nums}.notification strong{display:block}
+
+.business-metrics{grid-template-columns:repeat(3,minmax(140px,1fr))}.ingestion-metrics>div{border-top:1px solid #d5dfe3;background:#f8faf9}.ingestion-metrics strong{font-size:20px}.secondary-action{background:transparent;border-color:#d5dfe3;color:#536674}#upload-notice-message .secondary-action{margin-left:12px}@media(max-width:650px){.business-metrics{grid-template-columns:repeat(2,minmax(100px,1fr))}}
