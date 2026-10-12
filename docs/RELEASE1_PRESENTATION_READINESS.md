@@ -197,3 +197,15 @@ FINTRUST USER EXPERIENCE VERIFIED — ANALYST AND AUDITOR DEMO READY
 ### Running-server entry compatibility (2026-10-12)
 
 The user's existing port-5001 process was still serving `frontend/index.html` from the previous Python route, while `/release1` served the current authenticated workspace. A running server does not reload Python route changes automatically. The legacy HTML now redirects to `/release1`, with an accessible sign-in link as a fallback. This fixes the already-running process without stopping it, resetting synthetic data, replacing tokens, or bypassing authentication. The local HTTP check confirmed the redirect and the user's in-app browser reached the current sign-in screen. Authenticated data still requires the existing privately entered operator-issued token; no token was retrieved or provisioned for this correction.
+
+### Analyst login: conflicting local servers resolved (2026-10-12)
+
+Live sign-in reached `/v1/session` but the old backend lacked today's upload-contract route. Two stale `tools/serve_release1.py` processes were answering port 5001. Both were replaced with one current server, without `--reset` or `--seed-scenarios`. The new `--reuse-auth` option validates an existing active, uniquely hashed identity and its requested role, and does not alter the ignored credential registry. Credential-file checksums before/after matched. Six restart-identity tests plus four workspace-entry tests passed (10 total). The user's already-entered token then authenticated `analyst01`; the live browser loaded the Overview with 204 accepted transactions, two active reviews and two quarantined rows. No token value was read or captured, and no AWS or live RDS was contacted. In-memory local AWS mocks restart with the server, as documented for this local environment.
+
+To restart without replacing the Analyst credential:
+
+```powershell
+python tools/serve_release1.py --role Analyst --reuse-auth
+```
+
+Stop the previous local server first; run only one instance on port 5001. Enter the existing token privately in the browser. Evidence: `docs/EVIDENCE/12-e2e/analyst-workspace/analyst-login-live-verified.png`.
