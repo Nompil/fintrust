@@ -1,0 +1,105 @@
+{
+  "status": "VERIFIED - EXISTING CONTROLS PRESERVED",
+  "verification_date_local": "2026-10-13",
+  "timezone": "Africa/Johannesburg",
+  "source_commit": "48399b9",
+  "account": "966467878406",
+  "identity_arn": "arn:aws:iam::966467878406:user/fintrust-admin",
+  "application_region": "af-south-1",
+  "budget_api_region": "us-east-1 (global account service)",
+  "monthly_budget": {
+    "name": "FinTrust-Monthly-Budget",
+    "amount_usd": 10,
+    "period": "MONTHLY",
+    "alerts": [
+      "50% ACTUAL",
+      "80% ACTUAL",
+      "100% ACTUAL",
+      "100% FORECASTED"
+    ],
+    "operator": "GREATER_THAN",
+    "metric": [
+      "UnblendedCost"
+    ],
+    "health": "HEALTHY"
+  },
+  "zero_spend_budget": {
+    "name": "My Zero-Spend Budget",
+    "period": "MONTHLY",
+    "configured_limit_usd": "1.0",
+    "alert_type": "ACTUAL",
+    "threshold_type": "ABSOLUTE_VALUE",
+    "threshold_usd": "0.01",
+    "operator": "GREATER_THAN",
+    "includes_credits": true,
+    "health": "HEALTHY"
+  },
+  "recipient_count": 1,
+  "recipient_fingerprint": "51954f9027b9",
+  "recipient_configuration_verified": true,
+  "recipient_activation_not_exposed_by_api": true,
+  "actual_email_delivery_tested": false,
+  "cost_scope": "Entire account/all regions; no cost filters",
+  "cost_tags": {
+    "Project": "Inactive",
+    "Environment": "Inactive"
+  },
+  "cost_risks": [
+    [
+      "fintrust-ledger-dev",
+      "RDS",
+      "Recurring compute, 20 GiB gp3 and backups",
+      "Available; private Single-AZ db.t4g.micro; deletion protection",
+      "Monitor; no configuration change"
+    ],
+    [
+      "RDS-managed master credential",
+      "Secrets Manager",
+      "Secret storage and API requests",
+      "Active managed secret; metadata read only",
+      "No secret retrieval"
+    ],
+    [
+      "Shared S3 encryption key and three buckets",
+      "KMS / S3",
+      "Customer-managed key, requests, retained versions/artifacts",
+      "Storage stack CREATE_COMPLETE",
+      "Retain; monitor storage/credit use"
+    ],
+    [
+      "Queues and score table",
+      "SQS / DynamoDB",
+      "Requests and storage; future polling/stream processing",
+      "Messaging stack CREATE_COMPLETE",
+      "Activation remains gated"
+    ],
+    [
+      "fintrust-ingest-dev and log group",
+      "Lambda / CloudWatch",
+      "Invocations and retained logs",
+      "Reserved concurrency 0",
+      "Keep inactive"
+    ],
+    [
+      "Private VPC endpoints",
+      "VPC",
+      "No NAT/interface hourly charge in current project VPC",
+      "Only S3/DynamoDB gateway endpoints available",
+      "Preserve existing network"
+    ]
+  ],
+  "aws_mutations": false,
+  "replacement_budgets_created": false,
+  "budgets_deleted": false,
+  "cost_explorer_chargeable_queries": 0,
+  "secret_values_retrieved": false,
+  "application_resources_changed": false,
+  "next_gate": "Exact-source Linux Python 3.12 x86_64 verification",
+  "limitations": [
+    "Budgets evaluate periodically, not in real time, and do not enforce a spending cap.",
+    "Configured recipients are verified; activation status and actual delivery are not proven by these read-only API results.",
+    "Credit-inclusive zero-spend calculation may remain zero while billable resources consume credits; zero is not proof of free RDS.",
+    "Cost allocation tags are inactive; no project-specific attribution is claimed.",
+    "No current service price quote or invoice/credit balance query was performed."
+  ]
+}

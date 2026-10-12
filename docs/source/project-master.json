@@ -1,15 +1,15 @@
 {
   "title": "FinTrust Project Master",
   "subtitle": "Transaction Monitoring & Risk Alert Platform",
-  "checkpoint": "c35e41b",
-  "date": "12 October 2026",
+  "checkpoint": "48399b9",
+  "date": "13 October 2026",
   "sections": [
     {
       "title": "Executive Summary",
       "status": "LOCAL VERIFIED",
       "paragraphs": [
         "FinTrust is a transaction monitoring and risk investigation platform. It accepts CSV files, preserves transaction identity and source evidence, scores risk and records each review decision. It does not move funds, reverse charges or establish fraud.",
-        "Current implementation checkpoint c35e41b: Analyst workbench and direct documentation wording verified locally. 811 regression tests passed / 1 expected administrator-only skip; 19 focused and 82 affected tests passed. Historical verification remains recorded below. Current-release cloud integration is pending."
+        "Current source checkpoint 48399b9: local E2E verified through 20 scenarios and 125 selected tests, real isolated PostgreSQL, authenticated UI/API checks and mocked AWS services. The historical workbench regression remains 811 passed / 1 expected skip. Existing monthly and zero-spend budget configuration is live verified and preserved; exact-source Linux verification and live AWS E2E remain pending."
       ],
       "references": [
         "docs/architecture/FINTRUST_FLOW_AUDIT.md",
@@ -170,7 +170,7 @@
       "status": "LOCAL VERIFIED",
       "paragraphs": [
         "I verify each phase locally before requesting approval for live AWS changes. Domain rules and artifacts are frozen before deployment; read-only preflight checks assumptions before writes.",
-        "The completed local sequence covers repository structure, flow audit, lifecycle, quarantine recovery, review ownership, investigation and the Analyst workbench. Next: navigation polish, end-to-end scenario verification, cost governance, Linux packaging and controlled cloud integration."
+        "The completed local sequence covers repository structure, flow audit, lifecycle, quarantine recovery, review ownership, investigation, Analyst workbench and 20-scenario verification. Existing AWS budget configuration is verified and preserved. Next: exact-source Linux packaging and controlled cloud integration."
       ],
       "references": [
         "docs/architecture/FINTRUST_FLOW_AUDIT.md",
@@ -546,32 +546,63 @@
     },
     {
       "title": "Cost Governance",
-      "status": "PENDING VERIFICATION",
+      "status": "LIVE INVENTORY VERIFIED",
       "paragraphs": [
-        "Standing costs include RDS compute and 20 GiB gp3 storage, the S3 customer-managed KMS key and retained data/backups/logs. Lambda, SQS, DynamoDB, SES, requests and transfer add usage-dependent charges.",
-        "No NAT is proposed. Temporary interface endpoints charge per endpoint/AZ-hour and usage; historical temporary preflight endpoint deletion is recorded on 11 October 2026. Retained artifacts/logs may still incur storage charges.",
-        "Prices in old stage plans are dated estimates, not current bills. No fresh pricing or Cost Explorer query was performed for consolidation. Re-price af-south-1 and confirm credits/allowances before each spending approval."
+        "The project target is USD 10 per month. This is a budget alert target, not a spending cap or proof that the architecture fits within USD 10 before credits. Do not infer free operation from the reported budget spend.",
+        "Read-only inventory on 12-13 October 2026 confirms private Single-AZ PostgreSQL 16.15 on db.t4g.micro with 20 GiB gp3 storage, deletion protection and one-day backup retention. RDS compute/storage and retained backups are the main recurring exposure. The active RDS-managed master secret adds Secrets Manager storage/request charges; no secret value was read.",
+        "The shared customer-managed S3 KMS key, retained S3 versions/artifacts and log storage also carry recurring or request costs. SQS, DynamoDB, Lambda, SES and transfer add usage-dependent charges. Existing ingest reserved concurrency remains 0; activation is separately gated.",
+        "The project VPC has no NAT Gateway or interface endpoint. Only S3/DynamoDB gateway endpoints remain. Historical temporary preflight cleanup is preserved. No new endpoint, proxy, compute resource or billing service was created.",
+        "Prices in old stage plans remain dated estimates. Current service rates, remaining credits and a full-month pre-credit bill were not re-quoted in this configuration check. Check them before spending approval; credit-funded usage is not a permanent Free Tier entitlement."
       ],
       "references": [
         "infrastructure/DEPLOYMENT_BOOTSTRAP.md",
         "docs/OPERATIONS.md",
-        "docs/EVIDENCE/05-rds/release1-temporary-preflight-cleanup-result.md"
+        "docs/EVIDENCE/05-rds/release1-temporary-preflight-cleanup-result.md",
+        "docs/EVIDENCE/01-budget/2026-10-12-budget-readonly-inventory.json",
+        "docs/EVIDENCE/01-budget/2026-10-13-budget-control-verification.json"
       ],
       "table": null,
       "diagram": null
     },
     {
       "title": "AWS Budgets",
-      "status": "PENDING VERIFICATION",
+      "status": "LIVE CONFIGURATION VERIFIED",
       "paragraphs": [
-        "Budgets is an early-warning control, not a spending cap. Deployment approval should identify the budget owner, monthly threshold, recipients and response procedure. Missing notification evidence must remain pending rather than be inferred from a budget-first plan.",
-        "Before activation, check account/region, budget notification delivery, concurrency, report scheduling and endpoint/RDS cleanup ownership. This documentation task performs no budget creation, billing lookup or notification test."
+        "Preserved the existing FinTrust-Monthly-Budget: COST, USD 10, MONTHLY, healthy, with 50%, 80% and 100% ACTUAL notifications and 100% FORECASTED. All use GREATER_THAN; the actual dollar thresholds are greater than USD 5, 8 and 10. No replacement budget was created.",
+        "Preserved My Zero-Spend Budget: MONTHLY with a USD 1 configured limit, but its alert is ACTUAL, ABSOLUTE_VALUE, GREATER_THAN USD 0.01. The alert does not wait for USD 1. Its existing cost types include credits and refunds; a zero reported spend does not mean RDS or KMS stopped charging.",
+        "Each of the five alerts has one configured email subscriber, and all use the same existing recipient. Evidence stores only the recipient fingerprint. Subscriber configuration and budget health are verified; recipient activation was not exposed by the contact API and actual email delivery was not tested. Check recipient status or receipt in the console/inbox without generating paid usage.",
+        "Both controls cover account 966467878406 across all regions. Application infrastructure remains in af-south-1; the Budgets API is an account-wide service accessed through us-east-1. Project and Environment cost-allocation tags are inactive, so no FinTrust-specific cost filter is claimed. Activation, tag normalization and complete resource attribution remain future reviewed work.",
+        "Budgets updates up to three times daily, typically 8-12 hours apart, with billing/notification delays. It warns rather than stopping resources. Read alerts promptly, inspect cost drivers and obtain approval before resource shutdown or cleanup. Monitoring-only budgets/alerts are free; no paid budget reports or automated actions were enabled."
       ],
       "references": [
-        "infrastructure/BUDGET_FIRST.md",
-        "docs/EVIDENCE/01-budget"
+        "docs/EVIDENCE/01-budget/2026-10-13-budget-control-verification.json",
+        "docs/EVIDENCE/01-budget/2026-10-13-budget-settings-and-recipient-status.json",
+        "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html",
+        "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-email-recipients.html",
+        "https://aws.amazon.com/aws-cost-management/aws-budgets/pricing/"
       ],
-      "table": null,
+      "table": [
+        [
+          "Control",
+          "Verified configuration"
+        ],
+        [
+          "FinTrust-Monthly-Budget",
+          "USD 10/month; 50/80/100% ACTUAL; 100% FORECASTED"
+        ],
+        [
+          "My Zero-Spend Budget",
+          "ACTUAL > USD 0.01; absolute threshold; USD 1 limit unchanged"
+        ],
+        [
+          "Subscribers",
+          "One existing email per alert; same recipient; addresses redacted"
+        ],
+        [
+          "Scope",
+          "Account-wide; Project/Environment cost tags inactive"
+        ]
+      ],
       "diagram": null
     },
     {
@@ -582,7 +613,8 @@
         "Tests cover identity, threshold boundaries, immutable outcomes, rejected/quarantined rows, correction lineage, partial-write recovery, delivery claims, role/account authorization and browser workflows. Local mocks intentionally avoid AWS. Counts establish tested behavior, not availability, live service permissions or performance.",
         "Multi-user phase: 789 regression passed / 1 administrator-only skip; 27 focused passed; 130 affected checks passed; 48 PostgreSQL 16 passed; browser passed. Focused coverage includes immutable correction lineage, failed/successful/duplicate revalidation, named onboarding and disable/reactivate, role separation, concurrent claims, wrong-owner denial, assignment replay/scope, escalated recovery and browser role/action visibility. Evidence: docs/EVIDENCE/12-e2e/multi-user-operations/.",
         "Risk investigation: 16 new backend tests plus a real loopback browser gate; 65 affected tests; 64 on disposable PostgreSQL 16; full regression 810 passed / 1 expected administrator-only skip. Evidence: docs/EVIDENCE/12-e2e/risk-investigation/. No live AWS transport occurred.",
-        "Workbench and documentation phase: 19 focused tests passed, including three loopback browser workflows; 82 affected integration tests passed; full regression 811 passed / 1 expected administrator-only skip. The separate CSV scenario browser gate passed after its legacy review test was updated to claim before deciding. No backend, SQL or AWS changes. Evidence: docs/EVIDENCE/12-e2e/analyst-workbench/."
+        "Workbench and documentation phase: 19 focused tests passed, including three loopback browser workflows; 82 affected integration tests passed; full regression 811 passed / 1 expected administrator-only skip. The separate CSV scenario browser gate passed after its legacy review test was updated to claim before deciding. No backend, SQL or AWS changes. Evidence: docs/EVIDENCE/12-e2e/analyst-workbench/.",
+        "Local scenario phase at 48399b9: 122 lifecycle/risk/quarantine/RBAC integration and browser tests, two added outcome/role tests and one CSV A/B browser gate passed: 125 selected tests, no failures or skips. Evidence labels individual UI browser versus API checks. No fresh full regression or live AWS E2E is implied. See docs/EVIDENCE/12-e2e/scenario-verification/SCENARIO_RESULTS.md."
       ],
       "references": [
         "docs/EVIDENCE/12-e2e/transaction-lifecycle/verification-summary.json",
@@ -654,7 +686,7 @@
       "title": "Current Deployment State",
       "status": "PENDING VERIFICATION",
       "paragraphs": [
-        "Historical evidence/user-verified stages: network, S3/KMS, RDS PostgreSQL and DynamoDB/SQS stacks CREATE_COMPLETE. Historical ingest deployment/diagnostics are distinct from the current source. No AWS inventory or mutation occurred in this consolidation.",
+        "Historical foundation evidence covers network, S3/KMS, RDS PostgreSQL and DynamoDB/SQS. Read-only live cost inventory on 12-13 October 2026 confirms those stacks and ingest are CREATE_COMPLETE, with ingest reserved concurrency 0. Existing budgets are healthy and preserved; no AWS mutation occurred. Historical deployed artifacts are distinct from current source.",
         "The 11 October 2026 live read-only check used PostgreSQL 16.15 with TLS verify-full and found the application base schema missing. Cleanup then removed temporary runner/network stacks and billable endpoint, preserving the five existing stacks and retained evidence.",
         "Current application source is local verified. Complete cloud integration, current-source Linux packaging and live SQL bootstrap are pending. Do not call the whole application deployed."
       ],
@@ -670,7 +702,7 @@
       "title": "Future Roadmap",
       "status": "PLANNED",
       "paragraphs": [
-        "Next: navigation polish and the end-to-end scenario pack. The Analyst workbench is locally verified. Keep deterministic risk rules and independent delivery/review outcomes. AI remains planned.",
+        "Next: exact-source Linux Python 3.12 x86_64 verification, then separately approved deployment/wiring and live AWS E2E. Local 20-scenario evidence is verified at 48399b9; AI remains planned.",
         "After local closure: current Linux artifact gate, separately reviewed base bootstrap and 001/002/003/004/005 privilege/catalog chain, controlled live integration and recovery evidence. HA, federation, accounting extensions, archival automation and production capacity review are later scope."
       ],
       "references": [
@@ -704,7 +736,8 @@
         "DECISION: Controlled local credential enrollment | SOURCE: https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html | WHY IT APPLIES: Named sign-in must not expose credentials or imply production federation | HOW FINTRUST USES IT: Private prompt, unique opaque credentials, hashes only, disable checks.",
         "DECISION: Actor and outcome audit without secrets | SOURCE: https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html | WHY IT APPLIES: Investigations require attributable history | HOW FINTRUST USES IT: Reuse append-only SQL history and versioned governance receipts; no credential logging.",
         "DECISION: list-preserving investigation drawer, compact filters and visible triage | SOURCE: https://docs.datadoghq.com/security/cloud_siem/triage_and_investigate/investigate_security_signals/ | WHY IT APPLIES: Analysts need evidence and next steps without losing queue context | HOW FINTRUST USES IT: Adapt interaction principles to transaction risk, with original branding and backend-enforced ownership; no copied icons, wording or pixel layout.",
-        "DECISION: Reuse scoped aggregate and queue reads | SOURCE: backend/fintrust/frontend_workflows.py; visual_insights.py; workflow_api.py | WHY IT APPLIES: The brief requires evidence-backed triage without fabricated totals | HOW FINTRUST USES IT: Independent loading/error states, explicit count bounds and unconfigured SLA handling; no new risk or database model."
+        "DECISION: Reuse scoped aggregate and queue reads | SOURCE: backend/fintrust/frontend_workflows.py; visual_insights.py; workflow_api.py | WHY IT APPLIES: The brief requires evidence-backed triage without fabricated totals | HOW FINTRUST USES IT: Independent loading/error states, explicit count bounds and unconfigured SLA handling; no new risk or database model.",
+        "DECISION: Preserve existing monthly and zero-spend budget controls | SOURCE: AWS Budgets managing-costs and email-recipient guidance | WHY IT APPLIES: Avoid duplicate alerts while proving actual threshold/scope configuration | HOW FINTRUST USES IT: Account-wide read-only verification, masked configured subscriber evidence, periodic-notification limitations and separate live deployment approval."
       ],
       "references": [
         "docs/architecture/FINTRUST_FLOW_AUDIT.md",
@@ -718,7 +751,11 @@
         "sql/migrations/005_investigation_notes.sql",
         "backend/fintrust/investigation.py",
         "docs/EVIDENCE/12-e2e/risk-investigation/verification-summary.json",
-        "docs/EVIDENCE/12-e2e/analyst-workbench/verification-summary.json"
+        "docs/EVIDENCE/12-e2e/analyst-workbench/verification-summary.json",
+        "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html",
+        "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-email-recipients.html",
+        "https://aws.amazon.com/aws-cost-management/aws-budgets/pricing/",
+        "docs/EVIDENCE/01-budget/2026-10-13-budget-control-verification.json"
       ],
       "table": null,
       "diagram": null

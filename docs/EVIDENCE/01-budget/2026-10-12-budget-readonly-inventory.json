@@ -1,0 +1,567 @@
+{
+  "captured_at": "2026-10-12T21:54:32.327048+00:00",
+  "identity": {
+    "UserId": "AIDA6CBPZPYDFEIIDBTKZ",
+    "Account": "966467878406",
+    "Arn": "arn:aws:iam::966467878406:user/fintrust-admin"
+  },
+  "application_region": "af-south-1",
+  "billing_service_region": "us-east-1 (global account budgets)",
+  "aws_mutations": false,
+  "cost_explorer_chargeable_queries": 0,
+  "budgets": [
+    {
+      "BudgetName": "FinTrust-Monthly-Budget",
+      "BudgetLimit": {
+        "Amount": "10.0",
+        "Unit": "USD"
+      },
+      "TimeUnit": "MONTHLY",
+      "CalculatedSpend": {
+        "ActualSpend": {
+          "Amount": "0.0",
+          "Unit": "USD"
+        },
+        "ForecastedSpend": {
+          "Amount": "4.66",
+          "Unit": "USD"
+        }
+      },
+      "BudgetType": "COST",
+      "LastUpdatedTime": "2026-10-12T16:51:12.446000+02:00",
+      "notifications": [
+        {
+          "NotificationType": "ACTUAL",
+          "ComparisonOperator": "GREATER_THAN",
+          "Threshold": 100.0,
+          "NotificationState": "OK",
+          "subscriber_count": 1,
+          "subscriber_types": [
+            "EMAIL"
+          ]
+        },
+        {
+          "NotificationType": "ACTUAL",
+          "ComparisonOperator": "GREATER_THAN",
+          "Threshold": 50.0,
+          "NotificationState": "OK",
+          "subscriber_count": 1,
+          "subscriber_types": [
+            "EMAIL"
+          ]
+        },
+        {
+          "NotificationType": "ACTUAL",
+          "ComparisonOperator": "GREATER_THAN",
+          "Threshold": 80.0,
+          "NotificationState": "OK",
+          "subscriber_count": 1,
+          "subscriber_types": [
+            "EMAIL"
+          ]
+        },
+        {
+          "NotificationType": "FORECASTED",
+          "ComparisonOperator": "GREATER_THAN",
+          "Threshold": 100.0,
+          "NotificationState": "OK",
+          "subscriber_count": 1,
+          "subscriber_types": [
+            "EMAIL"
+          ]
+        }
+      ]
+    },
+    {
+      "BudgetName": "My Zero-Spend Budget",
+      "BudgetLimit": {
+        "Amount": "1.0",
+        "Unit": "USD"
+      },
+      "CostTypes": {
+        "IncludeTax": true,
+        "IncludeSubscription": true,
+        "UseBlended": false,
+        "IncludeRefund": true,
+        "IncludeCredit": true,
+        "IncludeUpfront": true,
+        "IncludeRecurring": true,
+        "IncludeOtherSubscription": true,
+        "IncludeSupport": true,
+        "IncludeDiscount": true,
+        "UseAmortized": false
+      },
+      "TimeUnit": "MONTHLY",
+      "CalculatedSpend": {
+        "ActualSpend": {
+          "Amount": "0.0",
+          "Unit": "USD"
+        },
+        "ForecastedSpend": {
+          "Amount": "4.66",
+          "Unit": "USD"
+        }
+      },
+      "BudgetType": "COST",
+      "LastUpdatedTime": "2026-10-12T16:54:32.420000+02:00",
+      "BillingViewArn": "arn:aws:billing::966467878406:billingview/primary",
+      "notifications": [
+        {
+          "NotificationType": "ACTUAL",
+          "ComparisonOperator": "GREATER_THAN",
+          "Threshold": 0.01,
+          "ThresholdType": "ABSOLUTE_VALUE",
+          "NotificationState": "OK",
+          "subscriber_count": 1,
+          "subscriber_types": [
+            "EMAIL"
+          ]
+        }
+      ]
+    }
+  ],
+  "inventory": {
+    "stacks": [
+      {
+        "name": "fintrust-ingest-dev",
+        "status": "CREATE_COMPLETE",
+        "tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": "dev"
+          }
+        ]
+      },
+      {
+        "name": "fintrust-messaging-dev",
+        "status": "CREATE_COMPLETE",
+        "tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": "dev"
+          }
+        ]
+      },
+      {
+        "name": "fintrust-database-dev",
+        "status": "CREATE_COMPLETE",
+        "tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": "dev"
+          }
+        ]
+      },
+      {
+        "name": "fintrust-storage-dev",
+        "status": "CREATE_COMPLETE",
+        "tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": "dev"
+          }
+        ]
+      },
+      {
+        "name": "fintrust-network-dev",
+        "status": "CREATE_COMPLETE",
+        "tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": "dev"
+          }
+        ]
+      }
+    ],
+    "resources": [
+      {
+        "stack": "fintrust-ingest-dev",
+        "logical_id": "IngestAsync",
+        "physical_id": "fintrust-ingest-dev|$LATEST",
+        "type": "AWS::Lambda::EventInvokeConfig",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-ingest-dev",
+        "logical_id": "IngestFunction",
+        "physical_id": "fintrust-ingest-dev",
+        "type": "AWS::Lambda::Function",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-ingest-dev",
+        "logical_id": "IngestLogs",
+        "physical_id": "/aws/lambda/fintrust-ingest-dev",
+        "type": "AWS::Logs::LogGroup",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-messaging-dev",
+        "logical_id": "AlertFailures",
+        "physical_id": "https://sqs.af-south-1.amazonaws.com/966467878406/fintrust-alert-failures-dev",
+        "type": "AWS::SQS::Queue",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-messaging-dev",
+        "logical_id": "IngestFailures",
+        "physical_id": "https://sqs.af-south-1.amazonaws.com/966467878406/fintrust-ingest-failures-dev",
+        "type": "AWS::SQS::Queue",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-messaging-dev",
+        "logical_id": "ReportFailures",
+        "physical_id": "https://sqs.af-south-1.amazonaws.com/966467878406/fintrust-report-failures-dev",
+        "type": "AWS::SQS::Queue",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-messaging-dev",
+        "logical_id": "RiskTable",
+        "physical_id": "fintrust-risk-dev",
+        "type": "AWS::DynamoDB::Table",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-messaging-dev",
+        "logical_id": "TransactionDLQ",
+        "physical_id": "https://sqs.af-south-1.amazonaws.com/966467878406/fintrust-transactions-dlq-dev.fifo",
+        "type": "AWS::SQS::Queue",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-messaging-dev",
+        "logical_id": "Transactions",
+        "physical_id": "https://sqs.af-south-1.amazonaws.com/966467878406/fintrust-transactions-dev.fifo",
+        "type": "AWS::SQS::Queue",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-database-dev",
+        "logical_id": "DatabaseTls",
+        "physical_id": "fintrust-postgres16-dev",
+        "type": "AWS::RDS::DBParameterGroup",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-database-dev",
+        "logical_id": "LedgerDatabase",
+        "physical_id": "fintrust-ledger-dev",
+        "type": "AWS::RDS::DBInstance",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-storage-dev",
+        "logical_id": "DataKey",
+        "physical_id": "598a4158-2cc6-4946-af24-512784a276c8",
+        "type": "AWS::KMS::Key",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-storage-dev",
+        "logical_id": "DataKeyAlias",
+        "physical_id": "alias/fintrust-dev",
+        "type": "AWS::KMS::Alias",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-storage-dev",
+        "logical_id": "QuarantineBucket",
+        "physical_id": "fintrust-quarantine-966467878406-af-south-1-dev",
+        "type": "AWS::S3::Bucket",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-storage-dev",
+        "logical_id": "QuarantineBucketPolicy",
+        "physical_id": "fintrust-quarantine-966467878406-af-south-1-dev",
+        "type": "AWS::S3::BucketPolicy",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-storage-dev",
+        "logical_id": "RawBucket",
+        "physical_id": "fintrust-raw-966467878406-af-south-1-dev",
+        "type": "AWS::S3::Bucket",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-storage-dev",
+        "logical_id": "RawBucketPolicy",
+        "physical_id": "fintrust-raw-966467878406-af-south-1-dev",
+        "type": "AWS::S3::BucketPolicy",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-storage-dev",
+        "logical_id": "ReportsBucket",
+        "physical_id": "fintrust-reports-966467878406-af-south-1-dev",
+        "type": "AWS::S3::Bucket",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-storage-dev",
+        "logical_id": "ReportsBucketPolicy",
+        "physical_id": "fintrust-reports-966467878406-af-south-1-dev",
+        "type": "AWS::S3::BucketPolicy",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-network-dev",
+        "logical_id": "ApplicationRoutes",
+        "physical_id": "rtb-01b4916c13d2894a5",
+        "type": "AWS::EC2::RouteTable",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-network-dev",
+        "logical_id": "ApplicationSubnet1",
+        "physical_id": "subnet-0c2d87e8a83361e30",
+        "type": "AWS::EC2::Subnet",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-network-dev",
+        "logical_id": "ApplicationSubnet1Route",
+        "physical_id": "rtbassoc-093f19942c1625024",
+        "type": "AWS::EC2::SubnetRouteTableAssociation",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-network-dev",
+        "logical_id": "ApplicationSubnet2",
+        "physical_id": "subnet-0328276227fa30ead",
+        "type": "AWS::EC2::Subnet",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-network-dev",
+        "logical_id": "ApplicationSubnet2Route",
+        "physical_id": "rtbassoc-07e092a4c1a95468c",
+        "type": "AWS::EC2::SubnetRouteTableAssociation",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-network-dev",
+        "logical_id": "DatabaseGroup",
+        "physical_id": "sg-01644a4c9f2c44162",
+        "type": "AWS::EC2::SecurityGroup",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-network-dev",
+        "logical_id": "DatabaseIngress",
+        "physical_id": "sgr-0c89b4a1fb97ec847",
+        "type": "AWS::EC2::SecurityGroupIngress",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-network-dev",
+        "logical_id": "DatabaseRoutes",
+        "physical_id": "rtb-008ec3760f6ccd9f0",
+        "type": "AWS::EC2::RouteTable",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-network-dev",
+        "logical_id": "DatabaseSubnet1",
+        "physical_id": "subnet-04dc0f576867d7a6c",
+        "type": "AWS::EC2::Subnet",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-network-dev",
+        "logical_id": "DatabaseSubnet1Route",
+        "physical_id": "rtbassoc-0c9237f84e8346448",
+        "type": "AWS::EC2::SubnetRouteTableAssociation",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-network-dev",
+        "logical_id": "DatabaseSubnet2",
+        "physical_id": "subnet-084deb13f49a36064",
+        "type": "AWS::EC2::Subnet",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-network-dev",
+        "logical_id": "DatabaseSubnet2Route",
+        "physical_id": "rtbassoc-03f07a9ff6eb100d9",
+        "type": "AWS::EC2::SubnetRouteTableAssociation",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-network-dev",
+        "logical_id": "DatabaseSubnets",
+        "physical_id": "fintrust-db-dev",
+        "type": "AWS::RDS::DBSubnetGroup",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-network-dev",
+        "logical_id": "DynamodbEndpoint",
+        "physical_id": "vpce-0647afafb32f34e6d",
+        "type": "AWS::EC2::VPCEndpoint",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-network-dev",
+        "logical_id": "LambdaGroup",
+        "physical_id": "sg-0850bd798bb9505e2",
+        "type": "AWS::EC2::SecurityGroup",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-network-dev",
+        "logical_id": "S3Endpoint",
+        "physical_id": "vpce-0b59921927bd0e852",
+        "type": "AWS::EC2::VPCEndpoint",
+        "status": "CREATE_COMPLETE"
+      },
+      {
+        "stack": "fintrust-network-dev",
+        "logical_id": "Vpc",
+        "physical_id": "vpc-0aba008bb360f5147",
+        "type": "AWS::EC2::VPC",
+        "status": "CREATE_COMPLETE"
+      }
+    ],
+    "rds": [
+      {
+        "DBInstanceIdentifier": "fintrust-ledger-dev",
+        "DBInstanceClass": "db.t4g.micro",
+        "Engine": "postgres",
+        "DBInstanceStatus": "available",
+        "AllocatedStorage": 20,
+        "BackupRetentionPeriod": 1,
+        "MultiAZ": false,
+        "EngineVersion": "16.15",
+        "Iops": 3000,
+        "PubliclyAccessible": false,
+        "StorageType": "gp3",
+        "StorageEncrypted": true,
+        "DeletionProtection": true
+      }
+    ],
+    "snapshots": [
+      {
+        "DBSnapshotIdentifier": "rds:fintrust-ledger-dev-2026-10-10-06-10",
+        "DBInstanceIdentifier": "fintrust-ledger-dev",
+        "SnapshotCreateTime": "2026-10-10T06:10:08.297000+00:00",
+        "AllocatedStorage": 20,
+        "Status": "available",
+        "SnapshotType": "automated",
+        "StorageType": "gp3"
+      },
+      {
+        "DBSnapshotIdentifier": "rds:fintrust-ledger-dev-2026-10-11-06-10",
+        "DBInstanceIdentifier": "fintrust-ledger-dev",
+        "SnapshotCreateTime": "2026-10-11T06:10:09.179000+00:00",
+        "AllocatedStorage": 20,
+        "Status": "available",
+        "SnapshotType": "automated",
+        "StorageType": "gp3"
+      },
+      {
+        "DBSnapshotIdentifier": "rds:fintrust-ledger-dev-2026-10-12-06-10",
+        "DBInstanceIdentifier": "fintrust-ledger-dev",
+        "SnapshotCreateTime": "2026-10-12T06:10:07.122000+00:00",
+        "AllocatedStorage": 20,
+        "Status": "available",
+        "SnapshotType": "automated",
+        "StorageType": "gp3"
+      }
+    ],
+    "endpoints": [
+      {
+        "VpcEndpointId": "vpce-0647afafb32f34e6d",
+        "VpcEndpointType": "Gateway",
+        "VpcId": "vpc-0aba008bb360f5147",
+        "ServiceName": "com.amazonaws.af-south-1.dynamodb",
+        "State": "available",
+        "SubnetIds": []
+      },
+      {
+        "VpcEndpointId": "vpce-0b59921927bd0e852",
+        "VpcEndpointType": "Gateway",
+        "VpcId": "vpc-0aba008bb360f5147",
+        "ServiceName": "com.amazonaws.af-south-1.s3",
+        "State": "available",
+        "SubnetIds": []
+      }
+    ],
+    "nat_gateways": [],
+    "lambda": [
+      {
+        "FunctionName": "fintrust-ingest-dev",
+        "Runtime": "python3.12",
+        "Timeout": 120,
+        "MemorySize": 256,
+        "LastModified": "2026-10-08T20:14:57.941+0000",
+        "reserved_concurrency": 0
+      }
+    ]
+  },
+  "cost_allocation": {
+    "status": "OK",
+    "tags": [
+      {
+        "TagKey": "Environment",
+        "Type": "UserDefined",
+        "Status": "Inactive",
+        "LastUsedDate": "2026-10-01T00:00:00Z"
+      },
+      {
+        "TagKey": "Environment ",
+        "Type": "UserDefined",
+        "Status": "Inactive",
+        "LastUsedDate": "2026-10-01T00:00:00Z"
+      },
+      {
+        "TagKey": "Name",
+        "Type": "UserDefined",
+        "Status": "Inactive",
+        "LastUsedDate": "2026-10-01T00:00:00Z"
+      },
+      {
+        "TagKey": "Owner",
+        "Type": "UserDefined",
+        "Status": "Inactive",
+        "LastUsedDate": "2026-10-01T00:00:00Z"
+      },
+      {
+        "TagKey": "Project",
+        "Type": "UserDefined",
+        "Status": "Inactive",
+        "LastUsedDate": "2026-10-01T00:00:00Z"
+      },
+      {
+        "TagKey": "Purpose",
+        "Type": "UserDefined",
+        "Status": "Inactive",
+        "LastUsedDate": "2026-10-01T00:00:00Z"
+      }
+    ]
+  }
+}
