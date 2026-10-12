@@ -313,6 +313,16 @@ def transaction_detail(identifier):
     return jsonify({"data":detail(identifier,g.principal)})
 
 
+@app.get("/v1/transactions/<identifier>/lifecycle")
+def transaction_lifecycle(identifier):
+    from .lifecycle_api import transaction
+    return jsonify({"data":transaction(identifier,g.principal)})
+
+@app.get("/v1/ingestion/<batch>/rows/<int:row>/lifecycle")
+def occurrence_lifecycle(batch,row):
+    from .lifecycle_api import occurrence
+    return jsonify({"data":occurrence(batch,row,g.principal)})
+
 @app.post("/v1/reviews/<int:event>/transition")
 def transition(event):
     g.principal.require("review")

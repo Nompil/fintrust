@@ -1,0 +1,19 @@
+{
+  "initdb": {
+    "exit_code": 0,
+    "seconds": 8.16
+  },
+  "server-start": {
+    "exit_code": 0,
+    "seconds": 0.48
+  },
+  "lifecycle-pg16-focused": {
+    "exit_code": 0,
+    "seconds": 29.13
+  },
+  "status": "PASSED",
+  "server-stop": {
+    "exit_code": 0,
+    "seconds": 1.67
+  }
+}

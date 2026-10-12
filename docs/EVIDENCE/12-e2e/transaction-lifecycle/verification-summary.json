@@ -1,0 +1,39 @@
+{
+  "status": "VERIFIED_LOCAL",
+  "baseline_commit": "6fbe7735c88afc9edfee2817dbe95a29773ea723",
+  "focused_regression": {
+    "passed": 62,
+    "failed": 0,
+    "skipped": 0
+  },
+  "lifecycle_tests": 21,
+  "broader_regression": {
+    "passed": 756,
+    "failed": 0,
+    "skipped": 1
+  },
+  "postgres16_focused": {
+    "passed": 21,
+    "failed": 0,
+    "skipped": 0
+  },
+  "preserved_unrelated_files": 163,
+  "prior_sql_unchanged": true,
+  "new_migration": "003_transaction_lifecycle.sql",
+  "aws_access": false,
+  "live_database_access": false,
+  "push": false,
+  "actual_processing_order": [
+    "RECEIVED",
+    "QUEUED",
+    "VALIDATED",
+    "SCORED",
+    "STORED"
+  ],
+  "boundaries": [
+    "No automatic DLQ transport wiring; only trusted observed failure reconciliation can record DLQ",
+    "Current live runner/schema supports only prior approved phases; migration 003 and grants need separate live approval",
+    "Historical records have incomplete audit history; no invented backfill",
+    "No dashboard redesign or AI"
+  ]
+}

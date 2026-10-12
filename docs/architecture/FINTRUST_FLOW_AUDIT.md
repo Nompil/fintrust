@@ -1,6 +1,6 @@
 # FinTrust authoritative flow audit and implementation gap plan
 
-Scope: actual source at the repository-hardening checkpoint; no AWS inventory or mutations in this task. Local verification is not live AWS integration. Existing AWS resource states are historical evidence, not freshly asserted here. No business logic changed. Runtime module names and deployment handlers remain stable.
+Scope: actual source at the repository-hardening checkpoint; no AWS inventory or mutations in this task. Local verification is not live AWS integration. Existing AWS resource states are historical evidence, not freshly asserted here. Phase 2 adds durable lifecycle audit/API reads; frozen scoring, identity and review rules remain unchanged. Runtime module names and deployment handlers remain stable.
 
 Release 1 actual flow: authenticated local upload -> mocked S3 -> direct consumer helper; cloud design: input S3 -> ingest file parsing -> FIFO candidate envelopes -> database-aware validation / quarantine OR accepted ledger+frozen scoring -> DynamoDB projection -> High-only alert delivery. Review work is created transactionally for Medium/High and does not wait for SES. Each scored transaction has a risk_events record, including Low. The requested diagram must not be treated as authority over these frozen semantics.
 
@@ -10,6 +10,7 @@ Source files below are under `backend/fintrust/` unless a different prefix is sh
 
 | FLOW STAGE | SOURCE FILES / BACKEND | DATABASE | UI | TESTS | STATUS | GAP | PRIORITY |
 |---|---|---|---|---|---|---|---|
+| Transaction lifecycle | lifecycle.py, lifecycle_api.py, release_workflow.py | migration 003 append-only audit + existing domain histories | API ready; final UI deferred | test_transaction_lifecycle.py | Local implementation; focused/regression gates recorded below | No live rollout; automatic DLQ transport evidence deferred | P1 |
 | CSV upload | api.py, operations.py, file_admission.py | ingestion_attempts; local upload receipts | Upload Transactions / Rejected Uploads | test_original_fixture_admission.py, test_frontend_workflows.py | Local verified; cloud upload handoff pending | Production intake authentication and S3 publication need deployment proof | P0 |
 | Input / landing S3 | ingest.py, release_ingest.py, batches.py | Content/attempt identity in ingestion_batches | Upload result / source provenance | test_ingest.py, test_release1_end_to_end.py | Implemented; local AWS mocks | Bucket notification is a separate controlled wiring step | P0 |
 | Ingest Lambda | ingest.py, release_ingest.py; infrastructure/ingest_deployment.py | No private SQL dependency in cloud ingest | Upload summary | test_stage5_ingest.py, test_release1_workflows.py | Implemented; deployment evidence historical | Current Release 1 package needs separate Linux/live gate after source move | P0 |
@@ -45,12 +46,16 @@ Source files below are under `backend/fintrust/` unless a different prefix is sh
 - File-publication failure/control envelopes and cloud queue retries are richer than the local upload presentation; evidence must distinguish local direct processing from cloud transport.
 - Notifications are session-scoped UI notices backed by selected ingestion history, not a durable enterprise notification service.
 
-## Next five implementation tasks (dependency order; NOT implemented here)
+## Next local implementation phases (before AWS)
 
-1. Approve and prove the base bootstrap -> 001 -> 002 chain and service-role grants against live private RDS only through the separately controlled runner procedure. P0.
-2. Build/reverify the current Linux Python 3.12 release, pin artifact/version, then deploy authenticated upload/API and processing functions with exact least-privilege runtime roles. P0.
-3. Wire and prove S3 -> FIFO -> private scoring -> SQL -> DynamoDB, including publication retries, quarantine, reconciliation and correction/projection drains. P0.
-4. Prove DynamoDB Streams -> High-risk alert -> SES without blocking existing reviews; verify UNKNOWN delivery recovery and bounded DLQ redrive. P0.
-5. Expose scheduled report outputs and bounded operational completion evidence within existing account authorization, then verify the full Analyst/Auditor journey. P1/P2.
+1. Transaction lifecycle: implement and verify authoritative processing/risk/review/delivery audit visibility (this Phase 2; see [contract](TRANSACTION_LIFECYCLE.md)).
+2. Quarantine recovery: prove correction lineage, revalidation/dedupe and worker completion across failures.
+3. Risk Event -> Alert -> Review Queue: prove High delivery and uncertain-send handling without blocking Medium/High reviews.
+4. Run the complete local A/B/replay/error scenarios and verify reconciled API business outcomes.
+5. Then prepare current Linux artifacts and controlled live bootstrap/integration approvals. Existing deployment gaps in the matrix remain separate from local domain completeness.
 
-Before implementing any item, reconcile the simplified target diagram with candidate-before-validation transport, all-level risk records and durable review-before-email. Do not change those semantics merely to match a picture. No AI or new features were added.
+Preserve candidate-before-validation transport, all-level risk records and durable review-before-email. Do not change these semantics merely to match a picture. No AI or unrelated presentation features added.
+
+## Phase 2 verification
+
+62 focused lifecycle/domain/frozen-runner regression tests passed locally and 21 lifecycle tests passed on disposable PostgreSQL 16. Broader regression: 756 passed, 1 skipped, zero failures. The existing administrator-only role skip retains its separate prior PG16 proof. Existing domain/API focused run: 144 passed. SQL 001/002 and all 163 unrelated files preserved. See [sanitized evidence](../EVIDENCE/12-e2e/transaction-lifecycle/verification-summary.json).

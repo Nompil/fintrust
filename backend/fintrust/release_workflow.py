@@ -9,7 +9,7 @@ import uuid
 from datetime import datetime, timezone
 from psycopg2.extras import Json
 from .db import get_connection
-from . import score, jobs, dynamo
+from . import score, jobs, dynamo, lifecycle
 from .release_contract import validation_errors, VERSION
 
 TERMINAL={"ACCEPTED","QUARANTINED","DUPLICATE"}
@@ -75,6 +75,8 @@ def register(item):
             if original is not None and original!=digest: raise ValueError("Row occurrence content changed")
             if original is None:
                 cur.execute("UPDATE ingestion_records SET candidate_digest=%s WHERE batch_id=%s AND source_row=%s",(digest,b["batch_id"],s["row"]))
+            lifecycle.append(cur,item,"RECEIVED")
+            lifecycle.append(cur,item,"QUEUED")
     _with_connection(write)
 
 def outcome(cur,item,disposition,canonical=None,reason=None):
@@ -109,11 +111,26 @@ def quarantine(item,errors):
             VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,NOW()) ON CONFLICT(batch_id,source_row) DO NOTHING""",
             (identity,b["batch_id"],source["row"],errors[0]["reason_code"],errors[0]["reason_detail"],Json(errors),account,key,version,
              item["row"].get("source_transaction_id") or item["row"].get("source_reference")))
+        lifecycle.append(cur,item,"QUARANTINED")
     _with_connection(finish)
     return {"status":"QUARANTINED","quarantine_id":identity,"validation_errors":errors}
 
 def process_envelope(item):
-    clock=_check(item); register(item)
+    _check(item); register(item)
+    if item["kind"]!="ROW": return _process_registered(item)
+    _with_connection(lambda cur:lifecycle.resume(cur,item))
+    try:
+        return _process_registered(item)
+    except Exception as error:
+        try:
+            _with_connection(lambda cur:lifecycle.append(cur,item,"TECHNICAL_FAILURE",error_type=type(error).__name__))
+        except Exception:
+            # Preserve the original retryable failure. SQL outages cannot produce a SQL audit.
+            score.logger.error(json.dumps({"event":"lifecycle_audit_unavailable","batch_id":item["batch"]["batch_id"],"source_row":item["source"]["row"]}))
+        raise
+
+def _process_registered(item):
+    clock=_check(item)
     if item["kind"]!="ROW": return {"status":"FAILED" if item["kind"]=="FILE_FAILURE" else "DUPLICATE_FILE" if item["kind"]=="DUPLICATE_FILE" else "QUEUED","batch_id":item["batch"]["batch_id"]}
     def saved(cur):
         cur.execute("SELECT disposition FROM ingestion_records WHERE batch_id=%s AND source_row=%s",(item["batch"]["batch_id"],item["source"]["row"]))
@@ -138,7 +155,14 @@ def process_envelope(item):
         first=result.get("batch",{}); original=result.get("source",{})
         duplicate=existing and (first is None or first.get("batch_id")!=b["batch_id"] or original.get("row")!=s["row"])
         state["status"]="DUPLICATE" if duplicate else "ACCEPTED"
+        validated="REVALIDATED" if item.get("source_system")=="manual-correction" else "VALIDATED"
+        lifecycle.append(cur,item,validated)
         outcome(cur,item,state["status"],canonical,"DUPLICATE_TRANSACTION" if duplicate else None)
+        if duplicate:
+            lifecycle.append(cur,item,"DUPLICATE")
+        else:
+            lifecycle.append(cur,item,"SCORED")
+            lifecycle.append(cur,item,"STORED")
         cur.execute("INSERT INTO projection_outbox(tx_id) VALUES(%s) ON CONFLICT DO NOTHING",(canonical,))
         if result["risk_level"] in {"Medium","High"}:
             cur.execute("INSERT INTO risk_reviews(risk_event_id,change_actor) VALUES(%s,'scoring-worker') ON CONFLICT DO NOTHING",(result["risk_event_id"],))
@@ -150,6 +174,7 @@ def process_envelope(item):
     dynamo.publish_score(os.environ["DYNAMODB_TABLE"],{**result,"score_date":"TX#"+result["transaction_id"],"risk_score":result["score"]})
     def projected(cur):
         cur.execute("UPDATE projection_outbox SET state='COMPLETED',completed_at=NOW() WHERE tx_id=%s",(result["transaction_id"],))
+        lifecycle.recovered(cur,item)
     _with_connection(projected)
     return {**result,"status":state["status"],"contract_version":VERSION}
 
@@ -182,6 +207,14 @@ def rebuild_projection(transaction_id):
     dynamo.publish_score(os.environ["DYNAMODB_TABLE"],{**result,"score_date":"TX#"+identifier,"risk_score":result["score"]})
     def projected(cur):
         cur.execute("UPDATE projection_outbox SET state='COMPLETED',completed_at=NOW() WHERE tx_id=%s",(identifier,))
+        cur.execute("SELECT batch_id::text,source_row FROM ingestion_records WHERE canonical_tx_id=%s ORDER BY batch_id,source_row",(identifier,))
+        for batch,row in cur.fetchall():
+            item={'batch':{'batch_id':batch},'source':{'row':row}}
+            cur.execute("SELECT event_type FROM transaction_lifecycle_events WHERE batch_id=%s AND source_row=%s ORDER BY sequence DESC LIMIT 1",(batch,row))
+            event=cur.fetchone()
+            if event and event[0]=='TECHNICAL_FAILURE':
+                lifecycle.resume(cur,item);lifecycle.recovered(cur,item)
+
     _with_connection(projected)
     return identifier
 
