@@ -1,0 +1,58 @@
+{
+  "status": "PASSED",
+  "official_source": "https://aws.amazon.com/architecture/icons/",
+  "provenance": "Existing retained official assets; historical importer selects Architecture-Service/Arch_*_64@5x.png from the AWS icon package",
+  "embedded_icons": 21,
+  "external_image_dependencies": 0,
+  "icon_assets": [
+    {
+      "path": "docs/diagrams/aws-icons/api.png",
+      "sha256": "ff7762b429c15f65bddf866b248c814b91dce3eb38ab0689698ab08862b6f91d"
+    },
+    {
+      "path": "docs/diagrams/aws-icons/cw.png",
+      "sha256": "66981fc0403fb86fa1b79bddb70aa153b1737a80f2ede07294ddfe5ddad3dfb4"
+    },
+    {
+      "path": "docs/diagrams/aws-icons/ddb.png",
+      "sha256": "b0f1c5a74b4ed81a23183844efdeb6978fa7ea6ee42cf3162b81d340f98e2067"
+    },
+    {
+      "path": "docs/diagrams/aws-icons/event.png",
+      "sha256": "cafdb0f87364b9441a7bfc4dd72f2c45330723e8282bf2ebe632904b004d26c0"
+    },
+    {
+      "path": "docs/diagrams/aws-icons/iam.png",
+      "sha256": "35063c9b904b22e39f7ec37e757b51038c3316c2cfb03fbd3aee1c3f8b6ace52"
+    },
+    {
+      "path": "docs/diagrams/aws-icons/kms.png",
+      "sha256": "b2a4f0ecfcf0dadd0acfaa544742b82bedee56cc1c2e6594b3b2693c27b7d742"
+    },
+    {
+      "path": "docs/diagrams/aws-icons/lambda.png",
+      "sha256": "19c9ef75c938fd4a7b11fe3c3065b0fa9196200cdd406bfa58aeddfab286c768"
+    },
+    {
+      "path": "docs/diagrams/aws-icons/rds.png",
+      "sha256": "85a5e52a123c945277db79e08dec0ffea053b45fc2f08f9a9811400d02a2d497"
+    },
+    {
+      "path": "docs/diagrams/aws-icons/s3.png",
+      "sha256": "2ade2624d7e5893ac82c9fbc01bd9a1cf5cad3eb9d5cf291eb2e07067a510b83"
+    },
+    {
+      "path": "docs/diagrams/aws-icons/ses.png",
+      "sha256": "6ea0753dc9f7bc5e3a398ebfc2152bf5223dcd129e80220eaaf1eae21f0bfd4b"
+    },
+    {
+      "path": "docs/diagrams/aws-icons/sqs.png",
+      "sha256": "d1b9326b6e3f4db7b7e3f4b6d2f3fadbe2ec407ee7376d811c0d25d4b8ed85e2"
+    },
+    {
+      "path": "docs/diagrams/aws-icons/ssm.png",
+      "sha256": "6303faa17dc75720a0203060d1e5a2dd9f81a0242f6436330c19fab57605b24b"
+    }
+  ],
+  "aws_mutations": false
+}

@@ -1,5 +1,7 @@
 # FinTrust Release 1 presentation pack
 
+Open the [ERD directly](../diagrams/fintrust-release1-erd.svg) or its [screen preview](../EVIDENCE/12-e2e/presentation-diagram-pack/erd.png). The AWS architecture uses official AWS service icons.
+
 Start with [speaker notes](FINTRUST_USE_CASE_SUMMARY.md), then [the live demo script](LIVE_DEMO_SCRIPT.md). Use the data decision flow first; keep the full ERD as the technical appendix.
 
 | View | Screen export | Editable source |
