@@ -1,0 +1,127 @@
+{
+  "status": "PASSED",
+  "renderer": "Viz.js 3.25.0 / Graphviz WASM",
+  "browser": "Installed Chrome / Playwright 1.62.1",
+  "viewport": "1600x1050",
+  "source_application_commit": "10eb378abf6a4a256043cd56617378cc17ae505c",
+  "aws_access": false,
+  "results": [
+    {
+      "name": "erd-1",
+      "status": "PASSED",
+      "nodes": 6,
+      "overlaps": [],
+      "clipped": [],
+      "viewBox": "0.00 0.00 1024.00 407.00",
+      "texts": 21
+    },
+    {
+      "name": "erd-2",
+      "status": "PASSED",
+      "nodes": 7,
+      "overlaps": [],
+      "clipped": [],
+      "viewBox": "0.00 0.00 1110.00 653.00",
+      "texts": 41
+    },
+    {
+      "name": "erd-3",
+      "status": "PASSED",
+      "nodes": 4,
+      "overlaps": [],
+      "clipped": [],
+      "viewBox": "0.00 0.00 655.00 467.00",
+      "texts": 26
+    },
+    {
+      "name": "erd-4",
+      "status": "PASSED",
+      "nodes": 4,
+      "overlaps": [],
+      "clipped": [],
+      "viewBox": "0.00 0.00 902.00 370.00",
+      "texts": 29
+    },
+    {
+      "name": "erd-5",
+      "status": "PASSED",
+      "nodes": 5,
+      "overlaps": [],
+      "clipped": [],
+      "viewBox": "0.00 0.00 841.00 452.00",
+      "texts": 31
+    },
+    {
+      "name": "aws-architecture-1",
+      "status": "PASSED",
+      "nodes": 10,
+      "overlaps": [],
+      "clipped": [],
+      "viewBox": "0.00 0.00 750.00 1346.00",
+      "texts": 28
+    },
+    {
+      "name": "aws-architecture-2",
+      "status": "PASSED",
+      "nodes": 9,
+      "overlaps": [],
+      "clipped": [],
+      "viewBox": "0.00 0.00 1106.00 750.00",
+      "texts": 26
+    },
+    {
+      "name": "activity-1",
+      "status": "PASSED",
+      "nodes": 20,
+      "overlaps": [],
+      "clipped": [],
+      "viewBox": "0.00 0.00 1267.00 1632.00",
+      "texts": 38
+    },
+    {
+      "name": "activity-2",
+      "status": "PASSED",
+      "nodes": 12,
+      "overlaps": [],
+      "clipped": [],
+      "viewBox": "0.00 0.00 1269.00 449.00",
+      "texts": 24
+    },
+    {
+      "name": "use-cases-1",
+      "status": "PASSED",
+      "nodes": 18,
+      "overlaps": [],
+      "clipped": [],
+      "viewBox": "0.00 0.00 836.00 1618.00",
+      "texts": 23
+    },
+    {
+      "name": "data-decisions-1",
+      "status": "PASSED",
+      "nodes": 13,
+      "overlaps": [],
+      "clipped": [],
+      "viewBox": "0.00 0.00 981.00 897.00",
+      "texts": 22
+    },
+    {
+      "name": "duplicate-handling-1",
+      "status": "PASSED",
+      "nodes": 10,
+      "overlaps": [],
+      "clipped": [],
+      "viewBox": "0.00 0.00 1502.00 255.00",
+      "texts": 21
+    },
+    {
+      "name": "role-separation-1",
+      "status": "PASSED",
+      "nodes": 8,
+      "overlaps": [],
+      "clipped": [],
+      "viewBox": "0.00 0.00 1189.00 255.00",
+      "texts": 17
+    }
+  ]
+}

@@ -1,87 +1,34 @@
+// VIEW: Admission and reconciliation
 digraph FinTrust {
-graph [bgcolor="#ffffff",fontname="Arial",fontsize=22,pad=0.3,nodesep=0.45,ranksep=0.65]; node [shape=box,style="rounded,filled",fillcolor="#edf5f3",color="#2b6557",fontname="Arial",fontsize=17,margin="0.18,0.13"]; edge [color="#607d8b",fontname="Arial",fontsize=13,arrowsize=0.7];
-rankdir=TB; label="BUSINESS ACTIVITY | Validate -> protect identity -> assess -> review"; labelloc=t;
+graph [bgcolor="white",fontname="Arial",fontsize=22,pad=.3,nodesep=.65,ranksep=.7,splines=ortho]; node [shape=box,style="rounded,filled",fillcolor="#edf5f3",color="#2b6557",fontname="Arial",fontsize=17,margin=".2,.15"]; edge [color="#607d8b",fontname="Arial",fontsize=12,arrowsize=.7]; labelloc=t;
+rankdir=TB;label="ACTIVITY | Admit -> validate -> protect identity -> assess -> reconcile";
 
-user [label="Analyst uploads CSV",shape=box];
-file [label="File format valid?",shape=diamond];
-reject [label="Reject file\nNo ledger work",shape=box];
-hash [label="Same file hash?",shape=diamond];
-old [label="View original batch\nRecord replay attempt",shape=box];
-batch [label="Create batch / row lineage",shape=box];
-valid [label="Row valid?",shape=diamond];
-quar [label="Quarantine original\nSafe payload + reason",shape=box];
-correct [label="Analyst corrects\nNew occurrence; revalidate",shape=box];
-identity [label="Identity / facts check",shape=box];
-duplicate [label="Same- or cross-file\nduplicate\nRecord occurrence; no new\nledger entry",shape=box];
-conflict [label="Identity conflict\nQuarantine; investigate",shape=box];
-queue [label="Queue unique valid rows\nFIFO by account",shape=box];
-score [label="Worker validates account\nScore frozen rules",shape=box];
-sql [label="Commit ledger + assessment\nReview / outbox metadata",shape=box];
-level [label="Risk level?",shape=diamond];
-low [label="LOW\nAccepted; no routine review",shape=box];
-medium [label="MEDIUM\nOpen review",shape=box];
-high [label="HIGH\nReview + alert via Streams",shape=box];
-review [label="OPEN -> UNDER_REVIEW\nCLEARED / CONFIRMED_RISK /\nESCALATED",shape=box];
-audit [label="Named actor + audit history",shape=box];
-reads [label="Insights + reports",shape=box];
-fail [label="Technical failure\nPending / failed outcome",shape=box];
-retry [label="Retry; exhausted retries to\nDLQ",shape=box];
-ops [label="Maintainer investigates\nControlled redrive / outbox\nretry",shape=box];
-user -> file;
-file -> reject [label="No"];
-file -> hash [label="Yes"];
-hash -> old [label="Yes"];
-hash -> batch [label="No"];
-batch -> valid;
-valid -> quar [label="No"];
-quar -> correct;
-correct -> valid;
-valid -> identity [label="Yes"];
-identity -> duplicate [label="Replay"];
-identity -> conflict [label="Conflict"];
-conflict -> quar;
-identity -> queue [label="Unique"];
-queue -> score;
-score -> sql;
-sql -> level;
-level -> low;
-level -> medium;
-level -> high;
-medium -> review;
-high -> review;
-review -> audit;
-audit -> reads;
-sql -> reads;
-score -> fail [style=dashed,color="#a96a3a"];
-sql -> fail [style=dashed,color="#a96a3a"];
-fail -> retry;
-retry -> ops;
-ops -> queue;
+start [label="Start",shape=oval]; upload [label="Analyst uploads CSV"]; file [label="File valid?",shape=diamond];
+reject [label="Invalid file\nReject; safe receipt\nEnd upload",fillcolor="#fff0cb"];
+hash [label="Exact file replay?",shape=diamond]; replay [label="Replay\nView original batch\nAudit attempt; no reprocessing"];
+batch [label="Admit batch + row lineage"]; row [label="Row valid?",shape=diamond]; quar [label="Invalid row\nQuarantine + reason\nCount reconciled outcome",fillcolor="#fff0cb"];
+identity [label="Identity / facts?",shape=diamond]; dup [label="Same facts\nRecord duplicate occurrence\nNo new ledger entry"]; conflict [label="Changed facts\nQuarantine identity conflict\nInvestigate",fillcolor="#fff0cb"];
+score [label="Unique valid row\nFIFO by account; score"]; commit [label="Commit ledger + assessment\nPersist review / outbox intent"];
+risk [label="Risk level?",shape=diamond]; low [label="LOW\nStore; no routine review"]; medium [label="MEDIUM\nOpen review"]; high [label="HIGH\nReview + alert path"];
+reconcile [label="Reconcile every received row\nAccepted / quarantine / duplicate\nPending or technical failure visible"];
+end [label="End / visible batch outcome",shape=oval];
+start -> upload -> file; file -> reject; file -> hash; hash -> replay; hash -> batch;
+batch -> row; row -> quar; row -> identity; identity -> dup; identity -> conflict; identity -> score;
+score -> commit -> risk; risk -> low; risk -> medium; risk -> high;
+low -> reconcile; medium -> reconcile; high -> reconcile; reconcile -> end;
 
-graph [overlap=false,splines=true,sep="+10"];
-user [pos="0.0,0.0!"];
-file [pos="4.3,0.0!"];
-hash [pos="8.6,0.0!"];
-old [pos="4.3,-7.5!"];
-reject [pos="0.0,-7.5!"];
-batch [pos="12.899999999999999,0.0!"];
-valid [pos="17.2,0.0!"];
-quar [pos="17.2,-7.5!"];
-correct [pos="12.899999999999999,-10.0!"];
-conflict [pos="12.899999999999999,-7.5!"];
-identity [pos="17.2,-2.5!"];
-duplicate [pos="8.6,-7.5!"];
-queue [pos="12.899999999999999,-2.5!"];
-score [pos="8.6,-2.5!"];
-sql [pos="4.3,-2.5!"];
-level [pos="0.0,-2.5!"];
-low [pos="0.0,-5.0!"];
-medium [pos="4.3,-5.0!"];
-high [pos="8.6,-5.0!"];
-review [pos="12.899999999999999,-5.0!"];
-fail [pos="0.0,-10.0!"];
-retry [pos="4.3,-10.0!"];
-ops [pos="8.6,-10.0!"];
-audit [pos="17.2,-5.0!"];
-reads [pos="17.2,-10.0!"];
+}
+
+// VIEW: Correction recovery and review
+digraph FinTrust {
+graph [bgcolor="white",fontname="Arial",fontsize=22,pad=.3,nodesep=.65,ranksep=.7,splines=ortho]; node [shape=box,style="rounded,filled",fillcolor="#edf5f3",color="#2b6557",fontname="Arial",fontsize=17,margin=".2,.15"]; edge [color="#607d8b",fontname="Arial",fontsize=12,arrowsize=.7]; labelloc=t;
+rankdir=LR;label="RECOVERY | Technical retry and compliance decisions are separate";
+
+subgraph cluster_q {label="BUSINESS CORRECTION";color="#ccded8";
+q [label="Quarantine original + reason"]; c [label="Analyst corrects\nNew version / occurrence"]; v [label="Worker revalidates\nIdentity / duplicate checks again"]; ret [label="Return to admission\nOriginal remains preserved"]; q -> c -> v -> ret;}
+subgraph cluster_t {label="TECHNICAL RECOVERY";color="#ccded8";
+f [label="Technical failure\nVisible pending / failed outcome"]; retry [label="Bounded retry"]; dlq [label="Exhausted retries\nDead-letter queue"]; maint [label="Maintainer controlled redrive\nIdempotent ledger / outbox retry"]; f -> retry -> dlq -> maint;}
+subgraph cluster_r {label="COMPLIANCE REVIEW";color="#ccded8";
+open [label="OPEN"]; under [label="UNDER_REVIEW"]; decision [label="CLEARED / CONFIRMED_RISK\nESCALATED"]; audit [label="Named actor + immutable history\nReports / Insights / audit"]; open -> under -> decision -> audit;}
+
 }

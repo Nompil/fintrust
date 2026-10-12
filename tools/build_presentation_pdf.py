@@ -31,7 +31,7 @@ def start(title,size=A4,sub='Release 1 | Planning and design evidence | 12 Octob
  global W,H,Y,PAGE
  W,H=size; C.setPageSize(size);PAGE+=1
  C.setFillColor(GREEN);C.rect(0,H-10,W,10,fill=1,stroke=0)
- C.setFillColor(INK);C.setFont('FTB',18);C.drawString(34,H-43,title)
+ C.setFillColor(INK);C.setFont('FTB',min(18,(W-68)*18/max(1,pdfmetrics.stringWidth(title,'FTB',18))));C.drawString(34,H-43,title)
  C.setFillColor(MUTED);C.setFont('FT',8.5);C.drawString(34,H-60,sub)
  C.setStrokeColor(PALE);C.line(34,31,W-34,31)
  C.setFont('FT',8);C.drawString(34,18,'FinTrust | Local evidence; live application integration pending')
@@ -55,9 +55,9 @@ def table(rows,widths=None,size=10):
  t.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),PALE),('VALIGN',(0,0),(-1,-1),'TOP'),('BOX',(0,0),(-1,-1),.4,GREEN),('INNERGRID',(0,0),(-1,-1),.25,HexColor('#ccded8')),('TOPPADDING',(0,0),(-1,-1),6),('BOTTOMPADDING',(0,0),(-1,-1),6)]))
  _,h=t.wrap(W-68,H);assert Y-h>43,(PAGE,'table',h,Y);t.drawOn(C,34,Y-h);Y-=h+10
 
-def diagram(name,maxheight=None):
+def diagram(name,maxheight=None,index=0):
  global Y
- d=svg2rlg(str(SVG/('fintrust-release1-'+name+'.svg')));assert d
+ d=svg2rlg(str(SVG/('fintrust-release1-'+name+('-'+str(index+1) if index else '')+'.svg')));assert d
  available=min(maxheight or Y-48,Y-48);scale=min((W-68)/d.width,available/d.height)
  h=d.height*scale;w=d.width*scale
  C.saveState();C.translate((W-w)/2,Y-h);C.scale(scale,scale);renderPDF.draw(d,C,0,0);C.restoreState();Y-=h+10
@@ -71,26 +71,25 @@ def newfile(path):
 CAPTIONS={
 'erd':'17 physical tables and two derived views, verified locally on PostgreSQL 16.15. Solid connectors are actual foreign keys. PK / FK / UK mean primary / foreign / unique key. Composite markers apply together. Larger A3 page preserves readable keys.',
 'aws-architecture':'Official AWS service icons are embedded. GREEN: verified foundation; BLUE: Release 1 target with pending wiring; GOLD: disabled historical ingest. Outline: private VPC. Region af-south-1; no NAT Gateway. Icons do not prove deployment.',
-'activity':'Follow the top row, then the scoring row from right to left. Invalid files are rejected; invalid rows are quarantined. Dashed branches are technical failure/recovery. A controlled retry is not a compliance decision.',
+'activity':'Read admission and scoring from top to bottom. Separate recovery and review paths are on the second page. Invalid files are rejected; invalid rows are quarantined. A controlled technical retry is not a compliance decision.',
 'use-cases':'Four named roles, enforced by the backend. Administrator visibility does not confer routine Analyst mutation authority. Auditor is read-only. Maintainer recovery does not resolve risk reviews.',
 'data-decisions':'Bad file: reject. Bad row: quarantine. Good unique row: process. Risky good row: investigate. LOW stores without routine review; MEDIUM opens review; HIGH opens review and the alert path.',
 'duplicate-handling':'Duplicate protection protects the ledger. Duplicate-charge detection protects the customer. Same source identity with changed facts is quarantined; distinct genuine transactions are kept and assessed.',
 'role-separation':'Technical recovery != compliance decision. Account scope and backend role checks apply. Local identity registry and governance receipts are outside the relational identity model.'}
+VIEWS=json.loads((SVG/'views.json').read_text())
+def viewpages(name):
+ for view in [v for v in VIEWS if v['name']==name]:
+  d=svg2rlg(str(SVG/view['file']))
+  # Large evidence sheets retain readable keys; wide process views use landscape.
+  size=landscape(A3) if d.width>d.height else A3
+  if name=='role-separation':size=landscape(A4)
+  start('FinTrust | '+view['title'],size)
+  if name=='erd':
+   p('Conceptual domain map: process arrows, not foreign keys.' if view['index']==0 else 'Physical foreign keys and keys are unchanged. Grey reference boxes connect domains across pages. PK / FK / UK: primary / foreign / unique keys. All 17 tables and 16 foreign keys are preserved.')
+  else:p(CAPTIONS[name])
+  diagram(name,index=view['index']);end()
 for name,(filename,title) in NAMES.items():
- newfile(DIAGRAMS/filename);size=A3 if name=='erd' else A4 if name in ['use-cases','data-decisions'] else landscape(A4)
- start('FinTrust | '+title,size);p(CAPTIONS[name]);diagram(name)
- if name=='duplicate-handling':
-  table([['Case','Outcome'],['Same exact file','Audit replay; view original batch; no second processing.'],['Same row in one file','Keep first accepted event; record repeat occurrence.'],['Same row in another file','Process other rows; repeated event gets no second ledger entry.'],['Same identity with changed facts','Quarantine conflict; no silent acceptance or overwrite.'],['Similar event with a different identity','Keep both valid events; assess possible duplicate-charge risk.']],[245,W-313],11)
- elif name=='role-separation':
-  table([['Role','Owns','Does not own'],['Administrator','User lifecycle, roles, governance and oversight.','Routine Analyst upload/correction/review authority.'],['Analyst','Scoped admission, business correction and risk review decisions.','Technical redrive or platform administration.'],['Auditor','Read-only scoped records, reports and audit history.','Business or technical mutations.'],['Maintainer','Failure diagnosis and controlled technical retry/recovery.','Compliance review decisions.']],[150,(W-218)/2,(W-218)/2],11)
- elif name=='data-decisions':
-  heading('Three separate decisions')
-  p('Validity: can the row be processed? Identity: is this a new financial event? Risk: should a valid event be investigated? A duplicate is not a new ledger event; HIGH risk is not invalid data.')
- elif name=='erd':
-  heading('Physical schema guardrails')
-  p('Two views are derived, not tables: batch_reconciliation and quarantine_workflow. Transactions.batch_id is lineage rather than a foreign key. Conditional source/account/transaction identity is unique; fingerprints are not globally unique.')
-  p('Users/roles remain in the local identity registry; browser notices are session state. Neither is an invented SQL entity. S3 payloads and DynamoDB projections are external storage, not relational tables.')
- end();C.save()
+ newfile(DIAGRAMS/filename);viewpages(name);C.save()
 
 newfile(OUT/'FinTrust_Project_Planning_and_Design_Evidence.pdf')
 start('FinTrust | Planning and design')
@@ -128,9 +127,9 @@ heading('9. Review workflow')
 table([['Band','Outcome'],['LOW: 0-39','Store ledger and assessment; no routine review.'],['MEDIUM: 40-69','Store and open review.'],['HIGH: 70-100','Store, open review and enter the idempotent alert path.']],[150,W-218],10)
 p('OPEN -&gt; UNDER_REVIEW -&gt; CLEARED / CONFIRMED_RISK / ESCALATED. Backend-enforced transitions preserve named actor, notes, versions and history. A risk flag is a reason to investigate, not proven fraud.')
 end()
-start('Use cases | Separation of duties')
+start('Use cases | Separation of duties',A3)
 p('Scope follows the signed-in identity and assigned accounts. Sign out before changing roles; do not reuse another person\'s session.')
-diagram('use-cases',620)
+diagram('use-cases')
 end()
 start('Operations | Evidence and reporting')
 heading('10. Failure handling / DLQ')
@@ -148,18 +147,11 @@ table([['Term','Meaning'],['File','Uploaded CSV.'],['Batch','Processing record f
 p('File -&gt; Batch -&gt; Rows -&gt; Transactions. Account -&gt; Transactions. Transaction -&gt; Risk event -&gt; Review. These are process relationships; only declared catalog foreign keys are drawn as physical relationships.')
 p('The verified local PostgreSQL 16.15 catalog contains 17 tables and two derived views: batch_reconciliation and quarantine_workflow. Transactions.batch_id is lineage, not a declared foreign key. Source-system/account/source-transaction identity is conditionally unique; fingerprints are not globally unique.')
 p('S3 holds original/safe payloads and reports; DynamoDB holds immutable projections and alert claims. SQL owns ledger, workflows, outboxes and migration history. Live RDS schema bootstrap remains pending.')
-p('The next A3 appendix page preserves readable physical keys and cardinalities. PK/FK/UK markers describe primary/foreign/unique keys; composite markers apply together. The retained schema notes provide exact constraint definitions.')
+p('The following conceptual and four domain pages preserve readable physical keys and cardinalities. PK/FK/UK markers describe primary/foreign/unique keys; composite markers apply together. The retained schema notes provide exact constraint definitions.')
 end()
-start('Database | Verified physical ERD',A3)
-p(CAPTIONS['erd']);diagram('erd');end()
-start('AWS | Foundation and target',landscape(A4))
-heading('14. AWS architecture')
-p('S3 -&gt; ingest -&gt; SQS FIFO -&gt; private scoring -&gt; RDS ledger + DynamoDB projection -&gt; Streams -&gt; alert / SES. API/query and scheduled reporting remain target wiring.')
-p(CAPTIONS['aws-architecture'],SMALL);diagram('aws-architecture',400);end()
-start('Business flow | Admission to recovery',landscape(A4))
-heading('15. Role separation / 16. Final system flow')
-p('Analyst owns business correction and review. Maintainer owns controlled technical recovery. Administrator governs access. Auditor inspects evidence without mutation. Bad file: reject; bad row: quarantine; good row: process; risky good row: investigate.')
-diagram('activity',415);end()
+viewpages('erd')
+viewpages('aws-architecture')
+viewpages('activity')
 start('Release boundary | Present safely')
 heading('17. Release 1 scope vs deferred work')
 bullets(['Locally verified: scoped roles, bounded CSV admission, identity protection, quarantine/correction, frozen risk review, reconciliation, reports/Insights and accountability.','Recorded AWS foundation: private network, S3/KMS, private PostgreSQL instance, SQS/DynamoDB; historical ingest disabled.','Pending approval and verification: live base schema/migration chain, hardened final Linux candidate, cloud identity/API, triggers, report schedule, SES delivery and complete live end-to-end wiring.','Deferred: velocity changes to hour-based rules, automatic refunds/reversals, proven fraud classification and complete archive/deletion workflow.'])
@@ -201,7 +193,7 @@ for path in [OUT/'FinTrust_Project_Planning_and_Design_Evidence.pdf',*[DIAGRAMS/
   png=folder/f'page-{i+1:02d}.png';page.get_pixmap(matrix=pymupdf.Matrix(1.25,1.25),alpha=False).save(png)
   pages.append({'page':i+1,'size_points':[page.rect.width,page.rect.height],'text_chars':len(text),'images':len(page.get_image_info()),'clipped_text':clipped,'render':png.relative_to(ROOT).as_posix()})
  results.append({'pdf':path.relative_to(ROOT).as_posix(),'purpose':path.stem.replace('_',' '),'pages':len(doc),'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'validation':pages});doc.close()
-assert next(x for x in results if 'AWS_Architecture' in x['pdf'])['validation'][0]['images']>=12,'AWS icons missing'
+assert sum(p['images'] for p in next(x for x in results if 'AWS_Architecture' in x['pdf'])['validation'])>=21,'AWS icons missing'
 EVIDENCE=ROOT/'docs/EVIDENCE/12-e2e/presentation-diagram-pack'
 (EVIDENCE/'pdf-validation.json').write_text(json.dumps({'status':'RENDERED_FOR_VISUAL_REVIEW','aws_access':False,'outputs':results},indent=2)+'\n',encoding='utf-8')
 print(json.dumps([{'pdf':r['pdf'],'pages':r['pages']} for r in results],indent=2))

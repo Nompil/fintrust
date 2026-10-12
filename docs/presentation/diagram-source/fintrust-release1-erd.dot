@@ -1,37 +1,78 @@
+// VIEW: Conceptual domain overview
 digraph FinTrust {
-graph [bgcolor="#ffffff",fontname="Arial",fontsize=22,pad=0.3,nodesep=0.45,ranksep=0.65]; node [shape=box,style="rounded,filled",fillcolor="#edf5f3",color="#2b6557",fontname="Arial",fontsize=17,margin="0.18,0.13"]; edge [color="#607d8b",fontname="Arial",fontsize=13,arrowsize=0.7];
-graph [overlap=false,splines=true,sep="+15",label="RELEASE 1 PHYSICAL ERD | 17 tables; solid edges are actual foreign keys",labelloc=t];node [shape=plain,fontsize=14];
-accounts [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>accounts</B></FONT></TD></TR><TR><TD ALIGN="LEFT">FK customer_id</TD></TR><TR><TD ALIGN="LEFT">PK account_id</TD></TR><TR><TD ALIGN="LEFT">account_type</TD></TR><TR><TD ALIGN="LEFT">status</TD></TR></TABLE>>,pos="0.0,0.0!"];
-alerts [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>alerts</B></FONT></TD></TR><TR><TD ALIGN="LEFT">UK delivery_key</TD></TR><TR><TD ALIGN="LEFT">PK alert_id</TD></TR><TR><TD ALIGN="LEFT">FK risk_event_id</TD></TR><TR><TD ALIGN="LEFT">delivery_state</TD></TR></TABLE>>,pos="4.9,0.0!"];
-correction_outbox [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>correction_outbox</B></FONT></TD></TR><TR><TD ALIGN="LEFT">FK/PK correction_id</TD></TR><TR><TD ALIGN="LEFT">state</TD></TR><TR><TD ALIGN="LEFT">attempts</TD></TR></TABLE>>,pos="9.8,0.0!"];
-customers [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>customers</B></FONT></TD></TR><TR><TD ALIGN="LEFT">UK id_number</TD></TR><TR><TD ALIGN="LEFT">PK customer_id</TD></TR><TR><TD ALIGN="LEFT">kyc_status</TD></TR></TABLE>>,pos="14.700000000000001,0.0!"];
-ingestion_attempts [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>ingestion_attempts</B></FONT></TD></TR><TR><TD ALIGN="LEFT">FK/UK batch_id</TD></TR><TR><TD ALIGN="LEFT">PK/UK attempt_id</TD></TR><TR><TD ALIGN="LEFT">status</TD></TR></TABLE>>,pos="0.0,-3.0!"];
-ingestion_batches [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>ingestion_batches</B></FONT></TD></TR><TR><TD ALIGN="LEFT">PK batch_id</TD></TR><TR><TD ALIGN="LEFT">UK source_bucket</TD></TR><TR><TD ALIGN="LEFT">UK file_sha256</TD></TR><TR><TD ALIGN="LEFT">rows_received</TD></TR></TABLE>>,pos="4.9,-3.0!"];
-ingestion_records [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>ingestion_records</B></FONT></TD></TR><TR><TD ALIGN="LEFT">FK/PK batch_id</TD></TR><TR><TD ALIGN="LEFT">FK source_attempt_id</TD></TR><TR><TD ALIGN="LEFT">FK canonical_tx_id</TD></TR><TR><TD ALIGN="LEFT">PK source_row</TD></TR><TR><TD ALIGN="LEFT">disposition</TD></TR></TABLE>>,pos="9.8,-3.0!"];
-operations_requests [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>operations_requests</B></FONT></TD></TR><TR><TD ALIGN="LEFT">PK request_id</TD></TR><TR><TD ALIGN="LEFT">action</TD></TR><TR><TD ALIGN="LEFT">state</TD></TR><TR><TD ALIGN="LEFT">actor_subject</TD></TR></TABLE>>,pos="14.700000000000001,-3.0!"];
-processed_transactions [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>processed_transactions</B></FONT></TD></TR><TR><TD ALIGN="LEFT">FK/PK tx_id</TD></TR><TR><TD ALIGN="LEFT">result</TD></TR></TABLE>>,pos="0.0,-6.0!"];
-projection_outbox [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>projection_outbox</B></FONT></TD></TR><TR><TD ALIGN="LEFT">FK/PK tx_id</TD></TR><TR><TD ALIGN="LEFT">state</TD></TR></TABLE>>,pos="4.9,-6.0!"];
-quarantine_cases [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>quarantine_cases</B></FONT></TD></TR><TR><TD ALIGN="LEFT">FK/UK batch_id</TD></TR><TR><TD ALIGN="LEFT">FK/UK source_row</TD></TR><TR><TD ALIGN="LEFT">PK quarantine_id</TD></TR><TR><TD ALIGN="LEFT">reason_code</TD></TR></TABLE>>,pos="9.8,-6.0!"];
-quarantine_corrections [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>quarantine_corrections</B></FONT></TD></TR><TR><TD ALIGN="LEFT">PK correction_id</TD></TR><TR><TD ALIGN="LEFT">FK/UK quarantine_id</TD></TR><TR><TD ALIGN="LEFT">UK correction_version</TD></TR><TR><TD ALIGN="LEFT">FK reprocess_batch_id</TD></TR><TR><TD ALIGN="LEFT">FK reprocess_source_row</TD></TR><TR><TD ALIGN="LEFT">UK request_id</TD></TR><TR><TD ALIGN="LEFT">action</TD></TR><TR><TD ALIGN="LEFT">submitted_by</TD></TR></TABLE>>,pos="14.700000000000001,-6.0!"];
-risk_events [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>risk_events</B></FONT></TD></TR><TR><TD ALIGN="LEFT">PK risk_event_id</TD></TR><TR><TD ALIGN="LEFT">FK tx_id</TD></TR><TR><TD ALIGN="LEFT">risk_score</TD></TR></TABLE>>,pos="0.0,-9.0!"];
-risk_review_history [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>risk_review_history</B></FONT></TD></TR><TR><TD ALIGN="LEFT">FK/PK risk_event_id</TD></TR><TR><TD ALIGN="LEFT">PK version</TD></TR><TR><TD ALIGN="LEFT">UK request_id</TD></TR><TR><TD ALIGN="LEFT">before_status</TD></TR><TR><TD ALIGN="LEFT">after_status</TD></TR><TR><TD ALIGN="LEFT">actor_subject</TD></TR></TABLE>>,pos="4.9,-9.0!"];
-risk_reviews [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>risk_reviews</B></FONT></TD></TR><TR><TD ALIGN="LEFT">FK/PK risk_event_id</TD></TR><TR><TD ALIGN="LEFT">review_status</TD></TR><TR><TD ALIGN="LEFT">version</TD></TR></TABLE>>,pos="9.8,-9.0!"];
-schema_migrations [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>schema_migrations</B></FONT></TD></TR><TR><TD ALIGN="LEFT">PK version</TD></TR><TR><TD ALIGN="LEFT">source_sha256</TD></TR><TR><TD ALIGN="LEFT">applied_at</TD></TR></TABLE>>,pos="14.700000000000001,-9.0!"];
-transactions [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>transactions</B></FONT></TD></TR><TR><TD ALIGN="LEFT">FK account_id</TD></TR><TR><TD ALIGN="LEFT">PK tx_id</TD></TR><TR><TD ALIGN="LEFT">source_system</TD></TR><TR><TD ALIGN="LEFT">source_transaction_id</TD></TR><TR><TD ALIGN="LEFT">transaction_fingerprint</TD></TR><TR><TD ALIGN="LEFT">batch_id</TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="11">UK source/account/id WHERE id present</FONT></TD></TR></TABLE>>,pos="0.0,-12.0!"];
-customers -> accounts [dir=both,arrowhead=none,arrowtail=none,taillabel="1",headlabel="0..*",tooltip="customer_id",fontsize=11];
-risk_events -> alerts [dir=both,arrowhead=none,arrowtail=none,taillabel="1",headlabel="0..*",tooltip="risk_event_id",fontsize=11];
-quarantine_corrections -> correction_outbox [dir=both,arrowhead=none,arrowtail=none,taillabel="1",headlabel="0..1",tooltip="correction_id",fontsize=11];
-ingestion_batches -> ingestion_attempts [dir=both,arrowhead=none,arrowtail=none,taillabel="1",headlabel="0..*",tooltip="batch_id",fontsize=11];
-ingestion_batches -> ingestion_records [dir=both,arrowhead=none,arrowtail=none,taillabel="1",headlabel="0..*",tooltip="batch_id",fontsize=11];
-ingestion_attempts -> ingestion_records [dir=both,arrowhead=none,arrowtail=none,taillabel="1",headlabel="0..*",tooltip="batch_id,source_attempt_id",fontsize=11];
-transactions -> ingestion_records [dir=both,arrowhead=none,arrowtail=none,taillabel="0..1",headlabel="0..*",tooltip="canonical_tx_id",fontsize=11];
-transactions -> processed_transactions [dir=both,arrowhead=none,arrowtail=none,taillabel="1",headlabel="0..1",tooltip="tx_id",fontsize=11];
-processed_transactions -> projection_outbox [dir=both,arrowhead=none,arrowtail=none,taillabel="1",headlabel="0..1",tooltip="tx_id",fontsize=11];
-ingestion_records -> quarantine_cases [dir=both,arrowhead=none,arrowtail=none,taillabel="1",headlabel="0..1",tooltip="batch_id,source_row",fontsize=11];
-quarantine_cases -> quarantine_corrections [dir=both,arrowhead=none,arrowtail=none,taillabel="1",headlabel="0..*",tooltip="quarantine_id",fontsize=11];
-ingestion_records -> quarantine_corrections [dir=both,arrowhead=none,arrowtail=none,taillabel="0..1",headlabel="0..*",tooltip="reprocess_batch_id,reprocess_source_row",fontsize=11];
-transactions -> risk_events [dir=both,arrowhead=none,arrowtail=none,taillabel="1",headlabel="0..*",tooltip="tx_id",fontsize=11];
-risk_reviews -> risk_review_history [dir=both,arrowhead=none,arrowtail=none,taillabel="1",headlabel="0..*",tooltip="risk_event_id",fontsize=11];
-risk_events -> risk_reviews [dir=both,arrowhead=none,arrowtail=none,taillabel="1",headlabel="0..1",tooltip="risk_event_id",fontsize=11];
-accounts -> transactions [dir=both,arrowhead=none,arrowtail=none,taillabel="1",headlabel="0..*",tooltip="account_id",fontsize=11];
+graph [bgcolor="white",fontname="Arial",fontsize=22,pad=.3,nodesep=1.0,ranksep=1.0,splines=ortho]; node [shape=box,style="rounded,filled",fillcolor="#edf5f3",color="#2b6557",fontname="Arial",fontsize=17,margin=".2,.15"]; edge [color="#607d8b",fontname="Arial",fontsize=12,arrowsize=.7]; labelloc=t;
+rankdir=LR;label="CONCEPTUAL ERD | Domains; process arrows are not foreign keys";
+
+ing [label="INGESTION\ningestion_batches\ningestion_attempts\ningestion_records"];
+ledger [label="CORE LEDGER\ncustomers / accounts\ntransactions\nprocessed_transactions"];
+risk [label="RISK / COMPLIANCE\nrisk_events / risk_reviews\nrisk_review_history / alerts"];
+quar [label="QUARANTINE / CORRECTION\nquarantine_cases\nquarantine_corrections"];
+out [label="DURABLE RETRY INTENT\ncorrection_outbox\nprojection_outbox"];
+ops [label="OPERATIONS / MIGRATION HISTORY\noperations_requests\nschema_migrations"];
+ing -> ledger; ledger -> risk; ing -> quar; quar -> out;
+
+}
+
+// VIEW: Physical ledger and operations
+digraph FinTrust {
+graph [bgcolor="white",fontname="Arial",fontsize=22,pad=.3,nodesep=1.0,ranksep=1.0,splines=ortho]; node [shape=box,style="rounded,filled",fillcolor="#edf5f3",color="#2b6557",fontname="Arial",fontsize=17,margin=".2,.15"]; edge [color="#607d8b",fontname="Arial",fontsize=12,arrowsize=.7]; labelloc=t;
+rankdir=LR;label="PHYSICAL LEDGER AND OPERATIONS | Actual FKs; 1 / 0..1 / 0..*";
+node [shape=plain,fontsize=14];
+customers [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>customers</B></FONT></TD></TR><TR><TD ALIGN="LEFT">UK id_number</TD></TR><TR><TD ALIGN="LEFT">PK customer_id</TD></TR><TR><TD ALIGN="LEFT">kyc_status</TD></TR></TABLE>>];
+accounts [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>accounts</B></FONT></TD></TR><TR><TD ALIGN="LEFT">FK customer_id</TD></TR><TR><TD ALIGN="LEFT">PK account_id</TD></TR><TR><TD ALIGN="LEFT">account_type</TD></TR><TR><TD ALIGN="LEFT">status</TD></TR></TABLE>>];
+transactions [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>transactions</B></FONT></TD></TR><TR><TD ALIGN="LEFT">FK account_id</TD></TR><TR><TD ALIGN="LEFT">PK tx_id</TD></TR><TR><TD ALIGN="LEFT">source_system</TD></TR><TR><TD ALIGN="LEFT">source_transaction_id</TD></TR><TR><TD ALIGN="LEFT">transaction_fingerprint</TD></TR><TR><TD ALIGN="LEFT">batch_id</TD></TR><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="11">UK source/account/id WHERE id present</FONT></TD></TR></TABLE>>];
+processed_transactions [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>processed_transactions</B></FONT></TD></TR><TR><TD ALIGN="LEFT">FK/PK tx_id</TD></TR><TR><TD ALIGN="LEFT">result</TD></TR></TABLE>>];
+projection_outbox [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>projection_outbox</B></FONT></TD></TR><TR><TD ALIGN="LEFT">FK/PK tx_id</TD></TR><TR><TD ALIGN="LEFT">state</TD></TR></TABLE>>];
+operations_requests [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>operations_requests</B></FONT></TD></TR><TR><TD ALIGN="LEFT">PK request_id</TD></TR><TR><TD ALIGN="LEFT">action</TD></TR><TR><TD ALIGN="LEFT">state</TD></TR><TR><TD ALIGN="LEFT">actor_subject</TD></TR></TABLE>>];
+schema_migrations [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>schema_migrations</B></FONT></TD></TR><TR><TD ALIGN="LEFT">PK version</TD></TR><TR><TD ALIGN="LEFT">source_sha256</TD></TR><TR><TD ALIGN="LEFT">applied_at</TD></TR></TABLE>>];
+customers -> accounts [dir=both,arrowhead=none,arrowtail=none,taillabel="1",headlabel="0..*",tooltip="customer_id",fontsize=11,labeldistance=2.0,labelangle=25];
+transactions -> processed_transactions [dir=both,arrowhead=none,arrowtail=none,taillabel="1",headlabel="0..1",tooltip="tx_id",fontsize=11,labeldistance=2.0,labelangle=25];
+processed_transactions -> projection_outbox [dir=both,arrowhead=none,arrowtail=none,taillabel="1",headlabel="0..1",tooltip="tx_id",fontsize=11,labeldistance=2.0,labelangle=25];
+accounts -> transactions [dir=both,arrowhead=none,arrowtail=none,taillabel="1",headlabel="0..*",tooltip="account_id",fontsize=11,labeldistance=2.0,labelangle=25];
+}
+
+// VIEW: Physical ingestion
+digraph FinTrust {
+graph [bgcolor="white",fontname="Arial",fontsize=22,pad=.3,nodesep=1.0,ranksep=1.0,splines=ortho]; node [shape=box,style="rounded,filled",fillcolor="#edf5f3",color="#2b6557",fontname="Arial",fontsize=17,margin=".2,.15"]; edge [color="#607d8b",fontname="Arial",fontsize=12,arrowsize=.7]; labelloc=t;
+rankdir=LR;label="PHYSICAL INGESTION | Actual FKs; 1 / 0..1 / 0..*";
+node [shape=plain,fontsize=14];
+ingestion_batches [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>ingestion_batches</B></FONT></TD></TR><TR><TD ALIGN="LEFT">PK batch_id</TD></TR><TR><TD ALIGN="LEFT">UK source_bucket</TD></TR><TR><TD ALIGN="LEFT">UK file_sha256</TD></TR><TR><TD ALIGN="LEFT">rows_received</TD></TR></TABLE>>];
+ingestion_attempts [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>ingestion_attempts</B></FONT></TD></TR><TR><TD ALIGN="LEFT">FK/UK batch_id</TD></TR><TR><TD ALIGN="LEFT">PK/UK attempt_id</TD></TR><TR><TD ALIGN="LEFT">status</TD></TR></TABLE>>];
+ingestion_records [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>ingestion_records</B></FONT></TD></TR><TR><TD ALIGN="LEFT">FK/PK batch_id</TD></TR><TR><TD ALIGN="LEFT">FK source_attempt_id</TD></TR><TR><TD ALIGN="LEFT">FK canonical_tx_id</TD></TR><TR><TD ALIGN="LEFT">PK source_row</TD></TR><TR><TD ALIGN="LEFT">disposition</TD></TR></TABLE>>];
+transactions [shape=box,fontsize=14,fillcolor="#e4e9ef",label="transactions\nReference to ledger view"];
+ingestion_batches -> ingestion_attempts [dir=both,arrowhead=none,arrowtail=none,taillabel="1",headlabel="0..*",tooltip="batch_id",fontsize=11,labeldistance=2.0,labelangle=25];
+ingestion_batches -> ingestion_records [dir=both,arrowhead=none,arrowtail=none,taillabel="1",headlabel="0..*",tooltip="batch_id",fontsize=11,labeldistance=2.0,labelangle=25];
+ingestion_attempts -> ingestion_records [dir=both,arrowhead=none,arrowtail=none,taillabel="1",headlabel="0..*",tooltip="batch_id,source_attempt_id",fontsize=11,labeldistance=2.0,labelangle=25];
+transactions -> ingestion_records [dir=both,arrowhead=none,arrowtail=none,taillabel="0..1",headlabel="0..*",tooltip="canonical_tx_id",fontsize=11,labeldistance=2.0,labelangle=25];
+}
+
+// VIEW: Physical quarantine and corrections
+digraph FinTrust {
+graph [bgcolor="white",fontname="Arial",fontsize=22,pad=.3,nodesep=1.0,ranksep=1.0,splines=ortho]; node [shape=box,style="rounded,filled",fillcolor="#edf5f3",color="#2b6557",fontname="Arial",fontsize=17,margin=".2,.15"]; edge [color="#607d8b",fontname="Arial",fontsize=12,arrowsize=.7]; labelloc=t;
+rankdir=LR;label="PHYSICAL QUARANTINE AND CORRECTIONS | Actual FKs; 1 / 0..1 / 0..*";
+node [shape=plain,fontsize=14];
+quarantine_cases [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>quarantine_cases</B></FONT></TD></TR><TR><TD ALIGN="LEFT">FK/UK batch_id</TD></TR><TR><TD ALIGN="LEFT">FK/UK source_row</TD></TR><TR><TD ALIGN="LEFT">PK quarantine_id</TD></TR><TR><TD ALIGN="LEFT">reason_code</TD></TR></TABLE>>];
+quarantine_corrections [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>quarantine_corrections</B></FONT></TD></TR><TR><TD ALIGN="LEFT">PK correction_id</TD></TR><TR><TD ALIGN="LEFT">FK/UK quarantine_id</TD></TR><TR><TD ALIGN="LEFT">UK correction_version</TD></TR><TR><TD ALIGN="LEFT">FK reprocess_batch_id</TD></TR><TR><TD ALIGN="LEFT">FK reprocess_source_row</TD></TR><TR><TD ALIGN="LEFT">UK request_id</TD></TR><TR><TD ALIGN="LEFT">action</TD></TR><TR><TD ALIGN="LEFT">submitted_by</TD></TR></TABLE>>];
+correction_outbox [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>correction_outbox</B></FONT></TD></TR><TR><TD ALIGN="LEFT">FK/PK correction_id</TD></TR><TR><TD ALIGN="LEFT">state</TD></TR><TR><TD ALIGN="LEFT">attempts</TD></TR></TABLE>>];
+ingestion_records [shape=box,fontsize=14,fillcolor="#e4e9ef",label="ingestion_records\nReference to ingestion view"];
+quarantine_corrections -> correction_outbox [dir=both,arrowhead=none,arrowtail=none,taillabel="1",headlabel="0..1",tooltip="correction_id",fontsize=11,labeldistance=2.0,labelangle=25];
+ingestion_records -> quarantine_cases [dir=both,arrowhead=none,arrowtail=none,taillabel="1",headlabel="0..1",tooltip="batch_id,source_row",fontsize=11,labeldistance=2.0,labelangle=25];
+quarantine_cases -> quarantine_corrections [dir=both,arrowhead=none,arrowtail=none,taillabel="1",headlabel="0..*",tooltip="quarantine_id",fontsize=11,labeldistance=2.0,labelangle=25];
+ingestion_records -> quarantine_corrections [dir=both,arrowhead=none,arrowtail=none,taillabel="0..1",headlabel="0..*",tooltip="reprocess_batch_id,reprocess_source_row",fontsize=11,labeldistance=2.0,labelangle=25];
+}
+
+// VIEW: Physical risk and review
+digraph FinTrust {
+graph [bgcolor="white",fontname="Arial",fontsize=22,pad=.3,nodesep=1.0,ranksep=1.0,splines=ortho]; node [shape=box,style="rounded,filled",fillcolor="#edf5f3",color="#2b6557",fontname="Arial",fontsize=17,margin=".2,.15"]; edge [color="#607d8b",fontname="Arial",fontsize=12,arrowsize=.7]; labelloc=t;
+rankdir=LR;label="PHYSICAL RISK AND REVIEW | Actual FKs; 1 / 0..1 / 0..*";
+node [shape=plain,fontsize=14];
+risk_events [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>risk_events</B></FONT></TD></TR><TR><TD ALIGN="LEFT">PK risk_event_id</TD></TR><TR><TD ALIGN="LEFT">FK tx_id</TD></TR><TR><TD ALIGN="LEFT">risk_score</TD></TR></TABLE>>];
+alerts [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>alerts</B></FONT></TD></TR><TR><TD ALIGN="LEFT">UK delivery_key</TD></TR><TR><TD ALIGN="LEFT">PK alert_id</TD></TR><TR><TD ALIGN="LEFT">FK risk_event_id</TD></TR><TR><TD ALIGN="LEFT">delivery_state</TD></TR></TABLE>>];
+risk_reviews [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>risk_reviews</B></FONT></TD></TR><TR><TD ALIGN="LEFT">FK/PK risk_event_id</TD></TR><TR><TD ALIGN="LEFT">review_status</TD></TR><TR><TD ALIGN="LEFT">version</TD></TR></TABLE>>];
+risk_review_history [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" BGCOLOR="#edf5f3"><TR><TD BGCOLOR="#2b6557"><FONT COLOR="white"><B>risk_review_history</B></FONT></TD></TR><TR><TD ALIGN="LEFT">FK/PK risk_event_id</TD></TR><TR><TD ALIGN="LEFT">PK version</TD></TR><TR><TD ALIGN="LEFT">UK request_id</TD></TR><TR><TD ALIGN="LEFT">before_status</TD></TR><TR><TD ALIGN="LEFT">after_status</TD></TR><TR><TD ALIGN="LEFT">actor_subject</TD></TR></TABLE>>];
+transactions [shape=box,fontsize=14,fillcolor="#e4e9ef",label="transactions\nReference to ledger view"];
+risk_events -> alerts [dir=both,arrowhead=none,arrowtail=none,taillabel="1",headlabel="0..*",tooltip="risk_event_id",fontsize=11,labeldistance=2.0,labelangle=25];
+transactions -> risk_events [dir=both,arrowhead=none,arrowtail=none,taillabel="1",headlabel="0..*",tooltip="tx_id",fontsize=11,labeldistance=2.0,labelangle=25];
+risk_reviews -> risk_review_history [dir=both,arrowhead=none,arrowtail=none,taillabel="1",headlabel="0..*",tooltip="risk_event_id",fontsize=11,labeldistance=2.0,labelangle=25];
+risk_events -> risk_reviews [dir=both,arrowhead=none,arrowtail=none,taillabel="1",headlabel="0..1",tooltip="risk_event_id",fontsize=11,labeldistance=2.0,labelangle=25];
 }

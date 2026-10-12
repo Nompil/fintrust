@@ -5,8 +5,8 @@
     {
       "pdf": "docs/presentation/FinTrust_Project_Planning_and_Design_Evidence.pdf",
       "purpose": "FinTrust Project Planning and Design Evidence",
-      "pages": 13,
-      "sha256": "118499145c20c3013e1ef07832e12fa342cc66e4624715b964be15fec346c383",
+      "pages": 19,
+      "sha256": "3d870d6f2df0b7af230b992e9691e4004549de870e97fa651438039a92aa3fd3",
       "validation": [
         {
           "page": 1,
@@ -25,7 +25,7 @@
             595.2755737304688,
             841.8897705078125
           ],
-          "text_chars": 1409,
+          "text_chars": 1379,
           "images": 0,
           "clipped_text": [],
           "render": "build/presentation-pdf/FinTrust_Project_Planning_and_Design_Evidence/page-02.png"
@@ -55,10 +55,10 @@
         {
           "page": 5,
           "size_points": [
-            595.2755737304688,
-            841.8897705078125
+            841.8897705078125,
+            1190.551025390625
           ],
-          "text_chars": 813,
+          "text_chars": 965,
           "images": 0,
           "clipped_text": [],
           "render": "build/presentation-pdf/FinTrust_Project_Planning_and_Design_Evidence/page-05.png"
@@ -80,7 +80,7 @@
             595.2755737304688,
             841.8897705078125
           ],
-          "text_chars": 1514,
+          "text_chars": 1534,
           "images": 0,
           "clipped_text": [],
           "render": "build/presentation-pdf/FinTrust_Project_Planning_and_Design_Evidence/page-07.png"
@@ -88,10 +88,10 @@
         {
           "page": 8,
           "size_points": [
-            841.8897705078125,
-            1190.551025390625
+            1190.551025390625,
+            841.8897705078125
           ],
-          "text_chars": 1840,
+          "text_chars": 680,
           "images": 0,
           "clipped_text": [],
           "render": "build/presentation-pdf/FinTrust_Project_Planning_and_Design_Evidence/page-08.png"
@@ -99,21 +99,21 @@
         {
           "page": 9,
           "size_points": [
-            841.8897705078125,
-            595.2755737304688
+            1190.551025390625,
+            841.8897705078125
           ],
-          "text_chars": 1655,
-          "images": 21,
+          "text_chars": 892,
+          "images": 0,
           "clipped_text": [],
           "render": "build/presentation-pdf/FinTrust_Project_Planning_and_Design_Evidence/page-09.png"
         },
         {
           "page": 10,
           "size_points": [
-            841.8897705078125,
-            595.2755737304688
+            1190.551025390625,
+            841.8897705078125
           ],
-          "text_chars": 1425,
+          "text_chars": 700,
           "images": 0,
           "clipped_text": [],
           "render": "build/presentation-pdf/FinTrust_Project_Planning_and_Design_Evidence/page-10.png"
@@ -121,10 +121,10 @@
         {
           "page": 11,
           "size_points": [
-            595.2755737304688,
+            1190.551025390625,
             841.8897705078125
           ],
-          "text_chars": 1763,
+          "text_chars": 802,
           "images": 0,
           "clipped_text": [],
           "render": "build/presentation-pdf/FinTrust_Project_Planning_and_Design_Evidence/page-11.png"
@@ -132,10 +132,10 @@
         {
           "page": 12,
           "size_points": [
-            595.2755737304688,
+            1190.551025390625,
             841.8897705078125
           ],
-          "text_chars": 2198,
+          "text_chars": 753,
           "images": 0,
           "clipped_text": [],
           "render": "build/presentation-pdf/FinTrust_Project_Planning_and_Design_Evidence/page-12.png"
@@ -143,21 +143,150 @@
         {
           "page": 13,
           "size_points": [
+            841.8897705078125,
+            1190.551025390625
+          ],
+          "text_chars": 1015,
+          "images": 11,
+          "clipped_text": [],
+          "render": "build/presentation-pdf/FinTrust_Project_Planning_and_Design_Evidence/page-13.png"
+        },
+        {
+          "page": 14,
+          "size_points": [
+            1190.551025390625,
+            841.8897705078125
+          ],
+          "text_chars": 963,
+          "images": 11,
+          "clipped_text": [],
+          "render": "build/presentation-pdf/FinTrust_Project_Planning_and_Design_Evidence/page-14.png"
+        },
+        {
+          "page": 15,
+          "size_points": [
+            841.8897705078125,
+            1190.551025390625
+          ],
+          "text_chars": 1158,
+          "images": 0,
+          "clipped_text": [],
+          "render": "build/presentation-pdf/FinTrust_Project_Planning_and_Design_Evidence/page-15.png"
+        },
+        {
+          "page": 16,
+          "size_points": [
+            1190.551025390625,
+            841.8897705078125
+          ],
+          "text_chars": 960,
+          "images": 0,
+          "clipped_text": [],
+          "render": "build/presentation-pdf/FinTrust_Project_Planning_and_Design_Evidence/page-16.png"
+        },
+        {
+          "page": 17,
+          "size_points": [
+            595.2755737304688,
+            841.8897705078125
+          ],
+          "text_chars": 1763,
+          "images": 0,
+          "clipped_text": [],
+          "render": "build/presentation-pdf/FinTrust_Project_Planning_and_Design_Evidence/page-17.png"
+        },
+        {
+          "page": 18,
+          "size_points": [
+            595.2755737304688,
+            841.8897705078125
+          ],
+          "text_chars": 2198,
+          "images": 0,
+          "clipped_text": [],
+          "render": "build/presentation-pdf/FinTrust_Project_Planning_and_Design_Evidence/page-18.png"
+        },
+        {
+          "page": 19,
+          "size_points": [
             595.2755737304688,
             841.8897705078125
           ],
           "text_chars": 1899,
           "images": 0,
           "clipped_text": [],
-          "render": "build/presentation-pdf/FinTrust_Project_Planning_and_Design_Evidence/page-13.png"
+          "render": "build/presentation-pdf/FinTrust_Project_Planning_and_Design_Evidence/page-19.png"
         }
       ]
     },
     {
       "pdf": "docs/presentation/diagrams/FinTrust_ERD.pdf",
       "purpose": "FinTrust ERD",
-      "pages": 1,
-      "sha256": "56531f00319a230a15ed0ea64569b7ac49271384cc50f94d415d56286d4e9bfb",
+      "pages": 5,
+      "sha256": "000f5eccd668c265c135e8b313c6c88ce2548258f6f7837d35107ace3b96c97f",
+      "validation": [
+        {
+          "page": 1,
+          "size_points": [
+            1190.551025390625,
+            841.8897705078125
+          ],
+          "text_chars": 680,
+          "images": 0,
+          "clipped_text": [],
+          "render": "build/presentation-pdf/FinTrust_ERD/page-01.png"
+        },
+        {
+          "page": 2,
+          "size_points": [
+            1190.551025390625,
+            841.8897705078125
+          ],
+          "text_chars": 892,
+          "images": 0,
+          "clipped_text": [],
+          "render": "build/presentation-pdf/FinTrust_ERD/page-02.png"
+        },
+        {
+          "page": 3,
+          "size_points": [
+            1190.551025390625,
+            841.8897705078125
+          ],
+          "text_chars": 699,
+          "images": 0,
+          "clipped_text": [],
+          "render": "build/presentation-pdf/FinTrust_ERD/page-03.png"
+        },
+        {
+          "page": 4,
+          "size_points": [
+            1190.551025390625,
+            841.8897705078125
+          ],
+          "text_chars": 801,
+          "images": 0,
+          "clipped_text": [],
+          "render": "build/presentation-pdf/FinTrust_ERD/page-04.png"
+        },
+        {
+          "page": 5,
+          "size_points": [
+            1190.551025390625,
+            841.8897705078125
+          ],
+          "text_chars": 752,
+          "images": 0,
+          "clipped_text": [],
+          "render": "build/presentation-pdf/FinTrust_ERD/page-05.png"
+        }
+      ]
+    },
+    {
+      "pdf": "docs/presentation/diagrams/FinTrust_AWS_Architecture.pdf",
+      "purpose": "FinTrust AWS Architecture",
+      "pages": 2,
+      "sha256": "0a564b3925cbfbf3728babf990ca81c0e75cbd92f0f7ad949799f3e642c21692",
       "validation": [
         {
           "page": 1,
@@ -165,48 +294,51 @@
             841.8897705078125,
             1190.551025390625
           ],
-          "text_chars": 2301,
-          "images": 0,
-          "clipped_text": [],
-          "render": "build/presentation-pdf/FinTrust_ERD/page-01.png"
-        }
-      ]
-    },
-    {
-      "pdf": "docs/presentation/diagrams/FinTrust_AWS_Architecture.pdf",
-      "purpose": "FinTrust AWS Architecture",
-      "pages": 1,
-      "sha256": "eade3a35a962c5811523ab823654a8f74fe13a1931321cec20c8e2d39c7c176d",
-      "validation": [
-        {
-          "page": 1,
-          "size_points": [
-            841.8897705078125,
-            595.2755737304688
-          ],
-          "text_chars": 1471,
-          "images": 21,
+          "text_chars": 1014,
+          "images": 11,
           "clipped_text": [],
           "render": "build/presentation-pdf/FinTrust_AWS_Architecture/page-01.png"
+        },
+        {
+          "page": 2,
+          "size_points": [
+            1190.551025390625,
+            841.8897705078125
+          ],
+          "text_chars": 962,
+          "images": 11,
+          "clipped_text": [],
+          "render": "build/presentation-pdf/FinTrust_AWS_Architecture/page-02.png"
         }
       ]
     },
     {
       "pdf": "docs/presentation/diagrams/FinTrust_Activity_Diagram.pdf",
       "purpose": "FinTrust Activity Diagram",
-      "pages": 1,
-      "sha256": "5d170a242b8cc46f9baf31ee2a1468610ac9b11ca5f9bf35fc9446d2937fe55f",
+      "pages": 2,
+      "sha256": "3570e0305886cea8aaeb514553aa2563cc90fc02736123b441991bbc270c453a",
       "validation": [
         {
           "page": 1,
           "size_points": [
             841.8897705078125,
-            595.2755737304688
+            1190.551025390625
           ],
-          "text_chars": 1336,
+          "text_chars": 1157,
           "images": 0,
           "clipped_text": [],
           "render": "build/presentation-pdf/FinTrust_Activity_Diagram/page-01.png"
+        },
+        {
+          "page": 2,
+          "size_points": [
+            1190.551025390625,
+            841.8897705078125
+          ],
+          "text_chars": 959,
+          "images": 0,
+          "clipped_text": [],
+          "render": "build/presentation-pdf/FinTrust_Activity_Diagram/page-02.png"
         }
       ]
     },
@@ -214,15 +346,15 @@
       "pdf": "docs/presentation/diagrams/FinTrust_Use_Case_Diagram.pdf",
       "purpose": "FinTrust Use Case Diagram",
       "pages": 1,
-      "sha256": "02c3321de746bf2f0a129ec7ec940c323ef8fb9dcf38c44fb6de6ef971026a56",
+      "sha256": "4c1967323162041fae6bb92287fc5755d62d39a9f30c1db1e7de961e95c44c1e",
       "validation": [
         {
           "page": 1,
           "size_points": [
-            595.2755737304688,
-            841.8897705078125
+            841.8897705078125,
+            1190.551025390625
           ],
-          "text_chars": 863,
+          "text_chars": 1028,
           "images": 0,
           "clipped_text": [],
           "render": "build/presentation-pdf/FinTrust_Use_Case_Diagram/page-01.png"
@@ -233,15 +365,15 @@
       "pdf": "docs/presentation/diagrams/FinTrust_Data_Decision_Flow.pdf",
       "purpose": "FinTrust Data Decision Flow",
       "pages": 1,
-      "sha256": "3b570e5a76d839d45617587b9794f5ce4d159b6a1175818155c8bfcaf2e9625a",
+      "sha256": "17aa1a485972478bccfff6e5d3d43c469fbf306c1f697d4d15a9dfd10ba1c1d2",
       "validation": [
         {
           "page": 1,
           "size_points": [
-            595.2755737304688,
+            1190.551025390625,
             841.8897705078125
           ],
-          "text_chars": 987,
+          "text_chars": 741,
           "images": 0,
           "clipped_text": [],
           "render": "build/presentation-pdf/FinTrust_Data_Decision_Flow/page-01.png"
@@ -252,15 +384,15 @@
       "pdf": "docs/presentation/diagrams/FinTrust_Duplicate_Handling.pdf",
       "purpose": "FinTrust Duplicate Handling",
       "pages": 1,
-      "sha256": "3f18d83235737b4d0a638dad3e80c641a3a7329c09d416e32efcb48435d7c1a1",
+      "sha256": "8b35ecd9cc31fd2bc674f69900a938df5958b705f43769966d329bc67ea92ce3",
       "validation": [
         {
           "page": 1,
           "size_points": [
-            841.8897705078125,
-            595.2755737304688
+            1190.551025390625,
+            841.8897705078125
           ],
-          "text_chars": 1356,
+          "text_chars": 915,
           "images": 0,
           "clipped_text": [],
           "render": "build/presentation-pdf/FinTrust_Duplicate_Handling/page-01.png"
@@ -271,7 +403,7 @@
       "pdf": "docs/presentation/diagrams/FinTrust_Role_Separation.pdf",
       "purpose": "FinTrust Role Separation",
       "pages": 1,
-      "sha256": "78228866c112da07630df62add0d280bd7a5efe59df8b169fecdc532e5908b7a",
+      "sha256": "14db6eb945bbb512ce6676bda33b20d711dac7298829c5f243306143c1619d10",
       "validation": [
         {
           "page": 1,
@@ -279,7 +411,7 @@
             841.8897705078125,
             595.2755737304688
           ],
-          "text_chars": 1199,
+          "text_chars": 749,
           "images": 0,
           "clipped_text": [],
           "render": "build/presentation-pdf/FinTrust_Role_Separation/page-01.png"
@@ -287,35 +419,5 @@
       ]
     }
   ],
-  "visual_review": "All 20 final PDF pages rendered and inspected; no missing icons, blank pages, clipped text or broken glyphs.",
-  "markdown_links_checked": 83,
-  "broken_current_references": [],
-  "preexisting_project_reference_links": [
-    {
-      "file": "project-reference/component_guide.md",
-      "target": "remaining_work.md"
-    }
-  ],
-  "project_reference_files_unchanged": 11,
-  "unrelated_files_preserved": 157,
-  "source_count": 7,
-  "presentation_markdown_policy": "Three duplicated planning deliverables removed; small compatibility navigation README retained so project-reference remains unchanged.",
-  "pdf_tree": [
-    "docs/presentation/FinTrust_Project_Planning_and_Design_Evidence.pdf",
-    "docs/presentation/README.md",
-    "docs/presentation/diagram-source/fintrust-release1-activity.dot",
-    "docs/presentation/diagram-source/fintrust-release1-aws-architecture.dot",
-    "docs/presentation/diagram-source/fintrust-release1-data-decisions.dot",
-    "docs/presentation/diagram-source/fintrust-release1-duplicate-handling.dot",
-    "docs/presentation/diagram-source/fintrust-release1-erd.dot",
-    "docs/presentation/diagram-source/fintrust-release1-role-separation.dot",
-    "docs/presentation/diagram-source/fintrust-release1-use-cases.dot",
-    "docs/presentation/diagrams/FinTrust_Activity_Diagram.pdf",
-    "docs/presentation/diagrams/FinTrust_AWS_Architecture.pdf",
-    "docs/presentation/diagrams/FinTrust_Data_Decision_Flow.pdf",
-    "docs/presentation/diagrams/FinTrust_Duplicate_Handling.pdf",
-    "docs/presentation/diagrams/FinTrust_ERD.pdf",
-    "docs/presentation/diagrams/FinTrust_Role_Separation.pdf",
-    "docs/presentation/diagrams/FinTrust_Use_Case_Diagram.pdf"
-  ]
+  "visual_review": "All 32 rendered pages inspected, including all standalone diagram and combined planning pages."
 }

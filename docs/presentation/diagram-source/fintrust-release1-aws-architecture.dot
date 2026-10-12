@@ -1,62 +1,58 @@
+// VIEW: Core processing and failures
 digraph FinTrust {
-graph [bgcolor="#ffffff",fontname="Arial",fontsize=22,pad=0.3,nodesep=0.45,ranksep=0.65]; node [shape=box,style="rounded,filled",fillcolor="#edf5f3",color="#2b6557",fontname="Arial",fontsize=17,margin="0.18,0.13"]; edge [color="#607d8b",fontname="Arial",fontsize=13,arrowsize=0.7];
-rankdir=LR; label="AWS | af-south-1 | Verified foundation; application wiring pending"; labelloc=t;
-subgraph cluster_private {label=""; color="#2b6557";api;score;rds;report;gate;} raw [fillcolor="#d6eee4"];quar [fillcolor="#d6eee4"];reports [fillcolor="#d6eee4"];fifo [fillcolor="#d6eee4"];dlq [fillcolor="#d6eee4"];ddb [fillcolor="#d6eee4"];rds [fillcolor="#d6eee4"];gate [fillcolor="#d6eee4"]; ingest [fillcolor="#fff0cb"]; apiG [fillcolor="#e8edf9"];api [fillcolor="#e8edf9"];score [fillcolor="#e8edf9"];alert [fillcolor="#e8edf9"];report [fillcolor="#e8edf9"];sched [fillcolor="#e8edf9"];stream [fillcolor="#e8edf9"];browser [fillcolor="#e8edf9"];guard [shape=note];
-browser [label="Internal operations UI\nLocal verified; cloud\nidentity pending",shape=box];
-apiG [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_api</FONT></TD></TR><TR><TD COLSPAN="1">API Gateway</TD></TR><TR><TD COLSPAN="1">Authenticated target</TD></TR></TABLE>>,shape=box];
-api [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_lambda</FONT></TD></TR><TR><TD COLSPAN="1">Query / workflow Lambda</TD></TR><TR><TD COLSPAN="1">Private application subnets</TD></TR></TABLE>>,shape=box];
+graph [bgcolor="white",fontname="Arial",fontsize=22,pad=.3,nodesep=.65,ranksep=.7,splines=ortho]; node [shape=box,style="rounded,filled",fillcolor="#edf5f3",color="#2b6557",fontname="Arial",fontsize=17,margin=".2,.15"]; edge [color="#607d8b",fontname="Arial",fontsize=12,arrowsize=.7]; labelloc=t;
+rankdir=TB;label="AWS CORE | af-south-1; green verified / blue pending / gold disabled";
 raw [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_s3</FONT></TD></TR><TR><TD COLSPAN="1">S3 input bucket</TD></TR><TR><TD COLSPAN="1">Verified foundation</TD></TR></TABLE>>,shape=box];
+raw [fillcolor="#d6eee4"];
 ingest [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_lambda</FONT></TD></TR><TR><TD COLSPAN="1">Ingest Lambda</TD></TR><TR><TD COLSPAN="1">Outside VPC; existing</TD></TR><TR><TD COLSPAN="1">deployment disabled</TD></TR></TABLE>>,shape=box];
+ingest [fillcolor="#fff0cb"];
 fifo [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_sqs</FONT></TD></TR><TR><TD COLSPAN="1">SQS transactions FIFO</TD></TR><TR><TD COLSPAN="1">Verified; target trigger</TD></TR><TR><TD COLSPAN="1">pending</TD></TR></TABLE>>,shape=box];
-dlq [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_sqs</FONT></TD></TR><TR><TD COLSPAN="1">FIFO DLQ + async failure</TD></TR><TR><TD COLSPAN="1">queues</TD></TR><TR><TD COLSPAN="1">Verified; replay controlled</TD></TR></TABLE>>,shape=box];
+fifo [fillcolor="#d6eee4"];
 score [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_lambda</FONT></TD></TR><TR><TD COLSPAN="1">Scoring Lambda</TD></TR><TR><TD COLSPAN="1">Private application subnets</TD></TR></TABLE>>,shape=box];
+score [fillcolor="#e8edf9"];
 rds [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_rds</FONT></TD></TR><TR><TD COLSPAN="1">Private RDS PostgreSQL 16</TD></TR><TR><TD COLSPAN="1">Verified instance; live SQL</TD></TR><TR><TD COLSPAN="1">bootstrap pending</TD></TR></TABLE>>,shape=box];
+rds [fillcolor="#d6eee4"];
 ddb [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_ddb</FONT></TD></TR><TR><TD COLSPAN="1">DynamoDB risk projection</TD></TR><TR><TD COLSPAN="1">Verified table; Streams</TD></TR><TR><TD COLSPAN="1">wiring pending</TD></TR></TABLE>>,shape=box];
+ddb [fillcolor="#d6eee4"];
 stream [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_ddb</FONT></TD></TR><TR><TD COLSPAN="1">DynamoDB Streams</TD></TR><TR><TD COLSPAN="1">Target mapping</TD></TR></TABLE>>,shape=box];
+stream [fillcolor="#e8edf9"];
 alert [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_lambda</FONT></TD><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_ses</FONT></TD></TR><TR><TD COLSPAN="2">Alert Lambda -&gt; SES</TD></TR><TR><TD COLSPAN="2">Outside VPC; delivery</TD></TR><TR><TD COLSPAN="2">pending</TD></TR></TABLE>>,shape=box];
+alert [fillcolor="#e8edf9"];
 quar [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_s3</FONT></TD></TR><TR><TD COLSPAN="1">S3 quarantine bucket</TD></TR><TR><TD COLSPAN="1">Verified; safe row evidence</TD></TR></TABLE>>,shape=box];
-sched [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_event</FONT></TD></TR><TR><TD COLSPAN="1">EventBridge monthly</TD></TR><TR><TD COLSPAN="1">schedule</TD></TR><TR><TD COLSPAN="1">Target; initially disabled</TD></TR></TABLE>>,shape=box];
-report [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_lambda</FONT></TD></TR><TR><TD COLSPAN="1">Report Lambda</TD></TR><TR><TD COLSPAN="1">Private application subnets</TD></TR></TABLE>>,shape=box];
-reports [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_s3</FONT></TD></TR><TR><TD COLSPAN="1">S3 reports bucket</TD></TR><TR><TD COLSPAN="1">Verified; CSV / JSON</TD></TR></TABLE>>,shape=box];
-gate [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_s3</FONT></TD><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_ddb</FONT></TD></TR><TR><TD COLSPAN="2">S3 + DynamoDB gateway</TD></TR><TR><TD COLSPAN="2">endpoints</TD></TR><TR><TD COLSPAN="2">Verified; no NAT</TD></TR></TABLE>>,shape=box];
-guard [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_iam</FONT></TD><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_kms</FONT></TD><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_cw</FONT></TD></TR><TR><TD COLSPAN="3">Scoped IAM / KMS /</TD></TR><TR><TD COLSPAN="3">CloudWatch</TD></TR><TR><TD COLSPAN="3">Least privilege; target</TD></TR><TR><TD COLSPAN="3">runtime monitoring</TD></TR></TABLE>>,shape=box];
-browser -> apiG;
-apiG -> api;
-api -> rds;
-raw -> ingest;
-ingest -> fifo;
-ingest -> quar;
-fifo -> score;
-fifo -> dlq;
-score -> rds;
-score -> ddb;
-ddb -> stream;
-stream -> alert;
-sched -> report;
-report -> rds;
-report -> reports;
-gate -> score;
-gate -> api;
-gate -> report;
+quar [fillcolor="#d6eee4"];
+dlq [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_sqs</FONT></TD></TR><TR><TD COLSPAN="1">FIFO DLQ + async failure</TD></TR><TR><TD COLSPAN="1">queues</TD></TR><TR><TD COLSPAN="1">Verified; replay controlled</TD></TR></TABLE>>,shape=box];
+dlq [fillcolor="#d6eee4"];
 
-legend [shape=note,fontsize=14,label="GREEN: Verified foundation\nBLUE: Target / pending\nGOLD: Disabled ingest\nOutline: private VPC",pos="0,10!"];
-graph [overlap=false,splines=true,sep="+10"];
-browser [pos="4,10!"];
-apiG [pos="8,10!"];
-guard [pos="12,10!"];
-raw [pos="0,7.5!"];
-ingest [pos="4,7.5!"];
-api [pos="8,7.5!"];
-rds [pos="12,7.5!"];
-ddb [pos="16,7.5!"];
-quar [pos="0,5!"];
-fifo [pos="4,5!"];
-score [pos="8,5!"];
-gate [pos="12,5!"];
-stream [pos="16,5!"];
-sched [pos="0,2.5!"];
-dlq [pos="4,2.5!"];
-report [pos="8,2.5!"];
-alert [pos="16,2.5!"];
-reports [pos="12,0!"];
+subgraph cluster_private {label="PRIVATE VPC | Scoring / RDS";color="#2b6557";score;rds;}
+raw -> ingest -> fifo -> score; ingest -> quar; fifo -> dlq;
+score -> rds; score -> ddb; ddb -> stream -> alert;
+
+}
+
+// VIEW: Query reporting and security
+digraph FinTrust {
+graph [bgcolor="white",fontname="Arial",fontsize=22,pad=.3,nodesep=.65,ranksep=.7,splines=ortho]; node [shape=box,style="rounded,filled",fillcolor="#edf5f3",color="#2b6557",fontname="Arial",fontsize=17,margin=".2,.15"]; edge [color="#607d8b",fontname="Arial",fontsize=12,arrowsize=.7]; labelloc=t;
+rankdir=LR;label="AWS READ / REPORT | Private paths; no NAT Gateway";
+browser [label="Internal operations UI\nLocal verified; cloud\nidentity pending",shape=box];
+browser [fillcolor="#e8edf9"];
+apiG [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_api</FONT></TD></TR><TR><TD COLSPAN="1">API Gateway</TD></TR><TR><TD COLSPAN="1">Authenticated target</TD></TR></TABLE>>,shape=box];
+apiG [fillcolor="#e8edf9"];
+api [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_lambda</FONT></TD></TR><TR><TD COLSPAN="1">Query / workflow Lambda</TD></TR><TR><TD COLSPAN="1">Private application subnets</TD></TR></TABLE>>,shape=box];
+api [fillcolor="#e8edf9"];
+sched [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_event</FONT></TD></TR><TR><TD COLSPAN="1">EventBridge monthly</TD></TR><TR><TD COLSPAN="1">schedule</TD></TR><TR><TD COLSPAN="1">Target; initially disabled</TD></TR></TABLE>>,shape=box];
+sched [fillcolor="#e8edf9"];
+report [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_lambda</FONT></TD></TR><TR><TD COLSPAN="1">Report Lambda</TD></TR><TR><TD COLSPAN="1">Private application subnets</TD></TR></TABLE>>,shape=box];
+report [fillcolor="#e8edf9"];
+rds [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_rds</FONT></TD></TR><TR><TD COLSPAN="1">Private RDS PostgreSQL 16</TD></TR><TR><TD COLSPAN="1">Verified instance; live SQL</TD></TR><TR><TD COLSPAN="1">bootstrap pending</TD></TR></TABLE>>,shape=box];
+rds [fillcolor="#d6eee4"];
+reports [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_s3</FONT></TD></TR><TR><TD COLSPAN="1">S3 reports bucket</TD></TR><TR><TD COLSPAN="1">Verified; CSV / JSON</TD></TR></TABLE>>,shape=box];
+reports [fillcolor="#d6eee4"];
+gate [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_s3</FONT></TD><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_ddb</FONT></TD></TR><TR><TD COLSPAN="2">S3 + DynamoDB gateway</TD></TR><TR><TD COLSPAN="2">endpoints</TD></TR><TR><TD COLSPAN="2">Verified; no NAT</TD></TR></TABLE>>,shape=box];
+gate [fillcolor="#d6eee4"];
+guard [label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_iam</FONT></TD><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_kms</FONT></TD><TD WIDTH="60" HEIGHT="56"><FONT POINT-SIZE="1" COLOR="white">ICON_cw</FONT></TD></TR><TR><TD COLSPAN="3">Scoped IAM / KMS /</TD></TR><TR><TD COLSPAN="3">CloudWatch</TD></TR><TR><TD COLSPAN="3">Least privilege; target</TD></TR><TR><TD COLSPAN="3">runtime monitoring</TD></TR></TABLE>>,shape=box];
+guard [fillcolor="#e8edf9"];
+
+subgraph cluster_private {label="PRIVATE VPC | Application subnets";color="#2b6557";api;report;rds;gate;}
+browser -> apiG -> api -> rds; sched -> report -> rds; report -> reports;
+
 }

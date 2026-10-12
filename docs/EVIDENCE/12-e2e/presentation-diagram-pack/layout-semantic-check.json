@@ -1,0 +1,80 @@
+{
+  "status": "PASSED",
+  "physical_tables": 17,
+  "foreign_keys": 16,
+  "original_table_labels_and_foreign_keys_preserved": true,
+  "unrelated_files_preserved": 157,
+  "project_reference_files_preserved": 11,
+  "pages_visually_reviewed": 32,
+  "diagram_views": 13,
+  "routing_checks": [
+    {
+      "view": "Conceptual domain overview",
+      "orthogonal_connector_segments": 4,
+      "status": "PASSED"
+    },
+    {
+      "view": "Physical ledger and operations",
+      "orthogonal_connector_segments": 0,
+      "status": "PASSED"
+    },
+    {
+      "view": "Physical ingestion",
+      "orthogonal_connector_segments": 0,
+      "status": "PASSED"
+    },
+    {
+      "view": "Physical quarantine and corrections",
+      "orthogonal_connector_segments": 0,
+      "status": "PASSED"
+    },
+    {
+      "view": "Physical risk and review",
+      "orthogonal_connector_segments": 0,
+      "status": "PASSED"
+    },
+    {
+      "view": "Core processing and failures",
+      "orthogonal_connector_segments": 11,
+      "status": "PASSED"
+    },
+    {
+      "view": "Query reporting and security",
+      "orthogonal_connector_segments": 7,
+      "status": "PASSED"
+    },
+    {
+      "view": "Admission and reconciliation",
+      "orthogonal_connector_segments": 25,
+      "status": "PASSED"
+    },
+    {
+      "view": "Correction recovery and review",
+      "orthogonal_connector_segments": 9,
+      "status": "PASSED"
+    },
+    {
+      "view": "Role-grouped use cases",
+      "orthogonal_connector_segments": 28,
+      "status": "PASSED"
+    },
+    {
+      "view": "Data Decisions",
+      "orthogonal_connector_segments": 16,
+      "status": "PASSED"
+    },
+    {
+      "view": "Duplicate Handling",
+      "orthogonal_connector_segments": 5,
+      "status": "PASSED"
+    },
+    {
+      "view": "Role Separation",
+      "orthogonal_connector_segments": 4,
+      "status": "PASSED"
+    }
+  ],
+  "aws_access": false,
+  "application_changes": false,
+  "superseded_exports": "Eight PDFs replaced in place; earlier versions remain in Git. No additional final/draft copies created. Historical diagram archive retained."
+}
