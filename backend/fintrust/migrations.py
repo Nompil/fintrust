@@ -54,6 +54,10 @@ def _catalog(cur,schema,version):
     return hashlib.sha256(json.dumps(values,default=str,sort_keys=True).encode()).hexdigest()
 
 def _catalog_for_version(cur,schema,version):
+    if version==4:
+        # Current whole workflow and lifecycle catalogs validate intentional evolution;
+        # earlier historical snapshots remain immutable in schema_migrations.
+        return hashlib.sha256((_catalog(cur,schema,2)+_catalog_for_version(cur,schema,3)).encode()).hexdigest()
     if version!=3: return _catalog(cur,schema,version)
     tables=("transaction_lifecycle_events",)
     cur.execute("""SELECT c.relname,a.attname,pg_catalog.format_type(a.atttypid,a.atttypmod),a.attnotnull,
@@ -80,7 +84,7 @@ def apply_local(conn,version,*,schema="public"):
     target=parse_dsn(conn.dsn)
     if target.get("host") not in {"127.0.0.1","localhost","::1"} or target.get("dbname") not in {"fintrust_local_test","fintrust_test"}:
         raise ValueError("Dedicated loopback test database required")
-    names={1:"001_transaction_identity.sql",2:"002_operational_workflows.sql",3:"003_transaction_lifecycle.sql"}
+    names={1:"001_transaction_identity.sql",2:"002_operational_workflows.sql",3:"003_transaction_lifecycle.sql",4:"004_review_assignment.sql"}
     if version not in names: raise ValueError("Unknown migration")
     source=(ROOT/"sql/migrations"/names[version]).read_text(encoding="utf-8").replace("\r\n","\n")
     digest=hashlib.sha256(source.encode()).hexdigest()
@@ -93,8 +97,20 @@ def apply_local(conn,version,*,schema="public"):
             cur.execute(sql.SQL("CREATE TABLE IF NOT EXISTS {}.schema_migrations(version INTEGER PRIMARY KEY,source_sha256 CHAR(64) NOT NULL,catalog_sha256 CHAR(64) NOT NULL,applied_at TIMESTAMPTZ NOT NULL DEFAULT NOW())").format(sql.Identifier(schema)))
             cur.execute(sql.SQL("SELECT source_sha256,catalog_sha256 FROM {}.schema_migrations WHERE version=%s").format(sql.Identifier(schema)),(version,));saved=cur.fetchone()
             if saved:
-                if saved!=(digest,_catalog_for_version(cur,schema,version)): raise SchemaDrift("Migration source or schema drift detected")
+                cur.execute(sql.SQL("SELECT source_sha256,catalog_sha256 FROM {}.schema_migrations WHERE version=4").format(sql.Identifier(schema)))
+                evolved=cur.fetchone()
+                if evolved and version==2:
+                    fourth=(ROOT/"sql/migrations/004_review_assignment.sql").read_text(encoding="utf-8").replace("\r\n","\n")
+                    if saved[0]!=digest or evolved!=(hashlib.sha256(fourth.encode()).hexdigest(),_catalog_for_version(cur,schema,4)):
+                        raise SchemaDrift("Assignment evolution or prior source drift detected")
+                elif saved!=(digest,_catalog_for_version(cur,schema,version)): raise SchemaDrift("Migration source or schema drift detected")
                 return "ALREADY_APPLIED"
+            if version==4:
+                for prior_version in (2,3):
+                    cur.execute(sql.SQL("SELECT source_sha256,catalog_sha256 FROM {}.schema_migrations WHERE version=%s").format(sql.Identifier(schema)),(prior_version,));prior=cur.fetchone()
+                    previous=(ROOT/"sql/migrations"/names[prior_version]).read_text(encoding="utf-8").replace("\r\n","\n")
+                    if not prior or prior!=(hashlib.sha256(previous.encode()).hexdigest(),_catalog_for_version(cur,schema,prior_version)):
+                        raise SchemaDrift("Verified workflow/lifecycle migrations must precede 004")
             if version==3:
                 apply_previous=(ROOT/"sql/migrations/002_operational_workflows.sql").read_text(encoding="utf-8").replace("\r\n","\n")
                 cur.execute(sql.SQL("SELECT source_sha256,catalog_sha256 FROM {}.schema_migrations WHERE version=2").format(sql.Identifier(schema)));prior=cur.fetchone()

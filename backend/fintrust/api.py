@@ -37,7 +37,7 @@ def request_context():
         from .auth import authenticate
         try:
             g.principal=authenticate()
-            if g.principal.role=="Maintainer" and request.path not in {"/v1/session","/v1/operations","/v1/operations/retry"} and not request.path.startswith("/v1/workflows/batches"):
+            if g.principal.role=="Maintainer" and request.path not in {"/v1/session","/v1/sign-in","/v1/operations","/v1/operations/retry"} and not request.path.startswith("/v1/workflows/batches"):
                 return jsonify({"error":"Maintainer scope is technical operations"}),403
         except PermissionError: return jsonify({"error":"authentication required"}),401
     if request.method == "OPTIONS":
@@ -298,7 +298,24 @@ def workflow_metrics():
 
 @app.get("/v1/session")
 def session():
-    return jsonify({"data":{"subject":g.principal.subject,"role":g.principal.role,"accounts":g.principal.accounts}})
+    from .local_users import session_metadata
+    return jsonify({"data":session_metadata(g.principal)})
+
+@app.post("/v1/sign-in")
+def record_sign_in():
+    from .local_users import record_sign_in,session_metadata
+    record_sign_in(g.principal)
+    return jsonify({"data":session_metadata(g.principal)})
+
+@app.get("/v1/review-assignees")
+def review_assignees():
+    from .review_assignment import candidates
+    return jsonify({"data":candidates(g.principal)})
+
+@app.post("/v1/reviews/<int:event>/assignment")
+def review_assignment(event):
+    from .review_assignment import assign
+    return jsonify({"data":assign(event,request.get_json(),g.principal)})
 
 
 @app.get("/v1/workflows/<kind>")

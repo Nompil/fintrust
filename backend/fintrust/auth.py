@@ -31,7 +31,8 @@ def authenticate():
     path=os.getenv("FINTRUST_AUTH_FILE")
     if not path: raise PermissionError("Authentication required")
     try:
-        registry=json.loads(Path(path).read_text(encoding="utf-8"))
+        from .identity_registry import read_registry
+        registry=read_registry()
         digest=hashlib.sha256(value[7:].encode()).hexdigest()
         found=[p for p in registry["principals"] if hmac.compare_digest(p["token_sha256"],digest)]
         if len(found)!=1: raise PermissionError("Authentication required")

@@ -80,9 +80,9 @@ def validation_errors(row, received_at, *, known_account=True):
 
 def authorize(role, action):
     permissions={
-        "Admin":{"read","audit","operations"},
+        "Admin":{"read","audit","operations","assign_review"},
         "Maintainer":{"read","operations","retry"},
-        "Risk/Compliance Analyst":{"read","upload","review","correct","reject_quarantine"},
+        "Risk/Compliance Analyst":{"read","upload","review","correct","reject_quarantine","assign_review"},
         "Read-only/Auditor":{"read","audit"},
     }
     if action not in permissions.get(role,set()): raise PermissionError("Action is not authorized")

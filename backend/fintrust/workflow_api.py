@@ -29,7 +29,7 @@ def page_args(args,allowed=()):
     return limit,offset
 
 def list_page(kind,principal,args):
-    limit,offset=page_args(args,{"status","account_id",*( {"tx_id","source_id","country","risk_level","batch_id","from","to","min_amount","max_amount"} if kind=="transactions" else {"batch_id"} if kind=="batches" else set())})
+    limit,offset=page_args(args,{"status","account_id",*( {"tx_id","source_id","country","risk_level","batch_id","from","to","min_amount","max_amount"} if kind=="transactions" else {"batch_id"} if kind=="batches" else {"queue"} if kind=="reviews" else set())})
     scope=list(principal.accounts)
     if args.get("account_id"): scope=[principal.account(args["account_id"])]
     selects={
@@ -63,6 +63,19 @@ def list_page(kind,principal,args):
             where+=" AND EXISTS(SELECT 1 FROM ingestion_records i WHERE i.canonical_tx_id=t.tx_id AND i.batch_id=%s)";params.append(str(uuid.UUID(args["batch_id"])))
     if kind=="batches" and args.get("batch_id"):
         where+=" AND b.batch_id=%s";params.append(str(uuid.UUID(args["batch_id"])))
+    if kind=="reviews":
+        queue=args.get("queue")
+        if queue and queue not in {"mine","unassigned","open","high","over_sla"}:raise ValueError("Invalid review queue")
+        if queue:
+            where+=" AND w.review_status IN ('OPEN','UNDER_REVIEW','ESCALATED')"
+            if queue=="mine":where+=" AND w.reviewer_subject=%s";params.append(principal.subject)
+            elif queue=="unassigned":where+=" AND w.reviewer_subject IS NULL"
+            elif queue=="high":where+=" AND r.risk_score>=70"
+            elif queue=="over_sla":
+                from .review_assignment import sla_seconds
+                seconds=sla_seconds()
+                if seconds is None:return {"data":[],"meta":{"count":0,"limit":limit,"offset":offset,"has_more":False,"sla_configured":False}}
+                where+=" AND w.created_at<=NOW()-(%s * INTERVAL '1 second')";params.append(seconds)
     status=args.get("status")
     if status:
         valid={"reviews":{"OPEN","UNDER_REVIEW","CLEARED","CONFIRMED_RISK","ESCALATED"},"quarantine":{"OPEN","RESUBMITTED","RESOLVED","REJECTED"},"batches":{"RECEIVED","PROCESSING","QUEUED","COMPLETED","PARTIAL","FAILED"}}
@@ -70,6 +83,12 @@ def list_page(kind,principal,args):
         field={"reviews":"w.review_status","quarantine":"q.workflow_status","batches":"r.status"}[kind]
         where+=" AND "+field+"=%s";params.append(status)
     rows=_query(select+" WHERE "+where+" ORDER BY "+order+" LIMIT %s OFFSET %s",tuple(params+[limit+1,offset]))
+    if kind=="reviews":
+        from .review_assignment import decorate
+        rows=decorate(rows)
+    if kind=="quarantine":
+        for row in rows:
+            row["recovery_status"]="ACCEPTED" if row["workflow_status"]=="RESOLVED" else "CORRECTED" if row["workflow_status"]=="RESUBMITTED" else "REVALIDATION_FAILED" if row.get("correction_id") and row["workflow_status"]=="OPEN" else row["workflow_status"]
     if kind=="batches":
         import os
         if os.getenv("FINTRUST_MODE")=="local" and principal.role!="Maintainer":
@@ -107,7 +126,7 @@ def _body(body,fields):
     digest=hashlib.sha256(json.dumps(body,sort_keys=True).encode()).hexdigest()
     return identifier,digest
 
-def update_review(event,body,principal):
+def _update_review(event,body,principal):
     principal.require("review")
     if type(event) is not int or event<1: raise ValueError("Invalid risk event identifier")
     request,digest=_body(body,{"request_id","expected_version","status","notes","resolution_code"})
@@ -126,7 +145,8 @@ def update_review(event,body,principal):
                     return {"risk_event_id":event,"version":prior["version"],"review_status":prior["after_status"],"replayed":True}
                 if row["version"]!=body["expected_version"]: raise Conflict("Review changed; refresh before retry")
                 review_transition(row["review_status"],body["status"],role=principal.role,notes=body["notes"],resolution_code=body["resolution_code"])
-                if row["review_status"]=="UNDER_REVIEW" and row["reviewer_subject"]!=principal.subject and principal.role!="Admin": raise PermissionError("Review is assigned to another analyst")
+                if row["reviewer_subject"] is not None and row["reviewer_subject"]!=principal.subject: raise PermissionError("Review is assigned to another analyst")
+                if row["review_status"]=="UNDER_REVIEW" and not row["reviewer_subject"]: raise Conflict("Review must be claimed before decision")
                 terminal=body["status"] in {"CLEARED","CONFIRMED_RISK","ESCALATED"}
                 cur.execute("""UPDATE risk_reviews SET review_status=%s,reviewer_subject=%s,reviewed_by=%s,reviewed_at=%s,
                     review_notes=%s,resolution_code=%s,change_actor=%s,change_request_id=%s,request_digest=%s,version=version+1
@@ -136,7 +156,7 @@ def update_review(event,body,principal):
                 return {"risk_event_id":event,"version":cur.fetchone()["version"],"review_status":body["status"]}
     finally: conn.close()
 
-def correct_case(identifier,body,principal):
+def _correct_case(identifier,body,principal):
     identifier=str(uuid.UUID(identifier))
     request,digest=_body(body,{"request_id","action","notes","candidate"})
     action=body["action"]
@@ -240,4 +260,21 @@ def quarantine_detail(identifier,principal):
         correction_notes,action,reprocess_batch_id,reprocess_source_row FROM quarantine_corrections
         WHERE quarantine_id=%s ORDER BY correction_version DESC LIMIT 100""",(identifier,))
     case["history_limit"]=100
-    return case
+    from .quarantine_recovery import enrich
+    return enrich(case,principal)
+
+def update_review(event,body,principal):
+    from .identity_registry import locked_registry,read_registry
+    import os
+    with locked_registry(os.environ["FINTRUST_AUTH_FILE"]):
+        users=[u for u in read_registry()["principals"] if u["subject"]==principal.subject and u["role"]==principal.role and u.get("status","ACTIVE")=="ACTIVE"]
+        if len(users)!=1:raise PermissionError("Identity changed")
+        return _update_review(event,body,principal)
+
+def correct_case(identifier,body,principal):
+    from .identity_registry import locked_registry,read_registry
+    import os
+    with locked_registry(os.environ["FINTRUST_AUTH_FILE"]):
+        users=[u for u in read_registry()["principals"] if u["subject"]==principal.subject and u["role"]==principal.role and u.get("status","ACTIVE")=="ACTIVE"]
+        if len(users)!=1:raise PermissionError("Identity changed")
+        return _correct_case(identifier,body,principal)

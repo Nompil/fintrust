@@ -72,7 +72,7 @@ def main():
                     cur.execute(sql.SQL("SET search_path TO {},public").format(sql.Identifier(SCHEMA)))
                     cur.execute((ROOT/"sql/schema.sql").read_text().split("-- Additive identity hardening.")[0].replace("CREATE EXTENSION IF NOT EXISTS pgcrypto;",""))
                     cur.execute((ROOT/"sql/seed.sql").read_text())
-        apply_local(conn,1,schema=SCHEMA);apply_local(conn,2,schema=SCHEMA);apply_local(conn,3,schema=SCHEMA)
+        apply_local(conn,1,schema=SCHEMA);apply_local(conn,2,schema=SCHEMA);apply_local(conn,3,schema=SCHEMA);apply_local(conn,4,schema=SCHEMA)
     finally:conn.close()
     role={"Admin":"Admin","Analyst":"Risk/Compliance Analyst","Auditor":"Read-only/Auditor","Maintainer":"Maintainer"}[args.role]
     file=ROOT/".env.release1-auth.json"
@@ -86,12 +86,18 @@ def main():
         token=getpass("Local demo access token (>=32 random characters; hidden, never stored plaintext): ")
         if not 32<=len(token)<=256:raise ValueError("Token length must be 32..256")
         digest=hashlib.sha256(token.encode()).hexdigest();token=None
+        existing=[p for p in registry["principals"] if p["subject"]==subject]
+        if len(existing)>1:raise ValueError("Ambiguous local identity")
+        if existing and (existing[0]['role']!=role or existing[0].get('status','ACTIVE')!='ACTIVE'):raise ValueError("Role/status changes require Admin governance")
+        if existing and existing[0].get('token_sha256') and existing[0]['token_sha256']!=digest:raise ValueError("Use --reuse-auth; credential replacement requires separate approval")
         registry["principals"]=[p for p in registry["principals"] if p["subject"]!=subject]
         if any(p["token_sha256"]==digest for p in registry["principals"]):raise ValueError("Use a different token for each local role")
         for name,assigned in (("admin01","Admin"),("analyst01","Risk/Compliance Analyst"),("analyst02","Risk/Compliance Analyst"),("auditor01","Read-only/Auditor"),("maintainer01","Maintainer")):
             if name!=subject and not any(p["subject"]==name for p in registry["principals"]):
                 registry["principals"].append({"subject":name,"display_name":name,"status":"ACTIVE","role":assigned,"accounts":["20000000-0000-4000-8000-00000000000"+str(i) for i in range(1,6)],"token_sha256":"","created_at":datetime.now(timezone.utc).isoformat()})
-        registry["principals"].append({"subject":subject,"display_name":subject,"status":"ACTIVE","created_at":datetime.now(timezone.utc).isoformat(),"role":role,"accounts":["20000000-0000-4000-8000-00000000000"+str(i) for i in range(1,6)],"token_sha256":digest})
+        entry=dict(existing[0]) if existing else {"subject":subject,"display_name":subject,"status":"ACTIVE","created_at":datetime.now(timezone.utc).isoformat(),"role":role,"accounts":["20000000-0000-4000-8000-00000000000"+str(i) for i in range(1,6)]}
+        entry['token_sha256']=digest
+        registry["principals"].append(entry)
         file.write_text(json.dumps(registry,indent=2)+"\n",encoding="utf-8")
     os.environ.update(FINTRUST_AUTH_FILE=str(file),FINTRUST_MODE="local",FINTRUST_LOCAL_DEMO="0",FINTRUST_RELEASE1="1",FINTRUST_RELEASE1_UPLOAD="1",INPUT_BUCKET="release1-input",FINTRUST_ACCOUNT_ID="966467878406",DYNAMODB_TABLE="release1-scores",QUARANTINE_BUCKET="release1-demo-safe",AWS_ACCESS_KEY_ID="testing",AWS_SECRET_ACCESS_KEY="testing",AWS_SESSION_TOKEN="testing",AWS_DEFAULT_REGION="af-south-1",AWS_EC2_METADATA_DISABLED="true",AWS_IGNORE_CONFIGURED_ENDPOINT_URLS="true")
     from moto import mock_aws

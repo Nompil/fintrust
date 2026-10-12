@@ -39,7 +39,7 @@ def test_all_mutations_enforce_role_before_malformed_input(authenticated_client,
     assert response.status_code == 403, response.json
 
 @pytest.mark.parametrize('method,route', [(m,p) for m,p in ROUTES if p not in
-    {'/v1/session','/v1/operations','/v1/operations/retry','/v1/workflows/<kind>'}])
+    {'/v1/session','/v1/sign-in','/v1/operations','/v1/operations/retry','/v1/workflows/<kind>'}])
 def test_maintainer_cannot_read_financial_or_governance_routes(authenticated_client,maintainer_headers,method,route):
     response=authenticated_client[0].open(concrete(route),method=method,headers=maintainer_headers,json={} if method=='POST' else None)
     assert response.status_code==403
