@@ -1,0 +1,60 @@
+"""Build the local scenario record from real JUnit results; fail on missing proof."""
+import argparse,json,shutil,subprocess,xml.etree.ElementTree as ET
+from pathlib import Path
+ROOT=Path(__file__).resolve().parents[1]
+# Each entry states assertions made by the named integration test, not live AWS claims.
+CASES=[
+('Normal LOW-risk transaction','10 ZAR, ZA, unique source reference','Accept and score LOW; retain ledger without review','One immutable ledger entry, Low, NOT_REQUIRED','Transactions/lifecycle API returns STORED and Low','System lifecycle records source, actor and timestamps','test_accepted_levels_stored_and_timeline_is_authoritative[10-ZA-Low-NOT_REQUIRED]'),
+('MEDIUM-risk transaction','200000.01 ZAR, ZA','Accept, score MEDIUM, open review','Ledger retained, Medium, OPEN','Transaction lifecycle API returns Medium and OPEN','Frozen scoring evidence and ordered lifecycle','test_accepted_levels_stored_and_timeline_is_authoritative[200000.01-ZA-Medium-OPEN]'),
+('HIGH_AMOUNT','50000.01 ZAR','Trigger HIGH_AMOUNT; risk level remains combined score outcome','Frozen rule measurement and threshold; ledger retained','Risk Event detail API exposes amount and threshold','Rule created_at and immutable source evidence','test_signals_have_frozen_measurement_and_timestamp'),
+('HIGH_VELOCITY','Six distinct accepted transactions in closed 300-second window','First five do not trigger; sixth triggers; test boundary timing','HIGH_VELOCITY measured 6, threshold 5','Risk detail evidence supplies measured count and threshold','Frozen signals identify actual transactions/time window','test_velocity_closed_five_minute_time_boundary'),
+('CROSS_BORDER','Country US, valid amount/reference','Accept foreign-country transaction and retain signal; not invalid data','CROSS_BORDER signal with frozen measurement','Risk detail API exposes location, context and threshold','Signal created_at is present','test_signals_have_frozen_measurement_and_timestamp'),
+('POSSIBLE_DUPLICATE_CHARGE','Two unique references, same 123 ZAR merchant within 30 seconds','Keep both genuine identities; flag similarity within 120 seconds','Rule records matching transaction IDs, threshold 120','Risk detail uses frozen rule evidence','Source references and separate identities remain traceable','test_velocity_closed_window_and_duplicate_charge_evidence'),
+('Invalid transaction to quarantine','Amount bad','Reject row from ledger; quarantine safe original','Original occurrence remains QUARANTINED','Quarantine detail/API retains validation issue and source','RECEIVED, QUEUED, QUARANTINED system events','test_quarantine_correction_revalidates_new_occurrence_without_overwrite'),
+('Correct quarantine, revalidate, accepted','Analyst submits numeric amount with reason','Create correction occurrence; worker revalidates and scores','New occurrence STORED; original QUARANTINED; one ledger addition','Quarantine recovery API links resulting transaction and attempts','Human CORRECTED plus system REVALIDATED; original history preserved','test_correction_failed_then_valid_or_duplicate_with_link_and_immutable_history'),
+('HIGH, Risk Event, Alert, Review Queue','200000.01 ZAR, US; mocked successful mail provider','Keep HIGH ledger, open review, send idempotent alert','SENT independently of OPEN review; one canonical ledger entry','Investigation detail API shows SENT; queue remains OPEN','ALERTED only after durable SENT evidence','test_successful_alert_remains_independent_of_review'),
+('Analyst claims review','Active Analyst claims unassigned HIGH review','OPEN to UNDER_REVIEW with single owner','Reviewer set; stale/wrong owner rejected','Browser Claim Review reveals owned investigation actions','Assignment history attributes analyst01','test_claim_wrong_owner_complete_and_audit'),
+('Analyst clears review','Owner selects Clear and supplies notes','UNDER_REVIEW to CLEARED','CLEARED; ledger retained and identity unchanged','Browser investigation drawer shows CLEARED','Owner and reviewed_at recorded; append-only history','test_three_review_outcomes_browser_database_and_audit'),
+('Analyst confirms risk','Owner selects Confirm Risk and supplies notes','UNDER_REVIEW to CONFIRMED_RISK','CONFIRMED_RISK; ledger retained','Browser drawer shows CONFIRMED_RISK','Owner and timestamp recorded; prior history preserved','test_three_review_outcomes_browser_database_and_audit'),
+('Analyst escalates review','Owner selects Escalate and supplies notes','UNDER_REVIEW to ESCALATED','ESCALATED; ledger retained','Browser drawer shows ESCALATED','Owner and timestamp recorded; escalation remains explicit','test_three_review_outcomes_browser_database_and_audit'),
+('Two Analysts claim same review','Two simultaneous claim requests','One succeeds, one conflicts; no second owner','HTTP 200/409 and exactly two review-history rows','API conflict protects UI; wrong-owner browser is read-only','One authoritative owner change; no competing successful claim','test_two_simultaneous_claims_have_one_owner'),
+('Auditor mutation denied','Auditor submits financial note/mutation','Reject server-side regardless of UI','403; no financial authority granted','Auditor browser has no decision controls','Denied action is not a successful business event; API request status recorded','test_no_nonanalyst_notes'),
+('Admin creates, disables, reactivates user','Named local record with role/status and mandatory reason','Create without credential; disable blocks sign-in; reactivate preserves identity','User registry governs access; not a SQL financial user table','Admin browser creates/manages user; disabled session returns 401','USER_CREATED/USER_DISABLED governance receipts and actor','test_disable_reactivate_and_role_change_preserve_identity_and_audit'),
+('Admin reassigns to/from Maintainer','Admin changes analyst02 to Maintainer then restores Analyst','Identity remains stable; Maintainer cannot assign reviews or manage users','Stable user ID; Maintainer financial/admin requests return 403','Session API immediately reflects new role; UI roles independently browser-tested','USER_ROLE_CHANGED summary plus before/after versioned governance receipt','test_admin_reassigns_maintainer_role_without_inheriting_financial_authority'),
+('Alert failure without transaction rollback','Mocked SES rejection then ambiguous response','FAILED, retry, UNKNOWN reconciliation; retain ledger/review','Exactly one transaction; review OPEN despite mail failure','Investigation API returns FAILED/UNKNOWN and reconciliation_required','Delivery evidence remains separate; do not fabricate ALERTED','test_alert_failed_retry_unknown_do_not_change_ledger_or_review'),
+('Technical failure and retry','Inject projection failure after SQL commit, then restore publisher','STORED, TECHNICAL_FAILURE, RETRY, RECOVERED; replay idempotent','One ledger addition; eight lifecycle events, no duplicated acceptance','Lifecycle API/shared timeline render; failure branch checked in SQL, not a live AWS DLQ','Sanitized error type, system actor, retained retry/recovery history','test_technical_failure_retry_recovery_preserves_committed_ledger'),
+('Report generation and visibility','Authorized account transactions plus another account; page limits','Aggregate authorized data; export current page CSV/JSON','Account-scoped report rows, valid pagination, no mixed-batch scope leak','Browser downloads checked row-for-row against Reports API','Report read/export is not a financial mutation; existing lifecycle remains intact','test_report_pagination_and_no_mixed_batch_scope_leak'),
+]
+
+def main():
+    p=argparse.ArgumentParser();p.add_argument('runs',nargs='+',type=Path);args=p.parse_args()
+    out=ROOT/'docs/EVIDENCE/12-e2e/scenario-verification';out.mkdir(parents=True,exist_ok=True)
+    tests=[];runs=[]
+    for run in args.runs:
+        run=run.resolve();xml=ET.parse(run/'results.xml')
+        cases=list(xml.iter('testcase'))
+        tests.extend({'name':c.attrib['name'],'suite':c.attrib.get('classname'),'passed':not any(c.find(x) is not None for x in ('failure','error','skipped')),'run':run.name} for c in cases)
+        dst=out/'runs'/run.name;dst.mkdir(parents=True,exist_ok=True)
+        for name in ('results.xml','test-output.txt'):shutil.copyfile(run/name,dst/name)
+        runs.append({'id':run.name,'passed':sum(not any(c.find(x) is not None for x in ('failure','error','skipped')) for c in cases),'failed':sum(c.find('failure') is not None or c.find('error') is not None for c in cases),'skipped':sum(c.find('skipped') is not None for c in cases)})
+    rows=[]
+    for i,(title,inp,flow,database,ui,audit,selector) in enumerate(CASES,1):
+        matched=[t for t in tests if t['name']==selector or t['name'].startswith(selector+'[')]
+        if not matched or not all(t['passed'] for t in matched):raise ValueError(f'Missing/pending/failed evidence for scenario {i}: {selector}')
+        rows.append({'id':i,'scenario':title,'INPUT':inp,'EXPECTED FLOW':flow,'DATABASE RESULT':database,'UI RESULT':ui,'AUDIT RESULT':audit,'ACTUAL RESULT':'Named assertions passed in current local run; evidence scope below applies','PASS / FAIL':'PASS','test_evidence':matched})
+    browsers={}
+    for name in ('investigation','multi-user','review-outcomes','csv-browser'):
+        f=out/name/'browser-result.json';data=json.loads(f.read_text(encoding='utf8'))
+        if data['status']!='PASSED':raise ValueError(f'Browser gate failed: {name}')
+        browsers[name]=data
+    report={'status':'LOCAL VERIFIED','source_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),'source_worktree_changes':['tests/test_scenario_outcomes.py','tools/verify_scenario_outcomes.cjs','tools/build_scenario_report.py'],'scenarios':rows,'runs':runs,'browser_gates':browsers,'aws_mutations':False,'limitations':['Real isolated loopback PostgreSQL; S3/SQS/DynamoDB/SES are mocked. This is not live AWS E2E.','UI RESULT explicitly identifies browser versus backend API evidence. Not every failure injection is separately replayed through a browser.','Local user governance is a hashed-token registry with versioned audit receipts, not production federation.','Reports exports cover the authorized current page; they are not complete ledger archives.','Read/export and rejected mutations do not fabricate business audit transitions.','Release 1 velocity remains >5 accepted transactions in the closed 300-second window.','No new UI, backend, schema, AWS or business-rule changes were required.']}
+    (out/'scenario-results.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf8')
+    lines=['# FinTrust local end-to-end scenario verification','',f"Baseline: `{report['source_commit']}` plus the focused tests named in the evidence. No AWS changes or push.",'','These scenarios combine real PostgreSQL integration assertions with authenticated UI API checks and four browser gates. Individual UI evidence is labeled below; shared browser coverage is not presented as an individual browser replay.','']
+    for r in rows:
+        lines.extend([f"## {r['id']}. {r['scenario']}",''])
+        for key in ('INPUT','EXPECTED FLOW','DATABASE RESULT','UI RESULT','AUDIT RESULT','ACTUAL RESULT','PASS / FAIL'):lines.extend([f"**{key}:** {r[key]}",''])
+        lines.extend(['Test evidence: '+', '.join(f"`{x['suite']}::{x['name']}` (run `{x['run']}`)" for x in r['test_evidence']),''])
+    lines+=['## Boundaries and presentation use','']+['- '+x for x in report['limitations']]+['','Run the named tests through `tools/run_release1_tests.py` in the project environment. The disposable schema is cleaned afterward; evidence captures outcomes, not a persistent demo dataset. Use CSV A/B via the existing browser gate for the visible upload/reconciliation presentation.','', 'Next: AWS Budgets review, exact-source Linux verification, separately approved AWS deployment/wiring and live E2E. AI remains planned.']
+    (out/'SCENARIO_RESULTS.md').write_text('\n'.join(lines)+'\n',encoding='utf8')
+    print(json.dumps({'scenarios_passed':len(rows),'runs':runs,'browser_gates':list(browsers)},indent=2))
+if __name__=='__main__':main()

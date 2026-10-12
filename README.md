@@ -82,3 +82,7 @@ Latest implementation `c35e41b`: **811 regression passed / 1 expected administra
 
 ## Evidence
 [docs/EVIDENCE/](docs/EVIDENCE/) preserves sanitized tests, historical AWS checks, failures and recovery. Local/mock success is not live deployment evidence.
+
+## Local end-to-end scenario verification
+
+The [20-scenario evidence record](docs/EVIDENCE/12-e2e/scenario-verification/SCENARIO_RESULTS.md) traces input, processing, database state, UI/API evidence, audit and final outcome. The final selected runs passed 125 tests with no failures or skips. Four browser gates cover investigation, multi-user workflows, all three review outcomes and CSV A/B admission/report exports. Each scenario labels direct browser evidence versus API evidence. AWS transports are mocked; live AWS E2E remains separately gated. No product logic, schema or business-rule change was needed.

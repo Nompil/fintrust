@@ -1,0 +1,578 @@
+{
+  "status": "LOCAL VERIFIED",
+  "source_commit": "3c14fb170b19c71b7b0924bee541064b139d1075",
+  "source_worktree_changes": [
+    "tests/test_scenario_outcomes.py",
+    "tools/verify_scenario_outcomes.cjs",
+    "tools/build_scenario_report.py"
+  ],
+  "scenarios": [
+    {
+      "id": 1,
+      "scenario": "Normal LOW-risk transaction",
+      "INPUT": "10 ZAR, ZA, unique source reference",
+      "EXPECTED FLOW": "Accept and score LOW; retain ledger without review",
+      "DATABASE RESULT": "One immutable ledger entry, Low, NOT_REQUIRED",
+      "UI RESULT": "Transactions/lifecycle API returns STORED and Low",
+      "AUDIT RESULT": "System lifecycle records source, actor and timestamps",
+      "ACTUAL RESULT": "Named assertions passed in current local run; evidence scope below applies",
+      "PASS / FAIL": "PASS",
+      "test_evidence": [
+        {
+          "name": "test_accepted_levels_stored_and_timeline_is_authoritative[10-ZA-Low-NOT_REQUIRED]",
+          "suite": "tests.test_transaction_lifecycle",
+          "passed": true,
+          "run": "ed1f7c8078a14bca84d4413e4a3d46c3"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "scenario": "MEDIUM-risk transaction",
+      "INPUT": "200000.01 ZAR, ZA",
+      "EXPECTED FLOW": "Accept, score MEDIUM, open review",
+      "DATABASE RESULT": "Ledger retained, Medium, OPEN",
+      "UI RESULT": "Transaction lifecycle API returns Medium and OPEN",
+      "AUDIT RESULT": "Frozen scoring evidence and ordered lifecycle",
+      "ACTUAL RESULT": "Named assertions passed in current local run; evidence scope below applies",
+      "PASS / FAIL": "PASS",
+      "test_evidence": [
+        {
+          "name": "test_accepted_levels_stored_and_timeline_is_authoritative[200000.01-ZA-Medium-OPEN]",
+          "suite": "tests.test_transaction_lifecycle",
+          "passed": true,
+          "run": "ed1f7c8078a14bca84d4413e4a3d46c3"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "scenario": "HIGH_AMOUNT",
+      "INPUT": "50000.01 ZAR",
+      "EXPECTED FLOW": "Trigger HIGH_AMOUNT; risk level remains combined score outcome",
+      "DATABASE RESULT": "Frozen rule measurement and threshold; ledger retained",
+      "UI RESULT": "Risk Event detail API exposes amount and threshold",
+      "AUDIT RESULT": "Rule created_at and immutable source evidence",
+      "ACTUAL RESULT": "Named assertions passed in current local run; evidence scope below applies",
+      "PASS / FAIL": "PASS",
+      "test_evidence": [
+        {
+          "name": "test_signals_have_frozen_measurement_and_timestamp[values0-HIGH_AMOUNT]",
+          "suite": "tests.test_risk_investigation",
+          "passed": true,
+          "run": "ed1f7c8078a14bca84d4413e4a3d46c3"
+        },
+        {
+          "name": "test_signals_have_frozen_measurement_and_timestamp[values1-CROSS_BORDER]",
+          "suite": "tests.test_risk_investigation",
+          "passed": true,
+          "run": "ed1f7c8078a14bca84d4413e4a3d46c3"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "scenario": "HIGH_VELOCITY",
+      "INPUT": "Six distinct accepted transactions in closed 300-second window",
+      "EXPECTED FLOW": "First five do not trigger; sixth triggers; test boundary timing",
+      "DATABASE RESULT": "HIGH_VELOCITY measured 6, threshold 5",
+      "UI RESULT": "Risk detail evidence supplies measured count and threshold",
+      "AUDIT RESULT": "Frozen signals identify actual transactions/time window",
+      "ACTUAL RESULT": "Named assertions passed in current local run; evidence scope below applies",
+      "PASS / FAIL": "PASS",
+      "test_evidence": [
+        {
+          "name": "test_velocity_closed_five_minute_time_boundary[300-True]",
+          "suite": "tests.test_release1_end_to_end",
+          "passed": true,
+          "run": "ed1f7c8078a14bca84d4413e4a3d46c3"
+        },
+        {
+          "name": "test_velocity_closed_five_minute_time_boundary[300.000001-False]",
+          "suite": "tests.test_release1_end_to_end",
+          "passed": true,
+          "run": "ed1f7c8078a14bca84d4413e4a3d46c3"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "scenario": "CROSS_BORDER",
+      "INPUT": "Country US, valid amount/reference",
+      "EXPECTED FLOW": "Accept foreign-country transaction and retain signal; not invalid data",
+      "DATABASE RESULT": "CROSS_BORDER signal with frozen measurement",
+      "UI RESULT": "Risk detail API exposes location, context and threshold",
+      "AUDIT RESULT": "Signal created_at is present",
+      "ACTUAL RESULT": "Named assertions passed in current local run; evidence scope below applies",
+      "PASS / FAIL": "PASS",
+      "test_evidence": [
+        {
+          "name": "test_signals_have_frozen_measurement_and_timestamp[values0-HIGH_AMOUNT]",
+          "suite": "tests.test_risk_investigation",
+          "passed": true,
+          "run": "ed1f7c8078a14bca84d4413e4a3d46c3"
+        },
+        {
+          "name": "test_signals_have_frozen_measurement_and_timestamp[values1-CROSS_BORDER]",
+          "suite": "tests.test_risk_investigation",
+          "passed": true,
+          "run": "ed1f7c8078a14bca84d4413e4a3d46c3"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "scenario": "POSSIBLE_DUPLICATE_CHARGE",
+      "INPUT": "Two unique references, same 123 ZAR merchant within 30 seconds",
+      "EXPECTED FLOW": "Keep both genuine identities; flag similarity within 120 seconds",
+      "DATABASE RESULT": "Rule records matching transaction IDs, threshold 120",
+      "UI RESULT": "Risk detail uses frozen rule evidence",
+      "AUDIT RESULT": "Source references and separate identities remain traceable",
+      "ACTUAL RESULT": "Named assertions passed in current local run; evidence scope below applies",
+      "PASS / FAIL": "PASS",
+      "test_evidence": [
+        {
+          "name": "test_velocity_closed_window_and_duplicate_charge_evidence",
+          "suite": "tests.test_risk_investigation",
+          "passed": true,
+          "run": "ed1f7c8078a14bca84d4413e4a3d46c3"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "scenario": "Invalid transaction to quarantine",
+      "INPUT": "Amount bad",
+      "EXPECTED FLOW": "Reject row from ledger; quarantine safe original",
+      "DATABASE RESULT": "Original occurrence remains QUARANTINED",
+      "UI RESULT": "Quarantine detail/API retains validation issue and source",
+      "AUDIT RESULT": "RECEIVED, QUEUED, QUARANTINED system events",
+      "ACTUAL RESULT": "Named assertions passed in current local run; evidence scope below applies",
+      "PASS / FAIL": "PASS",
+      "test_evidence": [
+        {
+          "name": "test_quarantine_correction_revalidates_new_occurrence_without_overwrite",
+          "suite": "tests.test_transaction_lifecycle",
+          "passed": true,
+          "run": "ed1f7c8078a14bca84d4413e4a3d46c3"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "scenario": "Correct quarantine, revalidate, accepted",
+      "INPUT": "Analyst submits numeric amount with reason",
+      "EXPECTED FLOW": "Create correction occurrence; worker revalidates and scores",
+      "DATABASE RESULT": "New occurrence STORED; original QUARANTINED; one ledger addition",
+      "UI RESULT": "Quarantine recovery API links resulting transaction and attempts",
+      "AUDIT RESULT": "Human CORRECTED plus system REVALIDATED; original history preserved",
+      "ACTUAL RESULT": "Named assertions passed in current local run; evidence scope below applies",
+      "PASS / FAIL": "PASS",
+      "test_evidence": [
+        {
+          "name": "test_correction_failed_then_valid_or_duplicate_with_link_and_immutable_history[False]",
+          "suite": "tests.test_multi_user_operations",
+          "passed": true,
+          "run": "ed1f7c8078a14bca84d4413e4a3d46c3"
+        },
+        {
+          "name": "test_correction_failed_then_valid_or_duplicate_with_link_and_immutable_history[True]",
+          "suite": "tests.test_multi_user_operations",
+          "passed": true,
+          "run": "ed1f7c8078a14bca84d4413e4a3d46c3"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "scenario": "HIGH, Risk Event, Alert, Review Queue",
+      "INPUT": "200000.01 ZAR, US; mocked successful mail provider",
+      "EXPECTED FLOW": "Keep HIGH ledger, open review, send idempotent alert",
+      "DATABASE RESULT": "SENT independently of OPEN review; one canonical ledger entry",
+      "UI RESULT": "Investigation detail API shows SENT; queue remains OPEN",
+      "AUDIT RESULT": "ALERTED only after durable SENT evidence",
+      "ACTUAL RESULT": "Named assertions passed in current local run; evidence scope below applies",
+      "PASS / FAIL": "PASS",
+      "test_evidence": [
+        {
+          "name": "test_successful_alert_remains_independent_of_review",
+          "suite": "tests.test_risk_investigation",
+          "passed": true,
+          "run": "ed1f7c8078a14bca84d4413e4a3d46c3"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "scenario": "Analyst claims review",
+      "INPUT": "Active Analyst claims unassigned HIGH review",
+      "EXPECTED FLOW": "OPEN to UNDER_REVIEW with single owner",
+      "DATABASE RESULT": "Reviewer set; stale/wrong owner rejected",
+      "UI RESULT": "Browser Claim Review reveals owned investigation actions",
+      "AUDIT RESULT": "Assignment history attributes analyst01",
+      "ACTUAL RESULT": "Named assertions passed in current local run; evidence scope below applies",
+      "PASS / FAIL": "PASS",
+      "test_evidence": [
+        {
+          "name": "test_claim_wrong_owner_complete_and_audit",
+          "suite": "tests.test_multi_user_operations",
+          "passed": true,
+          "run": "ed1f7c8078a14bca84d4413e4a3d46c3"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "scenario": "Analyst clears review",
+      "INPUT": "Owner selects Clear and supplies notes",
+      "EXPECTED FLOW": "UNDER_REVIEW to CLEARED",
+      "DATABASE RESULT": "CLEARED; ledger retained and identity unchanged",
+      "UI RESULT": "Browser investigation drawer shows CLEARED",
+      "AUDIT RESULT": "Owner and reviewed_at recorded; append-only history",
+      "ACTUAL RESULT": "Named assertions passed in current local run; evidence scope below applies",
+      "PASS / FAIL": "PASS",
+      "test_evidence": [
+        {
+          "name": "test_three_review_outcomes_browser_database_and_audit",
+          "suite": "tests.test_scenario_outcomes",
+          "passed": true,
+          "run": "7796a569eb4a48f18b897ffb25a6ca7d"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "scenario": "Analyst confirms risk",
+      "INPUT": "Owner selects Confirm Risk and supplies notes",
+      "EXPECTED FLOW": "UNDER_REVIEW to CONFIRMED_RISK",
+      "DATABASE RESULT": "CONFIRMED_RISK; ledger retained",
+      "UI RESULT": "Browser drawer shows CONFIRMED_RISK",
+      "AUDIT RESULT": "Owner and timestamp recorded; prior history preserved",
+      "ACTUAL RESULT": "Named assertions passed in current local run; evidence scope below applies",
+      "PASS / FAIL": "PASS",
+      "test_evidence": [
+        {
+          "name": "test_three_review_outcomes_browser_database_and_audit",
+          "suite": "tests.test_scenario_outcomes",
+          "passed": true,
+          "run": "7796a569eb4a48f18b897ffb25a6ca7d"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "scenario": "Analyst escalates review",
+      "INPUT": "Owner selects Escalate and supplies notes",
+      "EXPECTED FLOW": "UNDER_REVIEW to ESCALATED",
+      "DATABASE RESULT": "ESCALATED; ledger retained",
+      "UI RESULT": "Browser drawer shows ESCALATED",
+      "AUDIT RESULT": "Owner and timestamp recorded; escalation remains explicit",
+      "ACTUAL RESULT": "Named assertions passed in current local run; evidence scope below applies",
+      "PASS / FAIL": "PASS",
+      "test_evidence": [
+        {
+          "name": "test_three_review_outcomes_browser_database_and_audit",
+          "suite": "tests.test_scenario_outcomes",
+          "passed": true,
+          "run": "7796a569eb4a48f18b897ffb25a6ca7d"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "scenario": "Two Analysts claim same review",
+      "INPUT": "Two simultaneous claim requests",
+      "EXPECTED FLOW": "One succeeds, one conflicts; no second owner",
+      "DATABASE RESULT": "HTTP 200/409 and exactly two review-history rows",
+      "UI RESULT": "API conflict protects UI; wrong-owner browser is read-only",
+      "AUDIT RESULT": "One authoritative owner change; no competing successful claim",
+      "ACTUAL RESULT": "Named assertions passed in current local run; evidence scope below applies",
+      "PASS / FAIL": "PASS",
+      "test_evidence": [
+        {
+          "name": "test_two_simultaneous_claims_have_one_owner",
+          "suite": "tests.test_multi_user_operations",
+          "passed": true,
+          "run": "ed1f7c8078a14bca84d4413e4a3d46c3"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "scenario": "Auditor mutation denied",
+      "INPUT": "Auditor submits financial note/mutation",
+      "EXPECTED FLOW": "Reject server-side regardless of UI",
+      "DATABASE RESULT": "403; no financial authority granted",
+      "UI RESULT": "Auditor browser has no decision controls",
+      "AUDIT RESULT": "Denied action is not a successful business event; API request status recorded",
+      "ACTUAL RESULT": "Named assertions passed in current local run; evidence scope below applies",
+      "PASS / FAIL": "PASS",
+      "test_evidence": [
+        {
+          "name": "test_no_nonanalyst_notes[admin01]",
+          "suite": "tests.test_risk_investigation",
+          "passed": true,
+          "run": "ed1f7c8078a14bca84d4413e4a3d46c3"
+        },
+        {
+          "name": "test_no_nonanalyst_notes[auditor01]",
+          "suite": "tests.test_risk_investigation",
+          "passed": true,
+          "run": "ed1f7c8078a14bca84d4413e4a3d46c3"
+        },
+        {
+          "name": "test_no_nonanalyst_notes[maintainer01]",
+          "suite": "tests.test_risk_investigation",
+          "passed": true,
+          "run": "ed1f7c8078a14bca84d4413e4a3d46c3"
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "scenario": "Admin creates, disables, reactivates user",
+      "INPUT": "Named local record with role/status and mandatory reason",
+      "EXPECTED FLOW": "Create without credential; disable blocks sign-in; reactivate preserves identity",
+      "DATABASE RESULT": "User registry governs access; not a SQL financial user table",
+      "UI RESULT": "Admin browser creates/manages user; disabled session returns 401",
+      "AUDIT RESULT": "USER_CREATED/USER_DISABLED governance receipts and actor",
+      "ACTUAL RESULT": "Named assertions passed in current local run; evidence scope below applies",
+      "PASS / FAIL": "PASS",
+      "test_evidence": [
+        {
+          "name": "test_disable_reactivate_and_role_change_preserve_identity_and_audit",
+          "suite": "tests.test_multi_user_operations",
+          "passed": true,
+          "run": "ed1f7c8078a14bca84d4413e4a3d46c3"
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "scenario": "Admin reassigns to/from Maintainer",
+      "INPUT": "Admin changes analyst02 to Maintainer then restores Analyst",
+      "EXPECTED FLOW": "Identity remains stable; Maintainer cannot assign reviews or manage users",
+      "DATABASE RESULT": "Stable user ID; Maintainer financial/admin requests return 403",
+      "UI RESULT": "Session API immediately reflects new role; UI roles independently browser-tested",
+      "AUDIT RESULT": "USER_ROLE_CHANGED summary plus before/after versioned governance receipt",
+      "ACTUAL RESULT": "Named assertions passed in current local run; evidence scope below applies",
+      "PASS / FAIL": "PASS",
+      "test_evidence": [
+        {
+          "name": "test_admin_reassigns_maintainer_role_without_inheriting_financial_authority",
+          "suite": "tests.test_scenario_outcomes",
+          "passed": true,
+          "run": "7796a569eb4a48f18b897ffb25a6ca7d"
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "scenario": "Alert failure without transaction rollback",
+      "INPUT": "Mocked SES rejection then ambiguous response",
+      "EXPECTED FLOW": "FAILED, retry, UNKNOWN reconciliation; retain ledger/review",
+      "DATABASE RESULT": "Exactly one transaction; review OPEN despite mail failure",
+      "UI RESULT": "Investigation API returns FAILED/UNKNOWN and reconciliation_required",
+      "AUDIT RESULT": "Delivery evidence remains separate; do not fabricate ALERTED",
+      "ACTUAL RESULT": "Named assertions passed in current local run; evidence scope below applies",
+      "PASS / FAIL": "PASS",
+      "test_evidence": [
+        {
+          "name": "test_alert_failed_retry_unknown_do_not_change_ledger_or_review",
+          "suite": "tests.test_risk_investigation",
+          "passed": true,
+          "run": "ed1f7c8078a14bca84d4413e4a3d46c3"
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "scenario": "Technical failure and retry",
+      "INPUT": "Inject projection failure after SQL commit, then restore publisher",
+      "EXPECTED FLOW": "STORED, TECHNICAL_FAILURE, RETRY, RECOVERED; replay idempotent",
+      "DATABASE RESULT": "One ledger addition; eight lifecycle events, no duplicated acceptance",
+      "UI RESULT": "Lifecycle API/shared timeline render; failure branch checked in SQL, not a live AWS DLQ",
+      "AUDIT RESULT": "Sanitized error type, system actor, retained retry/recovery history",
+      "ACTUAL RESULT": "Named assertions passed in current local run; evidence scope below applies",
+      "PASS / FAIL": "PASS",
+      "test_evidence": [
+        {
+          "name": "test_technical_failure_retry_recovery_preserves_committed_ledger",
+          "suite": "tests.test_transaction_lifecycle",
+          "passed": true,
+          "run": "ed1f7c8078a14bca84d4413e4a3d46c3"
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "scenario": "Report generation and visibility",
+      "INPUT": "Authorized account transactions plus another account; page limits",
+      "EXPECTED FLOW": "Aggregate authorized data; export current page CSV/JSON",
+      "DATABASE RESULT": "Account-scoped report rows, valid pagination, no mixed-batch scope leak",
+      "UI RESULT": "Browser downloads checked row-for-row against Reports API",
+      "AUDIT RESULT": "Report read/export is not a financial mutation; existing lifecycle remains intact",
+      "ACTUAL RESULT": "Named assertions passed in current local run; evidence scope below applies",
+      "PASS / FAIL": "PASS",
+      "test_evidence": [
+        {
+          "name": "test_report_pagination_and_no_mixed_batch_scope_leak",
+          "suite": "tests.test_release1_end_to_end",
+          "passed": true,
+          "run": "ed1f7c8078a14bca84d4413e4a3d46c3"
+        }
+      ]
+    }
+  ],
+  "runs": [
+    {
+      "id": "ed1f7c8078a14bca84d4413e4a3d46c3",
+      "passed": 122,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "id": "7796a569eb4a48f18b897ffb25a6ca7d",
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "id": "c7d296f2ccf54bf1ada2c3dff15290e0",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "browser_gates": {
+    "investigation": {
+      "status": "PASSED",
+      "checks": [
+        "scoped scenario filter",
+        "queue retained",
+        "North Star evidence drawer",
+        "claim",
+        "append notes",
+        "immutable history",
+        "Escape close",
+        "quarantine split detail",
+        "wrong Analyst read-only",
+        "Auditor read-only",
+        "mobile",
+        "user filter"
+      ],
+      "external_network": "blocked"
+    },
+    "multi-user": {
+      "status": "PASSED",
+      "checks": [
+        "named sign-in",
+        "self claim",
+        "My reviews",
+        "quarantine timeline",
+        "Users UI",
+        "Admin assignment",
+        "wrong Analyst no decision",
+        "Auditor read-only",
+        "mobile render"
+      ],
+      "external_network": "blocked"
+    },
+    "review-outcomes": {
+      "status": "PASSED",
+      "checks": [
+        "claim then clear",
+        "claim then confirm risk",
+        "claim then escalate",
+        "decision visible in investigation drawer"
+      ],
+      "external_network": "blocked",
+      "aws_access": false
+    },
+    "csv-browser": {
+      "status": "PASSED",
+      "analyst_navigation_priority_verified": true,
+      "business_metric_values_verified": true,
+      "upload_outcome_navigation_verified": true,
+      "batch_details_secondary_verified": true,
+      "related_risk_review_and_source_batch_verified": true,
+      "root_workspace_verified": true,
+      "analyst_upload_receipt_link_verified": true,
+      "session_expiry_on_read_and_upload_verified": true,
+      "source_commit": "3c14fb170b19c71b7b0924bee541064b139d1075",
+      "browser": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+      "pages": [
+        "Login",
+        "Overview",
+        "Rejected Uploads",
+        "Notifications",
+        "Transactions",
+        "Risk Events",
+        "Review Queue",
+        "Quarantine",
+        "Ingestion Batches",
+        "Reports",
+        "Insights",
+        "Accounts",
+        "Account History",
+        "Audit",
+        "Operations",
+        "Administration",
+        "Transaction Detail",
+        "Batch Detail",
+        "Quarantine Detail"
+      ],
+      "dataset_sequence": "A -> B -> exact A replay",
+      "charts_verified": 8,
+      "analyst_and_auditor_chart_values_verified": true,
+      "display_uuid_transport_verified": true,
+      "metric_error_vs_zero_verified": true,
+      "friendly_insight_failure_recovery_verified": true,
+      "role_switch_method": "Sign out and backend-authenticated token sign in",
+      "user_creation_audited": true,
+      "report_csv_verified": true,
+      "report_json_verified": true,
+      "account_history_navigation_verified": true,
+      "admin_compliance_actions": 0,
+      "upload_counts": {
+        "A": {
+          "accepted": 29,
+          "quarantined": 12,
+          "duplicates": 1
+        },
+        "B": {
+          "accepted": 7,
+          "quarantined": 4,
+          "duplicates": 1
+        }
+      },
+      "invalid_file_rejected": true,
+      "notice_persists_until_acknowledged": true,
+      "review_mutation": "OPEN -> UNDER_REVIEW -> CLEARED",
+      "quarantine_mutation": "RESUBMITTED (worker revalidation pending)",
+      "roles_verified": [
+        "Admin",
+        "Risk/Compliance Analyst",
+        "Read-only/Auditor",
+        "Maintainer"
+      ],
+      "loading_error_empty_verified": true,
+      "old_role_response_discarded": true,
+      "auditor_mutation_buttons": 0,
+      "maintainer_compliance_pages": 0,
+      "maintainer_technical_actions_visible": true,
+      "page_errors": [],
+      "aws_access": false
+    }
+  },
+  "aws_mutations": false,
+  "limitations": [
+    "Real isolated loopback PostgreSQL; S3/SQS/DynamoDB/SES are mocked. This is not live AWS E2E.",
+    "UI RESULT explicitly identifies browser versus backend API evidence. Not every failure injection is separately replayed through a browser.",
+    "Local user governance is a hashed-token registry with versioned audit receipts, not production federation.",
+    "Reports exports cover the authorized current page; they are not complete ledger archives.",
+    "Read/export and rejected mutations do not fabricate business audit transitions.",
+    "Release 1 velocity remains >5 accepted transactions in the closed 300-second window.",
+    "No new UI, backend, schema, AWS or business-rule changes were required."
+  ]
+}
