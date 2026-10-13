@@ -1,17 +1,18 @@
 {
   "title": "FinTrust Project Progress",
   "subtitle": "Single living status and milestone record",
-  "checkpoint": "d4e7653",
+  "checkpoint": "0056a59",
   "date": "13 October 2026",
   "sections": [
     {
       "title": "Current Snapshot",
       "status": "LOCAL VERIFIED",
       "paragraphs": [
-        "13 October 2026 | Implementation checkpoint d4e7653 | Local E2E verified; live AWS E2E pending. Existing budget controls verified and preserved.",
+        "13 October 2026 | Current local checkpoint 0056a59 | Local E2E verified; live AWS E2E pending. Existing budget controls verified and preserved.",
         "20 scenarios have passing local evidence across 125 selected tests, real isolated PostgreSQL, authenticated UI/API checks and mocked AWS transports. Individual browser versus API evidence is labeled. Historical full regression remains 811 passed / 1 expected administrator-only skip; that result belongs to the prior workbench phase; current UX regression is recorded below.",
         "Read-only AWS check verified fintrust-admin in account 966467878406 and infrastructure region af-south-1. The five foundation/ingest stacks remain CREATE_COMPLETE. Existing ingest concurrency remains 0; RDS remains private Single-AZ with 20 GiB gp3. No AWS mutation, deployment or push occurred.",
-        "13 October 2026 | Analyst UX correction locally verified: 35 focused tests passed, full browser gate passed, final investigation browser passed. Regression: 823 full-suite passes / 1 expected administrator-only skip; one stale navigation harness failed, was corrected and its two checks passed on targeted rerun. Total: 824 checks verified. Quarantine correction stays in the investigation drawer through worker revalidation and accepted-transaction linkage. Risk review claim, note and Clear preserve queue context. Grouped navigation, Admin-only Users, batch rejected-upload history, business-first transaction details and ten backend-backed Insights charts are verified. Implementation commit: d4e7653."
+        "13 October 2026 | Analyst UX correction locally verified: 35 focused tests passed, full browser gate passed, final investigation browser passed. Regression: 823 full-suite passes / 1 expected administrator-only skip; one stale navigation harness failed, was corrected and its two checks passed on targeted rerun. Total: 824 checks verified. Quarantine correction stays in the investigation drawer through worker revalidation and accepted-transaction linkage. Risk review claim, note and Clear preserve queue context. Grouped navigation, Admin-only Users, batch rejected-upload history, business-first transaction details and ten backend-backed Insights charts are verified. Implementation commit: d4e7653.",
+        "13 October 2026 | Workflow continuity and own-upload correction locally verified: 847 regression passed, 1 expected administrator-only skip, zero failures; final four-role browser passed; three investigation/missing-evidence/own-upload browser checks passed. Implementation: 209700a. AWS untouched; no schema change, credential reset or push."
       ],
       "table": null
     },
@@ -24,7 +25,11 @@
         "Named user governance, private local enrollment, active-role checks, immutable quarantine correction/outcome timeline, single-owner review claim/reassignment including escalated recovery, scoped queue filters and Admin/Analyst/Auditor browser controls.",
         "Scoped Risk Event investigation, measured frozen rule evidence, same-currency account context, related transactions, filtered counts/sort, list-preserving detail, append-only Analyst notes, independent delivery state and compact user search. Existing quarantine/assignment controls remain verified.",
         "Direct UI wording at 58fa83f, followed by README and authoritative documentation cleanup. Analyst workbench: six scoped metrics, active-review table, four evidence charts, issue links, independent errors and no fabricated SLA. Risk Events adds the existing Over SLA path; quarantine adds recorded age and a clear correction action; Admin user sorting/filtering and disable/reactivate remain verified.",
-        "Existing FinTrust-Monthly-Budget (USD 10/month; 50/80/100% ACTUAL and 100% FORECASTED) and My Zero-Spend Budget (ACTUAL > USD 0.01) verified, healthy and preserved. Same existing email subscriber on all five alerts; masked evidence retained. No duplicate/replacement budget created or current budget deleted."
+        "Existing FinTrust-Monthly-Budget (USD 10/month; 50/80/100% ACTUAL and 100% FORECASTED) and My Zero-Spend Budget (ACTUAL > USD 0.01) verified, healthy and preserved. Same existing email subscriber on all five alerts; masked evidence retained. No duplicate/replacement budget created or current budget deleted.",
+        "13 October 2026 | Workflow continuity and own-upload correction locally verified: 847 regression passed, 1 expected administrator-only skip, zero failures; final four-role browser passed; three investigation/missing-evidence/own-upload browser checks passed. Implementation: 209700a. AWS untouched; no schema change, credential reset or push.",
+        "Local mock evidence/projections/alert claims survive restart; missing originals no longer hide case metadata/audit, and new correction fails closed. Field-based correction, worker outcome linkage, accepted-transaction and row lifecycle, compact quarantine queue, typed filters, human age and honest report periods are verified.",
+        "Approved own unknown-account correction uses immutable first authenticated upload authority and an existing assigned target. Duplicate upload cannot transfer ownership; known unassigned accounts and historical unowned cases remain denied. Admin/Auditor/Maintainer financial correction remains denied.",
+        "Running local server uses existing users/credentials and preserved financial/audit rows. No reset, seed, AWS contact or push."
       ],
       "table": null
     },
@@ -200,7 +205,8 @@
         "Reuse existing immutable correction/review history and current state models. Explicit Admin reassignment preserves escalated decision evidence. Keep SLA configurable without inventing a deadline; retain controlled local authentication and no role inheritance.",
         "Datadog official investigation guidance informs information density and side-panel interactions only; the original FinTrust brief, RBAC and frozen risk rules remain authoritative. Reuse immutable review history for notes through additive 005; no second review model.",
         "Reuse existing scoped read APIs for workbench counts. Display Not configured when no SLA exists; distinguish high-risk flags from delivery receipts; disclose bounded and overlapping counts. Keep human decisions, quarantine recovery and RBAC unchanged.",
-        "Preserve working budget names rather than create replacements. Budget thresholds are warnings, not a cap. Keep account-wide controls until activated cost tags and full attribution are reviewed; do not claim recipient delivery from subscriber configuration alone."
+        "Preserve working budget names rather than create replacements. Budget thresholds are warnings, not a cap. Keep account-wide controls until activated cost tags and full attribution are reviewed; do not claim recipient delivery from subscriber configuration alone.",
+        "Approve Analyst correction of own unknown-account rows only: original authenticated first-upload receipt; corrected account must exist and be assigned; duplicate replay cannot confer ownership. No new schema or broader role authority."
       ],
       "table": null
     },
@@ -212,7 +218,8 @@
         "Live database missing base schema: read-only preflight stopped incremental migration; temporary billable infrastructure cleaned up, evidence retained.",
         "Stale local entry and login restart: authenticated workspace routing and existing hashed identity preservation fixed.",
         "Lifecycle recovery: distinguish durable financial STORED from external projection failure; compare latest failure/recovery sequence so multiple failed attempts recover correctly.",
-        "Unresolved: current-source Linux gate, live bootstrap/003/004/005 privileges and integration. No claim of production readiness."
+        "Unresolved: current-source Linux gate, live bootstrap/003/004/005 privileges and integration. No claim of production readiness.",
+        "Observed Quarantine 503 isolated to lost in-memory original object versions after local restart. Durable ignored synthetic store added; exact version integrity checked; old missing evidence produces metadata/audit plus blocked writes. Browser checks were updated for actual CSV row numbering, governance-only Audit and newly approved mixed-batch visibility; final clean results supersede those failed intermediate checks."
       ],
       "table": null
     },
@@ -220,10 +227,12 @@
       "title": "Evidence and Maintenance",
       "status": "LOCAL VERIFIED",
       "paragraphs": [
-        "Latest proof: docs/EVIDENCE/12-e2e/analyst-workbench/verification-summary.json, regression/affected output and browser screenshots. Prior UI-copy, investigation, multi-user and AWS evidence remains unchanged.",
+        "Historical workbench proof: docs/EVIDENCE/12-e2e/analyst-workbench/verification-summary.json, regression/affected output and browser screenshots. Prior UI-copy, investigation, multi-user and AWS evidence remains unchanged.",
         "Edit docs/source/project-progress.json and regenerate with python tools/build_project_docs.py. Keep historical results and explicit dates; do not overwrite evidence or mint another standalone status report.",
         "Budget configuration: docs/EVIDENCE/01-budget/2026-10-13-budget-control-verification.json and masked settings evidence. Local scenarios: docs/EVIDENCE/12-e2e/scenario-verification/SCENARIO_RESULTS.md. Historical evidence remains unchanged.",
-        "Current UX proof: docs/EVIDENCE/12-e2e/analyst-ux-correction/verification-summary.json, isolated PostgreSQL regression results and authenticated browser screenshots. No AWS mutation, Linux gate, schema change or credential reset occurred in this phase. Restart the local server to load the updated read-only Insights endpoint. Live AWS E2E remains pending."
+        "Current UX proof: docs/EVIDENCE/12-e2e/analyst-ux-correction/verification-summary.json, isolated PostgreSQL regression results and authenticated browser screenshots. No AWS mutation, Linux gate, schema change or credential reset occurred in this phase. Current port-5001 server restart is verified in workflow-continuity evidence. Live AWS E2E remains pending.",
+        "Current proof: docs/EVIDENCE/12-e2e/workflow-continuity/. Preserve ignored build/local-runtime with the local database; it contains synthetic original evidence and mock delivery claims, not credentials. Historical counts remain dated. Local completeness does not prove live AWS readiness.",
+        "Final navigation/copy polish: 0056a59. Recovered transactions activate Transactions, not Quarantine; LOW entries use Risk Assessment. Three focused browser checks passed; a stalled investigation attempt was rerun alone and passed. Earlier full-suite result remains 847 passed / 1 expected skip; the final polish has targeted browser verification, not a second full-suite claim."
       ],
       "table": null
     }

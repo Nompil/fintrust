@@ -1,0 +1,64 @@
+{
+  "status": "LOCAL_WORKFLOW_VERIFIED",
+  "implementation_commit": "209700ab3768086e1d2757df3b608036dcc5b30d",
+  "tested_source_sha256": {
+    "backend/fintrust/evidence_reads.py": "e6b0be33c29532c2d2a92085d79f91a239ad8fcaf062a49185626f32eefa6da1",
+    "backend/fintrust/upload_ownership.py": "26b90779125d00b4a065b49c22e6efce8a71bd5c49347b36533f41fd4bb5d93f",
+    "backend/fintrust/frontend_workflows.py": "0234296804601453b51f913095bed725280345d997c232dddf96a14ef5459e54",
+    "backend/fintrust/investigation.py": "5fe7cdc58d906d9ecfe0a2e433153afadf63e7e44e0b601286c6bdb6d0e85770",
+    "backend/fintrust/lifecycle_api.py": "e37433d18f6cd0a287b51373f86bdeaf47a438786a146afa451f8784bc1465d3",
+    "backend/fintrust/operations.py": "b40fd6e481d063a7e5fb5dd6e536f0d5edc6f70efb0eeca1c7acb6fd0fdd483a",
+    "backend/fintrust/quarantine_recovery.py": "97be06231e5250d0bd9a5b31da2e01d301c4eedb27def578636042378796f9a2",
+    "backend/fintrust/workflow_api.py": "41d774168be145e93cdfb05c7ad08fdd0ffddffca37aa3ea4052773c5727858a",
+    "frontend/css/release1.css": "bd8c6911306d78e650923996e7e5d051903188c0b3cc61dce6ff27f11c862e89",
+    "frontend/js/release1.js": "2362c8624c6741e8093d70c42254c140c7e1a3b7d6340b004dfabb02f041bc70",
+    "frontend/js/release1-workflows.js": "154b2b737c262b17e1caf7da31a423a8b8c4b64b9e4a264c7e1196b8956a51c8",
+    "frontend/release1.html": "23ae65be7ada6e4583a1dd9e499598dabef2fca2d9fd47d7ff13af0fa9659e14",
+    "tools/local_runtime_store.py": "5566c5b86f69c5dfb52c18ece717ebee5cf231d6b56118df04caa96bd34b3d7a",
+    "tools/serve_release1_demo.py": "5a4006e9cc602296aa9af54f247df7e80c13e550bf886e1ba6adf4496488faa7",
+    "tools/verify_release1_ui.cjs": "e48f756825c4b289851fb7a4eef9886fac0e86278ec5571184d1925b24e97c4c",
+    "tools/verify_investigation_ui.cjs": "609cda64e62df64cc5b274ab81c73100a98fffda4c4efe6caadc0ab2d5f562d5",
+    "tools/verify_missing_evidence_ui.cjs": "53ab47a7bae2ed55b4bbaf904306cc8db7200e4f372b96809367ef44727aa039",
+    "tools/verify_owned_quarantine_ui.cjs": "062a6863a3e8214a52d3595e03ede9a42b25e0fb022768738fd93bba3519eb1e"
+  },
+  "source_note": "Backend implementation 209700a passed full regression (847/1 expected skip). Final UI/navigation and browser harness polish 0056a59 was verified by the four-role browser plus targeted browser checks; no second full-suite or exact-source Linux claim.",
+  "regression": {
+    "tests": 848,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 1,
+    "passed": 847
+  },
+  "four_role_browser": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 1
+  },
+  "investigation_browser": {
+    "passed": 3,
+    "evidence": "owned-unknown, investigation and missing-evidence screenshots"
+  },
+  "approved_authorization_change": "Analyst may correct genuinely unknown/missing-account rows from own original authenticated local uploads; corrected account must exist and be assigned. Duplicate upload does not transfer ownership.",
+  "old_evidence_limitation": "Original version-pinned object bytes already lost before this phase cannot be reconstructed. Historical unowned/missing-original cases remain visible under existing authority but fail closed for new writes.",
+  "aws_mutation": false,
+  "sql_schema_change": false,
+  "credentials_modified": false,
+  "push": false,
+  "remaining_cloud_gates": [
+    "Exact-source Linux CPython 3.12 verification",
+    "Controlled private RDS bootstrap and migrations",
+    "Deployment and S3/FIFO/worker/projection/correction wiring",
+    "SES/retry/DLQ/report delivery live evidence",
+    "Live AWS end-to-end verification"
+  ],
+  "final_polish_commit": "0056a59a05a5b9f9d3fcad606eab6979add83053",
+  "final_polish_checks": {
+    "missing_evidence_owned_unknown_workbench": 3,
+    "investigation_rerun": 1,
+    "interrupted_attempt": "Final investigation attempt timed out during stalled local PostgreSQL request; rerun passed in 42.67 seconds. The three other checks passed.",
+    "result": "PASSED",
+    "navigation": "Recovered ledger detail activates Transactions, with accepted-transaction purpose. LOW uses Risk Assessment."
+  }
+}

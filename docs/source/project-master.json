@@ -1,7 +1,7 @@
 {
   "title": "FinTrust Project Master",
   "subtitle": "Transaction Monitoring & Risk Alert Platform",
-  "checkpoint": "d4e7653",
+  "checkpoint": "0056a59",
   "date": "13 October 2026",
   "sections": [
     {
@@ -10,7 +10,8 @@
       "paragraphs": [
         "FinTrust is a transaction monitoring and risk investigation platform. It accepts CSV files, preserves transaction identity and source evidence, scores risk and records each review decision. It does not move funds, reverse charges or establish fraud.",
         "Earlier local E2E checkpoint 48399b9: local E2E verified through 20 scenarios and 125 selected tests, real isolated PostgreSQL, authenticated UI/API checks and mocked AWS services. The historical workbench regression remains 811 passed / 1 expected skip. Existing monthly and zero-spend budget configuration is live verified and preserved; exact-source Linux verification and live AWS E2E remain pending.",
-        "13 October 2026 | Analyst UX correction locally verified: 35 focused tests passed, full browser gate passed, final investigation browser passed. Regression: 823 full-suite passes / 1 expected administrator-only skip; one stale navigation harness failed, was corrected and its two checks passed on targeted rerun. Total: 824 checks verified. Quarantine correction stays in the investigation drawer through worker revalidation and accepted-transaction linkage. Risk review claim, note and Clear preserve queue context. Grouped navigation, Admin-only Users, batch rejected-upload history, business-first transaction details and ten backend-backed Insights charts are verified. Implementation commit: d4e7653."
+        "13 October 2026 | Analyst UX correction locally verified: 35 focused tests passed, full browser gate passed, final investigation browser passed. Regression: 823 full-suite passes / 1 expected administrator-only skip; one stale navigation harness failed, was corrected and its two checks passed on targeted rerun. Total: 824 checks verified. Quarantine correction stays in the investigation drawer through worker revalidation and accepted-transaction linkage. Risk review claim, note and Clear preserve queue context. Grouped navigation, Admin-only Users, batch rejected-upload history, business-first transaction details and ten backend-backed Insights charts are verified. Implementation commit: d4e7653.",
+        "13 October 2026 | Workflow continuity and own-upload correction locally verified: 847 regression passed, 1 expected administrator-only skip, zero failures; final four-role browser passed; three investigation/missing-evidence/own-upload browser checks passed. Implementation: 209700a. AWS untouched; no schema change, credential reset or push."
       ],
       "references": [
         "docs/architecture/FINTRUST_FLOW_AUDIT.md",
@@ -297,9 +298,9 @@
       "paragraphs": [
         "Original restricted safe evidence, reason code/detail, source version, batch and row remain immutable. Corrections are independently versioned, attributed to the named Analyst and linked to a new occurrence. The existing validator, identity checks and normal processing run again; correction never approves a ledger write directly.",
         "Backend recovery detail exposes OPEN, CORRECTED, REVALIDATION_FAILED, ACCEPTED or REJECTED derived from existing workflow and durable outcome records. No competing status table was added. Failed attempts retain latest reason and every prior correction. Accepted and duplicate resolutions link to the canonical transaction; duplicates do not add a ledger entry.",
-        "Review original and corrected values, the correcting Analyst, correction time, attempt count, outcome and audit timeline. Evidence reads are version-pinned, bounded and account-scoped; incomplete history is explicitly marked. Missing/unknown-account cases remain Admin-visible for access resolution; Admin cannot perform the correction, and Analysts are not given blanket access to unassigned financial data.",
+        "Review original and corrected values, the correcting Analyst, correction time, attempt count, outcome and audit timeline. Evidence reads are version-pinned, bounded and account-scoped; incomplete history is explicitly marked. Unknown/missing-account rows are Admin-visible for oversight. By explicit approval, the original authenticated local uploader can correct their own row to an existing assigned account. Re-uploading an identical file does not transfer ownership; historical unowned cases and known unassigned accounts remain blocked. Admin cannot perform financial corrections.",
         "Local correction/projection outbox retry remains durable in PostgreSQL. Mock S3 evidence is session-limited, as before; this is not a live retention proof. No credential or sensitive raw payload is logged.",
-        "Quarantine now opens a list-preserving recovery drawer with original and corrected values, issue, attempts/outcome, immutable correction history and recorded timeline. Existing account-scoped correction/revalidation actions are reused. Missing/unknown-account cases remain fail-closed under the established access model.",
+        "Quarantine now opens a list-preserving recovery drawer with original and corrected values, issue, attempts/outcome, immutable correction history and recorded timeline. Existing account-scoped correction/revalidation actions are reused. Unknown rows follow the approved original-upload ownership exception; missing original evidence still fails closed.",
         "The compact quarantine list shows reference, reason, recovery/workflow status, account, recorded age and source provenance. Age derives from quarantined_at. The correcting Analyst is available in detail, not in the current list API. Correct / Revalidate opens the existing correction form; submission still requires normal validation, duplicate checks and processing."
       ],
       "references": [
@@ -382,7 +383,7 @@
       "status": "LOCAL VERIFIED",
       "paragraphs": [
         "Insights expose scoped SQL aggregates and exact tabular equivalents. Transaction/currency context must remain visible; cross-border activity alone is not suspicious.",
-        "Reports UI exports the current authorized query page. Backend scheduled monthly JSON/CSV outputs to S3 exist but are not a complete generated-report catalogue in the UI. A monthly summary is not a full ledger archive."
+        "Reports filters now query accepted ledger activity by UTC date period and currency; exports retain the current authorized query page. Backend scheduled monthly JSON/CSV outputs to S3 exist but are not a complete generated-report catalogue in the UI. A monthly summary is not a full ledger archive."
       ],
       "references": [
         "docs/architecture/FINTRUST_FLOW_AUDIT.md",
@@ -726,6 +727,90 @@
       "diagram": null
     },
     {
+      "title": "Local Workflow Completion and Remaining Cloud Gates",
+      "status": "LOCAL VERIFIED | LIVE AWS PENDING",
+      "paragraphs": [
+        "13 October 2026 | Workflow continuity and own-upload correction locally verified: 847 regression passed, 1 expected administrator-only skip, zero failures; final four-role browser passed; three investigation/missing-evidence/own-upload browser checks passed. Implementation: 209700a. AWS untouched; no schema change, credential reset or push.",
+        "The reported quarantine 503 came from lost in-memory mock versions after restart, not a valid reason to overwrite immutable evidence. Local synthetic object versions and typed DynamoDB claims now persist in ignored build/local-runtime. Exact pinned originals are checked; absent evidence preserves authorized metadata/history and blocks new writes.",
+        "Correction uses assigned-account fields, repeats validation and duplicate detection in the worker, retains original identity/provenance and records human/system events. Own unknown-account recovery is explicitly authorized for the original local uploader only. No schema expansion, risk-rule drift or role inheritance.",
+        "The actual local server was restarted with the existing credential and without reset/seeding. All four static assets match source; unauthenticated financial reads are denied; existing financial/audit rows were preserved. Already-lost historical original bytes and missing historical ownership evidence cannot be invented.",
+        "Local tests use real isolated PostgreSQL and mocked AWS transports. Exact current-source Linux/Python 3.12 and live RDS bootstrap/deployment/wiring/SES/DLQ/report delivery remain separate gates. Notifications remain session-scoped; a durable inbox/full report catalogue and AI assistant remain future work.",
+        "Final navigation/copy polish: 0056a59. Recovered transactions activate Transactions, not Quarantine; LOW entries use Risk Assessment. Three focused browser checks passed; a stalled investigation attempt was rerun alone and passed. Earlier full-suite result remains 847 passed / 1 expected skip; the final polish has targeted browser verification, not a second full-suite claim."
+      ],
+      "table": [
+        [
+          "Flow / requirement",
+          "Current local proof",
+          "Boundary / outcome"
+        ],
+        [
+          "CSV admission and provenance",
+          "Real input/API/SQL four-role browser; A/B and exact A replay",
+          "First uploader recorded before worker processing; malformed files create receipts, not ledger rows."
+        ],
+        [
+          "Identity and duplicates",
+          "Existing identity, scenario and dataset suites retained",
+          "Canonical IDs remain immutable; same/cross-file rows and whole-file replay create no extra ledger entry; conflicts quarantine, similar genuine charges remain accepted."
+        ],
+        [
+          "Validation and scoring",
+          "Existing LOW/MEDIUM/HIGH and frozen rule tests pass",
+          "All valid risk levels remain in ledger. Velocity remains >5 accepted in the closed 5-minute window; hourly alternative deferred."
+        ],
+        [
+          "Quarantine recovery",
+          "Field correction -> outbox -> worker -> accepted link, timeline and actor",
+          "Original evidence required. Correction is pending until worker outcome; repeat validation and dedupe."
+        ],
+        [
+          "Own unknown-account rows",
+          "Nine authorization checks plus browser accepted-path proof",
+          "Original authenticated uploader only; assigned existing target account; no known-unassigned access or duplicate-file ownership transfer."
+        ],
+        [
+          "Risk investigation / review",
+          "Claim, note, Clear/Confirm/Escalate and multi-user checks retained",
+          "Atomic owner/version conflict; Admin governs access, Auditor reads, Maintainer handles technical recovery; no automated fraud verdict."
+        ],
+        [
+          "Alert and technical failure",
+          "Provider-outage, claim/idempotency and retry/outbox checks",
+          "Ledger remains available when delivery evidence is unavailable. SENT/ALERTED must be proven; no blind uncertain-send retry."
+        ],
+        [
+          "Batch reconciliation / timeline",
+          "Owned mixed-batch detail, per-row recorded timeline and scoped audit",
+          "Received = accepted + quarantined + duplicate + failed + pending; every outcome stays visible within authority."
+        ],
+        [
+          "Reports and account history",
+          "UTC inclusive-start/exclusive-end period + currency SQL checks; exports",
+          "Accepted ledger net movement per currency from zero, not current balance or FX. Export says current page; scheduled cloud delivery pending."
+        ],
+        [
+          "Local runtime continuity",
+          "Separate mock sessions restore exact versions and typed DynamoDB; server baseline retained",
+          "Ignored SQLite backing for local synthetic mocks only. Historic already-lost bytes are not fabricated."
+        ],
+        [
+          "Usability and evidence",
+          "1100/1366/1920 layouts, drawer/form/recovered transaction screenshots",
+          "Single Details action, compact queue, human age, backend lifecycle, bounded technical detail, inline errors."
+        ],
+        [
+          "Cloud readiness",
+          "Local 20-scenario checkpoint remains verified; budgets preserved",
+          "Current-source Linux, live bootstrap/wiring/SES/DLQ/reports and live E2E remain approval gates."
+        ]
+      ],
+      "references": [
+        "docs/architecture/FINTRUST_FLOW_AUDIT.md",
+        "docs/EVIDENCE/12-e2e/workflow-continuity/verification-summary.json",
+        "docs/EVIDENCE/12-e2e/workflow-continuity/local-server-restart.json"
+      ]
+    },
+    {
       "title": "References",
       "status": "LOCAL VERIFIED",
       "paragraphs": [
@@ -739,9 +824,12 @@
         "DECISION: list-preserving investigation drawer, compact filters and visible triage | SOURCE: https://docs.datadoghq.com/security/cloud_siem/triage_and_investigate/investigate_security_signals/ | WHY IT APPLIES: Analysts need evidence and next steps without losing queue context | HOW FINTRUST USES IT: Adapt interaction principles to transaction risk, with original branding and backend-enforced ownership; no copied icons, wording or pixel layout.",
         "DECISION: Reuse scoped aggregate and queue reads | SOURCE: backend/fintrust/frontend_workflows.py; visual_insights.py; workflow_api.py | WHY IT APPLIES: The brief requires evidence-backed triage without fabricated totals | HOW FINTRUST USES IT: Independent loading/error states, explicit count bounds and unconfigured SLA handling; no new risk or database model.",
         "DECISION: Preserve existing monthly and zero-spend budget controls | SOURCE: AWS Budgets managing-costs and email-recipient guidance | WHY IT APPLIES: Avoid duplicate alerts while proving actual threshold/scope configuration | HOW FINTRUST USES IT: Account-wide read-only verification, masked configured subscriber evidence, periodic-notification limitations and separate live deployment approval.",
-        "Current UX proof: docs/EVIDENCE/12-e2e/analyst-ux-correction/verification-summary.json, isolated PostgreSQL regression results and authenticated browser screenshots. No AWS mutation, Linux gate, schema change or credential reset occurred in this phase. Restart the local server to load the updated read-only Insights endpoint. Live AWS E2E remains pending.",
+        "Current UX proof: docs/EVIDENCE/12-e2e/analyst-ux-correction/verification-summary.json, isolated PostgreSQL regression results and authenticated browser screenshots. No AWS mutation, Linux gate, schema change or credential reset occurred in this phase. Historical restart instruction superseded: current port-5001 server has been restarted and verified against the workflow-continuity evidence. Live AWS E2E remains pending.",
         "DECISION: Keep native tables and keyboard-operable action buttons | SOURCE: https://www.w3.org/WAI/ARIA/apg/patterns/table/ | WHY IT APPLIES: Analysts need dense lists without inaccessible custom grids | HOW FINTRUST USES IT: Native headings/cells, button entry, visible focus and drawer focus restoration.",
-        "DECISION: Aggregate authorized filtered rows before bounding the detail list | SOURCE: https://www.postgresql.org/docs/16/sql-select.html | WHY IT APPLIES: Analytical counts must not depend on the displayed page | HOW FINTRUST USES IT: Parameterized WHERE scope before GROUP BY; deterministic date/identity ordering for the latest 25 accepted entries."
+        "DECISION: Aggregate authorized filtered rows before bounding the detail list | SOURCE: https://www.postgresql.org/docs/16/sql-select.html | WHY IT APPLIES: Analytical counts must not depend on the displayed page | HOW FINTRUST USES IT: Parameterized WHERE scope before GROUP BY; deterministic date/identity ordering for the latest 25 accepted entries.",
+        "DECISION: Conditional immutable first-upload authority | SOURCE: https://docs.aws.amazon.com/AmazonS3/latest/userguide/conditional-writes.html | WHY IT APPLIES: Duplicate or concurrent uploads must not transfer ownership | HOW FINTRUST USES IT: Trusted local first-admission receipt, conditional create, versioned source pointer; known accounts still require assignment.",
+        "DECISION: Keep missing original evidence visible and fail closed for new writes | SOURCE: https://docs.aws.amazon.com/AmazonS3/latest/userguide/RetrievingObjectVersions.html | WHY IT APPLIES: Financial correction needs the recorded original | HOW FINTRUST USES IT: Pinned-version reads and explicit evidence health; no latest-version substitution.",
+        "DECISION: Separate read authority from financial correction | SOURCE: https://community.owasp.org/Access_Control | WHY IT APPLIES: Governance is not Analyst authority | HOW FINTRUST USES IT: Existing role checks plus authenticated original ownership and real assigned target; Admin oversight remains read-only."
       ],
       "references": [
         "docs/architecture/FINTRUST_FLOW_AUDIT.md",
@@ -757,9 +845,7 @@
         "docs/EVIDENCE/12-e2e/risk-investigation/verification-summary.json",
         "docs/EVIDENCE/12-e2e/analyst-workbench/verification-summary.json",
         "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html",
-        "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-email-recipients.html",
-        "https://aws.amazon.com/aws-cost-management/aws-budgets/pricing/",
-        "docs/EVIDENCE/01-budget/2026-10-13-budget-control-verification.json"
+        "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-email-recipients.html"
       ],
       "table": null,
       "diagram": null

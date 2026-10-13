@@ -10,13 +10,13 @@ Source files below are under `backend/fintrust/` unless a different prefix is sh
 
 | FLOW STAGE | SOURCE FILES / BACKEND | DATABASE | UI | TESTS | STATUS | GAP | PRIORITY |
 |---|---|---|---|---|---|---|---|
-| Transaction lifecycle | lifecycle.py, lifecycle_api.py, release_workflow.py | migration 003 append-only audit + existing domain histories | API ready; final UI deferred | test_transaction_lifecycle.py | Local implementation; focused/regression gates recorded below | No live rollout; automatic DLQ transport evidence deferred | P1 |
+| Transaction lifecycle | lifecycle.py, lifecycle_api.py, release_workflow.py | migration 003 append-only audit + existing domain histories | Backend timeline now shown in transaction and batch-row detail | test_transaction_lifecycle.py | Local implementation; focused/regression gates recorded below | No live rollout; automatic DLQ transport evidence deferred | P1 |
 | CSV upload | api.py, operations.py, file_admission.py | ingestion_attempts; local upload receipts | Upload Transactions / Rejected Uploads | test_original_fixture_admission.py, test_frontend_workflows.py | Local verified; cloud upload handoff pending | Production intake authentication and S3 publication need deployment proof | P0 |
 | Input / landing S3 | ingest.py, release_ingest.py, batches.py | Content/attempt identity in ingestion_batches | Upload result / source provenance | test_ingest.py, test_release1_end_to_end.py | Implemented; local AWS mocks | Bucket notification is a separate controlled wiring step | P0 |
 | Ingest Lambda | ingest.py, release_ingest.py; infrastructure/ingest_deployment.py | No private SQL dependency in cloud ingest | Upload summary | test_stage5_ingest.py, test_release1_workflows.py | Implemented; deployment evidence historical | Current Release 1 package needs separate Linux/live gate after source move | P0 |
 | Validation | validators.py, release_contract.py, release_workflow.py | Account existence checked against accounts | Quarantine reason/details | test_release1_workflows.py, test_release1_dataset_lifecycle.py | Implemented | Release 1 queues candidates BEFORE consumer DB-aware validation; target diagram must acknowledge this | P1 |
 | Quarantine | quarantine.py, release_workflow.py | quarantine_cases; safe payload version in quarantine S3 | Quarantine detail / row corrections | test_release1_workflows.py, test_release1_end_to_end.py | Local verified | Safe S3 payload + SQL case are retryable separate effects; live access not proven here | P0 |
-| Correction / revalidation | workflow_api.py, release_workflow.py | quarantine_corrections, correction_outbox | Correct / reject, RESUBMITTED pending | test_release1_end_to_end.py, test_release1_candidate.py | Local verified | Controlled correction worker/drain needs scheduled live execution; never direct ledger approval | P0 |
+| Correction / revalidation | workflow_api.py, release_workflow.py | quarantine_corrections, correction_outbox | Correct / reject, RESUBMITTED pending | test_release1_end_to_end.py, test_release1_candidate.py | Local verified | Local drawer/form/outbox/worker completion and restart-safe evidence verified; live correction-worker scheduling remains gated; never direct ledger approval | P0 |
 | SQS FIFO | release_ingest.py, score.py; infrastructure/messaging.py, processing.py | Immutable source envelope / outcome correlation | Batch evidence, Operations queue health | test_stage4_messaging.py, test_release1_workflows.py | Configured and mock-tested | Live S3 -> FIFO -> consumer mapping not demonstrated by direct local uploads | P0 |
 | Scoring Lambda | score.py, rules.py, ledger.py | Per-account lock; frozen processed_transactions result | Risk / transaction detail | test_processing.py, test_score.py | Local verified | Private runtime IAM/TLS and event mapping remain separate deployment gates | P0 |
 | LOW / MEDIUM / HIGH | rules.py, score.py, release_workflow.py | All accepted levels enter transactions; each scored result has risk_events; Medium/High get risk_reviews | Overview risk totals / Transactions / Review Queue | test_release1_workflows.py, test_presentation_ux_freeze.py | Local verified | Target diagram is simplified: risk_events are not exclusively High; risk does not reject valid financial data | P1 |
@@ -72,3 +72,44 @@ No schema or business-rule changes. Immutable identity/provenance, role/owner ch
 | Filtered SQL aggregates before detail pagination | https://www.postgresql.org/docs/16/sql-select.html | Counts must reflect authorized matching rows | Parameterized WHERE/GROUP BY, deterministic detail ordering |
 
 Evidence: [verification summary](../EVIDENCE/12-e2e/analyst-ux-correction/verification-summary.json). Live AWS and current-source Linux gates remain separate.
+
+## Workflow continuity and approved own-upload recovery - 13 October 2026
+
+13 October 2026 | Workflow continuity and own-upload correction locally verified: 847 regression passed, 1 expected administrator-only skip, zero failures; final four-role browser passed; three investigation/missing-evidence/own-upload browser checks passed. Implementation: 209700a. AWS untouched; no schema change, credential reset or push.
+
+Root cause of the reported quarantine 503: SQL pointers survived a local server restart, while the old in-memory mocked object versions did not. Exact original evidence is now persisted for future local uploads; missing historical originals return useful authorized metadata/audit and block corrections rather than fabricate values. The running port-5001 server was restarted with --reuse-auth, no reset or seed. Existing 204 ledger entries, four processed entries, two quarantine cases, zero corrections and three review-history rows were retained.
+
+| Flow / requirement | Local proof | Boundary / outcome |
+| --- | --- | --- |
+| CSV admission and provenance | Real input/API/SQL four-role browser; A/B and exact A replay | First uploader recorded before worker processing; malformed files create receipts, not ledger rows. |
+| Identity and duplicates | Existing identity, scenario and dataset suites retained | Canonical IDs remain immutable; same/cross-file rows and whole-file replay create no extra ledger entry; conflicts quarantine, similar genuine charges remain accepted. |
+| Validation and scoring | Existing LOW/MEDIUM/HIGH and frozen rule tests pass | All valid risk levels remain in ledger. Velocity remains >5 accepted in the closed 5-minute window; hourly alternative deferred. |
+| Quarantine recovery | Field correction -> outbox -> worker -> accepted link, timeline and actor | Original evidence required. Correction is pending until worker outcome; repeat validation and dedupe. |
+| Own unknown-account rows | Nine authorization checks plus browser accepted-path proof | Original authenticated uploader only; assigned existing target account; no known-unassigned access or duplicate-file ownership transfer. |
+| Risk investigation / review | Claim, note, Clear/Confirm/Escalate and multi-user checks retained | Atomic owner/version conflict; Admin governs access, Auditor reads, Maintainer handles technical recovery; no automated fraud verdict. |
+| Alert and technical failure | Provider-outage, claim/idempotency and retry/outbox checks | Ledger remains available when delivery evidence is unavailable. SENT/ALERTED must be proven; no blind uncertain-send retry. |
+| Batch reconciliation / timeline | Owned mixed-batch detail, per-row recorded timeline and scoped audit | Received = accepted + quarantined + duplicate + failed + pending; every outcome stays visible within authority. |
+| Reports and account history | UTC inclusive-start/exclusive-end period + currency SQL checks; exports | Accepted ledger net movement per currency from zero, not current balance or FX. Export says current page; scheduled cloud delivery pending. |
+| Local runtime continuity | Separate mock sessions restore exact versions and typed DynamoDB; server baseline retained | Ignored SQLite backing for local synthetic mocks only. Historic already-lost bytes are not fabricated. |
+| Usability and evidence | 1100/1366/1920 layouts, drawer/form/recovered transaction screenshots | Single Details action, compact queue, human age, backend lifecycle, bounded technical detail, inline errors. |
+| Cloud readiness | Local 20-scenario checkpoint remains verified; budgets preserved | Current-source Linux, live bootstrap/wiring/SES/DLQ/reports and live E2E remain approval gates. |
+
+### Approved ownership authority
+
+The authenticated local upload adapter records the first successful admission with a conditional If-None-Match write in the existing versioned quarantine audit bucket. Ownership is read from trusted server evidence, never CSV fields, request actor claims or UI labels. The receipt includes the source object version/checksum. A later duplicate uploader cannot replace it. Existing batches lacking ownership evidence are never retrospectively adopted by a replay. Unknown-account listing/detail, batch detail and row timeline share this authority; known unassigned accounts remain denied. Corrected account existence and assignment are checked before recording a new correction. Admin can oversee unknown cases and their correction audit but cannot correct financial data. Global Audit remains Admin/Auditor only; Analysts see their authorized recovery timeline.
+
+This is a local admission/provenance extension, not a second transaction-state model, new account assignment or new schema. Cloud intake without trusted authenticated admission remains blocked for this exception. Missing original evidence still blocks new RESUBMIT and REJECT. Do not delete ignored build/local-runtime while preserving the database: it now backs synthetic original versions, receipts, projections and alert claims.
+
+### Decisions supported by primary references
+
+| Decision | Source | Why it applies | FinTrust use |
+| --- | --- | --- | --- |
+| Conditional first-admission ownership | https://docs.aws.amazon.com/AmazonS3/latest/userguide/conditional-writes.html | Concurrent upload must not overwrite source authority | If-None-Match; first successful admission wins; replay cannot transfer ownership; local only |
+| Retrieve exact evidence version | https://docs.aws.amazon.com/AmazonS3/latest/userguide/RetrievingObjectVersions.html | Audit pointer must refer to original bytes | Preserve VersionId; never replace absent pinned version with latest |
+| Enforce authorization at service boundary | https://community.owasp.org/Access_Control | Hiding an action is insufficient authority | Active role, source owner, existing target assignment and direct endpoint denials |
+| Preserve native tables / distinguish nonmodal detail | https://www.w3.org/WAI/ARIA/apg/patterns/table/ and https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/ | Investigation should retain readable queue and keyboard access | Native tables; nonmodal aside; focus restoration; Escape/Close |
+| Use database concurrency for decisions | https://www.postgresql.org/docs/16/applevel-consistency.html | Two users must not independently own one review | Existing row locks/version checks; no new review state model |
+
+Evidence: docs/EVIDENCE/12-e2e/workflow-continuity/verification-summary.json and local-server-restart.json, regression XML and authenticated browser screenshots. Final code and evidence are local commits only. These results close the observed local workflow defects; they are not a claim of 100% production/cloud completion.
+
+Final navigation/copy polish: `0056a59`. Recovered transactions activate Transactions and show accepted-ledger purpose; LOW entries use Risk Assessment. Three targeted browser checks passed; an interrupted investigation check stalled on a local database request and was rerun alone: 1 passed in 42.67 seconds. Earlier clean full-suite result remains 847 passed / 1 expected skip, with separate final UI checks, not a second full-suite claim.

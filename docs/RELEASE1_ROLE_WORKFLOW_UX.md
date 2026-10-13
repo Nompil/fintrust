@@ -16,7 +16,7 @@ Eight backend-driven charts, report downloads, identity/deduplication, financial
 
 ## Known scope limits
 
-Batch-detail authority remains unchanged: non-Admin views exclude batches containing unknown/unassigned account outcomes. A mixed test file can therefore produce a valid latest upload result while its whole-batch history is visible only to Admin oversight. No account-scope bypass was added in a UX correction. Unknown-account correction remains deferred. The browser exercises scoped Analyst review/correction and Admin batch reconciliation separately. Notifications clear on sign-out to prevent another user seeing the uploading user's session history.
+At this historical freeze, non-Admin batch views excluded unknown/unassigned outcomes. That limitation is superseded only for genuinely unknown rows in the original authenticated uploader's batch by the explicit approval below. Batches containing known unassigned accounts remain inaccessible. Historical rule: unknown-account correction was deferred at this freeze. The explicitly approved continuation now permits an active Analyst to view and correct genuinely unknown/missing-account rows from their original authenticated local upload only. The first-admission receipt is immutable and versioned; duplicate re-upload does not transfer ownership. Corrected accounts must exist and be assigned. Historical batches without ownership evidence and cloud intake without trusted admission remain blocked. Known unassigned accounts remain inaccessible. The browser exercises scoped Analyst review/correction and Admin batch reconciliation separately. Notifications clear on sign-out to prevent another user seeing the uploading user's session history.
 
 ## Verification
 

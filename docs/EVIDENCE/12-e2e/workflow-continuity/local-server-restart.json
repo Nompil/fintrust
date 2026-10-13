@@ -1,0 +1,30 @@
+{
+  "url": "http://127.0.0.1:5001/release1",
+  "served_assets_match": {
+    "/assets/js/release1.js": true,
+    "/assets/js/release1-workflows.js": true,
+    "/assets/css/release1.css": true,
+    "/assets/js/release1-display.js": true
+  },
+  "reset_used": false,
+  "identity_check": "Passed in restart process before static verification",
+  "restart_reason": "Load verified source; no credential or user modifications",
+  "identity_boundary_preserved": true,
+  "scenario_seeding_used": false,
+  "source_commit": "0056a59a05a5b9f9d3fcad606eab6979add83053",
+  "timestamp": "2026-10-13T08:16:56.1806828Z",
+  "unauthenticated_financial_api_status": 401,
+  "verification_correction": "Used actual /assets paths; no second restart required",
+  "status": "VERIFIED",
+  "database": "dedicated loopback fintrust_local_test",
+  "schema": "fintrust_release1_candidate",
+  "financial_rows_preserved": true,
+  "table_counts": {
+    "transactions": 204,
+    "processed_transactions": 4,
+    "quarantine_cases": 2,
+    "quarantine_corrections": 0,
+    "risk_review_history": 3
+  },
+  "aws_contacted": false
+}

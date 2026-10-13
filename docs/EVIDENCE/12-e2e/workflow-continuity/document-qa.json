@@ -1,0 +1,156 @@
+{
+  "Master": {
+    "pages": 26,
+    "sha256": "e22dbd490b4f3cd25fce6d594bdf106a013c77b7e8a52dcac470f359842a159d",
+    "outline_entries": 43,
+    "pages_checked": [
+      {
+        "page": 1,
+        "characters": 479
+      },
+      {
+        "page": 2,
+        "characters": 791
+      },
+      {
+        "page": 3,
+        "characters": 629
+      },
+      {
+        "page": 4,
+        "characters": 2938
+      },
+      {
+        "page": 5,
+        "characters": 2163
+      },
+      {
+        "page": 6,
+        "characters": 2796
+      },
+      {
+        "page": 7,
+        "characters": 1641
+      },
+      {
+        "page": 8,
+        "characters": 759
+      },
+      {
+        "page": 9,
+        "characters": 2814
+      },
+      {
+        "page": 10,
+        "characters": 2926
+      },
+      {
+        "page": 11,
+        "characters": 3014
+      },
+      {
+        "page": 12,
+        "characters": 3098
+      },
+      {
+        "page": 13,
+        "characters": 2733
+      },
+      {
+        "page": 14,
+        "characters": 917
+      },
+      {
+        "page": 15,
+        "characters": 822
+      },
+      {
+        "page": 16,
+        "characters": 2931
+      },
+      {
+        "page": 17,
+        "characters": 849
+      },
+      {
+        "page": 18,
+        "characters": 2440
+      },
+      {
+        "page": 19,
+        "characters": 2953
+      },
+      {
+        "page": 20,
+        "characters": 3381
+      },
+      {
+        "page": 21,
+        "characters": 2817
+      },
+      {
+        "page": 22,
+        "characters": 2952
+      },
+      {
+        "page": 23,
+        "characters": 2927
+      },
+      {
+        "page": 24,
+        "characters": 2539
+      },
+      {
+        "page": 25,
+        "characters": 3014
+      },
+      {
+        "page": 26,
+        "characters": 3898
+      }
+    ]
+  },
+  "Progress": {
+    "pages": 8,
+    "sha256": "6095e7667f6e6a3eaa566585054d2516d6be5b9bc6e9852269fe61c9ed67088f",
+    "outline_entries": 10,
+    "pages_checked": [
+      {
+        "page": 1,
+        "characters": 480
+      },
+      {
+        "page": 2,
+        "characters": 312
+      },
+      {
+        "page": 3,
+        "characters": 3376
+      },
+      {
+        "page": 4,
+        "characters": 2564
+      },
+      {
+        "page": 5,
+        "characters": 2889
+      },
+      {
+        "page": 6,
+        "characters": 3542
+      },
+      {
+        "page": 7,
+        "characters": 3035
+      },
+      {
+        "page": 8,
+        "characters": 1975
+      }
+    ]
+  },
+  "references_checked": 110,
+  "missing_references": [],
+  "visual_review": "All 34 rendered pages inspected; no clipped text, overlap or orphan reference page.",
+  "pages_visually_checked": 34
+}
