@@ -1,0 +1,25 @@
+{
+  "status": "PASSED",
+  "checks": [
+    "real SQL six metrics",
+    "recorded High 70/100 and Low 0/100",
+    "historical null remains Not assessed",
+    "numeric score sorting",
+    "1100/1366/1920 monitoring dashboard",
+    "390px transaction containment",
+    "no invented SLA",
+    "all six workbench sections",
+    "laptop",
+    "keyboard focus",
+    "drawer Escape",
+    "Over SLA delegates to scoped reviews",
+    "scenario empty state",
+    "Auditor read-only",
+    "mobile metrics and charts stay within viewport",
+    "independent aggregate failure",
+    "full failure clears stale workbench",
+    "user sort/filter",
+    "disable/reactivate"
+  ],
+  "external_network": "blocked"
+}

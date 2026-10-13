@@ -9,7 +9,7 @@ from tests.test_release1_end_to_end import release_db, feed, run
 from tests.test_release1_workflows import row
 @pytest.mark.skipif(not os.getenv('FINTRUST_NODE'), reason='Explicit installed Node/Playwright gate')
 def test_workbench_browser(release_db, people, monkeypatch):
-    run(feed([row(amount='200000.01',country='US'),row(source_transaction_id='BAD-WB',amount='bad')]))
+    run(feed([row(amount='200000.01',country='US'),row(source_transaction_id='BAD-WB',amount='bad'),row(source_transaction_id='LOW-WB',amount='10',country='ZA')]))
     monkeypatch.setattr(db,'get_connection',release_db[2])
     monkeypatch.delenv('FINTRUST_REVIEW_SLA_SECONDS', raising=False)
     root=Path(__file__).resolve().parents[1]

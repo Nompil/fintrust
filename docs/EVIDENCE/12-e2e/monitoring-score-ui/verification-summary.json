@@ -1,0 +1,38 @@
+{
+  "status": "LOCAL_UI_VERIFIED",
+  "date": "2026-10-13",
+  "source_sha256": {
+    "frontend/css/release1.css": "b69f4fad486cc091b96b2d49e74f38ee6dd6dec510a991601729d93a90de2ba9",
+    "frontend/js/release1.js": "e810505eb93636817c43f2d2c11e46e9c5731a56bee424ba80c3be33b159a980",
+    "frontend/release1.html": "a367a10d706afe491b721ef2b75a2a8261b3bf113c92288d71205862eaabaa27",
+    "tests/test_presentation_ux_freeze.py": "e2fb19ca203e149fb6413d3fb579842a0bae1fda948b15bf176d4863a09da72a",
+    "tests/test_workbench_browser.py": "2e2d91b1a88086064f38bc15c23bad319cf832729072bced033e3c7d99fd7ba1",
+    "tools/verify_workbench_ui.cjs": "9c0ad430756c928e7cca27770676f7227d3abe660844734b0576083d19576bea"
+  },
+  "checks": {
+    "focused_suite": {
+      "passed": 29,
+      "failures": 0
+    },
+    "final_mobile_polish_browser": {
+      "passed": 1,
+      "failures": 0
+    }
+  },
+  "score_source": "Existing processed_transactions.result.score; no calculation in browser",
+  "score_semantics": "0 is a real assessment; null/missing remains Not assessed; score is rule points, not fraud probability.",
+  "ui": "Compact light workspace, dark FinTrust navigation, metrics, chart grid, risk distribution, readable score column, sortable page rows, contained mobile tables, existing investigation drawer.",
+  "scope": "No fake dashboard date/account filters: assigned accounts/all dates shown; existing scoped Insights filters linked.",
+  "business_rules_changed": false,
+  "api_changed": false,
+  "schema_changed": false,
+  "aws_contacted": false,
+  "credentials_changed": false,
+  "server_5001": "STOPPED",
+  "test_servers": "Temporary loopback servers shut down by fixture",
+  "sources": [
+    "https://www.datadoghq.com/"
+  ],
+  "design_boundary": "Use screenshots and official site for interaction inspiration; retain FinTrust identity. No imported logo, copied icons, CSS or pixel layout.",
+  "verification_boundary": "Focused local SQL/browser tests, not a repeated full regression or Linux/cloud gate."
+}

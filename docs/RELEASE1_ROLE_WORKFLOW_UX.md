@@ -23,3 +23,14 @@ At this historical freeze, non-Admin batch views excluded unknown/unassigned out
 Results and separate screenshots are under `docs/EVIDENCE/12-e2e/role-workflow-ux/`. Existing focused regression passed 122 checks; six new role/error checks and two offline bootstrap composition checks passed. The final four-role browser gate passed after verifying action-before-history layout, upload actor, separate notices and concealed Admin mutations. Full regression outcome is recorded in verification.json. The original freeze evidence is not overwritten.
 
 FINTRUST ROLE AND WORKFLOW UX VERIFIED
+
+
+## 13 October 2026 — recorded score and monitoring dashboard refinement
+
+Transactions and Account History show the existing recorded rule score out of 100 alongside severity. A recorded zero is shown as 0/100; absent historical assessment remains Not assessed. No rescoring, scoring thresholds, API or schema changes. Score is not a probability of fraud. Column sorting covers the displayed page, with missing scores last.
+
+The Overview uses a compact light workspace, dark FinTrust navigation, six real metrics, activity/count chart, assessed-risk distribution, rule/review charts and the existing investigation queue/drawer. Dense tables scroll within their panels on narrow screens; transaction dates/identifiers remain compact. Assigned accounts and all recorded dates are explicit; the existing scoped analytical filters are reached through Insights, not a cosmetic filter that changes no data.
+
+DECISION | SOURCE | WHY IT APPLIES | HOW FINTRUST USES IT: Compact monitoring/investigation workspace | https://www.datadoghq.com/ and user-supplied monitoring screenshots | Operators need counts, evidence and next actions in a readable workspace | Adapt interaction density, tables and adjacent investigation; keep FinTrust identity and original brief. No external logo, copied icons or proprietary layout assets.
+
+Verification: 29 focused local SQL/browser tests passed; final mobile row-height polish passed the workbench browser separately. Evidence: docs/EVIDENCE/12-e2e/monitoring-score-ui/. The earlier 847/1 full regression remains its original checkpoint, not a new full-suite claim. No AWS, user credential or persisted financial changes; the user-requested local port-5001 server remains stopped.
