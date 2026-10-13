@@ -52,8 +52,9 @@ def batch_detail(identifier, principal, args):
     where="i.batch_id=%s";params=[identifier]
     disposition=args.get("disposition")
     if disposition:
-        if disposition not in {"ACCEPTED","QUARANTINED","DUPLICATE","FAILED_TECHNICAL"}: raise ValueError("Invalid disposition")
-        where+=" AND i.disposition=%s";params.append(disposition)
+        if disposition not in {"ACCEPTED","QUARANTINED","DUPLICATE","FAILED_TECHNICAL","PENDING"}: raise ValueError("Invalid disposition")
+        if disposition=='PENDING':where+=" AND i.disposition IN ('RECEIVED','QUEUED')"
+        else:where+=" AND i.disposition=%s";params.append(disposition)
     rows=api._query("""SELECT i.*,t.source_transaction_id,t.source_system,t.tx_date,
         q.source_reference,q.quarantine_id,
         (SELECT min(original.updated_at) FROM ingestion_records original
@@ -72,27 +73,36 @@ def batch_detail(identifier, principal, args):
         "actor":events[-1]["actor"] if events else None,
         "accounted_for":sum(batch[k] for k in ("accepted","quarantined","duplicate","failed_technical")),
         "display_status":batch["status"] if batch["counts_consistent"] else "AWAITING_RECONCILIATION" if batch["rows_received"] is None else "RECONCILIATION_FAILED"})
+    stamps=api._query('SELECT min(updated_at) AS first_row_observed_at,max(updated_at) AS last_row_observed_at FROM ingestion_records WHERE batch_id=%s',(identifier,))[0]
+    batch['started_at']=batch['received_at']
+    batch['completed_at']=stamps['last_row_observed_at'] if batch['counts_consistent'] and batch['pending']==0 and batch['status'] in {'COMPLETED','PARTIAL','FAILED'} else None
+    batch['completed_at_note']='Last recorded row outcome; no separate processing completion event is recorded.'
+    total=api._query('SELECT count(*) AS total_count FROM ingestion_records i WHERE '+where,tuple(params))[0]['total_count']
     return {"batch":batch,"rows":rows[:limit],"attempts":attempts,
-        "meta":{"count":len(rows[:limit]),"has_more":len(rows)>limit,"offset":offset,"limit":limit}}
+        "meta":{"count":len(rows[:limit]),"total_count":total,"has_more":len(rows)>limit,"offset":offset,"limit":limit,"filters":{"disposition":disposition} if disposition else {}}}
 
 def overview(principal):
     from .query import get_overview
     data=get_overview(principal.accounts)
     scope=list(principal.accounts)
-    data["risk_distribution"]=api._query("SELECT p.result->>'risk_level' AS risk_level,count(*) AS count FROM processed_transactions p JOIN transactions t USING(tx_id) WHERE t.account_id=ANY(%s::uuid[]) GROUP BY 1",(scope,))
+    from .analyst_workflow import assessed_sql
+    data["risk_distribution"]=api._query("SELECT p.result->>'risk_level' AS risk_level,count(*) AS count FROM processed_transactions p JOIN transactions t USING(tx_id) WHERE t.account_id=ANY(%s::uuid[]) AND "+assessed_sql()+" GROUP BY 1",(scope,))
     data["new_ledger_entries"]=sum(r["count"] for r in data["risk_distribution"])
     data["open_reviews"]=api._query("SELECT count(*) AS count FROM risk_reviews w JOIN risk_events r USING(risk_event_id) JOIN transactions t USING(tx_id) WHERE t.account_id=ANY(%s::uuid[]) AND w.review_status IN ('OPEN','UNDER_REVIEW','ESCALATED')",(scope,))[0]["count"]
+    data.update(api.review_workload(principal))
+    from .analyst_workflow import policy
+    data['sla_policy']=policy()
     q=api.list_page("quarantine",principal,{"limit":100})
     # Counts share list scoping; exact counters are marked bounded when paginated.
     batches=api.list_page("batches",principal,{"limit":100})
-    data.update({"quarantined_rows":len(q["data"]),"duplicate_occurrences":sum(b["duplicate"] for b in batches["data"]),
+    data.update({"quarantined_rows":q['meta']['total_count'],"quarantine_requiring_action":api.list_page('quarantine',principal,{'limit':1,'status':'OPEN'})['meta']['total_count'],"duplicate_occurrences":sum(b["duplicate"] for b in batches["data"]),
         "technical_failures":sum(b["failed_technical"] for b in batches["data"]),
         "partial_failed_batches":sum(b["status"] in ('PARTIAL','FAILED') or (b["rows_received"] is not None and not b["counts_consistent"]) for b in batches["data"]),
         "rejected_uploads":sum(e["action"]=='UPLOAD_REJECTED' for e in upload_history(principal)),
         "bounded_counts":q["meta"]["has_more"] or batches["meta"]["has_more"],
         "recent_batches":batches["data"][:5],
         "recent_transactions":api.list_page("transactions",principal,{"limit":8})["data"],
-        "attention":api.list_page("reviews",principal,{"limit":8,"status":"OPEN"})["data"]})
+        "attention":api.list_page("reviews",principal,{"limit":8,"queue":"open"})["data"]})
     return data
 
 def audit_events(principal, args):
@@ -108,6 +118,9 @@ def audit_events(principal, args):
     if principal.role=='Admin':
         events+=api._query("SELECT COALESCE(completed_at,created_at) AS timestamp,actor_subject AS actor,action,request_id::text AS resource,state AS result,result->>'notes' AS details FROM operations_requests ORDER BY created_at DESC LIMIT 1000")
     for event in events:
-        event.setdefault('actor_role','SYSTEM' if event.get('actor')=='system' else 'Not captured')
+        automated=event.get('actor')=='system' and event.get('action','').startswith('ROW_') or event.get('actor')=='scoring-worker' and event.get('action')=='REVIEW_OPEN'
+        event.setdefault('actor_type','SYSTEM' if automated else 'HUMAN')
+        event.setdefault('actor_role','SYSTEM' if automated else 'Not recorded')
+        if event['actor_role']=='Not recorded':event['actor_role_note']='Role-at-action is not stored in this historical SQL record; current user roles are not substituted.'
     events.sort(key=lambda x:datetime.fromisoformat(x['timestamp'].replace('Z','+00:00')) if isinstance(x['timestamp'],str) else x['timestamp'],reverse=True)
     return {"data":events[offset:offset+limit],"meta":{"count":len(events[offset:offset+limit]),"has_more":len(events)>offset+limit,"bounded_per_source":1000}}

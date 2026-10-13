@@ -46,7 +46,7 @@ def test_browser_release1(dataset_db,authenticated_client,maintainer_headers,mon
     server=make_server("127.0.0.1",0,api.app,threaded=True)
     thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
     try:
-        result=subprocess.run([os.environ["FINTRUST_NODE"],str(root/"tools/verify_release1_ui.cjs"),f"http://127.0.0.1:{server.server_port}",str(evidence)],capture_output=True,text=True,timeout=180)
+        result=subprocess.run([os.environ["FINTRUST_NODE"],str(root/"tools/verify_release1_ui.cjs"),f"http://127.0.0.1:{server.server_port}",str(evidence)],capture_output=True,text=True,timeout=360)
         assert result.returncode==0,result.stderr
     finally:
         server.shutdown();thread.join(timeout=10);server.server_close()

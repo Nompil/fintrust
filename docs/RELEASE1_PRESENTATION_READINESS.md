@@ -225,3 +225,14 @@ Verification: 25 focused tests passed; full regression 726 passed, zero failed, 
 Refresh the current workspace to load the updated static interface, then sign in with the existing privately held Analyst token. Refreshing clears the in-memory browser sign-in; it does not replace the token or reset local data.
 
 FINTRUST ANALYST WORKFLOW VERIFIED — TRANSACTIONS AND RISK PRIORITIZED
+
+
+### Current Analyst walkthrough checkpoint - 14 October 2026
+
+Use **Quarantined Rows**, **Processing History**, **Processing Details** and **Processing Run** for current screenshots. Earlier sections retain historical implementation notes. LOW entries with a recorded assessment show their score and No review required. Canonical bootstrap entries without scoring evidence show Historical - not scored; modern missing evidence stays Not recorded.
+
+Walk through upload -> processing reconciliation -> run-scoped quarantine -> correction/revalidation or rejection -> accepted transaction -> frozen risk components -> claim/assignment -> notes/outcome -> history/Insights/report evidence. Medium/High review targets are 24h/4h; a recorded escalation starts a 2h target. An overdue review remains a human investigation, not an automatic decision. HIGH risk is priority, not proof of fraud or successful email delivery.
+
+Local verification: 961 full-suite passes, zero skips/failures; eight in-suite browser gates and the separate four-role CI walkthrough passed. Existing local financial records, credentials and infrastructure edits are preserved. See `docs/EVIDENCE/12-e2e/analyst-workflow-repair/` for the gap audit and refreshed desktop/mobile screenshots. Retake final SOP images during the interactive walkthrough; screenshot numbering and the final SOP PDF are not regenerated here.
+
+**Local E2E verified. New-candidate Linux re-freeze and live AWS E2E pending.** No AWS, deployment or push occurred in this repair.

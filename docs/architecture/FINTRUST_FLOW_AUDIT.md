@@ -123,3 +123,18 @@ Model: one amount band (0/15/25/40), velocity +25, cross-border +15, possible du
 New JSON snapshots preserve component measurements, configured/observed windows, related references, timing proximity, evaluation time and version. Replay returns the frozen result. Historical V1 results retain their own score/classification and missing evidence is not reconstructed. Percentage is configured priority, not probability of fraud.
 
 Additive migration 006 changes only the existing review guard to handle frozen V1 and V2 classifications. Apply the reviewed guard before enabling V2 workers in any environment. Existing migrations and financial/audit rows are unchanged. No second state/score table, behavioural scoring, AI or production-capacity claim is introduced. Future dimensions and scalability hardening are labelled PLANNED in Master, Progress and the existing presentation PDF.
+
+
+## 14 October 2026 - End-to-end Analyst workflow repair
+
+Local verification: **961 passed, zero failures, zero skips** on fresh disposable PostgreSQL 16.15, with all eight in-suite browser gates and the additional four-role CI walkthrough passed. This is 57 additional tests over the 904-case candidate. Three first-run verification failures were resolved: obsolete rejection of the requested 24-hour preset, the isolated trust-auth DSN's missing dummy password field, and the static-asset inventory's new presentation module. Five focused repair checks passed before the clean full regression.
+
+The console now preserves upload/run/row lineage, run-scoped Quarantined Rows, complete Processing Details reconciliation and outcome tabs. Investigation combines frozen risk measurements, account context, current ownership, notes, permitted outcomes and human lifecycle evidence. Independent alert delivery uses actual claims/receipts, including uncertainty; it never follows from severity alone. Insights uses SAST display and evidence-matching filters; the existing inclusive transaction end filter remains compatible, with explicit `to_exclusive=1` for new half-open Insights drill-downs.
+
+Medium 24h, High 4h and Escalated 2h review targets reuse existing recorded creation/escalation history. Priority, filters and counters are calculated over authorized records before pagination. SLA never resolves a case automatically. No Migration 007 is needed. Scoring, financial mutations, authorization, migrations 001-006, credentials and preserved financial/audit records remain unchanged.
+
+The shared UI has stronger navigation and entity hierarchy, readable striped tables, severity/action contrast, balanced component evidence, clear processing summaries and mobile containment. Desktop/mobile acceptance screenshots are local verification evidence, not finalized SOP capture. Mark as read dismisses only a session notification.
+
+Historical role-at-action is explicitly Not recorded where SQL did not persist it. Partly processed runs continue to obey their existing account-provenance restrictions; a permitted submission-receipt fallback is clearly a snapshot. These boundaries are not hidden or replaced with invented evidence.
+
+See [twelve-area workflow gap audit](../EVIDENCE/12-e2e/analyst-workflow-repair/WORKFLOW_GAP_AUDIT.md) and [verification evidence](../EVIDENCE/12-e2e/analyst-workflow-repair/verification-summary.json). AWS was untouched; no deployment, push or final SOP regeneration. This new source requires an interactive SOP walkthrough and exact-candidate Linux Python 3.12 / PostgreSQL 16 re-verification before AWS. The earlier Linux proof applies only to `38e2f2fc`.

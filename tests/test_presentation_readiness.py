@@ -69,10 +69,12 @@ def test_insights_real_totals_unscored_exclusion_and_scope(release_db,authentica
     assert scoped["batch_reconciliation"]["rows_received"]==4
     assert client.get("/v1/release1/insights?account_id="+other,headers=headers("Admin")).status_code==403
 
-@pytest.mark.parametrize("query",["days=1","days=7&days=30","unknown=x"])
+@pytest.mark.parametrize("query",["days=2","days=7&days=30","unknown=x"])
 def test_insight_filter_validation(release_db,authenticated_client,query):
     client,headers=authenticated_client
     assert client.get("/v1/release1/insights?"+query,headers=headers("Admin")).status_code==400
+    if query=="days=2":
+        assert client.get("/v1/release1/insights?days=1",headers=headers("Admin")).status_code==200
 
 def test_empty_scored_state_and_maintainer_denied(release_db,authenticated_client,maintainer_headers):
     client,headers=authenticated_client

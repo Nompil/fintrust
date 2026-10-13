@@ -7,7 +7,8 @@ from . import workflow_api as api
 def detail(event,principal):
     principal.require('read')
     rows=api._query('''SELECT r.*,t.*,p.result AS risk,p.processed_at,
-        w.review_status,w.reviewer_subject,w.version,w.reviewed_by,w.reviewed_at,w.review_notes,w.resolution_code
+        w.review_status,w.reviewer_subject,w.created_at AS review_created_at,w.version,w.reviewed_by,w.reviewed_at,w.review_notes,w.resolution_code,
+        EXISTS(SELECT 1 FROM ingestion_records i WHERE i.canonical_tx_id=t.tx_id) AS has_occurrence
         FROM risk_events r JOIN transactions t USING(tx_id)
         LEFT JOIN processed_transactions p USING(tx_id) LEFT JOIN risk_reviews w USING(risk_event_id)
         WHERE r.risk_event_id=%s AND t.account_id=ANY(%s::uuid[])''',(event,list(principal.accounts)))
@@ -16,7 +17,7 @@ def detail(event,principal):
     # Explicitly obtain event timestamp: t.* must not shadow r.created_at.
     stamp=api._query('SELECT created_at FROM risk_events WHERE risk_event_id=%s',(event,))[0]['created_at']
     value['created_at']=stamp
-    from .review_assignment import decorate
+    from .analyst_workflow import decorate
     decorate([value])
     risk=value.get('risk') or {}
     value['risk_level']=risk.get('risk_level','NOT_ASSESSED')
@@ -29,8 +30,10 @@ def detail(event,principal):
         FROM transactions WHERE account_id=%s AND currency=%s AND tx_date>=%s AND tx_date<%s AND tx_id<>%s''',
         (value['account_id'],value['currency'],start,when,value['tx_id']))[0]
     context.update(window_start=start,window_end=when,currency=value['currency'],basis='Current ledger, preceding 30 event-time days; not the original scoring-time snapshot')
-    related=api._query('''SELECT t.tx_id,t.amount,t.currency,t.tx_date,t.merchant,t.country,r.risk_event_id,r.risk_score,
-        p.result->>'risk_level' AS risk_level,w.review_status,w.reviewer_subject
+    related=api._query('''SELECT t.tx_id,t.amount,t.currency,t.tx_date,t.merchant,t.country,t.raw_file,
+        t.batch_id,t.source_system,t.source_transaction_id,t.transaction_fingerprint,r.risk_event_id,r.risk_score,
+        p.result AS risk,p.result->>'risk_level' AS risk_level,w.review_status,w.reviewer_subject,
+        EXISTS(SELECT 1 FROM ingestion_records i WHERE i.canonical_tx_id=t.tx_id) AS has_occurrence
         FROM transactions t LEFT JOIN risk_events r USING(tx_id) LEFT JOIN processed_transactions p USING(tx_id)
         LEFT JOIN risk_reviews w USING(risk_event_id)
         WHERE t.account_id=%s AND t.tx_date>=%s AND t.tx_date<=%s AND t.tx_id<>%s
@@ -41,11 +44,15 @@ def detail(event,principal):
         LEFT JOIN risk_reviews w USING(risk_event_id) WHERE t.account_id=%s AND t.tx_date>=%s AND t.tx_date<%s""",
         (value['account_id'],start,when))[0]
     context.update(totals)
+    from .analyst_workflow import assessment
+    for row in related:assessment(row)
     value['account_context']=context;value['related_transactions']=related[:20];value['related_truncated']=len(related)>20
     from .lifecycle_api import transaction
     lifecycle=transaction(str(value['tx_id']),principal)
     value['timeline']=lifecycle['timeline'];value['timeline_complete']=lifecycle['timeline_complete']
     value['review_history']=lifecycle['review_history']
+    from .analyst_workflow import review
+    review(value,history=value['review_history'])
     # Read the independent cloud delivery claim, not review state or an assumed send.
     from .dynamo import get_item
     from botocore.exceptions import ClientError,BotoCoreError
@@ -57,6 +64,7 @@ def detail(event,principal):
     owner=value.get('reviewer_subject')==principal.subject
     value['allowed_actions']={'claim':principal.role=='Risk/Compliance Analyst' and value.get('review_status')=='OPEN' and not value.get('reviewer_subject'),
         'assign':principal.role=='Admin' and value.get('review_status') in {'OPEN','UNDER_REVIEW','ESCALATED'},
+        'resume':principal.role=='Risk/Compliance Analyst' and owner and value.get('review_status')=='ESCALATED',
         'note':principal.role=='Risk/Compliance Analyst' and owner and value.get('review_status')=='UNDER_REVIEW',
         'decide':principal.role=='Risk/Compliance Analyst' and owner and value.get('review_status')=='UNDER_REVIEW'}
     value['updated_at']=value['review_history'][-1]['changed_at'] if value['review_history'] else stamp

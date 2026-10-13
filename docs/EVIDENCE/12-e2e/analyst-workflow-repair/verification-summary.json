@@ -1,0 +1,122 @@
+{
+  "verification_status": "LOCAL_ANALYST_WORKFLOW_VERIFIED",
+  "baseline_commit": "38e2f2fc2f58eca50875b4f22bbc07841036fe54",
+  "candidate_ref": "work/fintrust-analyst-workflow",
+  "candidate_commit_resolution": "git log -1 --format=%H -- docs/EVIDENCE/12-e2e/analyst-workflow-repair/verification-summary.json",
+  "tested_source_context": "Frozen modified worktree based on the baseline HEAD, committed only after local verification. Reported pre-commit HEAD values are not assertions of exact-commit testing. Production fingerprints are in source-file-sha256.json; Linux exact-commit proof is still required.",
+  "source_fingerprint_encoding": "Raw tested Windows file bytes; Git may normalize text line endings at checkout.",
+  "verified_utc": "2026-10-13T22:52:55.757507+00:00",
+  "environment": {
+    "os": "Windows",
+    "architecture": "AMD64",
+    "python": "3.14.7",
+    "postgresql": "16.15",
+    "node": "24.19.0",
+    "database": "fresh isolated disposable loopback PostgreSQL",
+    "aws_transport": "mocked; unmocked botocore transport prohibited",
+    "browser_external_network": "blocked"
+  },
+  "full_regression": {
+    "collected": 961,
+    "passed": 961,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "new_cases_vs_baseline": 57
+  },
+  "first_regression_failures_resolved": [
+    {
+      "class": "tests.test_presentation_readiness",
+      "test": "test_insight_filter_validation[days=1]"
+    },
+    {
+      "class": "tests.test_presentation_readiness",
+      "test": "test_launcher_named_users_reset_and_unrelated_schema_protection"
+    },
+    {
+      "class": "tests.test_repository_layout",
+      "test": "test_entry_assets_are_served_from_the_moved_locations"
+    }
+  ],
+  "focused_regression_repairs": {
+    "passed": 5,
+    "scope": "Unsupported-period rejection, supported 24-hour preset, isolated launcher reset protection, served asset inventory"
+  },
+  "browser_gates": {
+    "count": 8,
+    "status": "PASSED",
+    "gates": [
+      "investigation",
+      "missing-original-evidence",
+      "own-unknown-account-recovery",
+      "named-multi-user",
+      "three-review-outcomes",
+      "risk-model-v2",
+      "workbench",
+      "analyst-journeys-A-G"
+    ]
+  },
+  "acceptance_scenarios": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G"
+  ],
+  "screenshots": [
+    "auditor-read-only-mobile.png",
+    "filtered-quarantined-rows-390.png",
+    "filtered-quarantined-rows.png",
+    "historical-no-fabricated-score.png",
+    "insights-evidence-scope-390.png",
+    "insights-evidence-scope.png",
+    "journey-high-decision-390.png",
+    "journey-high-decision.png",
+    "journey-medium-decision-390.png",
+    "journey-medium-decision.png",
+    "low-lifecycle.png",
+    "processing-details-1366.png",
+    "processing-details-390.png",
+    "quarantine-corrected-result.png",
+    "quarantine-correction.png",
+    "quarantine-rejected-evidence.png",
+    "review-queue-overdue.png",
+    "sla-workload-390.png",
+    "sla-workload.png"
+  ],
+  "sla_defaults_seconds": {
+    "MEDIUM": 86400,
+    "HIGH": 14400,
+    "ESCALATED": 7200,
+    "DUE_SOON": 3600
+  },
+  "migration_007": "NOT_NEEDED; existing owner/history/timestamps reused",
+  "migrations_001_through_006": "UNCHANGED",
+  "risk_model_v2": "UNCHANGED; no historical rescoring",
+  "preservation_checks": {
+    "pre_existing_tracked_edits_unchanged": true,
+    "credential_and_config_files_unchanged": true,
+    "frozen_rules_auth_worker_migrations_unchanged": true,
+    "preserved_financial_and_audit_tables_unchanged": true
+  },
+  "mark_as_read": "Browser session notification dismissal only; no financial/database mutation",
+  "aws_touched": false,
+  "deployed": false,
+  "pushed": false,
+  "final_sop_generated": false,
+  "linux_exact_source_gate": "REQUIRED for this new candidate before AWS; old proof applies only to baseline source",
+  "remaining_boundaries": [
+    "Historical SQL actions lack recorded role-at-action; actor identity/type is exposed without inventing role history.",
+    "Partly processed runs without proven row-account scope retain existing authorization; submission receipt fallback is explicitly a snapshot."
+  ],
+  "next_step": "Interactive Analyst SOP walkthrough, then exact-candidate Linux Python 3.12 / PostgreSQL 16 re-freeze.",
+  "standalone_ci_browser": {
+    "status": "PASSED",
+    "evidence": "standalone-ci-browser.json",
+    "reported_checkout_head": "38e2f2fc2f58eca50875b4f22bbc07841036fe54",
+    "tested_source": "modified worktree; production fingerprints in source-file-sha256.json"
+  },
+  "post_verification_normalization": "Removed two trailing blank lines; Python ASTs verified identical. No semantic changes."
+}

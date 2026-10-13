@@ -119,8 +119,11 @@ def test_queue_filters_age_and_optional_sla(release_db,people,monkeypatch):
     assert not c.get('/v1/workflows/reviews?queue=mine',headers=h('analyst02')).json['data']
     assert not c.get('/v1/workflows/reviews?queue=unassigned',headers=h('analyst02')).json['data']
     monkeypatch.delenv('FINTRUST_REVIEW_SLA_SECONDS',raising=False)
+    assert c.get('/v1/workflows/reviews?queue=over_sla',headers=h('analyst01')).json['meta']['sla_configured'] is True
+    monkeypatch.setenv('FINTRUST_REVIEW_SLA_ENABLED','false')
     assert c.get('/v1/workflows/reviews?queue=over_sla',headers=h('analyst01')).json['meta']['sla_configured'] is False
-    now=datetime.now(timezone.utc);rows=[{'created_at':now-timedelta(seconds=90),'review_status':'OPEN','reviewer_subject':None}]
+    monkeypatch.setenv('FINTRUST_REVIEW_SLA_ENABLED','true')
+    now=datetime.now(timezone.utc);rows=[{'created_at':now-timedelta(seconds=90),'review_status':'OPEN','reviewer_subject':None,'risk':{'score':55,'risk_level':'High'}}]
     monkeypatch.setenv('FINTRUST_REVIEW_SLA_SECONDS','60');review_assignment.decorate(rows,now)
     assert rows[0]['age_seconds']==90 and rows[0]['over_sla']
 

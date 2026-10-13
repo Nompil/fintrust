@@ -1,0 +1,30 @@
+{
+  "status": "PASSED",
+  "scenarios": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G"
+  ],
+  "checks": [
+    "G: controlled SLA clock marks a HIGH review overdue without a decision or timestamp rewrite",
+    "Mark as read changes only session notification state, with unchanged processing, ledger and reviews",
+    "Upload lineage: run-filtered quarantine, clear filter, correct source count, long filename and all outcome tabs",
+    "D/E: permitted correction revalidates to ledger; rejection retains source and notes without ledger entry",
+    "A: LOW is stored, scored 0%, requires no review or alert, and remains reportable",
+    "B: MEDIUM claim, 24h policy, attributed note, clear and immutable history",
+    "C: HIGH claim, independent pending alert, 4h policy, attributed note and confirm risk",
+    "F: known seed provenance labels historical without inventing assessment or review",
+    "Scoped Insights denominator excludes seed history, SAST labels and matching investigation drill down; report includes ledger"
+  ],
+  "batch_id": "0d0654b2-64aa-538e-9f7c-f1e2e1d8b418",
+  "corrected_case": "ac024d92-0148-5153-8c8f-2b3b709025a0",
+  "rejected_case": "92c58cac-06cd-555d-8989-71764ddc33ae",
+  "sla_clock": "2026-10-14T03:39:12.266198+00:00",
+  "external_network": "blocked",
+  "aws_transport": "mocked",
+  "page_errors": []
+}

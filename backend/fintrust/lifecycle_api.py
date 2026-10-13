@@ -41,7 +41,7 @@ def occurrence(batch,row,principal):
 
 def transaction(identifier,principal):
     principal.require('read');identifier=str(uuid.UUID(identifier))
-    rows=api._query('SELECT t.*,p.result AS risk,p.processed_at FROM transactions t LEFT JOIN processed_transactions p USING(tx_id) WHERE t.tx_id=%s AND t.account_id=ANY(%s::uuid[])',(identifier,list(principal.accounts)))
+    rows=api._query(api.transaction_select()+' WHERE t.tx_id=%s AND t.account_id=ANY(%s::uuid[])',(identifier,list(principal.accounts)))
     if not rows:raise api.NotFound()
     value=rows[0]
     occurrences=api._query('SELECT batch_id,source_row FROM ingestion_records WHERE canonical_tx_id=%s ORDER BY batch_id,source_row LIMIT 101',(identifier,))
@@ -49,8 +49,14 @@ def transaction(identifier,principal):
     value['occurrences']=[occurrence(str(o['batch_id']),o['source_row'],principal) for o in occurrences]
     history=api._query('SELECT h.* FROM risk_review_history h JOIN risk_events r USING(risk_event_id) WHERE r.tx_id=%s ORDER BY h.changed_at DESC,h.version DESC LIMIT 1001',(identifier,))
     history_truncated=len(history)>1000;history=list(reversed(history[:1000]))
-    value['review_state']=history[-1]['after_status'] if history else 'NOT_REQUIRED' if value['risk'] else 'NOT_ASSESSED'
-    value['risk_state']=(value['risk'] or {}).get('risk_level','NOT_ASSESSED')
+    for h in history:
+        automated=h['actor_subject']=='scoring-worker' and h['before_status'] is None
+        h['actor_type']='SYSTEM' if automated else 'HUMAN'
+        h['actor_role']='SYSTEM' if automated else 'Not recorded'
+        if not automated:h['actor_role_note']='Role-at-action was not stored; the current registry role is not historical evidence.'
+    from .analyst_workflow import assessment,review
+    assessment(value);review(value,history=history)
+    value['risk_state']=(value['risk'] or {}).get('risk_level',value['assessment_state'])
     value['current_state']='STORED';value['review_history']=history
     timeline=[]
     corrections=api._query('SELECT c.submitted_by,c.submitted_at,c.action,c.quarantine_id FROM quarantine_corrections c WHERE EXISTS(SELECT 1 FROM ingestion_records i WHERE i.batch_id=c.reprocess_batch_id AND i.source_row=c.reprocess_source_row AND i.canonical_tx_id=%s) ORDER BY c.submitted_at LIMIT 101',(identifier,))
@@ -68,11 +74,15 @@ def transaction(identifier,principal):
     try:claim=get_item(os.environ.get('DYNAMODB_TABLE','risk_scores'),{'account_id':str(value['account_id']),'score_date':'ALERT#'+identifier}) or {}
     except (ClientError,BotoCoreError):claim={'delivery_state':'UNAVAILABLE'}
     receipts=api._query('SELECT delivery_state,sent_at FROM alerts a JOIN risk_events r USING(risk_event_id) WHERE r.tx_id=%s',(identifier,))
-    value['alert_state']=claim.get('delivery_state') or ('SENT' if any(x['delivery_state']=='SENT' for x in receipts) else 'PENDING' if value['risk_state']=='High' else 'NOT_REQUIRED')
+    from .analyst_workflow import alert_projection
+    value.update(alert_projection(value,claim,receipts))
     for receipt in receipts:
         if receipt['delivery_state']=='SENT' and receipt['sent_at']:timeline.append(dict(event_type='ALERTED',occurred_at=receipt['sent_at'],actor_subject='alert-worker',actor_type='SYSTEM',evidence_source='SQL_RECEIPT'))
     if claim.get('delivery_state')=='SENT' and claim.get('updated_at'):timeline.append(dict(event_type='ALERTED',occurred_at=claim['updated_at'],actor_subject='alert-worker',actor_type='SYSTEM',evidence_source='DYNAMODB_CLAIM'))
     from datetime import datetime
+    for entry in timeline:
+        entry.setdefault('actor_role','SYSTEM' if entry['actor_type']=='SYSTEM' else 'Not recorded')
+        if entry['actor_role']=='Not recorded':entry['actor_role_note']='Role-at-action was not stored; current roles are not historical evidence.'
     value['timeline']=sorted(timeline,key=lambda e:datetime.fromisoformat(e['occurred_at'].replace('Z','+00:00')) if isinstance(e['occurred_at'],str) else e['occurred_at'])
     value['timeline_complete']=bool(value['occurrences']) and not occurrences_truncated and not history_truncated and len(corrections)<=100 and len(operations)<=100 and all(o['timeline_complete'] for o in value['occurrences'])
     return value

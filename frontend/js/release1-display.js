@@ -14,11 +14,18 @@ const FinTrustDisplay = (() => {
     return (prefixes[kind] || "REF") + "-" + hash.toString(36).toUpperCase().padStart(13,"0");
   }
   function value(kind, raw) {
-    if (raw === null || raw === undefined || raw === "") return kind === "risk_level" ? "Not assessed" : ["merchant","source_system","source_transaction_id","source_reference"].includes(kind)?"Not provided in source":kind.startsWith("before_")?"No previous value":["resolution_code","review_notes"].includes(kind)?"No decision yet":kind==="canonical_tx_id"?"No accepted transaction": "Not available";
+    if (raw === null || raw === undefined || raw === "") return ["risk_level","risk_score","review_status","score"].includes(kind) ? "Not recorded" : ["merchant","source_system","source_transaction_id","source_reference"].includes(kind)?"Not provided in source":kind.startsWith("before_")?"No previous value":["resolution_code","review_notes"].includes(kind)?"No decision yet":kind==="canonical_tx_id"?"No accepted transaction": "Not recorded";
     if (["risk_score","score"].includes(kind) && Number.isFinite(Number(raw)) && Number(raw)>=0 && Number(raw)<=100) return String(Number(raw))+"%";
+    if (["review_status","before_status","after_status"].includes(kind) && typeof raw === "string") return raw.replaceAll("_"," ");
     if (prefixes[kind]) return reference(kind, raw);
     if (kind === "amount" && Number.isFinite(Number(raw))) return Number(raw).toLocaleString("en-ZA",{minimumFractionDigits:2,maximumFractionDigits:2});
     return typeof raw === "object" ? JSON.stringify(raw, null, 2) : String(raw);
+  }
+  function time(raw) {
+    if (!raw) return "Not recorded";
+    const date = new Date(raw);
+    if (Number.isNaN(date.getTime())) return String(raw);
+    return new Intl.DateTimeFormat("en-ZA", {timeZone:"Africa/Johannesburg",day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit",hour12:false}).format(date)+" SAST";
   }
   function failure(status, page) {
     if (status === 401) return "Session expired. Sign in again to continue.";
@@ -27,10 +34,13 @@ const FinTrustDisplay = (() => {
     if (page === "Insights") return "Insights unavailable. Refresh and try again.";
     return "Data unavailable. Refresh and try again.";
   }
+  function pageName(page) {
+    return {Quarantine:"Quarantined Rows", "Ingestion Batches":"Processing History"}[page] || page;
+  }
   function notice(message, severity, page) {
     const title = page === "Insights" && severity === "ERROR" ? "Insight unavailable" : /File rejected/i.test(message) ? "File rejected" : /already processed/i.test(message) ? "Duplicate file" : severity === "WARNING" ? "Rows need attention" : severity === "ERROR" ? "Action unavailable" : severity === "ACTION_REQUIRED" ? "Attention required" : severity === "SUCCESS" ? "Action completed" : "Workspace update";
-    return {title, action: page ? "Open " + page : "Refresh and try again."};
+    return {title, action: page ? "Open " + pageName(page) : "Refresh and try again."};
   }
-  return {uuid, reference, value, failure, notice};
+  return {uuid, reference, value, time, failure, notice, pageName};
 })();
 if (typeof module !== "undefined") module.exports = FinTrustDisplay;
