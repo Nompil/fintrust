@@ -1,0 +1,40 @@
+{
+  "status": "VERIFIED",
+  "utc": "2026-10-13T10:55:40.689767+00:00",
+  "base_commit": "b73866c",
+  "asset_version": "console-5",
+  "test_runs": {
+    "affected-regression": {
+      "tests": 111,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "final-browser": {
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "scope": "Local UI overhaul. Authoritative domain/API/database/scoring unchanged.",
+  "screenshots": "Synthetic isolated PostgreSQL test data; AWS mocked; external browser network blocked.",
+  "viewports": [
+    390,
+    1100,
+    1366,
+    1600,
+    1920
+  ],
+  "reference": "https://www.datadoghq.com/ and supplied screenshots; interaction inspiration only.",
+  "source_sha256": {
+    "frontend/release1.html": "5cd377da1678e00f9050095d9f2c1e321f7e72679b8ae3336bc603cbc29b97e9",
+    "frontend/css/release1.css": "f3eda41857b7dfe5451cd7b850a32dc080090ac648921ffbd718e020bccd509f",
+    "frontend/js/release1.js": "0c81107d9bc9e604c05e45a05be1742f60fbe0052f6027c6bc2c091fb64d7b65",
+    "frontend/js/release1-workflows.js": "b95603fd240d9b5e666bb3bf41390c6b106a616d27ecba99383c48c309288378",
+    "frontend/js/release1-display.js": "3d8876317dd8788b863406a94d1848c48075ed5751ee592375b1dd27a74c6888",
+    "tools/verify_workbench_ui.cjs": "9cbc263893ef01894233595cfb427c58319ac50d964286371efdb1ba0ac58987",
+    "tools/verify_investigation_ui.cjs": "609cda64e62df64cc5b274ab81c73100a98fffda4c4efe6caadc0ab2d5f562d5"
+  },
+  "cloud_status": "AWS untouched; deployment and live cloud E2E remain separate gates."
+}

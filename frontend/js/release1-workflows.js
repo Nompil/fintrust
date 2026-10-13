@@ -17,3 +17,43 @@ async function showRecordedLifecycle(panel,id){const section=node("section","");
 let reportScope={};
 document.getElementById("apply-report-filters").onclick=()=>{offset=0;load();};
 async function openOccurrence(batch,row){const own=++investigationGeneration;try{const data=(await request(`/v1/ingestion/${batch}/rows/${row}/lifecycle`)).data;if(own!==investigationGeneration||!principal)return;const panel=drawer("Row processing timeline");panel.append(investigationFacts({batch_id:data.batch_id,source_row:data.source_row,current_state:data.current_state,processing_state:data.processing_state}),table(data.timeline||[],["occurred_at","event_type","actor_subject","actor_type"]));if(data.correction_timeline?.length)panel.append(table(data.correction_timeline,["occurred_at","event_type","actor_subject"]));panel.append(node("p",data.timeline_note));if(!data.timeline_complete)panel.append(node("p","Processing evidence incomplete. Missing steps are not inferred."));}catch(e){if(own===investigationGeneration)error(e);}}
+
+
+// Workspace composition only. Authority, scoring and durable state stay in the backend.
+function consoleIcon(name){
+ const paths={Overview:'M3 3h7v7H3z M14 3h7v7h-7z M3 14h7v7H3z M14 14h7v7h-7z',Transactions:'M4 5h16 M4 12h16 M4 19h16 M8 3v18', 'Risk Events':'M12 3 2 21h20L12 3z M12 9v5 M12 17v1','Review Queue':'M7 5H4v16h16V5h-3 M8 3h8v4H8z M8 12l2 2 5-5 M8 18h8', 'Upload Transactions':'M12 16V3 M7 8l5-5 5 5 M4 16v5h16v-5',Quarantine:'M4 4h16v16H4z M8 8l8 8 M16 8l-8 8','Ingestion Batches':'M3 6l9-4 9 4-9 4-9-4z M3 12l9 4 9-4 M3 18l9 4 9-4',Accounts:'M8 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8 M2 21v-3a6 6 0 0 1 12 0v3 M17 4h4 M17 10h4 M17 16h4',Insights:'M3 3v18h18 M7 16l4-6 4 3 6-9',Reports:'M5 2h10l4 4v16H5z M14 2v5h5 M8 12h8 M8 16h8',Notifications:'M5 17h14l-2-4V8a5 5 0 0 0-10 0v5l-2 4z M10 21h4',Audit:'M12 2 3 6v6c0 6 9 10 9 10s9-4 9-10V6l-9-4z M8 12l3 3 5-6',Operations:'M14 3a6 6 0 0 0-6 8l-6 6 5 5 6-6a6 6 0 0 0 8-6l-4 3-4-4 3-6z',Administration:'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8 M12 2v3 M12 19v3 M2 12h3 M19 12h3 M5 5l2 2 M17 17l2 2 M5 19l2-2 M17 7l2-2'};
+ const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 24 24');svg.setAttribute('aria-hidden','true');svg.classList.add('console-icon');const p=document.createElementNS(svg.namespaceURI,'path');p.setAttribute('d',paths[name]||paths.Transactions);p.setAttribute('fill','none');p.setAttribute('stroke','currentColor');p.setAttribute('stroke-width','1.6');p.setAttribute('stroke-linecap','round');p.setAttribute('stroke-linejoin','round');svg.append(p);return svg;
+}
+function consoleShell(page){
+ const main=document.querySelector('main');main.dataset.page=page;main.classList.remove('record-open');byId('content').classList.remove('explorer-grid');document.getElementById('console-sidebar').classList.remove('is-open');document.getElementById('mobile-menu').setAttribute('aria-expanded','false');
+ const crumb=document.getElementById('workspace-crumb');if(crumb)crumb.textContent=(navigationGroup(page)||'Monitoring')+' / '+(page==='Administration'?'Users':page);
+ for(const b of byId('navigation').querySelectorAll('button'))if(!b.querySelector('svg'))b.prepend(consoleIcon(b.dataset.page));
+}
+function reviewWorkbenchRail(data){
+ const rail=node('aside','');rail.className='workbench-action-rail';rail.append(node('h3','NEXT ACTIONS'),node('p','Start with an unresolved item.'));
+ const entries=[['Review flagged activity',data.open_reviews,'Review Queue'],['Correct invalid rows',data.quarantined_rows,'Quarantine'],['Check processing failures',data.technical_failures,'Ingestion Batches']];
+ for(const [label,count,page]of entries){const b=button('',()=>navigate(page));b.className='workbench-task';b.append(consoleIcon(page),node('span',label),node('strong',String(count)),node('span','›'));rail.append(b);}
+ return rail;
+}
+function investigationLayout(panel,d){
+ const hero=node('div','');hero.className='case-hero';const top=node('div','');top.className='case-hero-top';const severity=node('span',d.risk_level);severity.className='status-badge status-'+String(d.risk_level).toLowerCase();top.append(severity,node('span',FinTrustDisplay.reference('risk_event_id',d.risk_event_id)),node('span',d.review_status));
+ hero.append(top,node('h3',`${d.currency} ${FinTrustDisplay.value('amount',d.amount)}`),node('p',`${FinTrustDisplay.reference('account_id',d.account_id)} · ${d.merchant||'Merchant not provided'} · ${FinTrustDisplay.reference('tx_id',d.tx_id)}`));const score=node('div','');score.className='case-score';score.append(riskScore(d.risk_score),node('small','Recorded risk score'));hero.append(score);
+ const layout=node('div','');layout.className='investigation-layout';const evidence=node('div','');evidence.className='investigation-evidence';const actions=node('aside','');actions.className='investigation-actions';actions.setAttribute('aria-label','Review actions');
+ const tabs=node('div','');tabs.className='case-tabs';tabs.setAttribute('aria-label','Investigation evidence sections');
+ for(const [label,group]of [['All evidence','all'],['Risk evidence','risk'],['Timeline','history'],['Related activity','related']]){const b=button(label,()=>{for(const s of evidence.querySelectorAll(':scope>section'))s.hidden=group!=='all'&&s.dataset.evidenceGroup!==group;for(const item of tabs.querySelectorAll('button'))item.setAttribute('aria-pressed',String(item===b));});b.setAttribute('aria-pressed',String(group==='all'));tabs.append(b);}evidence.append(tabs);layout.append(evidence,actions);panel.append(hero,layout);return {evidence,actions};
+}
+function arrangeRecovery(shell,panel,data){
+ const hero=node('div','');hero.className='case-hero recovery-hero';hero.append(node('span',FinTrustDisplay.reference('quarantine_id',data.quarantine_id)),node('h3',String(data.reason_code||'Invalid transaction').replaceAll('_',' ')),node('p',data.reason_detail||'Correct the validation issue using original evidence.'));
+ const layout=node('div','');layout.className='investigation-layout';panel.classList.add('investigation-evidence');const actions=node('aside','');actions.className='investigation-actions';actions.id='recovery-actions';actions.setAttribute('aria-label','Correction actions');
+ let moving=false;for(const child of [...panel.children]){if(child.tagName==='H3'&&child.textContent==='NEXT STEPS')moving=true;if(moving)actions.append(child);}
+ const context=node('div','');context.className='recovery-state';context.append(node('span','RECOVERY STATUS'),node('strong',data.recovery_status||data.workflow_status));actions.prepend(context);layout.append(panel,actions);shell.append(hero,layout);
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+ const trigger=document.getElementById('workspace-switcher'),dialog=document.getElementById('workspace-search');if(!trigger||!dialog)return;
+ const input=dialog.querySelector('input'),list=dialog.querySelector('.workspace-search-results');
+ function render(){list.replaceChildren();for(const nav of byId('navigation').querySelectorAll('button'))if(nav.textContent.toLowerCase().includes(input.value.toLowerCase())){const b=button(nav.textContent,()=>{dialog.close();nav.click();});b.prepend(consoleIcon(nav.dataset.page));list.append(b);}if(!list.childElementCount)list.append(node('p','No matching workspace pages.'));}
+ trigger.onclick=()=>{if(!principal)return;input.value='';render();dialog.showModal();input.focus();};input.oninput=render;dialog.querySelector('.search-close').onclick=()=>dialog.close();
+ document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'&&principal){e.preventDefault();trigger.click();}});
+ const menu=document.getElementById('mobile-menu');menu.onclick=()=>{const sidebar=document.getElementById('console-sidebar');const expanded=sidebar.classList.toggle('is-open');menu.setAttribute('aria-expanded',String(expanded));};
+});

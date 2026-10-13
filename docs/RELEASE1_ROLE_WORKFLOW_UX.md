@@ -34,3 +34,22 @@ The Overview uses a compact light workspace, dark FinTrust navigation, six real 
 DECISION | SOURCE | WHY IT APPLIES | HOW FINTRUST USES IT: Compact monitoring/investigation workspace | https://www.datadoghq.com/ and user-supplied monitoring screenshots | Operators need counts, evidence and next actions in a readable workspace | Adapt interaction density, tables and adjacent investigation; keep FinTrust identity and original brief. No external logo, copied icons or proprietary layout assets.
 
 Verification: 29 focused local SQL/browser tests passed; final mobile row-height polish passed the workbench browser separately. Evidence: docs/EVIDENCE/12-e2e/monitoring-score-ui/. The earlier 847/1 full regression remains its original checkpoint, not a new full-suite claim. No AWS, user credential or persisted financial changes; the user-requested local port-5001 server remains stopped.
+
+
+## 13 October 2026 — console-5 operational overhaul
+
+The user rejected the previous refinement and requested a major structural overhaul. The new console replaces the layered stylesheet with one theme, an icon-led FinTrust sidebar, compact top bar, breadcrumb and a role-scoped workspace finder (Ctrl+K). Mobile navigation has an explicit toggle. The workspace finder only lists navigation permitted for the current role; API authorization remains authoritative.
+
+Overview now puts the active review queue beside next actions, with real metrics above and transaction/risk/scenario/review charts below. Transactions use a dedicated filter rail and a dense ledger with recorded scores. Risk Events and Review Queue use a facet rail, matching counts and the existing ownership filters. Sorting table headers covers the displayed page; investigation Sort uses the existing backend ordering.
+
+Investigation opens alongside the list. A transaction/severity/recorded-score header leads into WHAT HAPPENED and WHY IS IT RISKY, with WHEN, WHERE, account context, related activity and recorded history retained. Evidence tabs focus the same returned evidence. NEXT STEPS has a distinct action column with claim/assignment, notes and outcome controls according to the existing backend permissions. Outcome buttons select an action; saving still requires notes and the existing version/idempotency contract. HIGH remains an accepted ledger entry, not invalid data or an automatic fraud decision.
+
+Quarantine uses original evidence and correction history beside a separate recovery/action column. Missing original evidence still blocks correction. Own unknown-account correction still requires original upload ownership and an existing assigned target account. Admin user governance and Maintainer recovery remain separate.
+
+| DECISION | SOURCE | WHY IT APPLIES | HOW FINTRUST USES IT |
+| --- | --- | --- | --- |
+| Dense operational explorer with adjacent evidence and next actions | https://www.datadoghq.com/ and user-supplied Datadog screenshots | Investigations need context and action without losing the work queue | Adapt filter rails, readable tables and a distinct investigation action column; use FinTrust colors, labels and original SVG icons. No copied branding/assets and no expanded domain scope. |
+
+Verification: 111 affected regression tests passed using real isolated PostgreSQL, AWS mocks and browser network isolation. After the final evidence/action ordering adjustment, all four browser scenarios passed again. The four role workspaces, role-scoped finder, mobile navigation, evidence tabs, scores (including zero/missing), partial/full errors, claim/notes/clear, correction/worker acceptance and missing-evidence restriction were exercised. This is an affected-suite checkpoint, not a new full-regression or live AWS claim.
+
+Screenshots and source hashes: `docs/EVIDENCE/12-e2e/console-overhaul/`. Screenshots use synthetic isolated test data. The requested local server is running on `http://127.0.0.1:5001/release1`; existing credentials and persisted user workspace data were preserved.

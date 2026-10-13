@@ -51,7 +51,7 @@ def test_overview_zero_and_actual_technical_counts(role,release_db,authenticated
 def test_no_frontend_identity_switch_endpoint_and_current_assets(authenticated_client,local_receipts):
     client,headers=authenticated_client
     html=client.get('/release1').data.decode()
-    assert 'release1-display.js?v=monitoring-4' in html
+    assert 'release1-display.js?v=console-5' in html
     assert 'operator-issued access token' in html
     assert not any('switch' in rule.rule or 'impersonat' in rule.rule for rule in client.application.url_map.iter_rules())
     for role in ('Risk/Compliance Analyst','Read-only/Auditor'):
