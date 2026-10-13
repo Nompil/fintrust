@@ -1,11 +1,7 @@
-name: FinTrust Linux verification
+﻿name: FinTrust Linux verification
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
 
 permissions:
   contents: read
@@ -17,24 +13,32 @@ concurrency:
 jobs:
   verify:
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 35
     services:
       postgres:
-        image: postgres:16
+        image: postgres:16.15
         env:
           POSTGRES_USER: postgres
-          # Disposable CI service only; never an application database credential.
+          # Disposable CI service only; never an application credential.
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: fintrust_test
-        ports:
-          - 5432:5432
+        ports: ['5432:5432']
         options: >-
           --health-cmd "pg_isready -U postgres -d fintrust_test"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+          --health-interval 10s --health-timeout 5s --health-retries 5
+    defaults:
+      run:
+        shell: bash
+        working-directory: candidate
     env:
-      PYTHONPATH: ${{ github.workspace }}/backend
+      APPLICATION_SOURCE_COMMIT: 38e2f2fc2f58eca50875b4f22bbc07841036fe54
+      CI_HARNESS_COMMIT: ${{ github.sha }}
+      FINTRUST_APPLICATION_ROOT: ${{ github.workspace }}/candidate
+      FINTRUST_CI_EVIDENCE: ${{ github.workspace }}/evidence
+      FINTRUST_ROLE_EVIDENCE: ${{ github.workspace }}/evidence/postgres16-roles.json
+      FINTRUST_UI_COPY_EVIDENCE: ${{ github.workspace }}/evidence/browser
+      FINTRUST_PLAYWRIGHT_MODULE: ${{ github.workspace }}/browser-tools/node_modules/playwright
+      PYTHONPATH: ${{ github.workspace }}/candidate/backend:${{ github.workspace }}/candidate
       FINTRUST_TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/fintrust_test
       AWS_REGION: af-south-1
       AWS_DEFAULT_REGION: af-south-1
@@ -43,89 +47,80 @@ jobs:
       AWS_SECRET_ACCESS_KEY: testing
       AWS_SESSION_TOKEN: testing
     steps:
-      - name: Check out source
+      - name: Check out verification controller only
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.sha }}
+          path: harness
           persist-credentials: false
-      - name: Set up Python 3.12
+          fetch-depth: 0
+      - name: Check out immutable application candidate
+        uses: actions/checkout@v4
+        with:
+          ref: 38e2f2fc2f58eca50875b4f22bbc07841036fe54
+          path: candidate
+          persist-credentials: false
+      - name: Set up Linux Python 3.12 x86_64
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
           architecture: x64
-      - name: Confirm Linux release environment
+      - name: Install candidate test dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Install pinned Playwright and isolated Chromium
         run: |
-          python3.12 - <<'PY'
-          import platform, sys
-          print(platform.platform(), platform.machine(), sys.version)
-          assert platform.system() == "Linux"
-          assert platform.machine() == "x86_64"
-          assert platform.python_implementation() == "CPython"
-          assert sys.version_info[:2] == (3, 12)
-          PY
-      - name: Build hardened release with production wheels
+          npm install --prefix ../browser-tools --no-save --ignore-scripts playwright@1.62.1
+          ../browser-tools/node_modules/.bin/playwright install --with-deps chromium
+          echo "FINTRUST_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          mkdir -p "$FINTRUST_CI_EVIDENCE"
+          python -c 'import platform,sys; assert platform.system()=="Linux" and platform.machine()=="x86_64" and sys.version_info[:2]==(3,12); print(platform.platform(),sys.version)' > ../evidence/runtime.txt
+          node --version >> ../evidence/runtime.txt
+          ../browser-tools/node_modules/.bin/playwright --version >> ../evidence/runtime.txt
+          node -e 'const p=require(process.env.FINTRUST_PLAYWRIGHT_MODULE); (async()=>{const b=await p.chromium.launch({headless:true});console.log("Chromium "+b.version());await b.close()})()' >> ../evidence/runtime.txt
+      - name: Verify empty PostgreSQL 16.15 and canonical migrations base through 006
+        run: python ../harness/tools/verify_candidate_ci.py migrations
+      - name: Verify current service roles with append-only lifecycle
+        run: python ../harness/tools/check_release1_roles_pg16.py
+      - name: Run full immutable candidate suite including all seven browser gates
+        run: python -m pytest -q --junitxml=../evidence/pytest.xml
+      - name: Assert exact regression counts and every browser gate
+        run: python ../harness/tools/verify_candidate_ci.py regression
+      - name: Run focused V2 rules scenarios migration and browser assurance
+        run: python -m pytest -q tests/test_risk_model_v2.py tests/test_risk_v2_scenarios.py tests/test_risk_v2_browser.py --junitxml=../evidence/focused-v2.xml
+      - name: Build fresh candidate Linux package only after complete tests pass
         run: |
           mkdir -p build/hardened-release
           curl --fail --silent --show-error --retry 3 --connect-timeout 15 --max-time 120 \
             https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem \
             -o build/hardened-release/global-bundle.pem
-          python3.12 tools/package_hardened_lambda.py \
+          GITHUB_SHA="$APPLICATION_SOURCE_COMMIT" python tools/package_hardened_lambda.py \
             --ca-bundle build/hardened-release/global-bundle.pem \
             --output build/release1-candidate/fintrust-release1-linux-py312.zip
-      - name: Check exact built content and source binding
-        run: python3.12 tools/verify_release_input.py build/release1-candidate/fintrust-release1-linux-py312.zip
-      - name: Verify built handlers and all production modules
+      - name: Check exact package contents source binding and secret patterns
+        run: GITHUB_SHA="$APPLICATION_SOURCE_COMMIT" python tools/verify_release_input.py build/release1-candidate/fintrust-release1-linux-py312.zip
+      - name: Verify five archived handlers all production modules and native dependencies
         run: |
           set -o pipefail
-          python3.12 tools/verify_lambda_linux.py build/release1-candidate/fintrust-release1-linux-py312.zip --all-production 2>&1 | tee build/linux-verification.txt
-      - name: Install approved test dependencies
-        run: python3.12 -m pip install -r requirements.txt
-      - name: Verify Release 1 PostgreSQL 16 service roles
-        run: python3.12 tools/check_release1_roles_pg16.py
-      - name: Install scoped browser verification dependency
-        run: npm install --prefix build/browser-tools --no-save --ignore-scripts playwright@1.62.1
-      - name: Run Release 1 candidate browser gate
-        env:
-          FINTRUST_NODE: /usr/local/bin/node
-          FINTRUST_PLAYWRIGHT_MODULE: ${{ github.workspace }}/build/browser-tools/node_modules/playwright
-        run: |
-          export FINTRUST_NODE="$(command -v node)"
-          python3.12 tools/run_release1_browser.py
-      - name: Run full suite with disposable PostgreSQL
-        run: python3.12 -m pytest -q --junitxml=test-results/pytest.xml
-      - name: Record release gate evidence
-        if: always()
-        env:
-          FINTRUST_RELEASE_ARCHIVE: build/release1-candidate/fintrust-release1-linux-py312.zip
-        run: python3.12 tools/record_release_verification.py
-      - name: Preserve verification evidence
+          python tools/verify_lambda_linux.py build/release1-candidate/fintrust-release1-linux-py312.zip --all-production 2>&1 | tee ../evidence/linux-import-check.txt
+      - name: Verify controller exclusion and record exact candidate readiness
+        run: python ../harness/tools/verify_candidate_ci.py final
+      - name: Preserve verification evidence including failures
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: fintrust-hardened-verification-evidence
+          name: fintrust-exact-candidate-linux-evidence
           path: |
-            docs/EVIDENCE/11-ci/hardened-release-linux-ci.json
-            docs/EVIDENCE/11-ci/hardened-release-linux-ci.md
-            build/linux-verification.txt
-            build/release1-candidate/fintrust-release1-linux-py312.manifest.json
-            test-results/pytest.xml
-            docs/EVIDENCE/12-e2e/release1-closure/postgres16-roles.json
-            docs/EVIDENCE/12-e2e/release1-lifecycle/browser/
-            build/release1-lifecycle/row-results.json
+            evidence/
+            candidate/build/release1-candidate/*.manifest.json
           if-no-files-found: error
           retention-days: 30
-      - name: Publish only the verified release
+      - name: Publish only freshly verified immutable application package
         uses: actions/upload-artifact@v4
         with:
           name: fintrust-release1-linux-py312
           path: |
-            build/release1-candidate/fintrust-release1-linux-py312.zip
-            build/release1-candidate/fintrust-release1-linux-py312.manifest.json
-            docs/EVIDENCE/11-ci/hardened-release-linux-ci.json
-            docs/EVIDENCE/11-ci/hardened-release-linux-ci.md
-            build/linux-verification.txt
-            test-results/pytest.xml
-            docs/EVIDENCE/12-e2e/release1-closure/postgres16-roles.json
-            docs/EVIDENCE/12-e2e/release1-lifecycle/browser/
-            build/release1-lifecycle/row-results.json
+            candidate/build/release1-candidate/fintrust-release1-linux-py312.zip
+            candidate/build/release1-candidate/fintrust-release1-linux-py312.manifest.json
+            evidence/readiness-summary.json
           if-no-files-found: error
           retention-days: 30
