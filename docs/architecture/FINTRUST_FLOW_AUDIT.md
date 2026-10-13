@@ -113,3 +113,13 @@ This is a local admission/provenance extension, not a second transaction-state m
 Evidence: docs/EVIDENCE/12-e2e/workflow-continuity/verification-summary.json and local-server-restart.json, regression XML and authenticated browser screenshots. Final code and evidence are local commits only. These results close the observed local workflow defects; they are not a claim of 100% production/cloud completion.
 
 Final navigation/copy polish: `0056a59`. Recovered transactions activate Transactions and show accepted-ledger purpose; LOW entries use Risk Assessment. Three targeted browser checks passed; an interrupted investigation check stalled on a local database request and was rerun alone: 1 passed in 42.67 seconds. Earlier clean full-suite result remains 847 passed / 1 expected skip, with separate final UI checks, not a second full-suite claim.
+
+## 13 October 2026 - Risk Model V2 and explainability
+
+Risk Model V2 and explainable UX VERIFIED: 903 PASSED | 0 FAILED | 1 EXPECTED SKIP (904 collected, +56 checks versus baseline). Final focused model/CSV/browser pass: 75; eight previously affected checks passed after explicit V2 oracle updates. Seven in-suite browser gates plus the separate four-role CSV/report gate passed. Preserved financial/audit data and credentials are unchanged. No historical rescoring, AWS contact, push or Linux run.
+
+Model: one amount band (0/15/25/40), velocity +25, cross-border +15, possible duplicate +20; cap 100. LOW 0-19, MEDIUM 20-39, HIGH 40-100. New version `fintrust-r2-rules-2026-10-13`; original currency, unchanged five-minute velocity, no FX.
+
+New JSON snapshots preserve component measurements, configured/observed windows, related references, timing proximity, evaluation time and version. Replay returns the frozen result. Historical V1 results retain their own score/classification and missing evidence is not reconstructed. Percentage is configured priority, not probability of fraud.
+
+Additive migration 006 changes only the existing review guard to handle frozen V1 and V2 classifications. Apply the reviewed guard before enabling V2 workers in any environment. Existing migrations and financial/audit rows are unchanged. No second state/score table, behavioural scoring, AI or production-capacity claim is introduced. Future dimensions and scalability hardening are labelled PLANNED in Master, Progress and the existing presentation PDF.

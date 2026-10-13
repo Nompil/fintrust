@@ -15,6 +15,7 @@ const FinTrustDisplay = (() => {
   }
   function value(kind, raw) {
     if (raw === null || raw === undefined || raw === "") return kind === "risk_level" ? "Not assessed" : ["merchant","source_system","source_transaction_id","source_reference"].includes(kind)?"Not provided in source":kind.startsWith("before_")?"No previous value":["resolution_code","review_notes"].includes(kind)?"No decision yet":kind==="canonical_tx_id"?"No accepted transaction": "Not available";
+    if (["risk_score","score"].includes(kind) && Number.isFinite(Number(raw)) && Number(raw)>=0 && Number(raw)<=100) return String(Number(raw))+"%";
     if (prefixes[kind]) return reference(kind, raw);
     if (kind === "amount" && Number.isFinite(Number(raw))) return Number(raw).toLocaleString("en-ZA",{minimumFractionDigits:2,maximumFractionDigits:2});
     return typeof raw === "object" ? JSON.stringify(raw, null, 2) : String(raw);

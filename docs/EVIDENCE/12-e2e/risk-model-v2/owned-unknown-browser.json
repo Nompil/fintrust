@@ -1,0 +1,12 @@
+{
+  "status": "PASSED",
+  "local_only": true,
+  "checks": [
+    "own upload detail",
+    "assigned-account selection",
+    "correction submitted",
+    "worker accepted",
+    "ledger lifecycle STORED"
+  ],
+  "page_errors": []
+}

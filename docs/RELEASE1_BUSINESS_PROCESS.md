@@ -116,22 +116,30 @@ unknown. Dependency outages are technical errors, not invalid financial records.
 
 ## Explainable risk model
 
-| Rule | Boundary | Points |
-|---|---|---:|
-| HIGH_AMOUNT | amount >50,000, not equality | 30 |
-| VERY_HIGH_AMOUNT | amount >200,000, additive to HIGH_AMOUNT | 25 |
-| HIGH_VELOCITY | >5 accepted records, current included, closed preceding300 seconds, same account | 30 |
-| CROSS_BORDER | transaction country other than ZA | 15 |
-| POSSIBLE_DUPLICATE_CHARGE | distinct nonnull refs in same source/account, matching debit/merchant/amount/currency in inclusive +/-120 seconds | 40 |
-| TRANSFER | outgoing transfer | 20 |
-| MERCHANT_MARKER | case-insensitive highrisk synthetic merchant marker | 20 |
+Current model: `fintrust-r2-rules-2026-10-13`. The `a474566` V1 freeze is a baseline, not this deployment candidate.
 
-Sum capped100; Low0-39, Medium40-69, High70-100. Cross-border alone scores15 Low:
-international activity does not mean fraud. High amount alone scores30 Low; very
-high alone55 Medium. Explain triggered reasons/points and matching charge IDs.
-At most20 match IDs; both real charges survive. Closed windows use event time;
-all accepted types/currencies currently contribute to account velocity. Frozen
-results never retroactively change with late arrivals or changed configuration.
+| Component | Boundary | Points |
+|---|---|---:|
+| AMOUNT_RISK | <=50,000 / >50,000-100,000 / >100,000-200,000 / >200,000; strongest band only | 0 / 15 / 25 / 40 |
+| HIGH_VELOCITY | >5 accepted entries, current included, closed preceding 300 seconds, same account | 25 |
+| CROSS_BORDER | transaction country differs from ZA or explicit cross-border flag | 15 |
+| POSSIBLE_DUPLICATE_CHARGE | distinct references; same source/account/debit/merchant/amount/currency; inclusive +/-120 seconds | 20 |
+
+Maximum 100; LOW 0-19, MEDIUM 20-39, HIGH 40-100. Original currency; no FX.
+Transfer and synthetic merchant-marker points are retired for new V2 assessments.
+Historical V1 results retain their original points, version and classification.
+Replay returns the frozen result. No automatic historical rescoring.
+
+New evidence includes all four component contributions and evaluated timestamp/version.
+Velocity records count, configured/observed windows; duplicate evidence records related
+references, matching fields and decimal-text timing proximity. No reconstruction of
+missing historical measurements. Scenario counts group amount bands once per transaction.
+Migration 006 updates only review eligibility in the existing trigger function: recorded
+V1 MEDIUM/HIGH and V2 MEDIUM/HIGH remain version-aware. No new tables or columns.
+
+The percentage represents a rule-based priority score, not probability of fraud.
+All accepted risk levels stay in the ledger; only MEDIUM/HIGH open review, with HIGH
+entering the independent alert path. Configured velocity remains unchanged.
 
 Twelve transactions spread five minutes apart over55 minutes do not exceed the
 five-minute threshold (max2 in a closed window). Six clustered within300 seconds

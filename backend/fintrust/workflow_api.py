@@ -93,7 +93,7 @@ def list_page(kind,principal,args):
             where+=" AND p.result->>'risk_level'=%s";params.append(level)
         scenario=args.get("scenario")
         if scenario:
-            if scenario not in {"HIGH_AMOUNT","VERY_HIGH_AMOUNT","HIGH_VELOCITY","CROSS_BORDER","POSSIBLE_DUPLICATE_CHARGE","TRANSFER","MERCHANT_MARKER"}:raise ValueError("Invalid scenario")
+            if scenario not in {"AMOUNT_RISK","HIGH_AMOUNT","VERY_HIGH_AMOUNT","HIGH_VELOCITY","CROSS_BORDER","POSSIBLE_DUPLICATE_CHARGE","TRANSFER","MERCHANT_MARKER"}:raise ValueError("Invalid scenario")
             where+=" AND EXISTS(SELECT 1 FROM jsonb_array_elements(p.result->'triggered_rules') signal WHERE signal->>'rule'=%s)";params.append(scenario)
         assignee=args.get("assignee")
         if assignee:

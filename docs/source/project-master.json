@@ -1,7 +1,7 @@
 {
   "title": "FinTrust Project Master",
   "subtitle": "Transaction Monitoring & Risk Alert Platform",
-  "checkpoint": "local-freeze / eb17ed5",
+  "checkpoint": "risk-v2 / a474566",
   "date": "13 October 2026",
   "sections": [
     {
@@ -9,13 +9,14 @@
       "status": "LOCAL VERIFIED",
       "paragraphs": [
         "FinTrust is a transaction monitoring and risk investigation platform. It accepts CSV files, preserves transaction identity and source evidence, scores risk and records each review decision. It does not move funds, reverse charges or establish fraud.",
-        "13 October 2026 | Candidate source eb17ed5 includes risk-score display b73866c and the major console overhaul. Final candidate includes a test-isolation correction and a narrow report display/export correction. Full post-correction regression: 847 PASSED | 0 FAILED | 1 SKIPPED (848 collected); six in-suite browser checks passed against isolated PostgreSQL and mocked AWS. A separate four-role CSV/report browser gate also passed. Business rules, APIs and schema are unchanged.",
-        "Final gate found and corrected a test-isolation gap: Overview database reads did not use the disposable schema. Four focused failures were resolved by binding db.get_connection in the existing release_db fixture, then the entire suite passed with implicit developer dotenv loading disabled. The sole skip requires a disposable PostgreSQL administrator; prior separate PG16 role proof remains historical.",
-        "The separate CSV/report browser gate detected null risk-score fields being added to report rows by the shared presentation renderer. Risk projection is now limited to transaction and risk views. The final browser check verifies exported JSON equals backend rows and CSV values match the report response; no API, scoring or schema behavior changed.",
-        "Authenticated preserved-workspace smoke PASSED as analyst01 (Risk/Compliance Analyst), using the existing credential entered privately in the browser. Overview, Transactions, Risk Events, Review Queue, Quarantine correction form, Accounts/Account History, Insights and Reports passed. Recorded scores, 0/100 and Not assessed are distinct; all ten Insights value tables match the API; report JSON matches backend rows. The investigation answers WHAT HAPPENED, WHY IS IT RISKY and NEXT STEPS.",
-        "Preserved financial and audit rows, credentials, roles, status and account assignments are unchanged. Normal sign-in metadata updated. No recovered case or owned unknown-account case exists in this Analyst scope; their recovery/authorization proofs remain separately labelled isolated evidence. No correction, claim, review outcome or user change was submitted for the smoke.",
-        "LOCAL SOURCE FREEZE VERIFIED | LOCAL E2E VERIFIED | LOCAL UX VERIFIED | AWS BUDGETS VERIFIED | LINUX VERIFICATION PENDING | LIVE AWS E2E PENDING. The existing 847 passed / 0 failed / 1 expected skip and seven isolated browser gates were reused without rerunning. The preserved-workspace authentication blocker is closed. No AWS contact, deployment or push occurred.",
-        "Historical milestones and their source-specific evidence remain recorded in Testing Strategy and Progress; they are not substituted for this candidate gate."
+        "Risk Model V2 and explainable UX VERIFIED: 903 PASSED | 0 FAILED | 1 EXPECTED SKIP (904 collected, +56 checks versus baseline). Final focused model/CSV/browser pass: 75; eight previously affected checks passed after explicit V2 oracle updates. Seven in-suite browser gates plus the separate four-role CSV/report gate passed. Preserved financial/audit data and credentials are unchanged. No historical rescoring, AWS contact, push or Linux run.",
+        "Risk model V2 uses one mutually exclusive amount component plus independent velocity, cross-border and possible-duplicate components. It remains deterministic, explainable and non-ML; its score prioritises investigation and is not a fraud or compliance verdict.",
+        "Amount <=50,000: 0; >50,000 to <=100,000: 15; >100,000 to <=200,000: 25; >200,000: 40. Velocity adds 25, cross-border adds 15 and possible duplicate adds 20. Maximum 100. LOW: 0-19; MEDIUM: 20-39; HIGH: 40-100. Thresholds use the original transaction currency; no FX conversion.",
+        "New assessments use fintrust-r2-rules-2026-10-13. V1 used overlapping HIGH_AMOUNT/VERY_HIGH_AMOUNT weights and additional transfer/merchant-marker signals. Existing V1 scores, classifications, source and rule version remain frozen; V2 does not rescore them. The current Release 1 validation, identity and review lifecycle remains in place.",
+        "Review eligibility migration 006 replaces the old hard-coded threshold with a version-aware guard. V1 LOW 30 remains ineligible; V2 MEDIUM 25 can open a review. The migration changes one existing trigger function, with no new tables or columns. Migrations 001-005 and historical rows remain unchanged. Live application remains a separate approved gate.",
+        "Controlled local presentation example: 150,000 ZAR; 8 accepted transactions in the closed 09:55-10:00 UTC window; country US versus ZA. Amount +25, velocity +25, cross-border +15, duplicate +0 = 65% - HIGH. Transaction -> Measured values -> Components -> Score -> Risk level -> Analyst investigation. This is not a probability of fraud; there is no invented partial velocity weight.",
+        "Baseline a474566 verified 847 passed / 0 failed / 1 expected skip, seven isolated browser gates and the preserved analyst01 workspace. That baseline is historical proof, not final proof of the changed V2 semantics. New focused, scenario, full-regression and browser evidence is recorded under docs/EVIDENCE/12-e2e/risk-model-v2/.",
+        "AWS untouched; nothing pushed; exact-source Linux verification and live AWS E2E remain pending. Behavioural dimensions and production-scale capacity remain planned."
       ],
       "references": [
         "docs/architecture/FINTRUST_FLOW_AUDIT.md",
@@ -239,9 +240,13 @@
       "title": "Risk Monitoring Model",
       "status": "LOCAL VERIFIED",
       "paragraphs": [
-        "Scoring is deterministic and records rule version, score and triggered explanations with the financial outcome. Scores are capped at 100. Low is below 40, Medium is 40 through 69, and High is 70 or above.",
-        "HIGH is valid accepted data requiring attention, not quarantine. Every accepted scored transaction has a risk_events record; only Medium/High open routine reviews. The rules support this case study; they are not a validated bank fraud model. Risk outcomes do not authorize money movement.",
-        "New frozen results record each triggered rule name, points, explanation, measured value, threshold and context. Signal creation time is the authoritative processed_transactions.processed_at timestamp. Keep historical results unchanged; do not reconstruct missing measurements. Frozen scoring semantics and rule version remain unchanged."
+        "Risk model V2 uses one mutually exclusive amount component plus independent velocity, cross-border and possible-duplicate components. It remains deterministic, explainable and non-ML; its score prioritises investigation and is not a fraud or compliance verdict.",
+        "Amount <=50,000: 0; >50,000 to <=100,000: 15; >100,000 to <=200,000: 25; >200,000: 40. Velocity adds 25, cross-border adds 15 and possible duplicate adds 20. Maximum 100. LOW: 0-19; MEDIUM: 20-39; HIGH: 40-100. Thresholds use the original transaction currency; no FX conversion.",
+        "New assessments use fintrust-r2-rules-2026-10-13. V1 used overlapping HIGH_AMOUNT/VERY_HIGH_AMOUNT weights and additional transfer/merchant-marker signals. Existing V1 scores, classifications, source and rule version remain frozen; V2 does not rescore them. The current Release 1 validation, identity and review lifecycle remains in place.",
+        "Every new result contains four components, including zero/non-triggered components, with observed value, amount band or threshold, points, explanation, evaluation timestamp and rule version. Velocity includes the configured closed window, actual earliest/latest accepted times and current account/count. Duplicate evidence includes matching references/fields and recorded seconds of proximity; these measurements are never reconstructed from later history.",
+        "Review eligibility migration 006 replaces the old hard-coded threshold with a version-aware guard. V1 LOW 30 remains ineligible; V2 MEDIUM 25 can open a review. The migration changes one existing trigger function, with no new tables or columns. Migrations 001-005 and historical rows remain unchanged. Live application remains a separate approved gate.",
+        "User-facing scores show a percentage, including 0%; missing assessment stays Not assessed. Rule-based risk score. This percentage represents the configured risk score, not the probability of fraud. Numeric API/storage semantics stay 0-100. Historical amount bands are grouped for display and scenario counts, with original identifiers available in technical evidence.",
+        "Zero risk score is distinct from a zero-amount row: zero amounts remain invalid at admission. Legacy decision compatibility hints are not financial authorization; accepted ledger records and human review outcomes remain authoritative."
       ],
       "references": [
         "backend/fintrust/rules.py",
@@ -254,8 +259,8 @@
       "title": "Risk Scenarios and Rules",
       "status": "LOCAL VERIFIED",
       "paragraphs": [
-        "Frozen Release 1 velocity is more than 5 accepted transactions in the closed 300-second event-time window, including the current transaction. Test 5 versus 6 and the exact window boundary. The 10/11/12-per-hour rule is exploratory and deferred.",
-        "For ZAR examples, 49,999.99 and 50,000.00 do not trigger HIGH_AMOUNT; 50,000.01 does. Thresholds apply numerically per currency. Distinct similar charges stay in the ledger and can add a possible-duplicate signal; exact repeats are deduplicated."
+        "Velocity remains more than 5 accepted transactions in the closed 300-second event-time window, current included. Five versus six and the exact boundary remain tested. An hourly or behavioural velocity rule is not implemented.",
+        "Amount contributes once. Independent components accumulate toward 100. All accepted LOW/MEDIUM/HIGH transactions remain in the ledger; MEDIUM/HIGH open review, and HIGH enters the independent alert path."
       ],
       "references": [
         "backend/fintrust/rules.py",
@@ -263,36 +268,24 @@
       ],
       "table": [
         [
-          "Signal",
-          "Default points / boundary"
+          "Component",
+          "Points / boundary"
         ],
         [
-          "HIGH_AMOUNT",
-          "30; amount > 50,000"
+          "Amount risk",
+          "0 / 15 / 25 / 40; one strongest applicable band"
         ],
         [
-          "VERY_HIGH_AMOUNT",
-          "25 additional; amount > 200,000"
+          "High velocity",
+          "25; more than 5 accepted transactions in the closed preceding 300 seconds, current included"
         ],
         [
-          "TRANSFER",
-          "20; transfer type"
+          "Cross-border",
+          "15; country differs from ZA or explicit cross-border flag"
         ],
         [
-          "CROSS_BORDER",
-          "15; country differs from ZA / explicit cross-border"
-        ],
-        [
-          "MERCHANT_MARKER",
-          "20; synthetic highrisk marker"
-        ],
-        [
-          "HIGH_VELOCITY",
-          "30; accepted count > 5 within 300 seconds"
-        ],
-        [
-          "POSSIBLE_DUPLICATE_CHARGE",
-          "40; distinct references match facts within 120 seconds"
+          "Possible duplicate",
+          "20; distinct source references, matching account/merchant/amount/currency/source system and debit type within inclusive +/-120 seconds"
         ]
       ],
       "diagram": null
@@ -622,10 +615,11 @@
         "Risk investigation: 16 new backend tests plus a real loopback browser gate; 65 affected tests; 64 on disposable PostgreSQL 16; full regression 810 passed / 1 expected administrator-only skip. Evidence: docs/EVIDENCE/12-e2e/risk-investigation/. No live AWS transport occurred.",
         "Workbench and documentation phase: 19 focused tests passed, including three loopback browser workflows; 82 affected integration tests passed; full regression 811 passed / 1 expected administrator-only skip. The separate CSV scenario browser gate passed after its legacy review test was updated to claim before deciding. No backend, SQL or AWS changes. Evidence: docs/EVIDENCE/12-e2e/analyst-workbench/.",
         "Local scenario phase at 48399b9: 122 lifecycle/risk/quarantine/RBAC integration and browser tests, two added outcome/role tests and one CSV A/B browser gate passed: 125 selected tests, no failures or skips. Evidence labels individual UI browser versus API checks. No fresh full regression or live AWS E2E is implied. See docs/EVIDENCE/12-e2e/scenario-verification/SCENARIO_RESULTS.md.",
-        "13 October 2026 | Candidate source eb17ed5 includes risk-score display b73866c and the major console overhaul. Final candidate includes a test-isolation correction and a narrow report display/export correction. Full post-correction regression: 847 PASSED | 0 FAILED | 1 SKIPPED (848 collected); six in-suite browser checks passed against isolated PostgreSQL and mocked AWS. A separate four-role CSV/report browser gate also passed. Business rules, APIs and schema are unchanged.",
+        "Historical V1 gate: 13 October 2026 | Candidate source eb17ed5 includes risk-score display b73866c and the major console overhaul. Final candidate includes a test-isolation correction and a narrow report display/export correction. Full post-correction regression: 847 PASSED | 0 FAILED | 1 SKIPPED (848 collected); six in-suite browser checks passed against isolated PostgreSQL and mocked AWS. A separate four-role CSV/report browser gate also passed. Business rules, APIs and schema are unchanged.",
         "Final gate found and corrected a test-isolation gap: Overview database reads did not use the disposable schema. Four focused failures were resolved by binding db.get_connection in the existing release_db fixture, then the entire suite passed with implicit developer dotenv loading disabled. The sole skip requires a disposable PostgreSQL administrator; prior separate PG16 role proof remains historical.",
         "The separate CSV/report browser gate detected null risk-score fields being added to report rows by the shared presentation renderer. Risk projection is now limited to transaction and risk views. The final browser check verifies exported JSON equals backend rows and CSV values match the report response; no API, scoring or schema behavior changed.",
-        "Current isolated browser proof covers recorded /100 scores including zero and missing values; grouped dark navigation; desktop/mobile containment; WHAT HAPPENED, WHY IS IT RISKY and NEXT STEPS; claim, notes and review outcomes; immutable quarantine correction and resulting-transaction navigation; own unknown-account upload recovery; Admin user/status and assignment controls; wrong-Analyst and Auditor read-only restrictions; real filtered Insights. Saved screenshots show alternating rows, clear selection/focus and retained investigation context."
+        "Historical V1 isolated browser proof:  recorded /100 scores including zero and missing values; grouped dark navigation; desktop/mobile containment; WHAT HAPPENED, WHY IS IT RISKY and NEXT STEPS; claim, notes and review outcomes; immutable quarantine correction and resulting-transaction navigation; own unknown-account upload recovery; Admin user/status and assignment controls; wrong-Analyst and Auditor read-only restrictions; real filtered Insights. Saved screenshots show alternating rows, clear selection/focus and retained investigation context.",
+        "Risk Model V2 and explainable UX VERIFIED: 903 PASSED | 0 FAILED | 1 EXPECTED SKIP (904 collected, +56 checks versus baseline). Final focused model/CSV/browser pass: 75; eight previously affected checks passed after explicit V2 oracle updates. Seven in-suite browser gates plus the separate four-role CSV/report gate passed. Preserved financial/audit data and credentials are unchanged. No historical rescoring, AWS contact, push or Linux run."
       ],
       "references": [
         "docs/EVIDENCE/12-e2e/transaction-lifecycle/verification-summary.json",
@@ -652,11 +646,8 @@
       "title": "Release Verification",
       "status": "PENDING VERIFICATION",
       "paragraphs": [
-        "Authenticated preserved-workspace smoke PASSED as analyst01 (Risk/Compliance Analyst), using the existing credential entered privately in the browser. Overview, Transactions, Risk Events, Review Queue, Quarantine correction form, Accounts/Account History, Insights and Reports passed. Recorded scores, 0/100 and Not assessed are distinct; all ten Insights value tables match the API; report JSON matches backend rows. The investigation answers WHAT HAPPENED, WHY IS IT RISKY and NEXT STEPS.",
-        "Preserved financial and audit rows, credentials, roles, status and account assignments are unchanged. Normal sign-in metadata updated. No recovered case or owned unknown-account case exists in this Analyst scope; their recovery/authorization proofs remain separately labelled isolated evidence. No correction, claim, review outcome or user change was submitted for the smoke.",
-        "Freeze source commit, build inputs, package digest, manifest, Linux imports and test proof together. Verify uploaded VersionId and checksum before a change set. Never reuse an old Linux result for changed application source.",
-        "The current checkpoint is LOCAL VERIFIED. A deployable artifact still needs the exact-source Linux gate. Live schema bootstrap and migration 003 privileges, authenticated API, cloud queue/stream paths, SES, alarm delivery and recovery exercise remain gates. Approval is scoped and sequential.",
-        "LOCAL SOURCE FREEZE VERIFIED | LOCAL E2E VERIFIED | LOCAL UX VERIFIED | AWS BUDGETS VERIFIED | LINUX VERIFICATION PENDING | LIVE AWS E2E PENDING. The existing 847 passed / 0 failed / 1 expected skip and seven isolated browser gates were reused without rerunning. The preserved-workspace authentication blocker is closed. No AWS contact, deployment or push occurred."
+        "Risk Model V2 and explainable UX VERIFIED: 903 PASSED | 0 FAILED | 1 EXPECTED SKIP (904 collected, +56 checks versus baseline). Final focused model/CSV/browser pass: 75; eight previously affected checks passed after explicit V2 oracle updates. Seven in-suite browser gates plus the separate four-role CSV/report gate passed. Preserved financial/audit data and credentials are unchanged. No historical rescoring, AWS contact, push or Linux run.",
+        "Final local re-freeze and exact-source Linux Python 3.12/x86_64 verification come next. Live schema chain must include reviewed migration 006 before V2 scoring is enabled. No live step was performed."
       ],
       "references": [
         "docs/architecture/FINTRUST_FLOW_AUDIT.md",
@@ -748,9 +739,9 @@
         "The actual local server was restarted with the existing credential and without reset/seeding. All four static assets match source; unauthenticated financial reads are denied; existing financial/audit rows were preserved. Already-lost historical original bytes and missing historical ownership evidence cannot be invented.",
         "Local tests use real isolated PostgreSQL and mocked AWS transports. Exact current-source Linux/Python 3.12 and live RDS bootstrap/deployment/wiring/SES/DLQ/report delivery remain separate gates. Notifications remain session-scoped; a durable inbox/full report catalogue and AI assistant remain future work.",
         "Final navigation/copy polish: 0056a59. Recovered transactions activate Transactions, not Quarantine; LOW entries use Risk Assessment. Three focused browser checks passed; a stalled investigation attempt was rerun alone and passed. Earlier full-suite result remains 847 passed / 1 expected skip; the final polish has targeted browser verification, not a second full-suite claim.",
-        "13 October 2026 | Candidate source eb17ed5 includes risk-score display b73866c and the major console overhaul. Final candidate includes a test-isolation correction and a narrow report display/export correction. Full post-correction regression: 847 PASSED | 0 FAILED | 1 SKIPPED (848 collected); six in-suite browser checks passed against isolated PostgreSQL and mocked AWS. A separate four-role CSV/report browser gate also passed. Business rules, APIs and schema are unchanged.",
-        "Current isolated browser proof covers recorded /100 scores including zero and missing values; grouped dark navigation; desktop/mobile containment; WHAT HAPPENED, WHY IS IT RISKY and NEXT STEPS; claim, notes and review outcomes; immutable quarantine correction and resulting-transaction navigation; own unknown-account upload recovery; Admin user/status and assignment controls; wrong-Analyst and Auditor read-only restrictions; real filtered Insights. Saved screenshots show alternating rows, clear selection/focus and retained investigation context.",
-        "Authenticated preserved-workspace smoke PASSED as analyst01 (Risk/Compliance Analyst), using the existing credential entered privately in the browser. Overview, Transactions, Risk Events, Review Queue, Quarantine correction form, Accounts/Account History, Insights and Reports passed. Recorded scores, 0/100 and Not assessed are distinct; all ten Insights value tables match the API; report JSON matches backend rows. The investigation answers WHAT HAPPENED, WHY IS IT RISKY and NEXT STEPS.",
+        "Historical V1 gate: 13 October 2026 | Candidate source eb17ed5 includes risk-score display b73866c and the major console overhaul. Final candidate includes a test-isolation correction and a narrow report display/export correction. Full post-correction regression: 847 PASSED | 0 FAILED | 1 SKIPPED (848 collected); six in-suite browser checks passed against isolated PostgreSQL and mocked AWS. A separate four-role CSV/report browser gate also passed. Business rules, APIs and schema are unchanged.",
+        "Historical V1 isolated browser proof:  recorded /100 scores including zero and missing values; grouped dark navigation; desktop/mobile containment; WHAT HAPPENED, WHY IS IT RISKY and NEXT STEPS; claim, notes and review outcomes; immutable quarantine correction and resulting-transaction navigation; own unknown-account upload recovery; Admin user/status and assignment controls; wrong-Analyst and Auditor read-only restrictions; real filtered Insights. Saved screenshots show alternating rows, clear selection/focus and retained investigation context.",
+        "Historical a474566 baseline: Authenticated preserved-workspace smoke PASSED as analyst01 (Risk/Compliance Analyst), using the existing credential entered privately in the browser. Overview, Transactions, Risk Events, Review Queue, Quarantine correction form, Accounts/Account History, Insights and Reports passed. Recorded scores, 0/100 and Not assessed are distinct; all ten Insights value tables match the API; report JSON matches backend rows. The investigation answers WHAT HAPPENED, WHY IS IT RISKY and NEXT STEPS.",
         "Preserved financial and audit rows, credentials, roles, status and account assignments are unchanged. Normal sign-in metadata updated. No recovered case or owned unknown-account case exists in this Analyst scope; their recovery/authorization proofs remain separately labelled isolated evidence. No correction, claim, review outcome or user change was submitted for the smoke."
       ],
       "table": [
@@ -827,6 +818,35 @@
       ]
     },
     {
+      "title": "Risk V2 Presentation Evidence",
+      "status": "LOCAL VERIFIED",
+      "paragraphs": [
+        "Controlled local presentation example: 150,000 ZAR; 8 accepted transactions in the closed 09:55-10:00 UTC window; country US versus ZA. Amount +25, velocity +25, cross-border +15, duplicate +0 = 65% - HIGH. Transaction -> Measured values -> Components -> Score -> Risk level -> Analyst investigation. This is not a probability of fraud; there is no invented partial velocity weight.",
+        "User-facing scores show a percentage, including 0%; missing assessment stays Not assessed. Rule-based risk score. This percentage represents the configured risk score, not the probability of fraud. Numeric API/storage semantics stay 0-100. Historical amount bands are grouped for display and scenario counts, with original identifiers available in technical evidence."
+      ],
+      "references": [
+        "docs/EVIDENCE/12-e2e/risk-model-v2/presentation-example.json"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
+      "title": "If I Had More Time and Budget",
+      "status": "PLANNED",
+      "paragraphs": [
+        "PLANNED - BEHAVIOUR-AWARE MONITORING: unusual amount against account baseline; unusual time/after-hours; unfamiliar country/geography or channel; new counterparty; dormant-account reactivation; bursts; rapid movement of funds; repeated payments below thresholds; historical behaviour deviation. None contributes points in Release 1.",
+        "A transaction at night is not automatically suspicious. It becomes a stronger signal when it differs from the account's normal behaviour. These features need adequate history, context, validation and governance before use.",
+        "CURRENT DESIGN: SQS FIFO buffers work; event-driven Lambda workers use per-account ordering and controlled concurrency; SQL owns the ledger and workflows, DynamoDB projections/delivery claims are independent, and retries/DLQ concern technical failures. The design has no NAT and remains cost-conscious. Local/mock proof is not proof of live wiring or production capacity.",
+        "FUTURE PRODUCTION HARDENING: 10k/100k/1M transaction load tests; concurrency/connection tuning; FIFO message-group strategy; high-throughput FIFO only if justified; RDS Proxy; queue-depth alarms; Multi-AZ; source-feed monitoring; configurable SLAs; alert aggregation; DR tests. The architecture is designed for elastic processing, but production-scale performance testing and connection tuning remain a future hardening step.",
+        "PLANNED - ADVANCED INTELLIGENCE: streaming ingestion, anomaly detection, AI Investigation Assistant with human review and authorised evidence, richer account/customer context, and governed adaptive thresholds. No AI or ML was added. Future features must improve What happened? Why is it risky? What should I do next?"
+      ],
+      "references": [
+        "https://docs.aws.amazon.com/lambda/latest/dg/services-sqs-scaling.html"
+      ],
+      "table": null,
+      "diagram": null
+    },
+    {
       "title": "References",
       "status": "LOCAL VERIFIED",
       "paragraphs": [
@@ -846,7 +866,11 @@
         "DECISION: Conditional immutable first-upload authority | SOURCE: https://docs.aws.amazon.com/AmazonS3/latest/userguide/conditional-writes.html | WHY IT APPLIES: Duplicate or concurrent uploads must not transfer ownership | HOW FINTRUST USES IT: Trusted local first-admission receipt, conditional create, versioned source pointer; known accounts still require assignment.",
         "DECISION: Keep missing original evidence visible and fail closed for new writes | SOURCE: https://docs.aws.amazon.com/AmazonS3/latest/userguide/RetrievingObjectVersions.html | WHY IT APPLIES: Financial correction needs the recorded original | HOW FINTRUST USES IT: Pinned-version reads and explicit evidence health; no latest-version substitution.",
         "DECISION: Separate read authority from financial correction | SOURCE: https://community.owasp.org/Access_Control | WHY IT APPLIES: Governance is not Analyst authority | HOW FINTRUST USES IT: Existing role checks plus authenticated original ownership and real assigned target; Admin oversight remains read-only.",
-        "Final local gate: docs/EVIDENCE/12-e2e/console-overhaul/final-local-freeze.json. Full regression, seven isolated browser gates and authenticated preserved-workspace smoke are recorded separately. The containing local-freeze commit supersedes base eb17ed5 for the next exact-source Linux verification; no live-readiness claim is made."
+        "The prior a474566 freeze is retained as historical baseline evidence. Current V2 source requires final local re-freeze before exact-source Linux and controlled live wiring. See docs/EVIDENCE/12-e2e/risk-model-v2/verification-summary.json.",
+        "DECISION: Reuse frozen JSON for component measurements | SOURCE: https://www.postgresql.org/docs/16/datatype-json.html | WHY IT APPLIES: existing processed_transactions.result is authoritative structured evidence | HOW FINTRUST USES IT: add component fields to new results; no backfill or competing score table.",
+        "DECISION: Preserve timestamp, version and attribution | SOURCE: https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html | WHY IT APPLIES: reconstructing an investigation requires context and recorded outcomes | HOW FINTRUST USES IT: frozen evaluation evidence and existing append-only human/system audit.",
+        "DECISION: Store exact timing proximity as decimal text | SOURCE: https://boto3.amazonaws.com/v1/documentation/api/latest/_modules/boto3/dynamodb/types.html | WHY IT APPLIES: Boto3 DynamoDB rejects float values | HOW FINTRUST USES IT: one JSON-compatible frozen measurement reused by SQL/API/projection.",
+        "DECISION: Keep capacity tuning planned | SOURCE: https://docs.aws.amazon.com/lambda/latest/dg/services-sqs-scaling.html | WHY IT APPLIES: FIFO groups and configured concurrency bound consumers | HOW FINTRUST USES IT: preserve current design; require real load/connection testing before claiming capacity."
       ],
       "references": [
         "docs/architecture/FINTRUST_FLOW_AUDIT.md",

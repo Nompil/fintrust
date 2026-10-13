@@ -36,15 +36,15 @@ def upload(client,headers,label):
 
 def expected(label):
     def ok(points=0,*rules,status="ACCEPTED"):
-        return {"status":status,"score":points,"risk_level":"High" if points>=70 else "Medium" if points>=40 else "Low","rules":list(rules)}
+        return {"status":status,"score":points,"risk_level":"High" if points>=40 else "Medium" if points>=20 else "Low","rules":list(rules)}
     def bad(code):return {"status":"QUARANTINED","reason_code":code}
     if label=="A":
-        rows=[ok(),ok(),ok(),ok(30,"HIGH_AMOUNT"),ok(30,"HIGH_AMOUNT"),ok(15,"CROSS_BORDER"),ok(45,"HIGH_AMOUNT","CROSS_BORDER")]
-        rows += [ok() for _ in range(11)]+[ok(45,"HIGH_AMOUNT","CROSS_BORDER"),ok(status="DUPLICATE"),ok(),ok(40,"POSSIBLE_DUPLICATE_CHARGE")]
+        rows=[ok(),ok(),ok(),ok(15,"AMOUNT_RISK"),ok(15,"AMOUNT_RISK"),ok(15,"CROSS_BORDER"),ok(30,"AMOUNT_RISK","CROSS_BORDER")]
+        rows += [ok() for _ in range(11)]+[ok(30,"AMOUNT_RISK","CROSS_BORDER"),ok(status="DUPLICATE"),ok(),ok(20,"POSSIBLE_DUPLICATE_CHARGE")]
         rows += [bad(c) for c in ["MISSING_REQUIRED_FIELD","INVALID_AMOUNT","NEGATIVE_AMOUNT","ZERO_AMOUNT","INVALID_TIMESTAMP","FUTURE_TIMESTAMP","UNKNOWN_ACCOUNT","UNSUPPORTED_CURRENCY","UNSUPPORTED_COUNTRY","MISSING_SOURCE_IDENTITY","MISSING_REQUIRED_FIELD"]]
-        rows += [ok() for _ in range(5)]+[ok(30,"HIGH_VELOCITY"),ok(),ok(70,"HIGH_AMOUNT","VERY_HIGH_AMOUNT","CROSS_BORDER"),bad("INVALID_COUNTRY")]
+        rows += [ok() for _ in range(5)]+[ok(25,"HIGH_VELOCITY"),ok(),ok(55,"AMOUNT_RISK","CROSS_BORDER"),bad("INVALID_COUNTRY")]
         return rows
-    return [ok(),ok(),ok(30,"HIGH_AMOUNT",status="DUPLICATE"),ok(70,"HIGH_AMOUNT","POSSIBLE_DUPLICATE_CHARGE"),ok(15,"CROSS_BORDER"),ok(30,"HIGH_AMOUNT"),ok(45,"HIGH_AMOUNT","CROSS_BORDER"),ok(),bad("MISSING_REQUIRED_FIELD"),bad("INVALID_AMOUNT"),bad("UNKNOWN_ACCOUNT"),bad("DUPLICATE_IDENTITY_CONFLICT")]
+    return [ok(),ok(),ok(15,"AMOUNT_RISK",status="DUPLICATE"),ok(35,"AMOUNT_RISK","POSSIBLE_DUPLICATE_CHARGE"),ok(15,"CROSS_BORDER"),ok(15,"AMOUNT_RISK"),ok(40,"AMOUNT_RISK","CROSS_BORDER"),ok(),bad("MISSING_REQUIRED_FIELD"),bad("INVALID_AMOUNT"),bad("UNKNOWN_ACCOUNT"),bad("DUPLICATE_IDENTITY_CONFLICT")]
 
 def check_rows(q,label,batch):
     rows=list(csv.DictReader(io.StringIO((FIXTURES/f"fintrust_release1_transactions_{label}.csv").read_text())))
@@ -78,8 +78,8 @@ def test_actual_A_B_exact_A_replay_every_row(dataset_db,authenticated_client,mon
         assert result["notification"]["severity"]=="warning"
     assert q("SELECT count(*) FROM transactions")==[(236,)]
     assert q("SELECT count(*) FROM quarantine_cases")==[(16,)]
-    assert q("SELECT count(*) FROM risk_reviews")==[(6,)]
-    assert sorted(q("SELECT result->>'risk_level',count(*) FROM processed_transactions GROUP BY 1"))==[("High",2),("Low",30),("Medium",4)]
+    assert q("SELECT count(*) FROM risk_reviews")==[(7,)]
+    assert sorted(q("SELECT result->>'risk_level',count(*) FROM processed_transactions GROUP BY 1"))==[("High",2),("Low",29),("Medium",5)]
     high=q("SELECT tx_id::text,result->>'account_id' FROM processed_transactions WHERE result->>'risk_level'='High'")
     monkeypatch.setattr(alert_delivery,"dynamodb",dynamo.dynamodb);monkeypatch.setenv("SES_SENDER","synthetic@example.com");monkeypatch.setenv("SES_RECIPIENT","reviewer@example.com")
     send=Mock(return_value={"MessageId":"synthetic-local"});monkeypatch.setattr(alert_delivery.ses,"send_email",send)
@@ -93,10 +93,10 @@ def test_actual_A_B_exact_A_replay_every_row(dataset_db,authenticated_client,mon
     assert alert_delivery.lambda_handler({"Records":records},None)=={"batchItemFailures":[]}
     assert send.call_count==2
     replay=upload(client,headers,"A");assert replay["upload_status"]=="DUPLICATE_FILE"
-    assert q("SELECT count(*) FROM transactions")==[(236,)] and q("SELECT count(*) FROM quarantine_cases")==[(16,)] and q("SELECT count(*) FROM risk_reviews")==[(6,)]
+    assert q("SELECT count(*) FROM transactions")==[(236,)] and q("SELECT count(*) FROM quarantine_cases")==[(16,)] and q("SELECT count(*) FROM risk_reviews")==[(7,)]
     for tx,account in high:alert_delivery.deliver(account,tx)
     assert send.call_count==2
-    evidence={"sequence":["A","B","exact A replay"],"A":a_rows,"B":b_rows,"batches":[a,b],"replay":replay,"new_ledger":36,"quarantine":16,"review_count":6,"risk_counts":{"Low":30,"Medium":4,"High":2},"mocked_alert_sends":2,"aws_access":False}
+    evidence={"sequence":["A","B","exact A replay"],"A":a_rows,"B":b_rows,"batches":[a,b],"replay":replay,"new_ledger":36,"quarantine":16,"review_count":7,"risk_counts":{"Low":29,"Medium":5,"High":2},"mocked_alert_sends":2,"aws_access":False}
     path=ROOT/"build/release1-lifecycle/row-results.json";path.parent.mkdir(parents=True,exist_ok=True);path.write_text(json.dumps(evidence,indent=2,default=str))
 
 def test_good_file_bad_rows_do_not_stop_valid_rows(dataset_db,authenticated_client):
@@ -106,9 +106,9 @@ def test_good_file_bad_rows_do_not_stop_valid_rows(dataset_db,authenticated_clie
 
 def test_suspicious_valid_rows_are_ledger_not_quarantine(dataset_db,authenticated_client):
     a=upload(*authenticated_client,"A");q=dataset_db[3]
-    assert q("SELECT count(*) FROM processed_transactions WHERE result->>'risk_level' IN ('Medium','High')")==[(4,)]
+    assert q("SELECT count(*) FROM processed_transactions WHERE result->>'risk_level' IN ('Medium','High')")==[(5,)]
     assert q("SELECT count(*) FROM ingestion_records r JOIN processed_transactions p ON p.tx_id=r.canonical_tx_id WHERE p.result->>'risk_level' IN ('Medium','High') AND r.disposition='QUARANTINED'")==[(0,)]
-    assert q("SELECT count(*) FROM risk_reviews WHERE review_status='OPEN'")==[(4,)]
+    assert q("SELECT count(*) FROM risk_reviews WHERE review_status='OPEN'")==[(5,)]
 
 @pytest.mark.parametrize("payload,name",[(b"", "empty.csv"),(b"bad,headers\n1,2", "wrong.csv"),(b"\x00\xff", "binary.csv"),(b"data","unsupported.exe"),(b'source_system,source_transaction_id,account_id,amount,currency,country,tx_type,tx_date\n"unterminated',"malformed.csv")])
 def test_bad_file_rejected_before_any_row_work(dataset_db,authenticated_client,payload,name):

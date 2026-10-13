@@ -1,0 +1,73 @@
+{
+  "status": "PASSED",
+  "analyst_navigation_priority_verified": true,
+  "business_metric_values_verified": true,
+  "upload_outcome_navigation_verified": true,
+  "batch_details_secondary_verified": true,
+  "related_risk_review_and_source_batch_verified": true,
+  "root_workspace_verified": true,
+  "analyst_upload_receipt_link_verified": true,
+  "session_expiry_on_read_and_upload_verified": true,
+  "source_commit": "a4745662ef7851bafed19637245be945ea94fd1f",
+  "browser": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+  "pages": [
+    "Login",
+    "Overview",
+    "Notifications",
+    "Transactions",
+    "Risk Events",
+    "Review Queue",
+    "Quarantine",
+    "Ingestion Batches",
+    "Reports",
+    "Insights",
+    "Accounts",
+    "Audit",
+    "Operations",
+    "Users",
+    "Transaction Detail",
+    "Batch Detail",
+    "Quarantine Detail"
+  ],
+  "dataset_sequence": "A -> B -> exact A replay",
+  "charts_verified": 10,
+  "analyst_and_auditor_chart_values_verified": true,
+  "display_uuid_transport_verified": true,
+  "metric_error_vs_zero_verified": true,
+  "friendly_insight_failure_recovery_verified": true,
+  "role_switch_method": "Sign out and backend-authenticated token sign in",
+  "user_creation_audited": true,
+  "report_csv_verified": true,
+  "report_json_verified": true,
+  "account_history_navigation_verified": true,
+  "admin_compliance_actions": 0,
+  "upload_counts": {
+    "A": {
+      "accepted": 29,
+      "quarantined": 12,
+      "duplicates": 1
+    },
+    "B": {
+      "accepted": 7,
+      "quarantined": 4,
+      "duplicates": 1
+    }
+  },
+  "invalid_file_rejected": true,
+  "notice_persists_until_acknowledged": true,
+  "review_mutation": "OPEN -> UNDER_REVIEW -> CLEARED",
+  "quarantine_mutation": "RESUBMITTED (worker revalidation pending)",
+  "roles_verified": [
+    "Admin",
+    "Risk/Compliance Analyst",
+    "Read-only/Auditor",
+    "Maintainer"
+  ],
+  "loading_error_empty_verified": true,
+  "old_role_response_discarded": true,
+  "auditor_mutation_buttons": 0,
+  "maintainer_compliance_pages": 0,
+  "maintainer_technical_actions_visible": true,
+  "page_errors": [],
+  "aws_access": false
+}

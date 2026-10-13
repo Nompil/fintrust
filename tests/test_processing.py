@@ -54,16 +54,17 @@ def test_reject_malformed_queue_contract(field, value):
         jobs.parse_job({**job(), field: value})
 
 
-@pytest.mark.parametrize("threshold,rule", [("high_amount", "HIGH_AMOUNT"), ("very_high_amount", "VERY_HIGH_AMOUNT")])
-@pytest.mark.parametrize("delta,present", [("-0.01", False), ("0", False), ("0.01", True)])
-def test_amount_boundaries(threshold, rule, delta, present):
-    cfg = rules.ScoringConfig(high_amount=Decimal("100"), very_high_amount=Decimal("200"))
+@pytest.mark.parametrize("threshold,before,after", [("high_amount",0,15),("middle_amount",15,25),("very_high_amount",25,40)])
+@pytest.mark.parametrize("delta", ["-0.01", "0", "0.01"])
+def test_amount_boundaries(threshold, before, after, delta):
+    cfg = rules.ScoringConfig(high_amount=Decimal("100"), middle_amount=Decimal("150"), very_high_amount=Decimal("200"))
     result = rules.evaluate({"amount": str(getattr(cfg, threshold) + Decimal(delta))}, config=cfg)
-    assert (rule in {r["rule"] for r in result["triggered_rules"]}) is present
+    assert result["score"] == (after if Decimal(delta)>0 else before)
+    assert len([c for c in result["components"] if c["rule"]=="AMOUNT_RISK"])==1
 
 
-@pytest.mark.parametrize("value,expected", [(39, "Low"), (40, "Medium"), (41, "Medium"),
-                                            (69, "Medium"), (70, "High"), (71, "High")])
+@pytest.mark.parametrize("value,expected", [(19, "Low"), (20, "Medium"), (21, "Medium"),
+                                            (39, "Medium"), (40, "High"), (41, "High")])
 def test_classification_boundaries(value, expected):
     assert rules.classify_risk(value, rules.ScoringConfig()) == expected
 
@@ -78,14 +79,14 @@ def test_multiple_rules_and_configurable_classification(monkeypatch):
     monkeypatch.setenv("RISK_HIGH", "80")
     cfg = rules.ScoringConfig.from_env()
     result = rules.evaluate({"amount": "200001", "country": "US", "transaction_type": "transfer",
-                             "merchant": "HighRisk Shop"}, 6, cfg)
+                             "merchant": "HighRisk Shop"}, 6, cfg, duplicate_matches=[TX])
     assert result["score"] == 100 and result["risk_level"] == "High"
-    assert len(result["triggered_rules"]) == 6
-    assert all(set(r) == {"rule", "points", "reason", "triggered_value", "threshold", "context"} for r in result["triggered_rules"])
+    assert {r["rule"] for r in result["triggered_rules"]} == {"AMOUNT_RISK","CROSS_BORDER","HIGH_VELOCITY","POSSIBLE_DUPLICATE_CHARGE"}
+    assert all({"rule", "points", "reason", "triggered_value", "threshold", "context", "evaluated_at", "rule_version"} <= set(r) for r in result["triggered_rules"])
     assert rules.classify_risk(79, cfg) == "Medium"
 
 
-@pytest.mark.parametrize("changes", [{"velocity_count": 0}, {"high": 40}, {"cross_border_points": -1},
+@pytest.mark.parametrize("changes", [{"velocity_count": 0}, {"high": 20}, {"cross_border_points": -1},
                                       {"high_amount": Decimal("NaN")}])
 def test_invalid_rule_configuration(changes):
     with pytest.raises(ValueError):

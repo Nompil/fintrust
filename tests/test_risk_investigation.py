@@ -9,7 +9,7 @@ from tests.test_release1_workflows import row,ACCOUNT
 def get(c,h,e,who='analyst01'):
     return c.get(f'/v1/risk-events/{e}',headers=h(who))
 
-@pytest.mark.parametrize('values,rule',[({'amount':'50000.01'},'HIGH_AMOUNT'),({'country':'US'},'CROSS_BORDER')])
+@pytest.mark.parametrize('values,rule',[({'amount':'50000.01'},'AMOUNT_RISK'),({'country':'US'},'CROSS_BORDER')])
 def test_signals_have_frozen_measurement_and_timestamp(release_db,people,values,rule):
     run(feed([row(**values)]));e=release_db[3]('SELECT risk_event_id FROM risk_events ORDER BY risk_event_id DESC LIMIT 1')[0][0]
     c,h,_=people;r=get(c,h,e);assert r.status_code==200,r.json
@@ -44,7 +44,7 @@ def test_investigation_claim_note_decide_audit(release_db,people,status,resoluti
 
 def test_scoped_filters_sort_counts_and_no_context_leak(release_db,people):
     c,h,path=people;e=event(release_db)
-    r=c.get('/v1/workflows/risk-events?scenario=HIGH_AMOUNT&risk_level=High&sort=severity',headers=h('analyst01'));assert r.status_code==200,r.json
+    r=c.get('/v1/workflows/risk-events?scenario=AMOUNT_RISK&risk_level=High&sort=severity',headers=h('analyst01'));assert r.status_code==200,r.json
     assert r.json['meta']['total_count']==1 and r.json['meta']['high_count']==1
     assert c.get('/v1/workflows/reviews?scenario=CROSS_BORDER',headers=h('analyst01')).json['meta']['active_count']==1
     assert c.get('/v1/workflows/reviews?scenario=INJECT',headers=h('analyst01')).status_code==400

@@ -40,5 +40,5 @@ def test_compute_risk_score_and_classification():
         "merchant": "HighRisk Shop",
     }
     score = compute_risk_score(record)
-    assert score >= 60
-    assert classify_risk(score) in {"Medium", "High"}
+    assert score == 30  # amount band 15 + explicit cross-border 15; retired synthetic signals contribute zero
+    assert classify_risk(score) == "Medium"

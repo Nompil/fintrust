@@ -177,7 +177,7 @@ def test_valid_high_risk_is_queued_not_quarantined(transport):
 def test_duplicate_charge_rule_keeps_explicit_matching_metadata(monkeypatch):
     monkeypatch.setenv("RISK_DUPLICATE_CHARGE_SECONDS", "3")
     result = rules.evaluate(job(), duplicate_matches=["other-transaction"])
-    assert result["score"] == 40
+    assert result["score"] == 20
     rule = result["triggered_rules"][0]
     assert rule["rule"] == "POSSIBLE_DUPLICATE_CHARGE" and rule["window_seconds"] == 3
     assert rule["matching_transaction_ids"] == ["other-transaction"]

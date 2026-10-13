@@ -43,7 +43,7 @@ def maintainer_headers(authenticated_client):
 def test_maintainer_authority_and_safe_health(release_db,authenticated_client,maintainer_headers):
     client,headers=authenticated_client
     response=client.get("/v1/operations",headers=maintainer_headers);assert response.status_code==200,response.json
-    assert [x["version"] for x in response.json["data"]["migration_versions"]]==[1,2,3,4,5]
+    assert [x["version"] for x in response.json["data"]["migration_versions"]]==[1,2,3,4,5,6]
     for route in ["/v1/transactions/"+str(uuid.uuid4()),"/v1/workflows/reviews","/v1/workflows/quarantine","/v1/administration","/v1/reports"]:assert client.get(route,headers=maintainer_headers).status_code==403
     for route in ["/v1/reviews/1/transition","/v1/quarantine/"+str(uuid.uuid4())+"/corrections","/v1/upload"]:assert client.post(route,json={},headers=maintainer_headers).status_code==403
     assert client.get("/v1/operations",headers=headers("Risk/Compliance Analyst")).status_code==403

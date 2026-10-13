@@ -13,7 +13,7 @@ from reportlab.graphics import renderPDF
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from svglib.svglib import svg2rlg
-import pymupdf
+import sys
 ROOT=Path(__file__).resolve().parents[1]
 OUT=ROOT/'docs/presentation'; DIAGRAMS=OUT/'diagrams'; DIAGRAMS.mkdir(parents=True,exist_ok=True)
 TMP=ROOT/'build/presentation-pdf'; TMP.mkdir(parents=True,exist_ok=True)
@@ -27,7 +27,7 @@ BOLD=ParagraphStyle('bold',parent=BODY,fontName='FTB',fontSize=13,leading=18)
 NAMES={'erd':('FinTrust_ERD.pdf','Database / ERD'),'aws-architecture':('FinTrust_AWS_Architecture.pdf','AWS architecture'),'activity':('FinTrust_Activity_Diagram.pdf','End-to-end activity'),'use-cases':('FinTrust_Use_Case_Diagram.pdf','Use cases'),'data-decisions':('FinTrust_Data_Decision_Flow.pdf','Data decisions'),'duplicate-handling':('FinTrust_Duplicate_Handling.pdf','Duplicate handling'),'role-separation':('FinTrust_Role_Separation.pdf','Role separation')}
 C=None;W=H=Y=PAGE=0
 
-def start(title,size=A4,sub='Release 1 | Planning and design evidence | 12 October 2026'):
+def start(title,size=A4,sub='Release 1 | Planning and design evidence | 13 October 2026'):
  global W,H,Y,PAGE
  W,H=size; C.setPageSize(size);PAGE+=1
  C.setFillColor(GREEN);C.rect(0,H-10,W,10,fill=1,stroke=0)
@@ -88,7 +88,7 @@ def viewpages(name):
    p('Conceptual domain map: process arrows, not foreign keys.' if view['index']==0 else 'Physical foreign keys and keys are unchanged. Grey reference boxes connect domains across pages. PK / FK / UK: primary / foreign / unique keys. All 17 tables and 16 foreign keys are preserved.')
   else:p(CAPTIONS[name])
   diagram(name,index=view['index']);end()
-for name,(filename,title) in NAMES.items():
+for name,(filename,title) in ([] if '--planning-only' in sys.argv else NAMES.items()):
  newfile(DIAGRAMS/filename);viewpages(name);C.save()
 
 newfile(OUT/'FinTrust_Project_Planning_and_Design_Evidence.pdf')
@@ -121,11 +121,32 @@ start('Quarantine | Risk and review')
 heading('7. Quarantine and correction')
 p('Preserve safe original payload, reason code/detail, source file, batch, row and actor. Correction records a new occurrence/version; the worker revalidates it and repeats identity checks. The original is retained. Rejected/invalid data is distinct from technical failure work.')
 heading('8. Frozen risk-scoring rules')
-table([['Rule','Points / boundary'],['Amount &gt; R50,000','30; R50,000 exactly does not trigger.'],['Amount &gt; R200,000','Additional 25.'],['Velocity: &gt; 5 accepted including current','30; inclusive 5-minute / 300-second window.'],['Non-ZA country','15.'],['Possible duplicate debit charge','40; distinct IDs, matching merchant/amount/currency within inclusive 120 seconds.'],['Outgoing transfer / high-risk merchant','20 each; combined score capped at 100.']],[275,W-343],10)
-p('R49,999.99 and R50,000.00 do not trigger the first amount rule; R50,000.01 does. Cross-border or high amount alone need not be HIGH. 10/11/12 per hour is deferred exploration.')
+table([['Component','Points / boundary'],['Amount risk','0 / 15 / 25 / 40; strongest band only.'],['High velocity','25; more than 5 accepted in the closed 300-second window, current included.'],['Cross-border','15; country differs from ZA / explicit cross-border flag.'],['Possible duplicate','20; distinct source references match debit/merchant/amount/currency within inclusive +/-120 seconds.']],[180,W-248],10)
+p('V2: fintrust-r2-rules-2026-10-13. Amount <=50,000: 0; >50,000 to 100,000: 15; >100,000 to 200,000: 25; >200,000: 40. Thresholds use transaction currency, without FX. V1 scores and versions remain frozen.')
 heading('9. Review workflow')
-table([['Band','Outcome'],['LOW: 0-39','Store ledger and assessment; no routine review.'],['MEDIUM: 40-69','Store and open review.'],['HIGH: 70-100','Store, open review and enter the idempotent alert path.']],[150,W-218],10)
+table([['Band','Outcome'],['LOW: 0-19','Store ledger and assessment; no routine review.'],['MEDIUM: 20-39','Store and open review.'],['HIGH: 40-100','Store, open review and enter the independent alert path.']],[150,W-218],10)
 p('OPEN -&gt; UNDER_REVIEW -&gt; CLEARED / CONFIRMED_RISK / ESCALATED. Backend-enforced transitions preserve named actor, notes, versions and history. A risk flag is a reason to investigate, not proven fraud.')
+end()
+start('Explainability | Measured risk components')
+heading('Controlled local example: 65% - HIGH')
+p('Transaction -> Measured values -> Components -> Score -> Risk level -> Analyst investigation. This is deterministic rule scoring, not machine learning.')
+table([['Measurement','Component / contribution'],['150,000 ZAR','Amount band >100,000 and <=200,000: +25.'],['8 accepted entries, 09:55-10:00 UTC','More than 5 in the closed 300-second window: high velocity +25.'],['Transaction country US; baseline ZA','Cross-border +15.'],['No matching distinct charge','Possible duplicate +0.'],['Total','65% - HIGH. Investigate and choose a human review outcome.']],[245,W-313],10)
+p('Rule-based risk score. This percentage represents the configured risk score, not the probability of fraud.')
+p('Evaluation timestamp, configured thresholds, observed windows, references and rule version are frozen in the original SQL result. Historical V1 evidence is displayed without reconstructing missing measurements. See docs/EVIDENCE/12-e2e/risk-model-v2/presentation-example.json for the real isolated test result.')
+p('Migration 006 changes only the existing review-eligibility guard: V1 LOW 30 stays ineligible; V2 MEDIUM 25 can open review. All accepted LOW/MEDIUM/HIGH transactions remain in the ledger.')
+end()
+start('If I had more time and budget | Planned')
+heading('Behaviour-aware monitoring - not implemented')
+p('Unusual amount versus account baseline; unusual time and after-hours activity; unfamiliar country/geography; unusual channel; new counterparty; dormant-account reactivation; bursts; rapid movement of funds; repeated payments below thresholds; historical behaviour deviation.')
+p("A transaction at night is not automatically suspicious. It becomes a stronger signal when it differs from the account's normal behaviour. More history and context, testing and governance are required before these dimensions affect a score.")
+heading('Production hardening - not capacity proof')
+p('Load tests at 10k / 100k / 1M transactions; Lambda concurrency and connection tuning; FIFO message-group strategy; high-throughput FIFO if justified; RDS Proxy; queue-depth alarms; Multi-AZ; source-feed monitoring; configurable SLAs; grouped alerts; disaster-recovery tests.')
+heading('Advanced intelligence - future scope')
+p('Streaming ingestion, anomaly detection, an AI Investigation Assistant using authorised evidence and human review, richer customer/account context and governed adaptive thresholds. No AI or ML was added to Release 1.')
+heading('Current architecture versus proven scale')
+p('Designed: SQS buffers bursts; event-driven Lambda workers use account ordering and controlled concurrency; RDS owns ledger/workflow, DynamoDB owns projections/claims; technical retries/DLQ; no NAT and cost-conscious limits. Live wiring remains pending.')
+p('The architecture is designed for elastic processing, but production-scale performance testing and connection tuning remain a future hardening step. A design is not a claim of tested throughput.')
+p('Keep the Analyst in view: What happened? Why is it risky? What should I do next? Future features must improve one of those answers.')
 end()
 start('Use cases | Separation of duties',A3)
 p('Scope follows the signed-in identity and assigned accounts. Sign out before changing roles; do not reuse another person\'s session.')
@@ -161,7 +182,7 @@ p('CSV A/B were created outside the repository and are not assumed to exist at i
 end()
 start('References | Source and maintenance')
 heading('Authoritative sources')
-bullets(['Application freeze: 10eb378; latest icon diagram checkpoint: c6f4274. The PDF conversion preserves those design decisions.','Verified local catalog: docs/EVIDENCE/05-rds/presentation-ux-freeze/postgres16-integrity.json.','Canonical schema detail: docs/diagrams/fintrust-release1-erd-notes.md. Business contract: docs/RELEASE1_BUSINESS_PROCESS.md.','Current local readiness: docs/RELEASE1_PRESENTATION_READINESS.md. Launch/fixture procedure: docs/RELEASE1_MONDAY_DEMO.md.','Official AWS icon attribution: aws.amazon.com/architecture/icons/. Icons are embedded unchanged from the retained service assets; no AWS deployment is implied.'])
+bullets(['Current risk-model baseline: a474566 plus the reviewed V2 refinement. Prior diagram checkpoint c6f4274 remains architectural design evidence; its icons do not prove live wiring.','Verified local catalog: docs/EVIDENCE/05-rds/presentation-ux-freeze/postgres16-integrity.json.','Canonical schema detail: docs/diagrams/fintrust-release1-erd-notes.md. Business contract: docs/RELEASE1_BUSINESS_PROCESS.md.','Current local readiness: docs/RELEASE1_PRESENTATION_READINESS.md. Launch/fixture procedure: docs/RELEASE1_MONDAY_DEMO.md.','Official AWS icon attribution: aws.amazon.com/architecture/icons/. Icons are embedded unchanged from the retained service assets; no AWS deployment is implied.'])
 heading('Reproduction and file discipline')
 p('Seven DOT sources under docs/presentation/diagram-source/ produce intermediate SVGs under ignored build/presentation-pdf/svg/. tools/render_release1_diagrams.cjs performs the vector layout and embeds official icons. tools/build_presentation_pdf.py produces the eight final PDFs. Requires Node/Viz.js, Python/reportlab/svglib/PyMuPDF and Arial fonts.')
 p('Current planning Markdown and current standalone SVG duplicates are removed only after PDF validation. Canonical development Markdown, historical screenshots, deployment/recovery history, AWS icon assets and project-reference remain retained. No AWS, application, migration or push operation is part of conversion.')
@@ -176,6 +197,15 @@ table([['File','Classification / recommendation after presentation'],['README.md
 p('No project-reference file is approved for deletion today. SAFE TO DELETE AFTER PRESENTATION applies only to copies confirmed redundant in a later comparison. Six earlier inline diagram duplicates already point to the authoritative views.',SMALL)
 end();C.save()
 
+# Planning-only rebuild keeps the seven diagram PDFs unchanged; Poppler QA is separate.
+if '--planning-only' in sys.argv:
+ import pymupdf
+ pdf=OUT/'FinTrust_Project_Planning_and_Design_Evidence.pdf'
+ reader=pymupdf.open(pdf);text='\n'.join(page.get_text() or '' for page in reader)
+ assert 'fintrust-r2-rules-2026-10-13' in text and '65%' in text and 'not the probability of fraud' in text
+ print(json.dumps({'pdf':str(pdf),'pages':len(reader),'status':'READY_FOR_POPPLER_VISUAL_REVIEW'}))
+ raise SystemExit(0)
+import pymupdf
 # Open and render every page for visual review; record PDF readability checks.
 results=[]
 for path in [OUT/'FinTrust_Project_Planning_and_Design_Evidence.pdf',*[DIAGRAMS/f for f,_ in NAMES.values()]]:

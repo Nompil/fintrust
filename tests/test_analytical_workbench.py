@@ -12,7 +12,7 @@ def test_filters_change_full_aggregate_and_scoped_detail(release_db, people):
     assert base['metrics']['transactions']==release_db[3]('SELECT count(*) FROM transactions WHERE account_id=%s',(ACCOUNT,))[0][0]
     assert base['metrics']['high_risk_rate']==50
     assert base['metrics']['quarantined']==1
-    for query in ['risk_level=High','country=US&risk_level=High','scenario=HIGH_AMOUNT','review_status=OPEN','tx_type=debit&country=US&risk_level=High','risk_level=High&country=US&scenario=CROSS_BORDER']:
+    for query in ['risk_level=High','country=US&risk_level=High','scenario=AMOUNT_RISK','review_status=OPEN','tx_type=debit&country=US&risk_level=High','risk_level=High&country=US&scenario=CROSS_BORDER']:
         response=client.get(path+'&'+query,headers=headers('analyst01'))
         assert response.status_code==200,response.json
         data=response.json['data']

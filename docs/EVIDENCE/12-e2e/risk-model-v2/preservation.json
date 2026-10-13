@@ -1,0 +1,78 @@
+{
+  "preserved_database_and_auth_unchanged": true,
+  "tables": {
+    "accounts": {
+      "count": 5,
+      "sha256": "7c8ded6599a1fae19aa7c0ce4ef485a88dee4aa6b1e4d02cbcf4a93a2786b270"
+    },
+    "alerts": {
+      "count": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "correction_outbox": {
+      "count": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "customers": {
+      "count": 5,
+      "sha256": "0ed8d118148f968bd7c4e874986aa905d99977b69c24aee3ba2eaeedc1926b88"
+    },
+    "ingestion_attempts": {
+      "count": 3,
+      "sha256": "8fb583f862ace75ef2471878cf203ef6f929ec9930a5262fabcc0e1b3d54a3af"
+    },
+    "ingestion_batches": {
+      "count": 3,
+      "sha256": "cde161f7755bd2541d2ca400e75916a2c8a59005f16e7a8394abfe44955004cb"
+    },
+    "ingestion_records": {
+      "count": 11,
+      "sha256": "0905495662eae74750d33b11bb52ba2d7435d441db7894c5b3afac12a51cc02e"
+    },
+    "operations_requests": {
+      "count": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "processed_transactions": {
+      "count": 4,
+      "sha256": "7032ef361bbde98da34e86b9d506fcbfc417aaff687dbc7eb217a81ea64887d3"
+    },
+    "projection_outbox": {
+      "count": 4,
+      "sha256": "bbb8d15ae9237677228c6c058c2fd6b7158a3056bd35d40d1766e045f128e4fa"
+    },
+    "quarantine_cases": {
+      "count": 7,
+      "sha256": "360e2732f1d0f3a37a1652c9aef8f44c392ee6eaadf8c636a384ce6708e80b56"
+    },
+    "quarantine_corrections": {
+      "count": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "risk_events": {
+      "count": 93,
+      "sha256": "a17a9391e93e109b321ae943292a8792dd76ffdbd88e16361aef1a8923ab4518"
+    },
+    "risk_review_history": {
+      "count": 3,
+      "sha256": "50d1b11523526fc99426f610f3870a8d7a0d712c49280eb1bf8e392c072415d1"
+    },
+    "risk_reviews": {
+      "count": 2,
+      "sha256": "cbbadcbf9cfe002fa85e6711d2bed0f30cf7b2e6818f75dcee1e7048bc23b85a"
+    },
+    "schema_migrations": {
+      "count": 5,
+      "sha256": "d1f6f345f1683946274a3c7766aca86605c00842d08c495277b40282350d57e2"
+    },
+    "transaction_lifecycle_events": {
+      "count": 15,
+      "sha256": "7ee727a10cf55558e4cf5cff139aee4159d455ab3f6d46f68843bcba785fbf81"
+    },
+    "transactions": {
+      "count": 204,
+      "sha256": "3ff8a1a9ed80e785ff52cfbb4c2ff017ac6da5f4d979191bf0782241760499f9"
+    }
+  },
+  "exit_code": 0
+}

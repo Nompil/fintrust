@@ -33,7 +33,7 @@ def release_db(monkeypatch):
             cur.execute(sql.SQL("SET search_path TO {},public").format(sql.Identifier(name)))
             base=(ROOT/"sql/schema.sql").read_text().split("-- Additive identity hardening.")[0].replace("CREATE EXTENSION IF NOT EXISTS pgcrypto;","")
             cur.execute(base);cur.execute((ROOT/"sql/seed.sql").read_text())
-    migrations.apply_local(conn,1,schema=name);migrations.apply_local(conn,2,schema=name);migrations.apply_local(conn,3,schema=name);migrations.apply_local(conn,4,schema=name);migrations.apply_local(conn,5,schema=name)
+    migrations.apply_local(conn,1,schema=name);migrations.apply_local(conn,2,schema=name);migrations.apply_local(conn,3,schema=name);migrations.apply_local(conn,4,schema=name);migrations.apply_local(conn,5,schema=name);migrations.apply_local(conn,6,schema=name)
     def connect():
         c=psycopg2.connect(dsn)
         with c.cursor() as cur:cur.execute(sql.SQL("SET search_path TO {},public").format(sql.Identifier(name)))
@@ -266,7 +266,7 @@ def test_rds_scoring_and_kms_failure_never_acknowledged(release_db,monkeypatch):
     assert q("SELECT count(*) FROM transactions")==[(200,)]
     assert q("SELECT pending FROM batch_reconciliation")==[(1,)]
     monkeypatch.setattr(score,"persist_score",original)
-    monkeypatch.setenv("RISK_MEDIUM","20")
+    monkeypatch.setenv("RISK_MEDIUM","21")
     with pytest.raises(ValueError,match="frozen"):worker.process_envelope(item)
     assert q("SELECT count(*) FROM transactions")==[(200,)]
     monkeypatch.delenv("RISK_MEDIUM")

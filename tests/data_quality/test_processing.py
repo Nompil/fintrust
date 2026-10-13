@@ -112,7 +112,7 @@ def test_full_csv_fifo_score_alert_projection_and_replay(pipeline):
     assert mail.call_count == 1
     assert query("SELECT count(*) FROM risk_events WHERE tx_id=%s", (high["transaction_id"],))[0][0] == 1
     record = dynamo.get_transaction_score("risk_scores", ACCOUNT, high["transaction_id"])
-    assert record["risk_level"] == "High" and record["risk_score"] == 90
+    assert record["risk_level"] == "High" and record["risk_score"] == 55
     delivery = query("SELECT delivery_state,sent_at,provider_message_id FROM alerts WHERE risk_event_id=%s", (record["risk_event_id"],))[0]
     assert delivery[0] == "SENT" and delivery[1] is not None and delivery[2] == "ses-message"
     assert dynamo.get_transaction_score("risk_scores", ACCOUNT, low["transaction_id"])["risk_level"] == "Low"

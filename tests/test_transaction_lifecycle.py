@@ -9,7 +9,7 @@ from fintrust import release_workflow as worker,lifecycle,migrations,dynamo
 def events(q,item):
     return q('SELECT event_type,actor_subject,occurred_at FROM transaction_lifecycle_events WHERE batch_id=%s AND source_row=%s ORDER BY sequence',(item['batch']['batch_id'],item['source']['row']))
 
-@pytest.mark.parametrize('amount,country,level,review', [('10','ZA','Low','NOT_REQUIRED'),('200000.01','ZA','Medium','OPEN'),('200000.01','US','High','OPEN')])
+@pytest.mark.parametrize('amount,country,level,review', [('10','ZA','Low','NOT_REQUIRED'),('150000','ZA','Medium','OPEN'),('200000.01','US','High','OPEN')])
 def test_accepted_levels_stored_and_timeline_is_authoritative(release_db,authenticated_client,amount,country,level,review):
     q=release_db[3];client,headers=authenticated_client
     item=feed([row(amount=amount,country=country,source_transaction_id='LIFECYCLE')])[0]

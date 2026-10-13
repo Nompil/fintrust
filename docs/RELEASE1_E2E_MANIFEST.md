@@ -18,22 +18,22 @@ Until then this is a scenario manifest, not a per-row manifest of unseen files.
 | Scenario | Validation/quarantine | Identity outcome | Risk flags / level | Alert / review | Reconciliation contribution |
 |---|---|---|---|---|---|
 | Normal debit 10 ZAR, ZA | Valid | ACCEPTED | 0 Low | Neither | accepted +1 |
-| 49,999.99 / 50,000.00 | Valid | ACCEPTED | No HIGH_AMOUNT, 0 Low | Neither | accepted +1 each |
-| 50,000.01 | Valid | ACCEPTED | HIGH_AMOUNT, 30 Low | Neither by amount alone | accepted +1 |
-| 200,000.00 | Valid | ACCEPTED | HIGH_AMOUNT, 30 Low | Neither alone | accepted +1 |
-| 200,000.01 | Valid | ACCEPTED | HIGH_AMOUNT + VERY_HIGH_AMOUNT, 55 Medium | Review required; no automatic email | accepted +1 |
+| 49,999.99 / 50,000.00 | Valid | ACCEPTED | Amount component 0 Low | Neither | accepted +1 each |
+| 50,000.01 | Valid | ACCEPTED | Amount component 15 Low | Neither by amount alone | accepted +1 |
+| 200,000.00 | Valid | ACCEPTED | Amount component 25 Medium | Review | accepted +1 |
+| 200,000.01 | Valid | ACCEPTED | Amount component 40 High | Review and High alert path | accepted +1 |
 | Foreign supported country only | Valid | ACCEPTED | CROSS_BORDER, 15 Low | Neither; not a fraud verdict | accepted +1 |
-| 200,000.01 + foreign country | Valid | ACCEPTED | 55 + 15 = 70 High | One logical alert; review required | accepted +1 |
+| 200,000.01 + foreign country | Valid | ACCEPTED | 40 + 15 = 55 High | One logical alert; review required | accepted +1 |
 | Five accepted events within 300 seconds | Valid | ACCEPTED | No HIGH_VELOCITY | Other factors determine review/alert | accepted +1 per distinct event |
-| Sixth accepted event at exactly 300 seconds from first | Valid | ACCEPTED | HIGH_VELOCITY +30; current counts itself | Other factors determine level | accepted +1 |
+| Sixth accepted event at exactly 300 seconds from first | Valid | ACCEPTED | HIGH_VELOCITY +25; current counts itself | Other factors determine level | accepted +1 |
 | Sixth at 300 seconds +1 microsecond (others at 60/120/180/240) | Valid | ACCEPTED | First excluded, count5; no velocity | Other factors determine level | accepted +1 |
 | 10/11/12 spread over one hour | Valid | ACCEPTED | No hourly rule exists; explore future rule only | Depends on actual five-minute clustering/other factors | accepted per distinct event |
-| Very high + cross-border + velocity | Valid | ACCEPTED | 55+15+30=100 High | One logical alert; review | accepted +1 |
+| Very high + cross-border + velocity | Valid | ACCEPTED | 40+15+25=80 High | One logical alert; review | accepted +1 |
 | Same source identity/equal content repeated in file | Valid values | DUPLICATE, canonical tx linked | Reuse frozen canonical result | No second logical alert/review | duplicate +1, not quarantine |
 | Same accepted identity in different file | Valid values | DUPLICATE_TRANSACTION | Frozen result reused | No additional logical effect | duplicate +1 |
 | Same identity/changed amount or other material field | DUPLICATE_IDENTITY_CONFLICT | QUARANTINED | Not rescored into ledger | Correction review; no email | quarantined +1 |
 | Whole identical file renamed/reuploaded/new version | Audit DUPLICATE_FILE attempt | Original batch/occurrences unchanged | No rescoring | No new logical effects | no new rows in original batch |
-| Distinct source IDs, same account/merchant/currency/amount, within closed +/-120s | Valid | Both ACCEPTED | POSSIBLE_DUPLICATE_CHARGE +40 on subsequent admission; Medium minimum | Review, not database dedup | accepted +1 each |
+| Distinct source IDs, same account/merchant/currency/amount, within closed +/-120s | Valid | Both ACCEPTED | POSSIBLE_DUPLICATE_CHARGE +20 on subsequent admission; Medium minimum | Review, not database dedup | accepted +1 each |
 | Missing account/amount/date/type/country/currency | MISSING_REQUIRED_FIELD; multiple deterministic reasons | QUARANTINED | None | Correction | quarantined +1 |
 | Unknown UUID account | UNKNOWN_ACCOUNT | QUARANTINED | None | Admin assigns eligible scoped account for correction | quarantined +1 |
 | Closed/inactive account, genuinely new identity | INACTIVE_ACCOUNT | QUARANTINED | None | Correction/operational review | quarantined +1 |
@@ -61,3 +61,5 @@ The ledger outcome partition is `received = accepted + quarantined + duplicate +
 technical_failed + pending`. A retry of the same occurrence changes no totals.
 A different corrected occurrence belongs to its own correction batch.
 Business completion and projection/alert delivery backlogs are separate.
+
+Current risk oracle: V2 `fintrust-r2-rules-2026-10-13`; V1 snapshots retain their original classification. Maximum 100; LOW 0-19 / MEDIUM 20-39 / HIGH 40-100. Percentage is not fraud probability.

@@ -1,0 +1,18 @@
+{
+  "status": "PASSED",
+  "checks": [
+    "65% with disclaimer",
+    "one amount component",
+    "frozen velocity count/threshold/windows/points",
+    "cross-border countries",
+    "duplicate fields/reference/proximity/points",
+    "zero 0%",
+    "missing Not assessed",
+    "V1 70% preserved and grouped amount 55",
+    "mixed scoring versions",
+    "Analyst evidence/context/actions",
+    "390px containment"
+  ],
+  "external_network": "blocked",
+  "page_errors": []
+}

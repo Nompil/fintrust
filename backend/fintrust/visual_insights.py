@@ -23,7 +23,7 @@ def read(principal,args):
             else:until=value
             where+=" AND t.tx_date"+operator+"%s";params.append(value)
     if until is not None and until<=since:raise ValueError("End must follow the start of the selected period")
-    choices={"risk_level":{"Low","Medium","High"},"review_status":{"OPEN","UNDER_REVIEW","CLEARED","CONFIRMED_RISK","ESCALATED"},"tx_type":{"debit","credit","transfer"},"scenario":{"HIGH_AMOUNT","VERY_HIGH_AMOUNT","HIGH_VELOCITY","CROSS_BORDER","POSSIBLE_DUPLICATE_CHARGE","TRANSFER","MERCHANT_MARKER"}}
+    choices={"risk_level":{"Low","Medium","High"},"review_status":{"OPEN","UNDER_REVIEW","CLEARED","CONFIRMED_RISK","ESCALATED"},"tx_type":{"debit","credit","transfer"},"scenario":{"AMOUNT_RISK","HIGH_AMOUNT","VERY_HIGH_AMOUNT","HIGH_VELOCITY","CROSS_BORDER","POSSIBLE_DUPLICATE_CHARGE","TRANSFER","MERCHANT_MARKER"}}
     for key,allowed in choices.items():
         if args.get(key) and args[key] not in allowed:raise ValueError("Unsupported analytical filter value")
     if args.get("country"):
@@ -43,8 +43,10 @@ def read(principal,args):
      "accounts":q("SELECT t.account_id::text AS label,count(*) AS count FROM transactions t WHERE "+where+" GROUP BY 1 ORDER BY count(*) DESC,1",params),
      "cross_border":q("SELECT CASE WHEN t.cross_border THEN 'Cross-border' ELSE 'Domestic' END AS label,count(*) AS count FROM transactions t WHERE "+where+" GROUP BY 1 ORDER BY 1",params),
      "risk":q("SELECT p.result->>'risk_level' AS label,count(*) AS count FROM processed_transactions p JOIN transactions t USING(tx_id) WHERE "+where+" AND p.result->>'risk_level' IN ('Low','Medium','High') GROUP BY 1 ORDER BY 1",params),
-     "rules":q("SELECT rule->>'rule' AS label,count(*) AS count FROM processed_transactions p JOIN transactions t USING(tx_id) CROSS JOIN LATERAL jsonb_array_elements(COALESCE(p.result->'triggered_rules','[]'::jsonb)) rule WHERE "+where+" GROUP BY 1 ORDER BY count(*) DESC,1",params),
+     "rules":q("SELECT CASE WHEN rule->>'rule' IN ('HIGH_AMOUNT','VERY_HIGH_AMOUNT','AMOUNT_RISK') THEN 'AMOUNT_RISK' ELSE rule->>'rule' END AS label,count(DISTINCT p.tx_id) AS count FROM processed_transactions p JOIN transactions t USING(tx_id) CROSS JOIN LATERAL jsonb_array_elements(COALESCE(p.result->'triggered_rules','[]'::jsonb)) rule WHERE "+where+" GROUP BY 1 ORDER BY count(DISTINCT p.tx_id) DESC,1",params),
      "reviews":q("SELECT w.review_status AS label,count(*) AS count FROM risk_reviews w JOIN risk_events r USING(risk_event_id) JOIN transactions t USING(tx_id) WHERE "+where+" GROUP BY 1 ORDER BY 1",params)}
+    result["rule_count_note"]="Amount risk groups legacy amount bands once per transaction. All classifications remain as recorded under their rule version; independent dimensions can overlap."
+    result["scoring_versions"]=q("SELECT p.result->>'rule_version' AS label,count(*) AS count FROM processed_transactions p JOIN transactions t USING(tx_id) WHERE "+where+" GROUP BY 1 ORDER BY 1",params)
     result["risk_trend"]=q("SELECT (t.tx_date AT TIME ZONE 'UTC')::date::text AS label,count(*) AS count FROM processed_transactions p JOIN transactions t USING(tx_id) WHERE "+where+" AND p.result->>'risk_level'='High' GROUP BY 1 ORDER BY 1",params)
     result["high_accounts"]=q("SELECT t.account_id::text AS label,count(*) AS count FROM processed_transactions p JOIN transactions t USING(tx_id) WHERE "+where+" AND p.result->>'risk_level'='High' GROUP BY 1 ORDER BY count(*) DESC,1",params)
     result["transactions"]=q("SELECT t.tx_id,t.account_id,t.amount,t.currency,t.tx_date,p.result->>'risk_level' AS risk_level,w.review_status FROM transactions t LEFT JOIN processed_transactions p USING(tx_id) LEFT JOIN risk_events r USING(tx_id) LEFT JOIN risk_reviews w USING(risk_event_id) WHERE "+where+" ORDER BY t.tx_date DESC,t.tx_id LIMIT 25",params)

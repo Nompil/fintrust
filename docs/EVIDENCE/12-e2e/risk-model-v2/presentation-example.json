@@ -1,0 +1,200 @@
+{
+  "label": "Controlled isolated PostgreSQL example; AWS mocked",
+  "flow": [
+    "Transaction",
+    "Measured values",
+    "Risk components",
+    "65%",
+    "HIGH",
+    "Analyst investigation"
+  ],
+  "result": {
+    "batch": {
+      "batch_id": "97e62a7a-cb8d-542d-815a-487a4209b0d5",
+      "file_sha256": "3138e245e3aa263af85910350e8c2deb858e109b6b808a90c48d86008bb10bb8",
+      "ingested_at": "2026-10-09T10:00:00+00:00"
+    },
+    "score": 65,
+    "tx_id": "6a465fe6-a8bd-55d6-a3ac-da7a7535a8e6",
+    "source": {
+      "key": "raw/release.csv",
+      "row": 9,
+      "etag": null,
+      "bucket": "synthetic-input",
+      "version": "v1"
+    },
+    "decision": "hold",
+    "account_id": "20000000-0000-4000-8000-000000000001",
+    "components": [
+      {
+        "rule": "AMOUNT_RISK",
+        "label": "Amount risk",
+        "points": 25,
+        "reason": "Amount greater than 100000 and at most 200000 in transaction currency",
+        "context": "Amount greater than 100000 and at most 200000 in transaction currency",
+        "currency": "ZAR",
+        "threshold": {
+          "lower": "100000",
+          "upper": "200000",
+          "lower_inclusive": false,
+          "upper_inclusive": true
+        },
+        "triggered": true,
+        "amount_band": {
+          "lower": "100000",
+          "upper": "200000",
+          "lower_inclusive": false,
+          "upper_inclusive": true
+        },
+        "evaluated_at": "2026-10-13T18:09:06.016385+00:00",
+        "rule_version": "fintrust-r2-rules-2026-10-13",
+        "triggered_value": "150000.00"
+      },
+      {
+        "rule": "CROSS_BORDER",
+        "label": "Cross-border",
+        "points": 15,
+        "reason": "Transaction country differs from ZA",
+        "context": "Transaction country differs from ZA",
+        "threshold": "ZA",
+        "triggered": true,
+        "evaluated_at": "2026-10-13T18:09:06.016385+00:00",
+        "rule_version": "fintrust-r2-rules-2026-10-13",
+        "triggered_value": "US",
+        "domestic_country": "ZA",
+        "explicit_cross_border": false
+      },
+      {
+        "rule": "HIGH_VELOCITY",
+        "label": "High velocity",
+        "points": 25,
+        "reason": "8 accepted transactions within 300 seconds; threshold more than 5",
+        "context": "8 accepted transactions within 300 seconds; threshold more than 5",
+        "threshold": 5,
+        "triggered": true,
+        "account_id": "20000000-0000-4000-8000-000000000001",
+        "comparison": "greater than",
+        "window_end": "2026-10-09T10:00:00+00:00",
+        "evaluated_at": "2026-10-13T18:09:06.016385+00:00",
+        "rule_version": "fintrust-r2-rules-2026-10-13",
+        "window_start": "2026-10-09T09:55:00+00:00",
+        "closed_window": true,
+        "window_seconds": 300,
+        "triggered_value": 8,
+        "includes_current": true,
+        "observed_window_end": "2026-10-09T10:00:00+00:00",
+        "observed_window_start": "2026-10-09T09:55:00+00:00"
+      },
+      {
+        "rule": "POSSIBLE_DUPLICATE_CHARGE",
+        "label": "Possible duplicate",
+        "points": 0,
+        "reason": "Distinct source references match account/merchant/amount/currency within the configured time window",
+        "context": "Distinct source references match account/merchant/amount/currency within the configured time window",
+        "threshold": 120,
+        "triggered": false,
+        "comparison": "at most; either side of event time",
+        "match_limit": 20,
+        "evaluated_at": "2026-10-13T18:09:06.016385+00:00",
+        "rule_version": "fintrust-r2-rules-2026-10-13",
+        "window_seconds": 120,
+        "matching_fields": [
+          "account_id",
+          "merchant",
+          "amount",
+          "currency",
+          "source_system",
+          "tx_type"
+        ],
+        "triggered_value": 0,
+        "matching_transactions": [],
+        "matching_transaction_ids": [],
+        "distinct_source_references": true
+      }
+    ],
+    "risk_level": "High",
+    "evaluated_at": "2026-10-13T18:09:06.016385+00:00",
+    "rule_version": "fintrust-r2-rules-2026-10-13",
+    "risk_event_id": 92,
+    "correlation_id": "6a465fe6-a8bd-55d6-a3ac-da7a7535a8e6",
+    "scoring_config": {
+      "high": "40",
+      "medium": "20",
+      "high_amount": "50000",
+      "amount_points": "15",
+      "middle_amount": "100000",
+      "middle_points": "25",
+      "velocity_count": "5",
+      "velocity_points": "25",
+      "velocity_seconds": "300",
+      "very_high_amount": "200000",
+      "very_high_points": "40",
+      "cross_border_points": "15",
+      "duplicate_charge_points": "20",
+      "duplicate_charge_seconds": "120"
+    },
+    "transaction_id": "6a465fe6-a8bd-55d6-a3ac-da7a7535a8e6",
+    "triggered_rules": [
+      {
+        "rule": "AMOUNT_RISK",
+        "label": "Amount risk",
+        "points": 25,
+        "reason": "Amount greater than 100000 and at most 200000 in transaction currency",
+        "context": "Amount greater than 100000 and at most 200000 in transaction currency",
+        "currency": "ZAR",
+        "threshold": {
+          "lower": "100000",
+          "upper": "200000",
+          "lower_inclusive": false,
+          "upper_inclusive": true
+        },
+        "triggered": true,
+        "amount_band": {
+          "lower": "100000",
+          "upper": "200000",
+          "lower_inclusive": false,
+          "upper_inclusive": true
+        },
+        "evaluated_at": "2026-10-13T18:09:06.016385+00:00",
+        "rule_version": "fintrust-r2-rules-2026-10-13",
+        "triggered_value": "150000.00"
+      },
+      {
+        "rule": "CROSS_BORDER",
+        "label": "Cross-border",
+        "points": 15,
+        "reason": "Transaction country differs from ZA",
+        "context": "Transaction country differs from ZA",
+        "threshold": "ZA",
+        "triggered": true,
+        "evaluated_at": "2026-10-13T18:09:06.016385+00:00",
+        "rule_version": "fintrust-r2-rules-2026-10-13",
+        "triggered_value": "US",
+        "domestic_country": "ZA",
+        "explicit_cross_border": false
+      },
+      {
+        "rule": "HIGH_VELOCITY",
+        "label": "High velocity",
+        "points": 25,
+        "reason": "8 accepted transactions within 300 seconds; threshold more than 5",
+        "context": "8 accepted transactions within 300 seconds; threshold more than 5",
+        "threshold": 5,
+        "triggered": true,
+        "account_id": "20000000-0000-4000-8000-000000000001",
+        "comparison": "greater than",
+        "window_end": "2026-10-09T10:00:00+00:00",
+        "evaluated_at": "2026-10-13T18:09:06.016385+00:00",
+        "rule_version": "fintrust-r2-rules-2026-10-13",
+        "window_start": "2026-10-09T09:55:00+00:00",
+        "closed_window": true,
+        "window_seconds": 300,
+        "triggered_value": 8,
+        "includes_current": true,
+        "observed_window_end": "2026-10-09T10:00:00+00:00",
+        "observed_window_start": "2026-10-09T09:55:00+00:00"
+      }
+    ],
+    "transaction_timestamp": "2026-10-09T10:00:00+00:00"
+  }
+}

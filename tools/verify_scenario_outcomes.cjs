@@ -8,6 +8,7 @@ const p=await context.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.mess
 await p.goto(origin+'/release1');await p.locator('#token').fill('2'.repeat(64));await p.locator('#signin').click();await p.locator('#workspace').waitFor({state:'visible'});
 for(const test of JSON.parse(fs.readFileSync(path.join(out,'inputs.json'),'utf8'))){
 await p.locator('#navigation').getByRole('button',{name:'Risk Events',exact:true}).click();await p.waitForFunction(()=>!document.querySelector('#status').textContent.startsWith('Loading'));
+await p.getByLabel('Severity',{exact:true}).selectOption('High');await p.getByRole('button',{name:'Apply investigation filters',exact:true}).click();await p.waitForFunction(()=>!document.querySelector('#status').textContent.startsWith('Loading'));
 const ref=await p.evaluate(id=>FinTrustDisplay.reference('risk_event_id',id),test.event_id);
 await p.locator('#content tr').filter({hasText:ref}).getByRole('button',{name:'Investigate',exact:true}).click();
 let drawer=p.locator('#investigation-drawer');await drawer.getByRole('button',{name:'Claim Review',exact:true}).click();await drawer.locator('textarea').waitFor();

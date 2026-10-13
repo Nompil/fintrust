@@ -72,7 +72,7 @@ def main():
                     cur.execute(sql.SQL("SET search_path TO {},public").format(sql.Identifier(SCHEMA)))
                     cur.execute((ROOT/"sql/schema.sql").read_text().split("-- Additive identity hardening.")[0].replace("CREATE EXTENSION IF NOT EXISTS pgcrypto;",""))
                     cur.execute((ROOT/"sql/seed.sql").read_text())
-        apply_local(conn,1,schema=SCHEMA);apply_local(conn,2,schema=SCHEMA);apply_local(conn,3,schema=SCHEMA);apply_local(conn,4,schema=SCHEMA);apply_local(conn,5,schema=SCHEMA)
+        apply_local(conn,1,schema=SCHEMA);apply_local(conn,2,schema=SCHEMA);apply_local(conn,3,schema=SCHEMA);apply_local(conn,4,schema=SCHEMA);apply_local(conn,5,schema=SCHEMA);apply_local(conn,6,schema=SCHEMA)
     finally:conn.close()
     role={"Admin":"Admin","Analyst":"Risk/Compliance Analyst","Auditor":"Read-only/Auditor","Maintainer":"Maintainer"}[args.role]
     file=ROOT/".env.release1-auth.json"

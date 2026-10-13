@@ -2,7 +2,7 @@
 import json
 import hashlib
 import os
-from datetime import timedelta
+from datetime import timedelta, datetime, timezone
 import boto3
 from psycopg2.extras import Json
 from .db import get_connection
@@ -28,8 +28,9 @@ class InactiveAccount(UnknownAccount):
     """Account exists but is not active/monitoring."""
 
 
-def score_transaction(record, velocity=1, config=None, *, duplicate_matches=()):
-    result = evaluate(record, velocity, config, duplicate_matches=duplicate_matches)
+def score_transaction(record, velocity=1, config=None, *, duplicate_matches=(), duplicate_evidence=(), velocity_evidence=None, evaluated_at=None):
+    result = evaluate(record, velocity, config, duplicate_matches=duplicate_matches,
+                      duplicate_evidence=duplicate_evidence, velocity_evidence=velocity_evidence, evaluated_at=evaluated_at)
     return {"account_id": record.get("account_id"),
             "transaction_id": record.get("transaction_id", record.get("tx_id")),
             "tx_id": record.get("transaction_id", record.get("tx_id")), **result,
@@ -66,12 +67,14 @@ def persist_score(job, *, commit_hook=None):
             if commit_hook and cfg != ScoringConfig():
                 raise ValueError("Release 1 scoring configuration differs from the frozen rule version")
             when = parse_transaction_date(job["transaction_timestamp"])
-            cur.execute("SELECT count(*) FROM transactions WHERE account_id=%s AND tx_date BETWEEN %s AND %s",
+            cur.execute("SELECT count(*),min(tx_date),max(tx_date) FROM transactions WHERE account_id=%s AND tx_date BETWEEN %s AND %s",
                         (job["account_id"], when - timedelta(seconds=cfg.velocity_seconds), when))
-            velocity = cur.fetchone()[0]
+            velocity, first_seen, last_seen = cur.fetchone()
+            velocity_evidence = {"observed_window_start": first_seen.astimezone(timezone.utc).isoformat(), "observed_window_end": last_seen.astimezone(timezone.utc).isoformat()}
             matches = []
+            duplicate_evidence = []
             if job.get("source_transaction_id") and job["merchant"] and job["transaction_type"] == "debit":
-                cur.execute("""SELECT tx_id::text FROM transactions
+                cur.execute("""SELECT tx_id::text,tx_date,source_transaction_id FROM transactions
                     WHERE account_id=%s AND merchant=%s AND amount=%s AND currency=%s
                       AND tx_type='debit' AND tx_id<>%s AND source_system=%s
                       AND source_transaction_id IS NOT NULL AND source_transaction_id<>%s
@@ -80,8 +83,13 @@ def persist_score(job, *, commit_hook=None):
                      job["transaction_id"], job["source_system"], job["source_transaction_id"],
                      when - timedelta(seconds=cfg.duplicate_charge_seconds),
                      when + timedelta(seconds=cfg.duplicate_charge_seconds)))
-                matches = [r[0] for r in cur.fetchall()]
-            result = score_transaction(job, velocity, cfg, duplicate_matches=matches)
+                matching_rows = cur.fetchall()
+                matches = [r[0] for r in matching_rows]
+                duplicate_evidence = [{"tx_id": r[0], "tx_date": r[1].astimezone(timezone.utc).isoformat(),
+                    "source_transaction_id": r[2], "seconds_apart": str(abs((when-r[1]).total_seconds()))} for r in matching_rows]
+            result = score_transaction(job, velocity, cfg, duplicate_matches=matches,
+                duplicate_evidence=duplicate_evidence, velocity_evidence=velocity_evidence,
+                evaluated_at=datetime.now(timezone.utc).isoformat())
             result.update(source=job["source"], batch=job.get("batch"),
                           correlation_id=job["correlation_id"],
                           transaction_timestamp=job["transaction_timestamp"],

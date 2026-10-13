@@ -1,0 +1,33 @@
+{
+  "status": "PASSED",
+  "checks": [
+    "four role workspaces",
+    "Auditor finder omits user governance and uploads",
+    "Maintainer finder only lists Notifications and Operations",
+    "icon navigation",
+    "authorized Ctrl K workspace finder",
+    "mobile navigation opens and closes",
+    "side-by-side evidence and actions",
+    "evidence tabs preserve audit visibility",
+    "real SQL six metrics",
+    "recorded V2 High 55% and Low 0%; percentage is not fraud probability",
+    "historical null remains Not assessed",
+    "numeric score sorting",
+    "1100/1366/1920 monitoring dashboard",
+    "390px transaction containment",
+    "no invented SLA",
+    "all six workbench sections",
+    "laptop",
+    "keyboard focus",
+    "drawer Escape",
+    "Over SLA delegates to scoped reviews",
+    "scenario empty state",
+    "Auditor read-only",
+    "mobile metrics and charts stay within viewport",
+    "independent aggregate failure",
+    "full failure clears stale workbench",
+    "user sort/filter",
+    "disable/reactivate"
+  ],
+  "external_network": "blocked"
+}

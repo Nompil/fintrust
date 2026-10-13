@@ -47,16 +47,16 @@ def test_normal_unknown_account_and_missing_internal_id():
     assert contract.validation_errors(row(),RECEIVED,known_account=False)[0]["reason_code"]=="UNKNOWN_ACCOUNT"
     assert contract.validation_errors(row(source_transaction_id="",tx_date=""),RECEIVED)
 
-@pytest.mark.parametrize("amount,score",[("49999.99",0),("50000.00",0),("50000.01",30),("200000",30),("200000.01",55)])
+@pytest.mark.parametrize("amount,score",[("49999.99",0),("50000.00",0),("50000.01",15),("100000",15),("100000.01",25),("200000",25),("200000.01",40)])
 def test_amount_edges(amount,score):
     assert rules.evaluate(row(amount=amount))["score"]==score
 
 def test_cross_border_combination_and_similar_charge():
     assert rules.evaluate(row(country="US"))["score"]==15
     assert rules.evaluate(row(country="US"))["risk_level"]=="Low"
-    assert rules.evaluate(row(amount="200000.01",country="US"),velocity=6)["score"]==100
+    assert rules.evaluate(row(amount="200000.01",country="US"),velocity=6)["score"]==80
     result=rules.evaluate(row(),duplicate_matches=[str(uuid.uuid4())])
-    assert result["score"]==40 and result["risk_level"]=="Medium"
+    assert result["score"]==20 and result["risk_level"]=="Medium"
     first=jobs.make_job(row(),"bucket","a.csv","a",2)
     other=jobs.make_job(row(source_transaction_id="REF-002"),"bucket","b.csv","b",2)
     assert jobs.identity_key(first)!=jobs.identity_key(other)
@@ -196,7 +196,7 @@ def test_duplicate_charge_closed_window_edges(pipeline,seconds,expected):
     result=score.persist_score(make(source_system="demo",source_transaction_id="SECOND",merchant="Exact merchant",tx_date=(when+timedelta(seconds=seconds)).isoformat()))
     assert ("POSSIBLE_DUPLICATE_CHARGE" in {x["rule"] for x in result["triggered_rules"]}) is expected
 
-@pytest.mark.parametrize("value,level",[(39,"Low"),(40,"Medium"),(69,"Medium"),(70,"High")])
+@pytest.mark.parametrize("value,level",[(19,"Low"),(20,"Medium"),(39,"Medium"),(40,"High")])
 def test_risk_level_edges(value,level):
     assert rules.classify_risk(value)==level
 

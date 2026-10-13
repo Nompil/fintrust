@@ -1,0 +1,15 @@
+{
+  "status": "PASSED",
+  "checks": [
+    "named sign-in",
+    "self claim",
+    "My reviews",
+    "quarantine timeline",
+    "Users UI",
+    "Admin assignment",
+    "wrong Analyst no decision",
+    "Auditor read-only",
+    "mobile render"
+  ],
+  "external_network": "blocked"
+}
