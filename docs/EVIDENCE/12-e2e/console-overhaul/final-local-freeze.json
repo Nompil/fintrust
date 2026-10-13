@@ -1,0 +1,447 @@
+{
+  "status": "VERIFIED",
+  "candidate_commit": "eb17ed5d61ca2b39b7975578f47674d3d33447b1",
+  "branch": "main",
+  "contains_b73866c": true,
+  "utc": "2026-10-13T15:35:24.388771+00:00",
+  "regression_runs": {
+    "initial-complete": {
+      "tests": 848,
+      "failures": 4,
+      "errors": 0,
+      "skipped": 1,
+      "passed": 843,
+      "seconds": 580.97
+    },
+    "isolation-fix-focused": {
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 4,
+      "seconds": 12.744
+    },
+    "complete-after-isolation-fix": {
+      "tests": 848,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1,
+      "passed": 847,
+      "seconds": 401.638
+    },
+    "report-export-browser-initial": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 0,
+      "seconds": 32.163
+    },
+    "report-export-browser-final": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 1,
+      "seconds": 58.959
+    },
+    "final-complete": {
+      "tests": 848,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1,
+      "passed": 847,
+      "seconds": 394.288
+    }
+  },
+  "test_count_comparison": "848 collected; previous baseline 847 passed plus 1 expected skip. No reduction.",
+  "skip": {
+    "test": "tests/data_quality/test_processing.py::test_database_roles_can_execute_pipeline_without_owner_privileges",
+    "reason": "Requires a disposable PostgreSQL administrator. The local dedicated test role cannot manage global service roles.",
+    "historical_role_proof": "Earlier separately labeled PostgreSQL 16 role proof is retained, not claimed as a fresh run."
+  },
+  "test_isolation_defect": {
+    "type": "Test isolation",
+    "cause": "Overview uses db.run_query; release_db patched worker and score but omitted db.get_connection. Implicit developer dotenv settings hid the dependency.",
+    "fix": "Bind db.get_connection to the same disposable PostgreSQL schema.",
+    "verification": "Four failing checks passed, followed by complete 847/0/1 regression with implicit dotenv loading disabled."
+  },
+  "report_presentation_defect": {
+    "cause": "The shared renderer added null risk_score to Reports rows; JSON export then differed from the authoritative API response.",
+    "fix": "Derive risk display fields only for Transactions, Account History, Risk Events and Review Queue. Reports retain their API row fields.",
+    "validation": "Separate four-role CSV browser gate passed, including JSON equality with backend rows and exact CSV values; full suite rerun after correction.",
+    "file": "frontend/js/release1.js"
+  },
+  "isolated_browser_results": {
+    "workbench": {
+      "status": "PASSED",
+      "checks": [
+        "four role workspaces",
+        "Auditor finder omits user governance and uploads",
+        "Maintainer finder only lists Notifications and Operations",
+        "icon navigation",
+        "authorized Ctrl K workspace finder",
+        "mobile navigation opens and closes",
+        "side-by-side evidence and actions",
+        "evidence tabs preserve audit visibility",
+        "real SQL six metrics",
+        "recorded High 70/100 and Low 0/100",
+        "historical null remains Not assessed",
+        "numeric score sorting",
+        "1100/1366/1920 monitoring dashboard",
+        "390px transaction containment",
+        "no invented SLA",
+        "all six workbench sections",
+        "laptop",
+        "keyboard focus",
+        "drawer Escape",
+        "Over SLA delegates to scoped reviews",
+        "scenario empty state",
+        "Auditor read-only",
+        "mobile metrics and charts stay within viewport",
+        "independent aggregate failure",
+        "full failure clears stale workbench",
+        "user sort/filter",
+        "disable/reactivate"
+      ],
+      "external_network": "blocked"
+    },
+    "investigation": {
+      "status": "PASSED",
+      "checks": [
+        "scoped scenario filter",
+        "queue retained",
+        "North Star evidence drawer",
+        "claim",
+        "append notes",
+        "immutable history",
+        "Escape close",
+        "quarantine split detail",
+        "correction form stays in drawer",
+        "correction submission history",
+        "real worker revalidation to accepted transaction",
+        "clear review",
+        "analytical filters with real SQL",
+        "business-first transaction detail",
+        "wrong Analyst read-only",
+        "Auditor read-only",
+        "mobile",
+        "user filter"
+      ],
+      "external_network": "blocked"
+    },
+    "multi-user": {
+      "status": "PASSED",
+      "checks": [
+        "named sign-in",
+        "self claim",
+        "My reviews",
+        "quarantine timeline",
+        "Users UI",
+        "Admin assignment",
+        "wrong Analyst no decision",
+        "Auditor read-only",
+        "mobile render"
+      ],
+      "external_network": "blocked"
+    },
+    "missing-evidence": {
+      "status": "PASSED",
+      "metadata_visible": true,
+      "audit_visible": true,
+      "correction_blocked": true,
+      "original_not_invented": true,
+      "external_network": "blocked"
+    },
+    "owned-unknown": {
+      "status": "PASSED",
+      "local_only": true,
+      "checks": [
+        "own upload detail",
+        "assigned-account selection",
+        "correction submitted",
+        "worker accepted",
+        "ledger lifecycle STORED"
+      ],
+      "page_errors": []
+    },
+    "review-outcomes": {
+      "status": "PASSED",
+      "checks": [
+        "claim then clear",
+        "claim then confirm risk",
+        "claim then escalate",
+        "decision visible in investigation drawer"
+      ],
+      "external_network": "blocked",
+      "aws_access": false
+    },
+    "role-browser": {
+      "status": "PASSED",
+      "analyst_navigation_priority_verified": true,
+      "business_metric_values_verified": true,
+      "upload_outcome_navigation_verified": true,
+      "batch_details_secondary_verified": true,
+      "related_risk_review_and_source_batch_verified": true,
+      "root_workspace_verified": true,
+      "analyst_upload_receipt_link_verified": true,
+      "session_expiry_on_read_and_upload_verified": true,
+      "source_commit": "eb17ed5d61ca2b39b7975578f47674d3d33447b1",
+      "browser": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+      "pages": [
+        "Login",
+        "Overview",
+        "Notifications",
+        "Transactions",
+        "Risk Events",
+        "Review Queue",
+        "Quarantine",
+        "Ingestion Batches",
+        "Reports",
+        "Insights",
+        "Accounts",
+        "Audit",
+        "Operations",
+        "Users",
+        "Transaction Detail",
+        "Batch Detail",
+        "Quarantine Detail"
+      ],
+      "dataset_sequence": "A -> B -> exact A replay",
+      "charts_verified": 10,
+      "analyst_and_auditor_chart_values_verified": true,
+      "display_uuid_transport_verified": true,
+      "metric_error_vs_zero_verified": true,
+      "friendly_insight_failure_recovery_verified": true,
+      "role_switch_method": "Sign out and backend-authenticated token sign in",
+      "user_creation_audited": true,
+      "report_csv_verified": true,
+      "report_json_verified": true,
+      "account_history_navigation_verified": true,
+      "admin_compliance_actions": 0,
+      "upload_counts": {
+        "A": {
+          "accepted": 29,
+          "quarantined": 12,
+          "duplicates": 1
+        },
+        "B": {
+          "accepted": 7,
+          "quarantined": 4,
+          "duplicates": 1
+        }
+      },
+      "invalid_file_rejected": true,
+      "notice_persists_until_acknowledged": true,
+      "review_mutation": "OPEN -> UNDER_REVIEW -> CLEARED",
+      "quarantine_mutation": "RESUBMITTED (worker revalidation pending)",
+      "roles_verified": [
+        "Admin",
+        "Risk/Compliance Analyst",
+        "Read-only/Auditor",
+        "Maintainer"
+      ],
+      "loading_error_empty_verified": true,
+      "old_role_response_discarded": true,
+      "auditor_mutation_buttons": 0,
+      "maintainer_compliance_pages": 0,
+      "maintainer_technical_actions_visible": true,
+      "page_errors": [],
+      "aws_access": false
+    }
+  },
+  "preserved_workspace_browser": {
+    "status": "PASSED",
+    "identity": {
+      "username": "analyst01",
+      "role": "Risk/Compliance Analyst"
+    },
+    "evidence": "docs/EVIDENCE/12-e2e/console-overhaul/authenticated-preserved-workspace.json",
+    "pages": {
+      "Overview": {
+        "status": "PASSED",
+        "metric_cards_match_preserved_api": true,
+        "open_reviews": 2,
+        "high_risk_assessments": 2
+      },
+      "Transactions": {
+        "status": "PASSED",
+        "authorized_existing_rows": 204,
+        "recorded_score": true,
+        "zero_0_of_100": true,
+        "missing_not_assessed": true,
+        "detail_and_risk_evidence": true,
+        "filter_by_recorded_id": true
+      },
+      "Risk Events": {
+        "status": "PASSED",
+        "high_risk_visible": true,
+        "triggered_scenarios": true,
+        "recorded_score_and_threshold_evidence": true,
+        "investigation_panel": true,
+        "next_steps": true
+      },
+      "Review Queue": {
+        "status": "PASSED",
+        "unresolved_reviews": true,
+        "assignee_and_status": true,
+        "investigation": true,
+        "existing_review_history": true,
+        "decisions_changed": false
+      },
+      "Quarantine": {
+        "status": "PASSED",
+        "existing_rows": 7,
+        "details": true,
+        "original_values_read_only": true,
+        "records_modified": false,
+        "correction_workflow_loads": true,
+        "corrected_account_choices_match_assignment": true,
+        "existing_recovered_transaction_navigation": "No recovered case in preserved scope; no record changed to manufacture evidence",
+        "own_upload_authorization": {
+          "current_scoped_reads": true,
+          "assigned_account_choices": true,
+          "own_unknown_record_present": false,
+          "mutation_denial_proof": "Retained full-regression own-upload/assigned-target checks; no live mutation probes."
+        },
+        "current_correction_action_label": "Correct / Revalidate (current console equivalent of Open Action)"
+      },
+      "Accounts": {
+        "status": "PASSED",
+        "context": true,
+        "scoped_history": true,
+        "risk_score_column": true
+      },
+      "Insights": {
+        "status": "PASSED",
+        "ten_panels": true,
+        "ten_exact_value_tables_match_preserved_api": true,
+        "analytical_filters": true,
+        "fabricated_values": false
+      },
+      "Reports": {
+        "status": "PASSED",
+        "accessible": true,
+        "json_equals_preserved_api": true,
+        "no_spurious_risk_score": true,
+        "csv_header_and_row_count": true
+      }
+    },
+    "product_north_star": {
+      "what_happened": true,
+      "why_risky": true,
+      "what_next": true
+    },
+    "credential_changes": false,
+    "financial_record_mutation": false,
+    "normal_sign_in_metadata_updated": true,
+    "scope_limits": [
+      "No recovered case exists in the preserved Analyst scope; resulting-transaction navigation remains covered by isolated browser proof.",
+      "No owned unknown-account case exists in the preserved scope. Current assigned-target form and scoped reads passed; own-upload and denial proofs remain covered by the existing regression and isolated browser gates."
+    ]
+  },
+  "ux_review": {
+    "scope": "Seven isolated browser gates plus authenticated read-only smoke against preserved PostgreSQL and existing synthetic local service state.",
+    "north_star": "WHAT HAPPENED / WHY IS IT RISKY / NEXT STEPS visible in the investigation drawer.",
+    "scores": "Recorded High 70/100, Low 0/100 and historical Not assessed verified in browser.",
+    "layout": "1100/1366/1920 desktop and 390 mobile browser checks; dark grouped navigation and queue-preserving drawer.",
+    "table_states": "Visible alternating rows; separate hover (#eff5fa) and selected (#e6f2fb plus outline) styles; active navigation distinguished by green fill and inset marker.",
+    "insights": "Real scoped SQL aggregates and applied analytical filters, not fabricated chart values.",
+    "own_unknown_account": "Owned upload to assigned account accepted in browser; unauthorized targets/other uploads denied by full regression."
+  },
+  "statuses": [
+    "LOCAL E2E VERIFIED",
+    "LOCAL UX VERIFIED",
+    "AWS BUDGETS VERIFIED",
+    "LINUX VERIFICATION PENDING",
+    "LIVE AWS E2E PENDING"
+  ],
+  "business_logic_changed": false,
+  "presentation_defect_corrected": true,
+  "schema_changed": false,
+  "aws_contacted": false,
+  "pushed": false,
+  "source_sha256": {
+    "frontend/release1.html": "5cd377da1678e00f9050095d9f2c1e321f7e72679b8ae3336bc603cbc29b97e9",
+    "frontend/css/release1.css": "f3eda41857b7dfe5451cd7b850a32dc080090ac648921ffbd718e020bccd509f",
+    "frontend/js/release1.js": "cd455f748c44a041fb74077b4c1b82281fd19c99dbf51cf38d17ceb0f4d11e4f",
+    "frontend/js/release1-workflows.js": "b95603fd240d9b5e666bb3bf41390c6b106a616d27ecba99383c48c309288378",
+    "frontend/js/release1-display.js": "3d8876317dd8788b863406a94d1848c48075ed5751ee592375b1dd27a74c6888",
+    "tests/test_release1_end_to_end.py": "97ce491d0a4e331f49574993804f54f686096e494df5b0a2ab849d7f74ba9343"
+  },
+  "verified_source": "Base commit eb17ed5 plus the two source-hashed corrections. This manifest is included in the local freeze commit; use that containing commit for exact-source Linux verification.",
+  "verified_working_tree_corrections": [
+    "tests/test_release1_end_to_end.py",
+    "frontend/js/release1.js"
+  ],
+  "pre_existing_edits_preserved": [
+    "infrastructure/DEPLOYMENT_BOOTSTRAP.md",
+    "infrastructure/STAGE5_ASYNC_FIX.md",
+    "infrastructure/STAGE5_AUTHORIZATION_REVIEW.md",
+    "infrastructure/STAGE5_PERMANENT_FIX.md"
+  ],
+  "documentation_review": {
+    "rendering": "All 37 pages rendered at 110 DPI with Poppler; five all-page contact sheets and current summary pages inspected.",
+    "visual_result": "No clipped or overlapping text, broken tables or missing current status labels observed.",
+    "pages": {
+      "Master": 28,
+      "Progress": 9
+    },
+    "pdf_sha256": {
+      "Master": "d4c3a7358bec3c4d430dac44d0b4c0af4d463d484e9be8d4198e1ffaef916499",
+      "Progress": "2b0d64ade8e571ad2793056fb082e2ba1ccd21e1fdd29f3f717266d7784e5ce2"
+    }
+  },
+  "regression_reused_without_rerun": true,
+  "scope": "Local only; no Linux run, AWS contact, deployment or push.",
+  "commit_scope": "Two verified code/fixture corrections, the two authoritative documentation sources/PDFs, and explicitly listed local-freeze evidence. Pre-existing infrastructure edits remain unstaged.",
+  "working_tree_tracked_before_freeze": [
+    " M docs/FinTrust_Project_Master.pdf",
+    " M docs/FinTrust_Project_Progress.pdf",
+    " M docs/source/project-master.json",
+    " M docs/source/project-progress.json",
+    " M frontend/js/release1.js",
+    " M infrastructure/DEPLOYMENT_BOOTSTRAP.md",
+    " M infrastructure/STAGE5_ASYNC_FIX.md",
+    " M infrastructure/STAGE5_AUTHORIZATION_REVIEW.md",
+    " M infrastructure/STAGE5_PERMANENT_FIX.md",
+    " M tests/test_release1_end_to_end.py"
+  ],
+  "files_in_local_freeze": [
+    "frontend/js/release1.js",
+    "tests/test_release1_end_to_end.py",
+    "docs/source/project-master.json",
+    "docs/source/project-progress.json",
+    "docs/FinTrust_Project_Master.pdf",
+    "docs/FinTrust_Project_Progress.pdf",
+    "docs/EVIDENCE/12-e2e/console-overhaul/final-freeze-complete-after-isolation-fix.xml",
+    "docs/EVIDENCE/12-e2e/console-overhaul/final-freeze-final-complete.xml",
+    "docs/EVIDENCE/12-e2e/console-overhaul/final-freeze-initial-complete.xml",
+    "docs/EVIDENCE/12-e2e/console-overhaul/final-freeze-investigation-evidence-actions.png",
+    "docs/EVIDENCE/12-e2e/console-overhaul/final-freeze-investigation.json",
+    "docs/EVIDENCE/12-e2e/console-overhaul/final-freeze-isolation-fix-focused.xml",
+    "docs/EVIDENCE/12-e2e/console-overhaul/final-freeze-missing-evidence.json",
+    "docs/EVIDENCE/12-e2e/console-overhaul/final-freeze-monitoring-dashboard-1100.png",
+    "docs/EVIDENCE/12-e2e/console-overhaul/final-freeze-multi-user.json",
+    "docs/EVIDENCE/12-e2e/console-overhaul/final-freeze-own-upload-revalidated.png",
+    "docs/EVIDENCE/12-e2e/console-overhaul/final-freeze-owned-unknown.json",
+    "docs/EVIDENCE/12-e2e/console-overhaul/final-freeze-preserved-runtime.json",
+    "docs/EVIDENCE/12-e2e/console-overhaul/final-freeze-regression.txt",
+    "docs/EVIDENCE/12-e2e/console-overhaul/final-freeze-report-export-browser-final.xml",
+    "docs/EVIDENCE/12-e2e/console-overhaul/final-freeze-report-export-browser-initial.xml",
+    "docs/EVIDENCE/12-e2e/console-overhaul/final-freeze-review-outcomes.json",
+    "docs/EVIDENCE/12-e2e/console-overhaul/final-freeze-role-browser.json",
+    "docs/EVIDENCE/12-e2e/console-overhaul/final-freeze-transactions-recorded-scores.png",
+    "docs/EVIDENCE/12-e2e/console-overhaul/final-freeze-workbench.json",
+    "docs/EVIDENCE/12-e2e/console-overhaul/final-local-freeze.json",
+    "docs/EVIDENCE/12-e2e/console-overhaul/authenticated-preserved-workspace.json",
+    "docs/EVIDENCE/12-e2e/console-overhaul/authenticated-preserved-overview.png",
+    "docs/EVIDENCE/12-e2e/console-overhaul/authenticated-preserved-risk-investigation.png"
+  ],
+  "remaining_local_freeze_blockers": [],
+  "pending_after_local_freeze": [
+    "Exact-source Linux Python 3.12/x86_64 verification",
+    "Controlled live AWS integration and E2E verification"
+  ],
+  "evidence_sanitization": "Connection-URL examples and bearer-like strings in test reports are redacted before committing; test names, outcomes and counts are retained."
+}

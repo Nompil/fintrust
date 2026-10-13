@@ -1,7 +1,7 @@
 {
   "title": "FinTrust Project Master",
   "subtitle": "Transaction Monitoring & Risk Alert Platform",
-  "checkpoint": "0056a59",
+  "checkpoint": "local-freeze / eb17ed5",
   "date": "13 October 2026",
   "sections": [
     {
@@ -9,13 +9,18 @@
       "status": "LOCAL VERIFIED",
       "paragraphs": [
         "FinTrust is a transaction monitoring and risk investigation platform. It accepts CSV files, preserves transaction identity and source evidence, scores risk and records each review decision. It does not move funds, reverse charges or establish fraud.",
-        "Earlier local E2E checkpoint 48399b9: local E2E verified through 20 scenarios and 125 selected tests, real isolated PostgreSQL, authenticated UI/API checks and mocked AWS services. The historical workbench regression remains 811 passed / 1 expected skip. Existing monthly and zero-spend budget configuration is live verified and preserved; exact-source Linux verification and live AWS E2E remain pending.",
-        "13 October 2026 | Analyst UX correction locally verified: 35 focused tests passed, full browser gate passed, final investigation browser passed. Regression: 823 full-suite passes / 1 expected administrator-only skip; one stale navigation harness failed, was corrected and its two checks passed on targeted rerun. Total: 824 checks verified. Quarantine correction stays in the investigation drawer through worker revalidation and accepted-transaction linkage. Risk review claim, note and Clear preserve queue context. Grouped navigation, Admin-only Users, batch rejected-upload history, business-first transaction details and ten backend-backed Insights charts are verified. Implementation commit: d4e7653.",
-        "13 October 2026 | Workflow continuity and own-upload correction locally verified: 847 regression passed, 1 expected administrator-only skip, zero failures; final four-role browser passed; three investigation/missing-evidence/own-upload browser checks passed. Implementation: 209700a. AWS untouched; no schema change, credential reset or push."
+        "13 October 2026 | Candidate source eb17ed5 includes risk-score display b73866c and the major console overhaul. Final candidate includes a test-isolation correction and a narrow report display/export correction. Full post-correction regression: 847 PASSED | 0 FAILED | 1 SKIPPED (848 collected); six in-suite browser checks passed against isolated PostgreSQL and mocked AWS. A separate four-role CSV/report browser gate also passed. Business rules, APIs and schema are unchanged.",
+        "Final gate found and corrected a test-isolation gap: Overview database reads did not use the disposable schema. Four focused failures were resolved by binding db.get_connection in the existing release_db fixture, then the entire suite passed with implicit developer dotenv loading disabled. The sole skip requires a disposable PostgreSQL administrator; prior separate PG16 role proof remains historical.",
+        "The separate CSV/report browser gate detected null risk-score fields being added to report rows by the shared presentation renderer. Risk projection is now limited to transaction and risk views. The final browser check verifies exported JSON equals backend rows and CSV values match the report response; no API, scoring or schema behavior changed.",
+        "Authenticated preserved-workspace smoke PASSED as analyst01 (Risk/Compliance Analyst), using the existing credential entered privately in the browser. Overview, Transactions, Risk Events, Review Queue, Quarantine correction form, Accounts/Account History, Insights and Reports passed. Recorded scores, 0/100 and Not assessed are distinct; all ten Insights value tables match the API; report JSON matches backend rows. The investigation answers WHAT HAPPENED, WHY IS IT RISKY and NEXT STEPS.",
+        "Preserved financial and audit rows, credentials, roles, status and account assignments are unchanged. Normal sign-in metadata updated. No recovered case or owned unknown-account case exists in this Analyst scope; their recovery/authorization proofs remain separately labelled isolated evidence. No correction, claim, review outcome or user change was submitted for the smoke.",
+        "LOCAL SOURCE FREEZE VERIFIED | LOCAL E2E VERIFIED | LOCAL UX VERIFIED | AWS BUDGETS VERIFIED | LINUX VERIFICATION PENDING | LIVE AWS E2E PENDING. The existing 847 passed / 0 failed / 1 expected skip and seven isolated browser gates were reused without rerunning. The preserved-workspace authentication blocker is closed. No AWS contact, deployment or push occurred.",
+        "Historical milestones and their source-specific evidence remain recorded in Testing Strategy and Progress; they are not substituted for this candidate gate."
       ],
       "references": [
         "docs/architecture/FINTRUST_FLOW_AUDIT.md",
-        "docs/architecture/TRANSACTION_LIFECYCLE.md"
+        "docs/architecture/TRANSACTION_LIFECYCLE.md",
+        "docs/EVIDENCE/12-e2e/console-overhaul/final-local-freeze.json"
       ],
       "table": null,
       "diagram": null
@@ -616,7 +621,11 @@
         "Multi-user phase: 789 regression passed / 1 administrator-only skip; 27 focused passed; 130 affected checks passed; 48 PostgreSQL 16 passed; browser passed. Focused coverage includes immutable correction lineage, failed/successful/duplicate revalidation, named onboarding and disable/reactivate, role separation, concurrent claims, wrong-owner denial, assignment replay/scope, escalated recovery and browser role/action visibility. Evidence: docs/EVIDENCE/12-e2e/multi-user-operations/.",
         "Risk investigation: 16 new backend tests plus a real loopback browser gate; 65 affected tests; 64 on disposable PostgreSQL 16; full regression 810 passed / 1 expected administrator-only skip. Evidence: docs/EVIDENCE/12-e2e/risk-investigation/. No live AWS transport occurred.",
         "Workbench and documentation phase: 19 focused tests passed, including three loopback browser workflows; 82 affected integration tests passed; full regression 811 passed / 1 expected administrator-only skip. The separate CSV scenario browser gate passed after its legacy review test was updated to claim before deciding. No backend, SQL or AWS changes. Evidence: docs/EVIDENCE/12-e2e/analyst-workbench/.",
-        "Local scenario phase at 48399b9: 122 lifecycle/risk/quarantine/RBAC integration and browser tests, two added outcome/role tests and one CSV A/B browser gate passed: 125 selected tests, no failures or skips. Evidence labels individual UI browser versus API checks. No fresh full regression or live AWS E2E is implied. See docs/EVIDENCE/12-e2e/scenario-verification/SCENARIO_RESULTS.md."
+        "Local scenario phase at 48399b9: 122 lifecycle/risk/quarantine/RBAC integration and browser tests, two added outcome/role tests and one CSV A/B browser gate passed: 125 selected tests, no failures or skips. Evidence labels individual UI browser versus API checks. No fresh full regression or live AWS E2E is implied. See docs/EVIDENCE/12-e2e/scenario-verification/SCENARIO_RESULTS.md.",
+        "13 October 2026 | Candidate source eb17ed5 includes risk-score display b73866c and the major console overhaul. Final candidate includes a test-isolation correction and a narrow report display/export correction. Full post-correction regression: 847 PASSED | 0 FAILED | 1 SKIPPED (848 collected); six in-suite browser checks passed against isolated PostgreSQL and mocked AWS. A separate four-role CSV/report browser gate also passed. Business rules, APIs and schema are unchanged.",
+        "Final gate found and corrected a test-isolation gap: Overview database reads did not use the disposable schema. Four focused failures were resolved by binding db.get_connection in the existing release_db fixture, then the entire suite passed with implicit developer dotenv loading disabled. The sole skip requires a disposable PostgreSQL administrator; prior separate PG16 role proof remains historical.",
+        "The separate CSV/report browser gate detected null risk-score fields being added to report rows by the shared presentation renderer. Risk projection is now limited to transaction and risk views. The final browser check verifies exported JSON equals backend rows and CSV values match the report response; no API, scoring or schema behavior changed.",
+        "Current isolated browser proof covers recorded /100 scores including zero and missing values; grouped dark navigation; desktop/mobile containment; WHAT HAPPENED, WHY IS IT RISKY and NEXT STEPS; claim, notes and review outcomes; immutable quarantine correction and resulting-transaction navigation; own unknown-account upload recovery; Admin user/status and assignment controls; wrong-Analyst and Auditor read-only restrictions; real filtered Insights. Saved screenshots show alternating rows, clear selection/focus and retained investigation context."
       ],
       "references": [
         "docs/EVIDENCE/12-e2e/transaction-lifecycle/verification-summary.json",
@@ -643,8 +652,11 @@
       "title": "Release Verification",
       "status": "PENDING VERIFICATION",
       "paragraphs": [
+        "Authenticated preserved-workspace smoke PASSED as analyst01 (Risk/Compliance Analyst), using the existing credential entered privately in the browser. Overview, Transactions, Risk Events, Review Queue, Quarantine correction form, Accounts/Account History, Insights and Reports passed. Recorded scores, 0/100 and Not assessed are distinct; all ten Insights value tables match the API; report JSON matches backend rows. The investigation answers WHAT HAPPENED, WHY IS IT RISKY and NEXT STEPS.",
+        "Preserved financial and audit rows, credentials, roles, status and account assignments are unchanged. Normal sign-in metadata updated. No recovered case or owned unknown-account case exists in this Analyst scope; their recovery/authorization proofs remain separately labelled isolated evidence. No correction, claim, review outcome or user change was submitted for the smoke.",
         "Freeze source commit, build inputs, package digest, manifest, Linux imports and test proof together. Verify uploaded VersionId and checksum before a change set. Never reuse an old Linux result for changed application source.",
-        "The current checkpoint is LOCAL VERIFIED. A deployable artifact still needs the exact-source Linux gate. Live schema bootstrap and migration 003 privileges, authenticated API, cloud queue/stream paths, SES, alarm delivery and recovery exercise remain gates. Approval is scoped and sequential."
+        "The current checkpoint is LOCAL VERIFIED. A deployable artifact still needs the exact-source Linux gate. Live schema bootstrap and migration 003 privileges, authenticated API, cloud queue/stream paths, SES, alarm delivery and recovery exercise remain gates. Approval is scoped and sequential.",
+        "LOCAL SOURCE FREEZE VERIFIED | LOCAL E2E VERIFIED | LOCAL UX VERIFIED | AWS BUDGETS VERIFIED | LINUX VERIFICATION PENDING | LIVE AWS E2E PENDING. The existing 847 passed / 0 failed / 1 expected skip and seven isolated browser gates were reused without rerunning. The preserved-workspace authentication blocker is closed. No AWS contact, deployment or push occurred."
       ],
       "references": [
         "docs/architecture/FINTRUST_FLOW_AUDIT.md",
@@ -735,7 +747,11 @@
         "Correction uses assigned-account fields, repeats validation and duplicate detection in the worker, retains original identity/provenance and records human/system events. Own unknown-account recovery is explicitly authorized for the original local uploader only. No schema expansion, risk-rule drift or role inheritance.",
         "The actual local server was restarted with the existing credential and without reset/seeding. All four static assets match source; unauthenticated financial reads are denied; existing financial/audit rows were preserved. Already-lost historical original bytes and missing historical ownership evidence cannot be invented.",
         "Local tests use real isolated PostgreSQL and mocked AWS transports. Exact current-source Linux/Python 3.12 and live RDS bootstrap/deployment/wiring/SES/DLQ/report delivery remain separate gates. Notifications remain session-scoped; a durable inbox/full report catalogue and AI assistant remain future work.",
-        "Final navigation/copy polish: 0056a59. Recovered transactions activate Transactions, not Quarantine; LOW entries use Risk Assessment. Three focused browser checks passed; a stalled investigation attempt was rerun alone and passed. Earlier full-suite result remains 847 passed / 1 expected skip; the final polish has targeted browser verification, not a second full-suite claim."
+        "Final navigation/copy polish: 0056a59. Recovered transactions activate Transactions, not Quarantine; LOW entries use Risk Assessment. Three focused browser checks passed; a stalled investigation attempt was rerun alone and passed. Earlier full-suite result remains 847 passed / 1 expected skip; the final polish has targeted browser verification, not a second full-suite claim.",
+        "13 October 2026 | Candidate source eb17ed5 includes risk-score display b73866c and the major console overhaul. Final candidate includes a test-isolation correction and a narrow report display/export correction. Full post-correction regression: 847 PASSED | 0 FAILED | 1 SKIPPED (848 collected); six in-suite browser checks passed against isolated PostgreSQL and mocked AWS. A separate four-role CSV/report browser gate also passed. Business rules, APIs and schema are unchanged.",
+        "Current isolated browser proof covers recorded /100 scores including zero and missing values; grouped dark navigation; desktop/mobile containment; WHAT HAPPENED, WHY IS IT RISKY and NEXT STEPS; claim, notes and review outcomes; immutable quarantine correction and resulting-transaction navigation; own unknown-account upload recovery; Admin user/status and assignment controls; wrong-Analyst and Auditor read-only restrictions; real filtered Insights. Saved screenshots show alternating rows, clear selection/focus and retained investigation context.",
+        "Authenticated preserved-workspace smoke PASSED as analyst01 (Risk/Compliance Analyst), using the existing credential entered privately in the browser. Overview, Transactions, Risk Events, Review Queue, Quarantine correction form, Accounts/Account History, Insights and Reports passed. Recorded scores, 0/100 and Not assessed are distinct; all ten Insights value tables match the API; report JSON matches backend rows. The investigation answers WHAT HAPPENED, WHY IS IT RISKY and NEXT STEPS.",
+        "Preserved financial and audit rows, credentials, roles, status and account assignments are unchanged. Normal sign-in metadata updated. No recovered case or owned unknown-account case exists in this Analyst scope; their recovery/authorization proofs remain separately labelled isolated evidence. No correction, claim, review outcome or user change was submitted for the smoke."
       ],
       "table": [
         [
@@ -829,7 +845,8 @@
         "DECISION: Aggregate authorized filtered rows before bounding the detail list | SOURCE: https://www.postgresql.org/docs/16/sql-select.html | WHY IT APPLIES: Analytical counts must not depend on the displayed page | HOW FINTRUST USES IT: Parameterized WHERE scope before GROUP BY; deterministic date/identity ordering for the latest 25 accepted entries.",
         "DECISION: Conditional immutable first-upload authority | SOURCE: https://docs.aws.amazon.com/AmazonS3/latest/userguide/conditional-writes.html | WHY IT APPLIES: Duplicate or concurrent uploads must not transfer ownership | HOW FINTRUST USES IT: Trusted local first-admission receipt, conditional create, versioned source pointer; known accounts still require assignment.",
         "DECISION: Keep missing original evidence visible and fail closed for new writes | SOURCE: https://docs.aws.amazon.com/AmazonS3/latest/userguide/RetrievingObjectVersions.html | WHY IT APPLIES: Financial correction needs the recorded original | HOW FINTRUST USES IT: Pinned-version reads and explicit evidence health; no latest-version substitution.",
-        "DECISION: Separate read authority from financial correction | SOURCE: https://community.owasp.org/Access_Control | WHY IT APPLIES: Governance is not Analyst authority | HOW FINTRUST USES IT: Existing role checks plus authenticated original ownership and real assigned target; Admin oversight remains read-only."
+        "DECISION: Separate read authority from financial correction | SOURCE: https://community.owasp.org/Access_Control | WHY IT APPLIES: Governance is not Analyst authority | HOW FINTRUST USES IT: Existing role checks plus authenticated original ownership and real assigned target; Admin oversight remains read-only.",
+        "Final local gate: docs/EVIDENCE/12-e2e/console-overhaul/final-local-freeze.json. Full regression, seven isolated browser gates and authenticated preserved-workspace smoke are recorded separately. The containing local-freeze commit supersedes base eb17ed5 for the next exact-source Linux verification; no live-readiness claim is made."
       ],
       "references": [
         "docs/architecture/FINTRUST_FLOW_AUDIT.md",
@@ -845,7 +862,8 @@
         "docs/EVIDENCE/12-e2e/risk-investigation/verification-summary.json",
         "docs/EVIDENCE/12-e2e/analyst-workbench/verification-summary.json",
         "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html",
-        "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-email-recipients.html"
+        "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-email-recipients.html",
+        "docs/EVIDENCE/12-e2e/console-overhaul/final-local-freeze.json"
       ],
       "table": null,
       "diagram": null

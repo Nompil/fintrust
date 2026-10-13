@@ -38,7 +38,11 @@ def release_db(monkeypatch):
         c=psycopg2.connect(dsn)
         with c.cursor() as cur:cur.execute(sql.SQL("SET search_path TO {},public").format(sql.Identifier(name)))
         c.commit();return c
-    for module in (worker,score):monkeypatch.setattr(module,"get_connection",connect)
+    # Overview reads through db.run_query rather than workflow_api.connection.
+    # Bind every shared database reader to this disposable schema; never fall
+    # back to developer .env settings or the preserved local workspace.
+    from fintrust import db
+    for module in (worker,score,db):monkeypatch.setattr(module,"get_connection",connect)
     def query(statement,args=()):
         c=connect()
         try:
