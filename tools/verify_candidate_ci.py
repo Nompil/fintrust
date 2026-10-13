@@ -181,9 +181,21 @@ def final():
     assert roles["status"] == "PASSED" and roles["migrations"] == list(range(1, 7))
     assert json.loads((OUT / "migrations.json").read_text())["status"] == "PASSED"
     suspicious = re.compile(rb"(?:AKIA|ASIA)[A-Z0-9]{16}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|postgres(?:ql)?://[^\s:]+:[^\s@]+@")
+    # The immutable candidate's negative archive-security tests put these two
+    # intentionally synthetic payloads in JUnit parameter IDs. Redact only the
+    # exact known fixtures, never permit unknown credential patterns in evidence.
+    known_fixtures = {b"AKIA" + b"A" * 16, b"-----BEGIN PRIVATE KEY-----"}
+    redacted = 0
     for file in OUT.rglob("*"):
         if file.is_file() and file.suffix in {".json", ".xml", ".txt", ".log", ".md"}:
-            assert not suspicious.search(file.read_bytes()), f"Sensitive pattern in evidence: {file.name}"
+            data = file.read_bytes()
+            matches = list(suspicious.finditer(data))
+            if matches:
+                assert file.name == "pytest.xml" and all(x.group() in known_fixtures for x in matches), f"Unknown sensitive pattern in evidence: {file.name}"
+                redacted += len(matches)
+                data = suspicious.sub(b"[REDACTED-SYNTHETIC-SECURITY-FIXTURE]", data)
+                file.write_bytes(data)
+            assert not suspicious.search(data), f"Sensitive pattern in evidence: {file.name}"
     write("readiness-summary.json", {**state, "status": "PASSED", "timestamp_utc": datetime.now(timezone.utc).isoformat(),
           "run_url": f"https://github.com/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}",
           "environment": {"os": platform.platform(), "architecture": platform.machine(), "python": platform.python_version()},
@@ -191,6 +203,7 @@ def final():
           "package": manifest, "packaging_after_full_and_focused_pass": True,
           "artifact_filename": archive.name, "ci_harness_excluded_from_application_archive": True,
           "secret_pattern_checks": "PASSED", "source_content_check": "PASSED",
+          "junit_known_synthetic_security_fixture_ids_redacted": redacted,
           "deployment_permission_review": roles["fixture_grant_supplement"], "aws_deployed": False,
           "live_aws_e2e": "PENDING", "production_readiness_claimed": False})
     print("Exact candidate Linux gate passed; no AWS deployment occurred.")
