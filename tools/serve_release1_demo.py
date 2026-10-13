@@ -113,9 +113,12 @@ def main():
         s3=boto3.client("s3",region_name="af-south-1");s3.create_bucket(Bucket="release1-demo-safe",CreateBucketConfiguration={"LocationConstraint":"af-south-1"})
         s3.put_bucket_versioning(Bucket="release1-demo-safe",VersioningConfiguration={"Status":"Enabled"})
         s3.create_bucket(Bucket="release1-input",CreateBucketConfiguration={"LocationConstraint":"af-south-1"});s3.put_bucket_versioning(Bucket="release1-input",VersioningConfiguration={"Status":"Enabled"})
-        score.s3=s3;ingest.s3=s3
+        from tools.local_runtime_store import LocalStore,DurableS3,DurableDynamo
+        store=LocalStore(ROOT/"build/local-runtime/services.sqlite")
+        score.s3=DurableS3(s3,store);ingest.s3=score.s3
         dynamo.dynamodb=boto3.resource("dynamodb",region_name="af-south-1")
         dynamo.dynamodb.create_table(TableName="release1-scores",BillingMode="PAY_PER_REQUEST",AttributeDefinitions=[{"AttributeName":x,"AttributeType":"S"} for x in ("account_id","score_date")],KeySchema=[{"AttributeName":"account_id","KeyType":"HASH"},{"AttributeName":"score_date","KeyType":"RANGE"}])
+        dynamo.dynamodb=DurableDynamo(dynamo.dynamodb,store)
         if args.seed_scenarios:
             from fintrust.release_ingest import envelopes
             import uuid
@@ -132,7 +135,7 @@ def main():
         thread=threading.Thread(target=drain,daemon=True);thread.start()
         try:
             print(f"LOCAL ONLY: synthetic dedicated PostgreSQL + temporary AWS mocks. http://127.0.0.1:{args.port}/release1")
-            print("Mock S3 evidence is in memory and ends with this session. This is not a live release or privilege proof.")
+            print("Local mock evidence persists under ignored build/local-runtime. This is not live AWS or a cloud privilege proof.")
             api.app.run(host="127.0.0.1",port=args.port,debug=False,use_reloader=False)
         finally:stop.set();thread.join(timeout=15)
     return 0

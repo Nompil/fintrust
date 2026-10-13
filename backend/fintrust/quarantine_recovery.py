@@ -21,10 +21,10 @@ def enrich(case,principal):
                 c['details_hidden']=True
                 c['canonical_tx_id']=None;c['outcome_detail']=None;c['outcome_reason']=None
                 continue
-            b=api.workflow.score.s3.get_object(Bucket=os.environ['QUARANTINE_BUCKET'],Key=c['corrected_payload_key'],VersionId=c['corrected_payload_version'])['Body']
-            try:data=json.loads(b.read(262144))
-            finally:b.close()
-            c['corrected_values']={k:v for k,v in data['candidate'].items() if k in FIELDS and isinstance(v,str)}
+            from .evidence_reads import read
+            data,status=read(c['corrected_payload_key'],c['corrected_payload_version'])
+            c['evidence_status']=status
+            c['corrected_values']={k:v for k,v in (data or {}).get('candidate',{}).items() if k in FIELDS and isinstance(v,str)} if data else None
             events=api._query('SELECT event_type,occurred_at,actor_subject FROM transaction_lifecycle_events WHERE batch_id=%s AND source_row=%s ORDER BY sequence LIMIT 1001',(c['reprocess_batch_id'],c['reprocess_source_row']))
             if len(events)>1000:truncated=True
             for e in events[:1000]:
@@ -42,5 +42,5 @@ def enrich(case,principal):
     case['latest_reason_detail']=latest['outcome_detail'] if latest and latest['disposition']=='QUARANTINED' else case['reason_detail']
     case['revalidation_attempts']=sum(c['action']=='RESUBMIT' and c['disposition'] in {'ACCEPTED','DUPLICATE','QUARANTINED'} for c in history)
     case['audit_timeline']=sorted(timeline,key=lambda e:e['occurred_at'])
-    case['timeline_complete']=not truncated and not any(c.get('details_hidden') for c in history)
+    case['timeline_complete']=case.get('evidence_available',True) and not truncated and not any(c.get('details_hidden') or c.get('evidence_status','AVAILABLE')!='AVAILABLE' for c in history)
     return case

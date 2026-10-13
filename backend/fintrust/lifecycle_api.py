@@ -20,8 +20,11 @@ def occurrence(batch,row,principal):
         except PermissionError:
             # Same unknown-account authority as quarantine_detail.
             known=api._query('SELECT 1 FROM accounts WHERE account_id=%s',(account,))
-            if principal.role!='Admin' or known: raise api.NotFound() from None
-    elif principal.role!='Admin': raise api.NotFound()
+            from .upload_ownership import owns
+            if known or (principal.role!='Admin' and not owns(batch,principal)):raise api.NotFound() from None
+    elif principal.role!='Admin':
+        from .upload_ownership import owns
+        if not owns(batch,principal):raise api.NotFound()
     events=api._query('SELECT event_id,sequence,event_type,occurred_at,actor_subject,error_type FROM transaction_lifecycle_events WHERE batch_id=%s AND source_row=%s ORDER BY sequence LIMIT 1001',(batch,row))
     truncated=len(events)>1000;events=events[:1000]
     latest=api._query('SELECT event_type FROM transaction_lifecycle_events WHERE batch_id=%s AND source_row=%s ORDER BY sequence DESC LIMIT 1',(batch,row))
@@ -61,7 +64,9 @@ def transaction(identifier,principal):
     # Never call an unsent or uncertain delivery ALERTED. Existing SQL receipts and cloud claim are distinct evidence sources.
     from .dynamo import get_item
     import os
-    claim=get_item(os.environ.get('DYNAMODB_TABLE','risk_scores'),{'account_id':str(value['account_id']),'score_date':'ALERT#'+identifier}) or {}
+    from botocore.exceptions import ClientError,BotoCoreError
+    try:claim=get_item(os.environ.get('DYNAMODB_TABLE','risk_scores'),{'account_id':str(value['account_id']),'score_date':'ALERT#'+identifier}) or {}
+    except (ClientError,BotoCoreError):claim={'delivery_state':'UNAVAILABLE'}
     receipts=api._query('SELECT delivery_state,sent_at FROM alerts a JOIN risk_events r USING(risk_event_id) WHERE r.tx_id=%s',(identifier,))
     value['alert_state']=claim.get('delivery_state') or ('SENT' if any(x['delivery_state']=='SENT' for x in receipts) else 'PENDING' if value['risk_state']=='High' else 'NOT_REQUIRED')
     for receipt in receipts:

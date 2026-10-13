@@ -134,6 +134,11 @@ def upload_csv(filename,payload,principal):
     response=score.s3.put_object(Bucket=bucket,Key=key,Body=payload,ContentType="text/csv")
     if not response.get("VersionId"):raise RuntimeError("Input bucket must be versioned")
     batch=metadata(bucket,payload);audit=BatchAudit(score.s3,os.environ["QUARANTINE_BUCKET"],bucket,key,batch,response["VersionId"]);audit.first_receipt()
+    # Existing batches without trusted ownership remain unowned. A replay must
+    # never adopt a historical or another Analyst's source file.
+    from .upload_ownership import claim
+    if not api._query("SELECT 1 FROM ingestion_batches WHERE batch_id=%s",(batch["batch_id"],)):
+        claim(batch["batch_id"],principal,{"bucket":bucket,"key":key,"version":response["VersionId"],"sha256":digest})
     items=envelopes(bucket,key,payload,version=response["VersionId"],batch=batch)
     exists=api._query("SELECT 1 FROM ingestion_batches WHERE batch_id=%s AND publication_complete",(batch["batch_id"],))
     if exists:

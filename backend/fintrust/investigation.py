@@ -48,10 +48,12 @@ def detail(event,principal):
     value['review_history']=lifecycle['review_history']
     # Read the independent cloud delivery claim, not review state or an assumed send.
     from .dynamo import get_item
-    claim=get_item(os.environ.get('DYNAMODB_TABLE','risk_scores'),{'account_id':str(value['account_id']),'score_date':'ALERT#'+str(value['tx_id'])}) or {}
+    from botocore.exceptions import ClientError,BotoCoreError
+    try:claim=get_item(os.environ.get('DYNAMODB_TABLE','risk_scores'),{'account_id':str(value['account_id']),'score_date':'ALERT#'+str(value['tx_id'])}) or {}
+    except (ClientError,BotoCoreError):claim={};lifecycle['alert_state']='UNAVAILABLE'
     value['alert']={'required':value['risk_level']=='High','delivery_state':lifecycle['alert_state'],
         'updated_at':claim.get('updated_at'),'reconciliation_required':lifecycle['alert_state'] in {'UNKNOWN','SENDING'},
-        'source':'DYNAMODB_CLAIM' if claim else 'SQL_RECEIPT_OR_PENDING_INTENT'}
+        'source':'UNAVAILABLE' if lifecycle['alert_state']=='UNAVAILABLE' else 'DYNAMODB_CLAIM' if claim else 'SQL_RECEIPT_OR_PENDING_INTENT'}
     owner=value.get('reviewer_subject')==principal.subject
     value['allowed_actions']={'claim':principal.role=='Risk/Compliance Analyst' and value.get('review_status')=='OPEN' and not value.get('reviewer_subject'),
         'assign':principal.role=='Admin' and value.get('review_status') in {'OPEN','UNDER_REVIEW','ESCALATED'},

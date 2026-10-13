@@ -43,7 +43,17 @@ def list_page(kind,principal,args):
     if kind not in selects: raise NotFound()
     if kind=="audit": principal.require("audit")
     select,where,order=selects[kind];params=[scope]
-    if kind in {"quarantine","batches"}: params.append(principal.role=="Admin")
+    if kind in {"quarantine","batches"}:
+        from .upload_ownership import owned_batches
+        owned=owned_batches(principal)
+        if kind=='quarantine':
+            where="(q.candidate_account_id=ANY(%s::uuid[]) OR ((%s OR q.batch_id=ANY(%s::uuid[])) AND NOT EXISTS(SELECT 1 FROM accounts a WHERE a.account_id=q.candidate_account_id)))"
+            params.extend([principal.role=='Admin',owned])
+        else:
+            # A whole batch is visible only if every row is assigned, or is
+            # genuinely unknown and belongs to the original authenticated uploader.
+            where="(NOT EXISTS(SELECT 1 FROM ingestion_records i LEFT JOIN transactions t ON t.tx_id=i.canonical_tx_id LEFT JOIN quarantine_cases q ON q.batch_id=i.batch_id AND q.source_row=i.source_row WHERE i.batch_id=b.batch_id AND NOT (COALESCE(COALESCE(t.account_id,q.candidate_account_id)=ANY(%s::uuid[]),false) OR (b.batch_id=ANY(%s::uuid[]) AND i.disposition='QUARANTINED' AND NOT EXISTS(SELECT 1 FROM accounts a WHERE a.account_id=q.candidate_account_id)))) AND EXISTS(SELECT 1 FROM ingestion_records i WHERE i.batch_id=b.batch_id) OR %s)"
+            params.extend([owned,principal.role=='Admin'])
     if kind=="transactions":
         from decimal import Decimal, InvalidOperation
         for key,column,operator in (("tx_id","t.tx_id","="),("source_id","t.source_transaction_id","="),("country","t.country","="),("risk_level","p.result->>'risk_level'","="),("from","t.tx_date",">="),("to","t.tx_date","<="),("min_amount","t.amount",">="),("max_amount","t.amount","<=")):
@@ -132,7 +142,9 @@ def detail(identifier,principal):
     result["alert_delivery"]=_query("SELECT delivery_key,delivery_state,sent_at,provider_message_id FROM alerts a JOIN risk_events r USING(risk_event_id) WHERE r.tx_id=%s",(identifier,))
     from .dynamo import get_item
     import os
-    claim=get_item(os.environ.get("DYNAMODB_TABLE","risk_scores"),{"account_id":str(result["account_id"]),"score_date":"ALERT#"+identifier})
+    from botocore.exceptions import ClientError,BotoCoreError
+    try:claim=get_item(os.environ.get("DYNAMODB_TABLE","risk_scores"),{"account_id":str(result["account_id"]),"score_date":"ALERT#"+identifier})
+    except (ClientError,BotoCoreError):claim={"delivery_state":"UNAVAILABLE"}
     allowed=("delivery_state","risk_event_id","provider_message_id","updated_at")
     result["cloud_alert"]={k:claim[k] for k in allowed if k in claim} if claim else {"delivery_state":"PENDING" if (result.get("risk") or {}).get("risk_level")=="High" else "NOT_REQUIRED"}
     result["cloud_alert_note"]="SQL delivery entries are local/legacy evidence; cloud claims are read separately. SENDING/UNKNOWN require provider reconciliation."
@@ -200,13 +212,21 @@ def _correct_case(identifier,body,principal):
                 row=cur.fetchone()
                 if not row: raise NotFound()
                 if row["account_known"]: principal.account(row["candidate_account_id"])
-                elif principal.role!="Admin": raise PermissionError("Unassigned account corrections require Admin")
+                else:
+                    from .upload_ownership import owns
+                    if not owns(row['batch_id'],principal):raise PermissionError('Unknown-account correction requires original upload ownership')
+                if action=='RESUBMIT':
+                    cur.execute('SELECT 1 FROM accounts WHERE account_id=%s',(candidate['account_id'],))
+                    if not cur.fetchone():raise PermissionError('Corrected account must exist and be assigned')
                 cur.execute("SELECT quarantine_id FROM quarantine_cases WHERE quarantine_id=%s FOR UPDATE",(identifier,))
                 cur.execute("SELECT * FROM quarantine_corrections WHERE request_id=%s",(request,));prior=cur.fetchone()
                 if prior:
                     if str(prior["quarantine_id"])!=identifier or prior["submitted_by"]!=principal.subject or prior["request_digest"]!=digest: raise Conflict("Request identifier reused")
                     return {"correction_id":str(prior["correction_id"]),"status":"REPLAYED"}
                 if row["workflow_status"]!="OPEN": raise Conflict("Case is resolved or awaiting processing")
+                from .evidence_reads import read
+                if read(row['safe_payload_key'],row['safe_payload_version'])[0] is None:
+                    raise Conflict('Original evidence required before a new correction or rejection')
                 correction=str(uuid.uuid5(uuid.UUID(identifier),request))
                 envelope=None;key=None;version=None;batch=None
                 if action=="RESUBMIT":
@@ -238,13 +258,23 @@ def _correct_case(identifier,body,principal):
 
 
 def report(principal,args):
-    limit,offset=page_args(args,{"account_id"})
+    limit,offset=page_args(args,{"account_id","from","to","currency"})
     scope=[principal.account(args["account_id"])] if args.get("account_id") else list(principal.accounts)
+    where="account_id=ANY(%s::uuid[])";params=[scope];dates={}
+    for key,operator in (("from",">="),("to","<")):
+        if args.get(key):
+            try:value=datetime.strptime(args[key],"%Y-%m-%d").replace(tzinfo=timezone.utc)
+            except ValueError:raise ValueError("Report date must be YYYY-MM-DD") from None
+            dates[key]=value;where+=" AND tx_date"+operator+"%s";params.append(value)
+    if len(dates)==2 and dates["from"]>=dates["to"]:raise ValueError("Report end must be after start")
+    if args.get("currency"):
+        currency=args["currency"]
+        if len(currency)!=3 or not currency.isascii() or not currency.isalpha() or currency!=currency.upper():raise ValueError("Report currency must be three uppercase letters")
+        where+=" AND currency=%s";params.append(currency)
     rows=_query("""SELECT account_id::text,currency,count(*) AS transactions,
         sum(CASE WHEN tx_type='credit' THEN amount ELSE -amount END)::text AS net_movement,
-        sum(amount)::text AS gross_amount FROM transactions WHERE account_id=ANY(%s::uuid[])
-        GROUP BY account_id,currency ORDER BY account_id,currency LIMIT %s OFFSET %s""",(scope,limit+1,offset))
-    return {"data":rows[:limit],"meta":{"limit":limit,"offset":offset,"has_more":len(rows)>limit},"meaning":"Net movement from zero by account/currency; not current balances; no FX conversion"}
+        sum(amount)::text AS gross_amount FROM transactions WHERE """+where+" GROUP BY account_id,currency ORDER BY account_id,currency LIMIT %s OFFSET %s",tuple(params+[limit+1,offset]))
+    return {"data":rows[:limit],"meta":{"limit":limit,"offset":offset,"has_more":len(rows)>limit},"meaning":"Accepted ledger net movement from zero by account/currency; not current balances; no FX conversion", "filters":{k:args[k] for k in ("account_id","from","to","currency") if args.get(k)}}
 
 
 def metrics(principal):
@@ -269,14 +299,20 @@ def quarantine_detail(identifier,principal):
     if not rows: raise NotFound()
     case=rows[0]
     if case["account_known"]: principal.account(case["candidate_account_id"])
-    elif principal.role!="Admin": raise PermissionError("Unassigned case requires Admin")
+    else:
+        from .upload_ownership import owns
+        if principal.role!='Admin' and not owns(case['batch_id'],principal):raise PermissionError('Unknown case requires original upload ownership')
+    from .upload_ownership import owner
+    admission=owner(case['batch_id']) if not case['account_known'] else None
+    case['original_uploader']=admission['actor'] if admission else None
     import os
-    body=workflow.score.s3.get_object(Bucket=os.environ["QUARANTINE_BUCKET"],Key=case["safe_payload_key"],VersionId=case["safe_payload_version"])["Body"]
-    try: evidence=json.loads(body.read(262144))
-    finally: body.close()
-    candidate={k:v for k,v in evidence.get("record",{}).items() if k in FIELDS and isinstance(v,str)}
-    case["candidate"]=candidate
-    case["source"]=evidence.get("source")
+    from .evidence_reads import read
+    evidence,status=read(case['safe_payload_key'],case['safe_payload_version'])
+    case['evidence_status']=status
+    case['evidence_available']=status=='AVAILABLE'
+    case['evidence_note']='Original version-pinned evidence available.' if evidence is not None else 'Original evidence is unavailable. Correction is blocked until the exact original evidence is restored. Metadata and audit history remain available.'
+    case['candidate']={k:v for k,v in (evidence or {}).get('record',{}).items() if k in FIELDS and isinstance(v,str)}
+    case['source']=(evidence or {}).get('source')
     case["correction_history"]=_query("""SELECT correction_id,request_id,correction_version,submitted_by,submitted_at,
         correction_notes,action,reprocess_batch_id,reprocess_source_row FROM quarantine_corrections
         WHERE quarantine_id=%s ORDER BY correction_version DESC LIMIT 100""",(identifier,))
