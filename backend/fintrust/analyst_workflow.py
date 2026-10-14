@@ -80,9 +80,13 @@ def primary_reason(risk,reason=None):
             'HIGH_VELOCITY':'High velocity','CROSS_BORDER':'Cross-border',
             'POSSIBLE_DUPLICATE_CHARGE':'Possible duplicate charge','TRANSFER':'Transfer','MERCHANT_MARKER':'Merchant marker'}
     parts=[]
+    # Summarise the historical amount dimension once. Keep the original V1
+    # signals and their cumulative points intact in the assessment evidence.
+    has_very_high_amount=any(s.get('rule')=='VERY_HIGH_AMOUNT' for s in signals)
     for signal in signals:
         rule=signal.get('rule')
         if not rule: continue
+        if rule=='HIGH_AMOUNT' and has_very_high_amount: continue
         text=labels.get(rule,rule.replace('_',' ').capitalize())
         # Use frozen measured values only, never recalculate a scoring window.
         observed=signal.get('triggered_value',signal.get('observed_count'))
