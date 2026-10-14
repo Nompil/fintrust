@@ -22,9 +22,9 @@ def test_grouped_navigation_preserves_workflow_routes():
     groups = re.search(r"const navigationGroups=.*?\n", source).group(0)
     helper = re.search(r"function navigationPages\(.*?\n", source).group(0)
     program = groups + helper + r'''const assert=require('node:assert/strict');
-assert.deepEqual(Object.keys(navigationGroups),['Monitoring','Data quality','Analysis','System']);
+assert.deepEqual(Object.keys(navigationGroups),['Home','Monitor','Data quality','Analysis','System']);
 const routes=navigationPages();
-assert.deepEqual(routes.slice(0,4),['Overview','Transactions','Risk Events','Review Queue']);
+assert.deepEqual(routes.slice(0,5),['Overview','My Work','Transactions','Risk Events','Review Queue']);
 for(const route of ['Quarantine','Ingestion Batches','Accounts','Insights','Reports','Audit','Operations','Administration'])assert.ok(routes.includes(route));
 assert.ok(!routes.includes('Account History')&&!routes.includes('Rejected Uploads'));
 assert.equal(new Set(routes).size,routes.length);

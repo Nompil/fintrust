@@ -1,0 +1,24 @@
+{
+  "initial_full_run": {
+    "collected": 981,
+    "passed": 980,
+    "failed": 1,
+    "errors": 0,
+    "skipped": 0,
+    "source_unchanged_during_verification": true,
+    "expected_total": 981,
+    "windows_python": "3.14.7",
+    "postgresql": "16.15",
+    "aws": "mocked and external transport prohibited",
+    "test_partition_count": 2
+  },
+  "cause": "Windows WinError 5 during dotenv atomic replacement in a disposable test folder; production setup code unchanged",
+  "isolated_same_test": "PASSED",
+  "complete_local_setup_module": {
+    "passed": 7,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "aggregation": "Same named cases replaced by successful same-source recheck; no checks omitted or duplicated"
+}

@@ -1,0 +1,76 @@
+{
+  "status": "LOCAL_VERIFIED",
+  "source_base_commit": "09acf070bb0baa82196587aa2997a7fdf7f61b0c",
+  "checked_utc": "2026-10-14T05:48:19.527108+00:00",
+  "full_regression": {
+    "collected": 981,
+    "passed": 981,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "baseline": 961,
+    "additional": 20,
+    "feature_checks": 18,
+    "automatically_discovered_route_guards": 2
+  },
+  "verification_method": "Complete suite in two isolated processes; one Windows temporary-file replacement failure successfully rechecked, with all seven setup-module checks passing. See environment-retry.json.",
+  "in_suite_browser_gates": 9,
+  "standalone_four_role_browser": "PASSED",
+  "visual_review": {
+    "status": "VISUALLY_INSPECTED",
+    "count": 24,
+    "viewports": [
+      1366,
+      390
+    ],
+    "method": "Individual frames and six labeled contact sheets inspected; screenshot anchors preserve processing result and correct Insights bands",
+    "repairs": [
+      "duplicate ring legend removed",
+      "compact desktop My Work filters",
+      "readable source filenames and fixed actions in processing history",
+      "compact persistent notice outside Upload",
+      "visible referral destination before resume action",
+      "mobile containment"
+    ],
+    "screenshots": [
+      "01-overview-1366.png",
+      "01-overview-390.png",
+      "02-my-work-1366.png",
+      "02-my-work-390.png",
+      "03-upload-1366.png",
+      "03-upload-390.png",
+      "04-processing-result-1366.png",
+      "04-processing-result-390.png",
+      "05-processing-history-1366.png",
+      "05-processing-history-390.png",
+      "06-insights-top-1366.png",
+      "06-insights-top-390.png",
+      "07-insights-risk-1366.png",
+      "07-insights-risk-390.png",
+      "08-insights-attention-1366.png",
+      "08-insights-attention-390.png",
+      "09-investigation-1366.png",
+      "09-investigation-390.png",
+      "10-specialist-referral-1366.png",
+      "10-specialist-referral-390.png",
+      "11-quarantine-1366.png",
+      "11-quarantine-390.png",
+      "12-my-work-owned-1366.png",
+      "12-my-work-owned-390.png"
+    ]
+  },
+  "production_source_unchanged_during_verification": true,
+  "postgresql": "16.15 disposable loopback",
+  "python": "3.14.7 Windows",
+  "scoring_rbac_sla_schema_credentials_original_records": "PRESERVED",
+  "pre_existing_tracked_edits_preserved": 8,
+  "aws_touched": false,
+  "deployed": false,
+  "pushed": false,
+  "remaining": [
+    "Interactive final SOP walkthrough",
+    "New exact-source Linux Python 3.12 verification",
+    "Controlled AWS deployment/wiring and live E2E",
+    "Non-authoritative Investigation Assistant after cloud gates"
+  ]
+}

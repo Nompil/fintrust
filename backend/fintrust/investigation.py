@@ -51,6 +51,11 @@ def detail(event,principal):
     lifecycle=transaction(str(value['tx_id']),principal)
     value['timeline']=lifecycle['timeline'];value['timeline_complete']=lifecycle['timeline_complete']
     value['review_history']=lifecycle['review_history']
+    for key in ('referral_target','referral_target_label','referral_kind','referral_requested_by','referral_requested_at','referral_note','referral_active','referral_assignment_note','source_provenance','source_journey','submitted_by','submitted_at','submission_channel','original_filename'):
+        value[key]=lifecycle.get(key)
+    from .review_referral import decode
+    latest=value['review_history'][-1] if value['review_history'] else None
+    if latest and latest.get('raw_notes'):value.update(raw_review_notes=value.get('review_notes'),review_notes=latest['notes'])
     from .analyst_workflow import review
     review(value,history=value['review_history'])
     # Read the independent cloud delivery claim, not review state or an assumed send.

@@ -31,22 +31,23 @@ const {chromium}=require(process.env.FINTRUST_PLAYWRIGHT_MODULE);
   await page.locator('#workspace').waitFor({state:'visible'});await page.waitForFunction(()=>!document.querySelector('#status').textContent.startsWith('Loading'));
   if(await page.locator('#title').innerText()!=='Overview')throw Error('Analyst did not land on overview');
   if(await page.locator('#account option').count()<2)throw Error('Assigned accounts did not load');
-  const analystOrder=['Overview','Transactions','Risk Events','Review Queue','Upload Transactions','Quarantined Rows','Processing History','Accounts','Insights','Reports','Notifications'];
-  if(JSON.stringify((await page.locator('#navigation button').allTextContents()).slice(0,11))!==JSON.stringify(analystOrder))throw Error('Analyst navigation priority incorrect');
+  const analystOrder=['Overview','My Work','Transactions','Risk Events','Review Queue','Upload Transactions','Quarantined Rows','Processing History','Accounts','Insights','Reports','Notifications'];
+  if(JSON.stringify((await page.locator('#navigation button').allTextContents()).slice(0,12))!==JSON.stringify(analystOrder))throw Error('Analyst navigation priority incorrect');
   const headings=await page.locator('#business-overview h3').allTextContents();
-  if(headings.indexOf('Quarantine / processing issues')<=headings.indexOf('Reviews requiring attention'))throw Error('Processing issues must follow risk review work');
-  const overview=(await overviewResponse).data;const tiles=await page.locator('.workbench-metrics strong').allTextContents();
-  const sla=await page.locator('.workbench-metrics strong').nth(3).innerText();if(!['Not configured','Unavailable'].includes(sla)&&!/^\d+$/.test(sla))throw Error('Invalid SLA metric');const expectedMetrics=[overview.new_ledger_entries,overview.risk_distribution.filter(r=>String(r.risk_level).toLowerCase()==='high').reduce((n,r)=>n+Number(r.count),0),overview.open_reviews,overview.sla_policy.enabled?overview.reviews_over_sla:'Not configured',overview.quarantined_rows,overview.technical_failures].map(String);
+  if(headings.indexOf('Processing outcomes · row counts')<=headings.indexOf('Risk pulse'))throw Error('Processing issues must follow risk review work');
+  const overview=(await overviewResponse).data;const tiles=await page.locator('.my-day-strip strong').allTextContents();
+  const sla=await page.locator('.my-day-strip strong').nth(1).innerText();if(!['Not configured','Unavailable'].includes(sla)&&!/^\d+$/.test(sla))throw Error('Invalid SLA metric');const expectedMetrics=[overview.sla_policy.enabled?overview.due_today:'Not configured',overview.sla_policy.enabled?overview.reviews_over_sla:'Not configured',overview.my_open_reviews,overview.unassigned_high,overview.quarantine_requiring_action].map(String);
   if(JSON.stringify(tiles)!==JSON.stringify(expectedMetrics))throw Error('Business metrics differ from authorized backend results');
   await page.screenshot({path:path.join(output,'analyst-transactions-risk-overview.png'),fullPage:true});
 
   await page.locator('#navigation').getByRole('button',{name:'Upload Transactions',exact:true}).click();
-  if(!(await page.locator('#csv-contract').innerText()).includes('source_system'))throw Error('Current CSV contract missing');
+  await page.locator('#csv-requirements summary').click();if(!(await page.locator('#csv-contract').innerText()).includes('source_system'))throw Error('Current CSV contract missing');
   async function admit(input,expected,screenshot){
+   await page.locator("#navigation").getByRole("button",{name:"Upload Transactions",exact:true}).click();await page.waitForFunction(()=>!document.querySelector("#status").textContent.startsWith("Loading"));
    await page.locator('#csv-file').setInputFiles(input);
-   await page.getByRole('button',{name:'Validate and process file',exact:true}).click();
-   await page.waitForFunction(text=>document.querySelector('#upload-notice-message').textContent.includes(text),expected);
-   await page.getByRole('button',{name:'Validate and process file',exact:true}).waitFor({state:'visible'});
+   const response=page.waitForResponse(r=>r.request().method()==='POST'&&r.url().endsWith('/v1/upload'),{timeout:120000});await page.getByRole('button',{name:'Validate and Process',exact:true}).click();await response;
+   await page.waitForFunction(text=>document.querySelector('#upload-notice-message').textContent.includes(text.replaceAll(', ',' + ').replace('duplicates','duplicate')),expected);
+   await page.getByRole('button',{name:'Validate and Process',exact:true}).waitFor({state:'visible'});
    await page.waitForFunction(()=>!document.querySelector('#upload-form button').disabled);
    await page.screenshot({path:path.join(output,screenshot),fullPage:true});
   }
@@ -61,15 +62,15 @@ const {chromium}=require(process.env.FINTRUST_PLAYWRIGHT_MODULE);
   await admit(path.join(fixtures,'fintrust_release1_transactions_A.csv'),'29 accepted, 12 quarantined, 1 duplicates','A-upload-warning.png');
 
   const outcomes=['View accepted transactions','Review quarantined rows','View risk events','View processing details'];
-  if(JSON.stringify(await page.locator('#upload-notice-message button').allTextContents())!==JSON.stringify(outcomes))throw Error('Upload outcome action order incorrect');
+  if(JSON.stringify(await page.locator('#upload-notice-message .receipt-actions button').allTextContents())!==JSON.stringify(outcomes))throw Error('Upload outcome action order incorrect');
   if(!await page.locator('#upload-notice').getByRole('button',{name:'View processing details',exact:true}).evaluate(n=>n.classList.contains('secondary-action')))throw Error('Batch action must be secondary');
-  for(const [label,target] of [['View accepted transactions','Transactions'],['Review quarantined rows','Quarantined Rows'],['View risk events','Risk Events']]){await page.locator('#upload-notice').getByRole('button',{name:label,exact:true}).click();await page.waitForFunction(()=>!document.querySelector('#status').textContent.startsWith('Loading'));if(await page.locator('#title').innerText()!==target||await page.locator('#error').isVisible())throw Error('Upload business outcome navigation failed: '+target);}
-await page.locator('#upload-notice').getByRole('button',{name:'View processing details',exact:true}).first().click();await page.locator('#content').getByRole('button',{name:'All',exact:true}).waitFor();if(!(await page.locator('#status').innerText()).includes('Recorded processing outcomes'))throw Error('Owned mixed batch outcomes unavailable');await page.screenshot({path:path.join(output,'owned-mixed-batch.png'),fullPage:true});
-  await page.locator('#upload-notice').getByRole('button',{name:'View accepted transactions',exact:true}).first().click();await page.locator('#content').getByRole('button',{name:/^(View details|Investigate)$/}).first().waitFor();
+  for(const [label,target] of [['View accepted transactions','Transactions'],['Review quarantined rows','Quarantined Rows'],['View risk events','Risk Events']]){await page.locator('#navigation').getByRole('button',{name:'Upload Transactions',exact:true}).click();await page.waitForFunction(()=>!document.querySelector('#status').textContent.startsWith('Loading'));await page.locator('#upload-notice').getByRole('button',{name:label,exact:true}).click();await page.waitForFunction(()=>!document.querySelector('#status').textContent.startsWith('Loading'));if(await page.locator('#title').innerText()!==target||await page.locator('#error').isVisible())throw Error('Upload business outcome navigation failed: '+target);}
+await page.locator('#navigation').getByRole('button',{name:'Upload Transactions',exact:true}).click();await page.waitForFunction(()=>!document.querySelector('#status').textContent.startsWith('Loading'));await page.locator('#upload-notice').getByRole('button',{name:'View processing details',exact:true}).first().click();await page.locator('#content').getByRole('button',{name:'All',exact:true}).waitFor();if(!(await page.locator('#status').innerText()).includes('Recorded processing outcomes'))throw Error('Owned mixed batch outcomes unavailable');await page.screenshot({path:path.join(output,'owned-mixed-batch.png'),fullPage:true});
+  await page.locator('#navigation').getByRole('button',{name:'Upload Transactions',exact:true}).click();await page.waitForFunction(()=>!document.querySelector('#status').textContent.startsWith('Loading'));await page.locator('#upload-notice').getByRole('button',{name:'View accepted transactions',exact:true}).first().click();await page.locator('#content').getByRole('button',{name:/^(View details|Investigate)$/}).first().waitFor();
   await page.locator('#navigation').getByRole('button',{name:'Processing History',exact:true}).click();
   await admit(path.join(fixtures,'fintrust_release1_transactions_B.csv'),'7 accepted, 4 quarantined, 1 duplicates','B-upload-warning.png');
   if(!(await page.locator('#upload-notice-message').textContent()).includes('29 accepted, 12 quarantined'))throw Error('Unacknowledged A warning was lost after B');
-  await admit(path.join(fixtures,'fintrust_release1_transactions_A.csv'),'File already processed','A-whole-file-replay.png');
+  await admit(path.join(fixtures,'fintrust_release1_transactions_A.csv'),'This file was already processed','A-whole-file-replay.png');
   if(!await page.locator('#upload-panel').evaluate(n=>n.compareDocumentPosition(document.querySelector('#content'))&Node.DOCUMENT_POSITION_FOLLOWING))throw Error('Upload must precede history');
   if(/request [a-f0-9-]{36}/i.test(await page.locator('#upload-notice-message').innerText()))throw Error('Request ID exposed');
   await page.locator('#navigation').getByRole('button',{name:'Notifications',exact:true}).click();await page.getByRole('button',{name:'Open Processing History'}).first().waitFor();await page.screenshot({path:path.join(output,'notification-center.png'),fullPage:true});
@@ -78,10 +79,10 @@ await page.locator('#upload-notice').getByRole('button',{name:'View processing d
   for(const name of pages){await page.locator('#navigation').getByRole('button',{name,exact:true}).click();await page.waitForFunction(()=>!document.querySelector('#status').textContent.startsWith('Loading'));if(await page.locator('#error').isVisible())throw Error(name+': '+await page.locator('#error').textContent());if(['Overview','Transactions','Risk Events','Review Queue','Quarantined Rows','Processing History','Insights','Users'].includes(name))await page.screenshot({path:path.join(output,name.toLowerCase().replaceAll(' ','-')+'.png'),fullPage:true});}
   await page.locator('#navigation').getByRole('button',{name:'Insights',exact:true}).click();await page.locator('.insight-chart').first().waitFor();
   if(await page.locator('.insight-chart').count()!==10)throw Error('Missing backend chart panels');
-  if(!(await page.locator('#content').innerText()).includes('scored accepted'))throw Error('Unscored caveat missing');
+  if(!(await page.locator('#content').innerText()).includes('not a fraud probability'))throw Error('Unscored caveat missing');
   await page.locator('#insights-days').selectOption('all');await page.waitForFunction(()=>!document.querySelector('#status').textContent.startsWith('Loading'));
-  const insightData=(await insightsResponse).data;const chartKeys=['activity','accounts','cross_border','risk_trend','risk','rules','high_accounts','reviews','batch_outcomes','quality'];
-  for(let i=0;i<chartKeys.length;i++){const actual=await page.locator('.insight-chart').nth(i).locator('table tr').evaluateAll(rows=>rows.filter(r=>r.querySelector('td')).map(r=>Array.from(r.querySelectorAll('td')).map(c=>c.textContent)));const expected=insightData[chartKeys[i]].map(r=>[display.uuid(r.label)?display.reference("account_id",r.label):String(r.label),String(r.count)]);if(JSON.stringify(actual)!==JSON.stringify(expected))throw Error('Chart table disagrees with backend: '+chartKeys[i]);}
+  const insightData=(await insightsResponse).data;const chartKeys=['activity','cross_border','risk','rules','high_accounts','risk_trend','sla_state_counts','quality','reviews','batch_outcomes'];const chartRows=(data,key)=>key==='sla_state_counts'?data.metrics.sla_state_counts:data[key];
+  for(let i=0;i<chartKeys.length;i++){const actual=await page.locator('.insight-chart').nth(i).locator('table tr').evaluateAll(rows=>rows.filter(r=>r.querySelector('td')).map(r=>Array.from(r.querySelectorAll('td')).map(c=>c.textContent)));const expected=chartRows(insightData,chartKeys[i]).map(r=>[display.uuid(r.label)?display.reference("account_id",r.label):String(r.label),String(r.count)]);if(JSON.stringify(actual)!==JSON.stringify(expected))throw Error('Chart table disagrees with backend: '+chartKeys[i]);}
   await page.screenshot({path:path.join(output,'insights-all-dates.png'),fullPage:true});
   await page.locator('#navigation').getByRole('button',{name:'Reports',exact:true}).click();await page.getByRole('button',{name:'Download CSV · current page'}).waitFor();
   const downloadPromise=page.waitForEvent('download');await page.getByRole('button',{name:'Download CSV · current page'}).click();const download=await downloadPromise;await download.saveAs(path.join(output,'report-current-page.csv'));
@@ -97,8 +98,8 @@ await page.locator('#upload-notice').getByRole('button',{name:'View processing d
   await page.locator('#navigation').getByRole('button',{name:'Users',exact:true}).click();await page.getByRole('button',{name:'Add User'}).click();
   await page.locator('[name="username"]').fill('analyst02');await page.locator('[name="display_name"]').fill('Analyst Two');await page.locator('[name="role"]').selectOption('Risk/Compliance Analyst');await page.locator('[name="notes"]').fill('Synthetic presentation governance');await page.getByRole('button',{name:'Save User',exact:true}).click();await page.getByRole('cell',{name:'analyst02',exact:true}).waitFor();
   await page.screenshot({path:path.join(output,'administration-user-created.png'),fullPage:true});
-  await page.locator('#navigation').getByRole('button',{name:'Overview',exact:true}).click();await page.waitForFunction(()=>document.querySelector('.metrics'));await page.screenshot({path:path.join(output,'overview.png'),fullPage:true});
-  await page.waitForFunction(()=>!document.querySelector('#status').textContent.startsWith('Loading'));const businessMetrics=await page.locator('.workbench-metrics').innerText();if(!businessMetrics.includes('Quarantined rows')||!businessMetrics.includes('16'))throw Error('Quarantine business total missing');const processed=await page.locator('.workbench-metrics strong').first().innerText();if(processed!=='36')throw Error('Actual A/B processed total missing');
+  await page.locator('#navigation').getByRole('button',{name:'Overview',exact:true}).click();await page.waitForFunction(()=>document.querySelector('.my-day-strip'));await page.screenshot({path:path.join(output,'overview.png'),fullPage:true});
+  await page.waitForFunction(()=>!document.querySelector('#status').textContent.startsWith('Loading'));const businessMetrics=await page.locator('.my-day-strip').innerText();if(!businessMetrics.includes('Quarantine awaiting action')||!businessMetrics.includes('16'))throw Error('Quarantine business total missing');const processed=await page.locator('.dashboard-summary').innerText();if(!processed.includes('36 assessed transactions'))throw Error('Actual A/B processed total missing');
   await page.locator('#navigation').getByRole('button',{name:'Processing History',exact:true}).click();await page.getByRole('button',{name:'Rejected uploads',exact:true}).click();await page.getByRole('cell',{name:'INVALID_CSV_SCHEMA',exact:true}).waitFor();await page.screenshot({path:path.join(output,'rejected-uploads-history.png'),fullPage:true});
   await page.locator('#navigation').getByRole('button',{name:'Processing History',exact:true}).click();await page.getByRole('button',{name:'View processing details',exact:true}).first().click();await page.locator('#title').filter({hasText:'Processing Details'}).waitFor();await page.waitForFunction(()=>!document.querySelector('#status').textContent.startsWith('Loading'));await page.screenshot({path:path.join(output,'batch-reconciliation.png'),fullPage:true});
   await page.getByRole('button',{name:'Duplicate',exact:true}).click();await page.waitForFunction(()=>!document.querySelector('#status').textContent.startsWith('Loading'));await page.getByRole('cell',{name:'Existing transaction — no additional ledger entry',exact:true}).waitFor();await page.screenshot({path:path.join(output,'duplicate-occurrences.png'),fullPage:true});
@@ -140,7 +141,7 @@ await page.locator('#upload-notice').getByRole('button',{name:'View processing d
   await page.screenshot({path:path.join(output,'release1-maintainer-operations.png'),fullPage:true});
   const denied=await page.evaluate(async()=>{const r=await fetch('/v1/reviews/1/transition',{method:'POST',headers:{Authorization:'Bearer '+'d'.repeat(64),'Content-Type':'application/json'},body:'{}'});return r.status;});if(denied!==403)throw Error('Maintainer mutation was not denied by backend');
   // Hold an old Admin detail response until a different role is signed in.
-  await page.getByRole('button',{name:'Sign out',exact:true}).click();await page.locator('#token').fill('a'.repeat(64));await page.getByRole('button',{name:'Sign in',exact:true}).click();await page.waitForFunction(()=>!!document.querySelector('.metrics'));
+  await page.getByRole('button',{name:'Sign out',exact:true}).click();await page.locator('#token').fill('a'.repeat(64));await page.getByRole('button',{name:'Sign in',exact:true}).click();await page.waitForFunction(()=>!!document.querySelector('.my-day-strip'));
   let releaseOld,observedOld,finishedOld;const hold=new Promise(resolve=>releaseOld=resolve);const observed=new Promise(resolve=>observedOld=resolve);const finished=new Promise(resolve=>finishedOld=resolve);
   await page.route('**/v1/transactions/*',async route=>{const response=await route.fetch();observedOld();await hold;await route.fulfill({response});finishedOld();});
   await page.locator('#navigation').getByRole('button',{name:'Transactions',exact:true}).click();await page.waitForFunction(()=>!document.querySelector('#status').textContent.startsWith('Loading'));await openLedgerDetails(false);await observed;
@@ -168,13 +169,13 @@ await page.locator('#upload-notice').getByRole('button',{name:'View processing d
     const data=(await insightsResponse).data;
     for(let i=0;i<chartKeys.length;i++){
       const actual=await page.locator('.insight-chart').nth(i).locator('table tr').evaluateAll(rs=>rs.filter(x=>x.querySelector('td')).map(x=>Array.from(x.querySelectorAll('td')).map(c=>c.textContent)));
-      const expected=data[chartKeys[i]].map(x=>[display.uuid(x.label)?display.reference('account_id',x.label):String(x.label),String(x.count)]);
+      const expected=chartRows(data,chartKeys[i]).map(x=>[display.uuid(x.label)?display.reference('account_id',x.label):String(x.label),String(x.count)]);
       if(JSON.stringify(actual)!==JSON.stringify(expected))throw Error(user+' chart mismatch '+chartKeys[i]);
     }
     await page.screenshot({path:path.join(output,user+'-insights-verified.png'),fullPage:true});
     await page.locator('#navigation').getByRole('button',{name:'Reports',exact:true}).click();await page.getByRole('button',{name:'Download CSV · current page'}).waitFor();
     if(user==='auditor01'){
-      for(const target of ['Review Queue','Quarantined Rows','Processing History']){await page.locator('#navigation').getByRole('button',{name:target,exact:true}).click();await page.waitForFunction(()=>!document.querySelector('#status').textContent.startsWith('Loading'));if(await page.getByRole('button',{name:/Claim review|Claim Review|Save investigation|Correct and resubmit|Reject row|Validate and process file/}).count())throw Error('Auditor mutation control visible');}
+      for(const target of ['Review Queue','Quarantined Rows','Processing History']){await page.locator('#navigation').getByRole('button',{name:target,exact:true}).click();await page.waitForFunction(()=>!document.querySelector('#status').textContent.startsWith('Loading'));if(await page.getByRole('button',{name:/Claim review|Claim Review|Save investigation|Correct and resubmit|Reject row|Validate and Process/}).count())throw Error('Auditor mutation control visible');}
       const status=await page.evaluate(async()=>{const r=await fetch('/v1/upload',{method:'POST',headers:{Authorization:'Bearer '+'c'.repeat(64)}});return r.status;});if(status!==403)throw Error('Auditor backend upload not denied');
     }
     await page.route('**/v1/release1/insights?**',route=>route.fulfill({status:404,contentType:'application/json',body:JSON.stringify({error:'Not Found',detail:'unsafe provider detail'})}));
@@ -198,7 +199,7 @@ await page.locator('#upload-notice').getByRole('button',{name:'View processing d
   await page.unroute('**/v1/release1/overview');await page.locator('#token').fill('b'.repeat(64));await page.getByRole('button',{name:'Sign in',exact:true}).click();await page.locator('#workspace').waitFor({state:'visible'});
   await page.locator('#navigation').getByRole('button',{name:'Upload Transactions',exact:true}).click();
   await page.route('**/v1/upload',route=>route.fulfill({status:401,contentType:'application/json',body:'{"error":"authentication required"}'}));
-  await page.locator('#csv-file').setInputFiles(path.join(fixtures,'fintrust_release1_transactions_A.csv'));await page.getByRole('button',{name:'Validate and process file',exact:true}).click();
+  await page.locator('#csv-file').setInputFiles(path.join(fixtures,'fintrust_release1_transactions_A.csv'));await page.getByRole('button',{name:'Validate and Process',exact:true}).click();
   await page.getByRole('heading',{name:'Session expired',exact:true}).waitFor();await page.screenshot({path:path.join(output,'session-expired.png'),fullPage:true});
   await page.unroute('**/v1/upload');
   if(errors.length)throw Error(errors.join('; '));

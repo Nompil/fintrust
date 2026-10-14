@@ -51,7 +51,7 @@ def test_entry_assets_are_served_from_the_moved_locations():
     client=api.app.test_client()
     html=client.get('/release1').data.decode('utf-8')
     assets=re.findall(r'(?:src|href)="(/assets/[^"?]+)',html)
-    assert set(assets)=={'/assets/css/release1.css','/assets/js/release1-display.js','/assets/js/release1-workflows.js','/assets/js/release1.js','/assets/js/release1-analyst.js'}
+    assert set(assets)=={'/assets/css/release1.css','/assets/js/release1-display.js','/assets/js/release1-workflows.js','/assets/js/release1.js','/assets/js/release1-analyst.js','/assets/js/release1-intake-insights.js','/assets/js/release1-cases.js','/assets/js/release1-dashboard.js','/assets/css/release1-dashboard.css'}
     for asset in assets:
         assert client.get(asset).status_code==200,asset
     assert '/assets/js/release1.js' in assets and '/assets/css/release1.css' in assets

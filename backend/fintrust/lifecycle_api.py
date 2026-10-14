@@ -54,6 +54,8 @@ def transaction(identifier,principal):
         h['actor_type']='SYSTEM' if automated else 'HUMAN'
         h['actor_role']='SYSTEM' if automated else 'Not recorded'
         if not automated:h['actor_role_note']='Role-at-action was not stored; the current registry role is not historical evidence.'
+    from .review_referral import project,history_projection
+    project(value,history);history=history_projection(history)
     from .analyst_workflow import assessment,review
     assessment(value);review(value,history=history)
     value['risk_state']=(value['risk'] or {}).get('risk_level',value['assessment_state'])
@@ -66,7 +68,17 @@ def transaction(identifier,principal):
     for o in value['occurrences']:timeline.extend(dict(e,batch_id=o['batch_id'],source_row=o['source_row']) for e in o['timeline'])
     risk=api._query('SELECT risk_event_id,created_at FROM risk_events WHERE tx_id=%s ORDER BY risk_event_id',(identifier,))
     timeline.extend(dict(event_type='RISK_EVENT',occurred_at=e['created_at'],actor_subject='scoring-worker',actor_type='SYSTEM',risk_event_id=e['risk_event_id']) for e in risk)
-    timeline.extend(dict(event_type='INVESTIGATION_NOTE' if h['before_status']==h['after_status']=='UNDER_REVIEW' and any(previous['version']==h['version']-1 and previous['reviewer_subject']==h['reviewer_subject'] for previous in history) else h['after_status'],occurred_at=h['changed_at'],actor_subject=h['actor_subject'],actor_type='SYSTEM' if h['actor_subject']=='scoring-worker' and h['before_status'] is None else 'HUMAN',version=h['version']) for h in history)
+    indexed={h['version']:h for h in history}
+    for h in history:
+        previous=indexed.get(h['version']-1)
+        same_status=h['before_status']==h['after_status']
+        ownership_changed=previous is not None and previous['reviewer_subject']!=h['reviewer_subject']
+        event_type=('ASSIGNED' if same_status and ownership_changed else
+                    'INVESTIGATION_NOTE' if same_status and h['after_status']=='UNDER_REVIEW' and previous is not None else
+                    'UNASSIGNED' if h['before_status']=='UNDER_REVIEW' and h['after_status']=='OPEN' and not h['reviewer_subject'] else h['after_status'])
+        timeline.append(dict(event_type=event_type,occurred_at=h['changed_at'],actor_subject=h['actor_subject'],
+            actor_type=h.get('actor_type','HUMAN'),actor_role=h.get('actor_role','Not recorded'),
+            reviewer_subject=h['reviewer_subject'],notes=h['notes'],version=h['version']))
     # Never call an unsent or uncertain delivery ALERTED. Existing SQL receipts and cloud claim are distinct evidence sources.
     from .dynamo import get_item
     import os
@@ -85,4 +97,6 @@ def transaction(identifier,principal):
         if entry['actor_role']=='Not recorded':entry['actor_role_note']='Role-at-action was not stored; current roles are not historical evidence.'
     value['timeline']=sorted(timeline,key=lambda e:datetime.fromisoformat(e['occurred_at'].replace('Z','+00:00')) if isinstance(e['occurred_at'],str) else e['occurred_at'])
     value['timeline_complete']=bool(value['occurrences']) and not occurrences_truncated and not history_truncated and len(corrections)<=100 and len(operations)<=100 and all(o['timeline_complete'] for o in value['occurrences'])
+    from .case_provenance import enrich,journey
+    enrich([value],principal,'transactions');value['source_journey']=journey(value)
     return value

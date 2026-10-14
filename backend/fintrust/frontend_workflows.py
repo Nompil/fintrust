@@ -77,6 +77,9 @@ def batch_detail(identifier, principal, args):
     batch['started_at']=batch['received_at']
     batch['completed_at']=stamps['last_row_observed_at'] if batch['counts_consistent'] and batch['pending']==0 and batch['status'] in {'COMPLETED','PARTIAL','FAILED'} else None
     batch['completed_at_note']='Last recorded row outcome; no separate processing completion event is recorded.'
+    batch['filename']=batch.get('original_filename') or batch.get('source_provenance',{}).get('recorded_upload_filename') or batch.get('source_filename')
+    batch['actor']=batch.get('submitted_by')
+    batch['risk_event_counts']=api.run_risk_counts(identifier,principal)
     total=api._query('SELECT count(*) AS total_count FROM ingestion_records i WHERE '+where,tuple(params))[0]['total_count']
     return {"batch":batch,"rows":rows[:limit],"attempts":attempts,
         "meta":{"count":len(rows[:limit]),"total_count":total,"has_more":len(rows)>limit,"offset":offset,"limit":limit,"filters":{"disposition":disposition} if disposition else {}}}
@@ -92,6 +95,13 @@ def overview(principal):
     data.update(api.review_workload(principal))
     from .analyst_workflow import policy
     data['sla_policy']=policy()
+    # Financial case history is already readable through the scoped case API.
+    # This preview is bounded; it is never used for counters or SLA denominators.
+    data['recent_review_activity']=api._query('''SELECT h.risk_event_id,r.tx_id,t.account_id,
+        h.actor_subject,h.before_status,h.after_status,h.changed_at
+        FROM risk_review_history h JOIN risk_events r USING(risk_event_id)
+        JOIN transactions t USING(tx_id) WHERE t.account_id=ANY(%s::uuid[])
+        ORDER BY h.changed_at DESC,h.risk_event_id,h.version DESC LIMIT 6''',(scope,))
     q=api.list_page("quarantine",principal,{"limit":100})
     # Counts share list scoping; exact counters are marked bounded when paginated.
     batches=api.list_page("batches",principal,{"limit":100})
@@ -112,12 +122,19 @@ def audit_events(principal, args):
     from .upload_ownership import owned_batches
     owned=owned_batches(principal)
     events=[{"timestamp":e["attempted_at"],"actor":e["actor"],"action":e["action"],"resource":e.get("target") or e.get("batch_id") or e["event_id"],"result":e["result"],"actor_role":e.get("actor_role","Not captured"),"details":e.get("notes") or e.get("reason_code") or e["filename"]} for e in upload_history(principal)]
-    events+=api._query("SELECT h.changed_at AS timestamp,h.actor_subject AS actor,CASE WHEN h.before_status='OPEN' AND h.after_status='UNDER_REVIEW' THEN 'REVIEW_CLAIMED' WHEN h.before_status=h.after_status AND h.after_status='UNDER_REVIEW' AND h.reviewer_subject=(SELECT previous.reviewer_subject FROM risk_review_history previous WHERE previous.risk_event_id=h.risk_event_id AND previous.version=h.version-1) THEN 'REVIEW_NOTE_ADDED' WHEN h.before_status=h.after_status AND h.after_status IN ('UNDER_REVIEW','ESCALATED') THEN 'REVIEW_REASSIGNED' WHEN h.before_status='UNDER_REVIEW' AND h.after_status='OPEN' THEN 'REVIEW_UNASSIGNED' ELSE 'REVIEW_'||h.after_status END AS action,h.risk_event_id::text AS resource,h.after_status AS result,h.notes AS details FROM risk_review_history h JOIN risk_events r USING(risk_event_id) JOIN transactions t USING(tx_id) WHERE t.account_id=ANY(%s::uuid[]) ORDER BY h.changed_at DESC LIMIT 1000",(scope,))
+    events+=api._query("SELECT h.changed_at AS timestamp,h.actor_subject AS actor,CASE WHEN h.before_status='OPEN' AND h.after_status='UNDER_REVIEW' THEN 'REVIEW_CLAIMED' WHEN h.before_status=h.after_status AND h.after_status='UNDER_REVIEW' AND h.reviewer_subject=(SELECT previous.reviewer_subject FROM risk_review_history previous WHERE previous.risk_event_id=h.risk_event_id AND previous.version=h.version-1) THEN 'REVIEW_NOTE_ADDED' WHEN h.before_status=h.after_status AND h.after_status IN ('UNDER_REVIEW','ESCALATED') THEN 'REVIEW_REASSIGNED' WHEN h.before_status='UNDER_REVIEW' AND h.after_status='OPEN' THEN 'REVIEW_UNASSIGNED' ELSE 'REVIEW_'||h.after_status END AS action,h.risk_event_id::text AS resource,h.after_status AS result,h.notes AS details,h.version,h.request_id,h.request_digest,h.before_status,h.after_status,h.resolution_code FROM risk_review_history h JOIN risk_events r USING(risk_event_id) JOIN transactions t USING(tx_id) WHERE t.account_id=ANY(%s::uuid[]) ORDER BY h.changed_at DESC LIMIT 1000",(scope,))
     events+=api._query("SELECT i.updated_at AS timestamp,'system' AS actor,'ROW_'||i.disposition AS action,i.batch_id::text||':'||i.source_row::text AS resource,i.disposition AS result,i.reason_code AS details FROM ingestion_records i LEFT JOIN transactions t ON t.tx_id=i.canonical_tx_id LEFT JOIN quarantine_cases q ON q.batch_id=i.batch_id AND q.source_row=i.source_row WHERE COALESCE(t.account_id,q.candidate_account_id)=ANY(%s::uuid[]) OR ((%s OR q.batch_id=ANY(%s::uuid[])) AND i.disposition='QUARANTINED' AND NOT EXISTS(SELECT 1 FROM accounts a WHERE a.account_id=q.candidate_account_id)) ORDER BY i.updated_at DESC LIMIT 1000",(scope,principal.role=='Admin',owned))
     events+=api._query("SELECT c.submitted_at AS timestamp,c.submitted_by AS actor,'QUARANTINE_'||c.action AS action,c.quarantine_id::text AS resource,c.action AS result,c.correction_notes AS details FROM quarantine_corrections c JOIN quarantine_cases q USING(quarantine_id) WHERE q.candidate_account_id=ANY(%s::uuid[]) OR ((%s OR q.batch_id=ANY(%s::uuid[])) AND NOT EXISTS(SELECT 1 FROM accounts a WHERE a.account_id=q.candidate_account_id)) ORDER BY c.submitted_at DESC LIMIT 1000",(scope,principal.role=='Admin',owned))
     if principal.role=='Admin':
         events+=api._query("SELECT COALESCE(completed_at,created_at) AS timestamp,actor_subject AS actor,action,request_id::text AS resource,state AS result,result->>'notes' AS details FROM operations_requests ORDER BY created_at DESC LIMIT 1000")
     for event in events:
+        if event.get('action','').startswith('REVIEW_'):
+            from .review_referral import decode
+            history={**event,'notes':event.get('details'),'actor_subject':event.get('actor')}
+            context=decode(history)
+            if context:
+                event.update(raw_details=event['details'],details=context['notes'],actor_role=context['actor']['role'],actor_type='HUMAN',
+                             referral_target=context['target']['value'],referral_target_label=context['target']['label'])
         automated=event.get('actor')=='system' and event.get('action','').startswith('ROW_') or event.get('actor')=='scoring-worker' and event.get('action')=='REVIEW_OPEN'
         event.setdefault('actor_type','SYSTEM' if automated else 'HUMAN')
         event.setdefault('actor_role','SYSTEM' if automated else 'Not recorded')

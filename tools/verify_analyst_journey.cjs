@@ -95,7 +95,7 @@ const {chromium} = require(process.env.FINTRUST_PLAYWRIGHT_MODULE);
     }
 
     await login();
-    await p.locator('.workbench-metrics').getByText('Reviews over SLA', {exact: true}).waitFor();
+    await p.locator('.my-day-strip').getByText('Overdue', {exact: true}).waitFor();
     const overview = await api('/v1/release1/overview');
     assert.equal(overview.data.reviews_over_sla, 1);
     await screen('sla-workload');
@@ -204,9 +204,9 @@ const {chromium} = require(process.env.FINTRUST_PLAYWRIGHT_MODULE);
     assert.match(await low.innerText(), /No review required/);
     await low.getByRole('button', {name: 'View details', exact: true}).click();
     await p.getByRole('heading', {name: 'Transaction lifecycle', exact: true}).waitFor();
-    await p.locator('.recorded-lifecycle .lifecycle-steps li').last().waitFor();
-    assert.equal(await p.locator('.recorded-lifecycle .lifecycle-steps li').count(), 6);
-    assert.match(await p.locator('.recorded-lifecycle').innerText(), /Stored[\s\S]*Recorded[\s\S]*Assessed[\s\S]*0% LOW/);
+    await p.locator('.recorded-lifecycle .case-journey li').last().waitFor();
+    const lowEvidence=(await api('/v1/workflows/transactions?source_id=JOURNEY-LOW')).data[0];const lowJourney=(await api('/v1/transactions/'+lowEvidence.tx_id+'/lifecycle')).data.source_journey;assert.equal(await p.locator('.recorded-lifecycle .case-journey li').count(),lowJourney.stages.length);
+    assert.match(await p.locator('.recorded-lifecycle').innerText(), /Assessed[\s\S]*Stored/);
     assert.equal((await p.locator('.recorded-lifecycle').innerText()).includes('Loading recorded events'), false);
     assert.match(await p.locator('.transaction-detail').innerText(), /Not required/);
     assert.equal(await p.getByRole('button', {name: 'Claim Review', exact: true}).count(), 0);
@@ -231,8 +231,8 @@ const {chromium} = require(process.env.FINTRUST_PLAYWRIGHT_MODULE);
     checks.push('F: known seed provenance labels historical without inventing assessment or review');
 
     await nav('Review Queue');
-    for (const label of ['Mine', 'Unassigned', 'All visible']) await p.getByRole('button', {name: label, exact: true}).waitFor();
-    await p.getByRole('button', {name: 'Over SLA', exact: true}).click();
+    for (const label of ['My Work', 'Unassigned', 'All visible']) await p.locator('.case-view-tabs').getByRole('button', {name: label, exact: true}).waitFor();
+    await p.getByRole('button', {name: 'Overdue', exact: true}).click();
     await ready();
     assert.match(await p.locator('#content').innerText(), /Overdue/);
     await screen('review-queue-overdue');
@@ -240,7 +240,7 @@ const {chromium} = require(process.env.FINTRUST_PLAYWRIGHT_MODULE);
     await p.locator('#insights-days').selectOption('all');
     await p.getByRole('button', {name: 'Apply analytical filters', exact: true}).click();
     await ready();
-    for (const heading of ['WHAT HAPPENED?', 'WHERE IS THE RISK?', 'WHAT NEEDS ATTENTION?', 'WHAT HAPPENED TO THE WORK?'])
+    for (const heading of ['WHAT HAPPENED?', 'WHERE IS THE RISK?', 'WHAT NEEDS ATTENTION?', 'WHAT WAS THE OUTCOME?'])
       await p.getByRole('heading', {name: heading, exact: true}).waitFor();
     assert.match(await p.locator('#content').innerText(), /SAST/);
     const aggregate = await api('/v1/release1/insights?days=all');
@@ -255,7 +255,7 @@ const {chromium} = require(process.env.FINTRUST_PLAYWRIGHT_MODULE);
     await ready();
     await screen('insights-evidence-scope');
     const trend = p.locator('.insight-chart').filter({has: p.getByRole('heading',
-      {name: 'High-risk trend · SAST days', exact: true})});
+      {name: 'HIGH-risk trend · SAST', exact: true})});
     const evidenceRequest = p.waitForResponse(r => new URL(r.url()).pathname === '/v1/workflows/transactions');
     await trend.getByRole('button', {name: 'Investigate these transactions', exact: true}).click();
     const evidenceUrl = new URL((await evidenceRequest).url());

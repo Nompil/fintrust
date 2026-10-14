@@ -1,0 +1,8 @@
+{
+  "checks": {
+    "original_source_objects_unchanged": true,
+    "sla_policy_function_unchanged": true,
+    "existing_assignment_registry_and_base_schema_unchanged": true
+  },
+  "private_values_recorded": false
+}

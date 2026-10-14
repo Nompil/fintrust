@@ -1,0 +1,20 @@
+{
+  "status": "PASSED",
+  "checks": [
+    "Composed Overview; five authoritative work counters; risk ring, trend, rankings and processing segments",
+    "All eight work views use scoped backend queues and full-scope counters",
+    "CSV requirements/sample/clear-selection; receipt has immutable uploader; zero-row action disabled",
+    "Insights has four business bands, activity/HIGH area trends, four real rings, rankings and reconciled segments",
+    "Claim \u2192 note \u2192 named referral \u2192 separate Administrator transfer; immutable audit and existing two-hour SLA",
+    "Invalid CSV row \u2192 filtered quarantine; no accepted financial entry",
+    "Auditor can inspect journey; no financial mutation controls",
+    "Maintainer has no financial work or referral authority"
+  ],
+  "browser_errors": [],
+  "viewports": [
+    1366,
+    390
+  ],
+  "aws": "mocked",
+  "credentials": "isolated synthetic fixtures only"
+}

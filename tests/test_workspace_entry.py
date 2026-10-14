@@ -13,7 +13,7 @@ def test_default_entry_is_current_authenticated_workspace():
         assert response.data==client.get('/release1').data
         assert b'earlier learning interface' not in response.data
         assert b'id="login"' in response.data and b'id="workspace" hidden' in response.data
-        assert b'Validate and process file' in response.data
+        assert b'Validate and Process' in response.data
 
 
 def test_csv_contract_matches_validator_and_is_analyst_scoped(authenticated_client):

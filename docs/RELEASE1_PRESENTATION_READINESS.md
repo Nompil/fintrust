@@ -227,7 +227,7 @@ Refresh the current workspace to load the updated static interface, then sign in
 FINTRUST ANALYST WORKFLOW VERIFIED — TRANSACTIONS AND RISK PRIORITIZED
 
 
-### Current Analyst walkthrough checkpoint - 14 October 2026
+### Analyst workflow repair checkpoint - 14 October 2026
 
 Use **Quarantined Rows**, **Processing History**, **Processing Details** and **Processing Run** for current screenshots. Earlier sections retain historical implementation notes. LOW entries with a recorded assessment show their score and No review required. Canonical bootstrap entries without scoring evidence show Historical - not scored; modern missing evidence stays Not recorded.
 
@@ -236,3 +236,12 @@ Walk through upload -> processing reconciliation -> run-scoped quarantine -> cor
 Local verification: 961 full-suite passes, zero skips/failures; eight in-suite browser gates and the separate four-role CI walkthrough passed. Existing local financial records, credentials and infrastructure edits are preserved. See `docs/EVIDENCE/12-e2e/analyst-workflow-repair/` for the gap audit and refreshed desktop/mobile screenshots. Retake final SOP images during the interactive walkthrough; screenshot numbering and the final SOP PDF are not regenerated here.
 
 **Local E2E verified. New-candidate Linux re-freeze and live AWS E2E pending.** No AWS, deployment or push occurred in this repair.
+
+
+### Elevated case workspace — final local checkpoint
+
+Overview → My Work → Case → Investigation → Decision → History is implemented. Work views expose ownership, due/overdue and priority before pagination. Upload requirements/sample/result/history are clearer; Insights combines real trends, proportions, rankings, SLA and reconciliation. Source provenance is recorded, not guessed. Refer for Specialist Review records a requested destination; Administrator transfer remains separate and the existing two-hour target is preserved.
+
+981 checks verified (+20 over the 961 baseline), nine in-suite browser gates, separate four-role walkthrough and 24 visually inspected desktop/mobile frames. One Windows temporary-file lock was resolved by a same-source fresh-folder retry, documented transparently. See [verification and boundaries](EVIDENCE/12-e2e/elevated-case-workspace/RESULT.md). Existing financial/audit records, credentials, scoring, role separation, SLA values, migrations and eight existing local edits are preserved.
+
+Retake final numbered SOP images during the interactive presentation walkthrough. Manual CSV is current; configured reviewer groups, secure feeds/API/streams and the non-authoritative Investigation Assistant remain roadmap work. **New-source Linux verification and live AWS E2E remain pending. AWS was untouched; no push or deployment occurred.**

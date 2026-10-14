@@ -49,28 +49,52 @@ def review_workload(principal, where=None, params=None):
         "count(*) FILTER(WHERE "+active+" AND w.reviewer_subject=%s) AS my_open_reviews,"
         "count(*) FILTER(WHERE "+active+" AND w.reviewer_subject IS NULL) AS unassigned_reviews,"
         "count(*) FILTER(WHERE "+active+" AND w.reviewer_subject IS NOT NULL) AS assigned_reviews,"
+        "count(*) FILTER(WHERE "+active+" AND p.result->>'risk_level'='High') AS high_priority,"
+        "count(*) FILTER(WHERE "+active+" AND w.reviewer_subject IS NULL AND p.result->>'risk_level'='High') AS unassigned_high,"
+        "count(*) FILTER(WHERE w.review_status='ESCALATED') AS specialist_review,"
+        "count(*) FILTER(WHERE w.review_status IN ('CLEARED','CONFIRMED_RISK')) AS recently_completed,"
+        "count(*) FILTER(WHERE "+active+" AND "+analyst.due_today_sql(due)+") AS due_today,"
+        "count(*) FILTER(WHERE "+active+" AND "+due+">"+now+"+INTERVAL '"+str(window)+" seconds') AS within_sla,"
+        "count(*) FILTER(WHERE "+active+" AND "+due+" IS NULL) AS sla_not_recorded,"
         "count(*) FILTER(WHERE "+active+" AND "+due+"<="+now+") AS reviews_over_sla,"
         "count(*) FILTER(WHERE "+active+" AND "+due+">"+now+" AND "+due+"<="+now+"+INTERVAL '"+str(window)+" seconds') AS reviews_due_soon "
         "FROM risk_reviews w JOIN risk_events r USING(risk_event_id) JOIN transactions t USING(tx_id) LEFT JOIN processed_transactions p USING(tx_id)"
         +analyst.review_history_join()+" WHERE "+where,(principal.subject,)+tuple(params))[0]
     metrics.update(over_sla=metrics['reviews_over_sla'],sla_breached=metrics['reviews_over_sla'],due_soon=metrics['reviews_due_soon'])
+    metrics.update(my_work=metrics['my_open_reviews'],unassigned=metrics['unassigned_reviews'],overdue=metrics['reviews_over_sla'],all_visible=metrics['review_count'])
+    metrics['sla_state_counts']=[{'label':label,'count':metrics[key]} for label,key in [('Within SLA','within_sla'),('Due soon','reviews_due_soon'),('Overdue','reviews_over_sla'),('Not recorded' if analyst.policy()['enabled'] else 'Not configured','sla_not_recorded')]]
+    metrics['due_today_note']='Active reviews due during the current SAST calendar day, including any already overdue today; categories can overlap.'
     return metrics
 
+
+def run_risk_counts(batch,principal):
+    result=_query('''SELECT count(DISTINCT r.risk_event_id) AS risk_events,
+        count(DISTINCT w.risk_event_id) AS review_cases,
+        count(DISTINCT w.risk_event_id) FILTER(WHERE w.review_status IN ('OPEN','UNDER_REVIEW','ESCALATED')) AS active_review_cases,
+        count(DISTINCT r.risk_event_id) FILTER(WHERE p.result->>'risk_level'='High') AS high,
+        count(DISTINCT r.risk_event_id) FILTER(WHERE p.result->>'risk_level'='Medium') AS medium
+        FROM ingestion_records i JOIN transactions t ON t.tx_id=i.canonical_tx_id
+        JOIN risk_events r ON r.tx_id=t.tx_id LEFT JOIN risk_reviews w USING(risk_event_id)
+        LEFT JOIN processed_transactions p ON p.tx_id=t.tx_id
+        WHERE i.batch_id=%s AND t.account_id=ANY(%s::uuid[])''',(str(batch),list(principal.accounts)))[0]
+    result['scope_note']='Cases linked to canonical transactions in this processing run and current assigned-account scope. Duplicate rows can link existing cases; these counts do not imply new case creation.'
+    return result
+
 def list_page(kind,principal,args):
-    limit,offset=page_args(args,{"status","account_id",*( {"tx_id","source_id","country","risk_level","batch_id","from","to","to_exclusive","min_amount","max_amount","scenario","review_status","tx_type","cross_border"} if kind=="transactions" else {"batch_id","from","to"} if kind=="batches" else {"queue","scenario","risk_level","assignee","sort","from","to","country","tx_type","cross_border"} if kind=="reviews" else {"scenario","risk_level","assignee","sort","from","to","country","tx_type","cross_border"} if kind=="risk-events" else {"batch_id","reason_code","from","to"} if kind=="quarantine" else set())})
+    limit,offset=page_args(args,{"status","account_id",*( {"tx_id","source_id","country","risk_level","batch_id","from","to","to_exclusive","min_amount","max_amount","scenario","review_status","tx_type","cross_border"} if kind=="transactions" else {"batch_id","from","to"} if kind=="batches" else {"queue","scenario","risk_level","assignee","sort","from","to","country","tx_type","cross_border","batch_id"} if kind=="reviews" else {"scenario","risk_level","assignee","sort","from","to","country","tx_type","cross_border","batch_id"} if kind=="risk-events" else {"batch_id","reason_code","from","to"} if kind=="quarantine" else set())})
     scope=list(principal.accounts)
     if args.get("account_id"): scope=[principal.account(args["account_id"])]
     selects={
       "transactions":(transaction_select(),"t.account_id=ANY(%s::uuid[])","t.tx_date DESC,t.tx_id DESC"),
       "risk-events":("SELECT r.*,t.account_id,t.amount,t.currency,t.tx_date,t.raw_file,t.batch_id,t.source_system,t.source_transaction_id,t.transaction_fingerprint,EXISTS(SELECT 1 FROM ingestion_records i WHERE i.canonical_tx_id=t.tx_id) AS has_occurrence,w.review_status,w.reviewer_subject,w.created_at AS review_created_at,w.version,p.result AS risk,assignment.assigned_at,assignment.assigned_by,escalation.escalated_at FROM risk_events r JOIN transactions t USING(tx_id) LEFT JOIN risk_reviews w USING(risk_event_id) LEFT JOIN processed_transactions p USING(tx_id)"+analyst.review_history_join(),"t.account_id=ANY(%s::uuid[])","r.risk_event_id DESC"),
-      "reviews":("SELECT w.*,r.tx_id,r.risk_score,t.account_id,t.amount,t.currency,t.tx_date,p.result AS risk,assignment.assigned_at,assignment.assigned_by,escalation.escalated_at FROM risk_reviews w JOIN risk_events r USING(risk_event_id) JOIN transactions t USING(tx_id) LEFT JOIN processed_transactions p USING(tx_id)"+analyst.review_history_join(),"t.account_id=ANY(%s::uuid[])","w.created_at,w.risk_event_id"),
+      "reviews":("SELECT w.*,r.tx_id,r.risk_score,t.account_id,t.amount,t.currency,t.tx_date,t.batch_id,t.source_system,t.source_transaction_id,t.raw_file,p.result AS risk,assignment.assigned_at,assignment.assigned_by,escalation.escalated_at FROM risk_reviews w JOIN risk_events r USING(risk_event_id) JOIN transactions t USING(tx_id) LEFT JOIN processed_transactions p USING(tx_id)"+analyst.review_history_join(),"t.account_id=ANY(%s::uuid[])","w.created_at,w.risk_event_id"),
       "quarantine":("SELECT q.*,a.source_file AS source_filename FROM quarantine_workflow q LEFT JOIN ingestion_records i ON i.batch_id=q.batch_id AND i.source_row=q.source_row LEFT JOIN ingestion_attempts a ON a.attempt_id=i.source_attempt_id","(q.candidate_account_id=ANY(%s::uuid[]) OR (%s AND NOT EXISTS(SELECT 1 FROM accounts a WHERE a.account_id=q.candidate_account_id)))","q.quarantined_at,q.quarantine_id"),
       "batches":("SELECT b.*,r.*,source.source_file AS source_filename FROM ingestion_batches b JOIN batch_reconciliation r USING(batch_id) LEFT JOIN LATERAL (SELECT source_file FROM ingestion_attempts a WHERE a.batch_id=b.batch_id ORDER BY a.received_at,a.attempt_id LIMIT 1) source ON TRUE","(NOT EXISTS(SELECT 1 FROM ingestion_records i LEFT JOIN transactions t ON t.tx_id=i.canonical_tx_id LEFT JOIN quarantine_cases q ON q.batch_id=i.batch_id AND q.source_row=i.source_row WHERE i.batch_id=b.batch_id AND (COALESCE(t.account_id,q.candidate_account_id) IS NULL OR NOT (COALESCE(t.account_id,q.candidate_account_id)=ANY(%s::uuid[])))) AND EXISTS(SELECT 1 FROM ingestion_records i WHERE i.batch_id=b.batch_id) OR %s)","b.received_at DESC,b.batch_id"),
       "audit":("SELECT h.*,t.account_id FROM risk_review_history h JOIN risk_events r USING(risk_event_id) JOIN transactions t USING(tx_id)","t.account_id=ANY(%s::uuid[])","h.changed_at DESC,h.risk_event_id,h.version"),
     }
     if kind not in selects: raise NotFound()
     if kind=="audit": principal.require("audit")
-    select,where,order=selects[kind];params=[scope]
+    select,where,order=selects[kind];params=[scope];queue_clause='';queue_params=[]
     if kind in {"quarantine","batches"}:
         from .upload_ownership import owned_batches
         owned=owned_batches(principal)
@@ -121,6 +145,8 @@ def list_page(kind,principal,args):
                 if stamp.tzinfo is None:raise ValueError('Timezone required')
                 where+=' AND '+column+op+'%s';params.append(stamp)
     if kind in {'transactions','reviews','risk-events'}:
+        if kind!='transactions' and args.get('batch_id'):
+            where+=' AND EXISTS(SELECT 1 FROM ingestion_records i WHERE i.canonical_tx_id=t.tx_id AND i.batch_id=%s)';params.append(str(uuid.UUID(args['batch_id'])))
         if args.get('cross_border'):
             if args['cross_border'] not in {'0','1'}:raise ValueError('Use 1 for cross-border or 0 for domestic')
             where+=' AND t.cross_border=%s';params.append(args['cross_border']=='1')
@@ -136,15 +162,20 @@ def list_page(kind,principal,args):
             where+=' AND w.review_status=%s';params.append(args['review_status'])
     if kind=="reviews":
         queue=args.get("queue")
-        if queue and queue not in {"mine","unassigned","open","high","over_sla","due_soon"}:raise ValueError("Invalid review queue")
+        aliases={'my_work':'mine','overdue':'over_sla','high_priority':'high','all_visible':None}
+        queue=aliases.get(queue,queue)
+        if queue and queue not in {"mine","unassigned","open","high","over_sla","due_soon","due_today","specialist_review","recently_completed"}:raise ValueError("Invalid review queue")
         if queue:
-            where+=" AND w.review_status IN ('OPEN','UNDER_REVIEW','ESCALATED')"
-            if queue=="mine":where+=" AND w.reviewer_subject=%s";params.append(principal.subject)
-            elif queue=="unassigned":where+=" AND w.reviewer_subject IS NULL"
-            elif queue=="high":where+=" AND p.result->>'risk_level'='High'"
+            queue_clause=" AND w.review_status IN ('OPEN','UNDER_REVIEW','ESCALATED')"
+            if queue=="specialist_review":queue_clause=" AND w.review_status='ESCALATED'"
+            elif queue=="recently_completed":queue_clause=" AND w.review_status IN ('CLEARED','CONFIRMED_RISK')"
+            elif queue=="mine":queue_clause+=" AND w.reviewer_subject=%s";queue_params.append(principal.subject)
+            elif queue=="unassigned":queue_clause+=" AND w.reviewer_subject IS NULL"
+            elif queue=="high":queue_clause+=" AND p.result->>'risk_level'='High'"
+            elif queue=='due_today':queue_clause+=' AND '+analyst.due_today_sql()
             elif queue in {'over_sla','due_soon'}:
                 due=analyst.due_sql();now=analyst.clock_sql()
-                where+=' AND '+due+('<='+now if queue=='over_sla' else '>'+now+' AND '+due+'<='+now+"+INTERVAL '"+str(analyst.policy()['due_soon_seconds'])+" seconds'")
+                queue_clause+=' AND '+due+('<='+now if queue=='over_sla' else '>'+now+' AND '+due+'<='+now+"+INTERVAL '"+str(analyst.policy()['due_soon_seconds'])+" seconds'")
     if kind in {"transactions","reviews","risk-events"}:
         level=args.get("risk_level")
         if level:
@@ -164,16 +195,22 @@ def list_page(kind,principal,args):
             orders={"oldest":"r.created_at,r.risk_event_id","newest":"r.created_at DESC,r.risk_event_id DESC","severity":"r.risk_score DESC,r.created_at,r.risk_event_id","amount":"t.amount DESC,r.created_at,r.risk_event_id","priority":analyst.priority_sql()}
             if sorting not in orders:raise ValueError("Invalid investigation sort")
             order=orders[sorting]
+            if kind=="reviews" and args.get("queue")=="recently_completed":order="w.reviewed_at DESC NULLS LAST,w.risk_event_id DESC"
     status=args.get("status")
     if status:
         valid={"risk-events":{"OPEN","UNDER_REVIEW","CLEARED","CONFIRMED_RISK","ESCALATED"},"reviews":{"OPEN","UNDER_REVIEW","CLEARED","CONFIRMED_RISK","ESCALATED"},"quarantine":{"OPEN","RESUBMITTED","RESOLVED","REJECTED"},"batches":{"RECEIVED","PROCESSING","QUEUED","COMPLETED","PARTIAL","FAILED"}}
         if status not in valid.get(kind,set()): raise ValueError("Unsupported status filter")
         field={"risk-events":"w.review_status","reviews":"w.review_status","quarantine":"q.workflow_status","batches":"r.status"}[kind]
         where+=" AND "+field+"=%s";params.append(status)
+    scope_where=where;scope_params=tuple(params)
+    where+=queue_clause;params+=queue_params
     rows=_query(select+" WHERE "+where+" ORDER BY "+order+" LIMIT %s OFFSET %s",tuple(params+[limit+1,offset]))
     if kind in {"reviews","risk-events"}:rows=analyst.decorate(rows)
     if kind=='transactions':
         for row in rows:analyst.assessment(row);analyst.review(row)
+    if kind in {'reviews','risk-events','transactions'}:
+        from .review_referral import decorate as referrals
+        referrals(rows)
     if kind=="quarantine":
         for row in rows:
             row["recovery_status"]="ACCEPTED" if row["workflow_status"]=="RESOLVED" else "CORRECTED" if row["workflow_status"]=="RESUBMITTED" else "REVALIDATION_FAILED" if row.get("correction_id") and row["workflow_status"]=="OPEN" else row["workflow_status"]
@@ -197,6 +234,9 @@ def list_page(kind,principal,args):
                 row["actor"]=events[-1]["actor"] if events else None
         for row in rows:
             row["display_status"]=row["status"] if row["counts_consistent"] else "AWAITING_RECONCILIATION" if row["rows_received"] is None else "RECONCILIATION_FAILED"
+    if kind in {'batches','quarantine','transactions','reviews','risk-events'}:
+        from .case_provenance import enrich
+        enrich(rows,principal,kind)
     meta={"count":len(rows[:limit]),"limit":limit,"offset":offset,"has_more":len(rows)>limit}
     meta['filters']={k:v for k,v in args.items() if k not in {'limit','offset'} and v}
     if kind in {'quarantine','batches','transactions'}:
@@ -204,7 +244,10 @@ def list_page(kind,principal,args):
     if kind in {"reviews","risk-events"}:
         counts=_query("SELECT count(*) AS total_count,count(*) FILTER(WHERE evidence.risk->>'risk_level'='High') AS high_count,count(*) FILTER(WHERE evidence.review_status IN ('OPEN','UNDER_REVIEW','ESCALATED')) AS active_count FROM ("+select+" WHERE "+where+") evidence",tuple(params))[0]
         meta.update(counts)
-        if kind=='reviews':meta['sla_configured']=analyst.policy()['enabled']
+        if kind=='reviews':
+            meta['sla_configured']=analyst.policy()['enabled']
+            meta['scope_counts']=review_workload(principal,scope_where,scope_params)
+            start,end=analyst.sast_day();meta['sast_day']={'from_utc':start.isoformat(),'to_utc':end.isoformat(),'timezone':'Africa/Johannesburg'}
     return {"data":rows[:limit],"meta":meta}
 
 def detail(identifier,principal):
@@ -215,6 +258,10 @@ def detail(identifier,principal):
     analyst.assessment(result)
     analyst.review(result)
     result["review_history"]=_query("SELECT h.* FROM risk_review_history h JOIN risk_events r USING(risk_event_id) WHERE r.tx_id=%s ORDER BY h.changed_at,h.version",(identifier,))
+    from .review_referral import project,history_projection
+    project(result,result['review_history']);result['review_history']=history_projection(result['review_history'])
+    from .case_provenance import enrich
+    enrich([result],principal,'transactions')
     result["alert_delivery"]=_query("SELECT delivery_key,delivery_state,sent_at,provider_message_id FROM alerts a JOIN risk_events r USING(risk_event_id) WHERE r.tx_id=%s",(identifier,))
     from .dynamo import get_item
     import os
@@ -239,7 +286,9 @@ def _body(body,fields):
 def _update_review(event,body,principal):
     principal.require("review")
     if type(event) is not int or event<1: raise ValueError("Invalid risk event identifier")
-    request,digest=_body(body,{"request_id","expected_version","status","notes","resolution_code"})
+    referred=isinstance(body,dict) and 'referral_target' in body
+    request,digest=_body(body,{"request_id","expected_version","status","notes","resolution_code",*({'referral_target'} if referred else set())})
+    if referred and body.get('status')!='ESCALATED':raise ValueError('Referral metadata is only valid for specialist review')
     if not isinstance(body["status"],str) or body["resolution_code"] is not None and not isinstance(body["resolution_code"],str): raise ValueError("Invalid review state values")
     if type(body["expected_version"]) is not int or body["expected_version"]<1: raise ValueError("Integer expected version required")
     conn=connection()
@@ -252,18 +301,30 @@ def _update_review(event,body,principal):
                 cur.execute("SELECT * FROM risk_review_history WHERE request_id=%s",(request,));prior=cur.fetchone()
                 if prior:
                     if prior["risk_event_id"]!=event or prior["actor_subject"]!=principal.subject or prior["request_digest"]!=digest: raise Conflict("Request identifier reused")
-                    return {"risk_event_id":event,"version":prior["version"],"review_status":prior["after_status"],"replayed":True}
+                    result={"risk_event_id":event,"version":prior["version"],"review_status":prior["after_status"],"replayed":True}
+                    if referred:
+                        from .review_referral import decode
+                        metadata=decode(dict(prior))
+                        if metadata:result.update(referral_target=metadata['target']['value'],referral_target_label=metadata['target']['label'])
+                    return result
                 if row["version"]!=body["expected_version"]: raise Conflict("Review changed; refresh before retry")
                 review_transition(row["review_status"],body["status"],role=principal.role,notes=body["notes"],resolution_code=body["resolution_code"])
                 if row["reviewer_subject"] is not None and row["reviewer_subject"]!=principal.subject: raise PermissionError("Review is assigned to another analyst")
                 if row["review_status"]=="UNDER_REVIEW" and not row["reviewer_subject"]: raise Conflict("Review must be claimed before decision")
+                notes=body['notes'];referral=None
+                if referred:
+                    from .review_referral import target,encode
+                    referral=target(body['referral_target'],principal,row['account_id'])
+                    notes=encode(body,principal,referral,digest)
                 terminal=body["status"] in {"CLEARED","CONFIRMED_RISK","ESCALATED"}
                 cur.execute("""UPDATE risk_reviews SET review_status=%s,reviewer_subject=%s,reviewed_by=%s,reviewed_at=%s,
                     review_notes=%s,resolution_code=%s,change_actor=%s,change_request_id=%s,request_digest=%s,version=version+1
                     WHERE risk_event_id=%s RETURNING version""",
                     (body["status"],principal.subject,principal.subject if terminal else None,datetime.now(timezone.utc) if terminal else None,
-                     body["notes"],body["resolution_code"] if terminal else None,principal.subject,request,digest,event))
-                return {"risk_event_id":event,"version":cur.fetchone()["version"],"review_status":body["status"]}
+                     notes,body["resolution_code"] if terminal else None,principal.subject,request,digest,event))
+                result={"risk_event_id":event,"version":cur.fetchone()["version"],"review_status":body["status"]}
+                if referral:result.update(referral_target=referral['value'],referral_target_label=referral['label'])
+                return result
     finally: conn.close()
 
 def _correct_case(identifier,body,principal):

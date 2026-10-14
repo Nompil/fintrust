@@ -312,6 +312,12 @@ def review_assignees():
     from .review_assignment import candidates
     return jsonify({"data":candidates(g.principal)})
 
+
+@app.get('/v1/reviews/<int:event>/referral-targets')
+def referral_targets(event):
+    from .review_referral import options
+    return jsonify({'data':options(event,g.principal)})
+
 @app.post("/v1/reviews/<int:event>/assignment")
 def review_assignment(event):
     from .review_assignment import assign

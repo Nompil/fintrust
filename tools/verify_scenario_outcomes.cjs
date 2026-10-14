@@ -12,7 +12,7 @@ await p.getByLabel('Severity',{exact:true}).selectOption('High');await p.getByRo
 const ref=await p.evaluate(id=>FinTrustDisplay.reference('risk_event_id',id),test.event_id);
 await p.locator('#content tr').filter({hasText:ref}).getByRole('button',{name:'Investigate',exact:true}).click();
 let drawer=p.locator('#investigation-drawer');await drawer.getByRole('button',{name:'Claim Review',exact:true}).click();await drawer.locator('textarea').waitFor();
-await drawer.locator('textarea').fill('Controlled scenario: merchant and source evidence checked');await drawer.locator('form select').selectOption(test.status);
+await drawer.locator('textarea').fill('Controlled scenario: merchant and source evidence checked');await drawer.getByLabel('Investigation action').selectOption(test.status);if(test.status==='ESCALATED')await drawer.locator('#referral-target').selectOption('SPECIALIST_REVIEW');
 const done=p.waitForResponse(r=>r.request().method()==='POST'&&r.url().endsWith('/transition')&&r.status()===200);
 await drawer.getByRole('button',{name:'Save investigation',exact:true}).click();await done;
 await p.waitForFunction(expected=>document.querySelector('#investigation-drawer')?.textContent.includes(expected),test.status);

@@ -1,5 +1,7 @@
 # FinTrust authoritative flow audit and implementation gap plan
 
+Current continuation: the wider Analyst workspace adds SAST work views, composed Overview/Insights, source provenance and a recorded specialist-referral destination while preserving the existing assignment boundary. See [current case-workspace evidence](../EVIDENCE/12-e2e/elevated-case-workspace/RESULT.md). Earlier checkpoints below retain their original source/test/deployment boundaries.
+
 Scope: actual source at the repository-hardening checkpoint; no AWS inventory or mutations in this task. Local verification is not live AWS integration. Existing AWS resource states are historical evidence, not freshly asserted here. Phase 2 adds durable lifecycle audit/API reads; frozen scoring, identity and review rules remain unchanged. Runtime module names and deployment handlers remain stable.
 
 Release 1 actual flow: authenticated local upload -> mocked S3 -> direct consumer helper; cloud design: input S3 -> ingest file parsing -> FIFO candidate envelopes -> database-aware validation / quarantine OR accepted ledger+frozen scoring -> DynamoDB projection -> High-only alert delivery. Review work is created transactionally for Medium/High and does not wait for SES. Each scored transaction has a risk_events record, including Low. The requested diagram must not be treated as authority over these frozen semantics.

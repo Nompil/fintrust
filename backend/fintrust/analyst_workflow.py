@@ -21,6 +21,17 @@ def clock_sql():
     return "TIMESTAMPTZ '"+_time(now_utc()).astimezone(timezone.utc).isoformat()+"'"
 
 
+def sast_day(now=None):
+    current=_time(now or now_utc()).astimezone(timezone(timedelta(hours=2)))
+    start=current.replace(hour=0,minute=0,second=0,microsecond=0)
+    return start.astimezone(timezone.utc),(start+timedelta(days=1)).astimezone(timezone.utc)
+
+
+def due_today_sql(due=None):
+    due=due or due_sql();start,end=sast_day()
+    return '('+due+">=TIMESTAMPTZ '"+start.isoformat()+"' AND "+due+"<TIMESTAMPTZ '"+end.isoformat()+"')"
+
+
 def policy():
     enabled = os.getenv('FINTRUST_REVIEW_SLA_ENABLED', 'true').lower()
     if enabled not in {'true', 'false'}:
@@ -172,6 +183,11 @@ def review(row, now=None, history=None, users=None):
     elif state=='WITHIN_SLA': label='Within SLA · Due in '+_duration(remaining)
     else: label={'NOT_APPLICABLE':'Not applicable','NOT_CONFIGURED':'Not configured','NOT_RECORDED':'Not recorded'}[state]
     row['sla_label']=label
+    start_day,end_day=sast_day(now)
+    row['due_today']=bool(active and due and start_day<=due<end_day)
+    row['priority']=('OVERDUE' if row['over_sla'] else 'HIGH_PRIORITY' if active and level=='High'
+                     else 'DUE_SOON' if row['due_soon'] else 'SPECIALIST_REVIEW' if status=='ESCALATED'
+                     else 'MEDIUM_PRIORITY' if active and level=='Medium' else 'CLOSED' if status in {'CLEARED','CONFIRMED_RISK'} else 'NOT_RECORDED')
     return row
 
 

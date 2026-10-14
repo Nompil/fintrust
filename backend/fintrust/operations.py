@@ -138,7 +138,8 @@ def upload_csv(filename,payload,principal):
     # never adopt a historical or another Analyst's source file.
     from .upload_ownership import claim
     if not api._query("SELECT 1 FROM ingestion_batches WHERE batch_id=%s",(batch["batch_id"],)):
-        claim(batch["batch_id"],principal,{"bucket":bucket,"key":key,"version":response["VersionId"],"sha256":digest})
+        claim(batch["batch_id"],principal,{"bucket":bucket,"key":key,"version":response["VersionId"],"sha256":digest,
+            "filename":filename,"actor_role":principal.role,"channel":"MANUAL_UPLOAD"})
     items=envelopes(bucket,key,payload,version=response["VersionId"],batch=batch)
     exists=api._query("SELECT 1 FROM ingestion_batches WHERE batch_id=%s AND publication_complete",(batch["batch_id"],))
     if exists:
@@ -150,4 +151,9 @@ def upload_csv(filename,payload,principal):
     status="DUPLICATE_FILE" if exists else state["status"]
     from .frontend_workflows import record_upload
     record_upload(principal,filename,"UPLOAD_REPLAY" if exists else "UPLOAD_ACCEPTED",status,batch_id=batch["batch_id"])
-    return {"filename":filename,"batch_id":batch["batch_id"],"upload_status":status,"reconciliation":state,"notification":notification(status,state),"execution":"local synchronous real worker; AWS services mocked"}
+    from .case_provenance import source
+    provenance=source(batch['batch_id'],principal)
+    return {"filename":filename,"batch_id":batch["batch_id"],"upload_status":status,"reconciliation":state,"notification":notification(status,state),"execution":"local synchronous real worker; AWS services mocked",
+        'source_provenance':provenance,'submitted_by':provenance.get('submitted_by'),'submitted_at':provenance.get('submitted_at'),
+        'original_filename':provenance.get('original_filename'),'submission_channel':provenance.get('submission_channel'),
+        'risk_event_counts':api.run_risk_counts(batch['batch_id'],principal)}
