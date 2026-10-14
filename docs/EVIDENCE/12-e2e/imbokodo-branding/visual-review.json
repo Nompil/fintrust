@@ -1,0 +1,34 @@
+{
+  "status": "PASSED",
+  "source_parent_commit": "ec0f78c7a518218e076419cf045e1ccacedd2da4",
+  "viewports": [
+    1366,
+    390
+  ],
+  "screenshots": [
+    "00-sign-in-1366.png",
+    "00-sign-in-390.png",
+    "01-overview-1366.png",
+    "01-overview-390.png",
+    "03-upload-1366.png",
+    "03-upload-390.png",
+    "06-insights-top-1366.png",
+    "06-insights-top-390.png"
+  ],
+  "screenshots_are_synthetic_test_data": true,
+  "credentials": "isolated synthetic fixtures only",
+  "aws": "not accessed; mocked in browser journey",
+  "browser_checks": [
+    "Imbokodo sign-in identity, access copy, favicon mark and desktop/mobile layout",
+    "Composed Overview; five authoritative work counters; risk ring, trend, rankings and processing segments",
+    "All eight work views use scoped backend queues and full-scope counters",
+    "CSV requirements/sample/clear-selection; receipt has immutable uploader; zero-row action disabled",
+    "Insights has four business bands, activity/HIGH area trends, four real rings, rankings and reconciled segments",
+    "Claim → note → named referral → separate Administrator transfer; immutable audit and existing two-hour SLA",
+    "Invalid CSV row → filtered quarantine; no accepted financial entry",
+    "Auditor can inspect journey; no financial mutation controls",
+    "Maintainer has no financial work or referral authority"
+  ],
+  "browser_errors": [],
+  "visual_inspection": "Desktop and mobile sign-in, Overview, Upload and Insights screenshots reviewed; no branding inconsistency, clipping or horizontal page overflow observed."
+}

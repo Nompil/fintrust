@@ -18,10 +18,10 @@ function downloadSampleCsv(){
  const account=byId("account").value||principal.accounts[0];if(!principal.accounts.includes(account))return;
  const identity=currentCsvContract.identity_one_of.includes("source_reference")?"source_reference":currentCsvContract.identity_one_of[0];
  const fields=[...currentCsvContract.required,identity,...currentCsvContract.optional.filter(x=>x==="merchant")];
- const values={account_id:account,amount:"10.00",country:"ZA",currency:"ZAR",source_system:"fintrust-sample",tx_date:new Date().toISOString(),tx_type:"debit",merchant:"Sample merchant",[identity]:"SAMPLE-"+crypto.randomUUID()};
+ const values={account_id:account,amount:"10.00",country:"ZA",currency:"ZAR",source_system:"imbokodo-sample",tx_date:new Date().toISOString(),tx_type:"debit",merchant:"Sample merchant",[identity]:"SAMPLE-"+crypto.randomUUID()};
  const quote=value=>'"'+String(value??"").replaceAll('"','""')+'"';
  const csv=fields.map(quote).join(",")+"\r\n"+fields.map(k=>quote(values[k])).join(",")+"\r\n";
- const url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));const link=node("a","");link.href=url;link.download="fintrust-sample-transactions.csv";document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ const url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));const link=node("a","");link.href=url;link.download="imbokodo-sample-transactions.csv";document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 
 function selectedAccountLabel(){const select=byId("account");return select.selectedOptions[0]?.textContent||"All assigned accounts";}
