@@ -31,3 +31,10 @@ main:not([data-page="Upload Transactions"]) #upload-notice{display:flex;align-it
 .earlier-upload-notices{margin-top:10px}.earlier-upload-notices>strong{font-size:10px;color:#8a775e}.earlier-upload-notices article{font-size:10.5px;padding:8px 12px;margin:6px 0;border-radius:4px;line-height:1.5}main:not([data-page="Upload Transactions"]) .earlier-upload-notices{display:none}
 main[data-page="My Work"] .investigation-filters{flex-direction:row;position:static;align-items:end}main[data-page="My Work"] .filter-rail{position:static}.processing-history-compact table{min-width:1060px}.processing-history-compact td:nth-child(2){min-width:230px;max-width:300px;white-space:normal;overflow-wrap:anywhere}.processing-history-compact td:nth-child(4){min-width:150px}.processing-history-compact td:nth-child(7){min-width:200px;max-width:260px;white-space:normal;font-size:10px;line-height:1.7}.processing-history-compact th:last-child,.processing-history-compact td:last-child{position:sticky;right:0;background:#fff;box-shadow:-1px 0 #e1e8ef;min-width:110px}.processing-history-compact th:last-child{background:#edf3f7}.processing-history-compact td:first-child{min-width:135px}.processing-history-compact td:last-child button{font-size:10px;min-height:30px;padding:6px 9px}
 @media(prefers-reduced-motion:reduce){button{transition:none}}
+.case-queue th:nth-child(8),.case-queue td:nth-child(8){min-width:144px;width:144px}
+.case-queue th:nth-child(9),.case-queue td:nth-child(9){min-width:112px;width:112px}
+.case-queue th:nth-child(8),.case-queue th:nth-child(9){white-space:nowrap}
+.case-queue td:nth-child(8) .status-badge,.case-queue td:nth-child(9) .priority-badge{max-width:100%;white-space:normal;overflow-wrap:normal;line-height:1.4}
+.case-queue th:last-child,.case-queue td:last-child{min-width:168px;width:168px}
+.case-queue td:last-child button{width:100%;white-space:normal;line-height:1.4}
+@media(max-width:760px){.case-queue th:nth-child(8),.case-queue td:nth-child(8){min-width:120px;width:120px}.case-queue th:nth-child(9),.case-queue td:nth-child(9){min-width:100px;width:100px}.case-queue th:last-child,.case-queue td:last-child{min-width:126px;width:126px}}
