@@ -2,7 +2,7 @@
 import hashlib
 import json
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from psycopg2.extras import RealDictCursor, Json
 from . import release_workflow as workflow
 from .release_contract import review_transition
@@ -396,12 +396,15 @@ def _correct_case(identifier,body,principal):
 
 
 def report(principal,args):
-    limit,offset=page_args(args,{"account_id","from","to","currency"})
+    limit,offset=page_args(args,{"account_id","from","to","currency","date_timezone"})
     scope=[principal.account(args["account_id"])] if args.get("account_id") else list(principal.accounts)
+    date_timezone=args.get("date_timezone","UTC")
+    if date_timezone not in {"UTC","Africa/Johannesburg"}:raise ValueError("Unsupported report date timezone")
+    local_zone=timezone(timedelta(hours=2)) if date_timezone=="Africa/Johannesburg" else timezone.utc
     where="account_id=ANY(%s::uuid[])";params=[scope];dates={}
     for key,operator in (("from",">="),("to","<")):
         if args.get(key):
-            try:value=datetime.strptime(args[key],"%Y-%m-%d").replace(tzinfo=timezone.utc)
+            try:value=datetime.strptime(args[key],"%Y-%m-%d").replace(tzinfo=local_zone).astimezone(timezone.utc)
             except ValueError:raise ValueError("Report date must be YYYY-MM-DD") from None
             dates[key]=value;where+=" AND tx_date"+operator+"%s";params.append(value)
     if len(dates)==2 and dates["from"]>=dates["to"]:raise ValueError("Report end must be after start")
@@ -412,7 +415,8 @@ def report(principal,args):
     rows=_query("""SELECT account_id::text,currency,count(*) AS transactions,
         sum(CASE WHEN tx_type='credit' THEN amount ELSE -amount END)::text AS net_movement,
         sum(amount)::text AS gross_amount FROM transactions WHERE """+where+" GROUP BY account_id,currency ORDER BY account_id,currency LIMIT %s OFFSET %s",tuple(params+[limit+1,offset]))
-    return {"data":rows[:limit],"meta":{"limit":limit,"offset":offset,"has_more":len(rows)>limit},"meaning":"Accepted ledger net movement from zero by account/currency; not current balances; no FX conversion", "filters":{k:args[k] for k in ("account_id","from","to","currency") if args.get(k)}}
+    currencies=_query("SELECT DISTINCT currency FROM transactions WHERE account_id=ANY(%s::uuid[]) ORDER BY currency",(scope,))
+    return {"data":rows[:limit],"meta":{"limit":limit,"offset":offset,"has_more":len(rows)>limit,"currencies":[r['currency'] for r in currencies],"date_timezone":date_timezone},"meaning":"Accepted ledger net movement from zero by account/currency; not current balances; no FX conversion", "filters":{k:args[k] for k in ("account_id","from","to","currency","date_timezone") if args.get(k)}}
 
 
 def metrics(principal):
