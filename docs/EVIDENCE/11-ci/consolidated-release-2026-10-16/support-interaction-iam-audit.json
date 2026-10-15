@@ -1,0 +1,120 @@
+{
+  "change": "Support interaction permissions required by the displayed case-creation workflow",
+  "before": {
+    "PolicyVersion": {
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "ReadSupportCaseConsole",
+            "Effect": "Allow",
+            "Action": [
+              "support:DescribeSupportLevel",
+              "support:DescribeCases",
+              "support:SearchForCases",
+              "support:DescribeCaseAttributes",
+              "support:DescribeCommunication",
+              "support:DescribeCommunications",
+              "support:DescribeCreateCaseOptions",
+              "support:DescribeIssueTypes",
+              "support:DescribeServices",
+              "support:DescribeSeverityLevels",
+              "support:DescribeSupportedLanguages",
+              "support:ListInteractions",
+              "support:GetInteraction",
+              "support:ListInteractionEntries",
+              "support-console:GetAccountState",
+              "support-console:GetAccountGovCloudEnabled",
+              "support-console:GetCaseDraft",
+              "support-console:GetBanner",
+              "support-console:DescribeDynamicHelp",
+              "support-console:CheckSubscription"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Sid": "CreateAndFollowUpQuotaCase",
+            "Effect": "Allow",
+            "Action": [
+              "support:CreateCase",
+              "support:AddCommunicationToCase",
+              "support-console:CreateCaseDraft"
+            ],
+            "Resource": "*"
+          }
+        ]
+      },
+      "VersionId": "v1",
+      "IsDefaultVersion": true,
+      "CreateDate": "2026-10-15T23:23:10+00:00"
+    }
+  },
+  "policy": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "ReadSupportCaseConsole",
+        "Effect": "Allow",
+        "Action": [
+          "support:DescribeSupportLevel",
+          "support:DescribeCases",
+          "support:SearchForCases",
+          "support:DescribeCaseAttributes",
+          "support:DescribeCommunication",
+          "support:DescribeCommunications",
+          "support:DescribeCreateCaseOptions",
+          "support:DescribeIssueTypes",
+          "support:DescribeServices",
+          "support:DescribeSeverityLevels",
+          "support:DescribeSupportedLanguages",
+          "support:ListInteractions",
+          "support:GetInteraction",
+          "support:ListInteractionEntries",
+          "support-console:GetAccountState",
+          "support-console:GetAccountGovCloudEnabled",
+          "support-console:GetCaseDraft",
+          "support-console:GetBanner",
+          "support-console:DescribeDynamicHelp",
+          "support-console:CheckSubscription"
+        ],
+        "Resource": "*"
+      },
+      {
+        "Sid": "CreateAndFollowUpQuotaCase",
+        "Effect": "Allow",
+        "Action": [
+          "support:CreateCase",
+          "support:AddCommunicationToCase",
+          "support-console:CreateCaseDraft"
+        ],
+        "Resource": "*"
+      },
+      {
+        "Sid": "QuotaReviewInteraction",
+        "Effect": "Allow",
+        "Action": [
+          "support:StartInteraction",
+          "support:UpdateInteraction",
+          "support-console:GetIssueClassificationPredictions",
+          "support-console:GetIssueTextSummary"
+        ],
+        "Resource": "*"
+      }
+    ]
+  },
+  "result": {
+    "PolicyVersion": {
+      "VersionId": "v2",
+      "IsDefaultVersion": true,
+      "CreateDate": "2026-10-15T23:34:46+00:00"
+    }
+  },
+  "access_analyzer_findings": [],
+  "admin_used_for": "IAM administration only",
+  "case_submitted": false,
+  "quota_changed": false,
+  "support_plan_changed": false,
+  "devops_agent_permissions_granted": false,
+  "paid_resources_created": false,
+  "cleanup": "Detach/delete FinTrustQuotaSupport after case resolution and follow-up; retain audit."
+}
