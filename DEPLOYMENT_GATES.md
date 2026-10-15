@@ -32,3 +32,12 @@ Detailed receipts in this branch: `docs/EVIDENCE/11-ci/consolidated-release-2026
 5. Enable consumers and the raw S3 notification only when the downstream system is ready. Run a real ingestion-to-scoring-to-persistence-to-authorized-retrieval-to-alert/audit E2E. System completion remains blocked until it passes.
 
 No live RDS changes or live E2E have been performed by this verification.
+
+## Post-freeze live checks
+
+- Runtime source frozen as commit `3368f4c31373291d11d5ef852884abb669f6dca8` on `release/fintrust-consolidated-20261016`. This does not deploy or switch the running local checkout.
+- Deployer identity reauthenticated and verified. Existing foundation/ingest stacks are present and healthy.
+- Quota read permissions were missing. Admin was used only to publish FinTrustConsoleReadOnly v4, adding exact-quota GetServiceQuota/history and region-bounded Lambda GetAccountSettings. Existing v3 grants were preserved. Access Analyzer returned no findings; all three new reads succeeded with deployer after propagation.
+- Regional quota is still 10, unreserved quota 10, and function count 1. Service Quotas request history is empty. This does not prove there is no separate AWS Support case. No quota write was attempted.
+- Existing foundation outputs are mapped in `docs/EVIDENCE/11-ci/consolidated-release-2026-10-16/live-deployment-inputs.json`. Unresolved values remain explicit; the worksheet cannot be used as an execution-ready parameter file.
+- The separate AWS Support console session requires interactive sign-in. The Support case remains a draft; paid support, a 1,001 quota request and endpoint recreation remain unauthorized.

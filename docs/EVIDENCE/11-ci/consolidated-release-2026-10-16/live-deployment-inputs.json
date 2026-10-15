@@ -1,0 +1,268 @@
+{
+  "status": "WORKSHEET_NOT_EXECUTABLE",
+  "account": "966467878406",
+  "region": "af-south-1",
+  "runtime_release_commit": "3368f4c31373291d11d5ef852884abb669f6dca8",
+  "artifact_sha256": "ebf94636046662736b6f77bec1616bd122e0f14c856e189f1d90fc9fa77ea1ff",
+  "artifact_uploaded": false,
+  "aws_changes": false,
+  "existing_outputs": {
+    "network": {
+      "StackName": "fintrust-network-dev",
+      "StackStatus": "CREATE_COMPLETE",
+      "Outputs": [
+        {
+          "OutputKey": "DatabaseSubnet1",
+          "OutputValue": "subnet-04dc0f576867d7a6c"
+        },
+        {
+          "OutputKey": "DatabaseSubnets",
+          "OutputValue": "fintrust-db-dev"
+        },
+        {
+          "OutputKey": "DatabaseSubnet2",
+          "OutputValue": "subnet-084deb13f49a36064"
+        },
+        {
+          "OutputKey": "ApplicationSubnet1",
+          "OutputValue": "subnet-0c2d87e8a83361e30"
+        },
+        {
+          "OutputKey": "S3Endpoint",
+          "OutputValue": "vpce-0b59921927bd0e852"
+        },
+        {
+          "OutputKey": "ApplicationSubnet2",
+          "OutputValue": "subnet-0328276227fa30ead"
+        },
+        {
+          "OutputKey": "Vpc",
+          "OutputValue": "vpc-0aba008bb360f5147"
+        },
+        {
+          "OutputKey": "ApplicationRoutes",
+          "OutputValue": "rtb-01b4916c13d2894a5"
+        },
+        {
+          "OutputKey": "LambdaGroup",
+          "OutputValue": "sg-0850bd798bb9505e2"
+        },
+        {
+          "OutputKey": "DynamodbEndpoint",
+          "OutputValue": "vpce-0647afafb32f34e6d"
+        },
+        {
+          "OutputKey": "DatabaseRoutes",
+          "OutputValue": "rtb-008ec3760f6ccd9f0"
+        },
+        {
+          "OutputKey": "DatabaseGroup",
+          "OutputValue": "sg-01644a4c9f2c44162"
+        }
+      ]
+    },
+    "storage": {
+      "StackName": "fintrust-storage-dev",
+      "StackStatus": "CREATE_COMPLETE",
+      "Outputs": [
+        {
+          "OutputKey": "RawBucket",
+          "OutputValue": "fintrust-raw-966467878406-af-south-1-dev"
+        },
+        {
+          "OutputKey": "ReportsBucket",
+          "OutputValue": "fintrust-reports-966467878406-af-south-1-dev"
+        },
+        {
+          "OutputKey": "QuarantineBucket",
+          "OutputValue": "fintrust-quarantine-966467878406-af-south-1-dev"
+        },
+        {
+          "OutputKey": "DataKeyArn",
+          "OutputValue": "arn:aws:kms:af-south-1:966467878406:key/598a4158-2cc6-4946-af24-512784a276c8"
+        }
+      ]
+    },
+    "database": {
+      "StackName": "fintrust-database-dev",
+      "StackStatus": "CREATE_COMPLETE",
+      "Outputs": [
+        {
+          "OutputKey": "DatabasePort",
+          "OutputValue": "5432"
+        },
+        {
+          "OutputKey": "MasterSecretArn",
+          "OutputValue": "arn:aws:secretsmanager:af-south-1:966467878406:secret:rds!db-e93012ae-0d14-4225-bdc3-988f4d98f72a-BbEGMn"
+        },
+        {
+          "OutputKey": "DatabaseHost",
+          "OutputValue": "fintrust-ledger-dev.cv84aee6u6up.af-south-1.rds.amazonaws.com"
+        },
+        {
+          "OutputKey": "DatabaseResourceId",
+          "OutputValue": "db-QZ3JN4H22YOMU7VLI22RL2IUYQ"
+        }
+      ]
+    },
+    "messaging": {
+      "StackName": "fintrust-messaging-dev",
+      "StackStatus": "CREATE_COMPLETE",
+      "Outputs": [
+        {
+          "OutputKey": "TransactionsArn",
+          "OutputValue": "arn:aws:sqs:af-south-1:966467878406:fintrust-transactions-dev.fifo"
+        },
+        {
+          "OutputKey": "TransactionDLQUrl",
+          "OutputValue": "https://sqs.af-south-1.amazonaws.com/966467878406/fintrust-transactions-dlq-dev.fifo"
+        },
+        {
+          "OutputKey": "IngestFailuresArn",
+          "OutputValue": "arn:aws:sqs:af-south-1:966467878406:fintrust-ingest-failures-dev"
+        },
+        {
+          "OutputKey": "RiskTableName",
+          "OutputValue": "fintrust-risk-dev"
+        },
+        {
+          "OutputKey": "ReportFailuresArn",
+          "OutputValue": "arn:aws:sqs:af-south-1:966467878406:fintrust-report-failures-dev"
+        },
+        {
+          "OutputKey": "RiskStreamArn",
+          "OutputValue": "arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev/stream/2026-10-08T08:19:35.208"
+        },
+        {
+          "OutputKey": "AlertFailuresUrl",
+          "OutputValue": "https://sqs.af-south-1.amazonaws.com/966467878406/fintrust-alert-failures-dev"
+        },
+        {
+          "OutputKey": "TransactionsUrl",
+          "OutputValue": "https://sqs.af-south-1.amazonaws.com/966467878406/fintrust-transactions-dev.fifo"
+        },
+        {
+          "OutputKey": "IngestFailuresUrl",
+          "OutputValue": "https://sqs.af-south-1.amazonaws.com/966467878406/fintrust-ingest-failures-dev"
+        },
+        {
+          "OutputKey": "TransactionDLQArn",
+          "OutputValue": "arn:aws:sqs:af-south-1:966467878406:fintrust-transactions-dlq-dev.fifo"
+        },
+        {
+          "OutputKey": "RiskTableArn",
+          "OutputValue": "arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev"
+        },
+        {
+          "OutputKey": "ReportFailuresUrl",
+          "OutputValue": "https://sqs.af-south-1.amazonaws.com/966467878406/fintrust-report-failures-dev"
+        },
+        {
+          "OutputKey": "AlertFailuresArn",
+          "OutputValue": "arn:aws:sqs:af-south-1:966467878406:fintrust-alert-failures-dev"
+        }
+      ]
+    }
+  },
+  "parameters": {
+    "ses-identities.json": {},
+    "application-functions.json": {
+      "CodeBucket": "fintrust-reports-966467878406-af-south-1-dev",
+      "CodeKey": null,
+      "CodeSha256": "6/lGNgRmYnNrb3e+wWFr0SLg8UyFbhifHZD8n6d+of8=",
+      "QuarantineBucket": "fintrust-quarantine-966467878406-af-south-1-dev",
+      "ReportsBucket": "fintrust-reports-966467878406-af-south-1-dev",
+      "RiskTable": "fintrust-risk-dev",
+      "RiskStreamArn": "arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev/stream/2026-10-08T08:19:35.208",
+      "CognitoUserPoolId": null,
+      "CognitoAppClientId": null,
+      "CognitoDomain": null,
+      "CognitoRedirectUri": null,
+      "CognitoLogoutUri": null,
+      "CognitoUserScopeTable": null,
+      "CorsAllowedOrigins": null,
+      "SubnetIds": [
+        "subnet-0c2d87e8a83361e30",
+        "subnet-0328276227fa30ead"
+      ],
+      "SecurityGroupIds": [
+        "sg-0850bd798bb9505e2"
+      ],
+      "ExistingTransactionsArn": "arn:aws:sqs:af-south-1:966467878406:fintrust-transactions-dev.fifo",
+      "ExistingAlertFailuresArn": "arn:aws:sqs:af-south-1:966467878406:fintrust-alert-failures-dev",
+      "ExistingReportFailuresArn": "arn:aws:sqs:af-south-1:966467878406:fintrust-report-failures-dev",
+      "ExistingReportFailuresUrl": "https://sqs.af-south-1.amazonaws.com/966467878406/fintrust-report-failures-dev",
+      "CodeObjectVersion": null
+    },
+    "monitoring.json": {
+      "DbInstanceIdentifier": "fintrust-ledger-dev",
+      "TransactionsQueueName": "fintrust-transactions-dev.fifo",
+      "TransactionDlqName": "fintrust-transactions-dlq-dev.fifo",
+      "IngestFailuresName": "fintrust-ingest-failures-dev",
+      "AlertFailuresName": "fintrust-alert-failures-dev",
+      "ReportFailuresName": "fintrust-report-failures-dev"
+    },
+    "cognito.json": {
+      "StageName": null,
+      "ApiExecutionRoleArn": null,
+      "DomainPrefix": null,
+      "CallbackUrls": null,
+      "LogoutUrls": null
+    },
+    "api.json": {
+      "ApiFunctionName": null,
+      "UserPoolArn": null
+    },
+    "api-shell.json": {}
+  },
+  "unresolved_parameters": {
+    "ses-identities.json": [],
+    "application-functions.json": [
+      "CodeKey",
+      "CognitoUserPoolId",
+      "CognitoAppClientId",
+      "CognitoDomain",
+      "CognitoRedirectUri",
+      "CognitoLogoutUri",
+      "CognitoUserScopeTable",
+      "CorsAllowedOrigins",
+      "CodeObjectVersion"
+    ],
+    "monitoring.json": [],
+    "cognito.json": [
+      "StageName",
+      "ApiExecutionRoleArn",
+      "DomainPrefix",
+      "CallbackUrls",
+      "LogoutUrls"
+    ],
+    "api.json": [
+      "ApiFunctionName",
+      "UserPoolArn"
+    ],
+    "api-shell.json": []
+  },
+  "activation_flags": {
+    "EnableFunctions": "false",
+    "EnableConsumers": "false",
+    "EnableMonthlyReports": "false",
+    "EnableAlarms": "false",
+    "EnableScopeRecovery": "false",
+    "CreateSenderIdentity": "false",
+    "CreateRecipientIdentity": "false"
+  },
+  "db_connection": {
+    "host": "fintrust-ledger-dev.cv84aee6u6up.af-south-1.rds.amazonaws.com",
+    "port": 5432,
+    "resource_id": "db-QZ3JN4H22YOMU7VLI22RL2IUYQ",
+    "database_name": "UNVERIFIED",
+    "live_migration_executed": false
+  },
+  "notes": [
+    "Nulls are intentional unresolved inputs; this is not a CloudFormation CLI parameter file.",
+    "Monitoring DB identifier is inferred from the recorded template/host, not a fresh RDS DescribeDBInstances result.",
+    "CodeSha256 is bound to the locally verified ZIP; no S3 object key/version is asserted until upload is approved and verified.",
+    "Runtime roles, DB users/grants and SSM values remain separate deployment prerequisites.",
+    "No template deployment or activation is authorized by this worksheet."
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "runtime_release_commit": "3368f4c31373291d11d5ef852884abb669f6dca8",
+  "source_manifest_sha256": "45f9cccfd803c0d73c473f51fe764041952846b56a809d797a4dfa09627fc717",
+  "artifact_sha256": "ebf94636046662736b6f77bec1616bd122e0f14c856e189f1d90fc9fa77ea1ff",
+  "branch": "release/fintrust-consolidated-20261016",
+  "running_checkout_untouched": true,
+  "published": false,
+  "live_e2e_passed": false
+}
