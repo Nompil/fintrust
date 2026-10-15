@@ -1,0 +1,118 @@
+{
+  "account": "966467878406",
+  "purpose": "Unblock the owner-authorized Lambda concurrency quota Support review",
+  "admin_used_for": "IAM policy creation and role attachment only",
+  "policy": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "ReadSupportCaseConsole",
+        "Effect": "Allow",
+        "Action": [
+          "support:DescribeSupportLevel",
+          "support:DescribeCases",
+          "support:SearchForCases",
+          "support:DescribeCaseAttributes",
+          "support:DescribeCommunication",
+          "support:DescribeCommunications",
+          "support:DescribeCreateCaseOptions",
+          "support:DescribeIssueTypes",
+          "support:DescribeServices",
+          "support:DescribeSeverityLevels",
+          "support:DescribeSupportedLanguages",
+          "support:ListInteractions",
+          "support:GetInteraction",
+          "support:ListInteractionEntries",
+          "support-console:GetAccountState",
+          "support-console:GetAccountGovCloudEnabled",
+          "support-console:GetCaseDraft",
+          "support-console:GetBanner",
+          "support-console:DescribeDynamicHelp",
+          "support-console:CheckSubscription"
+        ],
+        "Resource": "*"
+      },
+      {
+        "Sid": "CreateAndFollowUpQuotaCase",
+        "Effect": "Allow",
+        "Action": [
+          "support:CreateCase",
+          "support:AddCommunicationToCase",
+          "support-console:CreateCaseDraft"
+        ],
+        "Resource": "*"
+      }
+    ]
+  },
+  "creation": {
+    "Policy": {
+      "PolicyName": "FinTrustQuotaSupport",
+      "PolicyId": "ANPA6CBPZPYDLXOINW7TT",
+      "Arn": "arn:aws:iam::966467878406:policy/FinTrustQuotaSupport",
+      "Path": "/",
+      "DefaultVersionId": "v1",
+      "AttachmentCount": 0,
+      "PermissionsBoundaryUsageCount": 0,
+      "IsAttachable": true,
+      "CreateDate": "2026-10-15T23:23:10+00:00",
+      "UpdateDate": "2026-10-15T23:23:10+00:00",
+      "Tags": [
+        {
+          "Key": "Project",
+          "Value": "FinTrust"
+        },
+        {
+          "Key": "Purpose",
+          "Value": "quota-review"
+        }
+      ]
+    }
+  },
+  "attachment_verified": {
+    "PolicyGroups": [],
+    "PolicyUsers": [],
+    "PolicyRoles": [
+      {
+        "RoleName": "fintrust-deployer-role",
+        "RoleId": "AROA6CBPZPYDGYGBP2XTJ"
+      }
+    ]
+  },
+  "iam_simulation": [
+    {
+      "Action": "support:DescribeSupportLevel",
+      "Decision": "allowed"
+    },
+    {
+      "Action": "support:DescribeCases",
+      "Decision": "allowed"
+    },
+    {
+      "Action": "support:CreateCase",
+      "Decision": "allowed"
+    },
+    {
+      "Action": "support-console:GetAccountState",
+      "Decision": "allowed"
+    },
+    {
+      "Action": "support-console:CreateCaseDraft",
+      "Decision": "allowed"
+    }
+  ],
+  "access_analyzer_findings": [],
+  "console_access_verified": false,
+  "console_identity_in_screenshot": "arn:aws:iam::966467878406:user/fintrust_deployer",
+  "required_console_identity": "fintrust-deployer-role",
+  "support_plan_changed": false,
+  "quota_changed": false,
+  "case_submitted": false,
+  "paid_resources_created": false,
+  "cleanup": "After the quota case and required follow-up are complete, detach this policy from fintrust-deployer-role; verify no remaining attachments, then delete FinTrustQuotaSupport and retain this audit.",
+  "references": [
+    "https://docs.aws.amazon.com/service-authorization/latest/reference/list_support.html",
+    "https://docs.aws.amazon.com/service-authorization/latest/reference/list_support-console.html",
+    "https://docs.aws.amazon.com/awssupport/latest/user/support-console-access-control.html"
+  ],
+  "scope_note": "Support does not provide resource-level IAM scopes. Resource '*' is required for these named actions. No support:* wildcard, no plan management, no attachments upload, no workload changes, no automatic investigations."
+}
