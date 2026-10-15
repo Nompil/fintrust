@@ -1,0 +1,67 @@
+# Lambda Concurrent Executions Quota Request – Technical Guidance 
+ 
+ ## Understanding the Concurrency Constraint 
+ 
+ Your account's applied quota for **Concurrent executions (L-B99A9384)** in `af-south-1` is **10**, with all 10 currently unreserved. This creates a blocking issue because of how Lambda enforces concurrency allocation: 
+ 
+ - [Reserved concurrency sets both the maximum and minimum number of concurrent instances](https://docs.aws.amazon.com/lambda/latest/dg/configuration-concurrency.html) allocated to a function, and this allocation is deducted from your account's total concurrency pool. 
+ - [Lambda requires you to leave at least 100 simultaneous executions unreserved for functions that aren't configured with a per-function limit](https://docs.aws.amazon.com/lambda/latest/dg/lambda-concurrency.html). This is a hard constraint enforced by the `PutFunctionConcurrency` API. 
+ - With an account-level ceiling of 10, reserving even 1 unit of concurrency pushes unreserved executions below the mandatory 100-unit floor, causing the request to fail. 
+ 
+ ## Why Your Service Quotas Request for "11" Was Rejected 
+ 
+ Service Quotas requests for values significantly below the published default (1,000 for Lambda concurrent executions) can be auto-rejected by the automated workflow. The system is calibrated to validate against the published default rather than your currently reduced applied value. [As documented in similar quota scenarios, requests asking only for the published default value (not above it) have been initially declined, and only explicit explanation of the applied-vs-default mismatch and concrete use case led to approval](https://builder.aws.com/content/3JoOAlGGglNjtqqP0NPu4m29zIA/too-many-tokens-per-day-on-my-first-bedrock-call). 
+ 
+ ## Minimum Quota Value Required 
+ 
+ Based on the mechanics of Lambda's concurrency model: 
+ 
+ | Requirement | Concurrent Executions | 
+ |---|---| 
+ | Mandatory unreserved floor (always reserved for functions without per-function limits) | 100 | 
+ | Reserved slot for the temporary migration runner | 1 | 
+ | **Minimum to unblock the migration function now** | **101** | 
+ | Reserved slots for 4 additional app functions (5 total, 1 each) | 4 | 
+ | **Minimum to support full steady-state app (5 reserved + 100 floor)** | **105** | 
+ 
+ Request **101** immediately to enable the migration function, with a planned follow-up (or combined single request) to **105** once all five functions need reserved concurrency. Both values remain well below the 1,000 default. 
+ 
+ ## Steps to Submit a Successful Quota Increase Request 
+ 
+ 1. **Navigate to Service Quotas in the correct Region** 
+ - Open the [AWS Management Console](https://console.aws.amazon.com/servicequotas) 
+ - Select Region `af-south-1` 
+ - Search for "Lambda" 
+ - Locate quota `L-B99A9384` (Concurrent executions) 
+ 
+ 2. **Request a specific new value** 
+ - Enter **101** (or **105** if requesting the full steady-state capacity now) 
+ - Do not request only "current + 1" — specify the concrete target value 
+ 
+ 3. **Include clear justification in the request description** 
+ - State the applied-vs-default mismatch: applied value is 10 (not the 1,000 default) 
+ - Explain that the requested value (101 or 105) is still well under the default 
+ - Reference [Lambda's documented 100-unit unreserved floor requirement](https://docs.aws.amazon.com/lambda/latest/dg/lambda-concurrency.html) 
+ - Describe your use case: temporary migration function plus 4–5 production functions requiring reserved concurrency 
+ 
+ 4. **Example request text** 
+ > "Account [contact information removed], Region af-south-1, quota L-B99A9384 (Concurrent executions). Applied value is currently 10, all unreserved. Lambda requires a minimum of 100 unreserved concurrent executions account-wide before any function-level reserved concurrency can be configured. We need to reserve 1 unit of concurrency for a temporary migration Lambda function immediately, and ultimately 5 units total (one per production function). Requesting an increase to 101 now (or 105 to cover the full planned footprint), which remains far below the published default of 1,000." 
+ 
+ 5. **Monitor concurrency metrics after approval** 
+ - Use [CloudWatch metrics `ClaimedAccountConcurrency` and `UnreservedConcurrentExecutions`](https://docs.aws.amazon.com/lambda/latest/dg/monitoring-concurrency.html) to confirm you remain above the 100-unit floor as you add reserved functions 
+ 
+ ## Cost and Prerequisites 
+ 
+ - [Reserved concurrency itself incurs no additional charge](https://docs.aws.amazon.com/lambda/latest/dg/lambda-concurrency.html) — the quota increase has zero cost impact 
+ - No support plan upgrade or additional resources are required for a standard Service Quotas request 
+ 
+ --- 
+ 
+ ## Sources: 
+ 
+ 1. [Understanding Lambda Event Function scaling – Concurrency quotas](https://docs.aws.amazon.com/lambda/latest/dg/lambda-concurrency.html) 
+ 2. [Configuring reserved concurrency for an Event Function](https://docs.aws.amazon.com/lambda/latest/dg/configuration-concurrency.html) 
+ 3. [Monitoring concurrency – AWS Lambda](https://docs.aws.amazon.com/lambda/latest/dg/monitoring-concurrency.html) 
+ 4. [Too Many Tokens per Day — On My First Bedrock Call](https://builder.aws.com/content/3JoOAlGGglNjtqqP0NPu4m29zIA/too-many-tokens-per-day-on-my-first-bedrock-call)
+
+**This response might contain information related to security, a nuanced topic. You should verify the response using informed human judgement. Visit [Security in AWS Support](https://docs.aws.amazon.com/awssupport/latest/user/security.html) for more details.**
