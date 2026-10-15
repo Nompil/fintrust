@@ -1,0 +1,10 @@
+{
+  "source": "C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\analyst-workflow-worktree",
+  "files": {
+    "infrastructure/processing.py": "8cd3b5f4153c3fe5965f989a926f4ae20014d9cf8e717d7574270b2073a5896e",
+    "infrastructure/application_functions.py": "c61e156f849c5d48065e942a45619ac03deac404985383b82c9321dd6dfa4706",
+    "infrastructure/auth/cognito.json": "02dbcbfa54e73e6ef395d600890ff6351170077ebd3267d1c9b15dd90f606859",
+    "infrastructure/api/gateway.json": "5a7450444b77f481e3279b5f82898e4fb6572c0096f8d151de3ced4790412999",
+    "infrastructure/api/gateway-shell.json": "a757807892cbefc36c2247f3fe483142aed9b9c17800336ffc468707f9bf4637"
+  }
+}

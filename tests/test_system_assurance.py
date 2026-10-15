@@ -9,7 +9,7 @@ from tests.test_frontend_workflows import local_receipts
 from tests.test_release1_candidate import maintainer_headers
 
 ROUTES = sorted((method, rule.rule) for rule in api.app.url_map.iter_rules()
-    if rule.rule.startswith('/v1/') and rule.rule != '/v1/health'
+    if rule.rule.startswith('/v1/') and rule.rule not in {'/v1/health','/v1/auth/config'}
     for method in rule.methods - {'HEAD', 'OPTIONS'})
 
 def concrete(route):

@@ -1,0 +1,23 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ses:SendEmail"
+      ],
+      "Resource": "arn:aws:ses:af-south-1:966467878406:identity/nompilomabuya@outlook.com",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "ses:FromAddress": "nompilomabuya@outlook.com"
+        },
+        "ForAllValues:StringEquals": {
+          "ses:Recipients": [
+            "nompilomabuya@outlook.com"
+          ]
+        }
+      }
+    }
+  ]
+}

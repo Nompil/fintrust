@@ -49,3 +49,11 @@ main[data-page="Upload Transactions"]>#filters{padding:12px 16px;align-items:cen
 
 /* Component evidence grows independently of the review controls. */
 .transaction-columns{align-items:start}
+
+/* Keep risk scores consistent across registers, queues and investigation details. */
+.risk-score[data-risk-level="high"],.risk-score[data-risk-level="high"] small{color:#b42332}
+.risk-score[data-risk-level="high"] .score-track>span{background:#b42332}
+.risk-score[data-risk-level="medium"],.risk-score[data-risk-level="medium"] small{color:#91651c}
+.risk-score[data-risk-level="medium"] .score-track>span{background:#91651c}
+.risk-score[data-risk-level="low"],.risk-score[data-risk-level="low"] small{color:#277a5c}
+.risk-score[data-risk-level="low"] .score-track>span{background:#277a5c}

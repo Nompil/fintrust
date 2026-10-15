@@ -54,11 +54,19 @@ def change(principal,body):
         return metadata(entry)
 
 def session_metadata(principal):
+    if principal.auth_source=="cognito":
+        return {"user_id":principal.user_id,"subject":principal.subject,
+                "username":principal.subject,"email":principal.email,
+                "last_sign_in_at":None,"display_name":principal.display_name or principal.subject,
+                "role":principal.role,"status":"ACTIVE","created_at":None,
+                "credential_provisioned":True,"auth_source":"cognito",
+                "accounts":list(principal.accounts)}
     users=[u for u in read_registry()['principals'] if u['subject']==principal.subject]
     if len(users)!=1:raise PermissionError('Identity unavailable')
     return {**metadata(users[0]),'subject':principal.subject,'accounts':list(principal.accounts)}
 
 def record_sign_in(principal):
+    if principal.auth_source=="cognito":return
     path=os.environ['FINTRUST_AUTH_FILE']
     with locked_registry(path):
         registry=read_registry()

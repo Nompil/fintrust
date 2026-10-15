@@ -1,0 +1,25 @@
+{
+  "status": "PREPARED_LOCALLY_NOT_DEPLOYED",
+  "aws_changes": 0,
+  "email_verification": "NOT_CHECKED",
+  "sender": "nompilomabuya@outlook.com",
+  "recipient": "nompilomabuya@outlook.com",
+  "files": {
+    "ses-identities.json": "d712e5141fd07e1beefd780da5471b4e09d817e79b45acd00047ca5aef2dfeff",
+    "application-functions.json": "c5d830d5009f2d9048c17e72def899c97440be6d93672206708f154aaef460d3",
+    "monitoring.json": "56cb131bd30862bfc8560d72a2baf909111f90eebf36ff625a64474c070aec41",
+    "alert-ses-policy.json": "418b042dbb8533837e01fe7d8789cb90c82306a42a80805d1b3ba38ecf613818",
+    "cognito.json": "b382e7a900aa3917c91273122349681b5c04495de01adf0af5810622ba983406",
+    "api.json": "79f44a8e47401c977d6281d535ea90edcb14719271dff5b5496a97bf7dd947e1",
+    "api-shell.json": "b4604d57c47829d748a5320a74084e0cda972251b8b365d7c91ea0c86329a6a5"
+  },
+  "remaining_gates": [
+    "Actual resource and identity inventory",
+    "Required inputs and IAM review",
+    "One consolidated source release",
+    "Linux artifact verification",
+    "Quota resolution",
+    "Cost-compatible live migration and grants",
+    "Live E2E"
+  ]
+}

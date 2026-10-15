@@ -204,6 +204,11 @@ def test_infrastructure_failure_contract_and_role_separation():
     assert queue["VisibilityTimeout"] >= 6 * resources["ScoringFunction"]["Properties"]["Timeout"]
     assert queue["RedrivePolicy"]["maxReceiveCount"] == 5
     assert mapping["FunctionResponseTypes"] == ["ReportBatchItemFailures"] and mapping["BatchSize"] <= 10
+    api_env = resources["ApiFunction"]["Properties"]["Environment"]["Variables"]
+    assert api_env["AUTH_MODE"] == "cognito"
+    assert {"COGNITO_USER_POOL_ID", "COGNITO_APP_CLIENT_ID", "COGNITO_DOMAIN",
+            "COGNITO_REDIRECT_URI", "COGNITO_LOGOUT_URI", "COGNITO_USER_SCOPE_TABLE",
+            "CORS_ALLOWED_ORIGINS"} <= set(api_env)
     assert "DestinationConfig" in resources["ReportAsync"]["Properties"]
     assert "DeadLetterConfig" in resources["MonthlySchedule"]["Properties"]["Targets"][0]
     policies = build_policies("123456789012", "af-south-1", "dev", "raw-bucket", "scores", "db-example",

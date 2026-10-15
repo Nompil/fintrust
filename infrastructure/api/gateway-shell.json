@@ -1,0 +1,20 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Temporary first phase for the FinTrust API stack: reserve its stable API ID before registering the Cognito OAuth callback.",
+  "Parameters": {
+    "StageName": {"Type": "String", "AllowedValues": ["dev", "staging", "prod"], "Default": "dev"}
+  },
+  "Resources": {
+    "Api": {
+      "Type": "AWS::ApiGateway::RestApi",
+      "Properties": {
+        "Name": {"Fn::Sub": "fintrust-${StageName}"},
+        "EndpointConfiguration": {"Types": ["REGIONAL"]}
+      }
+    }
+  },
+  "Outputs": {
+    "ApiId": {"Value": {"Ref": "Api"}},
+    "CallbackUrl": {"Value": {"Fn::Sub": "https://${Api}.execute-api.${AWS::Region}.${AWS::URLSuffix}/${StageName}/"}}
+  }
+}

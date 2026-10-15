@@ -5,7 +5,8 @@ from pathlib import Path
 import pytest
 
 IAM = Path('infrastructure/iam')
-POLICY = IAM / 'stage5-deployment-policy.json'
+# Historical AWS evidence is bound to this preserved policy, not later edits.
+POLICY = IAM / 'evidence/stage5-permanent-installed-policy.json'
 BASELINE = IAM / 'evidence/stage5-tagloggroup-version-baseline.json'
 VALIDATION = IAM / 'evidence/stage5-permanent-validation.json'
 VERSIONS = IAM / 'evidence/stage5-permanent-version-baseline.json'

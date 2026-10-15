@@ -1,0 +1,11 @@
+test_email_permission_cannot_send_to_other_recipients_or_from_other_identities (test_preparation.ConfigurationTests.test_email_permission_cannot_send_to_other_recipients_or_from_other_identities) ... ok
+test_existing_foundation_is_not_recreated_and_code_is_versioned (test_preparation.ConfigurationTests.test_existing_foundation_is_not_recreated_and_code_is_versioned) ... ok
+test_monitoring_is_opt_in_and_has_no_custom_metrics_or_automatic_actions (test_preparation.ConfigurationTests.test_monitoring_is_opt_in_and_has_no_custom_metrics_or_automatic_actions) ... ok
+test_monthly_schedule_is_independent_of_consumers_and_requires_function_capacity (test_preparation.ConfigurationTests.test_monthly_schedule_is_independent_of_consumers_and_requires_function_capacity) ... ok
+test_optional_recovery_cost_is_not_implicitly_enabled (test_preparation.ConfigurationTests.test_optional_recovery_cost_is_not_implicitly_enabled) ... ok
+test_same_mailbox_cannot_create_duplicate_ses_identities (test_preparation.ConfigurationTests.test_same_mailbox_cannot_create_duplicate_ses_identities) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.002s
+
+OK

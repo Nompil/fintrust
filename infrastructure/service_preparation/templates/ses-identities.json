@@ -1,0 +1,108 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "FinTrust SES email identity proposal; no sending or paid add-ons",
+  "Parameters": {
+    "SesSender": {
+      "Type": "String",
+      "Default": "nompilomabuya@outlook.com",
+      "AllowedPattern": "[^\\s@*?]+@[^\\s@*?]+\\.[^\\s@*?]+",
+      "MaxLength": 254
+    },
+    "SesRecipient": {
+      "Type": "String",
+      "Default": "nompilomabuya@outlook.com",
+      "AllowedPattern": "[^\\s@*?]+@[^\\s@*?]+\\.[^\\s@*?]+",
+      "MaxLength": 254
+    },
+    "CreateSenderIdentity": {
+      "Type": "String",
+      "Default": "false",
+      "AllowedValues": [
+        "false",
+        "true"
+      ],
+      "Description": "Set true only after confirming the sender identity does not exist."
+    },
+    "CreateRecipientIdentity": {
+      "Type": "String",
+      "Default": "false",
+      "AllowedValues": [
+        "false",
+        "true"
+      ],
+      "Description": "For a distinct sandbox recipient only; inspect existing identities first."
+    }
+  },
+  "Conditions": {
+    "CreateSender": {
+      "Fn::Equals": [
+        {
+          "Ref": "CreateSenderIdentity"
+        },
+        "true"
+      ]
+    },
+    "CreateRecipient": {
+      "Fn::And": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "CreateRecipientIdentity"
+            },
+            "true"
+          ]
+        },
+        {
+          "Fn::Not": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "SesSender"
+                },
+                {
+                  "Ref": "SesRecipient"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "Resources": {
+    "SenderIdentity": {
+      "Type": "AWS::SES::EmailIdentity",
+      "Condition": "CreateSender",
+      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Retain",
+      "Properties": {
+        "EmailIdentity": {
+          "Ref": "SesSender"
+        }
+      }
+    },
+    "RecipientIdentity": {
+      "Type": "AWS::SES::EmailIdentity",
+      "Condition": "CreateRecipient",
+      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Retain",
+      "Properties": {
+        "EmailIdentity": {
+          "Ref": "SesRecipient"
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "SesSender": {
+      "Value": {
+        "Ref": "SesSender"
+      }
+    },
+    "SesRecipient": {
+      "Value": {
+        "Ref": "SesRecipient"
+      }
+    }
+  }
+}

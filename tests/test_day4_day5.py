@@ -68,14 +68,26 @@ def test_service_policies_enforce_distinct_resources():
 
 
 def test_gateway_routes_and_restricted_invocation():
-    resources = json.loads(Path('infrastructure/api/gateway.json').read_text())['Resources']
+    template = json.loads(Path('infrastructure/api/gateway.json').read_text())
+    resources = template['Resources']
     methods = [v['Properties'] for v in resources.values() if v['Type'] == 'AWS::ApiGateway::Method']
-    assert len(methods) == 5
-    assert sum(m['AuthorizationType'] == 'NONE' for m in methods) == 1
-    assert all(m['HttpMethod'] == 'GET' for m in methods)
-    assert any(s['Effect'] == 'Deny' for s in resources['Api']['Properties']['Policy']['Statement'])
+    assert len(methods) == 7
+    assert {(m['HttpMethod'], m['AuthorizationType']) for m in methods} == {
+        ('GET', 'NONE'), ('POST', 'COGNITO_USER_POOLS'),
+        ('GET', 'COGNITO_USER_POOLS'), ('OPTIONS', 'NONE')}
+    assert all(m.get('AuthorizationScopes') == ['openid'] for m in methods
+               if m['AuthorizationType'] == 'COGNITO_USER_POOLS')
+    assert resources['CognitoAuthorizer']['Properties']['Type'] == 'COGNITO_USER_POOLS'
+    assert resources['CognitoAuthorizer']['Properties']['IdentitySource'] == 'method.request.header.Authorization'
     permissions = [v['Properties'] for v in resources.values() if v['Type'] == 'AWS::Lambda::Permission']
-    assert all('SourceArn' in p and 'SourceAccount' in p for p in permissions)
+    assert len(permissions) == 1
+    assert 'SourceArn' in permissions[0] and 'SourceAccount' in permissions[0]
+    assert '${StageName}/*' in permissions[0]['SourceArn']['Fn::Sub']
+    assert {'ApiId', 'BaseUrl', 'CallbackUrl'} <= set(template['Outputs'])
+    shell = json.loads(Path('infrastructure/api/gateway-shell.json').read_text())
+    assert shell['Resources']['Api']['Type'] == 'AWS::ApiGateway::RestApi'
+    assert shell['Outputs']['ApiId']['Value'] == {'Ref': 'Api'}
+    assert shell['Outputs']['CallbackUrl']['Value']['Fn::Sub'].endswith('/${StageName}/')
 
 
 @pytest.fixture(autouse=True)

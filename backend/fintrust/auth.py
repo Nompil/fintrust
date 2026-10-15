@@ -18,6 +18,10 @@ class Principal:
     subject: str
     role: str
     accounts: tuple
+    auth_source: str = "local"
+    user_id: str | None = None
+    display_name: str | None = None
+    email: str | None = None
     def require(self,action): authorize(self.role,action)
     def account(self,identifier):
         value=str(UUID(str(identifier)))
@@ -26,7 +30,13 @@ class Principal:
 
 def authenticate():
     value=request.headers.get("Authorization","")
-    if not value.startswith("Bearer ") or not 32<=len(value[7:])<=256:
+    if not value.startswith("Bearer ") or not 1<=len(value[7:])<=16384:
+        raise PermissionError("Authentication required")
+    mode=os.getenv("AUTH_MODE", "cognito" if os.getenv("AWS_EXECUTION_ENV") else "local").lower()
+    if mode=="cognito":
+        from .cognito_auth import authenticate as authenticate_cognito
+        return authenticate_cognito(value[7:])
+    if mode!="local" or len(value[7:])<32:
         raise PermissionError("Authentication required")
     path=os.getenv("FINTRUST_AUTH_FILE")
     if not path: raise PermissionError("Authentication required")

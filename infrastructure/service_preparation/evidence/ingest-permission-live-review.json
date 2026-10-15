@@ -1,0 +1,16 @@
+{
+  "prepared_at_utc": "2026-10-15T21:54:50.759758+00:00",
+  "changes": [
+    "Add RawBucketInvokePermission only"
+  ],
+  "existing_template_preserved": true,
+  "code_object_version": "UsePreviousValue",
+  "reserved_concurrency": 0,
+  "s3_notifications": "Unchanged; all four notification types absent in successful read",
+  "database_changes": false,
+  "new_paid_resources": false,
+  "source_account": "966467878406",
+  "source_bucket": "arn:aws:s3:::fintrust-raw-966467878406-af-south-1-dev",
+  "template_sha256": "6315fc42155ec7616305271570d332c428eb366598d1faf9ee50c44c067da960",
+  "live_read_gate": "PASSED: Lambda GetPolicy returns ResourceNotFound while function exists, confirming absent resource policy rather than access denial"
+}

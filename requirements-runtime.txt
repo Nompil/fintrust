@@ -4,3 +4,4 @@ aws-wsgi==0.2.7
 Flask==3.1.3
 psycopg2-binary==2.9.13
 python-dotenv==1.2.3
+PyJWT[crypto]==2.10.1

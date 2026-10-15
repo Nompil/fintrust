@@ -78,6 +78,20 @@
           "aws:RequestedRegion": "af-south-1"
         }
       }
+    },
+    {
+      "Sid": "ManageRawBucketNotifications",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetBucketNotification",
+        "s3:PutBucketNotification"
+      ],
+      "Resource": "arn:aws:s3:::fintrust-raw-966467878406-af-south-1-dev",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
     }
   ]
 }

@@ -1,0 +1,7 @@
+{
+  "tests": 6,
+  "failures": 0,
+  "errors": 0,
+  "aws_calls": 0,
+  "boundary": "Offline condition, resource ownership, SES permission and cost-switch checks; not live CloudFormation validation"
+}

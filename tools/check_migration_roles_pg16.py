@@ -30,7 +30,7 @@ def memberships(cur):
     return cur.fetchall()
 
 
-def run():
+def run(*, seed_fixture=None):
     if not (os.getenv("FINTRUST_DISPOSABLE_PG16_LOCAL")=="1" or (os.getenv("GITHUB_ACTIONS")=="true" and os.getenv("CI")=="true")):raise RuntimeError("Explicit disposable local PostgreSQL 16 or CI service required")
     dsn=os.environ["FINTRUST_TEST_DATABASE_URL"];v=parse_dsn(dsn)
     if v.get("host") not in {"localhost","127.0.0.1","::1"} or v.get("dbname")!="fintrust_test" or v.get("user")!="postgres":raise RuntimeError("Disposable target mismatch")
@@ -52,6 +52,8 @@ def run():
                 cur.execute("SET SESSION AUTHORIZATION fintrust_admin")
                 source=(ROOT/'sql/schema.sql').read_text().split('-- Additive identity hardening.')[0].replace('CREATE EXTENSION IF NOT EXISTS pgcrypto;','')
                 cur.execute(source);cur.execute((ROOT/'sql/seed.sql').read_text())
+                if seed_fixture is not None:
+                    seed_fixture(cur)
                 cur.execute("GRANT SELECT ON public.accounts TO fintrust_runtime_probe")
                 cur.execute("SELECT relacl::text FROM pg_class WHERE oid='public.accounts'::regclass")
                 runtime_acl_before=cur.fetchone()[0]

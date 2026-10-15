@@ -1,0 +1,7 @@
+{
+  "source_sha256": "d6ed8cb1aecd37ad23ea507be75b3f97cb83e301959c92324a592e0f11019923",
+  "aws_access": false,
+  "live_rds_access": false,
+  "status": "PASSED",
+  "temporary_cluster_removed": true
+}

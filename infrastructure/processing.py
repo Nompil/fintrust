@@ -29,7 +29,9 @@ def arn(name):
 def build_template():
     parameters = {name: {"Type": "String"} for name in (
         "CodeBucket", "CodeKey", "CodeSha256", "RawBucket", "QuarantineBucket", "ReportsBucket", "RiskTable",
-        "RiskStreamArn", "SesSender", "SesRecipient")}
+        "RiskStreamArn", "SesSender", "SesRecipient", "CognitoUserPoolId", "CognitoAppClientId",
+        "CognitoDomain", "CognitoRedirectUri", "CognitoLogoutUri", "CognitoUserScopeTable",
+        "CorsAllowedOrigins")}
     parameters.update(Stage={"Type": "String", "Default": "dev", "AllowedValues": ["dev", "staging", "prod"]},
                       SubnetIds={"Type": "List<AWS::EC2::Subnet::Id>"},
                       SecurityGroupIds={"Type": "List<AWS::EC2::SecurityGroup::Id>"},
@@ -73,7 +75,14 @@ def build_template():
         elif service == "report":
             env["S3_REPORT_BUCKET"] = ref("ReportsBucket")
         elif service == "api":
-            env["DYNAMODB_TABLE"] = ref("RiskTable")
+            env.update(DYNAMODB_TABLE=ref("RiskTable"), AUTH_MODE="cognito",
+                       COGNITO_USER_POOL_ID=ref("CognitoUserPoolId"),
+                       COGNITO_APP_CLIENT_ID=ref("CognitoAppClientId"),
+                       COGNITO_DOMAIN=ref("CognitoDomain"),
+                       COGNITO_REDIRECT_URI=ref("CognitoRedirectUri"),
+                       COGNITO_LOGOUT_URI=ref("CognitoLogoutUri"),
+                       COGNITO_USER_SCOPE_TABLE=ref("CognitoUserScopeTable"),
+                       CORS_ALLOWED_ORIGINS=ref("CorsAllowedOrigins"))
         add(name, "Lambda::Function", {
             "FunctionName": sub("fintrust-" + service + "-${Stage}"),
             "Role": sub("arn:${AWS::Partition}:iam::${AWS::AccountId}:role/fintrust-" + service + "-${Stage}"),

@@ -1,0 +1,195 @@
+{
+  "status": "PASSED",
+  "postgresql_version": "16.15",
+  "platform": "Linux-6.18.54.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "aws_access": false,
+  "live_rds_access": false,
+  "real_rds_iam_tls_tested": false,
+  "transport": "local session authorization, no cloud credentials",
+  "001_rehearsal_passed": true,
+  "002_rehearsal_passed": true,
+  "migrations": [
+    {
+      "version": 3,
+      "source_sha256": "5813a1d24b44c00d8f53629519a306e82b32e02a00d2ed34868d04037dc7f181",
+      "applied": true,
+      "rerun_noop": true,
+      "earlier_extension_reruns_noop": true,
+      "ddl_failure_rollback": true,
+      "post_ledger_failure_rollback": true,
+      "financial_and_review_history_unchanged": true,
+      "helper_self_removed": true
+    },
+    {
+      "version": 4,
+      "source_sha256": "ecf0badd166fa89c6143cbf2c75b6501a8b56fd3ae7385f496542bd51e2a55f6",
+      "applied": true,
+      "rerun_noop": true,
+      "earlier_extension_reruns_noop": true,
+      "ddl_failure_rollback": true,
+      "post_ledger_failure_rollback": true,
+      "financial_and_review_history_unchanged": true,
+      "helper_self_removed": true
+    },
+    {
+      "version": 5,
+      "source_sha256": "8f1697374e1853bd1ce48c6f0c502deb9c51f431aac9d5430312d3f79129fcfe",
+      "applied": true,
+      "rerun_noop": true,
+      "earlier_extension_reruns_noop": true,
+      "ddl_failure_rollback": true,
+      "post_ledger_failure_rollback": true,
+      "financial_and_review_history_unchanged": true,
+      "helper_self_removed": true
+    },
+    {
+      "version": 6,
+      "source_sha256": "9049d766b5613cdd74f814c278c3d5867349d99f08ef98b50c158d2d95b5c2a4",
+      "applied": true,
+      "rerun_noop": true,
+      "earlier_extension_reruns_noop": true,
+      "ddl_failure_rollback": true,
+      "post_ledger_failure_rollback": true,
+      "financial_and_review_history_unchanged": true,
+      "helper_self_removed": true
+    }
+  ],
+  "out_of_order_refused": true,
+  "partial_state_refused": true,
+  "catalog_drift_refused": true,
+  "modified_helper_refused": true,
+  "public_helper_execute_refused": true,
+  "migration_behavior_verified": true,
+  "no_arbitrary_sql_or_owner_membership": true,
+  "cleanup_verified": true,
+  "eligibility_006": [
+    {
+      "rule_version": null,
+      "points": 39,
+      "risk_level": null,
+      "accepted": false
+    },
+    {
+      "rule_version": null,
+      "points": 40,
+      "risk_level": null,
+      "accepted": true
+    },
+    {
+      "rule_version": "fintrust-r1-rules-2026-10-09",
+      "points": 20,
+      "risk_level": "Medium",
+      "accepted": false
+    },
+    {
+      "rule_version": "fintrust-r1-rules-2026-10-09",
+      "points": 40,
+      "risk_level": "Medium",
+      "accepted": true
+    },
+    {
+      "rule_version": "fintrust-r1-rules-2026-10-09",
+      "points": 70,
+      "risk_level": "High",
+      "accepted": true
+    },
+    {
+      "rule_version": "fintrust-r2-rules-2026-10-13",
+      "points": 15,
+      "risk_level": "Low",
+      "accepted": false
+    },
+    {
+      "rule_version": "fintrust-r2-rules-2026-10-13",
+      "points": 20,
+      "risk_level": "Medium",
+      "accepted": true
+    },
+    {
+      "rule_version": "fintrust-r2-rules-2026-10-13",
+      "points": 40,
+      "risk_level": "High",
+      "accepted": true
+    },
+    {
+      "rule_version": "unknown-version",
+      "points": 40,
+      "risk_level": "High",
+      "accepted": false
+    }
+  ],
+  "before_migrations": {
+    "customers": {
+      "count": 5,
+      "sha256": "6125044217cf239ea6064ad8c526c95228db935adfd4dcdf2fa49fbc74b04330"
+    },
+    "accounts": {
+      "count": 5,
+      "sha256": "b589b0e9208e4ee3daa8a32fa3634ba0dda96392d0a2aca1e77dd4c8e2ca8f63"
+    },
+    "transactions": {
+      "count": 200,
+      "sha256": "fcf70132d70fe6ab29d3d60a9b3ebc60fba1e8d63baccd56f43fcfedba3b32f8"
+    },
+    "risk_events": {
+      "count": 96,
+      "sha256": "da1f342f4e642e60da8ac3875618aac0b3e0e869680da0b8698bfb13b761864a"
+    },
+    "alerts": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "processed_transactions": {
+      "count": 8,
+      "sha256": "95c2cb5745eb4f4117f7e067164e4c302b101d94c871969583dda05782d5a833"
+    },
+    "risk_reviews": {
+      "count": 1,
+      "sha256": "ab9c59f1da9bef06b5e6ac58908649d5158d084c82fe92fa3e80381686aabc5a"
+    },
+    "risk_review_history": {
+      "count": 1,
+      "sha256": "4ba3947eead4a7c4f0c264ce65836c8ce205a5c10ab4f0d6e8a86712e7d46212"
+    }
+  },
+  "tested_files_sha256": {
+    "backend/migration_runner/__init__.py": "31dc56534c23703e9539d3c5899c2ef800ac3c5d89cb4a5fcc8a5f4cb63ce27d",
+    "backend/migration_runner/admin.py": "a50d5e675f9968afe756e62f90ca444f348222fc1984436d7f1389e7284fe6b7",
+    "backend/migration_runner/bootstrap002_entry.py": "9c1e427204bcd9bb24e9a30a7336bb8ee7a8284d3ddaa96b785b96168510c485",
+    "backend/migration_runner/bootstrap_entry.py": "2ce5ba0f64f6e73a0b322255ef58fd3046fdbce67f5420dd1f1bebb6a770a012",
+    "backend/migration_runner/bootstrap_extensions_entry.py": "4378b119c8c7a106b80f3e6e4cc4df38d6eae81eaaaddeca412e54aaa911c092",
+    "backend/migration_runner/cleanup002_entry.py": "a6b87b69817c45714a90581fdc2f3ece09d14360fd4b2db7889e697cb4b48844",
+    "backend/migration_runner/cleanup_entry.py": "eae48b2f0b2e85d9f613ce09fcc25c08a6bf0a041e411dafa7a0b3706f0b3640",
+    "backend/migration_runner/cleanup_extensions_entry.py": "22440322bb416b941b35e456a405c9b2a012f1f479f3c8226ee7b991e59c1344",
+    "backend/migration_runner/common.py": "861acc13622915cff95f3bef2048e7a27b9a2eaaa94fd5f227a9a0b18a49ef53",
+    "backend/migration_runner/config.py": "9c25129c15c92aa7a2fbc1ea1e3c520e4962fb94dcaf518b8ae585c64afb0f76",
+    "backend/migration_runner/contract.py": "f40cc817fca1ad2645613114666e27f636706cdd324869e9a395ee8df6dc7623",
+    "backend/migration_runner/extension_catalog.py": "7f4ec978479cdc18c56c21426bb15e0b98a8ff79cc9d133c4cc40528e2013948",
+    "backend/migration_runner/extensions.py": "88d5b26803e71232b39011d465f117f416b14d44d5e1f401db9acb4b03f09df6",
+    "backend/migration_runner/iam.py": "d48c65dee939645ae58d235ea554df161fb2b0b911a4591f42781b55d904201e",
+    "backend/migration_runner/iam002_entry.py": "52c225cc84f018e3a9811e7b43923b67f968d53500a599993b2b203db6ce55ef",
+    "backend/migration_runner/iam_entry.py": "85212a26cfb0ff672a9688e7ae8e124561f517a12d47b229d9265ecaec43f7d7",
+    "backend/migration_runner/iam_extensions_entry.py": "d2ad862a36ebea6d295d4fbeb328f6eccc5af40b5cad7ac368b9f6258124c23c",
+    "backend/migration_runner/preflight_entry.py": "963aa0150c95cac494dcd8059bf06a2b23f3a587b2978bab51904eff15d37de5",
+    "backend/migration_runner/release1_preflight.py": "e42439e263b94c042b323654bbcaf5e31b4c85267cfb9720696598936f2ce5a9",
+    "backend/migration_runner/sql_binding.py": "cb1f77e5f7dbbd9f63d691628830ee9801ad2f1ce7077e7a3107b4438c0d5512",
+    "backend/migration_runner/workflow_catalog.py": "793737eced47e1e5790c595f897f2a22260bc503b0eb7759b3ed205c19a2f4cc",
+    "backend/migration_runner/workflows.py": "32299de502e8fec7ea2301c052b2a24476ee0b5e824065aff8b7c3302bf48da1",
+    "sql/migrations/001_transaction_identity.sql": "0ff06ca8c43596ac9b8651f4bd851bfb0487343f4c9eccb198849e3e59772bd6",
+    "sql/migrations/002_operational_workflows.sql": "5b2c04440eea244bfce150347dfa1953dd2a7e7ddb6af7e3a66e187d1c912f02",
+    "sql/migrations/003_transaction_lifecycle.sql": "5813a1d24b44c00d8f53629519a306e82b32e02a00d2ed34868d04037dc7f181",
+    "sql/migrations/004_review_assignment.sql": "ecf0badd166fa89c6143cbf2c75b6501a8b56fd3ae7385f496542bd51e2a55f6",
+    "sql/migrations/005_investigation_notes.sql": "8f1697374e1853bd1ce48c6f0c502deb9c51f431aac9d5430312d3f79129fcfe",
+    "sql/migrations/006_versioned_risk_review.sql": "9049d766b5613cdd74f814c278c3d5867349d99f08ef98b50c158d2d95b5c2a4",
+    "tools/check_extensions_pg16.py": "b1a905e08c6cd9b76ff9b17722fb32e8d9209c03a381808893404924a95a2e8b",
+    "tools/check_migration_roles_pg16.py": "4ca430f5afd5d128a3192063b0d4928e41cc035cb83b9c43083801ca6af243f6",
+    "tools/check_workflows_pg16.py": "13ef7d1254c6f9b089a5fb3928693e263e7fce91c7210b3f65db8e9e9efb29d1"
+  },
+  "source_sha256": {
+    "3": "5813a1d24b44c00d8f53629519a306e82b32e02a00d2ed34868d04037dc7f181",
+    "4": "ecf0badd166fa89c6143cbf2c75b6501a8b56fd3ae7385f496542bd51e2a55f6",
+    "5": "8f1697374e1853bd1ce48c6f0c502deb9c51f431aac9d5430312d3f79129fcfe",
+    "6": "9049d766b5613cdd74f814c278c3d5867349d99f08ef98b50c158d2d95b5c2a4"
+  }
+}

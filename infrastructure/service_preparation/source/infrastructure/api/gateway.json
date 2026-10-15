@@ -1,0 +1,59 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "FinTrust same-origin workbench API protected by an API Gateway Cognito user-pool authorizer.",
+  "Parameters": {
+    "StageName": {"Type": "String", "AllowedValues": ["dev", "staging", "prod"], "Default": "dev"},
+    "ApiFunctionName": {"Type": "String", "AllowedPattern": "[a-zA-Z0-9-_]+"},
+    "UserPoolArn": {"Type": "String", "AllowedPattern": "arn:[a-z0-9-]+:cognito-idp:[a-z0-9-]+:[0-9]{12}:userpool/[a-z0-9-]+_[A-Za-z0-9]+"}
+  },
+  "Resources": {
+    "Api": {
+      "Type": "AWS::ApiGateway::RestApi",
+      "Properties": {
+        "Name": {"Fn::Sub": "fintrust-${StageName}"},
+        "EndpointConfiguration": {"Types": ["REGIONAL"]}
+      }
+    },
+    "CognitoAuthorizer": {
+      "Type": "AWS::ApiGateway::Authorizer",
+      "Properties": {
+        "Name": {"Fn::Sub": "fintrust-${StageName}-cognito"},
+        "RestApiId": {"Ref": "Api"},
+        "Type": "COGNITO_USER_POOLS",
+        "IdentitySource": "method.request.header.Authorization",
+        "ProviderARNs": [{"Ref": "UserPoolArn"}]
+      }
+    },
+    "V1": {"Type": "AWS::ApiGateway::Resource", "Properties": {"RestApiId": {"Ref": "Api"}, "ParentId": {"Fn::GetAtt": ["Api", "RootResourceId"]}, "PathPart": "v1"}},
+    "Health": {"Type": "AWS::ApiGateway::Resource", "Properties": {"RestApiId": {"Ref": "Api"}, "ParentId": {"Ref": "V1"}, "PathPart": "health"}},
+    "HealthGet": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {"RestApiId": {"Ref": "Api"}, "ResourceId": {"Ref": "Health"}, "HttpMethod": "GET", "AuthorizationType": "NONE",
+        "Integration": {"Type": "AWS_PROXY", "IntegrationHttpMethod": "POST", "Uri": {"Fn::Sub": "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:${AWS::Partition}:lambda:${AWS::Region}:${AWS::AccountId}:function:${ApiFunctionName}:${StageName}/invocations"}}}
+    },
+    "AuthConfig": {"Type": "AWS::ApiGateway::Resource", "Properties": {"RestApiId": {"Ref": "Api"}, "ParentId": {"Ref": "V1"}, "PathPart": "auth"}},
+    "AuthConfigEndpoint": {"Type": "AWS::ApiGateway::Resource", "Properties": {"RestApiId": {"Ref": "Api"}, "ParentId": {"Ref": "AuthConfig"}, "PathPart": "config"}},
+    "AuthConfigGet": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {"RestApiId": {"Ref": "Api"}, "ResourceId": {"Ref": "AuthConfigEndpoint"}, "HttpMethod": "GET", "AuthorizationType": "NONE",
+        "Integration": {"Type": "AWS_PROXY", "IntegrationHttpMethod": "POST", "Uri": {"Fn::Sub": "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:${AWS::Partition}:lambda:${AWS::Region}:${AWS::AccountId}:function:${ApiFunctionName}:${StageName}/invocations"}}}
+    },
+    "V1Proxy": {"Type": "AWS::ApiGateway::Resource", "Properties": {"RestApiId": {"Ref": "Api"}, "ParentId": {"Ref": "V1"}, "PathPart": "{proxy+}"}},
+    "V1Get": {"Type": "AWS::ApiGateway::Method", "Properties": {"RestApiId": {"Ref": "Api"}, "ResourceId": {"Ref": "V1Proxy"}, "HttpMethod": "GET", "AuthorizationType": "COGNITO_USER_POOLS", "AuthorizerId": {"Ref": "CognitoAuthorizer"}, "AuthorizationScopes": ["openid"], "Integration": {"Type": "AWS_PROXY", "IntegrationHttpMethod": "POST", "Uri": {"Fn::Sub": "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:${AWS::Partition}:lambda:${AWS::Region}:${AWS::AccountId}:function:${ApiFunctionName}:${StageName}/invocations"}}}},
+    "V1Post": {"Type": "AWS::ApiGateway::Method", "Properties": {"RestApiId": {"Ref": "Api"}, "ResourceId": {"Ref": "V1Proxy"}, "HttpMethod": "POST", "AuthorizationType": "COGNITO_USER_POOLS", "AuthorizerId": {"Ref": "CognitoAuthorizer"}, "AuthorizationScopes": ["openid"], "Integration": {"Type": "AWS_PROXY", "IntegrationHttpMethod": "POST", "Uri": {"Fn::Sub": "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:${AWS::Partition}:lambda:${AWS::Region}:${AWS::AccountId}:function:${ApiFunctionName}:${StageName}/invocations"}}}},
+    "V1Options": {"Type": "AWS::ApiGateway::Method", "Properties": {"RestApiId": {"Ref": "Api"}, "ResourceId": {"Ref": "V1Proxy"}, "HttpMethod": "OPTIONS", "AuthorizationType": "NONE", "Integration": {"Type": "AWS_PROXY", "IntegrationHttpMethod": "POST", "Uri": {"Fn::Sub": "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:${AWS::Partition}:lambda:${AWS::Region}:${AWS::AccountId}:function:${ApiFunctionName}:${StageName}/invocations"}}}},
+    "RootGet": {"Type": "AWS::ApiGateway::Method", "Properties": {"RestApiId": {"Ref": "Api"}, "ResourceId": {"Fn::GetAtt": ["Api", "RootResourceId"]}, "HttpMethod": "GET", "AuthorizationType": "NONE", "Integration": {"Type": "AWS_PROXY", "IntegrationHttpMethod": "POST", "Uri": {"Fn::Sub": "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:${AWS::Partition}:lambda:${AWS::Region}:${AWS::AccountId}:function:${ApiFunctionName}:${StageName}/invocations"}}}},
+    "Assets": {"Type": "AWS::ApiGateway::Resource", "Properties": {"RestApiId": {"Ref": "Api"}, "ParentId": {"Fn::GetAtt": ["Api", "RootResourceId"]}, "PathPart": "assets"}},
+    "AssetsProxy": {"Type": "AWS::ApiGateway::Resource", "Properties": {"RestApiId": {"Ref": "Api"}, "ParentId": {"Ref": "Assets"}, "PathPart": "{proxy+}"}},
+    "AssetsGet": {"Type": "AWS::ApiGateway::Method", "Properties": {"RestApiId": {"Ref": "Api"}, "ResourceId": {"Ref": "AssetsProxy"}, "HttpMethod": "GET", "AuthorizationType": "NONE", "Integration": {"Type": "AWS_PROXY", "IntegrationHttpMethod": "POST", "Uri": {"Fn::Sub": "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:${AWS::Partition}:lambda:${AWS::Region}:${AWS::AccountId}:function:${ApiFunctionName}:${StageName}/invocations"}}}},
+    "ApiLambdaPermission": {"Type": "AWS::Lambda::Permission", "Properties": {"Action": "lambda:InvokeFunction", "Principal": "apigateway.amazonaws.com", "FunctionName": {"Fn::Sub": "${ApiFunctionName}:${StageName}"}, "SourceAccount": {"Ref": "AWS::AccountId"}, "SourceArn": {"Fn::Sub": "arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${Api}/${StageName}/*"}}},
+    "AccessLogs": {"Type": "AWS::Logs::LogGroup", "Properties": {"RetentionInDays": 30}},
+    "Deployment": {"Type": "AWS::ApiGateway::Deployment", "DependsOn": ["HealthGet", "AuthConfigGet", "V1Get", "V1Post", "V1Options", "RootGet", "AssetsGet"], "Properties": {"RestApiId": {"Ref": "Api"}}},
+    "Stage": {"Type": "AWS::ApiGateway::Stage", "Properties": {"RestApiId": {"Ref": "Api"}, "DeploymentId": {"Ref": "Deployment"}, "StageName": {"Ref": "StageName"}, "AccessLogSetting": {"DestinationArn": {"Fn::GetAtt": ["AccessLogs", "Arn"]}, "Format": "{\"requestId\":\"$context.requestId\",\"status\":\"$context.status\",\"method\":\"$context.httpMethod\",\"resource\":\"$context.resourcePath\",\"latency\":\"$context.responseLatency\"}"}, "MethodSettings": [{"ResourcePath": "/*", "HttpMethod": "*", "ThrottlingBurstLimit": 20, "ThrottlingRateLimit": 10, "MetricsEnabled": true, "DataTraceEnabled": false}]}}
+  },
+  "Outputs": {
+    "ApiId": {"Value": {"Ref": "Api"}},
+    "BaseUrl": {"Value": {"Fn::Sub": "https://${Api}.execute-api.${AWS::Region}.${AWS::URLSuffix}/${StageName}"}},
+    "CallbackUrl": {"Value": {"Fn::Sub": "https://${Api}.execute-api.${AWS::Region}.${AWS::URLSuffix}/${StageName}/"}}
+  }
+}

@@ -33,7 +33,7 @@ def request_context():
     allowed.add(request.host_url.rstrip("/"))
     if origin and origin not in allowed:
         return jsonify({"error": "origin is not allowed"}), 403
-    if request.path.startswith("/v1/") and request.method!="OPTIONS" and request.path!="/v1/health":
+    if request.path.startswith("/v1/") and request.method!="OPTIONS" and request.path not in {"/v1/health","/v1/auth/config"}:
         from .auth import authenticate
         try:
             g.principal=authenticate()
@@ -63,7 +63,13 @@ def finish_request(response):
     response.headers["X-Request-ID"] = getattr(g, "request_id", "")
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["Cache-Control"] = "no-store"
-    response.headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'"
+    auth_mode=os.getenv("AUTH_MODE", "cognito" if os.getenv("AWS_EXECUTION_ENV") else "local").lower()
+    connect_src=" 'self'"
+    if auth_mode=="cognito":
+        from .cognito_auth import configuration
+        try: connect_src+=" "+configuration()["domain"]
+        except RuntimeError: pass
+    response.headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src"+connect_src+"; frame-ancestors 'none'; base-uri 'none'"
     origin = request.headers.get("Origin")
     allowed = {o.strip() for o in os.getenv("CORS_ALLOWED_ORIGINS", "").split(",") if o.strip()}
     if origin and (origin in allowed or origin == request.host_url.rstrip("/")):
@@ -284,6 +290,19 @@ def release1_dashboard():
     return send_from_directory(FRONTEND,"release1.html")
 
 
+@app.get("/v1/auth/config")
+def auth_configuration():
+    mode=os.getenv("AUTH_MODE", "cognito" if os.getenv("AWS_EXECUTION_ENV") else "local").lower()
+    if mode=="local":return jsonify({"data":{"mode":"local"}})
+    if mode!="cognito":raise RuntimeError("Unsupported authentication mode")
+    from .cognito_auth import configuration
+    cfg=configuration()
+    if not cfg["scope_table"]:raise RuntimeError("Cognito account scope is not configured")
+    return jsonify({"data":{"mode":"cognito","domain":cfg["domain"],
+        "client_id":cfg["client_id"],"redirect_uri":cfg["redirect_uri"],
+        "logout_uri":cfg["logout_uri"]}})
+
+
 @app.get("/v1/reports")
 def workflow_report():
     from .workflow_api import report
@@ -322,6 +341,12 @@ def referral_targets(event):
 def review_assignment(event):
     from .review_assignment import assign
     return jsonify({"data":assign(event,request.get_json(),g.principal)})
+
+
+@app.get("/v1/filter-options")
+def workspace_filter_options():
+    from .filter_options import read
+    return jsonify({"data": read(g.principal, request.args)})
 
 
 @app.get("/v1/workflows/<kind>")
@@ -388,7 +413,18 @@ def absent_object(error):
 
 
 def lambda_handler(event, context):
-    return awsgi.response(app, event, context)
+    # API Gateway validates Cognito JWT signatures and passes claims in the
+    # trusted authorizer context. The API Lambda has no public egress, so it
+    # must never attempt a network JWKS fetch itself.
+    from . import cognito_auth
+    request_context = event.get("requestContext", {}) if isinstance(event, dict) else {}
+    authorizer = request_context.get("authorizer", {}) if isinstance(request_context, dict) else {}
+    claims = authorizer.get("claims") if isinstance(authorizer, dict) else None
+    token = cognito_auth.set_gateway_claims(claims)
+    try:
+        return awsgi.response(app, event, context)
+    finally:
+        cognito_auth.reset_gateway_claims(token)
 
 
 if __name__ == "__main__":

@@ -77,7 +77,7 @@ def test_deployer_passrole_and_configuration_are_bounded():
     assert role["Condition"]["StringEquals"]["iam:PassedToService"] == "lambda.amazonaws.com"
     assert role["Condition"]["ForAnyValue:StringEquals"]["aws:CalledVia"] == ["cloudformation.amazonaws.com"]
     forbidden = {"iam:CreateRole", "iam:PutRolePolicy", "iam:AttachRolePolicy", "lambda:InvokeFunction",
-                 "lambda:AddPermission", "lambda:CreateEventSourceMapping", "s3:PutObject", "sqs:SendMessage"}
+                 "lambda:CreateEventSourceMapping", "s3:PutObject", "sqs:SendMessage"}
     assert not forbidden & {a for s in p["Statement"] for a in s["Action"]}
     for s in p["Statement"]:
         assert s["Condition"]["StringEquals"]["aws:RequestedRegion"] == "af-south-1"
@@ -85,7 +85,7 @@ def test_deployer_passrole_and_configuration_are_bounded():
         if s["Resource"] == "*":
             assert s["Sid"] in {"ValidateIngest", "InspectIngestLogGroups"}
     assert statements["PrepareIngest"]["Condition"]["ForAllValues:StringEquals"]["cloudformation:ResourceTypes"] == [
-        "AWS::Lambda::Function", "AWS::Lambda::EventInvokeConfig", "AWS::Logs::LogGroup"]
+        "AWS::Lambda::Function", "AWS::Lambda::EventInvokeConfig", "AWS::Lambda::Permission", "AWS::Logs::LogGroup"]
 
 
 @pytest.mark.parametrize("change,reason", [({"linux_execution_verified": False}, "Linux"),
@@ -236,3 +236,17 @@ def test_third_diagnostic_changes_only_primary_create_calledvia_from_v4():
         s for s in original["Statement"] if s["Sid"] == "TagIngestLogGroup")
     canonical = next(s for s in policy("deployment-policy")["Statement"] if s["Sid"] == "CreateIngestLogGroup")
     assert canonical["Condition"]["ForAnyValue:StringEquals"]["aws:CalledVia"] == ["cloudformation.amazonaws.com"]
+
+
+def test_current_invoke_permissions_are_cloudformation_only_and_exact_function():
+    current = policy("deployment-policy")
+    grants = [s for s in current["Statement"] if set(s["Action"]) & {"lambda:AddPermission", "lambda:RemovePermission"}]
+    assert len(grants) == 1
+    grant = grants[0]
+    assert grant["Effect"] == "Allow"
+    assert grant["Resource"] == "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev"
+    assert grant["Condition"] == {
+        "StringEquals": {"aws:RequestedRegion": "af-south-1"},
+        "ForAnyValue:StringEquals": {"aws:CalledVia": ["cloudformation.amazonaws.com"]}}
+    assert not Path("infrastructure/iam/stage5-invoke-policy.json").exists()
+    assert len(json.dumps(current, separators=(",", ":"))) <= 6144

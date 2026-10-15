@@ -22,7 +22,8 @@ BUCKET=f"fintrust-reports-{ACCOUNT}-{REGION}-dev"
 ENI=["ec2:CreateNetworkInterface","ec2:DescribeNetworkInterfaces","ec2:DescribeSubnets",
      "ec2:DeleteNetworkInterface","ec2:AssignPrivateIpAddresses","ec2:UnassignPrivateIpAddresses"]
 TAGS=[{"Key":"Project","Value":"FinTrust"},{"Key":"Environment","Value":"dev"},{"Key":"Purpose","Value":"temporary-migration"}]
-PHASES=("preflight","bootstrap","iam","cleanup","bootstrap002","iam002","cleanup002")
+PHASES=("preflight","bootstrap","iam","cleanup","bootstrap002","iam002","cleanup002",
+        "bootstrap_extensions","iam_extensions","cleanup_extensions")
 
 def allow(sid,actions,resource,conditions=None,effect="Allow"):
     s={"Sid":sid,"Effect":effect,"Action":actions,"Resource":resource}
@@ -51,7 +52,7 @@ def runtime_policy(phase,endpoint):
     statements=[allow("Logs",["logs:CreateLogStream","logs:PutLogEvents"],LOG+":log-stream:*",regional()),
                 allow("LambdaEni",ENI,"*",regional()),
                 allow("NoCodeEni",ENI,"*",{"ArnEquals":{"lambda:SourceFunctionArn":FUNCTION}},"Deny")]
-    if phase in {"iam","iam002"}:
+    if phase in {"iam","iam002","iam_extensions"}:
         statements += [allow("NoMaster",["secretsmanager:GetSecretValue"],config.SECRET,effect="Deny"),
                        allow("MigrationLogin",["rds-db:connect"],DBUSER)]
     else:

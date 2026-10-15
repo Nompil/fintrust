@@ -1,0 +1,18 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "CreateOnlyFinTrustAlertEmail",
+      "Effect": "Allow",
+      "Action": [
+        "ses:CreateEmailIdentity"
+      ],
+      "Resource": "arn:aws:ses:af-south-1:966467878406:identity/nompilomabuya@outlook.com",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    }
+  ]
+}

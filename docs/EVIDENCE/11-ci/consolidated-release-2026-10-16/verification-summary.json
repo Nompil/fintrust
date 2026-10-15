@@ -1,0 +1,43 @@
+{
+  "status": "LOCAL_CANDIDATE_VERIFIED_NOT_DEPLOYED",
+  "source_sha256": "d87b1c676b40df5326e477093a402c5b444800446273c1752407310aa6a33367",
+  "unique_tests_passed": 1072,
+  "unresolved_failures": 0,
+  "skips": 0,
+  "runs": [
+    {
+      "file": "full.xml",
+      "passed": 1068,
+      "failed": 1,
+      "skipped": 0
+    },
+    {
+      "file": "repair.xml",
+      "passed": 190,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "runner/extensions-focused.xml",
+      "passed": 107,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "full_run_then_targeted_repairs": true,
+  "files_changed_after_full_run_and_rechecked": [
+    "tests/test_release_verification.py",
+    "tools/verify_filter_dropdowns.cjs",
+    "tools/verify_release_input.py"
+  ],
+  "lambda_archive_sha256": "ebf94636046662736b6f77bec1616bd122e0f14c856e189f1d90fc9fa77ea1ff",
+  "lambda_linux_verified": true,
+  "migrations_003_006_pg16_15_verified": true,
+  "migration_artifacts_verified": true,
+  "running_checkout_source_preserved": true,
+  "aws_changes": false,
+  "promoted_to_running_checkout": false,
+  "release_commit_created": false,
+  "live_migration_executed": false,
+  "live_e2e_passed": false
+}

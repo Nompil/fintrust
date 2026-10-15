@@ -1,0 +1,330 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Imbokodo workforce Cognito sign-in and application account-scope map; deploy only after approved change review.",
+  "Parameters": {
+    "StageName": {
+      "Type": "String",
+      "AllowedValues": [
+        "dev",
+        "staging",
+        "prod"
+      ]
+    },
+    "ApiExecutionRoleArn": {
+      "Type": "String",
+      "AllowedPattern": "^arn:[^:]+:iam::[0-9]{12}:role/[^/]+$",
+      "Description": "Existing pathless API Lambda role; grants read-only access to this stack's account-scope table."
+    },
+    "DomainPrefix": {
+      "Type": "String",
+      "MinLength": 1,
+      "MaxLength": 63,
+      "AllowedPattern": "^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$"
+    },
+    "CallbackUrls": {
+      "Type": "CommaDelimitedList",
+      "Description": "Exact HTTPS Imbokodo callback URLs; no localhost or wildcards in a cloud stack."
+    },
+    "LogoutUrls": {
+      "Type": "CommaDelimitedList",
+      "Description": "Exact HTTPS Imbokodo logout URLs; no localhost or wildcards in a cloud stack."
+    },
+    "EnableScopeRecovery": {
+      "Type": "String",
+      "Default": "false",
+      "AllowedValues": [
+        "false",
+        "true"
+      ],
+      "Description": "Optional DynamoDB point-in-time recovery; may incur charges."
+    }
+  },
+  "Resources": {
+    "ImbokodoUserPool": {
+      "Type": "AWS::Cognito::UserPool",
+      "Properties": {
+        "UserPoolName": {
+          "Fn::Sub": "imbokodo-${StageName}-workforce"
+        },
+        "UserPoolTier": "LITE",
+        "UsernameConfiguration": {
+          "CaseSensitive": false
+        },
+        "AutoVerifiedAttributes": [
+          "email"
+        ],
+        "AdminCreateUserConfig": {
+          "AllowAdminCreateUserOnly": true,
+          "InviteMessageTemplate": {
+            "EmailSubject": "Imbokodo Bank account invitation",
+            "EmailMessage": "Your Imbokodo Bank account is ready. Username: {username}. Temporary password: {####}. Sign in to change it."
+          }
+        },
+        "Policies": {
+          "PasswordPolicy": {
+            "MinimumLength": 14,
+            "RequireLowercase": true,
+            "RequireUppercase": true,
+            "RequireNumbers": true,
+            "RequireSymbols": true,
+            "TemporaryPasswordValidityDays": 3
+          }
+        },
+        "AccountRecoverySetting": {
+          "RecoveryMechanisms": [
+            {
+              "Name": "verified_email",
+              "Priority": 1
+            }
+          ]
+        },
+        "MfaConfiguration": "ON",
+        "EnabledMfas": [
+          "SOFTWARE_TOKEN_MFA"
+        ],
+        "Schema": [
+          {
+            "Name": "email",
+            "AttributeDataType": "String",
+            "Mutable": true,
+            "Required": true
+          }
+        ],
+        "DeletionProtection": "ACTIVE"
+      }
+    },
+    "HostedDomain": {
+      "Type": "AWS::Cognito::UserPoolDomain",
+      "Properties": {
+        "Domain": {
+          "Ref": "DomainPrefix"
+        },
+        "UserPoolId": {
+          "Ref": "ImbokodoUserPool"
+        }
+      }
+    },
+    "ImbokodoWebClient": {
+      "Type": "AWS::Cognito::UserPoolClient",
+      "Properties": {
+        "ClientName": {
+          "Fn::Sub": "imbokodo-${StageName}-workbench"
+        },
+        "UserPoolId": {
+          "Ref": "ImbokodoUserPool"
+        },
+        "GenerateSecret": false,
+        "AllowedOAuthFlowsUserPoolClient": true,
+        "AllowedOAuthFlows": [
+          "code"
+        ],
+        "AllowedOAuthScopes": [
+          "openid",
+          "email",
+          "profile"
+        ],
+        "SupportedIdentityProviders": [
+          "COGNITO"
+        ],
+        "CallbackURLs": {
+          "Ref": "CallbackUrls"
+        },
+        "LogoutURLs": {
+          "Ref": "LogoutUrls"
+        },
+        "PreventUserExistenceErrors": "ENABLED",
+        "EnableTokenRevocation": true,
+        "AccessTokenValidity": 5,
+        "IdTokenValidity": 5,
+        "RefreshTokenValidity": 30,
+        "TokenValidityUnits": {
+          "AccessToken": "minutes",
+          "IdToken": "minutes",
+          "RefreshToken": "days"
+        },
+        "ExplicitAuthFlows": [
+          "ALLOW_REFRESH_TOKEN_AUTH"
+        ]
+      }
+    },
+    "Analysts": {
+      "Type": "AWS::Cognito::UserPoolGroup",
+      "Properties": {
+        "GroupName": "Analysts",
+        "Description": "Risk / Compliance Analyst",
+        "Precedence": 1,
+        "UserPoolId": {
+          "Ref": "ImbokodoUserPool"
+        }
+      }
+    },
+    "Administrators": {
+      "Type": "AWS::Cognito::UserPoolGroup",
+      "Properties": {
+        "GroupName": "Administrators",
+        "Description": "Administrator; application RBAC still restricts financial review decisions",
+        "Precedence": 2,
+        "UserPoolId": {
+          "Ref": "ImbokodoUserPool"
+        }
+      }
+    },
+    "Auditors": {
+      "Type": "AWS::Cognito::UserPoolGroup",
+      "Properties": {
+        "GroupName": "Auditors",
+        "Description": "Read-only auditor",
+        "Precedence": 3,
+        "UserPoolId": {
+          "Ref": "ImbokodoUserPool"
+        }
+      }
+    },
+    "Maintainers": {
+      "Type": "AWS::Cognito::UserPoolGroup",
+      "Properties": {
+        "GroupName": "Maintainers",
+        "Description": "Technical operations only",
+        "Precedence": 4,
+        "UserPoolId": {
+          "Ref": "ImbokodoUserPool"
+        }
+      }
+    },
+    "UserAccountScopes": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": {
+          "Fn::Sub": "imbokodo-${StageName}-user-account-scopes"
+        },
+        "BillingMode": "PAY_PER_REQUEST",
+        "SSESpecification": {
+          "SSEEnabled": true
+        },
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "subject",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "subject",
+            "KeyType": "HASH"
+          }
+        ],
+        "DeletionProtectionEnabled": true,
+        "PointInTimeRecoverySpecification": {
+          "PointInTimeRecoveryEnabled": {
+            "Fn::If": [
+              "ScopeRecoveryEnabled",
+              true,
+              false
+            ]
+          }
+        },
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "Imbokodo"
+          },
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "StageName"
+            }
+          },
+          {
+            "Key": "DataClass",
+            "Value": "IdentityScope"
+          }
+        ]
+      }
+    },
+    "ApiReadUserScopes": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": {
+          "Fn::Sub": "imbokodo-${StageName}-read-user-scopes"
+        },
+        "Roles": [
+          {
+            "Fn::Select": [
+              1,
+              {
+                "Fn::Split": [
+                  "/",
+                  {
+                    "Ref": "ApiExecutionRoleArn"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:GetItem"
+              ],
+              "Resource": {
+                "Fn::GetAtt": [
+                  "UserAccountScopes",
+                  "Arn"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "UserPoolId": {
+      "Value": {
+        "Ref": "ImbokodoUserPool"
+      }
+    },
+    "UserPoolArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "ImbokodoUserPool",
+          "Arn"
+        ]
+      }
+    },
+    "AppClientId": {
+      "Value": {
+        "Ref": "ImbokodoWebClient"
+      }
+    },
+    "Issuer": {
+      "Value": {
+        "Fn::Sub": "https://cognito-idp.${AWS::Region}.${AWS::URLSuffix}/${ImbokodoUserPool}"
+      }
+    },
+    "HostedDomain": {
+      "Value": {
+        "Fn::Sub": "https://${DomainPrefix}.auth.${AWS::Region}.amazoncognito.com"
+      }
+    },
+    "UserScopeTable": {
+      "Value": {
+        "Ref": "UserAccountScopes"
+      }
+    }
+  },
+  "Conditions": {
+    "ScopeRecoveryEnabled": {
+      "Fn::Equals": [
+        {
+          "Ref": "EnableScopeRecovery"
+        },
+        "true"
+      ]
+    }
+  }
+}

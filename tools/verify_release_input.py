@@ -7,6 +7,14 @@ import re
 import sys
 import zipfile
 
+# cryptography 50.0.2's SSH parser contains a public format-header constant,
+# not key material. Only this byte-identical pinned source is exempt from the
+# header-pattern check. Changed bytes, other paths, and AWS keys still fail.
+PUBLIC_KEY_FORMAT_SOURCE_SHA256 = {
+    "cryptography/hazmat/primitives/serialization/ssh.py":
+        "162b177bf9d429d3c67ea10d5612a99a86b399a23ca87f067be5466dcd1dca4c",
+}
+
 try:
     from .package_lambda import verify_archive
 except ImportError:
@@ -40,7 +48,8 @@ def check_input(source, expected):
             if data.startswith(b"MZ"):
                 raise ValueError(f"Windows PE executable in archive member: {name}")
             if (re.search(rb"(?:AKIA|ASIA)[A-Z0-9]{16}", data)
-                    or re.search(rb"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----", data)):
+                    or (re.search(rb"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----", data)
+                        and hashlib.sha256(data).hexdigest() != PUBLIC_KEY_FORMAT_SOURCE_SHA256.get(name))):
                 raise ValueError(f"Credential pattern found in archive member: {name}")
     return evidence
 

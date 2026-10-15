@@ -38,9 +38,14 @@ def test_bucket_grants_have_exact_names_and_no_object_or_delete_rights():
     expected = {"arn:aws:s3:::fintrust-" + name + "-966467878406-af-south-1-dev"
                 for name in ("raw", "quarantine", "reports")}
     for s in policies()["s3"]["Statement"]:
-        assert set(s["Resource"]) == expected
+        resources = {s["Resource"]} if isinstance(s["Resource"], str) else set(s["Resource"])
+        if s["Sid"] == "ManageRawBucketNotifications":
+            assert resources == {"arn:aws:s3:::fintrust-raw-966467878406-af-south-1-dev"}
+            assert set(s["Action"]) == {"s3:GetBucketNotification", "s3:PutBucketNotification"}
+        else:
+            assert resources == expected
         assert not any("Object" in a or "Delete" in a for a in s["Action"])
-        if s["Sid"] != "InspectNamedBuckets":
+        if s["Sid"] not in {"InspectNamedBuckets", "ManageRawBucketNotifications"}:
             assert s["Condition"]["ForAnyValue:StringEquals"]["aws:CalledVia"] == ["cloudformation.amazonaws.com"]
     assert statements("s3")["CreateNamedBuckets"]["Condition"]["StringEquals"]["s3:LocationConstraint"] == "af-south-1"
 

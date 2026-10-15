@@ -8,7 +8,7 @@ ARN = 'arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev'
 def read(p): return json.loads(p.read_text(encoding='utf-8'))
 def digest(p): return hashlib.sha256(p.read_bytes().replace(b'\r\n',b'\n')).hexdigest()
 def test_async_policy_is_exact_and_does_not_widen_concurrency_or_other_operations():
-    base = read(IAM/'stage5-deployment-policy.json')
+    base = read(IAM/'evidence/stage5-permanent-installed-policy.json')
     assert base == read(IAM/'evidence/stage5-permanent-installed-policy.json')
     statements = {s['Sid']:s for s in base['Statement']}
     assert statements['ConfigureNamedIngest']['Resource'] == ARN
@@ -32,7 +32,7 @@ def test_async_policy_is_exact_and_does_not_widen_concurrency_or_other_operation
 def test_validation_bound_to_both_policies_and_no_live_retry_claim():
     data=read(IAM/'evidence/stage5-async-validation.json')
     assert data['candidate_sha256']==digest(IAM/'stage5-async-policy.json')
-    assert data['base_sha256']==digest(IAM/'stage5-deployment-policy.json')
+    assert data['base_sha256']==digest(IAM/'evidence/stage5-permanent-installed-policy.json')
     assert data['access_analyzer']['findings']==[]
     assert data['aws_mutations']==0
     assert data['cloudformation_retry_verified'] is False
@@ -43,7 +43,7 @@ def test_capacity_and_retained_versions_are_archived_not_deleted():
     assert archive['v2']['PolicyVersion']['IsDefaultVersion'] is True
     assert archive['v5']['PolicyVersion']['IsDefaultVersion'] is False
     assert archive['v5']['PolicyVersion']['Document']==read(IAM/'stage5-deployment-diagnostic3-policy.json')
-    assert archive['v7']['PolicyVersion']['Document']==read(IAM/'stage5-deployment-policy.json')
+    assert archive['v7']['PolicyVersion']['Document']==read(IAM/'evidence/stage5-permanent-installed-policy.json')
     assert archive['proposed_managed_count']==11
     assert archive['proposed_managed_count']<=archive['account_summary']['SummaryMap']['AttachedPoliciesPerRoleQuota']
     assert archive['cleanup_required_for_this_plan'] is False

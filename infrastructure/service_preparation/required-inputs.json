@@ -1,0 +1,46 @@
+{
+  "ses-identities.json": {},
+  "application-functions.json": {
+    "CodeBucket": null,
+    "CodeKey": null,
+    "CodeSha256": null,
+    "QuarantineBucket": null,
+    "ReportsBucket": null,
+    "RiskTable": null,
+    "RiskStreamArn": null,
+    "CognitoUserPoolId": null,
+    "CognitoAppClientId": null,
+    "CognitoDomain": null,
+    "CognitoRedirectUri": null,
+    "CognitoLogoutUri": null,
+    "CognitoUserScopeTable": null,
+    "CorsAllowedOrigins": null,
+    "SubnetIds": null,
+    "SecurityGroupIds": null,
+    "ExistingTransactionsArn": null,
+    "ExistingAlertFailuresArn": null,
+    "ExistingReportFailuresArn": null,
+    "ExistingReportFailuresUrl": null,
+    "CodeObjectVersion": null
+  },
+  "monitoring.json": {
+    "DbInstanceIdentifier": null,
+    "TransactionsQueueName": null,
+    "TransactionDlqName": null,
+    "IngestFailuresName": null,
+    "AlertFailuresName": null,
+    "ReportFailuresName": null
+  },
+  "cognito.json": {
+    "StageName": null,
+    "ApiExecutionRoleArn": null,
+    "DomainPrefix": null,
+    "CallbackUrls": null,
+    "LogoutUrls": null
+  },
+  "api.json": {
+    "ApiFunctionName": null,
+    "UserPoolArn": null
+  },
+  "api-shell.json": {}
+}

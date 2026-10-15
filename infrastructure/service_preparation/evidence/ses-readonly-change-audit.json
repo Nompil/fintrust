@@ -1,0 +1,23 @@
+{
+  "account": "966467878406",
+  "region": "af-south-1",
+  "actor": "arn:aws:iam::966467878406:user/fintrust-admin",
+  "action": "iam:CreatePolicyVersion",
+  "policy_arn": "arn:aws:iam::966467878406:policy/FinTrustConsoleReadOnly",
+  "previous_default": "v1",
+  "new_default": "v2",
+  "previous_version_retained": true,
+  "created_at_utc": "2026-10-15T20:40:00+00:00",
+  "validation_findings": [],
+  "default_document_readback_matched": true,
+  "existing_cloudformation_permissions_preserved": true,
+  "added_actions": [
+    "ses:GetAccount",
+    "ses:GetEmailIdentity",
+    "ses:ListEmailIdentities"
+  ],
+  "candidate_sha256": "ec46f735ab9ed94f7fc35715d03322ad4baac0063b7fde5fff958d2c2714c1a4",
+  "paid_resources_created": 0,
+  "service_activation": false,
+  "next": "Authenticate normal deployer identity and verify effective SES reads"
+}

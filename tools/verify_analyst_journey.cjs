@@ -247,7 +247,7 @@ const {chromium} = require(process.env.FINTRUST_PLAYWRIGHT_MODULE);
     assert.equal(aggregate.data.metrics.reviews_over_sla, 1);
     assert.equal(aggregate.data.metrics.high_risk_rate, 40);
     await p.locator('[data-insights-filter=risk_level]').selectOption('High');
-    await p.locator('[data-insights-filter=country]').fill('US');
+    await p.locator('[data-insights-filter=country]').selectOption('US');
     await p.locator('#insights-days').selectOption('custom');
     await p.locator('[data-insights-filter=from]').fill('2026-10-09');
     await p.locator('[data-insights-filter=to]').fill('2026-10-10');

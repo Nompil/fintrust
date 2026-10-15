@@ -1,0 +1,61 @@
+{
+  "status": "LOCAL_RUNNER_GATE_PASSED",
+  "live_deployment": "BLOCKED",
+  "quota_gate": "UNRESOLVED",
+  "aws_changed": false,
+  "live_migration_executed": false,
+  "postgresql_version": "16.15",
+  "focused_tests_passed": 107,
+  "focused_tests_failed": 0,
+  "focused_tests_skipped": 0,
+  "packages": [
+    {
+      "filename": "fintrust-migration-bootstrap_extensions.zip",
+      "byte_size": 20691782,
+      "sha256": "baa5021bb3fd03df580b00ae8746e9439cbf1a47be69ba6adddb9da3b9f70b5c",
+      "sha256_base64": "uqUCG7P9A99YCwCuh0bpQ5y/Gke+abpq3dudo7n3C1w=",
+      "phase": "bootstrap_extensions",
+      "runtime": "python3.12",
+      "architecture": "x86_64",
+      "target_os": "Linux",
+      "psycopg2_binary": "2.9.13",
+      "handler": "migration_runner.bootstrap_extensions_entry.lambda_handler",
+      "linux_execution_verified": true,
+      "postgresql16_execution_verified": true
+    },
+    {
+      "filename": "fintrust-migration-iam_extensions.zip",
+      "byte_size": 20690622,
+      "sha256": "4e53ba5c7e872e7aadb1582e6cbdd82ee5f119989111707cfc521673116791c5",
+      "sha256_base64": "TlO6XH6HLnqtsVgubL3YLuXxGZiREXB8/FIWcxFnkcU=",
+      "phase": "iam_extensions",
+      "runtime": "python3.12",
+      "architecture": "x86_64",
+      "target_os": "Linux",
+      "psycopg2_binary": "2.9.13",
+      "handler": "migration_runner.iam_extensions_entry.lambda_handler",
+      "linux_execution_verified": true,
+      "postgresql16_execution_verified": true
+    },
+    {
+      "filename": "fintrust-migration-cleanup_extensions.zip",
+      "byte_size": 20691778,
+      "sha256": "61cabbfcf997f6a22ccd384ea60bbaa3c8ef80ab5b5b1954e2a5d65b5204a128",
+      "sha256_base64": "Ycq7/PmX9qIszThOpgu6o8jvgKtbWxlU4qXWW1IEoSg=",
+      "phase": "cleanup_extensions",
+      "runtime": "python3.12",
+      "architecture": "x86_64",
+      "target_os": "Linux",
+      "psycopg2_binary": "2.9.13",
+      "handler": "migration_runner.cleanup_extensions_entry.lambda_handler",
+      "linux_execution_verified": true,
+      "postgresql16_execution_verified": true
+    }
+  ],
+  "limitations": [
+    "No real RDS IAM/TLS test",
+    "No live schema reconciliation",
+    "Runtime application grants remain a separate gate",
+    "New runner sources are working-tree changes, not a new release commit"
+  ]
+}

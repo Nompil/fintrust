@@ -1,0 +1,118 @@
+{
+  "checks": [
+    {
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "f4ac94",
+        "wall_time_seconds": 4.0564169,
+        "exit_code": 0,
+        "original_token_count": 68,
+        "output": "{\r\n    \"StackStatus\": \"UPDATE_COMPLETE\",\r\n    \"Parameters\": [\r\n        {\r\n            \"ParameterKey\": \"CodeObjectVersion\",\r\n            \"ParameterValue\": \"8Y7mCJGc.s2QG2NdP1n9qy_KxntXbdx.\"\r\n        }\r\n    ],\r\n    \"LastUpdatedTime\": \"2026-10-15T21:56:14.945000+00:00\"\r\n}\r\n"
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "917e7e",
+        "wall_time_seconds": 2.4045356,
+        "exit_code": 0,
+        "original_token_count": 144,
+        "output": "{\r\n    \"Policy\": \"{\\\"Version\\\":\\\"2012-10-17\\\",\\\"Id\\\":\\\"default\\\",\\\"Statement\\\":[{\\\"Sid\\\":\\\"fintrust-ingest-dev-RawBucketInvokePermission-hZ6Zaz3DtbhL\\\",\\\"Effect\\\":\\\"Allow\\\",\\\"Principal\\\":{\\\"Service\\\":\\\"s3.amazonaws.com\\\"},\\\"Action\\\":\\\"lambda:InvokeFunction\\\",\\\"Resource\\\":\\\"arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev\\\",\\\"Condition\\\":{\\\"StringEquals\\\":{\\\"AWS:SourceAccount\\\":\\\"966467878406\\\"},\\\"ArnLike\\\":{\\\"AWS:SourceArn\\\":\\\"arn:aws:s3:::fintrust-raw-966467878406-af-south-1-dev\\\"}}}]}\",\r\n    \"RevisionId\": \"5e812664-5fd7-4989-bcc5-9da6b54befd3\"\r\n}\r\n"
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "28ab10",
+        "wall_time_seconds": 4.0418933,
+        "exit_code": 0,
+        "original_token_count": 12,
+        "output": "{\r\n    \"ReservedConcurrentExecutions\": 0\r\n}\r\n"
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "441235",
+        "wall_time_seconds": 4.0498776,
+        "exit_code": 0,
+        "original_token_count": 26,
+        "output": "{\r\n    \"LambdaFunctions\": null,\r\n    \"Queues\": null,\r\n    \"Topics\": null,\r\n    \"EventBridge\": null\r\n}\r\n"
+      }
+    }
+  ],
+  "initialReadChecks": [
+    {
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "ee7c41",
+        "wall_time_seconds": 2.2988018,
+        "exit_code": 0,
+        "original_token_count": 53,
+        "output": "{\r\n    \"UserId\": \"AROA6CBPZPYDGYGBP2XTJ:botocore-session-1792100931\",\r\n    \"Account\": \"966467878406\",\r\n    \"Arn\": \"arn:aws:sts::966467878406:assumed-role/fintrust-deployer-role/botocore-session-1792100931\"\r\n}\r\n"
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "73f507",
+        "wall_time_seconds": 2.3743187,
+        "exit_code": 1,
+        "original_token_count": 47,
+        "output": "\r\naws: [ERROR]: An error occurred (ResourceNotFoundException) when calling the GetPolicy operation: The resource you requested does not exist.\r\n\r\nAdditional error details:\r\nType: User\r\n"
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "642676",
+        "wall_time_seconds": 2.4097391,
+        "exit_code": 0,
+        "original_token_count": 64,
+        "output": "{\r\n    \"FunctionArn\": \"arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev\",\r\n    \"State\": \"Active\",\r\n    \"LastUpdateStatus\": \"Successful\",\r\n    \"Runtime\": \"python3.12\",\r\n    \"Role\": \"arn:aws:iam::966467878406:role/fintrust-ingest-dev\"\r\n}\r\n"
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "b8330b",
+        "wall_time_seconds": 2.5927531999999998,
+        "exit_code": 0,
+        "original_token_count": 0,
+        "output": ""
+      }
+    }
+  ],
+  "beforeState": [
+    {
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "f17fc7",
+        "wall_time_seconds": 5.213706,
+        "exit_code": 0,
+        "original_token_count": 12,
+        "output": "{\r\n    \"ReservedConcurrentExecutions\": 0\r\n}\r\n"
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "24a6a9",
+        "wall_time_seconds": 5.2411973,
+        "exit_code": 0,
+        "original_token_count": 26,
+        "output": "{\r\n    \"LambdaFunctions\": null,\r\n    \"Queues\": null,\r\n    \"Topics\": null,\r\n    \"EventBridge\": null\r\n}\r\n"
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "3680ef",
+        "wall_time_seconds": 2.1796401,
+        "exit_code": 0,
+        "original_token_count": 0,
+        "output": ""
+      }
+    }
+  ]
+}

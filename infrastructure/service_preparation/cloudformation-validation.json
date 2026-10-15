@@ -1,0 +1,90 @@
+{
+  "checked_via": "aws cloudformation validate-template",
+  "profile": "fintrust-deployer-role",
+  "account": "966467878406",
+  "region": "af-south-1",
+  "results": [
+    {
+      "template": "ses-identities",
+      "result": {
+        "status": "fulfilled",
+        "value": {
+          "chunk_id": "3ed15a",
+          "wall_time_seconds": 2.4849539,
+          "exit_code": 0,
+          "original_token_count": 36,
+          "output": "{\r\n    \"Description\": \"FinTrust SES email identity proposal; no sending or paid add-ons\",\r\n    \"Capabilities\": null,\r\n    \"Reason\": null\r\n}\r\n"
+        }
+      }
+    },
+    {
+      "template": "application-functions",
+      "result": {
+        "status": "fulfilled",
+        "value": {
+          "chunk_id": "edc182",
+          "wall_time_seconds": 2.4711736,
+          "exit_code": 0,
+          "original_token_count": 39,
+          "output": "{\r\n    \"Description\": \"FinTrust remaining functions; reference existing messaging and ingest stacks\",\r\n    \"Capabilities\": null,\r\n    \"Reason\": null\r\n}\r\n"
+        }
+      }
+    },
+    {
+      "template": "monitoring",
+      "result": {
+        "status": "fulfilled",
+        "value": {
+          "chunk_id": "de384f",
+          "wall_time_seconds": 2.437844,
+          "exit_code": 0,
+          "original_token_count": 43,
+          "output": "{\r\n    \"Description\": \"FinTrust optional standard-metric alarms; no logs, custom metrics, SNS or dashboards created\",\r\n    \"Capabilities\": null,\r\n    \"Reason\": null\r\n}\r\n"
+        }
+      }
+    },
+    {
+      "template": "cognito",
+      "result": {
+        "status": "fulfilled",
+        "value": {
+          "chunk_id": "13c5f5",
+          "wall_time_seconds": 2.3623336,
+          "exit_code": 0,
+          "original_token_count": 71,
+          "output": "{\r\n    \"Description\": \"Imbokodo workforce Cognito sign-in and application account-scope map; deploy only after approved change review.\",\r\n    \"Capabilities\": [\r\n        \"CAPABILITY_IAM\"\r\n    ],\r\n    \"Reason\": \"The following resource(s) require capabilities: [AWS::IAM::Policy]\"\r\n}\r\n"
+        }
+      }
+    },
+    {
+      "template": "api-shell",
+      "result": {
+        "status": "fulfilled",
+        "value": {
+          "chunk_id": "c90bca",
+          "wall_time_seconds": 2.3333415,
+          "exit_code": 0,
+          "original_token_count": 50,
+          "output": "{\r\n    \"Description\": \"Temporary first phase for the FinTrust API stack: reserve its stable API ID before registering the Cognito OAuth callback.\",\r\n    \"Capabilities\": null,\r\n    \"Reason\": null\r\n}\r\n"
+        }
+      }
+    },
+    {
+      "template": "api",
+      "result": {
+        "status": "fulfilled",
+        "value": {
+          "chunk_id": "6671b2",
+          "wall_time_seconds": 2.3410476,
+          "exit_code": 0,
+          "original_token_count": 43,
+          "output": "{\r\n    \"Description\": \"FinTrust same-origin workbench API protected by an API Gateway Cognito user-pool authorizer.\",\r\n    \"Capabilities\": null,\r\n    \"Reason\": null\r\n}\r\n"
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "Template validation is not a deployment, property-level runtime validation or live E2E proof.",
+    "No stacks were created or updated."
+  ]
+}

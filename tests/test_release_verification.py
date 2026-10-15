@@ -20,6 +20,27 @@ def test_checksum_mismatch_rejected_before_archive_inspection(tmp_path, monkeypa
         release.check_input(path, "0" * 64)
 
 
+@pytest.mark.parametrize("modified,relocated", [(False, False), (True, False), (False, True)])
+def test_pinned_ssh_parser_header_requires_exact_source_and_path(tmp_path, monkeypatch, modified, relocated):
+    from cryptography.hazmat.primitives.serialization import ssh
+    data = Path(ssh.__file__).read_bytes()
+    assert hashlib.sha256(data).hexdigest() == release.PUBLIC_KEY_FORMAT_SOURCE_SHA256[
+        "cryptography/hazmat/primitives/serialization/ssh.py"]
+    if modified:
+        data += b"\n# changed vendor content\n"
+    name = "fintrust/ssh.py" if relocated else "cryptography/hazmat/primitives/serialization/ssh.py"
+    path = tmp_path / "candidate.zip"
+    with zipfile.ZipFile(path, "w") as archive:
+        archive.writestr(name, data)
+    monkeypatch.setattr(release, "verify_archive", lambda _: {})
+    checksum = hashlib.sha256(path.read_bytes()).hexdigest()
+    if modified or relocated:
+        with pytest.raises(ValueError, match="Credential pattern"):
+            release.check_input(path, checksum)
+    else:
+        assert release.check_input(path, checksum) == {}
+
+
 @pytest.mark.parametrize("name,data", [
     (".env", b"local configuration"),
     ("docs/architecture.md", b"project documentation"),

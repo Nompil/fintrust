@@ -32,6 +32,7 @@
           "cloudformation:ResourceTypes": [
             "AWS::Lambda::Function",
             "AWS::Lambda::EventInvokeConfig",
+            "AWS::Lambda::Permission",
             "AWS::Logs::LogGroup"
           ]
         },
@@ -124,7 +125,9 @@
       "Effect": "Allow",
       "Action": [
         "lambda:PutFunctionConcurrency",
-        "lambda:PutFunctionEventInvokeConfig"
+        "lambda:PutFunctionEventInvokeConfig",
+        "lambda:AddPermission",
+        "lambda:RemovePermission"
       ],
       "Resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev",
       "Condition": {

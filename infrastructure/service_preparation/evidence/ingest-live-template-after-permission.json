@@ -1,0 +1,118 @@
+﻿{
+    "TemplateBody": {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Description": "FinTrust Stage 5 unwired ingest Lambda; separate execution approval required",
+        "Parameters": {
+            "CodeObjectVersion": {
+                "Type": "String",
+                "MinLength": 1,
+                "AllowedPattern": "(?!null$)[A-Za-z0-9._+/=-]+",
+                "Description": "Verified version ID of the approved package object"
+            }
+        },
+        "Resources": {
+            "IngestLogs": {
+                "Type": "AWS::Logs::LogGroup",
+                "Properties": {
+                    "LogGroupName": "/aws/lambda/fintrust-ingest-dev",
+                    "RetentionInDays": 14,
+                    "Tags": [
+                        {
+                            "Key": "Project",
+                            "Value": "FinTrust"
+                        },
+                        {
+                            "Key": "Environment",
+                            "Value": "dev"
+                        }
+                    ]
+                },
+                "DeletionPolicy": "Retain",
+                "UpdateReplacePolicy": "Retain"
+            },
+            "IngestFunction": {
+                "Type": "AWS::Lambda::Function",
+                "Properties": {
+                    "FunctionName": "fintrust-ingest-dev",
+                    "Role": "arn:aws:iam::966467878406:role/fintrust-ingest-dev",
+                    "Runtime": "python3.12",
+                    "Handler": "fintrust.ingest.lambda_handler",
+                    "Code": {
+                        "S3Bucket": "fintrust-reports-966467878406-af-south-1-dev",
+                        "S3Key": "deployment/lambda/d645d8949ee5b128b2b5c4c1558dd61a1a5c0fd3cdeace60363b19f70d167d62/fintrust.zip",
+                        "S3ObjectVersion": {
+                            "Ref": "CodeObjectVersion"
+                        }
+                    },
+                    "Timeout": 120,
+                    "MemorySize": 256,
+                    "Environment": {
+                        "Variables": {
+                            "FINTRUST_SERVICE": "ingest",
+                            "FINTRUST_STAGE": "dev",
+                            "TRANSACTION_QUEUE_URL": "https://sqs.af-south-1.amazonaws.com/966467878406/fintrust-transactions-dev.fifo",
+                            "QUARANTINE_BUCKET": "fintrust-quarantine-966467878406-af-south-1-dev"
+                        }
+                    },
+                    "Architectures": [
+                        "x86_64"
+                    ],
+                    "ReservedConcurrentExecutions": 0,
+                    "Tags": [
+                        {
+                            "Key": "Project",
+                            "Value": "FinTrust"
+                        },
+                        {
+                            "Key": "Environment",
+                            "Value": "dev"
+                        }
+                    ]
+                },
+                "DependsOn": "IngestLogs"
+            },
+            "IngestAsync": {
+                "Type": "AWS::Lambda::EventInvokeConfig",
+                "Properties": {
+                    "FunctionName": {
+                        "Ref": "IngestFunction"
+                    },
+                    "Qualifier": "$LATEST",
+                    "MaximumRetryAttempts": 2,
+                    "MaximumEventAgeInSeconds": 21600,
+                    "DestinationConfig": {
+                        "OnFailure": {
+                            "Destination": "arn:aws:sqs:af-south-1:966467878406:fintrust-ingest-failures-dev"
+                        }
+                    }
+                }
+            },
+            "RawBucketInvokePermission": {
+                "Type": "AWS::Lambda::Permission",
+                "Properties": {
+                    "FunctionName": {
+                        "Ref": "IngestFunction"
+                    },
+                    "Action": "lambda:InvokeFunction",
+                    "Principal": "s3.amazonaws.com",
+                    "SourceAccount": "966467878406",
+                    "SourceArn": "arn:aws:s3:::fintrust-raw-966467878406-af-south-1-dev"
+                }
+            }
+        },
+        "Outputs": {
+            "IngestFunctionArn": {
+                "Value": {
+                    "Fn::GetAtt": [
+                        "IngestFunction",
+                        "Arn"
+                    ]
+                }
+            }
+        }
+    },
+    "StagesAvailable": [
+        "Original",
+        "Processed"
+    ]
+}

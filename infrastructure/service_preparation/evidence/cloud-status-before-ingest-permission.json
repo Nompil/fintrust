@@ -1,0 +1,86 @@
+{
+  "checked_at_utc": "2026-10-15T20:53:21.318574+00:00",
+  "account": "966467878406",
+  "region": "af-south-1",
+  "ses": {
+    "identity": "nompilomabuya@outlook.com",
+    "verified_for_sending": true,
+    "verification_status": "SUCCESS",
+    "sandbox": true,
+    "pricing_plan": "ESSENTIALS",
+    "pricing_plan_changed": false,
+    "test_alerts_sent": 0,
+    "application_alert_lambda_deployed_by_this_work": false
+  },
+  "templates": {
+    "cloudformation_validation_passed": 6,
+    "stacks_deployed": 0,
+    "runtime_not_verified": true
+  },
+  "ingest": {
+    "reserved_concurrency": 0,
+    "wiring_changed": false,
+    "get_policy_check": "AccessDenied despite exact attached v3 permission and allowed simulation; effective read not proven; no scope broadening"
+  },
+  "temporary_iam": {
+    "policy_arn": "arn:aws:iam::966467878406:policy/FinTrustSesIdentitySetupTemporary",
+    "policy_id": "ANPA6CBPZPYDON2TAUK4T",
+    "detached": true,
+    "deleted": true,
+    "deletion_confirmed_by": "iam:GetPolicy returned NoSuchEntity"
+  },
+  "read_only_policy": {
+    "name": "FinTrustConsoleReadOnly",
+    "default_version": "v3",
+    "versions_v1_v2_retained": true,
+    "v3_readback_verified": true
+  },
+  "configuration_changes": [
+    {
+      "actor": "fintrust-admin",
+      "action": "iam:CreatePolicyVersion",
+      "resource": "FinTrustConsoleReadOnly",
+      "version": "v2",
+      "created_at": "2026-10-15T20:40:00+00:00"
+    },
+    {
+      "actor": "fintrust-admin",
+      "action": "iam:CreatePolicy",
+      "resource": "arn:aws:iam::966467878406:policy/FinTrustSesIdentitySetupTemporary",
+      "created_at": "2026-10-15T20:46:09+00:00"
+    },
+    {
+      "actor": "fintrust-admin",
+      "action": "iam:AttachRolePolicy",
+      "resource": "arn:aws:iam::966467878406:policy/FinTrustSesIdentitySetupTemporary",
+      "role": "fintrust-deployer-role"
+    },
+    {
+      "actor": "fintrust-deployer-role",
+      "action": "ses:CreateEmailIdentity",
+      "resource": "nompilomabuya@outlook.com",
+      "initial_retry": "First call denied during propagation; same scoped permission simulated allowed; retry succeeded"
+    },
+    {
+      "actor": "fintrust-admin",
+      "action": "iam:DetachRolePolicy",
+      "resource": "arn:aws:iam::966467878406:policy/FinTrustSesIdentitySetupTemporary"
+    },
+    {
+      "actor": "fintrust-admin",
+      "action": "iam:DeletePolicy",
+      "resource": "arn:aws:iam::966467878406:policy/FinTrustSesIdentitySetupTemporary"
+    },
+    {
+      "actor": "fintrust-admin",
+      "action": "iam:CreatePolicyVersion",
+      "resource": "FinTrustConsoleReadOnly",
+      "version": "v3",
+      "created_at": "2026-10-15T20:50:23+00:00"
+    }
+  ],
+  "paid_endpoints_created": 0,
+  "quota_changed": false,
+  "live_migration_run": false,
+  "schedules_or_alarms_activated": false
+}

@@ -1,5 +1,8 @@
 # Stage 5 complete tagged-log creation authorization review
 
+> Latest live state: Stage 5 disabled ingest infrastructure is VERIFIED / CREATE_COMPLETE.
+> See the final live checkpoint below. Prior failure/recovery instructions are historical.
+
 Current checkpoint: the approved v6 direct test succeeded; canonical v2 plus one
 scoped legacy grant is prepared locally. See [permanent fix and recovery](STAGE5_PERMANENT_FIX.md).
 Earlier hypotheses/results below are preserved as chronological evidence.
@@ -325,3 +328,20 @@ is restored as default. See [STAGE5_ASYNC_FIX.md](STAGE5_ASYNC_FIX.md) for the
 size-constrained supplemental policy, read-only evidence and administrator cleanup
 plan. Earlier ROLLBACK_COMPLETE retry instructions are historical and must not
 be executed for this state. No AWS mutations or runtime/SQL changes in this review.
+
+
+## Live checkpoint: Stage 5 disabled ingest infrastructure verified
+
+The approved async recovery deployed fintrust-ingest-dev and all three resources
+to CREATE_COMPLETE in exactly one attempt. FinTrustStage5Async is attached only
+to the deployer role, v7 is default, and v2 is preserved. Failed stack cleanup and
+empty retained-log cleanup completed through the administrator. Python 3.12/x86_64
+uses the unchanged historical artifact; reserved concurrency is 0 and trigger
+checks are clear. The async $LATEST settings match the template. See
+[verification report](../docs/EVIDENCE/08-lambda/82-stage5-async-verification-result.md)
+for live evidence and the resolved post-deploy empty-OnSuccess comparison.
+Stage 5 infrastructure is Verified; AWS Integration remains In Progress. Runtime
+processing and the hardened-runtime release are separate and have not begun.
+Earlier recovery commands are historical: do not repeat them against this
+CREATE_COMPLETE stack. No package upload, invocation, SQL, RDS/SQS/DynamoDB
+mutation or Git push occurred.

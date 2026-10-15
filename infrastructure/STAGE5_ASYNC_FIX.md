@@ -1,5 +1,8 @@
 # Stage 5 async IAM correction and CREATE rollback recovery
 
+> Latest live state: Stage 5 disabled ingest infrastructure is VERIFIED / CREATE_COMPLETE.
+> See the final live checkpoint below. Prior failure/recovery instructions are historical.
+
 Status: preparation only; no AWS mutations authorized or performed in this review.
 This supersedes the retry instructions in STAGE5_PERMANENT_FIX.md for the current
 stack. Stages 1â€“4 remain verified; Stage 5 is not verified; AWS Integration is In Progress.
@@ -299,3 +302,20 @@ zero findings**. Managed attachment capacity verified at 11/20 for the proposal;
 base remains 6065/6144. AWS v2 remains default; no new policy/version was created,
 attached, activated or deleted. **STAGE5 ASYNC IAM FIX READY** means ready for
 reviewed manual IAM/recovery approval, not deployed or runtime verified.
+
+
+## Live checkpoint: Stage 5 disabled ingest infrastructure verified
+
+The approved async recovery deployed fintrust-ingest-dev and all three resources
+to CREATE_COMPLETE in exactly one attempt. FinTrustStage5Async is attached only
+to the deployer role, v7 is default, and v2 is preserved. Failed stack cleanup and
+empty retained-log cleanup completed through the administrator. Python 3.12/x86_64
+uses the unchanged historical artifact; reserved concurrency is 0 and trigger
+checks are clear. The async $LATEST settings match the template. See
+[verification report](../docs/EVIDENCE/08-lambda/82-stage5-async-verification-result.md)
+for live evidence and the resolved post-deploy empty-OnSuccess comparison.
+Stage 5 infrastructure is Verified; AWS Integration remains In Progress. Runtime
+processing and the hardened-runtime release are separate and have not begun.
+Earlier recovery commands are historical: do not repeat them against this
+CREATE_COMPLETE stack. No package upload, invocation, SQL, RDS/SQS/DynamoDB
+mutation or Git push occurred.

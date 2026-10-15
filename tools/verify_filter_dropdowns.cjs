@@ -1,0 +1,70 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const {chromium}=require(process.env.FINTRUST_PLAYWRIGHT_MODULE);
+(async()=>{
+ const origin=process.argv[2],out=process.argv[3];
+ assert.match(origin,/^http:\/\/127\.0\.0\.1:\d+$/);
+ const executablePath=[chromium.executablePath(),'C:/Program Files/Google/Chrome/Application/chrome.exe','C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'].find(p=>fs.existsSync(p));
+ assert.ok(executablePath,'Install Playwright Chromium or a supported local browser before verification');
+ const browser=await chromium.launch({headless:true,executablePath,args:['--disable-background-networking']});
+ try{
+  const context=await browser.newContext({viewport:{width:1366,height:900}});
+  await context.route('**/*',route=>new URL(route.request().url()).origin===origin?route.continue():route.abort());
+  const page=await context.newPage(),errors=[];
+  page.on('pageerror',error=>errors.push(error.message));
+  async function ready(){await page.waitForFunction(()=>!document.querySelector('#status').textContent.startsWith('Loading'));assert.equal(await page.locator('#error').isVisible(),false,await page.locator('#error').textContent());}
+  async function nav(name){await page.locator('#navigation').getByRole('button',{name,exact:true}).click();await ready();}
+  await page.goto(origin+'/release1');
+  await page.locator('#token').fill('2'.repeat(64));await page.locator('#signin').click();
+  await page.locator('#workspace').waitFor({state:'visible'});await ready();
+  // Hold the first response briefly so the actual loading label is observable.
+  const transactions=url=>url.origin===origin&&url.pathname==='/v1/workflows/transactions';
+  await page.route(transactions,async route=>{await new Promise(resolve=>setTimeout(resolve,700));await route.continue();});
+  await page.locator('#navigation').getByRole('button',{name:'Transactions',exact:true}).click();
+  await page.waitForFunction(()=>document.querySelector('#status').textContent==='Loading\u2026');
+  await ready();await page.unroute(transactions);
+  assert.match(await page.locator('#page').textContent(),/^Rows \d+\u2013\d+$/);
+  assert.ok(await page.locator('.analyst-table td').count()>0,'Accepted ledger transactions should be visible');
+  const colours=await page.evaluate(()=>['High','Medium','Low'].map(level=>{const el=riskScore(70,level);document.body.append(el);const text=getComputedStyle(el).color,bar=getComputedStyle(el.querySelector('.score-track>span')).backgroundColor,label=el.textContent;el.remove();return {text,bar,label};}));
+  assert.deepEqual(colours.map(x=>x.text),['rgb(180, 35, 50)','rgb(145, 101, 28)','rgb(39, 122, 92)']);
+  assert.deepEqual(colours.map(x=>x.bar),colours.map(x=>x.text));
+  assert.ok(colours.every((x,i)=>x.label.includes(['HIGH','MEDIUM','LOW'][i])));
+  const country=page.locator('[data-filter="country"]');
+  assert.equal(await country.evaluate(e=>e.tagName),'SELECT');
+  assert.match(await country.innerText(),/ZA.*South Africa/);
+  assert.equal(await country.locator('option[value="ZA"]').innerText(),'ZA \u2014 South Africa');
+  assert.match(await country.innerText(),/US.*United States/);
+  await country.selectOption('US');
+  const filtered=page.waitForResponse(r=>r.url().includes('/v1/workflows/transactions?')&&r.url().includes('country=US'));
+  await page.locator('#apply-transaction-filters').click();
+  assert.equal((await filtered).status(),200);await ready();assert.equal(await country.inputValue(),'US');
+  await page.screenshot({path:path.join(out,'transactions-dropdown.png'),fullPage:true});
+  const insights=url=>url.origin===origin&&url.pathname==='/v1/release1/insights';
+  await page.route(insights,async route=>{await new Promise(resolve=>setTimeout(resolve,700));await route.continue();});
+  await page.locator('#navigation').getByRole('button',{name:'Insights',exact:true}).click();
+  await page.waitForFunction(()=>document.querySelector('#status').textContent==='Loading\u2026');
+  assert.equal(await page.locator('#paging').isVisible(),false);
+  await ready();await page.unroute(insights);
+  const insight=page.locator('[data-insights-filter="country"]');
+  assert.equal(await insight.evaluate(e=>e.tagName),'SELECT');
+  await insight.selectOption('ZA');await page.locator('#apply-insights-filters').click();await ready();
+  assert.equal(await insight.inputValue(),'ZA');
+  await page.screenshot({path:path.join(out,'insights-dropdown.png'),fullPage:true});
+  await nav('Risk Events');
+  const assignee=page.locator('.investigation-filters select[name="assignee"]');
+  assert.match(await assignee.innerText(),/analyst02/);await assignee.selectOption('analyst02');
+  const assigned=page.waitForResponse(r=>r.url().includes('/v1/workflows/risk-events?')&&r.url().includes('assignee=analyst02'));
+  await page.getByRole('button',{name:'Apply investigation filters',exact:true}).click();
+  assert.equal((await assigned).status(),200);await ready();
+  assert.equal(await page.locator('.investigation-filters select[name="assignee"]').inputValue(),'analyst02');
+  await page.screenshot({path:path.join(out,'assignee-dropdown.png'),fullPage:true});
+  assert.doesNotMatch(await page.locator('body').innerText(),/\u00e2\u20ac|\u00c2[\u00a0-\u00bf]|\ufffd/);
+  await page.getByRole('button',{name:'Reset filters',exact:true}).click();await ready();
+  assert.equal(await page.locator('.investigation-filters select[name="assignee"]').inputValue(),'');
+  await page.locator('#logout').click();
+  assert.equal(await country.locator('option').count(),1);
+  assert.equal(await insight.locator('option').count(),1);
+  assert.deepEqual(errors,[]);
+  fs.writeFileSync(path.join(out,'browser-result.json'),JSON.stringify({status:'PASSED',loading_text_encoding:true,pagination_encoding:true,country_label_encoding:true,no_garbled_page_text:true,country_dropdowns:true,scoped_options:true,assignee_dropdown:true,selections_apply_and_persist:true,reset_and_logout_clear:true,page_errors:errors},null,2));
+ }finally{await browser.close();}
+})().catch(error=>{console.error(error);process.exit(1);});

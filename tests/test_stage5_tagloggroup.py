@@ -9,6 +9,7 @@ IAM = Path('infrastructure/iam')
 CANDIDATE = IAM / 'stage5-deployment-tagloggroup-diagnostic-policy.json'
 V5 = IAM / 'stage5-deployment-diagnostic3-policy.json'
 CANONICAL = IAM / 'stage5-deployment-policy.json'
+PERMANENT_SNAPSHOT = IAM / 'evidence/stage5-permanent-installed-policy.json'
 ARCHIVE = IAM / 'evidence/stage5-tagloggroup-version-baseline.json'
 VALIDATION = IAM / 'evidence/stage5-tagloggroup-validation.json'
 ARN = 'arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev'
@@ -38,7 +39,7 @@ def test_candidate_adds_exactly_one_legacy_grant_and_preserves_all_v5_statements
 
 
 def test_archived_v2_and_v5_controls_remain_preserved():
-    current = read(CANONICAL)
+    current = read(PERMANENT_SNAPSHOT)
     assert current['Statement'][:-1] == read(ARCHIVE)['v2']['PolicyVersion']['Document']['Statement']
     assert historical_policy_sha256(V5.read_bytes()) == 'bc51f45a07560c6a2f11adebb6db721a1303eff62b871d0d3a6aa7f69b257c48'
 
@@ -50,7 +51,7 @@ def test_proposed_v3_cleanup_is_nondefault_and_archived_before_any_deletion():
     assert archive['v2']['PolicyVersion']['IsDefaultVersion'] is True
     assert archive['v3']['PolicyVersion']['IsDefaultVersion'] is False
     assert archive['v3']['PolicyVersion']['Document'] == read(IAM / 'stage5-deployment-diagnostic-policy.json')
-    current = read(CANONICAL)
+    current = read(PERMANENT_SNAPSHOT)
     assert archive['v2']['PolicyVersion']['Document'] == {**current, 'Statement': current['Statement'][:-1]}
     assert archive['v5']['PolicyVersion']['Document'] == read(V5)
 
