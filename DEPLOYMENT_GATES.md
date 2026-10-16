@@ -41,3 +41,22 @@ No live RDS changes or live E2E have been performed by this verification.
 - Regional quota is still 10, unreserved quota 10, and function count 1. Service Quotas request history is empty. This does not prove there is no separate AWS Support case. No quota write was attempted.
 - Existing foundation outputs are mapped in `docs/EVIDENCE/11-ci/consolidated-release-2026-10-16/live-deployment-inputs.json`. Unresolved values remain explicit; the worksheet cannot be used as an execution-ready parameter file.
 - The separate AWS Support console session requires interactive sign-in. The Support case remains a draft; paid support, a 1,001 quota request and endpoint recreation remain unauthorized.
+
+## Support case submitted - latest evidence
+
+The owner-provided case-details screenshot confirms submission of AWS Support
+case **179210878300923**, created **16 October 2026, 01:59:43 SAST**
+(`2026-10-15T23:59:43.512Z`). Its displayed status is **Unassigned**.
+The console shows case type **Account**, category **Service Quotas, General**,
+severity **General question**, and **Basic Support**. Earlier draft-only and
+no-case-ID statements above describe the earlier state and are superseded here.
+
+Evidence is saved without visual editing as
+`docs/EVIDENCE/11-ci/consolidated-release-2026-10-16/aws-support-case-179210878300923-details.png`.
+The adjacent status JSON records the PNG SHA256, dimensions and provenance.
+
+The quota gate remains **BLOCKED_PENDING_AWS_REVIEW**. The screenshot does not
+confirm a quota increase, an assigned agent, or approval for live migration.
+No live migration, service activation, support-plan upgrade or endpoint creation
+was performed while saving this evidence. Keep the case-access IAM policy only
+for required case follow-up, then execute its recorded cleanup plan.

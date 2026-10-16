@@ -1,0 +1,28 @@
+{
+  "case_id": "179210878300923",
+  "subject": "Manual review: Lambda quota 10 blocks reserved concurrency in af-south-1",
+  "status_as_shown": "Unassigned",
+  "created_utc": "2026-10-15T23:59:43.512Z",
+  "created_sast": "2026-10-16T01:59:43.512+02:00",
+  "case_type_as_shown": "Account",
+  "category_as_shown": "Service Quotas, General",
+  "severity_as_shown": "General question",
+  "support_plan_as_shown": "Basic Support",
+  "language_as_shown": "English",
+  "source": "Owner-provided screenshot; matching clipboard image visually verified before saving",
+  "screenshot": "aws-support-case-179210878300923-details.png",
+  "screenshot_sha256": "58c36f8e95881aa2341b5e9db00cc31ee126bfd52ee662ed10ea266ea014fa44",
+  "screenshot_bytes": 120540,
+  "width": 1879,
+  "height": 754,
+  "recorded_at_sast": "2026-10-16T02:04:58.992432+02:00",
+  "case_submission_confirmed_by_screenshot": true,
+  "quota_approval_confirmed": false,
+  "quota_gate": "BLOCKED_PENDING_AWS_REVIEW",
+  "live_migration_executed": false,
+  "aws_changes_during_evidence_save": false,
+  "limitations": [
+    "Status reflects the supplied screenshot, not a fresh API query.",
+    "Case creation is not quota approval or proof that the quota value changed."
+  ]
+}
