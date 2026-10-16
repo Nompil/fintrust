@@ -51,5 +51,14 @@
   ],
   "no_new_nat_interface_endpoint_or_paid_support_authorized": true,
   "application_activation_performed": false,
-  "updated_at": "2026-10-16T21:29:27.055392+00:00"
+  "updated_at": "2026-10-16T21:29:27.055392+00:00",
+  "latest_safety_verification": {
+    "checked_at": "2026-10-16T21:41:53.287968+00:00",
+    "status": "PASS_INACTIVE_CONFIGURATION",
+    "evidence": "deployment_iam/evidence/post-configuration-safety-check.json",
+    "lambda_total_concurrency": 10,
+    "support_correspondence": "NOT_RECHECKED_CONSOLE_SIGN_IN_REQUIRED",
+    "new_aws_changes": false
+  },
+  "remaining_release_checklist": "REMAINING_RELEASE_STEPS.md"
 }
