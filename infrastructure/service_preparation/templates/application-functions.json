@@ -187,7 +187,19 @@
             1,
             0
           ]
-        }
+        },
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "Stage"
+            }
+          }
+        ]
       },
       "DependsOn": "ScoringLogs"
     },
@@ -197,7 +209,19 @@
         "LogGroupName": {
           "Fn::Sub": "/aws/lambda/fintrust-scoring-${Stage}"
         },
-        "RetentionInDays": 14
+        "RetentionInDays": 14,
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "Stage"
+            }
+          }
+        ]
       },
       "DeletionPolicy": "Retain",
       "UpdateReplacePolicy": "Retain"
@@ -252,7 +276,19 @@
             1,
             0
           ]
-        }
+        },
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "Stage"
+            }
+          }
+        ]
       },
       "DependsOn": "AlertLogs"
     },
@@ -262,7 +298,19 @@
         "LogGroupName": {
           "Fn::Sub": "/aws/lambda/fintrust-alert-${Stage}"
         },
-        "RetentionInDays": 14
+        "RetentionInDays": 14,
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "Stage"
+            }
+          }
+        ]
       },
       "DeletionPolicy": "Retain",
       "UpdateReplacePolicy": "Retain"
@@ -331,7 +379,19 @@
             1,
             0
           ]
-        }
+        },
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "Stage"
+            }
+          }
+        ]
       },
       "DependsOn": "ReportLogs"
     },
@@ -341,7 +401,19 @@
         "LogGroupName": {
           "Fn::Sub": "/aws/lambda/fintrust-report-${Stage}"
         },
-        "RetentionInDays": 14
+        "RetentionInDays": 14,
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "Stage"
+            }
+          }
+        ]
       },
       "DeletionPolicy": "Retain",
       "UpdateReplacePolicy": "Retain"
@@ -432,7 +504,19 @@
             1,
             0
           ]
-        }
+        },
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "Stage"
+            }
+          }
+        ]
       },
       "DependsOn": "ApiLogs"
     },
@@ -442,7 +526,19 @@
         "LogGroupName": {
           "Fn::Sub": "/aws/lambda/fintrust-api-${Stage}"
         },
-        "RetentionInDays": 14
+        "RetentionInDays": 14,
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "Stage"
+            }
+          }
+        ]
       },
       "DeletionPolicy": "Retain",
       "UpdateReplacePolicy": "Retain"
@@ -466,6 +562,18 @@
         },
         "FunctionResponseTypes": [
           "ReportBatchItemFailures"
+        ],
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "Stage"
+            }
+          }
         ]
       }
     },
@@ -505,7 +613,19 @@
               "Pattern": "{\"eventName\": [\"INSERT\"], \"dynamodb\": {\"NewImage\": {\"score_date\": {\"S\": [{\"prefix\": \"TX#\"}]}, \"risk_level\": {\"S\": [\"High\"]}}}}"
             }
           ]
-        }
+        },
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "Stage"
+            }
+          }
+        ]
       }
     },
     "ApiVersion": {

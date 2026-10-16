@@ -6,3 +6,9 @@
 tests/fixtures/e2e/fintrust_e2e_mixed_transactions.csv -text whitespace=cr-at-eol
 tests/fixtures/e2e/fintrust_e2e_companion_transactions_B.csv -text whitespace=cr-at-eol
 tests/fixtures/e2e/release1/*.csv -text
+
+# Hash-bound deployment documents must keep identical bytes on Windows/Linux.
+infrastructure/service_preparation/templates/*.json text eol=lf
+infrastructure/service_preparation/runtime_iam/*.json text eol=lf
+infrastructure/service_preparation/deployment_iam/*.json text eol=lf
+infrastructure/service_preparation/deployment_iam/evidence/*.json text eol=lf

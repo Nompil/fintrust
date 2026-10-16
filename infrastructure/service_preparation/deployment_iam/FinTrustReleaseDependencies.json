@@ -1,0 +1,260 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ReadOnlyBoundReleaseObject",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObjectVersion"
+      ],
+      "Resource": "arn:aws:s3:::fintrust-reports-966467878406-af-south-1-dev/deployment/lambda/ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d/fintrust.zip",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    },
+    {
+      "Sid": "DecryptOnlyBoundReleaseViaS3",
+      "Effect": "Allow",
+      "Action": [
+        "kms:Decrypt"
+      ],
+      "Resource": "arn:aws:kms:af-south-1:966467878406:key/598a4158-2cc6-4946-af24-512784a276c8",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "kms:ViaService": "s3.af-south-1.amazonaws.com",
+          "kms:CallerAccount": "966467878406"
+        },
+        "StringLike": {
+          "kms:EncryptionContext:aws:s3:arn": [
+            "arn:aws:s3:::fintrust-reports-966467878406-af-south-1-dev/deployment/lambda/ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d/fintrust.zip",
+            "arn:aws:s3:::fintrust-reports-966467878406-af-south-1-dev"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "ManageOwnedLogConfiguration",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:PutRetentionPolicy",
+        "logs:DeleteRetentionPolicy",
+        "logs:TagLogGroup",
+        "logs:UntagLogGroup"
+      ],
+      "Resource": [
+        "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-scoring-dev:*",
+        "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-alert-dev:*",
+        "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-report-dev:*",
+        "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-api-dev:*",
+        "arn:aws:logs:af-south-1:966467878406:log-group:/aws/apigateway/fintrust-dev:*"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "TagOwnedLogGroups",
+      "Effect": "Allow",
+      "Action": [
+        "logs:TagResource",
+        "logs:UntagResource"
+      ],
+      "Resource": [
+        "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-scoring-dev",
+        "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-alert-dev",
+        "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-report-dev",
+        "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-api-dev",
+        "arn:aws:logs:af-south-1:966467878406:log-group:/aws/apigateway/fintrust-dev"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "ReadOwnedLogTags",
+      "Effect": "Allow",
+      "Action": [
+        "logs:ListTagsForResource"
+      ],
+      "Resource": [
+        "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-scoring-dev",
+        "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-alert-dev",
+        "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-report-dev",
+        "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-api-dev",
+        "arn:aws:logs:af-south-1:966467878406:log-group:/aws/apigateway/fintrust-dev"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    },
+    {
+      "Sid": "DescribeLogGroups",
+      "Effect": "Allow",
+      "Action": [
+        "logs:DescribeLogGroups"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    },
+    {
+      "Sid": "CreateTwoMappings",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:CreateEventSourceMapping"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        },
+        "ArnEquals": {
+          "lambda:FunctionArn": [
+            "arn:aws:lambda:af-south-1:966467878406:function:fintrust-scoring-dev",
+            "arn:aws:lambda:af-south-1:966467878406:function:fintrust-alert-dev"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "ManageTwoMappings",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:UpdateEventSourceMapping",
+        "lambda:DeleteEventSourceMapping"
+      ],
+      "Resource": "arn:aws:lambda:af-south-1:966467878406:event-source-mapping:*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        },
+        "ArnEquals": {
+          "lambda:FunctionArn": [
+            "arn:aws:lambda:af-south-1:966467878406:function:fintrust-scoring-dev",
+            "arn:aws:lambda:af-south-1:966467878406:function:fintrust-alert-dev"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "ReadTwoMappings",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:GetEventSourceMapping"
+      ],
+      "Resource": "arn:aws:lambda:af-south-1:966467878406:event-source-mapping:*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "ArnEquals": {
+          "lambda:FunctionArn": [
+            "arn:aws:lambda:af-south-1:966467878406:function:fintrust-scoring-dev",
+            "arn:aws:lambda:af-south-1:966467878406:function:fintrust-alert-dev"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "ListMappingMetadata",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:ListEventSourceMappings"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    },
+    {
+      "Sid": "TagCreatedMappings",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:TagResource"
+      ],
+      "Resource": "arn:aws:lambda:af-south-1:966467878406:event-source-mapping:*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:RequestTag/Project": "FinTrust",
+          "aws:RequestTag/Environment": "dev"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "UntagOwnedMappings",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:UntagResource"
+      ],
+      "Resource": "arn:aws:lambda:af-south-1:966467878406:event-source-mapping:*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:ResourceTag/Project": "FinTrust",
+          "aws:ResourceTag/Environment": "dev"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "ReadOwnedMappingTags",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:ListTags"
+      ],
+      "Resource": "arn:aws:lambda:af-south-1:966467878406:event-source-mapping:*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:ResourceTag/Project": "FinTrust",
+          "aws:ResourceTag/Environment": "dev"
+        }
+      }
+    }
+  ]
+}

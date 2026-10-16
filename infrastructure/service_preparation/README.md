@@ -11,6 +11,14 @@ See `evidence/service-prerequisites-live.json` and `DEPLOYMENT_GATES.md` at the
 repository root. Earlier preparation notes below describe their original dates;
 the latest deployment gates and evidence supersede their unresolved-status notes.
 
+Remaining deployment IAM is now installed and read back; see
+`deployment_iam/README.md` and its AWS validation/simulation/installation receipts.
+The prepared Cognito template has no IAM resources: its API scope-read grant is
+admin-owned and already installed separately. API permissions remain bootstrap-only
+until the real API ID is returned and bound. No remaining stack was deployed, and
+the latest tagged templates still need normal-deployer AWS validation after the
+sign-in error is resolved. All activation/cost flags remain false.
+
 Initially prepared locally on 15 October 2026 (SAST). Subsequent live progress:
 cloud-status.json records the verified SES email identity, scoped IAM changes
 and cleanup. cloudformation-validation.json records six accepted AWS template

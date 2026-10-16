@@ -10,11 +10,6 @@
         "prod"
       ]
     },
-    "ApiExecutionRoleArn": {
-      "Type": "String",
-      "AllowedPattern": "^arn:[^:]+:iam::[0-9]{12}:role/[^/]+$",
-      "Description": "Existing pathless API Lambda role; grants read-only access to this stack's account-scope table."
-    },
     "DomainPrefix": {
       "Type": "String",
       "MinLength": 1,
@@ -90,7 +85,14 @@
             "Required": true
           }
         ],
-        "DeletionProtection": "ACTIVE"
+        "DeletionProtection": "ACTIVE",
+        "UserPoolTags": {
+          "Project": "FinTrust",
+          "Environment": {
+            "Ref": "StageName"
+          },
+          "Service": "fintrust-auth"
+        }
       }
     },
     "HostedDomain": {
@@ -239,46 +241,6 @@
             "Value": "IdentityScope"
           }
         ]
-      }
-    },
-    "ApiReadUserScopes": {
-      "Type": "AWS::IAM::Policy",
-      "Properties": {
-        "PolicyName": {
-          "Fn::Sub": "imbokodo-${StageName}-read-user-scopes"
-        },
-        "Roles": [
-          {
-            "Fn::Select": [
-              1,
-              {
-                "Fn::Split": [
-                  "/",
-                  {
-                    "Ref": "ApiExecutionRoleArn"
-                  }
-                ]
-              }
-            ]
-          }
-        ],
-        "PolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Action": [
-                "dynamodb:GetItem"
-              ],
-              "Resource": {
-                "Fn::GetAtt": [
-                  "UserAccountScopes",
-                  "Arn"
-                ]
-              }
-            }
-          ]
-        }
       }
     }
   },

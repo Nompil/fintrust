@@ -1,0 +1,251 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "PrepareApplication",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:CreateChangeSet"
+      ],
+      "Resource": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-application-dev/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:RequestTag/Project": "FinTrust",
+          "aws:RequestTag/Environment": "dev"
+        },
+        "StringLike": {
+          "cloudformation:ChangeSetName": "fintrust-application-*"
+        },
+        "ForAllValues:StringEquals": {
+          "cloudformation:ResourceTypes": [
+            "AWS::Events::Rule",
+            "AWS::Lambda::Alias",
+            "AWS::Lambda::EventInvokeConfig",
+            "AWS::Lambda::EventSourceMapping",
+            "AWS::Lambda::Function",
+            "AWS::Lambda::Permission",
+            "AWS::Lambda::Version",
+            "AWS::Logs::LogGroup",
+            "AWS::SQS::QueuePolicy"
+          ]
+        },
+        "Null": {
+          "cloudformation:ResourceTypes": "false",
+          "cloudformation:RoleArn": "true",
+          "cloudformation:ImportResourceTypes": "true"
+        }
+      }
+    },
+    {
+      "Sid": "ManageApplication",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:ExecuteChangeSet",
+        "cloudformation:DeleteChangeSet"
+      ],
+      "Resource": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-application-dev/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "StringLike": {
+          "cloudformation:ChangeSetName": "fintrust-application-*"
+        }
+      }
+    },
+    {
+      "Sid": "PrepareApi",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:CreateChangeSet"
+      ],
+      "Resource": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:RequestTag/Project": "FinTrust",
+          "aws:RequestTag/Environment": "dev"
+        },
+        "StringLike": {
+          "cloudformation:ChangeSetName": "fintrust-api-*"
+        },
+        "ForAllValues:StringEquals": {
+          "cloudformation:ResourceTypes": [
+            "AWS::ApiGateway::Authorizer",
+            "AWS::ApiGateway::Deployment",
+            "AWS::ApiGateway::Method",
+            "AWS::ApiGateway::Resource",
+            "AWS::ApiGateway::RestApi",
+            "AWS::ApiGateway::Stage",
+            "AWS::Lambda::Permission",
+            "AWS::Logs::LogGroup"
+          ]
+        },
+        "Null": {
+          "cloudformation:ResourceTypes": "false",
+          "cloudformation:RoleArn": "true",
+          "cloudformation:ImportResourceTypes": "true"
+        }
+      }
+    },
+    {
+      "Sid": "ManageApi",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:ExecuteChangeSet",
+        "cloudformation:DeleteChangeSet"
+      ],
+      "Resource": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "StringLike": {
+          "cloudformation:ChangeSetName": "fintrust-api-*"
+        }
+      }
+    },
+    {
+      "Sid": "PrepareAuth",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:CreateChangeSet"
+      ],
+      "Resource": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-auth-dev/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:RequestTag/Project": "FinTrust",
+          "aws:RequestTag/Environment": "dev"
+        },
+        "StringLike": {
+          "cloudformation:ChangeSetName": "fintrust-auth-*"
+        },
+        "ForAllValues:StringEquals": {
+          "cloudformation:ResourceTypes": [
+            "AWS::Cognito::UserPool",
+            "AWS::Cognito::UserPoolClient",
+            "AWS::Cognito::UserPoolDomain",
+            "AWS::Cognito::UserPoolGroup",
+            "AWS::DynamoDB::Table"
+          ]
+        },
+        "Null": {
+          "cloudformation:ResourceTypes": "false",
+          "cloudformation:RoleArn": "true",
+          "cloudformation:ImportResourceTypes": "true"
+        }
+      }
+    },
+    {
+      "Sid": "ManageAuth",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:ExecuteChangeSet",
+        "cloudformation:DeleteChangeSet"
+      ],
+      "Resource": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-auth-dev/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "StringLike": {
+          "cloudformation:ChangeSetName": "fintrust-auth-*"
+        }
+      }
+    },
+    {
+      "Sid": "PrepareMonitoring",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:CreateChangeSet"
+      ],
+      "Resource": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-monitoring-dev/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:RequestTag/Project": "FinTrust",
+          "aws:RequestTag/Environment": "dev"
+        },
+        "StringLike": {
+          "cloudformation:ChangeSetName": "fintrust-monitoring-*"
+        },
+        "ForAllValues:StringEquals": {
+          "cloudformation:ResourceTypes": [
+            "AWS::CloudWatch::Alarm"
+          ]
+        },
+        "Null": {
+          "cloudformation:ResourceTypes": "false",
+          "cloudformation:RoleArn": "true",
+          "cloudformation:ImportResourceTypes": "true"
+        }
+      }
+    },
+    {
+      "Sid": "ManageMonitoring",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:ExecuteChangeSet",
+        "cloudformation:DeleteChangeSet"
+      ],
+      "Resource": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-monitoring-dev/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "StringLike": {
+          "cloudformation:ChangeSetName": "fintrust-monitoring-*"
+        }
+      }
+    },
+    {
+      "Sid": "ReadRemainingStacks",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:DescribeChangeSet",
+        "cloudformation:DescribeStacks",
+        "cloudformation:DescribeStackEvents",
+        "cloudformation:DescribeStackResources",
+        "cloudformation:DescribeStackResource",
+        "cloudformation:ListStackResources",
+        "cloudformation:ListChangeSets",
+        "cloudformation:GetTemplate"
+      ],
+      "Resource": [
+        "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-application-dev/*",
+        "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/*",
+        "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-auth-dev/*",
+        "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-monitoring-dev/*"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    },
+    {
+      "Sid": "RecoverRemainingStacks",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:ContinueUpdateRollback",
+        "cloudformation:DeleteStack"
+      ],
+      "Resource": [
+        "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-application-dev/*",
+        "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/*",
+        "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-auth-dev/*",
+        "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-monitoring-dev/*"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "Null": {
+          "cloudformation:RoleArn": "true"
+        }
+      }
+    }
+  ]
+}

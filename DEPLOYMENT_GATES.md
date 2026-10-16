@@ -85,3 +85,26 @@ Next preparation work: complete remaining deployment-policy scopes, verify/provi
 - Evidence: `infrastructure/service_preparation/evidence/service-prerequisites-live.json`. No function, API stage, log group, alarm, report schedule, endpoint, live migration, email or consumer was created/activated by this work. Actual log delivery remains unverified until API deployment and E2E.
 
 Next: prepare/review the remaining stack deployment permissions, bind immutable uploaded artifacts and real Cognito/API outputs, then deploy disabled resources in dependency order when their gates permit. The quota case, cost-compatible database access, live migrations/grants and full cloud E2E still gate activation.
+
+## Remaining deployment IAM installed - 16 October 2026
+
+- Six managed policies are attached only to `fintrust-deployer-role` and read back: remaining CloudFormation control, four application functions, release dependencies, Cognito/scope-table configuration, API bootstrap, and monitoring/report scheduling. Existing grants were preserved. Attachment use is 19 of the account's verified 20-policy role quota; no new attachment-quota request was made.
+- All seven documents, including the separate API scope-read grant, passed IAM Access Analyzer with no findings. Every managed document is below 6,144 nonwhitespace characters. No aggregate inline policy was added to the deployer role.
+- Downstream mutation grants require CloudFormation. Four exact stack names and resource-type allowlists prohibit IAM/custom-resource types, imports and substituted CloudFormation service roles. Four Lambda roles/functions, exact artifact key, nine SSM settings, own log destinations, two function-bound mappings, one report rule/target/failure-queue policy, the tagged workforce pool, exact scope table and eighteen optional alarm names form the new resource boundaries.
+- Twenty-six AWS IAM custom-policy scenarios passed, including denied direct function writes/invocation, unrelated functions/roles, IAM role-policy edits, endpoint/NAT creation, missing/forbidden CloudFormation resource types, and incorrect Cognito/API scope. The final additive scoped log-read grant has a separate two-resource simulation receipt. These tests do not prove the complete principal/SCP/resource-policy union or live service execution.
+- The admin separately installed `FinTrustApiUserScopes` on `fintrust-api-dev`, granting only GetItem on the exact future scope table. The prepared Cognito template no longer contains an IAM policy or ApiExecutionRoleArn parameter. Existing runtime policies remain preserved. Explicit dev tags were added to prepared functions, mappings, logs, API and workforce pool for reliable ownership checks.
+- `FinTrustApiDeployment` deliberately remains bootstrap-only. It can create the named REGIONAL API and read metadata needed for CloudFormation to return its generated ID. Full API mutation scope is not granted until that actual ID is verified and bound. No API or Cognito stack was created during this IAM work.
+- Current template edits passed seven offline configuration checks. AWS validation receipts for earlier templates are historical; the latest tagged templates and Cognito IAM removal still need normal-deployer ValidateTemplate. The deployer authentication attempts returned the wrong identity/expired sessions; identity guards prevented using them for deployment. The exact reported browser error remains pending from the owner. Admin was used only for IAM administration/validation/simulation, not as a deployment workaround.
+- Evidence and the concrete staged deployment sequence are in `infrastructure/service_preparation/deployment_iam/`. The existing runtime ZIP/source is unchanged. No artifact was uploaded, live RDS SQL run, function/consumer/API stage deployed, email sent, schedule/paid alarm enabled, network endpoint created, support plan upgraded or quota changed by this work.
+
+Next live step, after verified deployer authentication: validate the latest templates and review the API-shell change set, then bind its real ID before configuring Cognito. Runtime activation remains blocked on capacity, approved database access/migrations/grants, cost review and live E2E. Support case **179210878300923** remains the retained quota-review path; no new AWS reply is claimed here.
+
+Final log-read diagnostic remains open: IAM custom-policy simulation returned
+implicitDeny for the owned log stream as well as the unrelated stream. A separate
+single-resource test and a bare explicit-allow exact-ARN policy also returned
+implicitDeny for the owned stream, with no missing context reported. The 26
+earlier boundary scenarios passed; these extra log diagnostics are not passes.
+The installed log read grant retains the documented exact group/stream ARN scope;
+it was not broadened to force a simulator result. Verify the normal deployer's
+real CloudWatch Logs read once authentication is restored. This discrepancy is
+not evidence that log delivery or log inspection works in the live application.

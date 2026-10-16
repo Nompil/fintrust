@@ -1,0 +1,1381 @@
+{
+  "scope": "New deployment bundle only; not a complete proof of all existing principal policies",
+  "results": [
+    {
+      "name": "scoring_update_through_cfn",
+      "expected": "allowed",
+      "actual": "allowed",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:UpdateFunctionCode",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-scoring-dev",
+            "EvalDecision": "allowed",
+            "MatchedStatements": [
+              {
+                "SourcePolicyId": "PolicyInputList.2",
+                "SourcePolicyType": "IAM Policy",
+                "StartPosition": {
+                  "Line": 1,
+                  "Column": 41
+                },
+                "EndPosition": {
+                  "Line": 1,
+                  "Column": 780
+                }
+              }
+            ],
+            "MissingContextValues": [],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-scoring-dev",
+                "EvalResourceDecision": "allowed",
+                "MatchedStatements": [
+                  {
+                    "SourcePolicyId": "PolicyInputList.2",
+                    "SourcePolicyType": "IAM Policy",
+                    "StartPosition": {
+                      "Line": 1,
+                      "Column": 41
+                    },
+                    "EndPosition": {
+                      "Line": 1,
+                      "Column": 780
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "direct_scoring_update_denied",
+      "expected": "implicitDeny",
+      "actual": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:UpdateFunctionCode",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-scoring-dev",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "aws:ResourceTag/Project",
+              "apigateway:Request/EndpointType",
+              "aws:CalledVia",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "apigateway:Request/ApiName",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "aws:ResourceTag/Service",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "events:TargetArn",
+              "lambda:FunctionArn",
+              "aws:RequestTag/Service",
+              "cloudformation:RoleArn",
+              "lambda:Principal",
+              "aws:ResourceTag/Environment"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-scoring-dev",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "aws:ResourceTag/Project",
+                  "apigateway:Request/EndpointType",
+                  "aws:CalledVia",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "apigateway:Request/ApiName",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "aws:ResourceTag/Service",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "events:TargetArn",
+                  "lambda:FunctionArn",
+                  "aws:RequestTag/Service",
+                  "cloudformation:RoleArn",
+                  "lambda:Principal",
+                  "aws:ResourceTag/Environment"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "unrelated_function_update_denied",
+      "expected": "implicitDeny",
+      "actual": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:UpdateFunctionCode",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:unrelated",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "aws:ResourceTag/Project",
+              "apigateway:Request/EndpointType",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "apigateway:Request/ApiName",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "aws:ResourceTag/Service",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "events:TargetArn",
+              "lambda:FunctionArn",
+              "aws:RequestTag/Service",
+              "cloudformation:RoleArn",
+              "lambda:Principal",
+              "aws:ResourceTag/Environment"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:unrelated",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "aws:ResourceTag/Project",
+                  "apigateway:Request/EndpointType",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "apigateway:Request/ApiName",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "aws:ResourceTag/Service",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "events:TargetArn",
+                  "lambda:FunctionArn",
+                  "aws:RequestTag/Service",
+                  "cloudformation:RoleArn",
+                  "lambda:Principal",
+                  "aws:ResourceTag/Environment"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "other_region_denied",
+      "expected": "implicitDeny",
+      "actual": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:UpdateFunctionCode",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-scoring-dev",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "aws:ResourceTag/Project",
+              "apigateway:Request/EndpointType",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "apigateway:Request/ApiName",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "aws:ResourceTag/Service",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "events:TargetArn",
+              "lambda:FunctionArn",
+              "aws:RequestTag/Service",
+              "cloudformation:RoleArn",
+              "lambda:Principal",
+              "aws:ResourceTag/Environment"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-scoring-dev",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "aws:ResourceTag/Project",
+                  "apigateway:Request/EndpointType",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "apigateway:Request/ApiName",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "aws:ResourceTag/Service",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "events:TargetArn",
+                  "lambda:FunctionArn",
+                  "aws:RequestTag/Service",
+                  "cloudformation:RoleArn",
+                  "lambda:Principal",
+                  "aws:ResourceTag/Environment"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "pass_scoring_role_only_to_lambda",
+      "expected": "allowed",
+      "actual": "allowed",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "iam:PassRole",
+            "EvalResourceName": "arn:aws:iam::966467878406:role/fintrust-scoring-dev",
+            "EvalDecision": "allowed",
+            "MatchedStatements": [
+              {
+                "SourcePolicyId": "PolicyInputList.2",
+                "SourcePolicyType": "IAM Policy",
+                "StartPosition": {
+                  "Line": 1,
+                  "Column": 2964
+                },
+                "EndPosition": {
+                  "Line": 1,
+                  "Column": 3473
+                }
+              }
+            ],
+            "MissingContextValues": [],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:iam::966467878406:role/fintrust-scoring-dev",
+                "EvalResourceDecision": "allowed",
+                "MatchedStatements": [
+                  {
+                    "SourcePolicyId": "PolicyInputList.2",
+                    "SourcePolicyType": "IAM Policy",
+                    "StartPosition": {
+                      "Line": 1,
+                      "Column": 2964
+                    },
+                    "EndPosition": {
+                      "Line": 1,
+                      "Column": 3473
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "pass_admin_role_denied",
+      "expected": "implicitDeny",
+      "actual": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "iam:PassRole",
+            "EvalResourceName": "arn:aws:iam::966467878406:role/Administrator",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "aws:ResourceTag/Project",
+              "apigateway:Request/EndpointType",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "apigateway:Request/ApiName",
+              "kms:EncryptionContext:aws:s3:arn",
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "aws:ResourceTag/Service",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "events:TargetArn",
+              "lambda:FunctionArn",
+              "aws:RequestTag/Service",
+              "cloudformation:RoleArn",
+              "lambda:Principal",
+              "aws:ResourceTag/Environment"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:iam::966467878406:role/Administrator",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "aws:ResourceTag/Project",
+                  "apigateway:Request/EndpointType",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "apigateway:Request/ApiName",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "aws:ResourceTag/Service",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "events:TargetArn",
+                  "lambda:FunctionArn",
+                  "aws:RequestTag/Service",
+                  "cloudformation:RoleArn",
+                  "lambda:Principal",
+                  "aws:ResourceTag/Environment"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "pass_role_to_ec2_denied",
+      "expected": "implicitDeny",
+      "actual": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "iam:PassRole",
+            "EvalResourceName": "arn:aws:iam::966467878406:role/fintrust-scoring-dev",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "aws:ResourceTag/Project",
+              "apigateway:Request/EndpointType",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "apigateway:Request/ApiName",
+              "kms:EncryptionContext:aws:s3:arn",
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "aws:ResourceTag/Service",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "events:TargetArn",
+              "lambda:FunctionArn",
+              "aws:RequestTag/Service",
+              "cloudformation:RoleArn",
+              "lambda:Principal",
+              "aws:ResourceTag/Environment"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:iam::966467878406:role/fintrust-scoring-dev",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "aws:ResourceTag/Project",
+                  "apigateway:Request/EndpointType",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "apigateway:Request/ApiName",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "aws:ResourceTag/Service",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "events:TargetArn",
+                  "lambda:FunctionArn",
+                  "aws:RequestTag/Service",
+                  "cloudformation:RoleArn",
+                  "lambda:Principal",
+                  "aws:ResourceTag/Environment"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "no_role_policy_edit",
+      "expected": "implicitDeny",
+      "actual": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "iam:PutRolePolicy",
+            "EvalResourceName": "arn:aws:iam::966467878406:role/fintrust-scoring-dev",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "aws:ResourceTag/Project",
+              "apigateway:Request/EndpointType",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "apigateway:Request/ApiName",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "aws:ResourceTag/Service",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "events:TargetArn",
+              "lambda:FunctionArn",
+              "aws:RequestTag/Service",
+              "cloudformation:RoleArn",
+              "lambda:Principal",
+              "aws:ResourceTag/Environment"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:iam::966467878406:role/fintrust-scoring-dev",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "aws:ResourceTag/Project",
+                  "apigateway:Request/EndpointType",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "apigateway:Request/ApiName",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "aws:ResourceTag/Service",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "events:TargetArn",
+                  "lambda:FunctionArn",
+                  "aws:RequestTag/Service",
+                  "cloudformation:RoleArn",
+                  "lambda:Principal",
+                  "aws:ResourceTag/Environment"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "no_direct_invocation",
+      "expected": "implicitDeny",
+      "actual": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:InvokeFunction",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-scoring-dev",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "aws:ResourceTag/Project",
+              "apigateway:Request/EndpointType",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "apigateway:Request/ApiName",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "aws:ResourceTag/Service",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "events:TargetArn",
+              "lambda:FunctionArn",
+              "aws:RequestTag/Service",
+              "cloudformation:RoleArn",
+              "lambda:Principal",
+              "aws:ResourceTag/Environment"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-scoring-dev",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "aws:ResourceTag/Project",
+                  "apigateway:Request/EndpointType",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "apigateway:Request/ApiName",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "aws:ResourceTag/Service",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "events:TargetArn",
+                  "lambda:FunctionArn",
+                  "aws:RequestTag/Service",
+                  "cloudformation:RoleArn",
+                  "lambda:Principal",
+                  "aws:ResourceTag/Environment"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "no_nat_creation",
+      "expected": "implicitDeny",
+      "actual": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "ec2:CreateNatGateway",
+            "EvalResourceName": "*",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "aws:ResourceTag/Project",
+              "apigateway:Request/EndpointType",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "apigateway:Request/ApiName",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "aws:ResourceTag/Service",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "events:TargetArn",
+              "lambda:FunctionArn",
+              "aws:RequestTag/Service",
+              "cloudformation:RoleArn",
+              "lambda:Principal",
+              "aws:ResourceTag/Environment"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "no_endpoint_creation",
+      "expected": "implicitDeny",
+      "actual": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "ec2:CreateVpcEndpoint",
+            "EvalResourceName": "*",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "aws:ResourceTag/Project",
+              "apigateway:Request/EndpointType",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "apigateway:Request/ApiName",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "aws:ResourceTag/Service",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "events:TargetArn",
+              "lambda:FunctionArn",
+              "aws:RequestTag/Service",
+              "cloudformation:RoleArn",
+              "lambda:Principal",
+              "aws:ResourceTag/Environment"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "no_release_upload",
+      "expected": "implicitDeny",
+      "actual": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "s3:PutObject",
+            "EvalResourceName": "arn:aws:s3:::fintrust-reports-966467878406-af-south-1-dev/deployment/lambda/unapproved.zip",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "aws:ResourceTag/Project",
+              "apigateway:Request/EndpointType",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "apigateway:Request/ApiName",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "aws:ResourceTag/Service",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "events:TargetArn",
+              "lambda:FunctionArn",
+              "aws:RequestTag/Service",
+              "cloudformation:RoleArn",
+              "lambda:Principal",
+              "aws:ResourceTag/Environment"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:s3:::fintrust-reports-966467878406-af-south-1-dev/deployment/lambda/unapproved.zip",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "aws:ResourceTag/Project",
+                  "apigateway:Request/EndpointType",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "apigateway:Request/ApiName",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "aws:ResourceTag/Service",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "events:TargetArn",
+                  "lambda:FunctionArn",
+                  "aws:RequestTag/Service",
+                  "cloudformation:RoleArn",
+                  "lambda:Principal",
+                  "aws:ResourceTag/Environment"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "report_target_allowed",
+      "expected": "allowed",
+      "actual": "allowed",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "events:PutTargets",
+            "EvalResourceName": "arn:aws:events:af-south-1:966467878406:rule/fintrust-monthly-dev",
+            "EvalDecision": "allowed",
+            "MatchedStatements": [
+              {
+                "SourcePolicyId": "PolicyInputList.6",
+                "SourcePolicyType": "IAM Policy",
+                "StartPosition": {
+                  "Line": 1,
+                  "Column": 3973
+                },
+                "EndPosition": {
+                  "Line": 1,
+                  "Column": 4448
+                }
+              }
+            ],
+            "MissingContextValues": [],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:events:af-south-1:966467878406:rule/fintrust-monthly-dev",
+                "EvalResourceDecision": "allowed",
+                "MatchedStatements": [
+                  {
+                    "SourcePolicyId": "PolicyInputList.6",
+                    "SourcePolicyType": "IAM Policy",
+                    "StartPosition": {
+                      "Line": 1,
+                      "Column": 3973
+                    },
+                    "EndPosition": {
+                      "Line": 1,
+                      "Column": 4448
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "other_target_denied",
+      "expected": "implicitDeny",
+      "actual": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "events:PutTargets",
+            "EvalResourceName": "arn:aws:events:af-south-1:966467878406:rule/fintrust-monthly-dev",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "aws:ResourceTag/Project",
+              "apigateway:Request/EndpointType",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "apigateway:Request/ApiName",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "aws:ResourceTag/Service",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "lambda:FunctionArn",
+              "aws:RequestTag/Service",
+              "cloudformation:RoleArn",
+              "lambda:Principal",
+              "aws:ResourceTag/Environment"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:events:af-south-1:966467878406:rule/fintrust-monthly-dev",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "aws:ResourceTag/Project",
+                  "apigateway:Request/EndpointType",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "apigateway:Request/ApiName",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "aws:ResourceTag/Service",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "lambda:FunctionArn",
+                  "aws:RequestTag/Service",
+                  "cloudformation:RoleArn",
+                  "lambda:Principal",
+                  "aws:ResourceTag/Environment"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "new_mapping_scoring_allowed",
+      "expected": "allowed",
+      "actual": "allowed",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:CreateEventSourceMapping",
+            "EvalResourceName": "*",
+            "EvalDecision": "allowed",
+            "MatchedStatements": [
+              {
+                "SourcePolicyId": "PolicyInputList.3",
+                "SourcePolicyType": "IAM Policy",
+                "StartPosition": {
+                  "Line": 1,
+                  "Column": 3172
+                },
+                "EndPosition": {
+                  "Line": 1,
+                  "Column": 3617
+                }
+              }
+            ],
+            "MissingContextValues": []
+          }
+        ]
+      }
+    },
+    {
+      "name": "new_mapping_other_function_denied",
+      "expected": "implicitDeny",
+      "actual": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:CreateEventSourceMapping",
+            "EvalResourceName": "*",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "aws:ResourceTag/Project",
+              "apigateway:Request/EndpointType",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "apigateway:Request/ApiName",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "aws:ResourceTag/Service",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "events:TargetArn",
+              "aws:RequestTag/Service",
+              "cloudformation:RoleArn",
+              "lambda:Principal",
+              "aws:ResourceTag/Environment"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "named_stack_changeset_allowed",
+      "expected": "allowed",
+      "actual": "allowed",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "cloudformation:CreateChangeSet",
+            "EvalResourceName": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-application-dev/test-id",
+            "EvalDecision": "allowed",
+            "MatchedStatements": [
+              {
+                "SourcePolicyId": "PolicyInputList.1",
+                "SourcePolicyType": "IAM Policy",
+                "StartPosition": {
+                  "Line": 1,
+                  "Column": 41
+                },
+                "EndPosition": {
+                  "Line": 1,
+                  "Column": 881
+                }
+              }
+            ],
+            "MissingContextValues": [],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-application-dev/test-id",
+                "EvalResourceDecision": "allowed",
+                "MatchedStatements": [
+                  {
+                    "SourcePolicyId": "PolicyInputList.1",
+                    "SourcePolicyType": "IAM Policy",
+                    "StartPosition": {
+                      "Line": 1,
+                      "Column": 41
+                    },
+                    "EndPosition": {
+                      "Line": 1,
+                      "Column": 881
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "iam_resource_type_denied",
+      "expected": "implicitDeny",
+      "actual": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "cloudformation:CreateChangeSet",
+            "EvalResourceName": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-application-dev/test-id",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "aws:ResourceTag/Project",
+              "apigateway:Request/EndpointType",
+              "cloudformation:ImportResourceTypes",
+              "apigateway:Request/ApiName",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "aws:ResourceTag/Service",
+              "events:TargetArn",
+              "lambda:FunctionArn",
+              "aws:RequestTag/Service",
+              "cloudformation:RoleArn",
+              "lambda:Principal",
+              "aws:ResourceTag/Environment"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-application-dev/test-id",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "aws:ResourceTag/Project",
+                  "apigateway:Request/EndpointType",
+                  "cloudformation:ImportResourceTypes",
+                  "apigateway:Request/ApiName",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "aws:ResourceTag/Service",
+                  "events:TargetArn",
+                  "lambda:FunctionArn",
+                  "aws:RequestTag/Service",
+                  "cloudformation:RoleArn",
+                  "lambda:Principal",
+                  "aws:ResourceTag/Environment"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "missing_resource_types_denied",
+      "expected": "implicitDeny",
+      "actual": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "cloudformation:CreateChangeSet",
+            "EvalResourceName": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-application-dev/test-id",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "aws:ResourceTag/Project",
+              "apigateway:Request/EndpointType",
+              "cloudformation:ImportResourceTypes",
+              "apigateway:Request/ApiName",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "aws:ResourceTag/Service",
+              "events:TargetArn",
+              "lambda:FunctionArn",
+              "aws:RequestTag/Service",
+              "cloudformation:RoleArn",
+              "lambda:Principal",
+              "aws:ResourceTag/Environment"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-application-dev/test-id",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "aws:ResourceTag/Project",
+                  "apigateway:Request/EndpointType",
+                  "cloudformation:ImportResourceTypes",
+                  "apigateway:Request/ApiName",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "aws:ResourceTag/Service",
+                  "events:TargetArn",
+                  "lambda:FunctionArn",
+                  "aws:RequestTag/Service",
+                  "cloudformation:RoleArn",
+                  "lambda:Principal",
+                  "aws:ResourceTag/Environment"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "other_stack_denied",
+      "expected": "implicitDeny",
+      "actual": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "cloudformation:CreateChangeSet",
+            "EvalResourceName": "arn:aws:cloudformation:af-south-1:966467878406:stack/unrelated/test-id",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "aws:ResourceTag/Project",
+              "apigateway:Request/EndpointType",
+              "cloudformation:ImportResourceTypes",
+              "apigateway:Request/ApiName",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "aws:ResourceTag/Service",
+              "events:TargetArn",
+              "lambda:FunctionArn",
+              "aws:RequestTag/Service",
+              "cloudformation:RoleArn",
+              "lambda:Principal",
+              "aws:ResourceTag/Environment"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:cloudformation:af-south-1:966467878406:stack/unrelated/test-id",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "aws:ResourceTag/Project",
+                  "apigateway:Request/EndpointType",
+                  "cloudformation:ImportResourceTypes",
+                  "apigateway:Request/ApiName",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "aws:ResourceTag/Service",
+                  "events:TargetArn",
+                  "lambda:FunctionArn",
+                  "aws:RequestTag/Service",
+                  "cloudformation:RoleArn",
+                  "lambda:Principal",
+                  "aws:ResourceTag/Environment"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "regional_named_api_creation_allowed",
+      "expected": "allowed",
+      "actual": "allowed",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "apigateway:POST",
+            "EvalResourceName": "arn:aws:apigateway:af-south-1::/restapis",
+            "EvalDecision": "allowed",
+            "MatchedStatements": [
+              {
+                "SourcePolicyId": "PolicyInputList.5",
+                "SourcePolicyType": "IAM Policy",
+                "StartPosition": {
+                  "Line": 1,
+                  "Column": 41
+                },
+                "EndPosition": {
+                  "Line": 1,
+                  "Column": 515
+                }
+              }
+            ],
+            "MissingContextValues": [],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:apigateway:af-south-1::/restapis",
+                "EvalResourceDecision": "allowed",
+                "MatchedStatements": [
+                  {
+                    "SourcePolicyId": "PolicyInputList.5",
+                    "SourcePolicyType": "IAM Policy",
+                    "StartPosition": {
+                      "Line": 1,
+                      "Column": 41
+                    },
+                    "EndPosition": {
+                      "Line": 1,
+                      "Column": 515
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "other_api_name_denied",
+      "expected": "implicitDeny",
+      "actual": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "apigateway:POST",
+            "EvalResourceName": "arn:aws:apigateway:af-south-1::/restapis",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "aws:ResourceTag/Project",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "aws:ResourceTag/Service",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "events:TargetArn",
+              "lambda:FunctionArn",
+              "aws:RequestTag/Service",
+              "cloudformation:RoleArn",
+              "lambda:Principal",
+              "aws:ResourceTag/Environment"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:apigateway:af-south-1::/restapis",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "aws:ResourceTag/Project",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "aws:ResourceTag/Service",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "events:TargetArn",
+                  "lambda:FunctionArn",
+                  "aws:RequestTag/Service",
+                  "cloudformation:RoleArn",
+                  "lambda:Principal",
+                  "aws:ResourceTag/Environment"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "tagged_cognito_creation_allowed",
+      "expected": "allowed",
+      "actual": "allowed",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "cognito-idp:CreateUserPool",
+            "EvalResourceName": "*",
+            "EvalDecision": "allowed",
+            "MatchedStatements": [
+              {
+                "SourcePolicyId": "PolicyInputList.4",
+                "SourcePolicyType": "IAM Policy",
+                "StartPosition": {
+                  "Line": 1,
+                  "Column": 41
+                },
+                "EndPosition": {
+                  "Line": 1,
+                  "Column": 424
+                }
+              }
+            ],
+            "MissingContextValues": []
+          }
+        ]
+      }
+    },
+    {
+      "name": "untagged_cognito_creation_denied",
+      "expected": "implicitDeny",
+      "actual": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "cognito-idp:CreateUserPool",
+            "EvalResourceName": "*",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "aws:ResourceTag/Project",
+              "apigateway:Request/EndpointType",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "apigateway:Request/ApiName",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "aws:ResourceTag/Service",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "events:TargetArn",
+              "lambda:FunctionArn",
+              "aws:RequestTag/Service",
+              "cloudformation:RoleArn",
+              "lambda:Principal",
+              "aws:ResourceTag/Environment"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "unrelated_cognito_pool_change_denied",
+      "expected": "implicitDeny",
+      "actual": "implicitDeny",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "cognito-idp:UpdateUserPool",
+            "EvalResourceName": "arn:aws:cognito-idp:af-south-1:966467878406:userpool/af-south-1_TEST",
+            "EvalDecision": "implicitDeny",
+            "MatchedStatements": [],
+            "MissingContextValues": [
+              "aws:ResourceTag/Project",
+              "apigateway:Request/EndpointType",
+              "cloudformation:ImportResourceTypes",
+              "aws:RequestTag/Project",
+              "apigateway:Request/ApiName",
+              "kms:EncryptionContext:aws:s3:arn",
+              "iam:PassedToService",
+              "cloudformation:ResourceTypes",
+              "kms:ViaService",
+              "kms:CallerAccount",
+              "aws:ResourceTag/Service",
+              "cloudformation:ChangeSetName",
+              "aws:RequestTag/Environment",
+              "events:TargetArn",
+              "lambda:FunctionArn",
+              "aws:RequestTag/Service",
+              "cloudformation:RoleArn",
+              "lambda:Principal",
+              "aws:ResourceTag/Environment"
+            ],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:cognito-idp:af-south-1:966467878406:userpool/af-south-1_TEST",
+                "EvalResourceDecision": "implicitDeny",
+                "MissingContextValues": [
+                  "aws:ResourceTag/Project",
+                  "apigateway:Request/EndpointType",
+                  "cloudformation:ImportResourceTypes",
+                  "aws:RequestTag/Project",
+                  "apigateway:Request/ApiName",
+                  "kms:EncryptionContext:aws:s3:arn",
+                  "iam:PassedToService",
+                  "cloudformation:ResourceTypes",
+                  "kms:ViaService",
+                  "kms:CallerAccount",
+                  "aws:ResourceTag/Service",
+                  "cloudformation:ChangeSetName",
+                  "aws:RequestTag/Environment",
+                  "events:TargetArn",
+                  "lambda:FunctionArn",
+                  "aws:RequestTag/Service",
+                  "cloudformation:RoleArn",
+                  "lambda:Principal",
+                  "aws:ResourceTag/Environment"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "owned_mapping_tag_read_allowed",
+      "expected": "allowed",
+      "actual": "allowed",
+      "response": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:ListTags",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:event-source-mapping:00000000-0000-0000-0000-000000000001",
+            "EvalDecision": "allowed",
+            "MatchedStatements": [
+              {
+                "SourcePolicyId": "PolicyInputList.3",
+                "SourcePolicyType": "IAM Policy",
+                "StartPosition": {
+                  "Line": 1,
+                  "Column": 5538
+                },
+                "EndPosition": {
+                  "Line": 1,
+                  "Column": 5845
+                }
+              }
+            ],
+            "MissingContextValues": [],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:event-source-mapping:00000000-0000-0000-0000-000000000001",
+                "EvalResourceDecision": "allowed",
+                "MatchedStatements": [
+                  {
+                    "SourcePolicyId": "PolicyInputList.3",
+                    "SourcePolicyType": "IAM Policy",
+                    "StartPosition": {
+                      "Line": 1,
+                      "Column": 5538
+                    },
+                    "EndPosition": {
+                      "Line": 1,
+                      "Column": 5845
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "tested_policy_document_sha256": [
+    "16b9b2cc55b98689b77cf11e604389bf00c17444fbfa972f4ada6c8228e34f47",
+    "e77b2c0a6df877b564ba47d2a1e3594f7ea9713f406f1a615b7ef5dfc6b835a9",
+    "df3425e8c459391b262c650bac6f35a107693e132e17acff23fb37b38bb7372c",
+    "4e335a5e2b312286532347b9703c1e215e0e719561fa2dccfd5ffd5b4251ba95",
+    "541f5b0b2b041b05aef15e8652863162c0b7464869daf4c3d72249f70b49f4ff",
+    "de1686618cd290fc5f24f178284b5d8242e0c7390812a95905a8f8561e7b9c73"
+  ],
+  "coverage_note": "26 boundary checks preceded the final addition of scoped CloudWatch log reads; separate final log-read simulation verifies that additive grant."
+}

@@ -1,0 +1,10 @@
+{
+  "status": "REQUIRES_LIVE_READ_AFTER_AUTHENTICATION",
+  "owned_stream_expected": "allowed",
+  "owned_stream_simulated": "implicitDeny",
+  "unrelated_stream_expected": "implicitDeny",
+  "unrelated_stream_simulated": "implicitDeny",
+  "isolated_exact_allow_also_denied": true,
+  "permissions_broadened_for_simulator": false,
+  "reference": "https://docs.aws.amazon.com/service-authorization/latest/reference/list_logs.html"
+}

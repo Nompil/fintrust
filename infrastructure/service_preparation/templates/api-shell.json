@@ -23,7 +23,19 @@
           "Types": [
             "REGIONAL"
           ]
-        }
+        },
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "StageName"
+            }
+          }
+        ]
       }
     }
   },

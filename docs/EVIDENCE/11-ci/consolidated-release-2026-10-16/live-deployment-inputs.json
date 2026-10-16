@@ -203,8 +203,7 @@
       "ReportFailuresName": "fintrust-report-failures-dev"
     },
     "cognito.json": {
-      "StageName": null,
-      "ApiExecutionRoleArn": null,
+      "StageName": "dev",
       "DomainPrefix": null,
       "CallbackUrls": null,
       "LogoutUrls": null
@@ -230,8 +229,6 @@
     ],
     "monitoring.json": [],
     "cognito.json": [
-      "StageName",
-      "ApiExecutionRoleArn",
       "DomainPrefix",
       "CallbackUrls",
       "LogoutUrls"
@@ -263,9 +260,10 @@
     "Nulls are intentional unresolved inputs; this is not a CloudFormation CLI parameter file.",
     "Monitoring DB identifier is inferred from the recorded template/host, not a fresh RDS DescribeDBInstances result.",
     "CodeSha256 is bound to the locally verified ZIP; no S3 object key/version is asserted until upload is approved and verified.",
-    "Runtime roles, DB users/grants and SSM values remain separate deployment prerequisites.",
+    "Runtime roles and nine SSM values are installed; live DB users/grants and migrations remain unverified.",
     "No template deployment or activation is authorized by this worksheet.",
-    "Stage-path repair supersedes runtime commit 3368f4c; latest code is bound by source_sha256 and the gateway readiness evidence. Cloud upload and object version remain unapproved/unverified."
+    "Stage-path repair supersedes runtime commit 3368f4c; latest code is bound by source_sha256 and the gateway readiness evidence. Cloud upload and object version remain unapproved/unverified.",
+    "Prepared Cognito has no IAM resources: admin separately installed exact-table API GetItem access. Do not use the historical generic Cognito template."
   ],
   "source_sha256": "2b525f84dfd93f93006f245ee77df5d589d5a3bb056c4bfaf99000b1004ac852",
   "ssm_prerequisites": {
@@ -276,5 +274,12 @@
     "regional_role_arn": "arn:aws:iam::966467878406:role/fintrust-apigateway-logs-dev",
     "configured_and_read_back": true,
     "live_log_delivery_verified": false
+  },
+  "deployment_permissions": {
+    "status": "INSTALLED_READ_BACK_API_BOOTSTRAP_ONLY",
+    "evidence": "infrastructure/service_preparation/deployment_iam/evidence/installed.json",
+    "api_id_bound": false,
+    "full_api_mutation_permission_installed": false,
+    "template_validation_after_latest_tags": "PENDING_DEPLOYER_AUTHENTICATION"
   }
 }

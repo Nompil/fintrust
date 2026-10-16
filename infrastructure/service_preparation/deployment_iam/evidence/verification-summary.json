@@ -1,0 +1,24 @@
+{
+  "iam_documents_validated": 7,
+  "access_analyzer_findings": 0,
+  "installed_and_read_back": true,
+  "managed_deployer_attachments": 19,
+  "role_attachment_quota": 20,
+  "custom_policy_boundary_checks_passed": 26,
+  "offline_configuration_tests_passed": 7,
+  "log_read_diagnostic": {
+    "status": "REQUIRES_LIVE_READ_AFTER_AUTHENTICATION",
+    "owned_stream_expected": "allowed",
+    "owned_stream_simulated": "implicitDeny",
+    "unrelated_stream_expected": "implicitDeny",
+    "unrelated_stream_simulated": "implicitDeny",
+    "isolated_exact_allow_also_denied": true,
+    "permissions_broadened_for_simulator": false,
+    "reference": "https://docs.aws.amazon.com/service-authorization/latest/reference/list_logs.html"
+  },
+  "latest_template_aws_validation": "PENDING_CORRECT_DEPLOYER_SIGN_IN",
+  "api_scope": "BOOTSTRAP_ONLY_ID_NOT_YET_BOUND",
+  "workloads_activated": false,
+  "artifact_uploaded": false,
+  "live_migrations_executed": false
+}

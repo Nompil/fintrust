@@ -1,0 +1,194 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ManageOnlyPreparedAlarms",
+      "Effect": "Allow",
+      "Action": [
+        "cloudwatch:PutMetricAlarm",
+        "cloudwatch:DeleteAlarms",
+        "cloudwatch:TagResource",
+        "cloudwatch:UntagResource"
+      ],
+      "Resource": [
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-ingesterrors-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-ingestthrottles-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-scoringerrors-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-scoringthrottles-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-alerterrors-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-alertthrottles-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-apierrors-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-apithrottles-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-reporterrors-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-reportthrottles-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-transactiondlqnamevisible-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-ingestfailuresnamevisible-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-alertfailuresnamevisible-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-reportfailuresnamevisible-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-transactionsage-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-alertstreamlag-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-databasecpu-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-databasestorage-dev"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "ReadOnlyPreparedAlarms",
+      "Effect": "Allow",
+      "Action": [
+        "cloudwatch:DescribeAlarms",
+        "cloudwatch:DescribeAlarmHistory",
+        "cloudwatch:ListTagsForResource"
+      ],
+      "Resource": [
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-ingesterrors-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-ingestthrottles-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-scoringerrors-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-scoringthrottles-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-alerterrors-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-alertthrottles-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-apierrors-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-apithrottles-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-reporterrors-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-reportthrottles-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-transactiondlqnamevisible-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-ingestfailuresnamevisible-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-alertfailuresnamevisible-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-reportfailuresnamevisible-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-transactionsage-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-alertstreamlag-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-databasecpu-dev",
+        "arn:aws:cloudwatch:af-south-1:966467878406:alarm:fintrust-databasestorage-dev"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    },
+    {
+      "Sid": "ManageMonthlyRule",
+      "Effect": "Allow",
+      "Action": [
+        "events:PutRule",
+        "events:DeleteRule",
+        "events:RemoveTargets",
+        "events:TagResource",
+        "events:UntagResource"
+      ],
+      "Resource": "arn:aws:events:af-south-1:966467878406:rule/fintrust-monthly-dev",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "SetOnlyReportTarget",
+      "Effect": "Allow",
+      "Action": [
+        "events:PutTargets"
+      ],
+      "Resource": "arn:aws:events:af-south-1:966467878406:rule/fintrust-monthly-dev",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        },
+        "ForAllValues:ArnEquals": {
+          "events:TargetArn": [
+            "arn:aws:lambda:af-south-1:966467878406:function:fintrust-report-dev"
+          ]
+        },
+        "Null": {
+          "events:TargetArn": "false"
+        }
+      }
+    },
+    {
+      "Sid": "ReadMonthlyRule",
+      "Effect": "Allow",
+      "Action": [
+        "events:DescribeRule",
+        "events:ListTargetsByRule",
+        "events:ListTagsForResource"
+      ],
+      "Resource": "arn:aws:events:af-south-1:966467878406:rule/fintrust-monthly-dev",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    },
+    {
+      "Sid": "ManageOnlyReportDeliveryQueuePolicy",
+      "Effect": "Allow",
+      "Action": [
+        "sqs:SetQueueAttributes"
+      ],
+      "Resource": "arn:aws:sqs:af-south-1:966467878406:fintrust-report-failures-dev",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "ReadReportDeliveryQueuePolicy",
+      "Effect": "Allow",
+      "Action": [
+        "sqs:GetQueueAttributes"
+      ],
+      "Resource": "arn:aws:sqs:af-south-1:966467878406:fintrust-report-failures-dev",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    },
+    {
+      "Sid": "ReadOwnedApplicationLogStreams",
+      "Effect": "Allow",
+      "Action": [
+        "logs:DescribeLogStreams",
+        "logs:GetLogEvents",
+        "logs:FilterLogEvents"
+      ],
+      "Resource": [
+        "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-scoring-dev:*",
+        "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-alert-dev:*",
+        "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-report-dev:*",
+        "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-api-dev:*",
+        "arn:aws:logs:af-south-1:966467878406:log-group:/aws/apigateway/fintrust-dev:*"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    }
+  ]
+}

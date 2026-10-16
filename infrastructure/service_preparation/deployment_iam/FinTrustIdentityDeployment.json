@@ -1,0 +1,154 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "CreateTaggedWorkforcePool",
+      "Effect": "Allow",
+      "Action": [
+        "cognito-idp:CreateUserPool"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:RequestTag/Project": "FinTrust",
+          "aws:RequestTag/Environment": "dev",
+          "aws:RequestTag/Service": "fintrust-auth"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "ManageTaggedWorkforcePool",
+      "Effect": "Allow",
+      "Action": [
+        "cognito-idp:UpdateUserPool",
+        "cognito-idp:DeleteUserPool",
+        "cognito-idp:SetUserPoolMfaConfig",
+        "cognito-idp:CreateUserPoolClient",
+        "cognito-idp:UpdateUserPoolClient",
+        "cognito-idp:DeleteUserPoolClient",
+        "cognito-idp:CreateUserPoolDomain",
+        "cognito-idp:UpdateUserPoolDomain",
+        "cognito-idp:DeleteUserPoolDomain",
+        "cognito-idp:CreateGroup",
+        "cognito-idp:UpdateGroup",
+        "cognito-idp:DeleteGroup"
+      ],
+      "Resource": "arn:aws:cognito-idp:af-south-1:966467878406:userpool/af-south-1_*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:ResourceTag/Project": "FinTrust",
+          "aws:ResourceTag/Environment": "dev",
+          "aws:ResourceTag/Service": "fintrust-auth"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "TagCreatedWorkforcePool",
+      "Effect": "Allow",
+      "Action": [
+        "cognito-idp:TagResource"
+      ],
+      "Resource": "arn:aws:cognito-idp:af-south-1:966467878406:userpool/af-south-1_*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:RequestTag/Project": "FinTrust",
+          "aws:RequestTag/Environment": "dev",
+          "aws:RequestTag/Service": "fintrust-auth"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "ReadTaggedWorkforcePool",
+      "Effect": "Allow",
+      "Action": [
+        "cognito-idp:DescribeUserPool",
+        "cognito-idp:GetUserPoolMfaConfig",
+        "cognito-idp:DescribeUserPoolClient",
+        "cognito-idp:GetGroup",
+        "cognito-idp:ListGroups",
+        "cognito-idp:ListUserPoolClients",
+        "cognito-idp:ListTagsForResource"
+      ],
+      "Resource": "arn:aws:cognito-idp:af-south-1:966467878406:userpool/af-south-1_*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:ResourceTag/Project": "FinTrust",
+          "aws:ResourceTag/Environment": "dev",
+          "aws:ResourceTag/Service": "fintrust-auth"
+        }
+      }
+    },
+    {
+      "Sid": "DiscoverIdentityMetadata",
+      "Effect": "Allow",
+      "Action": [
+        "cognito-idp:ListUserPools",
+        "cognito-idp:DescribeUserPoolDomain"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    },
+    {
+      "Sid": "ManageOnlyScopeTable",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:CreateTable",
+        "dynamodb:UpdateTable",
+        "dynamodb:DeleteTable",
+        "dynamodb:UpdateContinuousBackups",
+        "dynamodb:TagResource",
+        "dynamodb:UntagResource"
+      ],
+      "Resource": "arn:aws:dynamodb:af-south-1:966467878406:table/imbokodo-dev-user-account-scopes",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "ReadOnlyScopeTableMetadata",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:DescribeTable",
+        "dynamodb:DescribeContinuousBackups",
+        "dynamodb:DescribeTimeToLive",
+        "dynamodb:ListTagsOfResource"
+      ],
+      "Resource": "arn:aws:dynamodb:af-south-1:966467878406:table/imbokodo-dev-user-account-scopes",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    }
+  ]
+}

@@ -31,7 +31,19 @@
           "Types": [
             "REGIONAL"
           ]
-        }
+        },
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "StageName"
+            }
+          }
+        ]
       }
     },
     "CognitoAuthorizer": {
@@ -319,7 +331,19 @@
         "RetentionInDays": 30,
         "LogGroupName": {
           "Fn::Sub": "/aws/apigateway/fintrust-${StageName}"
-        }
+        },
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "StageName"
+            }
+          }
+        ]
       }
     },
     "Deployment": {

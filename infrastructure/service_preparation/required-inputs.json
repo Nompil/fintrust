@@ -33,7 +33,6 @@
   },
   "cognito.json": {
     "StageName": null,
-    "ApiExecutionRoleArn": null,
     "DomainPrefix": null,
     "CallbackUrls": null,
     "LogoutUrls": null

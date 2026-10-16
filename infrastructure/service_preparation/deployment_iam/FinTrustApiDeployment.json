@@ -1,0 +1,61 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "CreateNamedRegionalApiOnly",
+      "Effect": "Allow",
+      "Action": [
+        "apigateway:POST"
+      ],
+      "Resource": "arn:aws:apigateway:af-south-1::/restapis",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "apigateway:Request/ApiName": "fintrust-dev"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        },
+        "ForAllValues:StringEquals": {
+          "apigateway:Request/EndpointType": [
+            "REGIONAL"
+          ]
+        },
+        "Null": {
+          "apigateway:Request/EndpointType": "false"
+        }
+      }
+    },
+    {
+      "Sid": "ReadApiInventoryAndAccount",
+      "Effect": "Allow",
+      "Action": [
+        "apigateway:GET"
+      ],
+      "Resource": [
+        "arn:aws:apigateway:af-south-1::/restapis",
+        "arn:aws:apigateway:af-south-1::/account"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    },
+    {
+      "Sid": "BootstrapReadApiMetadata",
+      "Effect": "Allow",
+      "Action": [
+        "apigateway:GET"
+      ],
+      "Resource": "arn:aws:apigateway:af-south-1::/restapis/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    }
+  ]
+}

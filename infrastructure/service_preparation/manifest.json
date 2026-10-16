@@ -7,12 +7,12 @@
   "recipient": "nompilomabuya@outlook.com",
   "files": {
     "ses-identities.json": "d712e5141fd07e1beefd780da5471b4e09d817e79b45acd00047ca5aef2dfeff",
-    "application-functions.json": "c5d830d5009f2d9048c17e72def899c97440be6d93672206708f154aaef460d3",
+    "application-functions.json": "bfe09077e751566ee0df9898171561a5c1d6c94ccb9d793ff521da25cfe3da86",
     "monitoring.json": "56cb131bd30862bfc8560d72a2baf909111f90eebf36ff625a64474c070aec41",
     "alert-ses-policy.json": "418b042dbb8533837e01fe7d8789cb90c82306a42a80805d1b3ba38ecf613818",
-    "cognito.json": "b382e7a900aa3917c91273122349681b5c04495de01adf0af5810622ba983406",
-    "api.json": "e1ffa00e77e7b8690feb6a261999e3ebc85b983b2dab46675e906d1fdcc44bdf",
-    "api-shell.json": "b4604d57c47829d748a5320a74084e0cda972251b8b365d7c91ea0c86329a6a5"
+    "cognito.json": "caa9ee0ec964f34a55f0ebdbdb51b5281d810f905ad0a4e4aed0b292a7202244",
+    "api.json": "ef8e3b71f7454e019b0f44e9df5ae5a35604a2dddb6b821df7e44d33b263db1b",
+    "api-shell.json": "af8bc1fac2ee37e9d9d4df9eef62c88884d024761e695f641c526b39ab9d62c1"
   },
   "remaining_gates": [
     "Actual resource and identity inventory",

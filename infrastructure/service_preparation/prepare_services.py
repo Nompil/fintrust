@@ -55,6 +55,10 @@ def application_template():
     template['Resources']['MonthlySchedule']['Properties']['State'] = {
         'Fn::If': ['ReportsEnabled', 'ENABLED', 'DISABLED']}
     for resource in template['Resources'].values():
+        if resource['Type'] in {'AWS::Lambda::Function', 'AWS::Lambda::EventSourceMapping', 'AWS::Logs::LogGroup'}:
+            resource['Properties']['Tags'] = [
+                {'Key': 'Project', 'Value': 'FinTrust'},
+                {'Key': 'Environment', 'Value': ref('Stage')}]
         if resource['Type'] == 'AWS::Logs::LogGroup':
             resource['DeletionPolicy'] = 'Retain'
             resource['UpdateReplacePolicy'] = 'Retain'
@@ -66,6 +70,10 @@ def api_template():
     # Keep the access-log destination stable for deployment and operator checks.
     template['Resources']['AccessLogs']['Properties']['LogGroupName'] = {
         'Fn::Sub': '/aws/apigateway/fintrust-${StageName}'}
+    for name in ['Api', 'AccessLogs']:
+        template['Resources'][name]['Properties']['Tags'] = [
+            {'Key': 'Project', 'Value': 'FinTrust'},
+            {'Key': 'Environment', 'Value': ref('StageName')}]
     # Detailed method metrics are optional billable CloudWatch metrics.
     for settings in template['Resources']['Stage']['Properties']['MethodSettings']:
         settings['MetricsEnabled'] = False
@@ -118,6 +126,12 @@ def alert_send_policy():
 
 def cognito_template():
     template = json.loads((ROOT / 'source/infrastructure/auth/cognito.json').read_text(encoding='utf-8'))
+    # The admin installs the exact-table GetItem grant separately. The deployer
+    # must not acquire PutRolePolicy merely to create sign-in resources.
+    template['Resources'].pop('ApiReadUserScopes')
+    template['Parameters'].pop('ApiExecutionRoleArn')
+    template['Resources']['ImbokodoUserPool']['Properties']['UserPoolTags'] = {
+        'Project': 'FinTrust', 'Environment': ref('StageName'), 'Service': 'fintrust-auth'}
     template['Parameters']['EnableScopeRecovery'] = flag('Optional DynamoDB point-in-time recovery; may incur charges.')
     template.setdefault('Conditions', {})['ScopeRecoveryEnabled'] = enabled('EnableScopeRecovery')
     for resource in template['Resources'].values():
@@ -135,6 +149,9 @@ def main():
                  'cognito.json': cognito_template(), 'api.json': api_template()}
     for name, source in [('api-shell.json', 'api/gateway-shell.json')]:
         generated[name] = json.loads((ROOT / 'source/infrastructure' / source).read_text(encoding='utf-8'))
+        generated[name]['Resources']['Api']['Properties']['Tags'] = [
+            {'Key': 'Project', 'Value': 'FinTrust'},
+            {'Key': 'Environment', 'Value': ref('StageName')}]
     for name, data in generated.items():
         (out / name).write_text(json.dumps(data, indent=2) + '\n', encoding='utf-8')
     missing = {name: {key: None for key, value in data.get('Parameters', {}).items() if 'Default' not in value}

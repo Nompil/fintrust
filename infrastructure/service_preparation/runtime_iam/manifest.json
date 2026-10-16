@@ -7,7 +7,7 @@
     "api": "fintrust-api-dev",
     "report": "fintrust-report-dev"
   },
-  "scope_table_access": "Cognito stack adds only GetItem on its own scope table to the existing API role.",
+  "scope_table_access": "Admin-installed FinTrustApiUserScopes inline grant on fintrust-api-dev; only GetItem on imbokodo-dev-user-account-scopes. Prepared Cognito performs no role-policy mutation.",
   "files_sha256": {
     "alert.json": "266fa4633629fb80281b296cd7027c23a231227265f363332ac19ad745fd3bad",
     "api.json": "4e98c991790e6fc7a6a00713fdbc0332a52311536609930df0b226fd9e2a84e3",
@@ -20,5 +20,10 @@
     "No function code or trigger activation is included.",
     "Use the cost-gated service preparation templates; do not use historical generic templates directly."
   ],
-  "audit": "docs/EVIDENCE/11-ci/consolidated-release-2026-10-16/remaining-runtime-roles-iam-audit.json"
+  "audit": "docs/EVIDENCE/11-ci/consolidated-release-2026-10-16/remaining-runtime-roles-iam-audit.json",
+  "additional_admin_grant": {
+    "file": "../deployment_iam/AdminInstalledApiScopeRead.json",
+    "sha256": "1fbf1e49d904fa992b9fed697467c1e7e55af442ffd8eb52a6e1624a01ede4a6",
+    "evidence": "../deployment_iam/evidence/installed.json"
+  }
 }

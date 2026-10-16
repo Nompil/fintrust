@@ -1,0 +1,20 @@
+{
+  "PolicyInputList": [
+    "{\"Version\": \"2012-10-17\", \"Statement\": [{\"Effect\": \"Allow\", \"Action\": \"logs:GetLogEvents\", \"Resource\": \"arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-api-dev:log-stream:verification\"}]}"
+  ],
+  "ActionNames": [
+    "logs:GetLogEvents"
+  ],
+  "ResourceArns": [
+    "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-api-dev:log-stream:verification"
+  ],
+  "ContextEntries": [
+    {
+      "ContextKeyName": "aws:RequestedRegion",
+      "ContextKeyValues": [
+        "af-south-1"
+      ],
+      "ContextKeyType": "string"
+    }
+  ]
+}

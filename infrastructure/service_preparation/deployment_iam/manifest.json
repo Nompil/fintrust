@@ -1,0 +1,72 @@
+{
+  "account": "966467878406",
+  "region": "af-south-1",
+  "stage": "dev",
+  "api_id": null,
+  "bound_artifact_sha256": "ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d",
+  "proposed_code_key_not_uploaded": "deployment/lambda/ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d/fintrust.zip",
+  "activation_authorized_by_policy_install": false,
+  "files": {
+    "FinTrustRemainingCloudFormation.json": {
+      "nonwhitespace_characters": 5563,
+      "sha256": "daa95bb3d1bcdc6c77dc670ceba75b1f5b3317004adafa72f3efa3cc49f5f11b"
+    },
+    "FinTrustApplicationDeployment.json": {
+      "nonwhitespace_characters": 5295,
+      "sha256": "005afdc52ed0756bfdb33a9f8bbe64ec9d5ef1cad2001a80637f6a18e567c93d"
+    },
+    "FinTrustReleaseDependencies.json": {
+      "nonwhitespace_characters": 5620,
+      "sha256": "023b71d19c55e1a8966294873deeffc1e1fd8f8048c3ebd28b0fb41176a03d0b"
+    },
+    "FinTrustIdentityDeployment.json": {
+      "nonwhitespace_characters": 3152,
+      "sha256": "b775320dd066ecacf11ae30143654e637ffdd38851110b258d62c56a397d0834"
+    },
+    "FinTrustApiDeployment.json": {
+      "nonwhitespace_characters": 939,
+      "sha256": "c64baf4c5e4da43620991a3ca5a1a880b0ccad0b174d6dd375fb4ff69a5ea674"
+    },
+    "FinTrustMonitoringDeployment.json": {
+      "nonwhitespace_characters": 5801,
+      "sha256": "7370637b775f3cb4d8082120ad4136304482a6106b68f2846046dc82b5ac6c6f"
+    },
+    "AdminInstalledApiScopeRead.json": {
+      "nonwhitespace_characters": 284,
+      "sha256": "1fbf1e49d904fa992b9fed697467c1e7e55af442ffd8eb52a6e1624a01ede4a6"
+    }
+  },
+  "stack_resource_types": {
+    "application": [
+      "AWS::Events::Rule",
+      "AWS::Lambda::Alias",
+      "AWS::Lambda::EventInvokeConfig",
+      "AWS::Lambda::EventSourceMapping",
+      "AWS::Lambda::Function",
+      "AWS::Lambda::Permission",
+      "AWS::Lambda::Version",
+      "AWS::Logs::LogGroup",
+      "AWS::SQS::QueuePolicy"
+    ],
+    "api": [
+      "AWS::ApiGateway::Authorizer",
+      "AWS::ApiGateway::Deployment",
+      "AWS::ApiGateway::Method",
+      "AWS::ApiGateway::Resource",
+      "AWS::ApiGateway::RestApi",
+      "AWS::ApiGateway::Stage",
+      "AWS::Lambda::Permission",
+      "AWS::Logs::LogGroup"
+    ],
+    "auth": [
+      "AWS::Cognito::UserPool",
+      "AWS::Cognito::UserPoolClient",
+      "AWS::Cognito::UserPoolDomain",
+      "AWS::Cognito::UserPoolGroup",
+      "AWS::DynamoDB::Table"
+    ],
+    "monitoring": [
+      "AWS::CloudWatch::Alarm"
+    ]
+  }
+}

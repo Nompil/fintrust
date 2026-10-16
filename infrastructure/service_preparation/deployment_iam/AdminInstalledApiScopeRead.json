@@ -1,0 +1,18 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ReadOnlyWorkforceAccountScope",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:GetItem"
+      ],
+      "Resource": "arn:aws:dynamodb:af-south-1:966467878406:table/imbokodo-dev-user-account-scopes",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    }
+  ]
+}
