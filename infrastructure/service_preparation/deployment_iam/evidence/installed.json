@@ -1297,5 +1297,11 @@
   "api_id": null,
   "workloads_deployed": false,
   "updated_at": "2026-10-16T16:25:51.459203+00:00",
-  "bundle_manifest_sha256": "86e3afc5e2a8b6d3d954b4ef6ebff16187c495077c9a86c951304ec14d3763ae"
+  "bundle_manifest_sha256": "c11245703e448a2ca5d14278e7eb4e541a657df1fc4baaf9e8cac0e4466c4872",
+  "binding_normalization": {
+    "previous_windows_manifest_sha256": "86e3afc5e2a8b6d3d954b4ef6ebff16187c495077c9a86c951304ec14d3763ae",
+    "canonical_lf_manifest_sha256": "c11245703e448a2ca5d14278e7eb4e541a657df1fc4baaf9e8cac0e4466c4872",
+    "json_policy_documents_unchanged": true,
+    "live_iam_updates_for_normalization": false
+  }
 }

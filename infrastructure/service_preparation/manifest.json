@@ -6,13 +6,13 @@
   "sender": "nompilomabuya@outlook.com",
   "recipient": "nompilomabuya@outlook.com",
   "files": {
-    "ses-identities.json": "d712e5141fd07e1beefd780da5471b4e09d817e79b45acd00047ca5aef2dfeff",
-    "application-functions.json": "bfe09077e751566ee0df9898171561a5c1d6c94ccb9d793ff521da25cfe3da86",
-    "monitoring.json": "56cb131bd30862bfc8560d72a2baf909111f90eebf36ff625a64474c070aec41",
-    "alert-ses-policy.json": "418b042dbb8533837e01fe7d8789cb90c82306a42a80805d1b3ba38ecf613818",
-    "cognito.json": "caa9ee0ec964f34a55f0ebdbdb51b5281d810f905ad0a4e4aed0b292a7202244",
-    "api.json": "ef8e3b71f7454e019b0f44e9df5ae5a35604a2dddb6b821df7e44d33b263db1b",
-    "api-shell.json": "af8bc1fac2ee37e9d9d4df9eef62c88884d024761e695f641c526b39ab9d62c1"
+    "ses-identities.json": "182bb1450d41e3fccf2251db09b6794e1d39b7b7f4b68e9bd148e0c9a643ee3a",
+    "application-functions.json": "5a370dbc6c6347336f2e24e6e4c541e0f7b2bea671663f0703debb3a443f6247",
+    "monitoring.json": "449d52493b48ef16c43351b80dc5868fb45c3d1fba3c46634407b0787d6e6b4a",
+    "alert-ses-policy.json": "9c0ab77e5f4b9d99f11145bd8e5795155d5872eeaaff9dbdf9f400b7699b4ed6",
+    "cognito.json": "b2ea539ae5e6fc62b1e96c3acc6f1e085380741d477f8080900466463267888d",
+    "api.json": "38b1c5f718b9c678a4bb07fe2281216905f880258ba0c918a22291e4b552cb56",
+    "api-shell.json": "664568f489da1835bb30b4b8f41a9e6cba5b2418e8eba4500f052c9e72057f48"
   },
   "remaining_gates": [
     "Actual resource and identity inventory",

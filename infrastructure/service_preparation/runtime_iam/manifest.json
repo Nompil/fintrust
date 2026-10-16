@@ -9,11 +9,11 @@
   },
   "scope_table_access": "Admin-installed FinTrustApiUserScopes inline grant on fintrust-api-dev; only GetItem on imbokodo-dev-user-account-scopes. Prepared Cognito performs no role-policy mutation.",
   "files_sha256": {
-    "alert.json": "266fa4633629fb80281b296cd7027c23a231227265f363332ac19ad745fd3bad",
-    "api.json": "4e98c991790e6fc7a6a00713fdbc0332a52311536609930df0b226fd9e2a84e3",
-    "report.json": "51c2807d55f48e3da37a4dd632cf070d1750e0e71af0a769d72c6df7d8f9eb34",
-    "scoring.json": "503b406fa53c02a654843474be112d8eff04651edfaf3e6dbd17e89531c9ef74",
-    "trust.json": "7d3ec39ee23e4aabeed84681a924ef18fddeef1883f2fab29a6c6aea0b589250"
+    "alert.json": "6bad00cb130c68b61f0c596ae73637f0cae200c548d7ff11b2bdcd17f3c18bf4",
+    "api.json": "876c690f63edb5d5bcae5441d03949287d7d02a58370b953d1b0616005d8870c",
+    "report.json": "3253b7905d248606b8622a720065c7cf33cd8496ad08344dfda48be051d7dd00",
+    "scoring.json": "d7455a887f218fa51a9f4186c30b4e1922696b7d3116e0de8e5f4f050dd5fc5f",
+    "trust.json": "b9cc71a38c80e687ad1946218fb689594cfb66a3deb9437944c40e670a4a8633"
   },
   "limitations": [
     "Identity policies do not prove KMS key-policy access or RDS schema grants.",
@@ -23,7 +23,8 @@
   "audit": "docs/EVIDENCE/11-ci/consolidated-release-2026-10-16/remaining-runtime-roles-iam-audit.json",
   "additional_admin_grant": {
     "file": "../deployment_iam/AdminInstalledApiScopeRead.json",
-    "sha256": "1fbf1e49d904fa992b9fed697467c1e7e55af442ffd8eb52a6e1624a01ede4a6",
+    "sha256": "fc7a7f0ed67a16cba8b0933432e8c27c7af5372487e18a7a0423bb0a35c182f2",
     "evidence": "../deployment_iam/evidence/installed.json"
-  }
+  },
+  "byte_normalization": "Current generated documents use canonical LF bytes. Historical Windows audit byte hashes remain historical; JSON policy contents and live grants are unchanged."
 }

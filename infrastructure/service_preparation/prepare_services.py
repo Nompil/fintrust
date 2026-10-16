@@ -153,10 +153,10 @@ def main():
             {'Key': 'Project', 'Value': 'FinTrust'},
             {'Key': 'Environment', 'Value': ref('StageName')}]
     for name, data in generated.items():
-        (out / name).write_text(json.dumps(data, indent=2) + '\n', encoding='utf-8')
+        (out / name).write_text(json.dumps(data, indent=2) + '\n', encoding='utf-8', newline='\n')
     missing = {name: {key: None for key, value in data.get('Parameters', {}).items() if 'Default' not in value}
                for name, data in generated.items() if 'Parameters' in data}
-    (ROOT / 'required-inputs.json').write_text(json.dumps(missing, indent=2) + '\n', encoding='utf-8')
+    (ROOT / 'required-inputs.json').write_text(json.dumps(missing, indent=2) + '\n', encoding='utf-8', newline='\n')
     result = {'status': 'PREPARED_LOCALLY_NOT_DEPLOYED', 'aws_changes': 0,
               'api_detailed_metrics_enabled': False,
               'email_verification': 'NOT_CHECKED', 'sender': EMAIL, 'recipient': EMAIL,
@@ -164,7 +164,7 @@ def main():
               'remaining_gates': ['Actual resource and identity inventory', 'Required inputs and IAM review',
                                   'One consolidated source release', 'Linux artifact verification',
                                   'Quota resolution', 'Cost-compatible live migration and grants', 'Live E2E']}
-    (ROOT / 'manifest.json').write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
+    (ROOT / 'manifest.json').write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8', newline='\n')
     print('Prepared 7 local configuration documents. AWS changes: 0.')
 
 

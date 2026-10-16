@@ -200,12 +200,12 @@ def main():
         size = len(json.dumps(doc, separators=(',', ':')))
         assert size <= 6144, (name, size)
         path = ROOT / (name + '.json')
-        path.write_text(json.dumps(doc, indent=2) + '\n', encoding='utf-8')
+        path.write_text(json.dumps(doc, indent=2) + '\n', encoding='utf-8', newline='\n')
         manifest['files'][path.name] = {'nonwhitespace_characters': size,
                                       'sha256': hashlib.sha256(path.read_bytes()).hexdigest()}
     manifest['stack_resource_types'] = {name: sorted({r['Type'] for r in t['Resources'].values()})
                                         for name, t in templates().items()}
-    (ROOT / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
+    (ROOT / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8', newline='\n')
     print(json.dumps({name: v['nonwhitespace_characters'] for name, v in manifest['files'].items()}))
 
 

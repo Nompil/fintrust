@@ -108,3 +108,11 @@ The installed log read grant retains the documented exact group/stream ARN scope
 it was not broadened to force a simulator result. Verify the normal deployer's
 real CloudWatch Logs read once authentication is restored. This discrepancy is
 not evidence that log delivery or log inspection works in the live application.
+
+Cross-platform deployment bindings were also repaired: generators now write
+explicit LF newlines and Git preserves them for hash-bound JSON documents.
+Canonical policy/template/runtime-file hash verification passed on Windows and
+Ubuntu Linux. Policy JSON objects and installed permissions did not change;
+the previous Windows manifest binding is retained in installed.json alongside
+the canonical binding. AWS revalidated all seven canonical policy documents
+with no findings. The runtime Lambda ZIP was not changed or rebuilt.

@@ -35,6 +35,11 @@ nonwhitespace sizes, exact stack resource types and the approved runtime ZIP
 SHA256. All managed documents must stay below 6,144 nonwhitespace characters.
 The code key is a proposed content-addressed destination, not proof of upload.
 An actual immutable S3 version still needs verification before function creation.
+Generated JSON uses explicit LF newlines, with matching Git attributes, so the
+hashes survive Windows/Linux checkouts. `verify_bindings.py` checks policy,
+template and runtime-file hashes against both their manifests and the installed
+policy read-back documents. It passed under Windows and Linux; it deliberately
+reports the pending sign-in, template-validation and live log-read gates.
 
 AWS receipts live in `evidence/`:
 

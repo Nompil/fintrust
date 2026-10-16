@@ -1,0 +1,17 @@
+{
+  "windows_verification": "PASS",
+  "ubuntu_linux_verification": "PASS",
+  "command": "python3 infrastructure/service_preparation/deployment_iam/verify_bindings.py",
+  "bundle_manifest_sha256": "c11245703e448a2ca5d14278e7eb4e541a657df1fc4baaf9e8cac0e4466c4872",
+  "permission_objects_changed_by_normalization": false,
+  "runtime_zip_changed": false,
+  "runtime_ready": false,
+  "open_gates": [
+    "Correct deployer browser sign-in/MFA",
+    "Latest template AWS validation",
+    "Real API ID binding",
+    "Live CloudWatch log-read discrepancy",
+    "Quota review and live migration/access/grants",
+    "Cloud E2E"
+  ]
+}
