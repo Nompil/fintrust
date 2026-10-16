@@ -2,7 +2,7 @@
   "account": "966467878406",
   "region": "af-south-1",
   "stage": "dev",
-  "api_id": null,
+  "api_id": "qzgzopn8o4",
   "bound_artifact_sha256": "ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d",
   "proposed_code_key_not_uploaded": "deployment/lambda/ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d/fintrust.zip",
   "activation_authorized_by_policy_install": false,
@@ -16,16 +16,16 @@
       "sha256": "239149b15443acb4684086d838723c9b0f41096e73ef7e550a540ecdfe590b10"
     },
     "FinTrustReleaseDependencies.json": {
-      "nonwhitespace_characters": 5620,
-      "sha256": "3432a19db508df16cefceab1c9060f73b42ad8fb8d8c90312cdaf91a0371670b"
+      "nonwhitespace_characters": 6021,
+      "sha256": "1c339847d1f6b375a9586624cc128581e6057583f67609cd607437d8e5e1f337"
     },
     "FinTrustIdentityDeployment.json": {
-      "nonwhitespace_characters": 3152,
-      "sha256": "78eb00a78d47999feca2f3e19185d95d13ae64d28f800c26979b05a8a20227ed"
+      "nonwhitespace_characters": 3141,
+      "sha256": "acdb9006d96eb59c27aa59e7e78b0f076b9b51c330564aa5c615c4f4e27d1d73"
     },
     "FinTrustApiDeployment.json": {
-      "nonwhitespace_characters": 939,
-      "sha256": "70d40f0621a31784a7878ad94e6f8c9d985ba256c95070fe485b2f63b9a47ea7"
+      "nonwhitespace_characters": 1153,
+      "sha256": "fd3561c173179731a69d6894ffa566608a8d03b8d41e007f2e4de6dbede9461d"
     },
     "FinTrustMonitoringDeployment.json": {
       "nonwhitespace_characters": 5801,

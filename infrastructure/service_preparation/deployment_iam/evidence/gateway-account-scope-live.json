@@ -1,0 +1,935 @@
+{
+  "aws_changes": true,
+  "before_template": {
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "FinTrust private network only; no application or paid endpoint resources",
+    "Parameters": {
+      "AvailabilityZone1": {
+        "Type": "AWS::EC2::AvailabilityZone::Name"
+      },
+      "AvailabilityZone2": {
+        "Type": "AWS::EC2::AvailabilityZone::Name"
+      },
+      "S3PrefixListId": {
+        "Type": "String",
+        "AllowedPattern": "pl-[a-f0-9]+"
+      },
+      "DynamoPrefixListId": {
+        "Type": "String",
+        "AllowedPattern": "pl-[a-f0-9]+"
+      }
+    },
+    "Rules": {
+      "DistinctZones": {
+        "Assertions": [
+          {
+            "Assert": {
+              "Fn::Not": [
+                {
+                  "Fn::Equals": [
+                    {
+                      "Ref": "AvailabilityZone1"
+                    },
+                    {
+                      "Ref": "AvailabilityZone2"
+                    }
+                  ]
+                }
+              ]
+            },
+            "AssertDescription": "Application and database subnet pairs require two distinct AZs"
+          }
+        ]
+      }
+    },
+    "Resources": {
+      "Vpc": {
+        "Type": "AWS::EC2::VPC",
+        "Properties": {
+          "CidrBlock": "10.42.0.0/16",
+          "EnableDnsSupport": true,
+          "EnableDnsHostnames": true,
+          "InstanceTenancy": "default",
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Name",
+              "Value": "fintrust-vpc-dev"
+            }
+          ]
+        }
+      },
+      "ApplicationRoutes": {
+        "Type": "AWS::EC2::RouteTable",
+        "Properties": {
+          "VpcId": {
+            "Ref": "Vpc"
+          },
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Name",
+              "Value": "fintrust-applicationroutes-dev"
+            }
+          ]
+        }
+      },
+      "ApplicationSubnet1": {
+        "Type": "AWS::EC2::Subnet",
+        "Properties": {
+          "VpcId": {
+            "Ref": "Vpc"
+          },
+          "CidrBlock": "10.42.0.0/24",
+          "AvailabilityZone": {
+            "Ref": "AvailabilityZone1"
+          },
+          "MapPublicIpOnLaunch": false,
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Name",
+              "Value": "fintrust-applicationsubnet1-dev"
+            }
+          ]
+        }
+      },
+      "ApplicationSubnet1Route": {
+        "Type": "AWS::EC2::SubnetRouteTableAssociation",
+        "Properties": {
+          "SubnetId": {
+            "Ref": "ApplicationSubnet1"
+          },
+          "RouteTableId": {
+            "Ref": "ApplicationRoutes"
+          }
+        }
+      },
+      "ApplicationSubnet2": {
+        "Type": "AWS::EC2::Subnet",
+        "Properties": {
+          "VpcId": {
+            "Ref": "Vpc"
+          },
+          "CidrBlock": "10.42.1.0/24",
+          "AvailabilityZone": {
+            "Ref": "AvailabilityZone2"
+          },
+          "MapPublicIpOnLaunch": false,
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Name",
+              "Value": "fintrust-applicationsubnet2-dev"
+            }
+          ]
+        }
+      },
+      "ApplicationSubnet2Route": {
+        "Type": "AWS::EC2::SubnetRouteTableAssociation",
+        "Properties": {
+          "SubnetId": {
+            "Ref": "ApplicationSubnet2"
+          },
+          "RouteTableId": {
+            "Ref": "ApplicationRoutes"
+          }
+        }
+      },
+      "DatabaseRoutes": {
+        "Type": "AWS::EC2::RouteTable",
+        "Properties": {
+          "VpcId": {
+            "Ref": "Vpc"
+          },
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Name",
+              "Value": "fintrust-databaseroutes-dev"
+            }
+          ]
+        }
+      },
+      "DatabaseSubnet1": {
+        "Type": "AWS::EC2::Subnet",
+        "Properties": {
+          "VpcId": {
+            "Ref": "Vpc"
+          },
+          "CidrBlock": "10.42.2.0/24",
+          "AvailabilityZone": {
+            "Ref": "AvailabilityZone1"
+          },
+          "MapPublicIpOnLaunch": false,
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Name",
+              "Value": "fintrust-databasesubnet1-dev"
+            }
+          ]
+        }
+      },
+      "DatabaseSubnet1Route": {
+        "Type": "AWS::EC2::SubnetRouteTableAssociation",
+        "Properties": {
+          "SubnetId": {
+            "Ref": "DatabaseSubnet1"
+          },
+          "RouteTableId": {
+            "Ref": "DatabaseRoutes"
+          }
+        }
+      },
+      "DatabaseSubnet2": {
+        "Type": "AWS::EC2::Subnet",
+        "Properties": {
+          "VpcId": {
+            "Ref": "Vpc"
+          },
+          "CidrBlock": "10.42.3.0/24",
+          "AvailabilityZone": {
+            "Ref": "AvailabilityZone2"
+          },
+          "MapPublicIpOnLaunch": false,
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Name",
+              "Value": "fintrust-databasesubnet2-dev"
+            }
+          ]
+        }
+      },
+      "DatabaseSubnet2Route": {
+        "Type": "AWS::EC2::SubnetRouteTableAssociation",
+        "Properties": {
+          "SubnetId": {
+            "Ref": "DatabaseSubnet2"
+          },
+          "RouteTableId": {
+            "Ref": "DatabaseRoutes"
+          }
+        }
+      },
+      "DatabaseGroup": {
+        "Type": "AWS::EC2::SecurityGroup",
+        "Properties": {
+          "GroupDescription": "Private PostgreSQL",
+          "VpcId": {
+            "Ref": "Vpc"
+          },
+          "SecurityGroupEgress": [
+            {
+              "IpProtocol": "-1",
+              "CidrIp": "127.0.0.1/32"
+            }
+          ],
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Name",
+              "Value": "fintrust-databasegroup-dev"
+            }
+          ]
+        }
+      },
+      "LambdaGroup": {
+        "Type": "AWS::EC2::SecurityGroup",
+        "Properties": {
+          "GroupDescription": "Ledger functions",
+          "VpcId": {
+            "Ref": "Vpc"
+          },
+          "SecurityGroupEgress": [
+            {
+              "IpProtocol": "tcp",
+              "FromPort": 5432,
+              "ToPort": 5432,
+              "DestinationSecurityGroupId": {
+                "Ref": "DatabaseGroup"
+              }
+            },
+            {
+              "IpProtocol": "tcp",
+              "FromPort": 443,
+              "ToPort": 443,
+              "DestinationPrefixListId": {
+                "Ref": "S3PrefixListId"
+              }
+            },
+            {
+              "IpProtocol": "tcp",
+              "FromPort": 443,
+              "ToPort": 443,
+              "DestinationPrefixListId": {
+                "Ref": "DynamoPrefixListId"
+              }
+            }
+          ],
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Name",
+              "Value": "fintrust-lambdagroup-dev"
+            }
+          ]
+        }
+      },
+      "DatabaseIngress": {
+        "Type": "AWS::EC2::SecurityGroupIngress",
+        "Properties": {
+          "GroupId": {
+            "Ref": "DatabaseGroup"
+          },
+          "SourceSecurityGroupId": {
+            "Ref": "LambdaGroup"
+          },
+          "IpProtocol": "tcp",
+          "FromPort": 5432,
+          "ToPort": 5432
+        }
+      },
+      "DatabaseSubnets": {
+        "Type": "AWS::RDS::DBSubnetGroup",
+        "Properties": {
+          "DBSubnetGroupName": "fintrust-db-dev",
+          "DBSubnetGroupDescription": "Private FinTrust database tier",
+          "SubnetIds": [
+            {
+              "Ref": "DatabaseSubnet1"
+            },
+            {
+              "Ref": "DatabaseSubnet2"
+            }
+          ],
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Name",
+              "Value": "fintrust-databasesubnets-dev"
+            }
+          ]
+        }
+      },
+      "S3Endpoint": {
+        "Type": "AWS::EC2::VPCEndpoint",
+        "Properties": {
+          "VpcId": {
+            "Ref": "Vpc"
+          },
+          "VpcEndpointType": "Gateway",
+          "ServiceName": {
+            "Fn::Sub": "com.amazonaws.${AWS::Region}.s3"
+          },
+          "RouteTableIds": [
+            {
+              "Ref": "ApplicationRoutes"
+            }
+          ],
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": "*",
+                "Action": [
+                  "s3:GetObject",
+                  "s3:GetObjectVersion",
+                  "s3:PutObject"
+                ],
+                "Resource": [
+                  {
+                    "Fn::Sub": "arn:${AWS::Partition}:s3:::fintrust-raw-${AWS::AccountId}-${AWS::Region}-dev/*"
+                  },
+                  {
+                    "Fn::Sub": "arn:${AWS::Partition}:s3:::fintrust-quarantine-${AWS::AccountId}-${AWS::Region}-dev/*"
+                  },
+                  {
+                    "Fn::Sub": "arn:${AWS::Partition}:s3:::fintrust-reports-${AWS::AccountId}-${AWS::Region}-dev/*"
+                  }
+                ],
+                "Condition": {
+                  "StringEquals": {
+                    "aws:PrincipalAccount": {
+                      "Ref": "AWS::AccountId"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Name",
+              "Value": "fintrust-s3endpoint-dev"
+            }
+          ]
+        }
+      },
+      "DynamodbEndpoint": {
+        "Type": "AWS::EC2::VPCEndpoint",
+        "Properties": {
+          "VpcId": {
+            "Ref": "Vpc"
+          },
+          "VpcEndpointType": "Gateway",
+          "ServiceName": {
+            "Fn::Sub": "com.amazonaws.${AWS::Region}.dynamodb"
+          },
+          "RouteTableIds": [
+            {
+              "Ref": "ApplicationRoutes"
+            }
+          ],
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": "*",
+                "Action": [
+                  "dynamodb:GetItem",
+                  "dynamodb:PutItem",
+                  "dynamodb:Query"
+                ],
+                "Resource": [
+                  {
+                    "Fn::Sub": "arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/fintrust-risk-dev"
+                  }
+                ],
+                "Condition": {
+                  "StringEquals": {
+                    "aws:PrincipalAccount": {
+                      "Ref": "AWS::AccountId"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Name",
+              "Value": "fintrust-dynamodbendpoint-dev"
+            }
+          ]
+        }
+      }
+    },
+    "Outputs": {
+      "Vpc": {
+        "Value": {
+          "Ref": "Vpc"
+        }
+      },
+      "ApplicationSubnet1": {
+        "Value": {
+          "Ref": "ApplicationSubnet1"
+        }
+      },
+      "ApplicationSubnet2": {
+        "Value": {
+          "Ref": "ApplicationSubnet2"
+        }
+      },
+      "DatabaseSubnet1": {
+        "Value": {
+          "Ref": "DatabaseSubnet1"
+        }
+      },
+      "DatabaseSubnet2": {
+        "Value": {
+          "Ref": "DatabaseSubnet2"
+        }
+      },
+      "ApplicationRoutes": {
+        "Value": {
+          "Ref": "ApplicationRoutes"
+        }
+      },
+      "DatabaseRoutes": {
+        "Value": {
+          "Ref": "DatabaseRoutes"
+        }
+      },
+      "LambdaGroup": {
+        "Value": {
+          "Ref": "LambdaGroup"
+        }
+      },
+      "DatabaseGroup": {
+        "Value": {
+          "Ref": "DatabaseGroup"
+        }
+      },
+      "DatabaseSubnets": {
+        "Value": {
+          "Ref": "DatabaseSubnets"
+        }
+      },
+      "S3Endpoint": {
+        "Value": {
+          "Ref": "S3Endpoint"
+        }
+      },
+      "DynamodbEndpoint": {
+        "Value": {
+          "Ref": "DynamodbEndpoint"
+        }
+      }
+    }
+  },
+  "before_stack": {
+    "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+    "StackName": "fintrust-network-dev",
+    "Description": "FinTrust private network only; no application or paid endpoint resources",
+    "Parameters": [
+      {
+        "ParameterKey": "AvailabilityZone1",
+        "ParameterValue": "af-south-1a"
+      },
+      {
+        "ParameterKey": "AvailabilityZone2",
+        "ParameterValue": "af-south-1b"
+      },
+      {
+        "ParameterKey": "DynamoPrefixListId",
+        "ParameterValue": "pl-d6ae4bbf"
+      },
+      {
+        "ParameterKey": "S3PrefixListId",
+        "ParameterValue": "pl-a3ac49ca"
+      }
+    ],
+    "CreationTime": "2026-10-07T11:45:26.476000+00:00",
+    "LastUpdatedTime": "2026-10-16T21:14:21.115000+00:00",
+    "RollbackConfiguration": {},
+    "StackStatus": "UPDATE_ROLLBACK_COMPLETE",
+    "DisableRollback": false,
+    "DeploymentConfig": {
+      "Mode": "STANDARD",
+      "DisableRollback": false
+    },
+    "NotificationARNs": [],
+    "Outputs": [
+      {
+        "OutputKey": "DatabaseSubnet1",
+        "OutputValue": "subnet-04dc0f576867d7a6c"
+      },
+      {
+        "OutputKey": "DatabaseSubnets",
+        "OutputValue": "fintrust-db-dev"
+      },
+      {
+        "OutputKey": "DatabaseSubnet2",
+        "OutputValue": "subnet-084deb13f49a36064"
+      },
+      {
+        "OutputKey": "ApplicationSubnet1",
+        "OutputValue": "subnet-0c2d87e8a83361e30"
+      },
+      {
+        "OutputKey": "S3Endpoint",
+        "OutputValue": "vpce-0b59921927bd0e852"
+      },
+      {
+        "OutputKey": "ApplicationSubnet2",
+        "OutputValue": "subnet-0328276227fa30ead"
+      },
+      {
+        "OutputKey": "Vpc",
+        "OutputValue": "vpc-0aba008bb360f5147"
+      },
+      {
+        "OutputKey": "ApplicationRoutes",
+        "OutputValue": "rtb-01b4916c13d2894a5"
+      },
+      {
+        "OutputKey": "LambdaGroup",
+        "OutputValue": "sg-0850bd798bb9505e2"
+      },
+      {
+        "OutputKey": "DynamodbEndpoint",
+        "OutputValue": "vpce-0647afafb32f34e6d"
+      },
+      {
+        "OutputKey": "DatabaseRoutes",
+        "OutputValue": "rtb-008ec3760f6ccd9f0"
+      },
+      {
+        "OutputKey": "DatabaseGroup",
+        "OutputValue": "sg-01644a4c9f2c44162"
+      }
+    ],
+    "Tags": [
+      {
+        "Key": "Project",
+        "Value": "FinTrust"
+      },
+      {
+        "Key": "Environment",
+        "Value": "dev"
+      }
+    ],
+    "EnableTerminationProtection": false,
+    "DriftInformation": {
+      "StackDriftStatus": "NOT_CHECKED"
+    },
+    "LastOperations": [
+      {
+        "OperationType": "CONTINUE_ROLLBACK",
+        "OperationId": "1cfc1d91-fd23-4236-9c40-dcd9bdfdd339"
+      }
+    ]
+  },
+  "candidate_sha256": "3b2ef5259400a1c6c9f02d5dbc7c649862f7e21d5ed9178da81b12ff60cf87b0",
+  "only_change": "DynamodbEndpoint.PolicyDocument: API role GetItem on exact scope table",
+  "validation": {
+    "Parameters": [
+      {
+        "ParameterKey": "AvailabilityZone1",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "AvailabilityZone2",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "DynamoPrefixListId",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "S3PrefixListId",
+        "NoEcho": false
+      }
+    ],
+    "Description": "FinTrust private network only; no application or paid endpoint resources"
+  },
+  "prepared": {
+    "Id": "arn:aws:cloudformation:af-south-1:966467878406:changeSet/fintrust-network-api-scope-retry-20261016/29b6e9df-d003-46a4-bd25-3294a36bbbf7",
+    "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d"
+  },
+  "updated_at": "2026-10-16T21:29:27.055392+00:00",
+  "reviewed_change_set": {
+    "Changes": [
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Modify",
+          "LogicalResourceId": "DynamodbEndpoint",
+          "PhysicalResourceId": "vpce-0647afafb32f34e6d",
+          "ResourceType": "AWS::EC2::VPCEndpoint",
+          "Replacement": "False",
+          "Scope": [
+            "Properties"
+          ],
+          "Details": [
+            {
+              "Target": {
+                "Attribute": "Properties",
+                "Name": "PolicyDocument",
+                "RequiresRecreation": "Never"
+              },
+              "Evaluation": "Static",
+              "ChangeSource": "DirectModification"
+            }
+          ]
+        }
+      }
+    ],
+    "ChangeSetName": "fintrust-network-api-scope-retry-20261016",
+    "ChangeSetId": "arn:aws:cloudformation:af-south-1:966467878406:changeSet/fintrust-network-api-scope-retry-20261016/29b6e9df-d003-46a4-bd25-3294a36bbbf7",
+    "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+    "StackName": "fintrust-network-dev",
+    "Description": null,
+    "Parameters": [
+      {
+        "ParameterKey": "AvailabilityZone1",
+        "ParameterValue": "af-south-1a"
+      },
+      {
+        "ParameterKey": "AvailabilityZone2",
+        "ParameterValue": "af-south-1b"
+      },
+      {
+        "ParameterKey": "DynamoPrefixListId",
+        "ParameterValue": "pl-d6ae4bbf"
+      },
+      {
+        "ParameterKey": "S3PrefixListId",
+        "ParameterValue": "pl-a3ac49ca"
+      }
+    ],
+    "CreationTime": "2026-10-16T21:29:05.667000+00:00",
+    "ExecutionStatus": "AVAILABLE",
+    "Status": "CREATE_COMPLETE",
+    "StatusReason": null,
+    "NotificationARNs": [],
+    "RollbackConfiguration": {},
+    "Capabilities": [],
+    "Tags": [
+      {
+        "Key": "Project",
+        "Value": "FinTrust"
+      },
+      {
+        "Key": "Environment",
+        "Value": "dev"
+      }
+    ],
+    "ParentChangeSetId": null,
+    "IncludeNestedStacks": false,
+    "RootChangeSetId": null,
+    "OnStackFailure": null,
+    "ImportExistingResources": null,
+    "StackDriftStatus": null,
+    "DeploymentMode": null,
+    "DeploymentConfig": {
+      "Mode": "STANDARD",
+      "DisableRollback": false
+    }
+  },
+  "status": "UPDATE_COMPLETE_IN_PLACE_POLICY_ONLY",
+  "after_stack": {
+    "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+    "StackName": "fintrust-network-dev",
+    "ChangeSetId": "arn:aws:cloudformation:af-south-1:966467878406:changeSet/fintrust-network-api-scope-retry-20261016/29b6e9df-d003-46a4-bd25-3294a36bbbf7",
+    "Description": "FinTrust private network only; no application or paid endpoint resources",
+    "Parameters": [
+      {
+        "ParameterKey": "AvailabilityZone1",
+        "ParameterValue": "af-south-1a"
+      },
+      {
+        "ParameterKey": "AvailabilityZone2",
+        "ParameterValue": "af-south-1b"
+      },
+      {
+        "ParameterKey": "DynamoPrefixListId",
+        "ParameterValue": "pl-d6ae4bbf"
+      },
+      {
+        "ParameterKey": "S3PrefixListId",
+        "ParameterValue": "pl-a3ac49ca"
+      }
+    ],
+    "CreationTime": "2026-10-07T11:45:26.476000+00:00",
+    "LastUpdatedTime": "2026-10-16T21:29:14.103000+00:00",
+    "RollbackConfiguration": {},
+    "StackStatus": "UPDATE_COMPLETE",
+    "DisableRollback": false,
+    "DeploymentConfig": {
+      "Mode": "STANDARD",
+      "DisableRollback": false
+    },
+    "NotificationARNs": [],
+    "Outputs": [
+      {
+        "OutputKey": "DatabaseSubnet1",
+        "OutputValue": "subnet-04dc0f576867d7a6c"
+      },
+      {
+        "OutputKey": "DatabaseSubnets",
+        "OutputValue": "fintrust-db-dev"
+      },
+      {
+        "OutputKey": "DatabaseSubnet2",
+        "OutputValue": "subnet-084deb13f49a36064"
+      },
+      {
+        "OutputKey": "ApplicationSubnet1",
+        "OutputValue": "subnet-0c2d87e8a83361e30"
+      },
+      {
+        "OutputKey": "S3Endpoint",
+        "OutputValue": "vpce-0b59921927bd0e852"
+      },
+      {
+        "OutputKey": "ApplicationSubnet2",
+        "OutputValue": "subnet-0328276227fa30ead"
+      },
+      {
+        "OutputKey": "Vpc",
+        "OutputValue": "vpc-0aba008bb360f5147"
+      },
+      {
+        "OutputKey": "ApplicationRoutes",
+        "OutputValue": "rtb-01b4916c13d2894a5"
+      },
+      {
+        "OutputKey": "LambdaGroup",
+        "OutputValue": "sg-0850bd798bb9505e2"
+      },
+      {
+        "OutputKey": "DynamodbEndpoint",
+        "OutputValue": "vpce-0647afafb32f34e6d"
+      },
+      {
+        "OutputKey": "DatabaseRoutes",
+        "OutputValue": "rtb-008ec3760f6ccd9f0"
+      },
+      {
+        "OutputKey": "DatabaseGroup",
+        "OutputValue": "sg-01644a4c9f2c44162"
+      }
+    ],
+    "Tags": [
+      {
+        "Key": "Project",
+        "Value": "FinTrust"
+      },
+      {
+        "Key": "Environment",
+        "Value": "dev"
+      }
+    ],
+    "EnableTerminationProtection": false,
+    "DriftInformation": {
+      "StackDriftStatus": "NOT_CHECKED"
+    },
+    "LastOperations": [
+      {
+        "OperationType": "UPDATE_STACK",
+        "OperationId": "e4f3ebc3-f096-40ba-8bd8-b3b40fb269d3"
+      }
+    ]
+  },
+  "endpoint_read_back": {
+    "VpcEndpointId": "vpce-0647afafb32f34e6d",
+    "VpcEndpointType": "Gateway",
+    "VpcId": "vpc-0aba008bb360f5147",
+    "ServiceName": "com.amazonaws.af-south-1.dynamodb",
+    "State": "available",
+    "PolicyDocument": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":[\"dynamodb:GetItem\",\"dynamodb:PutItem\",\"dynamodb:Query\"],\"Resource\":\"arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev\",\"Condition\":{\"StringEquals\":{\"aws:PrincipalAccount\":\"966467878406\"}}},{\"Sid\":\"ApiReadAccountScopes\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":\"dynamodb:GetItem\",\"Resource\":\"arn:aws:dynamodb:af-south-1:966467878406:table/imbokodo-dev-user-account-scopes\",\"Condition\":{\"StringEquals\":{\"aws:PrincipalArn\":\"arn:aws:iam::966467878406:role/fintrust-api-dev\",\"aws:PrincipalAccount\":\"966467878406\"}}}]}",
+    "RouteTableIds": [
+      "rtb-01b4916c13d2894a5"
+    ],
+    "SubnetIds": [],
+    "Groups": [],
+    "IpAddressType": "ipv4",
+    "DnsOptions": {
+      "DnsRecordIpType": "service-defined"
+    },
+    "PrivateDnsEnabled": false,
+    "RequesterManaged": false,
+    "NetworkInterfaceIds": [],
+    "DnsEntries": [],
+    "CreationTimestamp": "2026-10-07T11:50:32+00:00",
+    "Tags": [
+      {
+        "Key": "Project",
+        "Value": "FinTrust"
+      },
+      {
+        "Key": "aws:cloudformation:stack-name",
+        "Value": "fintrust-network-dev"
+      },
+      {
+        "Key": "Environment",
+        "Value": "dev"
+      },
+      {
+        "Key": "aws:cloudformation:logical-id",
+        "Value": "DynamodbEndpoint"
+      },
+      {
+        "Key": "aws:cloudformation:stack-id",
+        "Value": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d"
+      },
+      {
+        "Key": "Name",
+        "Value": "fintrust-dynamodbendpoint-dev"
+      }
+    ],
+    "OwnerId": "966467878406",
+    "ServiceRegion": "af-south-1"
+  }
+}

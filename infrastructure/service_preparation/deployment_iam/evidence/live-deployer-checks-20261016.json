@@ -1,0 +1,83 @@
+{
+  "account": "966467878406",
+  "region": "af-south-1",
+  "profile": "fintrust-deployer-role",
+  "checks": {
+    "api-shell": {
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "dfe619",
+        "wall_time_seconds": 4.2942841,
+        "exit_code": 0,
+        "original_token_count": 78,
+        "output": "{\r\n    \"Parameters\": [\r\n        {\r\n            \"ParameterKey\": \"StageName\",\r\n            \"DefaultValue\": \"dev\",\r\n            \"NoEcho\": false\r\n        }\r\n    ],\r\n    \"Description\": \"Temporary first phase for the FinTrust API stack: reserve its stable API ID before registering the Cognito OAuth callback.\"\r\n}\r\n"
+      }
+    },
+    "api": {
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "e1d08b",
+        "wall_time_seconds": 4.3720842,
+        "exit_code": 0,
+        "original_token_count": 119,
+        "output": "{\r\n    \"Parameters\": [\r\n        {\r\n            \"ParameterKey\": \"ApiFunctionName\",\r\n            \"NoEcho\": false\r\n        },\r\n        {\r\n            \"ParameterKey\": \"StageName\",\r\n            \"DefaultValue\": \"dev\",\r\n            \"NoEcho\": false\r\n        },\r\n        {\r\n            \"ParameterKey\": \"UserPoolArn\",\r\n            \"NoEcho\": false\r\n        }\r\n    ],\r\n    \"Description\": \"FinTrust same-origin workbench API protected by an API Gateway Cognito user-pool authorizer.\"\r\n}\r\n"
+      }
+    },
+    "application-functions": {
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "ad0d5e",
+        "wall_time_seconds": 4.3503855,
+        "exit_code": 0,
+        "original_token_count": 805,
+        "output": "{\r\n    \"Parameters\": [\r\n        {\r\n            \"ParameterKey\": \"CorsAllowedOrigins\",\r\n            \"NoEcho\": false\r\n        },\r\n        {\r\n            \"ParameterKey\": \"ExistingTransactionsArn\",\r\n            \"NoEcho\": false\r\n        },\r\n        {\r\n            \"ParameterKey\": \"RiskTable\",\r\n            \"NoEcho\": false\r\n        },\r\n        {\r\n            \"ParameterKey\": \"CodeKey\",\r\n            \"NoEcho\": false\r\n        },\r\n        {\r\n            \"ParameterKey\": \"ReportsBucket\",\r\n            \"NoEcho\": false\r\n        },\r\n        {\r\n            \"ParameterKey\": \"QuarantineBucket\",\r\n            \"NoEcho\": false\r\n        },\r\n        {\r\n            \"ParameterKey\": \"SubnetIds\",\r\n            \"NoEcho\": false\r\n        },\r\n        {\r\n            \"ParameterKey\": \"SesSender\",\r\n            \"DefaultValue\": \"nompilomabuya@outlook.com\",\r\n            \"NoEcho\": false\r\n        },\r\n        {\r\n            \"ParameterKey\": \"Stage\",\r\n            \"DefaultValue\": \"dev\",\r\n            \"NoEcho\": false\r\n        },\r\n        {\r\n            \"ParameterKey\": \"ExistingReportFailuresArn\",\r\n            \"NoEcho\": false\r\n        },\r\n        {\r\n            \"ParameterKey\": \"CognitoRedirectUri\",\r\n            \"NoEcho\": false\r\n        },\r\n        {\r\n            \"ParameterKey\": \"ExistingAlertFailuresArn\",\r\n            \"NoEcho\": false\r\n        },\r\n        {\r\n            \"ParameterKey\": \"CognitoDomain\",\r\n            \"NoEcho\": false\r\n        },\r\n        {\r\n            \"ParameterKey\": \"CognitoLogoutUri\",\r\n            \"NoEcho\": false\r\n        },\r\n        {\r\n            \"ParameterKey\": \"EnableFunctions\",\r\n            \"DefaultValue\": \"false\",\r\n            \"NoEcho\": false\r\n        },\r\n        {\r\n            \"ParameterKey\": \"EnableMonthlyReports\",\r\n            \"DefaultValue\": \"false\",\r\n            \"NoEcho\": false,\r\n            \"Description\": \"Independent report schedule activation after report validation and cost review.\"\r\n        },\r\n        {\r\n            \"ParameterKey\": \"RiskStreamArn\",\r\n            \"NoEcho\": false\r\n        },\r\n        {\r\n            \"ParameterKey\": \"ExistingReportFailuresUrl\",\r\n            \"NoEcho\": false\r\n        },\r\n        {\r\n            \"ParameterKey\": \"CodeSha256\",\r\n            \"NoEcho\": false\r\n        },\r\n        {\r\n            \"ParameterKey\": \"SecurityGroupIds\",\r\n            \"NoEcho\": false\r\n        },\r\n        {\r\n            \"ParameterKey\": \"CognitoUserPoolId\",\r\n            \"NoEcho\": false\r\n        },\r\n        {\r\n            \"ParameterKey\": \"CodeBucket\",\r\n            \"NoEcho\": false\r\n        },\r\n        {\r\n            \"ParameterKey\": \"CognitoUserScopeTable\",\r\n            \"NoEcho\": false\r\n        },\r\n        {\r\n            \"ParameterKey\": \"CognitoAppClientId\",\r\n            \"NoEcho\": false\r\n        },\r\n        {\r\n            \"ParameterKey\": \"SesRecipient\",\r\n            \"DefaultValue\": \"nompilomabuya@outlook.com\",\r\n            \"NoEcho\": false\r\n        },\r\n        {\r\n            \"ParameterKey\": \"EnableConsumers\",\r\n            \"DefaultValue\": \"false\",\r\n            \"NoEcho\": false\r\n        },\r\n        {\r\n            \"ParameterKey\": \"CodeObjectVersion\",\r\n            \"NoEcho\": false\r\n        }\r\n    ],\r\n    \"Description\": \"FinTrust remaining functions; reference existing messaging and ingest stacks\"\r\n}\r\n"
+      }
+    },
+    "cognito": {
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "d97c0a",
+        "wall_time_seconds": 4.2811794,
+        "exit_code": 0,
+        "original_token_count": 252,
+        "output": "{\r\n    \"Parameters\": [\r\n        {\r\n            \"ParameterKey\": \"EnableScopeRecovery\",\r\n            \"DefaultValue\": \"false\",\r\n            \"NoEcho\": false,\r\n            \"Description\": \"Optional DynamoDB point-in-time recovery; may incur charges.\"\r\n        },\r\n        {\r\n            \"ParameterKey\": \"StageName\",\r\n            \"NoEcho\": false\r\n        },\r\n        {\r\n            \"ParameterKey\": \"CallbackUrls\",\r\n            \"NoEcho\": false,\r\n            \"Description\": \"Exact HTTPS Imbokodo callback URLs; no localhost or wildcards in a cloud stack.\"\r\n        },\r\n        {\r\n            \"ParameterKey\": \"LogoutUrls\",\r\n            \"NoEcho\": false,\r\n            \"Description\": \"Exact HTTPS Imbokodo logout URLs; no localhost or wildcards in a cloud stack.\"\r\n        },\r\n        {\r\n            \"ParameterKey\": \"DomainPrefix\",\r\n            \"NoEcho\": false\r\n        }\r\n    ],\r\n    \"Description\": \"Imbokodo workforce Cognito sign-in and application account-scope map; deploy only after approved change review.\"\r\n}\r\n"
+      }
+    },
+    "logs-read": {
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "469bb5",
+        "wall_time_seconds": 4.3383494,
+        "exit_code": 1,
+        "original_token_count": 36,
+        "output": "\r\naws: [ERROR]: An error occurred (ResourceNotFoundException) when calling the GetLogEvents operation: The specified log group does not exist.\r\n"
+      }
+    },
+    "api-inventory": {
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "9c0319",
+        "wall_time_seconds": 4.1095454,
+        "exit_code": 0,
+        "original_token_count": 1,
+        "output": "[]\r\n"
+      }
+    },
+    "quota": {
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "340b13",
+        "wall_time_seconds": 4.1418033,
+        "exit_code": 0,
+        "original_token_count": 7,
+        "output": "{\r\n    \"Value\": 10.0\r\n}\r\n"
+      }
+    }
+  },
+  "interpretation": {
+    "templates": "Four latest templates accepted by AWS under the verified normal deployer role",
+    "logs": "GetLogEvents returned ResourceNotFoundException for the not-yet-created owned group, not AccessDenied; live log delivery remains untested",
+    "api_inventory": "Empty before API bootstrap",
+    "lambda_quota": 10
+  }
+}

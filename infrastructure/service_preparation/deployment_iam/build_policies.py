@@ -3,6 +3,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+from urllib.parse import quote
 
 ROOT = Path(__file__).resolve().parent
 PREP = ROOT.parent
@@ -129,6 +130,9 @@ def generate(api_id=None):
         stmt('ReadOwnedMappingTags', ['lambda:ListTags'], mapping_arns,
              extra={'StringEquals': {'aws:ResourceTag/Project': 'FinTrust', 'aws:ResourceTag/Environment': 'dev'}})])
     application.append(dependencies.pop(2))  # Nine settings resolved by the function stack.
+    dependencies.append(stmt('RetagExistingDynamoGatewayDuringStackUpdate', ['ec2:CreateTags'],
+        f'arn:aws:ec2:{REGION}:{ACCOUNT}:vpc-endpoint/vpce-0647afafb32f34e6d', via=True,
+        extra={'StringEquals': {'aws:ResourceTag/Project': 'FinTrust', 'aws:ResourceTag/Environment': 'dev'}}))
 
     pools = f'arn:aws:cognito-idp:{REGION}:{ACCOUNT}:userpool/{REGION}_*'
     pool_tags = {'aws:ResourceTag/Project': 'FinTrust', 'aws:ResourceTag/Environment': 'dev',
@@ -142,7 +146,10 @@ def generate(api_id=None):
             'cognito-idp:DeleteUserPoolClient', 'cognito-idp:CreateUserPoolDomain', 'cognito-idp:UpdateUserPoolDomain',
             'cognito-idp:DeleteUserPoolDomain', 'cognito-idp:CreateGroup', 'cognito-idp:UpdateGroup', 'cognito-idp:DeleteGroup'],
             pools, via=True, extra={'StringEquals': pool_tags}),
-        stmt('TagCreatedWorkforcePool', ['cognito-idp:TagResource'], pools, via=True,
+        # CreateUserPool authorizes its tag-on-create dependency before an ID exists.
+        # Keep the account/region, required ownership request tags and CFN boundary.
+        stmt('TagCreatedWorkforcePool', ['cognito-idp:TagResource'],
+             f'arn:aws:cognito-idp:{REGION}:{ACCOUNT}:userpool/*', via=True,
              extra={'StringEquals': {k.replace('ResourceTag', 'RequestTag'): v for k, v in pool_tags.items()}}),
         stmt('ReadTaggedWorkforcePool', ['cognito-idp:DescribeUserPool', 'cognito-idp:GetUserPoolMfaConfig',
             'cognito-idp:DescribeUserPoolClient', 'cognito-idp:GetGroup', 'cognito-idp:ListGroups',
@@ -161,8 +168,9 @@ def generate(api_id=None):
                 [f'arn:aws:apigateway:{REGION}::/restapis', f'arn:aws:apigateway:{REGION}::/account'])]
     if api_id:
         assert api_id.isalnum() and 1 <= len(api_id) <= 20
+        api = [entry for entry in api if entry['Sid'] != 'CreateNamedRegionalApiOnly']
         base = f'arn:aws:apigateway:{REGION}::/restapis/{api_id}'
-        tag = f'arn:aws:apigateway:{REGION}::/tags/{base}'
+        tag = f'arn:aws:apigateway:{REGION}::/tags/{quote(base, safe="")}'
         api += [stmt('ManageOnlyBoundApi', ['apigateway:POST', 'apigateway:PUT', 'apigateway:PATCH', 'apigateway:DELETE'],
                      [base, base + '/*', tag], via=True),
                 stmt('ReadOnlyBoundApi', ['apigateway:GET'], [base, base + '/*', tag])]
@@ -171,6 +179,10 @@ def generate(api_id=None):
         # return outputs. Bootstrap grants metadata reads, never API mutations.
         api.append(stmt('BootstrapReadApiMetadata', ['apigateway:GET'],
                         f'arn:aws:apigateway:{REGION}::/restapis/*'))
+        tag_prefix = quote(f'arn:aws:apigateway:{REGION}::/restapis/', safe='')
+        api.append(stmt('BootstrapTagNewApi', ['apigateway:PUT'],
+            f'arn:aws:apigateway:{REGION}::/tags/{tag_prefix}*', via=True,
+            extra={'StringEquals': {'aws:RequestTag/Project': 'FinTrust', 'aws:RequestTag/Environment': 'dev'}}))
 
     alarms = [f'arn:aws:cloudwatch:{REGION}:{ACCOUNT}:alarm:' + r['Properties']['AlarmName']['Fn::Sub'].replace('${Stage}', 'dev')
               for r in t['monitoring']['Resources'].values()]

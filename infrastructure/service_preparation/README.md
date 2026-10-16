@@ -1,5 +1,15 @@
 # Remaining AWS service preparation
 
+Latest live configuration: the API identity and empty Cognito Lite configuration
+are deployed and read back. Mandatory software MFA, exact callback/logout URLs,
+four groups and the empty on-demand account-scope table are verified. No API
+stage or users exist yet. SES identity verification is also read back. See
+`deployment_iam/evidence/` and the latest section of `DEPLOYMENT_GATES.md` for
+current state; earlier pending statements below are historical. The live quota
+remains 10. Application functions, migration execution, email delivery and cloud
+end-to-end checks are still outstanding. No report schedule exists yet, and
+optional paid alarms remain undeployed.
+
 Latest prerequisite update, 16 October 2026: all nine nonsecret dev database
 settings are installed as Standard String SSM parameters and read back. The live
 database name is `fintrust`; users/grants still require live migration checks.

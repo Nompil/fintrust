@@ -116,3 +116,34 @@ Ubuntu Linux. Policy JSON objects and installed permissions did not change;
 the previous Windows manifest binding is retained in installed.json alongside
 the canonical binding. AWS revalidated all seven canonical policy documents
 with no findings. The runtime Lambda ZIP was not changed or rebuilt.
+
+
+## API identity and empty Cognito configuration deployed - latest 16 October 2026
+
+This section supersedes earlier authentication, template-validation and API-bootstrap pending statements.
+
+- The normal deployer identity was verified. AWS accepted the four latest prepared templates (API shell, API, application functions and Cognito). Admin remained limited to IAM validation/installation.
+- `fintrust-api-dev` is CREATE_COMPLETE with API ID `qzgzopn8o4`. It has no serving stage or methods. Its exact callback is `https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/`.
+- API tag-on-create initially failed before resource creation. The verified empty failed stack was replaced after correcting the encoded tagging ARN. The installed API policy now binds the actual API ID and removes root API creation and bootstrap tag/metadata wildcards.
+- `fintrust-auth-dev` is CREATE_COMPLETE: pool `af-south-1_NnmfBS0y9`, public browser client, hosted domain and four groups. Read-back confirmed Lite tier, mandatory software MFA, authorization-code flow and exact callback/logout URLs. No users or invitations were created.
+- The on-demand `imbokodo-dev-user-account-scopes` table was created with point-in-time recovery disabled. No scope records were written. Cognito's first attempt failed on its pre-creation TagResource check; the correction retains required request tags, account/region and CloudFormation boundaries. The first failed stack was removed only after checking no pool existed and its cancelled table was deleted. Both attempts are retained as evidence.
+- The deployment worksheet now contains actual Cognito/API values. The immutable S3 code key/version remains unresolved because the new archive is not uploaded; the API function remains undeployed. This is still a worksheet, not execution-ready parameters.
+- A real deployer GetLogEvents call returned ResourceNotFoundException for the not-yet-created owned log group rather than AccessDenied. Historical simulator implicitDeny diagnostics remain recorded. Actual log delivery and an existing-stream read are untested.
+- The last regional Lambda quota read remains 10. No support response or quota increase is claimed. Case 179210878300923 remains the manual-review path.
+
+SES identity/runtime permissions are prepared; delivery awaits Alert Lambda and a real delivery test. EventBridge report wiring and CloudWatch alarms are prepared, with schedules/optional alarms off. No application function, consumer, raw S3 notification, report schedule, paid alarm, endpoint, database migration or email was activated by this step. The local ledger and running app were untouched.
+
+Next: verify an approved database access path and live schema/users/grants, complete migrations once capacity permits, bind the uploaded immutable package, deploy the application functions/API, then validate each service and the full cloud flow before activation. A USD 10 budget is a monitoring threshold, not a spending cap or service-quota change. AWS review and the remaining live gates prevent a deployment-ready claim today.
+
+Evidence: `infrastructure/service_preparation/deployment_iam/evidence/{api-shell-live,auth-configuration-first-attempt,auth-configuration-live,live-deployer-checks-20261016}.json`.
+
+
+## Existing gateway scope path corrected - final network read-back
+
+Fresh deployer inventory confirms only the existing S3/DynamoDB gateway endpoints, private RDS available, no public database access/default internet route/IPv6 assignment, SES email verification SUCCESS, and Lambda capacity still 10. The monthly rule `fintrust-monthly-dev` is absent, consistent with prepared-but-undeployed reports.
+
+The inventory revealed that the DynamoDB gateway policy excluded the new account-scope table. A network change set modified only `DynamodbEndpoint.PolicyDocument`, with Replacement=false. It preserves the risk-table statement and adds only GetItem on the exact scope table for `fintrust-api-dev` in this account. Its first update and rollback failed on endpoint CreateTags. A CloudFormation-only CreateTags grant on the one tagged endpoint passed Access Analyzer and was installed/read back. Normal rollback recovered without skipped resources; the retry completed UPDATE_COMPLETE. The gateway is available, its physical ID and all network stack outputs are unchanged, and the new policy was read back. No route, subnet, security group, RDS, gateway count or interface endpoint was changed.
+
+The failed/recovered attempt and successful retry are retained in `deployment_iam/evidence/gateway-account-scope-*.json`; `infrastructure/network-account-scope-update.json` is hash-bound to the receipt and reproducible by the network generator. The full seven-policy bundle was revalidated without findings. Six focused network tests and seven offline preparation checks passed; Windows/Linux policy/template/live-receipt binding verification passed. These are configuration checks, not new full-suite or live end-to-end results.
+
+Current remaining gates are recorded in `infrastructure/service_preparation/service-completion-status.json`. Runtime ZIP/upload state is unchanged. Paid monitoring/schedules and processing remain off. The quota review, private database access/migrations/grants, immutable upload/deployment, approved enrollment and full cloud E2E remain outstanding.

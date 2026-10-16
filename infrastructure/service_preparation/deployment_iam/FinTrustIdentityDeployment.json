@@ -60,7 +60,7 @@
       "Action": [
         "cognito-idp:TagResource"
       ],
-      "Resource": "arn:aws:cognito-idp:af-south-1:966467878406:userpool/af-south-1_*",
+      "Resource": "arn:aws:cognito-idp:af-south-1:966467878406:userpool/*",
       "Condition": {
         "StringEquals": {
           "aws:RequestedRegion": "af-south-1",

@@ -1,0 +1,55 @@
+{
+  "account": "966467878406",
+  "region": "af-south-1",
+  "environment": "dev",
+  "deployment_ready": false,
+  "budget_usd_owner_reported": 10,
+  "services": {
+    "ses": {
+      "configuration": "EMAIL_IDENTITY_VERIFIED_RUNTIME_PERMISSION_PREPARED",
+      "remaining": "Deploy Alert Lambda and verify real email delivery"
+    },
+    "cognito": {
+      "configuration": "EMPTY_LITE_POOL_CLIENT_DOMAIN_FOUR_GROUPS_READ_BACK",
+      "remaining": "Approved user enrollment, MFA setup, account scopes and browser sign-in test"
+    },
+    "api_gateway": {
+      "configuration": "NON_SERVING_API_IDENTITY_AND_LOGGING_ROLE_READ_BACK",
+      "remaining": "Deploy API Lambda, authorizer, methods and stage; verify authorization and logging"
+    },
+    "eventbridge": {
+      "configuration": "REPORT_RULE_TARGET_RETRIES_AND_DLQ_PREPARED_NOT_DEPLOYED",
+      "remaining": "Deploy with report function; keep monthly schedule disabled until report validation and cost decision"
+    },
+    "cloudwatch": {
+      "configuration": "LOGGING_ROLE_READY_RETENTION_AND_OPTIONAL_ALARM_TEMPLATES_PREPARED",
+      "remaining": "Verify real service logs; paid alarms remain undeployed"
+    },
+    "lambda": {
+      "configuration": "INGEST_PRESENT_THROTTLED_FOUR_MORE_FUNCTIONS_PREPARED",
+      "remaining": "Manual concurrency quota review, immutable artifact upload/version binding, disabled deployment and controlled activation"
+    },
+    "rds": {
+      "configuration": "PRIVATE_INSTANCE_AVAILABLE_IAM_AUTH_ENABLED_STANDARD_SSM_SETTINGS_READ_BACK",
+      "remaining": "Approved private access, live read-only preflight, backup gate, migrations and per-service IAM/TLS/grant checks"
+    },
+    "dynamodb": {
+      "configuration": "RISK_AND_EMPTY_SCOPE_TABLES_PRESENT_API_GATEWAY_ENDPOINT_READ_PATH_FIXED",
+      "remaining": "Verify runtime projection/scoping reads and writes during cloud end-to-end test"
+    },
+    "s3_sqs": {
+      "configuration": "FOUNDATION_BUCKETS_QUEUES_AND_INGEST_PERMISSION_PRESENT",
+      "remaining": "Bind current artifact, deploy disabled consumers and prove valid/quarantine/duplicate/failure paths before raw notification activation"
+    }
+  },
+  "activation_gates": [
+    "AWS_SUPPORT_CASE_179210878300923_QUOTA_REVIEW",
+    "APPROVED_DATABASE_ACCESS_AND_LIVE_MIGRATIONS_GRANTS",
+    "IMMUTABLE_PACKAGE_UPLOAD_AND_FUNCTION_API_DEPLOYMENT",
+    "AUTHORIZED_USER_AND_ACCOUNT_SCOPE_ENROLLMENT",
+    "CLOUD_END_TO_END_AND_FAILURE_PATH_EVIDENCE"
+  ],
+  "no_new_nat_interface_endpoint_or_paid_support_authorized": true,
+  "application_activation_performed": false,
+  "updated_at": "2026-10-16T21:29:27.055392+00:00"
+}

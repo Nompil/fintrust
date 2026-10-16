@@ -10,9 +10,9 @@ Six customer-managed policies attach only to `fintrust-deployer-role`:
 | --- | --- |
 | FinTrustRemainingCloudFormation | Four exact stacks; named change sets; explicit resource-type lists; no IAM/custom resources, imports or service-role substitution |
 | FinTrustApplicationDeployment | Four exact new functions, API version/alias, report async settings, four exact Lambda PassRole grants, exact invoke principals and nine nonsecret SSM reads |
-| FinTrustReleaseDependencies | The content-addressed approved code key, scoped S3 KMS decrypt, five owned log configurations, and two function-bound mappings with owned tags |
+| FinTrustReleaseDependencies | The content-addressed approved code key, scoped S3 KMS decrypt, five owned log configurations, two function-bound mappings with owned tags, and CloudFormation-only retagging of the one existing DynamoDB gateway |
 | FinTrustIdentityDeployment | Tagged dev workforce pool configuration and the exact account-scope table; no user enrollment, account-scope data writes or IAM role-policy editing |
-| FinTrustApiDeployment | Named regional API creation and bootstrap metadata reads; full API mutation scope is deliberately absent until its generated ID is read back and bound |
+| FinTrustApiDeployment | CloudFormation writes restricted to verified API `qzgzopn8o4` and its children; bootstrap creation permission removed |
 | FinTrustMonitoringDeployment | Eighteen exact optional alarm names, one monthly report rule/target/delivery-queue policy, and reads of five owned application/API log destinations |
 
 Downstream writes require `aws:CalledVia` to include CloudFormation. Deployer
@@ -39,7 +39,7 @@ Generated JSON uses explicit LF newlines, with matching Git attributes, so the
 hashes survive Windows/Linux checkouts. `verify_bindings.py` checks policy,
 template and runtime-file hashes against both their manifests and the installed
 policy read-back documents. It passed under Windows and Linux; it deliberately
-reports the pending sign-in, template-validation and live log-read gates.
+reports the four accepted templates, actual API binding and untested log delivery.
 
 AWS receipts live in `evidence/`:
 
@@ -52,7 +52,28 @@ AWS receipts live in `evidence/`:
   scoped bundle and an isolated bare exact-ARN allow returned implicitDeny for
   the owned stream; the unrelated stream was also denied. Do not count these as
   successful positive checks or broaden the actual grant to force a pass. A real
-  normal-deployer Logs read is still required after sign-in is restored.
+  normal-deployer GetLogEvents check subsequently returned ResourceNotFoundException
+  for the not-yet-created owned group, rather than AccessDenied. This does not
+  prove delivery or reading an existing stream.
+
+The non-serving API shell is now CREATE_COMPLETE. Its actual ID is
+`qzgzopn8o4`, with callback `https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/`.
+The bound policy removes root API creation and bootstrap metadata/tag wildcards.
+The API bootstrap retry required an encoded tag ARN for its pre-creation tag
+check; that temporary scope is no longer installed. The Cognito pre-creation
+tag dependency similarly checks `userpool/*`; only TagResource uses that
+account/region scope, with required ownership request tags and CloudFormation.
+Pool configuration remains restricted to matching owned pools. See live
+receipts for creation/rollback status; pool creation is not an enrollment test.
+
+The existing DynamoDB gateway now also permits only the API role's GetItem on
+the exact account-scope table. Its original risk-table statement is preserved.
+The network stack's first update/rollback failed because existing Stage 1
+permissions lacked endpoint retagging on update. The exact-endpoint grant passed
+Access Analyzer; rollback recovered without skipping resources, and the retry
+finished UPDATE_COMPLETE with unchanged outputs and no endpoint replacement.
+Receipts retain both attempts. The dependency policy remains below 6,144
+characters. This policy read-back is not a runtime database/API/E2E test.
 
 For a future API ID, first verify that it belongs to `fintrust-api-dev` and the
 CloudFormation logical resource `Api`. Run the offline builder with `--api-id`

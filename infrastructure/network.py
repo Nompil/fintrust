@@ -63,6 +63,18 @@ def build_template():
                 "Effect": "Allow", "Principal": "*", "Action": actions, "Resource": targets,
                 "Condition": {"StringEquals": {"aws:PrincipalAccount": ref("AWS::AccountId")}},
             }]}})
+    # The API's account assignments are separate from the risk projection. Keep
+    # this read-only path restricted to the API role rather than widening the
+    # existing risk-table statement to every principal/action.
+    resources["DynamodbEndpoint"]["Properties"]["PolicyDocument"]["Statement"].append({
+        "Sid": "ApiReadAccountScopes",
+        "Effect": "Allow", "Principal": "*", "Action": ["dynamodb:GetItem"],
+        "Resource": sub("arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/imbokodo-dev-user-account-scopes"),
+        "Condition": {"StringEquals": {
+            "aws:PrincipalAccount": ref("AWS::AccountId"),
+            "aws:PrincipalArn": sub("arn:${AWS::Partition}:iam::${AWS::AccountId}:role/fintrust-api-dev"),
+        }},
+    })
     return {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "FinTrust private network only; no application or paid endpoint resources",

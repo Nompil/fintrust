@@ -1,0 +1,709 @@
+{
+  "account": "966467878406",
+  "region": "af-south-1",
+  "users_created": 0,
+  "invitations_sent": 0,
+  "scope_records_written": 0,
+  "workloads_activated": false,
+  "api_read_back": {
+    "id": "qzgzopn8o4",
+    "name": "fintrust-dev",
+    "createdDate": "2026-10-16T19:57:16+02:00",
+    "apiKeySource": "HEADER",
+    "endpointConfiguration": {
+      "types": [
+        "REGIONAL"
+      ],
+      "ipAddressType": "ipv4"
+    },
+    "tags": {
+      "Environment": "dev",
+      "Project": "FinTrust",
+      "aws:cloudformation:logical-id": "Api",
+      "aws:cloudformation:stack-id": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+      "aws:cloudformation:stack-name": "fintrust-api-dev"
+    },
+    "disableExecuteApiEndpoint": false,
+    "rootResourceId": "yrj7ojr41j",
+    "securityPolicy": "TLS_1_0",
+    "apiStatus": "AVAILABLE"
+  },
+  "api_stages_before": {
+    "item": []
+  },
+  "template_sha256": "b2ea539ae5e6fc62b1e96c3acc6f1e085380741d477f8080900466463267888d",
+  "prepared": {
+    "Id": "arn:aws:cloudformation:af-south-1:966467878406:changeSet/fintrust-auth-config-retry-20261016/e00a116c-204f-44d1-aa25-d7c3cdd23b81",
+    "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-auth-dev/b18ea4c0-c99d-11f1-a24f-06a634c7705f"
+  },
+  "updated_at": "2026-10-16T20:13:31.227272+00:00",
+  "reviewed_change_set": {
+    "Changes": [
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "Administrators",
+          "ResourceType": "AWS::Cognito::UserPoolGroup",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "Analysts",
+          "ResourceType": "AWS::Cognito::UserPoolGroup",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "Auditors",
+          "ResourceType": "AWS::Cognito::UserPoolGroup",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "HostedDomain",
+          "ResourceType": "AWS::Cognito::UserPoolDomain",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "ImbokodoUserPool",
+          "ResourceType": "AWS::Cognito::UserPool",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "ImbokodoWebClient",
+          "ResourceType": "AWS::Cognito::UserPoolClient",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "Maintainers",
+          "ResourceType": "AWS::Cognito::UserPoolGroup",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "UserAccountScopes",
+          "ResourceType": "AWS::DynamoDB::Table",
+          "Scope": [],
+          "Details": []
+        }
+      }
+    ],
+    "ChangeSetName": "fintrust-auth-config-retry-20261016",
+    "ChangeSetId": "arn:aws:cloudformation:af-south-1:966467878406:changeSet/fintrust-auth-config-retry-20261016/e00a116c-204f-44d1-aa25-d7c3cdd23b81",
+    "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-auth-dev/b18ea4c0-c99d-11f1-a24f-06a634c7705f",
+    "StackName": "fintrust-auth-dev",
+    "Description": null,
+    "Parameters": [
+      {
+        "ParameterKey": "EnableScopeRecovery",
+        "ParameterValue": "false"
+      },
+      {
+        "ParameterKey": "StageName",
+        "ParameterValue": "dev"
+      },
+      {
+        "ParameterKey": "CallbackUrls",
+        "ParameterValue": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/"
+      },
+      {
+        "ParameterKey": "LogoutUrls",
+        "ParameterValue": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/"
+      },
+      {
+        "ParameterKey": "DomainPrefix",
+        "ParameterValue": "fintrust-966467878406-dev"
+      }
+    ],
+    "CreationTime": "2026-10-16T20:10:55.168000+00:00",
+    "ExecutionStatus": "AVAILABLE",
+    "Status": "CREATE_COMPLETE",
+    "StatusReason": null,
+    "NotificationARNs": [],
+    "RollbackConfiguration": {},
+    "Capabilities": [],
+    "Tags": [
+      {
+        "Key": "Project",
+        "Value": "FinTrust"
+      },
+      {
+        "Key": "Environment",
+        "Value": "dev"
+      }
+    ],
+    "ParentChangeSetId": null,
+    "IncludeNestedStacks": false,
+    "RootChangeSetId": null,
+    "OnStackFailure": null,
+    "ImportExistingResources": null,
+    "StackDriftStatus": null,
+    "DeploymentMode": null,
+    "DeploymentConfig": {
+      "Mode": "STANDARD",
+      "DisableRollback": false
+    }
+  },
+  "stack_read_back": {
+    "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-auth-dev/b18ea4c0-c99d-11f1-a24f-06a634c7705f",
+    "StackName": "fintrust-auth-dev",
+    "ChangeSetId": "arn:aws:cloudformation:af-south-1:966467878406:changeSet/fintrust-auth-config-retry-20261016/e00a116c-204f-44d1-aa25-d7c3cdd23b81",
+    "Description": "Imbokodo workforce Cognito sign-in and application account-scope map; deploy only after approved change review.",
+    "Parameters": [
+      {
+        "ParameterKey": "EnableScopeRecovery",
+        "ParameterValue": "false"
+      },
+      {
+        "ParameterKey": "StageName",
+        "ParameterValue": "dev"
+      },
+      {
+        "ParameterKey": "CallbackUrls",
+        "ParameterValue": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/"
+      },
+      {
+        "ParameterKey": "LogoutUrls",
+        "ParameterValue": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/"
+      },
+      {
+        "ParameterKey": "DomainPrefix",
+        "ParameterValue": "fintrust-966467878406-dev"
+      }
+    ],
+    "CreationTime": "2026-10-16T20:10:55.168000+00:00",
+    "LastUpdatedTime": "2026-10-16T20:11:00.327000+00:00",
+    "RollbackConfiguration": {},
+    "StackStatus": "CREATE_COMPLETE",
+    "DisableRollback": false,
+    "DeploymentConfig": {
+      "Mode": "STANDARD",
+      "DisableRollback": false
+    },
+    "NotificationARNs": [],
+    "Outputs": [
+      {
+        "OutputKey": "UserScopeTable",
+        "OutputValue": "imbokodo-dev-user-account-scopes"
+      },
+      {
+        "OutputKey": "UserPoolId",
+        "OutputValue": "af-south-1_NnmfBS0y9"
+      },
+      {
+        "OutputKey": "AppClientId",
+        "OutputValue": "5beqt819p8bpc3ug5hj65bj6i1"
+      },
+      {
+        "OutputKey": "Issuer",
+        "OutputValue": "https://cognito-idp.af-south-1.amazonaws.com/af-south-1_NnmfBS0y9"
+      },
+      {
+        "OutputKey": "HostedDomain",
+        "OutputValue": "https://fintrust-966467878406-dev.auth.af-south-1.amazoncognito.com"
+      },
+      {
+        "OutputKey": "UserPoolArn",
+        "OutputValue": "arn:aws:cognito-idp:af-south-1:966467878406:userpool/af-south-1_NnmfBS0y9"
+      }
+    ],
+    "Tags": [
+      {
+        "Key": "Project",
+        "Value": "FinTrust"
+      },
+      {
+        "Key": "Environment",
+        "Value": "dev"
+      }
+    ],
+    "EnableTerminationProtection": false,
+    "DriftInformation": {
+      "StackDriftStatus": "NOT_CHECKED"
+    },
+    "LastOperations": [
+      {
+        "OperationType": "CREATE_STACK",
+        "OperationId": "992fb218-5837-4635-bda4-b7dce1cdc444"
+      }
+    ]
+  },
+  "outputs": {
+    "UserScopeTable": "imbokodo-dev-user-account-scopes",
+    "UserPoolId": "af-south-1_NnmfBS0y9",
+    "AppClientId": "5beqt819p8bpc3ug5hj65bj6i1",
+    "Issuer": "https://cognito-idp.af-south-1.amazonaws.com/af-south-1_NnmfBS0y9",
+    "HostedDomain": "https://fintrust-966467878406-dev.auth.af-south-1.amazoncognito.com",
+    "UserPoolArn": "arn:aws:cognito-idp:af-south-1:966467878406:userpool/af-south-1_NnmfBS0y9"
+  },
+  "user_pool_read_back": {
+    "UserPool": {
+      "Id": "af-south-1_NnmfBS0y9",
+      "Name": "imbokodo-dev-workforce",
+      "Policies": {
+        "PasswordPolicy": {
+          "MinimumLength": 14,
+          "RequireUppercase": true,
+          "RequireLowercase": true,
+          "RequireNumbers": true,
+          "RequireSymbols": true,
+          "TemporaryPasswordValidityDays": 3
+        },
+        "SignInPolicy": {
+          "AllowedFirstAuthFactors": [
+            "PASSWORD"
+          ]
+        }
+      },
+      "DeletionProtection": "ACTIVE",
+      "LambdaConfig": {},
+      "LastModifiedDate": "2026-10-16T22:11:02.813000+02:00",
+      "CreationDate": "2026-10-16T22:11:02.813000+02:00",
+      "SchemaAttributes": [
+        {
+          "Name": "profile",
+          "AttributeDataType": "String",
+          "DeveloperOnlyAttribute": false,
+          "Mutable": true,
+          "Required": false,
+          "StringAttributeConstraints": {
+            "MinLength": "0",
+            "MaxLength": "2048"
+          }
+        },
+        {
+          "Name": "address",
+          "AttributeDataType": "String",
+          "DeveloperOnlyAttribute": false,
+          "Mutable": true,
+          "Required": false,
+          "StringAttributeConstraints": {
+            "MinLength": "0",
+            "MaxLength": "2048"
+          }
+        },
+        {
+          "Name": "birthdate",
+          "AttributeDataType": "String",
+          "DeveloperOnlyAttribute": false,
+          "Mutable": true,
+          "Required": false,
+          "StringAttributeConstraints": {
+            "MinLength": "10",
+            "MaxLength": "10"
+          }
+        },
+        {
+          "Name": "gender",
+          "AttributeDataType": "String",
+          "DeveloperOnlyAttribute": false,
+          "Mutable": true,
+          "Required": false,
+          "StringAttributeConstraints": {
+            "MinLength": "0",
+            "MaxLength": "2048"
+          }
+        },
+        {
+          "Name": "preferred_username",
+          "AttributeDataType": "String",
+          "DeveloperOnlyAttribute": false,
+          "Mutable": true,
+          "Required": false,
+          "StringAttributeConstraints": {
+            "MinLength": "0",
+            "MaxLength": "2048"
+          }
+        },
+        {
+          "Name": "updated_at",
+          "AttributeDataType": "Number",
+          "DeveloperOnlyAttribute": false,
+          "Mutable": true,
+          "Required": false,
+          "NumberAttributeConstraints": {
+            "MinValue": "0"
+          }
+        },
+        {
+          "Name": "website",
+          "AttributeDataType": "String",
+          "DeveloperOnlyAttribute": false,
+          "Mutable": true,
+          "Required": false,
+          "StringAttributeConstraints": {
+            "MinLength": "0",
+            "MaxLength": "2048"
+          }
+        },
+        {
+          "Name": "picture",
+          "AttributeDataType": "String",
+          "DeveloperOnlyAttribute": false,
+          "Mutable": true,
+          "Required": false,
+          "StringAttributeConstraints": {
+            "MinLength": "0",
+            "MaxLength": "2048"
+          }
+        },
+        {
+          "Name": "identities",
+          "AttributeDataType": "String",
+          "DeveloperOnlyAttribute": false,
+          "Mutable": true,
+          "Required": false,
+          "StringAttributeConstraints": {}
+        },
+        {
+          "Name": "sub",
+          "AttributeDataType": "String",
+          "DeveloperOnlyAttribute": false,
+          "Mutable": false,
+          "Required": true,
+          "StringAttributeConstraints": {
+            "MinLength": "1",
+            "MaxLength": "2048"
+          }
+        },
+        {
+          "Name": "phone_number",
+          "AttributeDataType": "String",
+          "DeveloperOnlyAttribute": false,
+          "Mutable": true,
+          "Required": false,
+          "StringAttributeConstraints": {
+            "MinLength": "0",
+            "MaxLength": "2048"
+          }
+        },
+        {
+          "Name": "phone_number_verified",
+          "AttributeDataType": "Boolean",
+          "DeveloperOnlyAttribute": false,
+          "Mutable": true,
+          "Required": false
+        },
+        {
+          "Name": "zoneinfo",
+          "AttributeDataType": "String",
+          "DeveloperOnlyAttribute": false,
+          "Mutable": true,
+          "Required": false,
+          "StringAttributeConstraints": {
+            "MinLength": "0",
+            "MaxLength": "2048"
+          }
+        },
+        {
+          "Name": "locale",
+          "AttributeDataType": "String",
+          "DeveloperOnlyAttribute": false,
+          "Mutable": true,
+          "Required": false,
+          "StringAttributeConstraints": {
+            "MinLength": "0",
+            "MaxLength": "2048"
+          }
+        },
+        {
+          "Name": "email",
+          "AttributeDataType": "String",
+          "DeveloperOnlyAttribute": false,
+          "Mutable": true,
+          "Required": true,
+          "StringAttributeConstraints": {
+            "MinLength": "0",
+            "MaxLength": "2048"
+          }
+        },
+        {
+          "Name": "email_verified",
+          "AttributeDataType": "Boolean",
+          "DeveloperOnlyAttribute": false,
+          "Mutable": true,
+          "Required": false
+        },
+        {
+          "Name": "given_name",
+          "AttributeDataType": "String",
+          "DeveloperOnlyAttribute": false,
+          "Mutable": true,
+          "Required": false,
+          "StringAttributeConstraints": {
+            "MinLength": "0",
+            "MaxLength": "2048"
+          }
+        },
+        {
+          "Name": "family_name",
+          "AttributeDataType": "String",
+          "DeveloperOnlyAttribute": false,
+          "Mutable": true,
+          "Required": false,
+          "StringAttributeConstraints": {
+            "MinLength": "0",
+            "MaxLength": "2048"
+          }
+        },
+        {
+          "Name": "middle_name",
+          "AttributeDataType": "String",
+          "DeveloperOnlyAttribute": false,
+          "Mutable": true,
+          "Required": false,
+          "StringAttributeConstraints": {
+            "MinLength": "0",
+            "MaxLength": "2048"
+          }
+        },
+        {
+          "Name": "name",
+          "AttributeDataType": "String",
+          "DeveloperOnlyAttribute": false,
+          "Mutable": true,
+          "Required": false,
+          "StringAttributeConstraints": {
+            "MinLength": "0",
+            "MaxLength": "2048"
+          }
+        },
+        {
+          "Name": "nickname",
+          "AttributeDataType": "String",
+          "DeveloperOnlyAttribute": false,
+          "Mutable": true,
+          "Required": false,
+          "StringAttributeConstraints": {
+            "MinLength": "0",
+            "MaxLength": "2048"
+          }
+        }
+      ],
+      "AutoVerifiedAttributes": [
+        "email"
+      ],
+      "VerificationMessageTemplate": {
+        "DefaultEmailOption": "CONFIRM_WITH_CODE"
+      },
+      "UserAttributeUpdateSettings": {
+        "AttributesRequireVerificationBeforeUpdate": []
+      },
+      "MfaConfiguration": "ON",
+      "EstimatedNumberOfUsers": 0,
+      "EmailConfiguration": {
+        "EmailSendingAccount": "COGNITO_DEFAULT"
+      },
+      "UserPoolTags": {
+        "Environment": "dev",
+        "Project": "FinTrust",
+        "Service": "fintrust-auth",
+        "aws:cloudformation:logical-id": "ImbokodoUserPool",
+        "aws:cloudformation:stack-id": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-auth-dev/b18ea4c0-c99d-11f1-a24f-06a634c7705f",
+        "aws:cloudformation:stack-name": "fintrust-auth-dev"
+      },
+      "Domain": "fintrust-966467878406-dev",
+      "AdminCreateUserConfig": {
+        "AllowAdminCreateUserOnly": true,
+        "UnusedAccountValidityDays": 3,
+        "InviteMessageTemplate": {
+          "EmailMessage": "Your Imbokodo Bank account is ready. Username: {username}. Temporary password: {####}. Sign in to change it.",
+          "EmailSubject": "Imbokodo Bank account invitation"
+        }
+      },
+      "UsernameConfiguration": {
+        "CaseSensitive": false
+      },
+      "Arn": "arn:aws:cognito-idp:af-south-1:966467878406:userpool/af-south-1_NnmfBS0y9",
+      "AccountRecoverySetting": {
+        "RecoveryMechanisms": [
+          {
+            "Priority": 1,
+            "Name": "verified_email"
+          }
+        ]
+      },
+      "UserPoolTier": "LITE",
+      "KeyConfiguration": {
+        "KeyType": "AWS_OWNED_KEY"
+      }
+    }
+  },
+  "scope_table_read_back": {
+    "Table": {
+      "AttributeDefinitions": [
+        {
+          "AttributeName": "subject",
+          "AttributeType": "S"
+        }
+      ],
+      "TableName": "imbokodo-dev-user-account-scopes",
+      "KeySchema": [
+        {
+          "AttributeName": "subject",
+          "KeyType": "HASH"
+        }
+      ],
+      "TableStatus": "ACTIVE",
+      "CreationDateTime": "2026-10-16T22:11:04.320000+02:00",
+      "ProvisionedThroughput": {
+        "NumberOfDecreasesToday": 0,
+        "ReadCapacityUnits": 0,
+        "WriteCapacityUnits": 0
+      },
+      "TableSizeBytes": 0,
+      "ItemCount": 0,
+      "TableArn": "arn:aws:dynamodb:af-south-1:966467878406:table/imbokodo-dev-user-account-scopes",
+      "TableId": "f9bceb8e-8284-40b5-a994-120270b8c11a",
+      "BillingModeSummary": {
+        "BillingMode": "PAY_PER_REQUEST",
+        "LastUpdateToPayPerRequestDateTime": "2026-10-16T22:11:04.320000+02:00"
+      },
+      "SSEDescription": {
+        "Status": "ENABLED",
+        "SSEType": "KMS",
+        "KMSMasterKeyArn": "arn:aws:kms:af-south-1:966467878406:key/72e10292-df4d-482e-a707-78729782a1ad"
+      },
+      "DeletionProtectionEnabled": true,
+      "WarmThroughput": {
+        "ReadUnitsPerSecond": 12000,
+        "WriteUnitsPerSecond": 4000,
+        "Status": "ACTIVE"
+      }
+    }
+  },
+  "scope_recovery_read_back": {
+    "ContinuousBackupsDescription": {
+      "ContinuousBackupsStatus": "ENABLED",
+      "PointInTimeRecoveryDescription": {
+        "PointInTimeRecoveryStatus": "DISABLED"
+      }
+    }
+  },
+  "status": "CREATE_COMPLETE_EMPTY_AUTH_CONFIGURATION",
+  "client_read_back": {
+    "UserPoolClient": {
+      "UserPoolId": "af-south-1_NnmfBS0y9",
+      "ClientName": "imbokodo-dev-workbench",
+      "ClientId": "5beqt819p8bpc3ug5hj65bj6i1",
+      "LastModifiedDate": "2026-10-16T22:11:05.088000+02:00",
+      "CreationDate": "2026-10-16T22:11:05.088000+02:00",
+      "RefreshTokenValidity": 30,
+      "AccessTokenValidity": 5,
+      "IdTokenValidity": 5,
+      "TokenValidityUnits": {
+        "AccessToken": "minutes",
+        "IdToken": "minutes",
+        "RefreshToken": "days"
+      },
+      "ExplicitAuthFlows": [
+        "ALLOW_REFRESH_TOKEN_AUTH"
+      ],
+      "SupportedIdentityProviders": [
+        "COGNITO"
+      ],
+      "CallbackURLs": [
+        "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/"
+      ],
+      "LogoutURLs": [
+        "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/"
+      ],
+      "AllowedOAuthFlows": [
+        "code"
+      ],
+      "AllowedOAuthScopes": [
+        "email",
+        "openid",
+        "profile"
+      ],
+      "AllowedOAuthFlowsUserPoolClient": true,
+      "PreventUserExistenceErrors": "ENABLED",
+      "EnableTokenRevocation": true,
+      "EnablePropagateAdditionalUserContextData": false,
+      "AuthSessionValidity": 3
+    }
+  },
+  "groups_read_back": {
+    "Groups": [
+      {
+        "GroupName": "Analysts",
+        "UserPoolId": "af-south-1_NnmfBS0y9",
+        "Description": "Risk / Compliance Analyst",
+        "Precedence": 1,
+        "LastModifiedDate": "2026-10-16T22:11:10.433000+02:00",
+        "CreationDate": "2026-10-16T22:11:10.433000+02:00"
+      },
+      {
+        "GroupName": "Maintainers",
+        "UserPoolId": "af-south-1_NnmfBS0y9",
+        "Description": "Technical operations only",
+        "Precedence": 4,
+        "LastModifiedDate": "2026-10-16T22:11:10.633000+02:00",
+        "CreationDate": "2026-10-16T22:11:10.633000+02:00"
+      },
+      {
+        "GroupName": "Administrators",
+        "UserPoolId": "af-south-1_NnmfBS0y9",
+        "Description": "Administrator; application RBAC still restricts financial review decisions",
+        "Precedence": 2,
+        "LastModifiedDate": "2026-10-16T22:11:10.307000+02:00",
+        "CreationDate": "2026-10-16T22:11:10.307000+02:00"
+      },
+      {
+        "GroupName": "Auditors",
+        "UserPoolId": "af-south-1_NnmfBS0y9",
+        "Description": "Read-only auditor",
+        "Precedence": 3,
+        "LastModifiedDate": "2026-10-16T22:11:10.189000+02:00",
+        "CreationDate": "2026-10-16T22:11:10.189000+02:00"
+      }
+    ]
+  },
+  "domain_read_back": {
+    "DomainDescription": {
+      "UserPoolId": "af-south-1_NnmfBS0y9",
+      "AWSAccountId": "966467878406",
+      "Domain": "fintrust-966467878406-dev",
+      "S3Bucket": "aws-cognito-prod-cpt-assets",
+      "CloudFrontDistribution": "d270dfmn9e5f1a.cloudfront.net",
+      "Version": "20261016201106",
+      "Status": "ACTIVE",
+      "ManagedLoginVersion": 1
+    }
+  },
+  "api_stages_after": {
+    "item": []
+  }
+}

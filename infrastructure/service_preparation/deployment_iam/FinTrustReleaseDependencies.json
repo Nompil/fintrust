@@ -255,6 +255,26 @@
           "aws:ResourceTag/Environment": "dev"
         }
       }
+    },
+    {
+      "Sid": "RetagExistingDynamoGatewayDuringStackUpdate",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:CreateTags"
+      ],
+      "Resource": "arn:aws:ec2:af-south-1:966467878406:vpc-endpoint/vpce-0647afafb32f34e6d",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:ResourceTag/Project": "FinTrust",
+          "aws:ResourceTag/Environment": "dev"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        }
+      }
     }
   ]
 }

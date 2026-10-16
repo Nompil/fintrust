@@ -1,0 +1,1897 @@
+{
+  "aws_changes": true,
+  "before_template": {
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "FinTrust private network only; no application or paid endpoint resources",
+    "Parameters": {
+      "AvailabilityZone1": {
+        "Type": "AWS::EC2::AvailabilityZone::Name"
+      },
+      "AvailabilityZone2": {
+        "Type": "AWS::EC2::AvailabilityZone::Name"
+      },
+      "S3PrefixListId": {
+        "Type": "String",
+        "AllowedPattern": "pl-[a-f0-9]+"
+      },
+      "DynamoPrefixListId": {
+        "Type": "String",
+        "AllowedPattern": "pl-[a-f0-9]+"
+      }
+    },
+    "Rules": {
+      "DistinctZones": {
+        "Assertions": [
+          {
+            "Assert": {
+              "Fn::Not": [
+                {
+                  "Fn::Equals": [
+                    {
+                      "Ref": "AvailabilityZone1"
+                    },
+                    {
+                      "Ref": "AvailabilityZone2"
+                    }
+                  ]
+                }
+              ]
+            },
+            "AssertDescription": "Application and database subnet pairs require two distinct AZs"
+          }
+        ]
+      }
+    },
+    "Resources": {
+      "Vpc": {
+        "Type": "AWS::EC2::VPC",
+        "Properties": {
+          "CidrBlock": "10.42.0.0/16",
+          "EnableDnsSupport": true,
+          "EnableDnsHostnames": true,
+          "InstanceTenancy": "default",
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Name",
+              "Value": "fintrust-vpc-dev"
+            }
+          ]
+        }
+      },
+      "ApplicationRoutes": {
+        "Type": "AWS::EC2::RouteTable",
+        "Properties": {
+          "VpcId": {
+            "Ref": "Vpc"
+          },
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Name",
+              "Value": "fintrust-applicationroutes-dev"
+            }
+          ]
+        }
+      },
+      "ApplicationSubnet1": {
+        "Type": "AWS::EC2::Subnet",
+        "Properties": {
+          "VpcId": {
+            "Ref": "Vpc"
+          },
+          "CidrBlock": "10.42.0.0/24",
+          "AvailabilityZone": {
+            "Ref": "AvailabilityZone1"
+          },
+          "MapPublicIpOnLaunch": false,
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Name",
+              "Value": "fintrust-applicationsubnet1-dev"
+            }
+          ]
+        }
+      },
+      "ApplicationSubnet1Route": {
+        "Type": "AWS::EC2::SubnetRouteTableAssociation",
+        "Properties": {
+          "SubnetId": {
+            "Ref": "ApplicationSubnet1"
+          },
+          "RouteTableId": {
+            "Ref": "ApplicationRoutes"
+          }
+        }
+      },
+      "ApplicationSubnet2": {
+        "Type": "AWS::EC2::Subnet",
+        "Properties": {
+          "VpcId": {
+            "Ref": "Vpc"
+          },
+          "CidrBlock": "10.42.1.0/24",
+          "AvailabilityZone": {
+            "Ref": "AvailabilityZone2"
+          },
+          "MapPublicIpOnLaunch": false,
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Name",
+              "Value": "fintrust-applicationsubnet2-dev"
+            }
+          ]
+        }
+      },
+      "ApplicationSubnet2Route": {
+        "Type": "AWS::EC2::SubnetRouteTableAssociation",
+        "Properties": {
+          "SubnetId": {
+            "Ref": "ApplicationSubnet2"
+          },
+          "RouteTableId": {
+            "Ref": "ApplicationRoutes"
+          }
+        }
+      },
+      "DatabaseRoutes": {
+        "Type": "AWS::EC2::RouteTable",
+        "Properties": {
+          "VpcId": {
+            "Ref": "Vpc"
+          },
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Name",
+              "Value": "fintrust-databaseroutes-dev"
+            }
+          ]
+        }
+      },
+      "DatabaseSubnet1": {
+        "Type": "AWS::EC2::Subnet",
+        "Properties": {
+          "VpcId": {
+            "Ref": "Vpc"
+          },
+          "CidrBlock": "10.42.2.0/24",
+          "AvailabilityZone": {
+            "Ref": "AvailabilityZone1"
+          },
+          "MapPublicIpOnLaunch": false,
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Name",
+              "Value": "fintrust-databasesubnet1-dev"
+            }
+          ]
+        }
+      },
+      "DatabaseSubnet1Route": {
+        "Type": "AWS::EC2::SubnetRouteTableAssociation",
+        "Properties": {
+          "SubnetId": {
+            "Ref": "DatabaseSubnet1"
+          },
+          "RouteTableId": {
+            "Ref": "DatabaseRoutes"
+          }
+        }
+      },
+      "DatabaseSubnet2": {
+        "Type": "AWS::EC2::Subnet",
+        "Properties": {
+          "VpcId": {
+            "Ref": "Vpc"
+          },
+          "CidrBlock": "10.42.3.0/24",
+          "AvailabilityZone": {
+            "Ref": "AvailabilityZone2"
+          },
+          "MapPublicIpOnLaunch": false,
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Name",
+              "Value": "fintrust-databasesubnet2-dev"
+            }
+          ]
+        }
+      },
+      "DatabaseSubnet2Route": {
+        "Type": "AWS::EC2::SubnetRouteTableAssociation",
+        "Properties": {
+          "SubnetId": {
+            "Ref": "DatabaseSubnet2"
+          },
+          "RouteTableId": {
+            "Ref": "DatabaseRoutes"
+          }
+        }
+      },
+      "DatabaseGroup": {
+        "Type": "AWS::EC2::SecurityGroup",
+        "Properties": {
+          "GroupDescription": "Private PostgreSQL",
+          "VpcId": {
+            "Ref": "Vpc"
+          },
+          "SecurityGroupEgress": [
+            {
+              "IpProtocol": "-1",
+              "CidrIp": "127.0.0.1/32"
+            }
+          ],
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Name",
+              "Value": "fintrust-databasegroup-dev"
+            }
+          ]
+        }
+      },
+      "LambdaGroup": {
+        "Type": "AWS::EC2::SecurityGroup",
+        "Properties": {
+          "GroupDescription": "Ledger functions",
+          "VpcId": {
+            "Ref": "Vpc"
+          },
+          "SecurityGroupEgress": [
+            {
+              "IpProtocol": "tcp",
+              "FromPort": 5432,
+              "ToPort": 5432,
+              "DestinationSecurityGroupId": {
+                "Ref": "DatabaseGroup"
+              }
+            },
+            {
+              "IpProtocol": "tcp",
+              "FromPort": 443,
+              "ToPort": 443,
+              "DestinationPrefixListId": {
+                "Ref": "S3PrefixListId"
+              }
+            },
+            {
+              "IpProtocol": "tcp",
+              "FromPort": 443,
+              "ToPort": 443,
+              "DestinationPrefixListId": {
+                "Ref": "DynamoPrefixListId"
+              }
+            }
+          ],
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Name",
+              "Value": "fintrust-lambdagroup-dev"
+            }
+          ]
+        }
+      },
+      "DatabaseIngress": {
+        "Type": "AWS::EC2::SecurityGroupIngress",
+        "Properties": {
+          "GroupId": {
+            "Ref": "DatabaseGroup"
+          },
+          "SourceSecurityGroupId": {
+            "Ref": "LambdaGroup"
+          },
+          "IpProtocol": "tcp",
+          "FromPort": 5432,
+          "ToPort": 5432
+        }
+      },
+      "DatabaseSubnets": {
+        "Type": "AWS::RDS::DBSubnetGroup",
+        "Properties": {
+          "DBSubnetGroupName": "fintrust-db-dev",
+          "DBSubnetGroupDescription": "Private FinTrust database tier",
+          "SubnetIds": [
+            {
+              "Ref": "DatabaseSubnet1"
+            },
+            {
+              "Ref": "DatabaseSubnet2"
+            }
+          ],
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Name",
+              "Value": "fintrust-databasesubnets-dev"
+            }
+          ]
+        }
+      },
+      "S3Endpoint": {
+        "Type": "AWS::EC2::VPCEndpoint",
+        "Properties": {
+          "VpcId": {
+            "Ref": "Vpc"
+          },
+          "VpcEndpointType": "Gateway",
+          "ServiceName": {
+            "Fn::Sub": "com.amazonaws.${AWS::Region}.s3"
+          },
+          "RouteTableIds": [
+            {
+              "Ref": "ApplicationRoutes"
+            }
+          ],
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": "*",
+                "Action": [
+                  "s3:GetObject",
+                  "s3:GetObjectVersion",
+                  "s3:PutObject"
+                ],
+                "Resource": [
+                  {
+                    "Fn::Sub": "arn:${AWS::Partition}:s3:::fintrust-raw-${AWS::AccountId}-${AWS::Region}-dev/*"
+                  },
+                  {
+                    "Fn::Sub": "arn:${AWS::Partition}:s3:::fintrust-quarantine-${AWS::AccountId}-${AWS::Region}-dev/*"
+                  },
+                  {
+                    "Fn::Sub": "arn:${AWS::Partition}:s3:::fintrust-reports-${AWS::AccountId}-${AWS::Region}-dev/*"
+                  }
+                ],
+                "Condition": {
+                  "StringEquals": {
+                    "aws:PrincipalAccount": {
+                      "Ref": "AWS::AccountId"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Name",
+              "Value": "fintrust-s3endpoint-dev"
+            }
+          ]
+        }
+      },
+      "DynamodbEndpoint": {
+        "Type": "AWS::EC2::VPCEndpoint",
+        "Properties": {
+          "VpcId": {
+            "Ref": "Vpc"
+          },
+          "VpcEndpointType": "Gateway",
+          "ServiceName": {
+            "Fn::Sub": "com.amazonaws.${AWS::Region}.dynamodb"
+          },
+          "RouteTableIds": [
+            {
+              "Ref": "ApplicationRoutes"
+            }
+          ],
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": "*",
+                "Action": [
+                  "dynamodb:GetItem",
+                  "dynamodb:PutItem",
+                  "dynamodb:Query"
+                ],
+                "Resource": [
+                  {
+                    "Fn::Sub": "arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/fintrust-risk-dev"
+                  }
+                ],
+                "Condition": {
+                  "StringEquals": {
+                    "aws:PrincipalAccount": {
+                      "Ref": "AWS::AccountId"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Name",
+              "Value": "fintrust-dynamodbendpoint-dev"
+            }
+          ]
+        }
+      }
+    },
+    "Outputs": {
+      "Vpc": {
+        "Value": {
+          "Ref": "Vpc"
+        }
+      },
+      "ApplicationSubnet1": {
+        "Value": {
+          "Ref": "ApplicationSubnet1"
+        }
+      },
+      "ApplicationSubnet2": {
+        "Value": {
+          "Ref": "ApplicationSubnet2"
+        }
+      },
+      "DatabaseSubnet1": {
+        "Value": {
+          "Ref": "DatabaseSubnet1"
+        }
+      },
+      "DatabaseSubnet2": {
+        "Value": {
+          "Ref": "DatabaseSubnet2"
+        }
+      },
+      "ApplicationRoutes": {
+        "Value": {
+          "Ref": "ApplicationRoutes"
+        }
+      },
+      "DatabaseRoutes": {
+        "Value": {
+          "Ref": "DatabaseRoutes"
+        }
+      },
+      "LambdaGroup": {
+        "Value": {
+          "Ref": "LambdaGroup"
+        }
+      },
+      "DatabaseGroup": {
+        "Value": {
+          "Ref": "DatabaseGroup"
+        }
+      },
+      "DatabaseSubnets": {
+        "Value": {
+          "Ref": "DatabaseSubnets"
+        }
+      },
+      "S3Endpoint": {
+        "Value": {
+          "Ref": "S3Endpoint"
+        }
+      },
+      "DynamodbEndpoint": {
+        "Value": {
+          "Ref": "DynamodbEndpoint"
+        }
+      }
+    }
+  },
+  "before_stack": {
+    "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+    "StackName": "fintrust-network-dev",
+    "ChangeSetId": "arn:aws:cloudformation:af-south-1:966467878406:changeSet/fintrust-network-stage1-retry/c6ce920d-0950-414b-9242-b674fb2465fc",
+    "Description": "FinTrust private network only; no application or paid endpoint resources",
+    "Parameters": [
+      {
+        "ParameterKey": "AvailabilityZone1",
+        "ParameterValue": "af-south-1a"
+      },
+      {
+        "ParameterKey": "AvailabilityZone2",
+        "ParameterValue": "af-south-1b"
+      },
+      {
+        "ParameterKey": "DynamoPrefixListId",
+        "ParameterValue": "pl-d6ae4bbf"
+      },
+      {
+        "ParameterKey": "S3PrefixListId",
+        "ParameterValue": "pl-a3ac49ca"
+      }
+    ],
+    "CreationTime": "2026-10-07T11:45:26.476000+00:00",
+    "LastUpdatedTime": "2026-10-07T11:50:13.696000+00:00",
+    "RollbackConfiguration": {},
+    "StackStatus": "CREATE_COMPLETE",
+    "DisableRollback": false,
+    "DeploymentConfig": {
+      "Mode": "STANDARD",
+      "DisableRollback": false
+    },
+    "NotificationARNs": [],
+    "Outputs": [
+      {
+        "OutputKey": "DatabaseSubnet1",
+        "OutputValue": "subnet-04dc0f576867d7a6c"
+      },
+      {
+        "OutputKey": "DatabaseSubnets",
+        "OutputValue": "fintrust-db-dev"
+      },
+      {
+        "OutputKey": "DatabaseSubnet2",
+        "OutputValue": "subnet-084deb13f49a36064"
+      },
+      {
+        "OutputKey": "ApplicationSubnet1",
+        "OutputValue": "subnet-0c2d87e8a83361e30"
+      },
+      {
+        "OutputKey": "S3Endpoint",
+        "OutputValue": "vpce-0b59921927bd0e852"
+      },
+      {
+        "OutputKey": "ApplicationSubnet2",
+        "OutputValue": "subnet-0328276227fa30ead"
+      },
+      {
+        "OutputKey": "Vpc",
+        "OutputValue": "vpc-0aba008bb360f5147"
+      },
+      {
+        "OutputKey": "ApplicationRoutes",
+        "OutputValue": "rtb-01b4916c13d2894a5"
+      },
+      {
+        "OutputKey": "LambdaGroup",
+        "OutputValue": "sg-0850bd798bb9505e2"
+      },
+      {
+        "OutputKey": "DynamodbEndpoint",
+        "OutputValue": "vpce-0647afafb32f34e6d"
+      },
+      {
+        "OutputKey": "DatabaseRoutes",
+        "OutputValue": "rtb-008ec3760f6ccd9f0"
+      },
+      {
+        "OutputKey": "DatabaseGroup",
+        "OutputValue": "sg-01644a4c9f2c44162"
+      }
+    ],
+    "Tags": [
+      {
+        "Key": "Project",
+        "Value": "FinTrust"
+      },
+      {
+        "Key": "Environment",
+        "Value": "dev"
+      }
+    ],
+    "EnableTerminationProtection": false,
+    "DriftInformation": {
+      "StackDriftStatus": "NOT_CHECKED"
+    },
+    "LastOperations": [
+      {
+        "OperationType": "CREATE_STACK",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88"
+      }
+    ]
+  },
+  "candidate_sha256": "3b2ef5259400a1c6c9f02d5dbc7c649862f7e21d5ed9178da81b12ff60cf87b0",
+  "only_change": "DynamodbEndpoint.PolicyDocument: API role GetItem on exact scope table",
+  "validation": {
+    "Parameters": [
+      {
+        "ParameterKey": "AvailabilityZone1",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "AvailabilityZone2",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "DynamoPrefixListId",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "S3PrefixListId",
+        "NoEcho": false
+      }
+    ],
+    "Description": "FinTrust private network only; no application or paid endpoint resources"
+  },
+  "prepared": {
+    "Id": "arn:aws:cloudformation:af-south-1:966467878406:changeSet/fintrust-network-api-scope-20261016/e8e2da42-c6ba-4db4-86aa-ddf3c40ba8ac",
+    "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d"
+  },
+  "updated_at": "2026-10-16T21:14:30.094948+00:00",
+  "reviewed_change_set": {
+    "Changes": [
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Modify",
+          "LogicalResourceId": "DynamodbEndpoint",
+          "PhysicalResourceId": "vpce-0647afafb32f34e6d",
+          "ResourceType": "AWS::EC2::VPCEndpoint",
+          "Replacement": "False",
+          "Scope": [
+            "Properties"
+          ],
+          "Details": [
+            {
+              "Target": {
+                "Attribute": "Properties",
+                "Name": "PolicyDocument",
+                "RequiresRecreation": "Never"
+              },
+              "Evaluation": "Static",
+              "ChangeSource": "DirectModification"
+            }
+          ]
+        }
+      }
+    ],
+    "ChangeSetName": "fintrust-network-api-scope-20261016",
+    "ChangeSetId": "arn:aws:cloudformation:af-south-1:966467878406:changeSet/fintrust-network-api-scope-20261016/e8e2da42-c6ba-4db4-86aa-ddf3c40ba8ac",
+    "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+    "StackName": "fintrust-network-dev",
+    "Description": null,
+    "Parameters": [
+      {
+        "ParameterKey": "AvailabilityZone1",
+        "ParameterValue": "af-south-1a"
+      },
+      {
+        "ParameterKey": "AvailabilityZone2",
+        "ParameterValue": "af-south-1b"
+      },
+      {
+        "ParameterKey": "DynamoPrefixListId",
+        "ParameterValue": "pl-d6ae4bbf"
+      },
+      {
+        "ParameterKey": "S3PrefixListId",
+        "ParameterValue": "pl-a3ac49ca"
+      }
+    ],
+    "CreationTime": "2026-10-16T21:14:13.677000+00:00",
+    "ExecutionStatus": "AVAILABLE",
+    "Status": "CREATE_COMPLETE",
+    "StatusReason": null,
+    "NotificationARNs": [],
+    "RollbackConfiguration": {},
+    "Capabilities": [],
+    "Tags": [
+      {
+        "Key": "Project",
+        "Value": "FinTrust"
+      },
+      {
+        "Key": "Environment",
+        "Value": "dev"
+      }
+    ],
+    "ParentChangeSetId": null,
+    "IncludeNestedStacks": false,
+    "RootChangeSetId": null,
+    "OnStackFailure": null,
+    "ImportExistingResources": null,
+    "StackDriftStatus": null,
+    "DeploymentMode": null,
+    "DeploymentConfig": {
+      "Mode": "STANDARD",
+      "DisableRollback": false
+    }
+  },
+  "failure_events": {
+    "StackEvents": [
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "919485a0-c9a6-11f1-baed-0effde2132e7",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "4fde0884-ce00-4dc1-9bee-5fec44e128c0",
+        "LogicalResourceId": "fintrust-network-dev",
+        "PhysicalResourceId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "ResourceType": "AWS::CloudFormation::Stack",
+        "Timestamp": "2026-10-16T21:14:26.924000+00:00",
+        "ResourceStatus": "UPDATE_ROLLBACK_FAILED",
+        "ResourceStatusReason": "The following resource(s) failed to update: [DynamodbEndpoint]. ",
+        "ClientRequestToken": "66e2a3d6-8964-44b0-a0d6-e53c1d572e58"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DynamodbEndpoint-UPDATE_FAILED-2026-10-16T21:14:26.700Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "4fde0884-ce00-4dc1-9bee-5fec44e128c0",
+        "LogicalResourceId": "DynamodbEndpoint",
+        "PhysicalResourceId": "vpce-0647afafb32f34e6d",
+        "ResourceType": "AWS::EC2::VPCEndpoint",
+        "Timestamp": "2026-10-16T21:14:26.700000+00:00",
+        "ResourceStatus": "UPDATE_FAILED",
+        "ResourceStatusReason": "Resource handler returned message: \"You are not authorized to perform this operation. User: arn:aws:sts::966467878406:assumed-role/fintrust-deployer-role/botocore-session-1792185195 is not authorized to perform: ec2:CreateTags on resource: arn:aws:ec2:af-south-1:966467878406:vpc-endpoint/vpce-0647afafb32f34e6d because no identity-based policy allows the ec2:CreateTags action. Encoded authorization failure message: UKlRNRAPepdgrmYTyU6EPeaf0CrZlTgu2DRsaTJcoaqS0VQ6o-DBjoeILdlCDVgPvexUWTUFfvOQ1cdx5iKPNZq0hJEdpHGus7lIYO-RNxqd84VM-x-d_sCToYVDKZgcB_hEvec5CaliDVUzMDjUCB97rLlf2R5dRNCt_9h0oSXLDI2KCsvz7zU1xhNYyquP4R5a7shZr5oMH9A9um4IfsJV6KmzmzvdlFb2FwQIqEt-aJZSLC0nHILJxFsbZJ5kHQzel8BjsxMsQB6ObU3_p--Ka5USpc7iCSjgSCOfaXdSr2ZMeA3sMTcZPwPNtvvYyDOTWZlpcbl9tYL9F0R5EIaioX9HxczzgevI3pamqNvEbXe3XuRbdiNoOrRkorviwMpJ8KqV6ZpQLK2_OgRUf-3vZOkUV9lSBgfeM-TULG944_TC1cqjUsvin5O8cqCDwDqyUInVEV-alUwIplgl0RK_Xqy2HEWo83Za147paM44TWQ06o0RWQkXMjmSPK0Kzss7aHYOexVoNQgc-keEiOqSjMhjffvCm__KQDQcyAoexCRSj-JYSkvf2KCXzTrU6snTWyP78flAdqOjrS9uG9EF3oT_I9i1ZO8-TMWhJs3mn1EUqeMdRKy0BDOIEBRKNUgCd6bv1TU-3VYgD_2di5WK_8V2WHM51na1gVjjMJ6pohZIZtVVJMazFv61tlplJBtEvRiIa_j6nlxWO-s_YxUKQ53juXc3VQtlFFlxpkRJ2JMWkWAZgeN_RhoeN3Djky1qyCa8WlYKrknvHwIjbKq56e6R3WLmS7RL8mW5pikTbM__oRgAW-bpp27dOTwjfwfAyUhuJpraFyo4BLlubIYzRED5iiSeS8qPHNZt1y4DFpp_RDfYZnFue4nFw5zl (Service: Ec2, Status Code: 403, Request ID: 911a082a-0a14-4546-a984-c55d5ebe1ee7) (SDK Attempt Count: 1)\" (RequestToken: 12cf5506-4b7b-01aa-4f8d-79740ce81ea3, HandlerErrorCode: AccessDenied)",
+        "ResourceProperties": "{\"VpcId\":\"vpc-0aba008bb360f5147\",\"ServiceName\":\"com.amazonaws.af-south-1.dynamodb\",\"RouteTableIds\":[\"rtb-01b4916c13d2894a5\"],\"VpcEndpointType\":\"Gateway\",\"PolicyDocument\":{\"Version\":\"2012-10-17\",\"Statement\":[{\"Condition\":{\"StringEquals\":{\"aws:PrincipalAccount\":\"966467878406\"}},\"Action\":[\"dynamodb:GetItem\",\"dynamodb:PutItem\",\"dynamodb:Query\"],\"Resource\":[\"arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev\"],\"Effect\":\"Allow\",\"Principal\":\"*\"}]},\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-dynamodbendpoint-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "66e2a3d6-8964-44b0-a0d6-e53c1d572e58"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DynamodbEndpoint-UPDATE_IN_PROGRESS-2026-10-16T21:14:25.892Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "4fde0884-ce00-4dc1-9bee-5fec44e128c0",
+        "LogicalResourceId": "DynamodbEndpoint",
+        "PhysicalResourceId": "vpce-0647afafb32f34e6d",
+        "ResourceType": "AWS::EC2::VPCEndpoint",
+        "Timestamp": "2026-10-16T21:14:25.892000+00:00",
+        "ResourceStatus": "UPDATE_IN_PROGRESS",
+        "ResourceProperties": "{\"VpcId\":\"vpc-0aba008bb360f5147\",\"ServiceName\":\"com.amazonaws.af-south-1.dynamodb\",\"RouteTableIds\":[\"rtb-01b4916c13d2894a5\"],\"VpcEndpointType\":\"Gateway\",\"PolicyDocument\":{\"Version\":\"2012-10-17\",\"Statement\":[{\"Condition\":{\"StringEquals\":{\"aws:PrincipalAccount\":\"966467878406\"}},\"Action\":[\"dynamodb:GetItem\",\"dynamodb:PutItem\",\"dynamodb:Query\"],\"Resource\":[\"arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev\"],\"Effect\":\"Allow\",\"Principal\":\"*\"}]},\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-dynamodbendpoint-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "66e2a3d6-8964-44b0-a0d6-e53c1d572e58"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "8fffdbe0-c9a6-11f1-b555-0a255acfb3e9",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "4fde0884-ce00-4dc1-9bee-5fec44e128c0",
+        "LogicalResourceId": "fintrust-network-dev",
+        "PhysicalResourceId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "ResourceType": "AWS::CloudFormation::Stack",
+        "Timestamp": "2026-10-16T21:14:24.260000+00:00",
+        "ResourceStatus": "UPDATE_ROLLBACK_IN_PROGRESS",
+        "ResourceStatusReason": "The following resource(s) failed to update: [DynamodbEndpoint]. ",
+        "ClientRequestToken": "66e2a3d6-8964-44b0-a0d6-e53c1d572e58"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DynamodbEndpoint-UPDATE_FAILED-2026-10-16T21:14:24.029Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "85b3db6e-c60c-46e0-91f0-052e29ace3ba",
+        "LogicalResourceId": "DynamodbEndpoint",
+        "PhysicalResourceId": "vpce-0647afafb32f34e6d",
+        "ResourceType": "AWS::EC2::VPCEndpoint",
+        "Timestamp": "2026-10-16T21:14:24.029000+00:00",
+        "ResourceStatus": "UPDATE_FAILED",
+        "ResourceStatusReason": "Resource handler returned message: \"You are not authorized to perform this operation. User: arn:aws:sts::966467878406:assumed-role/fintrust-deployer-role/botocore-session-1792185195 is not authorized to perform: ec2:CreateTags on resource: arn:aws:ec2:af-south-1:966467878406:vpc-endpoint/vpce-0647afafb32f34e6d because no identity-based policy allows the ec2:CreateTags action. Encoded authorization failure message: MNCYRaeL3z7OYNVJ5fMapOcaSXDxQkC2I5OaCUHDpYUHP0a-a1T5eteYwY2EoJSZpPzu-UIsVwO5b73UBnGdot7UJby9RP2iQWp7-iFIzmv2z-1byWTcT9DJquNHmMUyUm2qOjGaAdwrsjdMx8xUvHGwFKBKjSD_6WX-Q2NFjNz4EGtOKc2mOxdTw5Sp_GKOxg7mB0m8GOw99KuAqOjLd8W-h3H2Hu4Iy2rvmxJESUoFp4XRocOxhkEilwcardhLGM2IcLcPYuTvcQ18m-sCvFpXgUXk8Yizzdofm3NBV61OLynHm4F_y7UqHhp6etfcGaTMPgbINPuYhDxVGKYrjsGjodxDkdI6S21IWpTFttFuhzxgPEevNeaRw2JuHgfP-taZdFflEC8ooi8JGVgg7EDzGEtl-XE0y8wT2u67UmllSfRI57Heh8Qgc68pb-x7-wGkC-NpKNiRawJ9OSKzwBCzEGotkFMRMsuSIykHaLT96uAYt36YpWCjG3fieLE-Ce0GrrJt8LLevFLMr3C_dWaNwTMG41Fu3qVPVn6v_yKaL6i02sW-2zfzkaZfURavPqqFe5fbVDiLZyBxiURhUyzOrwTOWxLFLfnaM3rxWiK2zFMawkmljOE-KZ972FokE8lTyjiIcHV5KDaS_Bw0jFS8bRLjXg1qfR1MwJa6gmy4t9PwyiK5fFZFI2WsT8TSAz06v25MSFTerhjBCzVPihRT_CTqPbi1ZZ3gyc_thVF9ycFaFerPGIoVHnxh9dyZV9aEQQwuW8V4iRdI6UwwjdkeFAXOaI4Z0yg9hwgpnRoYFS_xRTJoqJd4U-xLse35jdNSUwxPJ8XwrvgSBq1RZvJw91CTVzzv_yiKQwt9_CZYd_tqgzvhSKTTrsp_hcnV (Service: Ec2, Status Code: 403, Request ID: 97a2b6ad-58c6-430d-a9e4-7a7af52ab3fc) (SDK Attempt Count: 1)\" (RequestToken: bd460b0d-0aaf-f10b-c416-8c082ff4a5c6, HandlerErrorCode: AccessDenied)",
+        "ResourceProperties": "{\"VpcId\":\"vpc-0aba008bb360f5147\",\"ServiceName\":\"com.amazonaws.af-south-1.dynamodb\",\"RouteTableIds\":[\"rtb-01b4916c13d2894a5\"],\"VpcEndpointType\":\"Gateway\",\"PolicyDocument\":{\"Version\":\"2012-10-17\",\"Statement\":[{\"Condition\":{\"StringEquals\":{\"aws:PrincipalAccount\":\"966467878406\"}},\"Action\":[\"dynamodb:GetItem\",\"dynamodb:PutItem\",\"dynamodb:Query\"],\"Resource\":[\"arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev\"],\"Effect\":\"Allow\",\"Principal\":\"*\"},{\"Condition\":{\"StringEquals\":{\"aws:PrincipalAccount\":\"966467878406\",\"aws:PrincipalArn\":\"arn:aws:iam::966467878406:role/fintrust-api-dev\"}},\"Action\":[\"dynamodb:GetItem\"],\"Resource\":\"arn:aws:dynamodb:af-south-1:966467878406:table/imbokodo-dev-user-account-scopes\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Sid\":\"ApiReadAccountScopes\"}]},\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-dynamodbendpoint-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "66e2a3d6-8964-44b0-a0d6-e53c1d572e58"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DynamodbEndpoint-UPDATE_IN_PROGRESS-2026-10-16T21:14:23.278Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "85b3db6e-c60c-46e0-91f0-052e29ace3ba",
+        "LogicalResourceId": "DynamodbEndpoint",
+        "PhysicalResourceId": "vpce-0647afafb32f34e6d",
+        "ResourceType": "AWS::EC2::VPCEndpoint",
+        "Timestamp": "2026-10-16T21:14:23.278000+00:00",
+        "ResourceStatus": "UPDATE_IN_PROGRESS",
+        "ResourceProperties": "{\"VpcId\":\"vpc-0aba008bb360f5147\",\"ServiceName\":\"com.amazonaws.af-south-1.dynamodb\",\"RouteTableIds\":[\"rtb-01b4916c13d2894a5\"],\"VpcEndpointType\":\"Gateway\",\"PolicyDocument\":{\"Version\":\"2012-10-17\",\"Statement\":[{\"Condition\":{\"StringEquals\":{\"aws:PrincipalAccount\":\"966467878406\"}},\"Action\":[\"dynamodb:GetItem\",\"dynamodb:PutItem\",\"dynamodb:Query\"],\"Resource\":[\"arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev\"],\"Effect\":\"Allow\",\"Principal\":\"*\"},{\"Condition\":{\"StringEquals\":{\"aws:PrincipalAccount\":\"966467878406\",\"aws:PrincipalArn\":\"arn:aws:iam::966467878406:role/fintrust-api-dev\"}},\"Action\":[\"dynamodb:GetItem\"],\"Resource\":\"arn:aws:dynamodb:af-south-1:966467878406:table/imbokodo-dev-user-account-scopes\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Sid\":\"ApiReadAccountScopes\"}]},\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-dynamodbendpoint-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "66e2a3d6-8964-44b0-a0d6-e53c1d572e58"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "8e1e4aa0-c9a6-11f1-8528-0a8f44d9e531",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "85b3db6e-c60c-46e0-91f0-052e29ace3ba",
+        "LogicalResourceId": "fintrust-network-dev",
+        "PhysicalResourceId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "ResourceType": "AWS::CloudFormation::Stack",
+        "Timestamp": "2026-10-16T21:14:21.115000+00:00",
+        "ResourceStatus": "UPDATE_IN_PROGRESS",
+        "ResourceStatusReason": "User Initiated",
+        "ClientRequestToken": "66e2a3d6-8964-44b0-a0d6-e53c1d572e58"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "562d0900-c245-11f1-ae3b-0af75c5ebc0f",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "fintrust-network-dev",
+        "PhysicalResourceId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "ResourceType": "AWS::CloudFormation::Stack",
+        "Timestamp": "2026-10-07T11:50:47.937000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DatabaseIngress-CREATE_COMPLETE-2026-10-07T11:50:47.337Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "DatabaseIngress",
+        "PhysicalResourceId": "sgr-0c89b4a1fb97ec847",
+        "ResourceType": "AWS::EC2::SecurityGroupIngress",
+        "Timestamp": "2026-10-07T11:50:47.337000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"FromPort\":\"5432\",\"ToPort\":\"5432\",\"IpProtocol\":\"tcp\",\"SourceSecurityGroupId\":\"sg-0850bd798bb9505e2\",\"GroupId\":\"sg-01644a4c9f2c44162\"}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DatabaseIngress-CREATE_IN_PROGRESS-2026-10-07T11:50:46.704Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "DatabaseIngress",
+        "PhysicalResourceId": "sgr-0c89b4a1fb97ec847",
+        "ResourceType": "AWS::EC2::SecurityGroupIngress",
+        "Timestamp": "2026-10-07T11:50:46.704000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"FromPort\":\"5432\",\"ToPort\":\"5432\",\"IpProtocol\":\"tcp\",\"SourceSecurityGroupId\":\"sg-0850bd798bb9505e2\",\"GroupId\":\"sg-01644a4c9f2c44162\"}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DatabaseIngress-CREATE_IN_PROGRESS-2026-10-07T11:50:45.942Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "DatabaseIngress",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::EC2::SecurityGroupIngress",
+        "Timestamp": "2026-10-07T11:50:45.942000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"FromPort\":\"5432\",\"ToPort\":\"5432\",\"IpProtocol\":\"tcp\",\"SourceSecurityGroupId\":\"sg-0850bd798bb9505e2\",\"GroupId\":\"sg-01644a4c9f2c44162\"}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "LambdaGroup-CREATE_COMPLETE-2026-10-07T11:50:45.658Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "LambdaGroup",
+        "PhysicalResourceId": "sg-0850bd798bb9505e2",
+        "ResourceType": "AWS::EC2::SecurityGroup",
+        "Timestamp": "2026-10-07T11:50:45.658000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"GroupDescription\":\"Ledger functions\",\"VpcId\":\"vpc-0aba008bb360f5147\",\"SecurityGroupEgress\":[{\"FromPort\":\"5432\",\"ToPort\":\"5432\",\"IpProtocol\":\"tcp\",\"DestinationSecurityGroupId\":\"sg-01644a4c9f2c44162\"},{\"FromPort\":\"443\",\"ToPort\":\"443\",\"IpProtocol\":\"tcp\",\"DestinationPrefixListId\":\"pl-a3ac49ca\"},{\"FromPort\":\"443\",\"ToPort\":\"443\",\"IpProtocol\":\"tcp\",\"DestinationPrefixListId\":\"pl-d6ae4bbf\"}],\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-lambdagroup-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "ApplicationRoutes-CREATE_COMPLETE-2026-10-07T11:50:39.472Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "ApplicationRoutes",
+        "PhysicalResourceId": "rtb-01b4916c13d2894a5",
+        "ResourceType": "AWS::EC2::RouteTable",
+        "Timestamp": "2026-10-07T11:50:39.472000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"VpcId\":\"vpc-0aba008bb360f5147\",\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-applicationroutes-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DatabaseRoutes-CREATE_COMPLETE-2026-10-07T11:50:39.424Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "DatabaseRoutes",
+        "PhysicalResourceId": "rtb-008ec3760f6ccd9f0",
+        "ResourceType": "AWS::EC2::RouteTable",
+        "Timestamp": "2026-10-07T11:50:39.424000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"VpcId\":\"vpc-0aba008bb360f5147\",\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-databaseroutes-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "LambdaGroup-CREATE_IN_PROGRESS-2026-10-07T11:50:38.803Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "LambdaGroup",
+        "PhysicalResourceId": "sg-0850bd798bb9505e2",
+        "ResourceType": "AWS::EC2::SecurityGroup",
+        "Timestamp": "2026-10-07T11:50:38.803000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"GroupDescription\":\"Ledger functions\",\"VpcId\":\"vpc-0aba008bb360f5147\",\"SecurityGroupEgress\":[{\"FromPort\":\"5432\",\"ToPort\":\"5432\",\"IpProtocol\":\"tcp\",\"DestinationSecurityGroupId\":\"sg-01644a4c9f2c44162\"},{\"FromPort\":\"443\",\"ToPort\":\"443\",\"IpProtocol\":\"tcp\",\"DestinationPrefixListId\":\"pl-a3ac49ca\"},{\"FromPort\":\"443\",\"ToPort\":\"443\",\"IpProtocol\":\"tcp\",\"DestinationPrefixListId\":\"pl-d6ae4bbf\"}],\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-lambdagroup-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "LambdaGroup-CREATE_IN_PROGRESS-2026-10-07T11:50:36.692Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "LambdaGroup",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::EC2::SecurityGroup",
+        "Timestamp": "2026-10-07T11:50:36.692000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"GroupDescription\":\"Ledger functions\",\"VpcId\":\"vpc-0aba008bb360f5147\",\"SecurityGroupEgress\":[{\"FromPort\":\"5432\",\"ToPort\":\"5432\",\"IpProtocol\":\"tcp\",\"DestinationSecurityGroupId\":\"sg-01644a4c9f2c44162\"},{\"FromPort\":\"443\",\"ToPort\":\"443\",\"IpProtocol\":\"tcp\",\"DestinationPrefixListId\":\"pl-a3ac49ca\"},{\"FromPort\":\"443\",\"ToPort\":\"443\",\"IpProtocol\":\"tcp\",\"DestinationPrefixListId\":\"pl-d6ae4bbf\"}],\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-lambdagroup-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DatabaseGroup-CREATE_COMPLETE-2026-10-07T11:50:36.410Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "DatabaseGroup",
+        "PhysicalResourceId": "sg-01644a4c9f2c44162",
+        "ResourceType": "AWS::EC2::SecurityGroup",
+        "Timestamp": "2026-10-07T11:50:36.410000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"GroupDescription\":\"Private PostgreSQL\",\"VpcId\":\"vpc-0aba008bb360f5147\",\"SecurityGroupEgress\":[{\"CidrIp\":\"127.0.0.1/32\",\"IpProtocol\":\"-1\"}],\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-databasegroup-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "ApplicationSubnet2Route-CREATE_COMPLETE-2026-10-07T11:50:35.882Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "ApplicationSubnet2Route",
+        "PhysicalResourceId": "rtbassoc-07e092a4c1a95468c",
+        "ResourceType": "AWS::EC2::SubnetRouteTableAssociation",
+        "Timestamp": "2026-10-07T11:50:35.882000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"RouteTableId\":\"rtb-01b4916c13d2894a5\",\"SubnetId\":\"subnet-0328276227fa30ead\"}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "ApplicationSubnet2Route-CREATE_IN_PROGRESS-2026-10-07T11:50:35.463Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "ApplicationSubnet2Route",
+        "PhysicalResourceId": "rtbassoc-07e092a4c1a95468c",
+        "ResourceType": "AWS::EC2::SubnetRouteTableAssociation",
+        "Timestamp": "2026-10-07T11:50:35.463000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"RouteTableId\":\"rtb-01b4916c13d2894a5\",\"SubnetId\":\"subnet-0328276227fa30ead\"}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DatabaseSubnets-CREATE_COMPLETE-2026-10-07T11:50:35.151Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "DatabaseSubnets",
+        "PhysicalResourceId": "fintrust-db-dev",
+        "ResourceType": "AWS::RDS::DBSubnetGroup",
+        "Timestamp": "2026-10-07T11:50:35.151000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"DBSubnetGroupName\":\"fintrust-db-dev\",\"DBSubnetGroupDescription\":\"Private FinTrust database tier\",\"SubnetIds\":[\"subnet-04dc0f576867d7a6c\",\"subnet-084deb13f49a36064\"],\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-databasesubnets-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "S3Endpoint-CREATE_COMPLETE-2026-10-07T11:50:34.661Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "S3Endpoint",
+        "PhysicalResourceId": "vpce-0b59921927bd0e852",
+        "ResourceType": "AWS::EC2::VPCEndpoint",
+        "Timestamp": "2026-10-07T11:50:34.661000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"VpcId\":\"vpc-0aba008bb360f5147\",\"ServiceName\":\"com.amazonaws.af-south-1.s3\",\"RouteTableIds\":[\"rtb-01b4916c13d2894a5\"],\"VpcEndpointType\":\"Gateway\",\"PolicyDocument\":{\"Version\":\"2012-10-17\",\"Statement\":[{\"Condition\":{\"StringEquals\":{\"aws:PrincipalAccount\":\"966467878406\"}},\"Action\":[\"s3:GetObject\",\"s3:GetObjectVersion\",\"s3:PutObject\"],\"Resource\":[\"arn:aws:s3:::fintrust-raw-966467878406-af-south-1-dev/*\",\"arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev/*\",\"arn:aws:s3:::fintrust-reports-966467878406-af-south-1-dev/*\"],\"Effect\":\"Allow\",\"Principal\":\"*\"}]},\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-s3endpoint-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "ApplicationSubnet2Route-CREATE_IN_PROGRESS-2026-10-07T11:50:34.632Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "ApplicationSubnet2Route",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::EC2::SubnetRouteTableAssociation",
+        "Timestamp": "2026-10-07T11:50:34.632000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"RouteTableId\":\"rtb-01b4916c13d2894a5\",\"SubnetId\":\"subnet-0328276227fa30ead\"}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DynamodbEndpoint-CREATE_COMPLETE-2026-10-07T11:50:34.504Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "DynamodbEndpoint",
+        "PhysicalResourceId": "vpce-0647afafb32f34e6d",
+        "ResourceType": "AWS::EC2::VPCEndpoint",
+        "Timestamp": "2026-10-07T11:50:34.504000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"VpcId\":\"vpc-0aba008bb360f5147\",\"ServiceName\":\"com.amazonaws.af-south-1.dynamodb\",\"RouteTableIds\":[\"rtb-01b4916c13d2894a5\"],\"VpcEndpointType\":\"Gateway\",\"PolicyDocument\":{\"Version\":\"2012-10-17\",\"Statement\":[{\"Condition\":{\"StringEquals\":{\"aws:PrincipalAccount\":\"966467878406\"}},\"Action\":[\"dynamodb:GetItem\",\"dynamodb:PutItem\",\"dynamodb:Query\"],\"Resource\":[\"arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev\"],\"Effect\":\"Allow\",\"Principal\":\"*\"}]},\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-dynamodbendpoint-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "ApplicationSubnet2-CREATE_COMPLETE-2026-10-07T11:50:34.375Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "ApplicationSubnet2",
+        "PhysicalResourceId": "subnet-0328276227fa30ead",
+        "ResourceType": "AWS::EC2::Subnet",
+        "Timestamp": "2026-10-07T11:50:34.375000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"VpcId\":\"vpc-0aba008bb360f5147\",\"MapPublicIpOnLaunch\":\"false\",\"CidrBlock\":\"10.42.1.0/24\",\"AvailabilityZone\":\"af-south-1b\",\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-applicationsubnet2-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "S3Endpoint-CREATE_IN_PROGRESS-2026-10-07T11:50:34.138Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "S3Endpoint",
+        "PhysicalResourceId": "vpce-0b59921927bd0e852",
+        "ResourceType": "AWS::EC2::VPCEndpoint",
+        "Timestamp": "2026-10-07T11:50:34.138000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"VpcId\":\"vpc-0aba008bb360f5147\",\"ServiceName\":\"com.amazonaws.af-south-1.s3\",\"RouteTableIds\":[\"rtb-01b4916c13d2894a5\"],\"VpcEndpointType\":\"Gateway\",\"PolicyDocument\":{\"Version\":\"2012-10-17\",\"Statement\":[{\"Condition\":{\"StringEquals\":{\"aws:PrincipalAccount\":\"966467878406\"}},\"Action\":[\"s3:GetObject\",\"s3:GetObjectVersion\",\"s3:PutObject\"],\"Resource\":[\"arn:aws:s3:::fintrust-raw-966467878406-af-south-1-dev/*\",\"arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev/*\",\"arn:aws:s3:::fintrust-reports-966467878406-af-south-1-dev/*\"],\"Effect\":\"Allow\",\"Principal\":\"*\"}]},\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-s3endpoint-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DynamodbEndpoint-CREATE_IN_PROGRESS-2026-10-07T11:50:34.029Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "DynamodbEndpoint",
+        "PhysicalResourceId": "vpce-0647afafb32f34e6d",
+        "ResourceType": "AWS::EC2::VPCEndpoint",
+        "Timestamp": "2026-10-07T11:50:34.029000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"VpcId\":\"vpc-0aba008bb360f5147\",\"ServiceName\":\"com.amazonaws.af-south-1.dynamodb\",\"RouteTableIds\":[\"rtb-01b4916c13d2894a5\"],\"VpcEndpointType\":\"Gateway\",\"PolicyDocument\":{\"Version\":\"2012-10-17\",\"Statement\":[{\"Condition\":{\"StringEquals\":{\"aws:PrincipalAccount\":\"966467878406\"}},\"Action\":[\"dynamodb:GetItem\",\"dynamodb:PutItem\",\"dynamodb:Query\"],\"Resource\":[\"arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev\"],\"Effect\":\"Allow\",\"Principal\":\"*\"}]},\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-dynamodbendpoint-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "ApplicationSubnet1Route-CREATE_COMPLETE-2026-10-07T11:50:33.162Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "ApplicationSubnet1Route",
+        "PhysicalResourceId": "rtbassoc-093f19942c1625024",
+        "ResourceType": "AWS::EC2::SubnetRouteTableAssociation",
+        "Timestamp": "2026-10-07T11:50:33.162000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"RouteTableId\":\"rtb-01b4916c13d2894a5\",\"SubnetId\":\"subnet-0c2d87e8a83361e30\"}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DatabaseSubnet2Route-CREATE_COMPLETE-2026-10-07T11:50:33.128Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "DatabaseSubnet2Route",
+        "PhysicalResourceId": "rtbassoc-03f07a9ff6eb100d9",
+        "ResourceType": "AWS::EC2::SubnetRouteTableAssociation",
+        "Timestamp": "2026-10-07T11:50:33.128000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"RouteTableId\":\"rtb-008ec3760f6ccd9f0\",\"SubnetId\":\"subnet-084deb13f49a36064\"}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DatabaseSubnet1Route-CREATE_COMPLETE-2026-10-07T11:50:33.076Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "DatabaseSubnet1Route",
+        "PhysicalResourceId": "rtbassoc-0c9237f84e8346448",
+        "ResourceType": "AWS::EC2::SubnetRouteTableAssociation",
+        "Timestamp": "2026-10-07T11:50:33.076000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"RouteTableId\":\"rtb-008ec3760f6ccd9f0\",\"SubnetId\":\"subnet-04dc0f576867d7a6c\"}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "ApplicationSubnet1Route-CREATE_IN_PROGRESS-2026-10-07T11:50:32.763Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "ApplicationSubnet1Route",
+        "PhysicalResourceId": "rtbassoc-093f19942c1625024",
+        "ResourceType": "AWS::EC2::SubnetRouteTableAssociation",
+        "Timestamp": "2026-10-07T11:50:32.763000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"RouteTableId\":\"rtb-01b4916c13d2894a5\",\"SubnetId\":\"subnet-0c2d87e8a83361e30\"}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DatabaseSubnet2Route-CREATE_IN_PROGRESS-2026-10-07T11:50:32.701Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "DatabaseSubnet2Route",
+        "PhysicalResourceId": "rtbassoc-03f07a9ff6eb100d9",
+        "ResourceType": "AWS::EC2::SubnetRouteTableAssociation",
+        "Timestamp": "2026-10-07T11:50:32.701000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"RouteTableId\":\"rtb-008ec3760f6ccd9f0\",\"SubnetId\":\"subnet-084deb13f49a36064\"}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DatabaseSubnet1Route-CREATE_IN_PROGRESS-2026-10-07T11:50:32.668Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "DatabaseSubnet1Route",
+        "PhysicalResourceId": "rtbassoc-0c9237f84e8346448",
+        "ResourceType": "AWS::EC2::SubnetRouteTableAssociation",
+        "Timestamp": "2026-10-07T11:50:32.668000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"RouteTableId\":\"rtb-008ec3760f6ccd9f0\",\"SubnetId\":\"subnet-04dc0f576867d7a6c\"}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DatabaseSubnets-CREATE_IN_PROGRESS-2026-10-07T11:50:32.555Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "DatabaseSubnets",
+        "PhysicalResourceId": "fintrust-db-dev",
+        "ResourceType": "AWS::RDS::DBSubnetGroup",
+        "Timestamp": "2026-10-07T11:50:32.555000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"DBSubnetGroupName\":\"fintrust-db-dev\",\"DBSubnetGroupDescription\":\"Private FinTrust database tier\",\"SubnetIds\":[\"subnet-04dc0f576867d7a6c\",\"subnet-084deb13f49a36064\"],\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-databasesubnets-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "ApplicationSubnet1Route-CREATE_IN_PROGRESS-2026-10-07T11:50:31.842Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "ApplicationSubnet1Route",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::EC2::SubnetRouteTableAssociation",
+        "Timestamp": "2026-10-07T11:50:31.842000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"RouteTableId\":\"rtb-01b4916c13d2894a5\",\"SubnetId\":\"subnet-0c2d87e8a83361e30\"}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DatabaseSubnet1Route-CREATE_IN_PROGRESS-2026-10-07T11:50:31.794Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "DatabaseSubnet1Route",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::EC2::SubnetRouteTableAssociation",
+        "Timestamp": "2026-10-07T11:50:31.794000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"RouteTableId\":\"rtb-008ec3760f6ccd9f0\",\"SubnetId\":\"subnet-04dc0f576867d7a6c\"}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DatabaseSubnets-CREATE_IN_PROGRESS-2026-10-07T11:50:31.782Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "DatabaseSubnets",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::RDS::DBSubnetGroup",
+        "Timestamp": "2026-10-07T11:50:31.782000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"DBSubnetGroupName\":\"fintrust-db-dev\",\"DBSubnetGroupDescription\":\"Private FinTrust database tier\",\"SubnetIds\":[\"subnet-04dc0f576867d7a6c\",\"subnet-084deb13f49a36064\"],\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-databasesubnets-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DatabaseSubnet2Route-CREATE_IN_PROGRESS-2026-10-07T11:50:31.717Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "DatabaseSubnet2Route",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::EC2::SubnetRouteTableAssociation",
+        "Timestamp": "2026-10-07T11:50:31.717000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"RouteTableId\":\"rtb-008ec3760f6ccd9f0\",\"SubnetId\":\"subnet-084deb13f49a36064\"}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "ApplicationSubnet2-CREATE_IN_PROGRESS-2026-10-07T11:50:31.624Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "ApplicationSubnet2",
+        "PhysicalResourceId": "subnet-0328276227fa30ead",
+        "ResourceType": "AWS::EC2::Subnet",
+        "Timestamp": "2026-10-07T11:50:31.624000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"VpcId\":\"vpc-0aba008bb360f5147\",\"MapPublicIpOnLaunch\":\"false\",\"CidrBlock\":\"10.42.1.0/24\",\"AvailabilityZone\":\"af-south-1b\",\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-applicationsubnet2-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "ApplicationSubnet1-CREATE_COMPLETE-2026-10-07T11:50:31.525Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "ApplicationSubnet1",
+        "PhysicalResourceId": "subnet-0c2d87e8a83361e30",
+        "ResourceType": "AWS::EC2::Subnet",
+        "Timestamp": "2026-10-07T11:50:31.525000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"VpcId\":\"vpc-0aba008bb360f5147\",\"MapPublicIpOnLaunch\":\"false\",\"CidrBlock\":\"10.42.0.0/24\",\"AvailabilityZone\":\"af-south-1a\",\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-applicationsubnet1-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DatabaseSubnet1-CREATE_COMPLETE-2026-10-07T11:50:31.523Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "DatabaseSubnet1",
+        "PhysicalResourceId": "subnet-04dc0f576867d7a6c",
+        "ResourceType": "AWS::EC2::Subnet",
+        "Timestamp": "2026-10-07T11:50:31.523000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"VpcId\":\"vpc-0aba008bb360f5147\",\"MapPublicIpOnLaunch\":\"false\",\"CidrBlock\":\"10.42.2.0/24\",\"AvailabilityZone\":\"af-south-1a\",\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-databasesubnet1-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DatabaseSubnet2-CREATE_COMPLETE-2026-10-07T11:50:31.454Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "DatabaseSubnet2",
+        "PhysicalResourceId": "subnet-084deb13f49a36064",
+        "ResourceType": "AWS::EC2::Subnet",
+        "Timestamp": "2026-10-07T11:50:31.454000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"VpcId\":\"vpc-0aba008bb360f5147\",\"MapPublicIpOnLaunch\":\"false\",\"CidrBlock\":\"10.42.3.0/24\",\"AvailabilityZone\":\"af-south-1b\",\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-databasesubnet2-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DatabaseGroup-CREATE_IN_PROGRESS-2026-10-07T11:50:29.992Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "DatabaseGroup",
+        "PhysicalResourceId": "sg-01644a4c9f2c44162",
+        "ResourceType": "AWS::EC2::SecurityGroup",
+        "Timestamp": "2026-10-07T11:50:29.992000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"GroupDescription\":\"Private PostgreSQL\",\"VpcId\":\"vpc-0aba008bb360f5147\",\"SecurityGroupEgress\":[{\"CidrIp\":\"127.0.0.1/32\",\"IpProtocol\":\"-1\"}],\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-databasegroup-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "S3Endpoint-CREATE_IN_PROGRESS-2026-10-07T11:50:29.429Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "S3Endpoint",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::EC2::VPCEndpoint",
+        "Timestamp": "2026-10-07T11:50:29.429000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"VpcId\":\"vpc-0aba008bb360f5147\",\"ServiceName\":\"com.amazonaws.af-south-1.s3\",\"RouteTableIds\":[\"rtb-01b4916c13d2894a5\"],\"VpcEndpointType\":\"Gateway\",\"PolicyDocument\":{\"Version\":\"2012-10-17\",\"Statement\":[{\"Condition\":{\"StringEquals\":{\"aws:PrincipalAccount\":\"966467878406\"}},\"Action\":[\"s3:GetObject\",\"s3:GetObjectVersion\",\"s3:PutObject\"],\"Resource\":[\"arn:aws:s3:::fintrust-raw-966467878406-af-south-1-dev/*\",\"arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev/*\",\"arn:aws:s3:::fintrust-reports-966467878406-af-south-1-dev/*\"],\"Effect\":\"Allow\",\"Principal\":\"*\"}]},\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-s3endpoint-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DynamodbEndpoint-CREATE_IN_PROGRESS-2026-10-07T11:50:29.415Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "DynamodbEndpoint",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::EC2::VPCEndpoint",
+        "Timestamp": "2026-10-07T11:50:29.415000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"VpcId\":\"vpc-0aba008bb360f5147\",\"ServiceName\":\"com.amazonaws.af-south-1.dynamodb\",\"RouteTableIds\":[\"rtb-01b4916c13d2894a5\"],\"VpcEndpointType\":\"Gateway\",\"PolicyDocument\":{\"Version\":\"2012-10-17\",\"Statement\":[{\"Condition\":{\"StringEquals\":{\"aws:PrincipalAccount\":\"966467878406\"}},\"Action\":[\"dynamodb:GetItem\",\"dynamodb:PutItem\",\"dynamodb:Query\"],\"Resource\":[\"arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev\"],\"Effect\":\"Allow\",\"Principal\":\"*\"}]},\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-dynamodbendpoint-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "ApplicationRoutes-0e259b7b-92fd-4148-a21d-9254025846d8",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "ApplicationRoutes",
+        "PhysicalResourceId": "rtb-01b4916c13d2894a5",
+        "ResourceType": "AWS::EC2::RouteTable",
+        "Timestamp": "2026-10-07T11:50:29.252000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Eventual consistency check initiated",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81",
+        "DetailedStatus": "CONFIGURATION_COMPLETE"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DatabaseRoutes-5d32cf53-7ea0-4909-8c1d-48228758d555",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "DatabaseRoutes",
+        "PhysicalResourceId": "rtb-008ec3760f6ccd9f0",
+        "ResourceType": "AWS::EC2::RouteTable",
+        "Timestamp": "2026-10-07T11:50:29.223000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Eventual consistency check initiated",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81",
+        "DetailedStatus": "CONFIGURATION_COMPLETE"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "ApplicationRoutes-CREATE_IN_PROGRESS-2026-10-07T11:50:28.845Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "ApplicationRoutes",
+        "PhysicalResourceId": "rtb-01b4916c13d2894a5",
+        "ResourceType": "AWS::EC2::RouteTable",
+        "Timestamp": "2026-10-07T11:50:28.845000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"VpcId\":\"vpc-0aba008bb360f5147\",\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-applicationroutes-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DatabaseSubnet1-CREATE_IN_PROGRESS-2026-10-07T11:50:28.844Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "DatabaseSubnet1",
+        "PhysicalResourceId": "subnet-04dc0f576867d7a6c",
+        "ResourceType": "AWS::EC2::Subnet",
+        "Timestamp": "2026-10-07T11:50:28.844000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"VpcId\":\"vpc-0aba008bb360f5147\",\"MapPublicIpOnLaunch\":\"false\",\"CidrBlock\":\"10.42.2.0/24\",\"AvailabilityZone\":\"af-south-1a\",\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-databasesubnet1-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "ApplicationSubnet1-CREATE_IN_PROGRESS-2026-10-07T11:50:28.814Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "ApplicationSubnet1",
+        "PhysicalResourceId": "subnet-0c2d87e8a83361e30",
+        "ResourceType": "AWS::EC2::Subnet",
+        "Timestamp": "2026-10-07T11:50:28.814000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"VpcId\":\"vpc-0aba008bb360f5147\",\"MapPublicIpOnLaunch\":\"false\",\"CidrBlock\":\"10.42.0.0/24\",\"AvailabilityZone\":\"af-south-1a\",\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-applicationsubnet1-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DatabaseRoutes-CREATE_IN_PROGRESS-2026-10-07T11:50:28.789Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "DatabaseRoutes",
+        "PhysicalResourceId": "rtb-008ec3760f6ccd9f0",
+        "ResourceType": "AWS::EC2::RouteTable",
+        "Timestamp": "2026-10-07T11:50:28.789000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"VpcId\":\"vpc-0aba008bb360f5147\",\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-databaseroutes-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DatabaseSubnet2-CREATE_IN_PROGRESS-2026-10-07T11:50:28.784Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "DatabaseSubnet2",
+        "PhysicalResourceId": "subnet-084deb13f49a36064",
+        "ResourceType": "AWS::EC2::Subnet",
+        "Timestamp": "2026-10-07T11:50:28.784000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"VpcId\":\"vpc-0aba008bb360f5147\",\"MapPublicIpOnLaunch\":\"false\",\"CidrBlock\":\"10.42.3.0/24\",\"AvailabilityZone\":\"af-south-1b\",\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-databasesubnet2-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DatabaseSubnet1-CREATE_IN_PROGRESS-2026-10-07T11:50:28.006Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "DatabaseSubnet1",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::EC2::Subnet",
+        "Timestamp": "2026-10-07T11:50:28.006000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"VpcId\":\"vpc-0aba008bb360f5147\",\"MapPublicIpOnLaunch\":\"false\",\"CidrBlock\":\"10.42.2.0/24\",\"AvailabilityZone\":\"af-south-1a\",\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-databasesubnet1-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DatabaseRoutes-CREATE_IN_PROGRESS-2026-10-07T11:50:28.006Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "DatabaseRoutes",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::EC2::RouteTable",
+        "Timestamp": "2026-10-07T11:50:28.006000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"VpcId\":\"vpc-0aba008bb360f5147\",\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-databaseroutes-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DatabaseGroup-CREATE_IN_PROGRESS-2026-10-07T11:50:28.006Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "DatabaseGroup",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::EC2::SecurityGroup",
+        "Timestamp": "2026-10-07T11:50:28.006000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"GroupDescription\":\"Private PostgreSQL\",\"VpcId\":\"vpc-0aba008bb360f5147\",\"SecurityGroupEgress\":[{\"CidrIp\":\"127.0.0.1/32\",\"IpProtocol\":\"-1\"}],\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-databasegroup-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "ApplicationRoutes-CREATE_IN_PROGRESS-2026-10-07T11:50:27.998Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "ApplicationRoutes",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::EC2::RouteTable",
+        "Timestamp": "2026-10-07T11:50:27.998000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"VpcId\":\"vpc-0aba008bb360f5147\",\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-applicationroutes-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "DatabaseSubnet2-CREATE_IN_PROGRESS-2026-10-07T11:50:27.997Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "DatabaseSubnet2",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::EC2::Subnet",
+        "Timestamp": "2026-10-07T11:50:27.997000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"VpcId\":\"vpc-0aba008bb360f5147\",\"MapPublicIpOnLaunch\":\"false\",\"CidrBlock\":\"10.42.3.0/24\",\"AvailabilityZone\":\"af-south-1b\",\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-databasesubnet2-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "ApplicationSubnet2-CREATE_IN_PROGRESS-2026-10-07T11:50:27.997Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "ApplicationSubnet2",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::EC2::Subnet",
+        "Timestamp": "2026-10-07T11:50:27.997000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"VpcId\":\"vpc-0aba008bb360f5147\",\"MapPublicIpOnLaunch\":\"false\",\"CidrBlock\":\"10.42.1.0/24\",\"AvailabilityZone\":\"af-south-1b\",\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-applicationsubnet2-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "ApplicationSubnet1-CREATE_IN_PROGRESS-2026-10-07T11:50:27.991Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "ApplicationSubnet1",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::EC2::Subnet",
+        "Timestamp": "2026-10-07T11:50:27.991000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"VpcId\":\"vpc-0aba008bb360f5147\",\"MapPublicIpOnLaunch\":\"false\",\"CidrBlock\":\"10.42.0.0/24\",\"AvailabilityZone\":\"af-south-1a\",\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-applicationsubnet1-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "Vpc-CREATE_COMPLETE-2026-10-07T11:50:27.708Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "Vpc",
+        "PhysicalResourceId": "vpc-0aba008bb360f5147",
+        "ResourceType": "AWS::EC2::VPC",
+        "Timestamp": "2026-10-07T11:50:27.708000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"InstanceTenancy\":\"default\",\"CidrBlock\":\"10.42.0.0/16\",\"EnableDnsSupport\":\"true\",\"EnableDnsHostnames\":\"true\",\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-vpc-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "Vpc-CREATE_IN_PROGRESS-2026-10-07T11:50:16.265Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "Vpc",
+        "PhysicalResourceId": "vpc-0aba008bb360f5147",
+        "ResourceType": "AWS::EC2::VPC",
+        "Timestamp": "2026-10-07T11:50:16.265000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"InstanceTenancy\":\"default\",\"CidrBlock\":\"10.42.0.0/16\",\"EnableDnsSupport\":\"true\",\"EnableDnsHostnames\":\"true\",\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-vpc-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "Vpc-CREATE_IN_PROGRESS-2026-10-07T11:50:15.160Z",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "Vpc",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::EC2::VPC",
+        "Timestamp": "2026-10-07T11:50:15.160000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"InstanceTenancy\":\"default\",\"CidrBlock\":\"10.42.0.0/16\",\"EnableDnsSupport\":\"true\",\"EnableDnsHostnames\":\"true\",\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"fintrust-vpc-dev\",\"Key\":\"Name\"}]}",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "41c4bb20-c245-11f1-ae34-0effdac0f74f",
+        "StackName": "fintrust-network-dev",
+        "OperationId": "61a0b97b-65f9-437b-b51a-42f5853bee88",
+        "LogicalResourceId": "fintrust-network-dev",
+        "PhysicalResourceId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "ResourceType": "AWS::CloudFormation::Stack",
+        "Timestamp": "2026-10-07T11:50:13.696000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "User Initiated",
+        "ClientRequestToken": "e74be045-3b9f-4afc-b9e5-44559e2b5c81"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "EventId": "9687e890-c244-11f1-a038-0effff617f8d",
+        "StackName": "fintrust-network-dev",
+        "LogicalResourceId": "fintrust-network-dev",
+        "PhysicalResourceId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "ResourceType": "AWS::CloudFormation::Stack",
+        "Timestamp": "2026-10-07T11:45:26.476000+00:00",
+        "ResourceStatus": "REVIEW_IN_PROGRESS",
+        "ResourceStatusReason": "User Initiated"
+      }
+    ]
+  },
+  "current_stack": {
+    "Stacks": [
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+        "StackName": "fintrust-network-dev",
+        "Description": "FinTrust private network only; no application or paid endpoint resources",
+        "Parameters": [
+          {
+            "ParameterKey": "AvailabilityZone1",
+            "ParameterValue": "af-south-1a"
+          },
+          {
+            "ParameterKey": "AvailabilityZone2",
+            "ParameterValue": "af-south-1b"
+          },
+          {
+            "ParameterKey": "DynamoPrefixListId",
+            "ParameterValue": "pl-d6ae4bbf"
+          },
+          {
+            "ParameterKey": "S3PrefixListId",
+            "ParameterValue": "pl-a3ac49ca"
+          }
+        ],
+        "CreationTime": "2026-10-07T11:45:26.476000+00:00",
+        "LastUpdatedTime": "2026-10-16T21:14:21.115000+00:00",
+        "RollbackConfiguration": {},
+        "StackStatus": "UPDATE_ROLLBACK_FAILED",
+        "StackStatusReason": "The following resource(s) failed to update: [DynamodbEndpoint]. ",
+        "DisableRollback": false,
+        "DeploymentConfig": {
+          "Mode": "STANDARD",
+          "DisableRollback": false
+        },
+        "NotificationARNs": [],
+        "Outputs": [
+          {
+            "OutputKey": "DatabaseSubnet1",
+            "OutputValue": "subnet-04dc0f576867d7a6c"
+          },
+          {
+            "OutputKey": "DatabaseSubnets",
+            "OutputValue": "fintrust-db-dev"
+          },
+          {
+            "OutputKey": "DatabaseSubnet2",
+            "OutputValue": "subnet-084deb13f49a36064"
+          },
+          {
+            "OutputKey": "ApplicationSubnet1",
+            "OutputValue": "subnet-0c2d87e8a83361e30"
+          },
+          {
+            "OutputKey": "S3Endpoint",
+            "OutputValue": "vpce-0b59921927bd0e852"
+          },
+          {
+            "OutputKey": "ApplicationSubnet2",
+            "OutputValue": "subnet-0328276227fa30ead"
+          },
+          {
+            "OutputKey": "Vpc",
+            "OutputValue": "vpc-0aba008bb360f5147"
+          },
+          {
+            "OutputKey": "ApplicationRoutes",
+            "OutputValue": "rtb-01b4916c13d2894a5"
+          },
+          {
+            "OutputKey": "LambdaGroup",
+            "OutputValue": "sg-0850bd798bb9505e2"
+          },
+          {
+            "OutputKey": "DynamodbEndpoint",
+            "OutputValue": "vpce-0647afafb32f34e6d"
+          },
+          {
+            "OutputKey": "DatabaseRoutes",
+            "OutputValue": "rtb-008ec3760f6ccd9f0"
+          },
+          {
+            "OutputKey": "DatabaseGroup",
+            "OutputValue": "sg-01644a4c9f2c44162"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": "dev"
+          }
+        ],
+        "EnableTerminationProtection": false,
+        "DriftInformation": {
+          "StackDriftStatus": "NOT_CHECKED"
+        },
+        "LastOperations": [
+          {
+            "OperationType": "ROLLBACK",
+            "OperationId": "4fde0884-ce00-4dc1-9bee-5fec44e128c0"
+          },
+          {
+            "OperationType": "UPDATE_STACK",
+            "OperationId": "85b3db6e-c60c-46e0-91f0-052e29ace3ba"
+          }
+        ]
+      }
+    ]
+  },
+  "endpoint_current": {
+    "VpcEndpoints": [
+      {
+        "VpcEndpointId": "vpce-0647afafb32f34e6d",
+        "VpcEndpointType": "Gateway",
+        "VpcId": "vpc-0aba008bb360f5147",
+        "ServiceName": "com.amazonaws.af-south-1.dynamodb",
+        "State": "available",
+        "PolicyDocument": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":[\"dynamodb:GetItem\",\"dynamodb:PutItem\",\"dynamodb:Query\"],\"Resource\":\"arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev\",\"Condition\":{\"StringEquals\":{\"aws:PrincipalAccount\":\"966467878406\"}}}]}",
+        "RouteTableIds": [
+          "rtb-01b4916c13d2894a5"
+        ],
+        "SubnetIds": [],
+        "Groups": [],
+        "IpAddressType": "ipv4",
+        "DnsOptions": {
+          "DnsRecordIpType": "service-defined"
+        },
+        "PrivateDnsEnabled": false,
+        "RequesterManaged": false,
+        "NetworkInterfaceIds": [],
+        "DnsEntries": [],
+        "CreationTimestamp": "2026-10-07T11:50:32+00:00",
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "aws:cloudformation:stack-name",
+            "Value": "fintrust-network-dev"
+          },
+          {
+            "Key": "Environment",
+            "Value": "dev"
+          },
+          {
+            "Key": "aws:cloudformation:logical-id",
+            "Value": "DynamodbEndpoint"
+          },
+          {
+            "Key": "aws:cloudformation:stack-id",
+            "Value": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d"
+          },
+          {
+            "Key": "Name",
+            "Value": "fintrust-dynamodbendpoint-dev"
+          }
+        ],
+        "OwnerId": "966467878406",
+        "ServiceRegion": "af-south-1"
+      }
+    ]
+  },
+  "status": "UPDATE_ROLLBACK_FAILED",
+  "rollback_recovery": {
+    "status": "UPDATE_ROLLBACK_COMPLETE",
+    "resources_skipped": [],
+    "stack": {
+      "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-network-dev/968836b0-c244-11f1-a038-0effff617f8d",
+      "StackName": "fintrust-network-dev",
+      "Description": "FinTrust private network only; no application or paid endpoint resources",
+      "Parameters": [
+        {
+          "ParameterKey": "AvailabilityZone1",
+          "ParameterValue": "af-south-1a"
+        },
+        {
+          "ParameterKey": "AvailabilityZone2",
+          "ParameterValue": "af-south-1b"
+        },
+        {
+          "ParameterKey": "DynamoPrefixListId",
+          "ParameterValue": "pl-d6ae4bbf"
+        },
+        {
+          "ParameterKey": "S3PrefixListId",
+          "ParameterValue": "pl-a3ac49ca"
+        }
+      ],
+      "CreationTime": "2026-10-07T11:45:26.476000+00:00",
+      "LastUpdatedTime": "2026-10-16T21:14:21.115000+00:00",
+      "RollbackConfiguration": {},
+      "StackStatus": "UPDATE_ROLLBACK_COMPLETE",
+      "DisableRollback": false,
+      "DeploymentConfig": {
+        "Mode": "STANDARD",
+        "DisableRollback": false
+      },
+      "NotificationARNs": [],
+      "Outputs": [
+        {
+          "OutputKey": "DatabaseSubnet1",
+          "OutputValue": "subnet-04dc0f576867d7a6c"
+        },
+        {
+          "OutputKey": "DatabaseSubnets",
+          "OutputValue": "fintrust-db-dev"
+        },
+        {
+          "OutputKey": "DatabaseSubnet2",
+          "OutputValue": "subnet-084deb13f49a36064"
+        },
+        {
+          "OutputKey": "ApplicationSubnet1",
+          "OutputValue": "subnet-0c2d87e8a83361e30"
+        },
+        {
+          "OutputKey": "S3Endpoint",
+          "OutputValue": "vpce-0b59921927bd0e852"
+        },
+        {
+          "OutputKey": "ApplicationSubnet2",
+          "OutputValue": "subnet-0328276227fa30ead"
+        },
+        {
+          "OutputKey": "Vpc",
+          "OutputValue": "vpc-0aba008bb360f5147"
+        },
+        {
+          "OutputKey": "ApplicationRoutes",
+          "OutputValue": "rtb-01b4916c13d2894a5"
+        },
+        {
+          "OutputKey": "LambdaGroup",
+          "OutputValue": "sg-0850bd798bb9505e2"
+        },
+        {
+          "OutputKey": "DynamodbEndpoint",
+          "OutputValue": "vpce-0647afafb32f34e6d"
+        },
+        {
+          "OutputKey": "DatabaseRoutes",
+          "OutputValue": "rtb-008ec3760f6ccd9f0"
+        },
+        {
+          "OutputKey": "DatabaseGroup",
+          "OutputValue": "sg-01644a4c9f2c44162"
+        }
+      ],
+      "Tags": [
+        {
+          "Key": "Project",
+          "Value": "FinTrust"
+        },
+        {
+          "Key": "Environment",
+          "Value": "dev"
+        }
+      ],
+      "EnableTerminationProtection": false,
+      "DriftInformation": {
+        "StackDriftStatus": "NOT_CHECKED"
+      },
+      "LastOperations": [
+        {
+          "OperationType": "CONTINUE_ROLLBACK",
+          "OperationId": "1cfc1d91-fd23-4236-9c40-dcd9bdfdd339"
+        }
+      ]
+    },
+    "checked_at": "2026-10-16T21:28:55.864084+00:00"
+  }
+}

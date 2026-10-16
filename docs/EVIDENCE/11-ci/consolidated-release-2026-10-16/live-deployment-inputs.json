@@ -5,7 +5,7 @@
   "runtime_release_commit": "29ad78ee03b1ce02b1f94e7f908a8b8a37b76a89",
   "artifact_sha256": "ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d",
   "artifact_uploaded": false,
-  "aws_changes": false,
+  "aws_changes": true,
   "existing_outputs": {
     "network": {
       "StackName": "fintrust-network-dev",
@@ -174,13 +174,13 @@
       "ReportsBucket": "fintrust-reports-966467878406-af-south-1-dev",
       "RiskTable": "fintrust-risk-dev",
       "RiskStreamArn": "arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev/stream/2026-10-08T08:19:35.208",
-      "CognitoUserPoolId": null,
-      "CognitoAppClientId": null,
-      "CognitoDomain": null,
-      "CognitoRedirectUri": null,
-      "CognitoLogoutUri": null,
-      "CognitoUserScopeTable": null,
-      "CorsAllowedOrigins": null,
+      "CognitoUserPoolId": "af-south-1_NnmfBS0y9",
+      "CognitoAppClientId": "5beqt819p8bpc3ug5hj65bj6i1",
+      "CognitoDomain": "https://fintrust-966467878406-dev.auth.af-south-1.amazoncognito.com",
+      "CognitoRedirectUri": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/",
+      "CognitoLogoutUri": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/",
+      "CognitoUserScopeTable": "imbokodo-dev-user-account-scopes",
+      "CorsAllowedOrigins": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com",
       "SubnetIds": [
         "subnet-0c2d87e8a83361e30",
         "subnet-0328276227fa30ead"
@@ -204,13 +204,13 @@
     },
     "cognito.json": {
       "StageName": "dev",
-      "DomainPrefix": null,
-      "CallbackUrls": null,
-      "LogoutUrls": null
+      "DomainPrefix": "fintrust-966467878406-dev",
+      "CallbackUrls": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/",
+      "LogoutUrls": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/"
     },
     "api.json": {
       "ApiFunctionName": null,
-      "UserPoolArn": null
+      "UserPoolArn": "arn:aws:cognito-idp:af-south-1:966467878406:userpool/af-south-1_NnmfBS0y9"
     },
     "api-shell.json": {}
   },
@@ -218,24 +218,12 @@
     "ses-identities.json": [],
     "application-functions.json": [
       "CodeKey",
-      "CognitoUserPoolId",
-      "CognitoAppClientId",
-      "CognitoDomain",
-      "CognitoRedirectUri",
-      "CognitoLogoutUri",
-      "CognitoUserScopeTable",
-      "CorsAllowedOrigins",
       "CodeObjectVersion"
     ],
     "monitoring.json": [],
-    "cognito.json": [
-      "DomainPrefix",
-      "CallbackUrls",
-      "LogoutUrls"
-    ],
+    "cognito.json": [],
     "api.json": [
-      "ApiFunctionName",
-      "UserPoolArn"
+      "ApiFunctionName"
     ],
     "api-shell.json": []
   },
@@ -263,7 +251,8 @@
     "Runtime roles and nine SSM values are installed; live DB users/grants and migrations remain unverified.",
     "No template deployment or activation is authorized by this worksheet.",
     "Stage-path repair supersedes runtime commit 3368f4c; latest code is bound by source_sha256 and the gateway readiness evidence. Cloud upload and object version remain unapproved/unverified.",
-    "Prepared Cognito has no IAM resources: admin separately installed exact-table API GetItem access. Do not use the historical generic Cognito template."
+    "Prepared Cognito has no IAM resources: admin separately installed exact-table API GetItem access. Do not use the historical generic Cognito template.",
+    "API identity and empty Cognito/scope configuration deployed and read back. No users, scope assignments, serving API stage or workloads activated. Artifact upload, database gates and end-to-end validation remain outstanding."
   ],
   "source_sha256": "2b525f84dfd93f93006f245ee77df5d589d5a3bb056c4bfaf99000b1004ac852",
   "ssm_prerequisites": {
@@ -276,10 +265,38 @@
     "live_log_delivery_verified": false
   },
   "deployment_permissions": {
-    "status": "INSTALLED_READ_BACK_API_BOOTSTRAP_ONLY",
+    "status": "INSTALLED_READ_BACK_API_ID_BOUND",
     "evidence": "infrastructure/service_preparation/deployment_iam/evidence/installed.json",
-    "api_id_bound": false,
-    "full_api_mutation_permission_installed": false,
-    "template_validation_after_latest_tags": "PENDING_DEPLOYER_AUTHENTICATION"
+    "api_id_bound": true,
+    "full_api_mutation_permission_installed": true,
+    "template_validation_after_latest_tags": "FOUR_TEMPLATES_ACCEPTED_BY_VERIFIED_DEPLOYER"
+  },
+  "auth_configuration": {
+    "status": "CREATE_COMPLETE_EMPTY_AUTH_CONFIGURATION",
+    "outputs": {
+      "UserScopeTable": "imbokodo-dev-user-account-scopes",
+      "UserPoolId": "af-south-1_NnmfBS0y9",
+      "AppClientId": "5beqt819p8bpc3ug5hj65bj6i1",
+      "Issuer": "https://cognito-idp.af-south-1.amazonaws.com/af-south-1_NnmfBS0y9",
+      "HostedDomain": "https://fintrust-966467878406-dev.auth.af-south-1.amazoncognito.com",
+      "UserPoolArn": "arn:aws:cognito-idp:af-south-1:966467878406:userpool/af-south-1_NnmfBS0y9"
+    },
+    "users_created": 0,
+    "scope_records_written": 0,
+    "evidence": "infrastructure/service_preparation/deployment_iam/evidence/auth-configuration-live.json"
+  },
+  "api_configuration": {
+    "api_id": "qzgzopn8o4",
+    "stack_status": "CREATE_COMPLETE",
+    "callback_url": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/",
+    "serving_stage_created": false
+  },
+  "gateway_scope_prerequisite": {
+    "status": "UPDATE_COMPLETE_IN_PLACE_POLICY_ONLY",
+    "endpoint_id": "vpce-0647afafb32f34e6d",
+    "api_getitem_scope_table_only": true,
+    "risk_table_statement_preserved": true,
+    "network_outputs_unchanged": true,
+    "evidence": "infrastructure/service_preparation/deployment_iam/evidence/gateway-account-scope-live.json"
   }
 }

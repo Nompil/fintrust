@@ -35,9 +35,15 @@ def test_endpoints_and_security_groups_cannot_expose_database():
     for endpoint in endpoints:
         assert endpoint["VpcEndpointType"] == "Gateway"
         assert endpoint["RouteTableIds"] == [{"Ref": "ApplicationRoutes"}]
-        statement = endpoint["PolicyDocument"]["Statement"][0]
-        assert statement["Resource"] != "*"
-        assert statement["Condition"]["StringEquals"]["aws:PrincipalAccount"] == {"Ref": "AWS::AccountId"}
+        for statement in endpoint["PolicyDocument"]["Statement"]:
+            assert statement["Resource"] != "*"
+            assert statement["Condition"]["StringEquals"]["aws:PrincipalAccount"] == {"Ref": "AWS::AccountId"}
+    scope = next(s for s in resources["DynamodbEndpoint"]["Properties"]["PolicyDocument"]["Statement"]
+                 if s.get("Sid") == "ApiReadAccountScopes")
+    assert scope["Action"] == ["dynamodb:GetItem"]
+    assert scope["Resource"] == {"Fn::Sub": "arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/imbokodo-dev-user-account-scopes"}
+    assert scope["Condition"]["StringEquals"]["aws:PrincipalArn"] == {
+        "Fn::Sub": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/fintrust-api-dev"}
     ingress = resources["DatabaseIngress"]["Properties"]
     assert ingress == {"GroupId": {"Ref": "DatabaseGroup"}, "SourceSecurityGroupId": {"Ref": "LambdaGroup"},
                        "IpProtocol": "tcp", "FromPort": 5432, "ToPort": 5432}

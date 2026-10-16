@@ -507,7 +507,7 @@
     },
     "FinTrustReleaseDependencies": {
       "arn": "arn:aws:iam::966467878406:policy/FinTrustReleaseDependencies",
-      "default_version": "v2",
+      "default_version": "v3",
       "document": {
         "Version": "2012-10-17",
         "Statement": [
@@ -765,6 +765,26 @@
                 "aws:ResourceTag/Environment": "dev"
               }
             }
+          },
+          {
+            "Sid": "RetagExistingDynamoGatewayDuringStackUpdate",
+            "Effect": "Allow",
+            "Action": [
+              "ec2:CreateTags"
+            ],
+            "Resource": "arn:aws:ec2:af-south-1:966467878406:vpc-endpoint/vpce-0647afafb32f34e6d",
+            "Condition": {
+              "StringEquals": {
+                "aws:RequestedRegion": "af-south-1",
+                "aws:ResourceTag/Project": "FinTrust",
+                "aws:ResourceTag/Environment": "dev"
+              },
+              "ForAnyValue:StringEquals": {
+                "aws:CalledVia": [
+                  "cloudformation.amazonaws.com"
+                ]
+              }
+            }
           }
         ]
       },
@@ -772,7 +792,7 @@
     },
     "FinTrustIdentityDeployment": {
       "arn": "arn:aws:iam::966467878406:policy/FinTrustIdentityDeployment",
-      "default_version": "v2",
+      "default_version": "v3",
       "document": {
         "Version": "2012-10-17",
         "Statement": [
@@ -835,7 +855,7 @@
             "Action": [
               "cognito-idp:TagResource"
             ],
-            "Resource": "arn:aws:cognito-idp:af-south-1:966467878406:userpool/af-south-1_*",
+            "Resource": "arn:aws:cognito-idp:af-south-1:966467878406:userpool/*",
             "Condition": {
               "StringEquals": {
                 "aws:RequestedRegion": "af-south-1",
@@ -931,37 +951,10 @@
     },
     "FinTrustApiDeployment": {
       "arn": "arn:aws:iam::966467878406:policy/FinTrustApiDeployment",
-      "default_version": "v2",
+      "default_version": "v4",
       "document": {
         "Version": "2012-10-17",
         "Statement": [
-          {
-            "Sid": "CreateNamedRegionalApiOnly",
-            "Effect": "Allow",
-            "Action": [
-              "apigateway:POST"
-            ],
-            "Resource": "arn:aws:apigateway:af-south-1::/restapis",
-            "Condition": {
-              "StringEquals": {
-                "aws:RequestedRegion": "af-south-1",
-                "apigateway:Request/ApiName": "fintrust-dev"
-              },
-              "ForAnyValue:StringEquals": {
-                "aws:CalledVia": [
-                  "cloudformation.amazonaws.com"
-                ]
-              },
-              "ForAllValues:StringEquals": {
-                "apigateway:Request/EndpointType": [
-                  "REGIONAL"
-                ]
-              },
-              "Null": {
-                "apigateway:Request/EndpointType": "false"
-              }
-            }
-          },
           {
             "Sid": "ReadApiInventoryAndAccount",
             "Effect": "Allow",
@@ -979,12 +972,41 @@
             }
           },
           {
-            "Sid": "BootstrapReadApiMetadata",
+            "Sid": "ManageOnlyBoundApi",
+            "Effect": "Allow",
+            "Action": [
+              "apigateway:POST",
+              "apigateway:PUT",
+              "apigateway:PATCH",
+              "apigateway:DELETE"
+            ],
+            "Resource": [
+              "arn:aws:apigateway:af-south-1::/restapis/qzgzopn8o4",
+              "arn:aws:apigateway:af-south-1::/restapis/qzgzopn8o4/*",
+              "arn:aws:apigateway:af-south-1::/tags/arn%3Aaws%3Aapigateway%3Aaf-south-1%3A%3A%2Frestapis%2Fqzgzopn8o4"
+            ],
+            "Condition": {
+              "StringEquals": {
+                "aws:RequestedRegion": "af-south-1"
+              },
+              "ForAnyValue:StringEquals": {
+                "aws:CalledVia": [
+                  "cloudformation.amazonaws.com"
+                ]
+              }
+            }
+          },
+          {
+            "Sid": "ReadOnlyBoundApi",
             "Effect": "Allow",
             "Action": [
               "apigateway:GET"
             ],
-            "Resource": "arn:aws:apigateway:af-south-1::/restapis/*",
+            "Resource": [
+              "arn:aws:apigateway:af-south-1::/restapis/qzgzopn8o4",
+              "arn:aws:apigateway:af-south-1::/restapis/qzgzopn8o4/*",
+              "arn:aws:apigateway:af-south-1::/tags/arn%3Aaws%3Aapigateway%3Aaf-south-1%3A%3A%2Frestapis%2Fqzgzopn8o4"
+            ],
             "Condition": {
               "StringEquals": {
                 "aws:RequestedRegion": "af-south-1"
@@ -1294,10 +1316,10 @@
     }
   ],
   "status": "INSTALLED_AND_READ_BACK",
-  "api_id": null,
+  "api_id": "qzgzopn8o4",
   "workloads_deployed": false,
-  "updated_at": "2026-10-16T16:25:51.459203+00:00",
-  "bundle_manifest_sha256": "c11245703e448a2ca5d14278e7eb4e541a657df1fc4baaf9e8cac0e4466c4872",
+  "updated_at": "2026-10-16T21:29:48.311379+00:00",
+  "bundle_manifest_sha256": "e3bdfe061b692f544b139aee5b230dd9954a8a14997e4e2d5cfb29003be6f36e",
   "binding_normalization": {
     "previous_windows_manifest_sha256": "86e3afc5e2a8b6d3d954b4ef6ebff16187c495077c9a86c951304ec14d3763ae",
     "canonical_lf_manifest_sha256": "c11245703e448a2ca5d14278e7eb4e541a657df1fc4baaf9e8cac0e4466c4872",
