@@ -61,6 +61,14 @@ def application_template():
     return template
 
 
+def api_template():
+    template = json.loads((ROOT / 'source/infrastructure/api/gateway.json').read_text(encoding='utf-8'))
+    # Detailed method metrics are optional billable CloudWatch metrics.
+    for settings in template['Resources']['Stage']['Properties']['MethodSettings']:
+        settings['MetricsEnabled'] = False
+    return template
+
+
 def monitoring_template():
     params = {'Stage': {'Type': 'String', 'Default': 'dev', 'AllowedValues': ['dev', 'staging', 'prod']},
               'EnableAlarms': flag('Creating alarms may incur charges. Keep false until billing allowance is verified.'),
@@ -121,9 +129,8 @@ def main():
     out.mkdir(exist_ok=True)
     generated = {'ses-identities.json': ses_template(), 'application-functions.json': application_template(),
                  'monitoring.json': monitoring_template(), 'alert-ses-policy.json': alert_send_policy(),
-                 'cognito.json': cognito_template()}
-    for name, source in [('api.json', 'api/gateway.json'),
-                         ('api-shell.json', 'api/gateway-shell.json')]:
+                 'cognito.json': cognito_template(), 'api.json': api_template()}
+    for name, source in [('api-shell.json', 'api/gateway-shell.json')]:
         generated[name] = json.loads((ROOT / 'source/infrastructure' / source).read_text(encoding='utf-8'))
     for name, data in generated.items():
         (out / name).write_text(json.dumps(data, indent=2) + '\n', encoding='utf-8')

@@ -1,0 +1,19 @@
+{
+  "status": "TARGETED_LINUX_AND_PACKAGE_CHECKS_PASSED_NOT_DEPLOYED",
+  "source_sha256": "2b525f84dfd93f93006f245ee77df5d589d5a3bb056c4bfaf99000b1004ac852",
+  "tests_passed": 216,
+  "failures": 0,
+  "skips": 0,
+  "additional_offline_configuration_tests_passed": 7,
+  "linux_archived_handlers_verified": 5,
+  "artifact_sha256": "ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d",
+  "artifact_uploaded": false,
+  "supersedes_artifact_sha256": "ebf94636046662736b6f77bec1616bd122e0f14c856e189f1d90fc9fa77ea1ff",
+  "aws_template_validation_for_changed_api_template": "PENDING_NORMAL_DEPLOYER_AUTHENTICATION",
+  "notes": [
+    "Prior full regression is retained; this result is targeted revalidation of the stage-path repair, not a new full-suite claim.",
+    "No live Cognito/API Gateway browser E2E is claimed.",
+    "Existing migration SQL and runner sources are unchanged.",
+    "All four remaining IAM execution roles were installed separately; no functions or triggers were created."
+  ]
+}

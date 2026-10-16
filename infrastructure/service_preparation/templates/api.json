@@ -363,7 +363,7 @@
             "HttpMethod": "*",
             "ThrottlingBurstLimit": 20,
             "ThrottlingRateLimit": 10,
-            "MetricsEnabled": true,
+            "MetricsEnabled": false,
             "DataTraceEnabled": false
           }
         ]

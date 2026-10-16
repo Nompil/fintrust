@@ -24,6 +24,12 @@ def resolve(value, parameters, conditions):
 
 
 class ConfigurationTests(unittest.TestCase):
+    def test_api_detailed_metrics_are_not_implicitly_enabled(self):
+        template = config.api_template()
+        for settings in template['Resources']['Stage']['Properties']['MethodSettings']:
+            self.assertFalse(settings['MetricsEnabled'])
+            self.assertFalse(settings['DataTraceEnabled'])
+
     def test_monthly_schedule_is_independent_of_consumers_and_requires_function_capacity(self):
         t = config.application_template()
         for functions, consumers, reports in itertools.product(['false', 'true'], repeat=3):

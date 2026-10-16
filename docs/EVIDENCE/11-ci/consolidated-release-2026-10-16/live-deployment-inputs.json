@@ -2,8 +2,8 @@
   "status": "WORKSHEET_NOT_EXECUTABLE",
   "account": "966467878406",
   "region": "af-south-1",
-  "runtime_release_commit": "3368f4c31373291d11d5ef852884abb669f6dca8",
-  "artifact_sha256": "ebf94636046662736b6f77bec1616bd122e0f14c856e189f1d90fc9fa77ea1ff",
+  "runtime_release_commit": null,
+  "artifact_sha256": "ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d",
   "artifact_uploaded": false,
   "aws_changes": false,
   "existing_outputs": {
@@ -169,7 +169,7 @@
     "application-functions.json": {
       "CodeBucket": "fintrust-reports-966467878406-af-south-1-dev",
       "CodeKey": null,
-      "CodeSha256": "6/lGNgRmYnNrb3e+wWFr0SLg8UyFbhifHZD8n6d+of8=",
+      "CodeSha256": "/2Mk1kpdZdqxhSOjDqcrsVlNL6XKf75rg5HFLwPtWJ0=",
       "QuarantineBucket": "fintrust-quarantine-966467878406-af-south-1-dev",
       "ReportsBucket": "fintrust-reports-966467878406-af-south-1-dev",
       "RiskTable": "fintrust-risk-dev",
@@ -263,6 +263,8 @@
     "Monitoring DB identifier is inferred from the recorded template/host, not a fresh RDS DescribeDBInstances result.",
     "CodeSha256 is bound to the locally verified ZIP; no S3 object key/version is asserted until upload is approved and verified.",
     "Runtime roles, DB users/grants and SSM values remain separate deployment prerequisites.",
-    "No template deployment or activation is authorized by this worksheet."
-  ]
+    "No template deployment or activation is authorized by this worksheet.",
+    "Stage-path repair supersedes runtime commit 3368f4c; latest code is bound by source_sha256 and the gateway readiness evidence. Cloud upload and object version remain unapproved/unverified."
+  ],
+  "source_sha256": "2b525f84dfd93f93006f245ee77df5d589d5a3bb056c4bfaf99000b1004ac852"
 }

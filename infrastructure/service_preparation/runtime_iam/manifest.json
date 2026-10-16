@@ -1,0 +1,24 @@
+{
+  "status": "INSTALLED_AND_READ_BACK",
+  "resources_from": "foundation-live-outputs-20261016.json",
+  "roles": {
+    "scoring": "fintrust-scoring-dev",
+    "alert": "fintrust-alert-dev",
+    "api": "fintrust-api-dev",
+    "report": "fintrust-report-dev"
+  },
+  "scope_table_access": "Cognito stack adds only GetItem on its own scope table to the existing API role.",
+  "files_sha256": {
+    "alert.json": "266fa4633629fb80281b296cd7027c23a231227265f363332ac19ad745fd3bad",
+    "api.json": "4e98c991790e6fc7a6a00713fdbc0332a52311536609930df0b226fd9e2a84e3",
+    "report.json": "51c2807d55f48e3da37a4dd632cf070d1750e0e71af0a769d72c6df7d8f9eb34",
+    "scoring.json": "503b406fa53c02a654843474be112d8eff04651edfaf3e6dbd17e89531c9ef74",
+    "trust.json": "7d3ec39ee23e4aabeed84681a924ef18fddeef1883f2fab29a6c6aea0b589250"
+  },
+  "limitations": [
+    "Identity policies do not prove KMS key-policy access or RDS schema grants.",
+    "No function code or trigger activation is included.",
+    "Use the cost-gated service preparation templates; do not use historical generic templates directly."
+  ],
+  "audit": "docs/EVIDENCE/11-ci/consolidated-release-2026-10-16/remaining-runtime-roles-iam-audit.json"
+}

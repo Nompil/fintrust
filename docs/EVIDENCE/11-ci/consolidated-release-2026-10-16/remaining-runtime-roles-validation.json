@@ -1,0 +1,71 @@
+{
+  "validation": {
+    "scoring": {
+      "findings": []
+    },
+    "alert": {
+      "findings": []
+    },
+    "api": {
+      "findings": []
+    },
+    "report": {
+      "findings": []
+    }
+  },
+  "scope_checks": {
+    "api-table": [
+      {
+        "Action": "dynamodb:GetItem",
+        "Resource": "arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev",
+        "Decision": "allowed"
+      },
+      {
+        "Action": "dynamodb:DeleteItem",
+        "Resource": "arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev",
+        "Decision": "implicitDeny"
+      }
+    ],
+    "ses-recipient": [
+      {
+        "Action": "ses:SendEmail",
+        "Resource": "arn:aws:ses:af-south-1:966467878406:identity/nompilomabuya@outlook.com",
+        "Decision": "implicitDeny"
+      }
+    ],
+    "other-db-user": [
+      {
+        "Action": "rds-db:connect",
+        "Resource": "arn:aws:rds-db:af-south-1:966467878406:dbuser:db-QZ3JN4H22YOMU7VLI22RL2IUYQ/fintrust_report_dev",
+        "Decision": "implicitDeny",
+        "Missing": [
+          "aws:RequestedRegion",
+          "kms:ViaService",
+          "kms:CallerAccount",
+          "kms:EncryptionContext:aws:s3:arn",
+          "lambda:SourceFunctionArn"
+        ]
+      }
+    ],
+    "ses-allowed": [
+      {
+        "Action": "ses:SendEmail",
+        "Resource": "arn:aws:ses:af-south-1:966467878406:identity/nompilomabuya@outlook.com",
+        "Decision": "allowed",
+        "Missing": []
+      }
+    ],
+    "own-db-user": {
+      "Action": "rds-db:connect",
+      "Resource": "arn:aws:rds-db:af-south-1:966467878406:dbuser:db-QZ3JN4H22YOMU7VLI22RL2IUYQ/fintrust_api_dev",
+      "Decision": "allowed",
+      "MissingContextValues": []
+    }
+  },
+  "notes": [
+    "IAM simulation is not a live RDS login or SES delivery test.",
+    "The initial multi-resource RDS simulation was inconclusive at the aggregate level; a separate single-resource check allowed the API's exact database user.",
+    "The alert recipient allow and deny checks sent no email."
+  ],
+  "new_paid_resources_created": false
+}

@@ -4,7 +4,7 @@ const crypto=require('node:crypto');
 const {chromium}=require(process.env.FINTRUST_PLAYWRIGHT_MODULE);
 
 (async()=>{
- const origin=process.argv[2],out=process.argv[3];
+ const origin=process.argv[2],out=process.argv[3],base=process.argv[4]||'',entry=base?base+'/':'/release1';
  const exe=[chromium.executablePath(),'C:/Program Files/Google/Chrome/Application/chrome.exe'].find(require('node:fs').existsSync);
  const browser=await chromium.launch({executablePath:exe,headless:true,args:['--disable-background-networking']});
  const context=await browser.newContext({viewport:{width:1280,height:900}});
@@ -12,13 +12,14 @@ const {chromium}=require(process.env.FINTRUST_PLAYWRIGHT_MODULE);
  await context.route('**/*',async route=>{
   const url=new URL(route.request().url());
   if(url.origin===origin){
-   if(url.pathname==='/v1/accounts')return route.fulfill({status:200,contentType:'application/json',body:'{"data":[]}'});
-   if(url.pathname==='/v1/release1/overview')return route.fulfill({status:503,contentType:'application/json',body:'{"error":"verification read is intentionally unavailable"}'});
+   assert.ok(!base||url.pathname.startsWith(base+'/'),'Request escaped API Gateway stage: '+url.pathname);
+   if(url.pathname===base+'/v1/accounts')return route.fulfill({status:200,contentType:'application/json',body:'{"data":[]}'});
+   if(url.pathname===base+'/v1/release1/overview')return route.fulfill({status:503,contentType:'application/json',body:'{"error":"verification read is intentionally unavailable"}'});
    return route.continue();
   }
   if(url.pathname==='/oauth2/authorize'){
    authorize=url;
-   const callback=new URL(origin+'/release1');callback.searchParams.set('code','synthetic-code');callback.searchParams.set('state',url.searchParams.get('state'));
+   const callback=new URL(origin+entry);callback.searchParams.set('code','synthetic-code');callback.searchParams.set('state',url.searchParams.get('state'));
    return route.fulfill({status:200,contentType:'text/html',body:`<!doctype html><a id="continue" href="${callback}">Continue sign-in</a>`});
   }
   if(url.pathname==='/oauth2/token'){
@@ -38,7 +39,7 @@ const {chromium}=require(process.env.FINTRUST_PLAYWRIGHT_MODULE);
  });
  try{
   const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.goto(origin+'/release1');
+  await page.goto(origin+entry);
   await page.waitForFunction(()=>document.querySelector('#signin')?.textContent.includes('Imbokodo'));
   await page.getByRole('button',{name:'Sign in with Imbokodo'}).click();
   await page.getByRole('link',{name:'Continue sign-in'}).waitFor();

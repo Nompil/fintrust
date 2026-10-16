@@ -2,6 +2,7 @@ from .paths import RESOURCE_ROOT
 import json
 import os
 from pathlib import Path
+from contextvars import ContextVar
 from time import perf_counter
 from uuid import uuid4
 from datetime import date
@@ -22,6 +23,21 @@ logger = get_logger("api")
 app = Flask("fintrust-api")
 app.config["MAX_CONTENT_LENGTH"] = 1024 * 1024 + 65536
 FRONTEND = RESOURCE_ROOT / "frontend"
+_public_base_path = ContextVar("fintrust_public_base_path", default="")
+
+
+def workbench_document():
+    # API Gateway's trusted request context supplies the stage prefix. Local
+    # URLs and custom-domain root mappings keep an empty prefix.
+    prefix = _public_base_path.get()
+    response = send_from_directory(FRONTEND, "release1.html")
+    response.direct_passthrough = False
+    html = response.get_data(as_text=True)
+    html = html.replace("<head>", '<head><meta name="fintrust-api-base" content="' + prefix + '">', 1)
+    for attribute in ('href', 'src'):
+        html = html.replace(attribute + '="/assets/', attribute + '="' + prefix + '/assets/')
+    response.set_data(html)
+    return response
 
 
 @app.before_request
@@ -101,7 +117,7 @@ def unexpected_error(error):
 @app.get("/")
 @app.get("/index.html")
 def dashboard():
-    return send_from_directory(FRONTEND, "release1.html")
+    return workbench_document()
 
 
 @app.get("/assets/<path:name>")
@@ -287,7 +303,7 @@ def bad_input(error):
 
 @app.get("/release1")
 def release1_dashboard():
-    return send_from_directory(FRONTEND,"release1.html")
+    return workbench_document()
 
 
 @app.get("/v1/auth/config")
@@ -421,9 +437,16 @@ def lambda_handler(event, context):
     authorizer = request_context.get("authorizer", {}) if isinstance(request_context, dict) else {}
     claims = authorizer.get("claims") if isinstance(authorizer, dict) else None
     token = cognito_auth.set_gateway_claims(claims)
+    stage = request_context.get("stage") if isinstance(request_context, dict) else None
+    domain = request_context.get("domainName", "") if isinstance(request_context, dict) else ""
+    prefix = "/" + stage if (isinstance(stage, str) and stage in {"dev", "staging", "prod"}
+        and isinstance(domain, str) and ".execute-api." in domain
+        and domain.endswith((".amazonaws.com", ".amazonaws.com.cn"))) else ""
+    prefix_token = _public_base_path.set(prefix)
     try:
         return awsgi.response(app, event, context)
     finally:
+        _public_base_path.reset(prefix_token)
         cognito_auth.reset_gateway_claims(token)
 
 

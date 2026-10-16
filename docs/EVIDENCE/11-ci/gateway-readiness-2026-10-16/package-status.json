@@ -1,0 +1,20 @@
+{
+  "source_sha256": "2b525f84dfd93f93006f245ee77df5d589d5a3bb056c4bfaf99000b1004ac852",
+  "commands": [
+    {
+      "tool": "tools/package_hardened_lambda.py",
+      "exit_code": 0
+    },
+    {
+      "tool": "tools/verify_release_input.py",
+      "exit_code": 0
+    },
+    {
+      "tool": "tools/verify_lambda_linux.py",
+      "exit_code": 0
+    }
+  ],
+  "aws_changes": false,
+  "published": false,
+  "passed": true
+}

@@ -60,3 +60,15 @@ confirm a quota increase, an assigned agent, or approval for live migration.
 No live migration, service activation, support-plan upgrade or endpoint creation
 was performed while saving this evidence. Keep the case-access IAM policy only
 for required case follow-up, then execute its recorded cleanup plan.
+
+## Remaining runtime prerequisites and gateway repair - latest source
+
+- Created and read back `fintrust-scoring-dev`, `fintrust-alert-dev`, `fintrust-api-dev` and `fintrust-report-dev` IAM execution roles using admin only for IAM administration. Existing ingest was untouched. These IAM prerequisites did not create functions, triggers, networks, database objects or paid services. The role creation journal, validation results and policy documents are retained.
+- All four runtime policies passed Access Analyzer with no findings. They reference actual foundation outputs, per-service database users, scoped log groups, queue/table/bucket/KMS resources, exact alert stream ARN and the approved SES sender/recipient. VPC ENI permissions are regional and explicitly denied to function code.
+- Fixed the confirmed API Gateway stage-path bug: the served HTML now derives asset/API prefixes from trusted Gateway context, preserving `/dev/`, `/staging/` and `/prod/` URLs. Local and custom-domain root URLs retain the root prefix. Trusted claims and prefix contexts reset even on adapter failure. The Cognito browser check now exercises the real Lambda proxy adapter at `/dev/`.
+- 216 focused Linux tests passed with zero failures/skips, plus seven offline service-configuration checks. These include local/Cognito browser sign-in, API Gateway stage sign-in, filters, authorizer/RBAC and package guards. Earlier full regression evidence remains historical and has not been presented as a fresh full run for this repair.
+- Rebuilt the shared Lambda archive and verified its content, source binding, all five handlers and all production modules under Linux Python 3.12. New ZIP SHA256: `ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d`. It is local only and supersedes the earlier archive for future deployment.
+- Disabled optional API Gateway detailed method metrics in the cost-gated prepared template. Existing alarms and schedules remain disabled. The changed API template still needs AWS ValidateTemplate under normal deployer credentials; prior API validation applies to the previous template.
+- Normal deployer role credentials expired during this check; no new interactive authentication was requested merely for offline preparation, and admin was not used for non-IAM inventory/deployment. SSM parameter existence and live DB name/grants remain unverified.
+
+Next preparation work: complete remaining deployment-policy scopes, verify/provision the exact nonsecret SSM values after identifying the live database name, and verify API Gateway logging account configuration. Live migration remains blocked on case **179210878300923**, a cost-compatible access path and live RDS preflight. No endpoint is authorized by these checks. Live Cognito scope enrollment, alert delivery and end-to-end evidence remain outstanding.

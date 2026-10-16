@@ -1,0 +1,104 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ec2:CreateNetworkInterface",
+        "ec2:DescribeNetworkInterfaces",
+        "ec2:DescribeSubnets",
+        "ec2:DeleteNetworkInterface",
+        "ec2:AssignPrivateIpAddresses",
+        "ec2:UnassignPrivateIpAddresses"
+      ],
+      "Resource": "*",
+      "Sid": "ApiRuntime1",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    },
+    {
+      "Effect": "Deny",
+      "Action": [
+        "ec2:CreateNetworkInterface",
+        "ec2:DescribeNetworkInterfaces",
+        "ec2:DescribeSubnets",
+        "ec2:DeleteNetworkInterface",
+        "ec2:AssignPrivateIpAddresses",
+        "ec2:UnassignPrivateIpAddresses"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "ArnEquals": {
+          "lambda:SourceFunctionArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev"
+        }
+      },
+      "Sid": "ApiRuntime2"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-api-dev:*",
+      "Sid": "ApiRuntime3"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "rds-db:connect"
+      ],
+      "Resource": "arn:aws:rds-db:af-south-1:966467878406:dbuser:db-QZ3JN4H22YOMU7VLI22RL2IUYQ/fintrust_api_dev",
+      "Sid": "ApiRuntime4"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:GetItem",
+        "dynamodb:Query"
+      ],
+      "Resource": "arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev",
+      "Sid": "ApiRuntime5"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObjectVersion"
+      ],
+      "Resource": "arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev/quarantine/release1/*",
+      "Sid": "ApiRuntime6"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject"
+      ],
+      "Resource": "arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev/quarantine/corrections/*",
+      "Sid": "ApiRuntime7"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "kms:GenerateDataKey",
+        "kms:Decrypt"
+      ],
+      "Resource": "arn:aws:kms:af-south-1:966467878406:key/598a4158-2cc6-4946-af24-512784a276c8",
+      "Condition": {
+        "StringEquals": {
+          "kms:ViaService": "s3.af-south-1.amazonaws.com",
+          "kms:CallerAccount": "966467878406"
+        },
+        "StringLike": {
+          "kms:EncryptionContext:aws:s3:arn": [
+            "arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev",
+            "arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev/*"
+          ]
+        }
+      },
+      "Sid": "ApiRuntime8"
+    }
+  ]
+}

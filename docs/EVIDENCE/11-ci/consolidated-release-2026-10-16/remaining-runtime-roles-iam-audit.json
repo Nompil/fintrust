@@ -1,0 +1,961 @@
+{
+  "started_utc": "2026-10-16T00:12:47.802246+00:00",
+  "admin_used_for": "IAM administration only",
+  "actions": [
+    {
+      "utc": "2026-10-16T00:13:00.964040+00:00",
+      "arguments": [
+        "get-role",
+        "--role-name",
+        "fintrust-scoring-dev"
+      ],
+      "exit_code": 254,
+      "response": null,
+      "error": "aws: [ERROR]: An error occurred (NoSuchEntity) when calling the GetRole operation: The role with name fintrust-scoring-dev cannot be found."
+    },
+    {
+      "utc": "2026-10-16T00:13:03.942321+00:00",
+      "arguments": [
+        "create-role",
+        "--role-name",
+        "fintrust-scoring-dev",
+        "--assume-role-policy-document",
+        "file://C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\consolidated-release-freeze\\infrastructure\\service_preparation\\runtime_iam\\trust.json",
+        "--description",
+        "FinTrust scoring runtime prerequisite; no function or trigger activation",
+        "--tags",
+        "Key=Project,Value=FinTrust",
+        "Key=Environment,Value=dev",
+        "Key=Service,Value=scoring"
+      ],
+      "exit_code": 0,
+      "response": {
+        "Role": {
+          "Path": "/",
+          "RoleName": "fintrust-scoring-dev",
+          "RoleId": "AROA6CBPZPYDIWAWMKZTG",
+          "Arn": "arn:aws:iam::966467878406:role/fintrust-scoring-dev",
+          "CreateDate": "2026-10-16T00:13:03+00:00",
+          "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": {
+                  "Service": "lambda.amazonaws.com"
+                },
+                "Action": "sts:AssumeRole"
+              }
+            ]
+          },
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Service",
+              "Value": "scoring"
+            }
+          ]
+        }
+      },
+      "error": null
+    },
+    {
+      "utc": "2026-10-16T00:13:06.713266+00:00",
+      "arguments": [
+        "put-role-policy",
+        "--role-name",
+        "fintrust-scoring-dev",
+        "--policy-name",
+        "FinTrustScoringRuntime",
+        "--policy-document",
+        "file://C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\consolidated-release-freeze\\infrastructure\\service_preparation\\runtime_iam\\scoring.json"
+      ],
+      "exit_code": 0,
+      "response": null,
+      "error": null
+    },
+    {
+      "utc": "2026-10-16T00:13:09.361663+00:00",
+      "arguments": [
+        "get-role-policy",
+        "--role-name",
+        "fintrust-scoring-dev",
+        "--policy-name",
+        "FinTrustScoringRuntime"
+      ],
+      "exit_code": 0,
+      "response": {
+        "RoleName": "fintrust-scoring-dev",
+        "PolicyName": "FinTrustScoringRuntime",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "ec2:CreateNetworkInterface",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DescribeSubnets",
+                "ec2:DeleteNetworkInterface",
+                "ec2:AssignPrivateIpAddresses",
+                "ec2:UnassignPrivateIpAddresses"
+              ],
+              "Resource": "*",
+              "Sid": "ScoringRuntime1",
+              "Condition": {
+                "StringEquals": {
+                  "aws:RequestedRegion": "af-south-1"
+                }
+              }
+            },
+            {
+              "Effect": "Deny",
+              "Action": [
+                "ec2:CreateNetworkInterface",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DescribeSubnets",
+                "ec2:DeleteNetworkInterface",
+                "ec2:AssignPrivateIpAddresses",
+                "ec2:UnassignPrivateIpAddresses"
+              ],
+              "Resource": "*",
+              "Condition": {
+                "ArnEquals": {
+                  "lambda:SourceFunctionArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-scoring-dev"
+                }
+              },
+              "Sid": "ScoringRuntime2"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Resource": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-scoring-dev:*",
+              "Sid": "ScoringRuntime3"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "rds-db:connect"
+              ],
+              "Resource": "arn:aws:rds-db:af-south-1:966467878406:dbuser:db-QZ3JN4H22YOMU7VLI22RL2IUYQ/fintrust_scoring_dev",
+              "Sid": "ScoringRuntime4"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:PutItem",
+                "dynamodb:GetItem"
+              ],
+              "Resource": "arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev",
+              "Sid": "ScoringRuntime5"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "sqs:ReceiveMessage",
+                "sqs:DeleteMessage",
+                "sqs:GetQueueAttributes"
+              ],
+              "Resource": "arn:aws:sqs:af-south-1:966467878406:fintrust-transactions-dev.fifo",
+              "Sid": "ScoringRuntime6"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:PutObject"
+              ],
+              "Resource": "arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev/quarantine/accounts/*",
+              "Sid": "ScoringRuntime7"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:PutObject"
+              ],
+              "Resource": "arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev/quarantine/release1/*",
+              "Sid": "ScoringRuntime8"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "kms:GenerateDataKey",
+                "kms:Decrypt"
+              ],
+              "Resource": "arn:aws:kms:af-south-1:966467878406:key/598a4158-2cc6-4946-af24-512784a276c8",
+              "Condition": {
+                "StringEquals": {
+                  "kms:ViaService": "s3.af-south-1.amazonaws.com",
+                  "kms:CallerAccount": "966467878406"
+                },
+                "StringLike": {
+                  "kms:EncryptionContext:aws:s3:arn": [
+                    "arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev",
+                    "arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev/*"
+                  ]
+                }
+              },
+              "Sid": "ScoringRuntime9"
+            }
+          ]
+        }
+      },
+      "error": null
+    },
+    {
+      "utc": "2026-10-16T00:13:12.117273+00:00",
+      "arguments": [
+        "get-role",
+        "--role-name",
+        "fintrust-scoring-dev"
+      ],
+      "exit_code": 0,
+      "response": {
+        "Role": {
+          "Path": "/",
+          "RoleName": "fintrust-scoring-dev",
+          "RoleId": "AROA6CBPZPYDIWAWMKZTG",
+          "Arn": "arn:aws:iam::966467878406:role/fintrust-scoring-dev",
+          "CreateDate": "2026-10-16T00:13:03+00:00",
+          "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": {
+                  "Service": "lambda.amazonaws.com"
+                },
+                "Action": "sts:AssumeRole"
+              }
+            ]
+          },
+          "Description": "FinTrust scoring runtime prerequisite; no function or trigger activation",
+          "MaxSessionDuration": 3600,
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Service",
+              "Value": "scoring"
+            }
+          ],
+          "RoleLastUsed": {}
+        }
+      },
+      "error": null
+    },
+    {
+      "utc": "2026-10-16T00:13:14.815024+00:00",
+      "arguments": [
+        "get-role",
+        "--role-name",
+        "fintrust-alert-dev"
+      ],
+      "exit_code": 254,
+      "response": null,
+      "error": "aws: [ERROR]: An error occurred (NoSuchEntity) when calling the GetRole operation: The role with name fintrust-alert-dev cannot be found."
+    },
+    {
+      "utc": "2026-10-16T00:13:17.548448+00:00",
+      "arguments": [
+        "create-role",
+        "--role-name",
+        "fintrust-alert-dev",
+        "--assume-role-policy-document",
+        "file://C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\consolidated-release-freeze\\infrastructure\\service_preparation\\runtime_iam\\trust.json",
+        "--description",
+        "FinTrust alert runtime prerequisite; no function or trigger activation",
+        "--tags",
+        "Key=Project,Value=FinTrust",
+        "Key=Environment,Value=dev",
+        "Key=Service,Value=alert"
+      ],
+      "exit_code": 0,
+      "response": {
+        "Role": {
+          "Path": "/",
+          "RoleName": "fintrust-alert-dev",
+          "RoleId": "AROA6CBPZPYDFWKHNQ6YU",
+          "Arn": "arn:aws:iam::966467878406:role/fintrust-alert-dev",
+          "CreateDate": "2026-10-16T00:13:17+00:00",
+          "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": {
+                  "Service": "lambda.amazonaws.com"
+                },
+                "Action": "sts:AssumeRole"
+              }
+            ]
+          },
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Service",
+              "Value": "alert"
+            }
+          ]
+        }
+      },
+      "error": null
+    },
+    {
+      "utc": "2026-10-16T00:13:20.330012+00:00",
+      "arguments": [
+        "put-role-policy",
+        "--role-name",
+        "fintrust-alert-dev",
+        "--policy-name",
+        "FinTrustAlertRuntime",
+        "--policy-document",
+        "file://C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\consolidated-release-freeze\\infrastructure\\service_preparation\\runtime_iam\\alert.json"
+      ],
+      "exit_code": 0,
+      "response": null,
+      "error": null
+    },
+    {
+      "utc": "2026-10-16T00:13:23.091031+00:00",
+      "arguments": [
+        "get-role-policy",
+        "--role-name",
+        "fintrust-alert-dev",
+        "--policy-name",
+        "FinTrustAlertRuntime"
+      ],
+      "exit_code": 0,
+      "response": {
+        "RoleName": "fintrust-alert-dev",
+        "PolicyName": "FinTrustAlertRuntime",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Resource": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-alert-dev:*",
+              "Sid": "AlertRuntime1"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:GetItem",
+                "dynamodb:UpdateItem"
+              ],
+              "Resource": "arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev",
+              "Sid": "AlertRuntime2"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:DescribeStream",
+                "dynamodb:ListStreams"
+              ],
+              "Resource": "arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev/stream/2026-10-08T08:19:35.208",
+              "Sid": "AlertRuntime3"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "sqs:SendMessage"
+              ],
+              "Resource": "arn:aws:sqs:af-south-1:966467878406:fintrust-alert-failures-dev",
+              "Sid": "AlertRuntime4"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "ses:SendEmail"
+              ],
+              "Resource": "arn:aws:ses:af-south-1:966467878406:identity/nompilomabuya@outlook.com",
+              "Condition": {
+                "StringEquals": {
+                  "ses:FromAddress": "nompilomabuya@outlook.com",
+                  "aws:RequestedRegion": "af-south-1"
+                },
+                "ForAllValues:StringEquals": {
+                  "ses:Recipients": [
+                    "nompilomabuya@outlook.com"
+                  ]
+                },
+                "Null": {
+                  "ses:Recipients": "false"
+                }
+              },
+              "Sid": "AlertRuntime5"
+            }
+          ]
+        }
+      },
+      "error": null
+    },
+    {
+      "utc": "2026-10-16T00:13:25.949103+00:00",
+      "arguments": [
+        "get-role",
+        "--role-name",
+        "fintrust-alert-dev"
+      ],
+      "exit_code": 0,
+      "response": {
+        "Role": {
+          "Path": "/",
+          "RoleName": "fintrust-alert-dev",
+          "RoleId": "AROA6CBPZPYDFWKHNQ6YU",
+          "Arn": "arn:aws:iam::966467878406:role/fintrust-alert-dev",
+          "CreateDate": "2026-10-16T00:13:17+00:00",
+          "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": {
+                  "Service": "lambda.amazonaws.com"
+                },
+                "Action": "sts:AssumeRole"
+              }
+            ]
+          },
+          "Description": "FinTrust alert runtime prerequisite; no function or trigger activation",
+          "MaxSessionDuration": 3600,
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Service",
+              "Value": "alert"
+            }
+          ],
+          "RoleLastUsed": {}
+        }
+      },
+      "error": null
+    },
+    {
+      "utc": "2026-10-16T00:13:28.871136+00:00",
+      "arguments": [
+        "get-role",
+        "--role-name",
+        "fintrust-api-dev"
+      ],
+      "exit_code": 254,
+      "response": null,
+      "error": "aws: [ERROR]: An error occurred (NoSuchEntity) when calling the GetRole operation: The role with name fintrust-api-dev cannot be found."
+    },
+    {
+      "utc": "2026-10-16T00:13:31.880035+00:00",
+      "arguments": [
+        "create-role",
+        "--role-name",
+        "fintrust-api-dev",
+        "--assume-role-policy-document",
+        "file://C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\consolidated-release-freeze\\infrastructure\\service_preparation\\runtime_iam\\trust.json",
+        "--description",
+        "FinTrust api runtime prerequisite; no function or trigger activation",
+        "--tags",
+        "Key=Project,Value=FinTrust",
+        "Key=Environment,Value=dev",
+        "Key=Service,Value=api"
+      ],
+      "exit_code": 0,
+      "response": {
+        "Role": {
+          "Path": "/",
+          "RoleName": "fintrust-api-dev",
+          "RoleId": "AROA6CBPZPYDKYUNWAPPI",
+          "Arn": "arn:aws:iam::966467878406:role/fintrust-api-dev",
+          "CreateDate": "2026-10-16T00:13:31+00:00",
+          "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": {
+                  "Service": "lambda.amazonaws.com"
+                },
+                "Action": "sts:AssumeRole"
+              }
+            ]
+          },
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Service",
+              "Value": "api"
+            }
+          ]
+        }
+      },
+      "error": null
+    },
+    {
+      "utc": "2026-10-16T00:13:34.621842+00:00",
+      "arguments": [
+        "put-role-policy",
+        "--role-name",
+        "fintrust-api-dev",
+        "--policy-name",
+        "FinTrustApiRuntime",
+        "--policy-document",
+        "file://C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\consolidated-release-freeze\\infrastructure\\service_preparation\\runtime_iam\\api.json"
+      ],
+      "exit_code": 0,
+      "response": null,
+      "error": null
+    },
+    {
+      "utc": "2026-10-16T00:13:37.309478+00:00",
+      "arguments": [
+        "get-role-policy",
+        "--role-name",
+        "fintrust-api-dev",
+        "--policy-name",
+        "FinTrustApiRuntime"
+      ],
+      "exit_code": 0,
+      "response": {
+        "RoleName": "fintrust-api-dev",
+        "PolicyName": "FinTrustApiRuntime",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "ec2:CreateNetworkInterface",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DescribeSubnets",
+                "ec2:DeleteNetworkInterface",
+                "ec2:AssignPrivateIpAddresses",
+                "ec2:UnassignPrivateIpAddresses"
+              ],
+              "Resource": "*",
+              "Sid": "ApiRuntime1",
+              "Condition": {
+                "StringEquals": {
+                  "aws:RequestedRegion": "af-south-1"
+                }
+              }
+            },
+            {
+              "Effect": "Deny",
+              "Action": [
+                "ec2:CreateNetworkInterface",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DescribeSubnets",
+                "ec2:DeleteNetworkInterface",
+                "ec2:AssignPrivateIpAddresses",
+                "ec2:UnassignPrivateIpAddresses"
+              ],
+              "Resource": "*",
+              "Condition": {
+                "ArnEquals": {
+                  "lambda:SourceFunctionArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev"
+                }
+              },
+              "Sid": "ApiRuntime2"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Resource": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-api-dev:*",
+              "Sid": "ApiRuntime3"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "rds-db:connect"
+              ],
+              "Resource": "arn:aws:rds-db:af-south-1:966467878406:dbuser:db-QZ3JN4H22YOMU7VLI22RL2IUYQ/fintrust_api_dev",
+              "Sid": "ApiRuntime4"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:GetItem",
+                "dynamodb:Query"
+              ],
+              "Resource": "arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev",
+              "Sid": "ApiRuntime5"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:GetObjectVersion"
+              ],
+              "Resource": "arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev/quarantine/release1/*",
+              "Sid": "ApiRuntime6"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:PutObject"
+              ],
+              "Resource": "arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev/quarantine/corrections/*",
+              "Sid": "ApiRuntime7"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "kms:GenerateDataKey",
+                "kms:Decrypt"
+              ],
+              "Resource": "arn:aws:kms:af-south-1:966467878406:key/598a4158-2cc6-4946-af24-512784a276c8",
+              "Condition": {
+                "StringEquals": {
+                  "kms:ViaService": "s3.af-south-1.amazonaws.com",
+                  "kms:CallerAccount": "966467878406"
+                },
+                "StringLike": {
+                  "kms:EncryptionContext:aws:s3:arn": [
+                    "arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev",
+                    "arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev/*"
+                  ]
+                }
+              },
+              "Sid": "ApiRuntime8"
+            }
+          ]
+        }
+      },
+      "error": null
+    },
+    {
+      "utc": "2026-10-16T00:13:39.947310+00:00",
+      "arguments": [
+        "get-role",
+        "--role-name",
+        "fintrust-api-dev"
+      ],
+      "exit_code": 0,
+      "response": {
+        "Role": {
+          "Path": "/",
+          "RoleName": "fintrust-api-dev",
+          "RoleId": "AROA6CBPZPYDKYUNWAPPI",
+          "Arn": "arn:aws:iam::966467878406:role/fintrust-api-dev",
+          "CreateDate": "2026-10-16T00:13:31+00:00",
+          "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": {
+                  "Service": "lambda.amazonaws.com"
+                },
+                "Action": "sts:AssumeRole"
+              }
+            ]
+          },
+          "Description": "FinTrust api runtime prerequisite; no function or trigger activation",
+          "MaxSessionDuration": 3600,
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Service",
+              "Value": "api"
+            }
+          ],
+          "RoleLastUsed": {}
+        }
+      },
+      "error": null
+    },
+    {
+      "utc": "2026-10-16T00:13:42.740481+00:00",
+      "arguments": [
+        "get-role",
+        "--role-name",
+        "fintrust-report-dev"
+      ],
+      "exit_code": 254,
+      "response": null,
+      "error": "aws: [ERROR]: An error occurred (NoSuchEntity) when calling the GetRole operation: The role with name fintrust-report-dev cannot be found."
+    },
+    {
+      "utc": "2026-10-16T00:13:45.443411+00:00",
+      "arguments": [
+        "create-role",
+        "--role-name",
+        "fintrust-report-dev",
+        "--assume-role-policy-document",
+        "file://C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\consolidated-release-freeze\\infrastructure\\service_preparation\\runtime_iam\\trust.json",
+        "--description",
+        "FinTrust report runtime prerequisite; no function or trigger activation",
+        "--tags",
+        "Key=Project,Value=FinTrust",
+        "Key=Environment,Value=dev",
+        "Key=Service,Value=report"
+      ],
+      "exit_code": 0,
+      "response": {
+        "Role": {
+          "Path": "/",
+          "RoleName": "fintrust-report-dev",
+          "RoleId": "AROA6CBPZPYDPA2G6QFDP",
+          "Arn": "arn:aws:iam::966467878406:role/fintrust-report-dev",
+          "CreateDate": "2026-10-16T00:13:44+00:00",
+          "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": {
+                  "Service": "lambda.amazonaws.com"
+                },
+                "Action": "sts:AssumeRole"
+              }
+            ]
+          },
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Service",
+              "Value": "report"
+            }
+          ]
+        }
+      },
+      "error": null
+    },
+    {
+      "utc": "2026-10-16T00:13:48.325158+00:00",
+      "arguments": [
+        "put-role-policy",
+        "--role-name",
+        "fintrust-report-dev",
+        "--policy-name",
+        "FinTrustReportRuntime",
+        "--policy-document",
+        "file://C:\\Users\\Nompilo\\OneDrive\\Desktop\\fintrust\\build\\consolidated-release-freeze\\infrastructure\\service_preparation\\runtime_iam\\report.json"
+      ],
+      "exit_code": 0,
+      "response": null,
+      "error": null
+    },
+    {
+      "utc": "2026-10-16T00:13:51.160305+00:00",
+      "arguments": [
+        "get-role-policy",
+        "--role-name",
+        "fintrust-report-dev",
+        "--policy-name",
+        "FinTrustReportRuntime"
+      ],
+      "exit_code": 0,
+      "response": {
+        "RoleName": "fintrust-report-dev",
+        "PolicyName": "FinTrustReportRuntime",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "ec2:CreateNetworkInterface",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DescribeSubnets",
+                "ec2:DeleteNetworkInterface",
+                "ec2:AssignPrivateIpAddresses",
+                "ec2:UnassignPrivateIpAddresses"
+              ],
+              "Resource": "*",
+              "Sid": "ReportRuntime1",
+              "Condition": {
+                "StringEquals": {
+                  "aws:RequestedRegion": "af-south-1"
+                }
+              }
+            },
+            {
+              "Effect": "Deny",
+              "Action": [
+                "ec2:CreateNetworkInterface",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DescribeSubnets",
+                "ec2:DeleteNetworkInterface",
+                "ec2:AssignPrivateIpAddresses",
+                "ec2:UnassignPrivateIpAddresses"
+              ],
+              "Resource": "*",
+              "Condition": {
+                "ArnEquals": {
+                  "lambda:SourceFunctionArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-report-dev"
+                }
+              },
+              "Sid": "ReportRuntime2"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Resource": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-report-dev:*",
+              "Sid": "ReportRuntime3"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "rds-db:connect"
+              ],
+              "Resource": "arn:aws:rds-db:af-south-1:966467878406:dbuser:db-QZ3JN4H22YOMU7VLI22RL2IUYQ/fintrust_report_dev",
+              "Sid": "ReportRuntime4"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:PutObject"
+              ],
+              "Resource": "arn:aws:s3:::fintrust-reports-966467878406-af-south-1-dev/monthly/*",
+              "Sid": "ReportRuntime5"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "sqs:SendMessage"
+              ],
+              "Resource": "arn:aws:sqs:af-south-1:966467878406:fintrust-report-failures-dev",
+              "Sid": "ReportRuntime6"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "kms:GenerateDataKey",
+                "kms:Decrypt"
+              ],
+              "Resource": "arn:aws:kms:af-south-1:966467878406:key/598a4158-2cc6-4946-af24-512784a276c8",
+              "Condition": {
+                "StringEquals": {
+                  "kms:ViaService": "s3.af-south-1.amazonaws.com",
+                  "kms:CallerAccount": "966467878406"
+                },
+                "StringLike": {
+                  "kms:EncryptionContext:aws:s3:arn": [
+                    "arn:aws:s3:::fintrust-reports-966467878406-af-south-1-dev",
+                    "arn:aws:s3:::fintrust-reports-966467878406-af-south-1-dev/*"
+                  ]
+                }
+              },
+              "Sid": "ReportRuntime7"
+            }
+          ]
+        }
+      },
+      "error": null
+    },
+    {
+      "utc": "2026-10-16T00:13:54.705384+00:00",
+      "arguments": [
+        "get-role",
+        "--role-name",
+        "fintrust-report-dev"
+      ],
+      "exit_code": 0,
+      "response": {
+        "Role": {
+          "Path": "/",
+          "RoleName": "fintrust-report-dev",
+          "RoleId": "AROA6CBPZPYDPA2G6QFDP",
+          "Arn": "arn:aws:iam::966467878406:role/fintrust-report-dev",
+          "CreateDate": "2026-10-16T00:13:44+00:00",
+          "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": {
+                  "Service": "lambda.amazonaws.com"
+                },
+                "Action": "sts:AssumeRole"
+              }
+            ]
+          },
+          "Description": "FinTrust report runtime prerequisite; no function or trigger activation",
+          "MaxSessionDuration": 3600,
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "FinTrust"
+            },
+            {
+              "Key": "Environment",
+              "Value": "dev"
+            },
+            {
+              "Key": "Service",
+              "Value": "report"
+            }
+          ],
+          "RoleLastUsed": {}
+        }
+      },
+      "error": null
+    }
+  ],
+  "workloads_created": false,
+  "live_database_changed": false,
+  "quota_changed": false,
+  "new_paid_resources_created": false,
+  "status": "IAM_PREREQUISITES_INSTALLED_AND_READ_BACK",
+  "finished_utc": "2026-10-16T00:13:54.705384+00:00"
+}

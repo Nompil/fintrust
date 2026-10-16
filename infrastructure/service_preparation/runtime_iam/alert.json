@@ -1,0 +1,64 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-alert-dev:*",
+      "Sid": "AlertRuntime1"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:GetItem",
+        "dynamodb:UpdateItem"
+      ],
+      "Resource": "arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev",
+      "Sid": "AlertRuntime2"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:DescribeStream",
+        "dynamodb:ListStreams"
+      ],
+      "Resource": "arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev/stream/2026-10-08T08:19:35.208",
+      "Sid": "AlertRuntime3"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "sqs:SendMessage"
+      ],
+      "Resource": "arn:aws:sqs:af-south-1:966467878406:fintrust-alert-failures-dev",
+      "Sid": "AlertRuntime4"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ses:SendEmail"
+      ],
+      "Resource": "arn:aws:ses:af-south-1:966467878406:identity/nompilomabuya@outlook.com",
+      "Condition": {
+        "StringEquals": {
+          "ses:FromAddress": "nompilomabuya@outlook.com",
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "ForAllValues:StringEquals": {
+          "ses:Recipients": [
+            "nompilomabuya@outlook.com"
+          ]
+        },
+        "Null": {
+          "ses:Recipients": "false"
+        }
+      },
+      "Sid": "AlertRuntime5"
+    }
+  ]
+}
