@@ -2,7 +2,7 @@
   "status": "WORKSHEET_NOT_EXECUTABLE",
   "account": "966467878406",
   "region": "af-south-1",
-  "runtime_release_commit": null,
+  "runtime_release_commit": "29ad78ee03b1ce02b1f94e7f908a8b8a37b76a89",
   "artifact_sha256": "ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d",
   "artifact_uploaded": false,
   "aws_changes": false,

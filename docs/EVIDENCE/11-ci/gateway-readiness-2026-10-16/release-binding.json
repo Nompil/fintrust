@@ -1,0 +1,7 @@
+{
+  "runtime_release_commit": "29ad78ee03b1ce02b1f94e7f908a8b8a37b76a89",
+  "source_sha256": "2b525f84dfd93f93006f245ee77df5d589d5a3bb056c4bfaf99000b1004ac852",
+  "artifact_sha256": "ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d",
+  "deployed": false,
+  "live_e2e_passed": false
+}
