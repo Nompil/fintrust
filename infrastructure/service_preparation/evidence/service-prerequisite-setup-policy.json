@@ -1,0 +1,55 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "CreateExactNonsecretDatabaseSettings",
+      "Effect": "Allow",
+      "Action": [
+        "ssm:PutParameter",
+        "ssm:AddTagsToResource"
+      ],
+      "Resource": [
+        "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/scoring/db_host",
+        "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/scoring/db_name",
+        "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/scoring/db_user",
+        "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/report/db_host",
+        "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/report/db_name",
+        "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/report/db_user",
+        "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/api/db_host",
+        "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/api/db_name",
+        "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/api/db_user"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    },
+    {
+      "Sid": "SetRegionalApiLoggingRole",
+      "Effect": "Allow",
+      "Action": [
+        "apigateway:PATCH"
+      ],
+      "Resource": "arn:aws:apigateway:af-south-1::/account",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        }
+      }
+    },
+    {
+      "Sid": "PassOnlyApiLoggingRole",
+      "Effect": "Allow",
+      "Action": [
+        "iam:PassRole"
+      ],
+      "Resource": "arn:aws:iam::966467878406:role/fintrust-apigateway-logs-dev",
+      "Condition": {
+        "StringEquals": {
+          "iam:PassedToService": "apigateway.amazonaws.com"
+        }
+      }
+    }
+  ]
+}

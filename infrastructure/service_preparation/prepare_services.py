@@ -63,6 +63,9 @@ def application_template():
 
 def api_template():
     template = json.loads((ROOT / 'source/infrastructure/api/gateway.json').read_text(encoding='utf-8'))
+    # Keep the access-log destination stable for deployment and operator checks.
+    template['Resources']['AccessLogs']['Properties']['LogGroupName'] = {
+        'Fn::Sub': '/aws/apigateway/fintrust-${StageName}'}
     # Detailed method metrics are optional billable CloudWatch metrics.
     for settings in template['Resources']['Stage']['Properties']['MethodSettings']:
         settings['MetricsEnabled'] = False
@@ -138,6 +141,7 @@ def main():
                for name, data in generated.items() if 'Parameters' in data}
     (ROOT / 'required-inputs.json').write_text(json.dumps(missing, indent=2) + '\n', encoding='utf-8')
     result = {'status': 'PREPARED_LOCALLY_NOT_DEPLOYED', 'aws_changes': 0,
+              'api_detailed_metrics_enabled': False,
               'email_verification': 'NOT_CHECKED', 'sender': EMAIL, 'recipient': EMAIL,
               'files': {name: hashlib.sha256((out / name).read_bytes()).hexdigest() for name in generated},
               'remaining_gates': ['Actual resource and identity inventory', 'Required inputs and IAM review',

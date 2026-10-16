@@ -1,0 +1,29 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "WriteOnlyFinTrustApiAccessLogs",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:DescribeLogStreams",
+        "logs:PutLogEvents",
+        "logs:GetLogEvents",
+        "logs:FilterLogEvents"
+      ],
+      "Resource": [
+        "arn:aws:logs:af-south-1:966467878406:log-group:/aws/apigateway/fintrust-dev",
+        "arn:aws:logs:af-south-1:966467878406:log-group:/aws/apigateway/fintrust-dev:*"
+      ]
+    },
+    {
+      "Sid": "DescribeRegionalLogGroups",
+      "Effect": "Allow",
+      "Action": [
+        "logs:DescribeLogGroups"
+      ],
+      "Resource": "*"
+    }
+  ]
+}

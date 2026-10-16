@@ -316,7 +316,10 @@
     "AccessLogs": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "RetentionInDays": 30
+        "RetentionInDays": 30,
+        "LogGroupName": {
+          "Fn::Sub": "/aws/apigateway/fintrust-${StageName}"
+        }
       }
     },
     "Deployment": {

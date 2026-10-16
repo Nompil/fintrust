@@ -72,3 +72,16 @@ for required case follow-up, then execute its recorded cleanup plan.
 - Normal deployer role credentials expired during this check; no new interactive authentication was requested merely for offline preparation, and admin was not used for non-IAM inventory/deployment. SSM parameter existence and live DB name/grants remain unverified.
 
 Next preparation work: complete remaining deployment-policy scopes, verify/provision the exact nonsecret SSM values after identifying the live database name, and verify API Gateway logging account configuration. Live migration remains blocked on case **179210878300923**, a cost-compatible access path and live RDS preflight. No endpoint is authorized by these checks. Live Cognito scope enrollment, alert delivery and end-to-end evidence remain outstanding.
+
+## SSM and API logging prerequisites completed - 16 October 2026
+
+- The owner restored the monthly budget to USD 10. This is an owner-reported monitoring threshold, not a quota change or authorization for new recurring charges.
+- Deployer read-back identified the available database as `fintrust`, with IAM authentication enabled. This does not prove database users, migrations or grants.
+- Added FinTrustConsoleReadOnly v5, preserving v4 and adding only GetParameters on nine exact dev settings plus GET on the regional API Gateway account. Access Analyzer returned no findings and v5 was read back. All five policy-version slots are now used; review version retention before a future policy update.
+- Created and read back nine Standard String SSM parameters: host/name/user for scoring, report and API. Values match the live RDS metadata and the already-installed per-service runtime policies. No passwords, tokens or advanced parameters were stored. Existing parameters were absent; no overwrite was used.
+- Configured the regional API Gateway CloudWatch role `fintrust-apigateway-logs-dev` and read it back through the deployer. API Gateway rejected the custom exact-log-group policy; AWS's documented AmazonAPIGatewayPushToCloudWatchLogs service-role policy succeeded. Its seven CloudWatch Logs operations use Resource `*`; this is a recorded scope exception, not an exact-log-group permission claim. Trust allows API Gateway only. The rejected inline policy was removed.
+- Prepared API access logs now use the stable name `/aws/apigateway/fintrust-${StageName}`. AWS validated the changed template. Detailed metrics and data tracing remain false; seven focused offline configuration checks passed. No new application runtime code or package changed.
+- The temporary FinTrustServicePrerequisiteSetup policy was detached, deleted and its absence verified. The read-only permissions and API Gateway service role remain as prerequisites.
+- Evidence: `infrastructure/service_preparation/evidence/service-prerequisites-live.json`. No function, API stage, log group, alarm, report schedule, endpoint, live migration, email or consumer was created/activated by this work. Actual log delivery remains unverified until API deployment and E2E.
+
+Next: prepare/review the remaining stack deployment permissions, bind immutable uploaded artifacts and real Cognito/API outputs, then deploy disabled resources in dependency order when their gates permit. The quota case, cost-compatible database access, live migrations/grants and full cloud E2E still gate activation.

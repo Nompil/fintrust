@@ -255,8 +255,9 @@
     "host": "fintrust-ledger-dev.cv84aee6u6up.af-south-1.rds.amazonaws.com",
     "port": 5432,
     "resource_id": "db-QZ3JN4H22YOMU7VLI22RL2IUYQ",
-    "database_name": "UNVERIFIED",
-    "live_migration_executed": false
+    "database_name": "fintrust",
+    "live_migration_executed": false,
+    "name_verified_by": "RDS DescribeDBInstances, 16 October 2026; not proof of schema/grants"
   },
   "notes": [
     "Nulls are intentional unresolved inputs; this is not a CloudFormation CLI parameter file.",
@@ -266,5 +267,14 @@
     "No template deployment or activation is authorized by this worksheet.",
     "Stage-path repair supersedes runtime commit 3368f4c; latest code is bound by source_sha256 and the gateway readiness evidence. Cloud upload and object version remain unapproved/unverified."
   ],
-  "source_sha256": "2b525f84dfd93f93006f245ee77df5d589d5a3bb056c4bfaf99000b1004ac852"
+  "source_sha256": "2b525f84dfd93f93006f245ee77df5d589d5a3bb056c4bfaf99000b1004ac852",
+  "ssm_prerequisites": {
+    "status": "NINE_STANDARD_STRING_PARAMETERS_READ_BACK",
+    "evidence": "infrastructure/service_preparation/evidence/service-prerequisites-live.json"
+  },
+  "api_logging_prerequisite": {
+    "regional_role_arn": "arn:aws:iam::966467878406:role/fintrust-apigateway-logs-dev",
+    "configured_and_read_back": true,
+    "live_log_delivery_verified": false
+  }
 }

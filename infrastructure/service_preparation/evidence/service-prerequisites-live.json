@@ -1,0 +1,504 @@
+{
+  "account": "966467878406",
+  "region": "af-south-1",
+  "prepared_at": "2026-10-16T07:46:00.184709+00:00",
+  "database": {
+    "DBName": "fintrust",
+    "DBInstanceStatus": "available",
+    "DbiResourceId": "db-QZ3JN4H22YOMU7VLI22RL2IUYQ",
+    "IAMDatabaseAuthenticationEnabled": true
+  },
+  "values": {
+    "/fintrust/dev/scoring/db_host": "fintrust-ledger-dev.cv84aee6u6up.af-south-1.rds.amazonaws.com",
+    "/fintrust/dev/scoring/db_name": "fintrust",
+    "/fintrust/dev/scoring/db_user": "fintrust_scoring_dev",
+    "/fintrust/dev/report/db_host": "fintrust-ledger-dev.cv84aee6u6up.af-south-1.rds.amazonaws.com",
+    "/fintrust/dev/report/db_name": "fintrust",
+    "/fintrust/dev/report/db_user": "fintrust_report_dev",
+    "/fintrust/dev/api/db_host": "fintrust-ledger-dev.cv84aee6u6up.af-south-1.rds.amazonaws.com",
+    "/fintrust/dev/api/db_name": "fintrust",
+    "/fintrust/dev/api/db_user": "fintrust_api_dev"
+  },
+  "before": {
+    "parameters": {
+      "Parameters": [],
+      "InvalidParameters": [
+        "/fintrust/dev/api/db_host",
+        "/fintrust/dev/api/db_name",
+        "/fintrust/dev/api/db_user",
+        "/fintrust/dev/report/db_host",
+        "/fintrust/dev/report/db_name",
+        "/fintrust/dev/report/db_user",
+        "/fintrust/dev/scoring/db_host",
+        "/fintrust/dev/scoring/db_name",
+        "/fintrust/dev/scoring/db_user"
+      ]
+    },
+    "api_account": {
+      "throttleSettings": {
+        "burstLimit": 1250,
+        "rateLimit": 2500.0
+      },
+      "features": [
+        "UsagePlans"
+      ],
+      "apiKeyVersion": "4"
+    }
+  },
+  "limitations": [
+    "SSM usernames do not create or prove database users/grants.",
+    "No live migration, Lambda deployment, trigger, schedule, alarm or API stage is created.",
+    "API access logging is not proven until the eventual live API E2E."
+  ],
+  "updated_at": "2026-10-16T08:04:18.001013+00:00",
+  "validation": {
+    "api-logging-runtime-policy.json": {
+      "findings": []
+    },
+    "service-prerequisite-setup-policy.json": {
+      "findings": []
+    }
+  },
+  "logging_role": {
+    "Path": "/",
+    "RoleName": "fintrust-apigateway-logs-dev",
+    "RoleId": "AROA6CBPZPYDOHFTP3XPH",
+    "Arn": "arn:aws:iam::966467878406:role/fintrust-apigateway-logs-dev",
+    "CreateDate": "2026-10-16T07:46:55+00:00",
+    "AssumeRolePolicyDocument": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Principal": {
+            "Service": "apigateway.amazonaws.com"
+          },
+          "Action": "sts:AssumeRole"
+        }
+      ]
+    },
+    "Description": "FinTrust dev API Gateway access logs only",
+    "MaxSessionDuration": 3600,
+    "Tags": [
+      {
+        "Key": "Project",
+        "Value": "FinTrust"
+      },
+      {
+        "Key": "Environment",
+        "Value": "dev"
+      }
+    ],
+    "RoleLastUsed": {
+      "LastUsedDate": "2026-10-16T07:59:13+00:00",
+      "Region": "af-south-1"
+    }
+  },
+  "temporary_setup_attached": false,
+  "created_parameters": {
+    "/fintrust/dev/scoring/db_host": {
+      "Version": 1,
+      "Tier": "Standard"
+    },
+    "/fintrust/dev/scoring/db_name": {
+      "Version": 1,
+      "Tier": "Standard"
+    },
+    "/fintrust/dev/scoring/db_user": {
+      "Version": 1,
+      "Tier": "Standard"
+    },
+    "/fintrust/dev/report/db_host": {
+      "Version": 1,
+      "Tier": "Standard"
+    },
+    "/fintrust/dev/report/db_name": {
+      "Version": 1,
+      "Tier": "Standard"
+    },
+    "/fintrust/dev/report/db_user": {
+      "Version": 1,
+      "Tier": "Standard"
+    },
+    "/fintrust/dev/api/db_host": {
+      "Version": 1,
+      "Tier": "Standard"
+    },
+    "/fintrust/dev/api/db_name": {
+      "Version": 1,
+      "Tier": "Standard"
+    },
+    "/fintrust/dev/api/db_user": {
+      "Version": 1,
+      "Tier": "Standard"
+    }
+  },
+  "parameters_read_back": {
+    "Parameters": [
+      {
+        "Name": "/fintrust/dev/api/db_host",
+        "Type": "String",
+        "Value": "fintrust-ledger-dev.cv84aee6u6up.af-south-1.rds.amazonaws.com",
+        "Version": 1,
+        "LastModifiedDate": "2026-10-16T09:51:22.215000+02:00",
+        "ARN": "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/api/db_host",
+        "DataType": "text"
+      },
+      {
+        "Name": "/fintrust/dev/api/db_name",
+        "Type": "String",
+        "Value": "fintrust",
+        "Version": 1,
+        "LastModifiedDate": "2026-10-16T09:51:25.007000+02:00",
+        "ARN": "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/api/db_name",
+        "DataType": "text"
+      },
+      {
+        "Name": "/fintrust/dev/api/db_user",
+        "Type": "String",
+        "Value": "fintrust_api_dev",
+        "Version": 1,
+        "LastModifiedDate": "2026-10-16T09:51:27.129000+02:00",
+        "ARN": "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/api/db_user",
+        "DataType": "text"
+      },
+      {
+        "Name": "/fintrust/dev/report/db_host",
+        "Type": "String",
+        "Value": "fintrust-ledger-dev.cv84aee6u6up.af-south-1.rds.amazonaws.com",
+        "Version": 1,
+        "LastModifiedDate": "2026-10-16T09:51:13.909000+02:00",
+        "ARN": "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/report/db_host",
+        "DataType": "text"
+      },
+      {
+        "Name": "/fintrust/dev/report/db_name",
+        "Type": "String",
+        "Value": "fintrust",
+        "Version": 1,
+        "LastModifiedDate": "2026-10-16T09:51:17.092000+02:00",
+        "ARN": "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/report/db_name",
+        "DataType": "text"
+      },
+      {
+        "Name": "/fintrust/dev/report/db_user",
+        "Type": "String",
+        "Value": "fintrust_report_dev",
+        "Version": 1,
+        "LastModifiedDate": "2026-10-16T09:51:19.559000+02:00",
+        "ARN": "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/report/db_user",
+        "DataType": "text"
+      },
+      {
+        "Name": "/fintrust/dev/scoring/db_host",
+        "Type": "String",
+        "Value": "fintrust-ledger-dev.cv84aee6u6up.af-south-1.rds.amazonaws.com",
+        "Version": 1,
+        "LastModifiedDate": "2026-10-16T09:51:05.085000+02:00",
+        "ARN": "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/scoring/db_host",
+        "DataType": "text"
+      },
+      {
+        "Name": "/fintrust/dev/scoring/db_name",
+        "Type": "String",
+        "Value": "fintrust",
+        "Version": 1,
+        "LastModifiedDate": "2026-10-16T09:51:08.292000+02:00",
+        "ARN": "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/scoring/db_name",
+        "DataType": "text"
+      },
+      {
+        "Name": "/fintrust/dev/scoring/db_user",
+        "Type": "String",
+        "Value": "fintrust_scoring_dev",
+        "Version": 1,
+        "LastModifiedDate": "2026-10-16T09:51:11.047000+02:00",
+        "ARN": "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/scoring/db_user",
+        "DataType": "text"
+      }
+    ],
+    "InvalidParameters": []
+  },
+  "api_account_read_back": {
+    "cloudwatchRoleArn": "arn:aws:iam::966467878406:role/fintrust-apigateway-logs-dev",
+    "throttleSettings": {
+      "burstLimit": 1250,
+      "rateLimit": 2500.0
+    },
+    "features": [
+      "UsagePlans"
+    ],
+    "apiKeyVersion": "4"
+  },
+  "status": "CONFIGURED_AND_READ_BACK_NOT_LIVE_E2E",
+  "temporary_setup_deleted": true,
+  "initial_scoped_logging_policy_rejected": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "WriteOnlyFinTrustApiAccessLogs",
+        "Effect": "Allow",
+        "Action": [
+          "logs:CreateLogStream",
+          "logs:DescribeLogStreams",
+          "logs:PutLogEvents",
+          "logs:GetLogEvents",
+          "logs:FilterLogEvents"
+        ],
+        "Resource": [
+          "arn:aws:logs:af-south-1:966467878406:log-group:/aws/apigateway/fintrust-dev",
+          "arn:aws:logs:af-south-1:966467878406:log-group:/aws/apigateway/fintrust-dev:*"
+        ],
+        "Condition": {
+          "StringEquals": {
+            "aws:RequestedRegion": "af-south-1"
+          }
+        }
+      },
+      {
+        "Sid": "DescribeRegionalLogGroups",
+        "Effect": "Allow",
+        "Action": [
+          "logs:DescribeLogGroups"
+        ],
+        "Resource": "*",
+        "Condition": {
+          "StringEquals": {
+            "aws:RequestedRegion": "af-south-1"
+          }
+        }
+      }
+    ]
+  },
+  "logging_attached_policies": [
+    {
+      "PolicyName": "AmazonAPIGatewayPushToCloudWatchLogs",
+      "PolicyArn": "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+    }
+  ],
+  "logging_managed_policy": {
+    "Document": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": [
+            "logs:CreateLogGroup",
+            "logs:CreateLogStream",
+            "logs:DescribeLogGroups",
+            "logs:DescribeLogStreams",
+            "logs:PutLogEvents",
+            "logs:GetLogEvents",
+            "logs:FilterLogEvents"
+          ],
+          "Resource": "*"
+        }
+      ]
+    },
+    "VersionId": "v1",
+    "IsDefaultVersion": true,
+    "CreateDate": "2015-11-11T23:41:46+00:00"
+  },
+  "logging_policy_validation": {
+    "findings": []
+  },
+  "logging_scope_exception": {
+    "reason": "API Gateway rejected the exact-log-group policy, with and without requested-region conditions. Adding AWS documented managed service-role policy succeeded.",
+    "scope": "Seven CloudWatch Logs operations on Resource *. No Delete*, IAM, database or application data permissions. Trust is API Gateway service only.",
+    "reference": "https://docs.aws.amazon.com/aws-managed-policy/latest/reference/AmazonAPIGatewayPushToCloudWatchLogs.html",
+    "rejected_error": "The role ARN does not have required permissions configured. Please grant trust permission for API Gateway and add the required role policy."
+  },
+  "console_readonly_v5_readback": {
+    "Document": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "ListCapeTownStacks",
+          "Effect": "Allow",
+          "Action": [
+            "cloudformation:ListStacks"
+          ],
+          "Resource": "*",
+          "Condition": {
+            "StringEquals": {
+              "aws:RequestedRegion": "af-south-1"
+            }
+          }
+        },
+        {
+          "Sid": "ListIngestChangeSets",
+          "Effect": "Allow",
+          "Action": [
+            "cloudformation:ListChangeSets"
+          ],
+          "Resource": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-ingest-dev/*",
+          "Condition": {
+            "StringEquals": {
+              "aws:RequestedRegion": "af-south-1"
+            }
+          }
+        },
+        {
+          "Sid": "InspectCapeTownSesAccount",
+          "Effect": "Allow",
+          "Action": [
+            "ses:GetAccount",
+            "ses:ListEmailIdentities"
+          ],
+          "Resource": "*",
+          "Condition": {
+            "StringEquals": {
+              "aws:RequestedRegion": "af-south-1"
+            }
+          }
+        },
+        {
+          "Sid": "InspectFinTrustAlertEmail",
+          "Effect": "Allow",
+          "Action": [
+            "ses:GetEmailIdentity"
+          ],
+          "Resource": "arn:aws:ses:af-south-1:966467878406:identity/nompilomabuya@outlook.com",
+          "Condition": {
+            "StringEquals": {
+              "aws:RequestedRegion": "af-south-1"
+            }
+          }
+        },
+        {
+          "Sid": "InspectIngestInvokePolicy",
+          "Effect": "Allow",
+          "Action": [
+            "lambda:GetPolicy"
+          ],
+          "Resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev",
+          "Condition": {
+            "StringEquals": {
+              "aws:RequestedRegion": "af-south-1"
+            }
+          }
+        },
+        {
+          "Sid": "InspectLambdaConcurrencyQuota",
+          "Effect": "Allow",
+          "Action": [
+            "servicequotas:GetServiceQuota",
+            "servicequotas:ListRequestedServiceQuotaChangeHistoryByQuota"
+          ],
+          "Resource": "arn:aws:servicequotas:af-south-1:966467878406:lambda/L-B99A9384",
+          "Condition": {
+            "StringEquals": {
+              "aws:RequestedRegion": "af-south-1"
+            }
+          }
+        },
+        {
+          "Sid": "InspectLambdaAccountConcurrency",
+          "Effect": "Allow",
+          "Action": [
+            "lambda:GetAccountSettings"
+          ],
+          "Resource": "*",
+          "Condition": {
+            "StringEquals": {
+              "aws:RequestedRegion": "af-south-1"
+            }
+          }
+        },
+        {
+          "Sid": "InspectExactApplicationDatabaseSettings",
+          "Effect": "Allow",
+          "Action": [
+            "ssm:GetParameters"
+          ],
+          "Resource": [
+            "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/scoring/db_host",
+            "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/scoring/db_name",
+            "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/scoring/db_user",
+            "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/report/db_host",
+            "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/report/db_name",
+            "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/report/db_user",
+            "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/api/db_host",
+            "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/api/db_name",
+            "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/api/db_user"
+          ],
+          "Condition": {
+            "StringEquals": {
+              "aws:RequestedRegion": "af-south-1"
+            }
+          }
+        },
+        {
+          "Sid": "InspectRegionalApiLoggingAccount",
+          "Effect": "Allow",
+          "Action": [
+            "apigateway:GET"
+          ],
+          "Resource": "arn:aws:apigateway:af-south-1::/account",
+          "Condition": {
+            "StringEquals": {
+              "aws:RequestedRegion": "af-south-1"
+            }
+          }
+        }
+      ]
+    },
+    "VersionId": "v5",
+    "IsDefaultVersion": true,
+    "CreateDate": "2026-10-16T07:35:29+00:00"
+  },
+  "temporary_setup_detachment_verified": true,
+  "api_template_validation": {
+    "Parameters": [
+      {
+        "ParameterKey": "ApiFunctionName",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "StageName",
+        "DefaultValue": "dev",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "UserPoolArn",
+        "NoEcho": false
+      }
+    ],
+    "Description": "FinTrust same-origin workbench API protected by an API Gateway Cognito user-pool authorizer."
+  },
+  "api_template_sha256": "e1ffa00e77e7b8690feb6a261999e3ebc85b983b2dab46675e906d1fdcc44bdf",
+  "quota": {
+    "ServiceCode": "lambda",
+    "ServiceName": "AWS Lambda",
+    "QuotaArn": "arn:aws:servicequotas:af-south-1:966467878406:lambda/L-B99A9384",
+    "QuotaCode": "L-B99A9384",
+    "QuotaName": "Concurrent executions",
+    "Value": 10.0,
+    "Unit": "Count",
+    "Adjustable": true,
+    "GlobalQuota": false,
+    "UsageMetric": {
+      "MetricNamespace": "AWS/Lambda",
+      "MetricName": "ConcurrentExecutions",
+      "MetricDimensions": {},
+      "MetricStatisticRecommendation": "Maximum"
+    },
+    "QuotaAppliedAtLevel": "ACCOUNT",
+    "Description": "The maximum number of events that functions can process simultaneously in the current Region."
+  },
+  "lambda_account_settings": {
+    "AccountLimit": {
+      "TotalCodeSize": 322122547200,
+      "CodeSizeUnzipped": 262144000,
+      "CodeSizeZipped": 52428800,
+      "ConcurrentExecutions": 10,
+      "UnreservedConcurrentExecutions": 10
+    },
+    "AccountUsage": {
+      "TotalCodeSize": 21646562,
+      "FunctionCount": 1
+    }
+  },
+  "owner_reported_budget_usd": 10,
+  "budget_verified_via_billing_api": false
+}

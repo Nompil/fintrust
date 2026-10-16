@@ -1,0 +1,98 @@
+﻿{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "ListCapeTownStacks",
+            "Effect": "Allow",
+            "Action": [
+                "cloudformation:ListStacks"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestedRegion": "af-south-1"
+                }
+            }
+        },
+        {
+            "Sid": "ListIngestChangeSets",
+            "Effect": "Allow",
+            "Action": [
+                "cloudformation:ListChangeSets"
+            ],
+            "Resource": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-ingest-dev/*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestedRegion": "af-south-1"
+                }
+            }
+        },
+        {
+            "Sid": "InspectCapeTownSesAccount",
+            "Effect": "Allow",
+            "Action": [
+                "ses:GetAccount",
+                "ses:ListEmailIdentities"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestedRegion": "af-south-1"
+                }
+            }
+        },
+        {
+            "Sid": "InspectFinTrustAlertEmail",
+            "Effect": "Allow",
+            "Action": [
+                "ses:GetEmailIdentity"
+            ],
+            "Resource": "arn:aws:ses:af-south-1:966467878406:identity/nompilomabuya@outlook.com",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestedRegion": "af-south-1"
+                }
+            }
+        },
+        {
+            "Sid": "InspectIngestInvokePolicy",
+            "Effect": "Allow",
+            "Action": [
+                "lambda:GetPolicy"
+            ],
+            "Resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestedRegion": "af-south-1"
+                }
+            }
+        },
+        {
+            "Sid": "InspectLambdaConcurrencyQuota",
+            "Effect": "Allow",
+            "Action": [
+                "servicequotas:GetServiceQuota",
+                "servicequotas:ListRequestedServiceQuotaChangeHistoryByQuota"
+            ],
+            "Resource": "arn:aws:servicequotas:af-south-1:966467878406:lambda/L-B99A9384",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestedRegion": "af-south-1"
+                }
+            }
+        },
+        {
+            "Sid": "InspectLambdaAccountConcurrency",
+            "Effect": "Allow",
+            "Action": [
+                "lambda:GetAccountSettings"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestedRegion": "af-south-1"
+                }
+            }
+        }
+    ]
+}

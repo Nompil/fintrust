@@ -1,6 +1,7 @@
 {
   "status": "PREPARED_LOCALLY_NOT_DEPLOYED",
   "aws_changes": 0,
+  "api_detailed_metrics_enabled": false,
   "email_verification": "NOT_CHECKED",
   "sender": "nompilomabuya@outlook.com",
   "recipient": "nompilomabuya@outlook.com",
@@ -10,7 +11,7 @@
     "monitoring.json": "56cb131bd30862bfc8560d72a2baf909111f90eebf36ff625a64474c070aec41",
     "alert-ses-policy.json": "418b042dbb8533837e01fe7d8789cb90c82306a42a80805d1b3ba38ecf613818",
     "cognito.json": "b382e7a900aa3917c91273122349681b5c04495de01adf0af5810622ba983406",
-    "api.json": "dc47d607125e55aaf8172d464658a5b436a4e4c0f93ce2f731a42bd513184613",
+    "api.json": "e1ffa00e77e7b8690feb6a261999e3ebc85b983b2dab46675e906d1fdcc44bdf",
     "api-shell.json": "b4604d57c47829d748a5320a74084e0cda972251b8b365d7c91ea0c86329a6a5"
   },
   "remaining_gates": [
@@ -21,6 +22,5 @@
     "Quota resolution",
     "Cost-compatible live migration and grants",
     "Live E2E"
-  ],
-  "api_detailed_metrics_enabled": false
+  ]
 }

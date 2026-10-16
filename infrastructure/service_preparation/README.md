@@ -1,5 +1,16 @@
 # Remaining AWS service preparation
 
+Latest prerequisite update, 16 October 2026: all nine nonsecret dev database
+settings are installed as Standard String SSM parameters and read back. The live
+database name is `fintrust`; users/grants still require live migration checks.
+The regional API Gateway CloudWatch role is configured and read back. Its active
+AWS-managed logging policy has broader log-resource scope than the initially
+proposed custom policy, which API Gateway rejected. No API stage/log group or
+workload was deployed. Temporary setup write permissions were removed.
+See `evidence/service-prerequisites-live.json` and `DEPLOYMENT_GATES.md` at the
+repository root. Earlier preparation notes below describe their original dates;
+the latest deployment gates and evidence supersede their unresolved-status notes.
+
 Initially prepared locally on 15 October 2026 (SAST). Subsequent live progress:
 cloud-status.json records the verified SES email identity, scoped IAM changes
 and cleanup. cloudformation-validation.json records six accepted AWS template
