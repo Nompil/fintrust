@@ -15,11 +15,10 @@ class NotFound(LookupError): pass
 def connection(): return workflow.get_connection()
 
 def _query(statement,params=()):
-    conn=connection()
-    try:
+    from .read_session import read_connection
+    with read_connection(connection) as conn:
         with conn.cursor(cursor_factory=RealDictCursor) as cur:
             cur.execute(statement,params);return [dict(x) for x in cur.fetchall()]
-    finally: conn.close()
 
 def page_args(args,allowed=()):
     if hasattr(args,"getlist") and any(len(args.getlist(k))!=1 for k in args): raise ValueError("Duplicate filter")

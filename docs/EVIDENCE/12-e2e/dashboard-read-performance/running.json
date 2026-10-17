@@ -1,0 +1,27 @@
+{
+  "source": "optimized_running",
+  "readonly": true,
+  "aws_access": false,
+  "timings": {
+    "overview": {
+      "seconds": 0.647,
+      "connections": 1,
+      "connect_seconds": 0.06
+    },
+    "insights_all": {
+      "seconds": 0.404,
+      "connections": 1,
+      "connect_seconds": 0.102
+    }
+  },
+  "sla_policy": {
+    "enabled": true,
+    "targets": {
+      "MEDIUM": 86400,
+      "HIGH": 14400,
+      "ESCALATED": 7200
+    },
+    "due_soon_seconds": 3600
+  },
+  "ledger_count_unchanged": true
+}

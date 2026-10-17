@@ -1,0 +1,13 @@
+{
+  "status": "PASSED",
+  "aws_access": false,
+  "preserved_local_ledger_access": false,
+  "temporary_cluster_removed": true,
+  "tests": {
+    "tests": 58,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "checked_at": "2026-10-17T13:36:30.521102+00:00"
+}

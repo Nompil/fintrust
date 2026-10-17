@@ -494,12 +494,20 @@ def frontend_audit_read():
 @app.get("/v1/release1/overview")
 def release1_overview_read():
     from .frontend_workflows import overview as read
-    return jsonify({"data":read(g.principal)})
+    from .read_session import read_session
+    from . import db
+    with read_session(db.get_connection):
+        data=read(g.principal)
+    return jsonify({"data":data})
 
 @app.get("/v1/release1/insights")
 def release1_visual_insights():
     from .visual_insights import read
-    return jsonify({"data":read(g.principal,request.args)})
+    from .read_session import read_session
+    from . import db
+    with read_session(db.get_connection):
+        data=read(g.principal,request.args)
+    return jsonify({"data":data})
 
 @app.get("/v1/administration/users")
 def local_user_list():

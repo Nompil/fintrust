@@ -50,7 +50,7 @@
     "CLOUD_END_TO_END_AND_FAILURE_PATH_EVIDENCE"
   ],
   "application_activation_performed": false,
-  "updated_at": "2026-10-17T13:03:10.180210+00:00",
+  "updated_at": "2026-10-17T13:43:44.541759+00:00",
   "latest_safety_verification": {
     "checked_at": "2026-10-17T06:42:44.216264+00:00",
     "status": "API_CONFIGURED_FUNCTIONS_ZERO_CONSUMERS_AND_REPORTS_DISABLED",
@@ -148,5 +148,12 @@
     "next_gate": "GUARDED_BASE_SCHEMA_INITIALIZATION_THEN_MIGRATIONS_001_TO_006_AND_RUNTIME_IAM_TLS_GRANTS",
     "deployment_ready": false,
     "local_ledger_modified": false
+  },
+  "application_code_changed_after_cloud_artifact_staging": true,
+  "latest_local_performance_fix": {
+    "evidence": "../../docs/EVIDENCE/12-e2e/dashboard-read-performance/result.json",
+    "description": "Request-scoped read-only database snapshots for Overview and Insights; no cross-request result cache",
+    "cloud_package_rebuild_required": true,
+    "targeted_tests_passed": 58
   }
 }

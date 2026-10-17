@@ -45,6 +45,13 @@ runner's capacity/security plan or the full integrated-release gates below.
    downloaded version passed verification and the temporary permission was
    removed. `CodeKey` and `CodeObjectVersion` are now bound in the deployment
    worksheet. Do not re-upload it or substitute the older ingest version.
+   **Later local change:** Overview/Insights now use request-scoped read-only
+   database snapshots. The 58 targeted regressions and preserved local ledger
+   checks passed (`../../docs/EVIDENCE/12-e2e/dashboard-read-performance/RESULT.md`).
+   This source change is not in the staged archive above. Build and verify a new
+   immutable final package, update all affected source/version bindings, and
+   deploy it disabled before controlled cloud validation. Do not claim the old
+   archive contains the performance fix.
 4. **Completed: four application functions deployed disabled.** The live
    receipt is `shared_manual/application-disabled-live.json`; all four are at
    zero concurrency, both mappings are disabled and the report rule is disabled.

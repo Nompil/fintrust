@@ -1,0 +1,23 @@
+{
+  "status": "LOCAL_PERFORMANCE_FIX_VERIFIED_CLOUD_PACKAGE_REBUILD_REQUIRED",
+  "checked_at": "2026-10-17T13:43:44.541759+00:00",
+  "tests": {
+    "tests": 58,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "ledger_rows_preserved": 208,
+  "ledger_contents_preserved": true,
+  "existing_credentials_preserved": true,
+  "running_assets_match_source": true,
+  "unauthenticated_overview_status": 401,
+  "aws_changes": false,
+  "deployment_ready": false,
+  "source_sha256": {
+    "backend/fintrust/api.py": "ee3fa5dc2497a46fcbe6cd1ec30203231dace2ecd8a736f6e91f95b23c6e1cb3",
+    "backend/fintrust/db.py": "a68038260623a9e08a3b4faf3d5431108d2923b09e44eb641c46ce1f9ee23978",
+    "backend/fintrust/workflow_api.py": "15e60c089183ca2ea677e20359a4dbc035f89b9877c21ac8550a353416aefcd9",
+    "backend/fintrust/read_session.py": "524c24c683132bbabd983b9572029e60eed275598a9a1b75752d9359fa4b624d"
+  }
+}
