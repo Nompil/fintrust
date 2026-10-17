@@ -8,6 +8,7 @@ import os
 import sys
 import json
 import uuid
+import tempfile
 from datetime import datetime,timezone
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
@@ -25,6 +26,11 @@ def main():
         raise ValueError("Disposable loopback test database required")
     conn=psycopg2.connect(dsn);name="release1_privilege_"+uuid.uuid4().hex
     probes=[]
+    registry_dir=tempfile.TemporaryDirectory(prefix='fintrust-ci-identity-')
+    old_registry=os.environ.get('FINTRUST_AUTH_FILE')
+    registry=Path(registry_dir.name)/'principals.json'
+    registry.write_text(json.dumps({'principals':[{'subject':'ci-analyst','role':'Risk/Compliance Analyst','status':'ACTIVE','accounts':['20000000-0000-4000-8000-000000000001'],'token_sha256':'a'*64}]}))
+    os.environ['FINTRUST_AUTH_FILE']=str(registry)
     try:
         with conn.cursor() as cur:
             cur.execute("SELECT current_setting('server_version_num')::int,rolsuper FROM pg_roles WHERE rolname=current_user")
@@ -34,12 +40,19 @@ def main():
             cur.execute(sql.SQL("SET search_path TO {},public").format(sql.Identifier(name)))
             cur.execute((ROOT/"sql/schema.sql").read_text().split("-- Additive identity hardening.")[0].replace("CREATE EXTENSION IF NOT EXISTS pgcrypto;",""))
             cur.execute((ROOT/"sql/seed.sql").read_text())
-        conn.commit();migrations.apply_local(conn,1,schema=name);migrations.apply_local(conn,2,schema=name)
+        conn.commit()
+        for migration in range(1,7):migrations.apply_local(conn,migration,schema=name)
         with conn.cursor() as cur:
             cur.execute(sql.SQL("SET search_path TO {},public").format(sql.Identifier(name)))
             for file in ("permissions.sql","release1_permissions.sql"):
                 text=(ROOT/"infrastructure/rds"/file).read_text().replace("public",name)
                 cur.execute("\n".join(line for line in text.splitlines() if line.strip() not in {"BEGIN;","COMMIT;"}))
+            # Match the reviewed post-003 runtime privileges. The original 002
+            # permission file predates this immutable lifecycle table.
+            cur.execute('GRANT SELECT ON transaction_lifecycle_events TO fintrust_workflow_api')
+            cur.execute('GRANT SELECT,INSERT ON transaction_lifecycle_events TO fintrust_scoring')
+            cur.execute('GRANT USAGE ON SEQUENCE transaction_lifecycle_events_event_id_seq TO fintrust_scoring')
+            cur.execute('GRANT EXECUTE ON FUNCTION validate_lifecycle_event() TO fintrust_scoring')
         # All role creation/grants/ownership changes above remain rollback-only.
         class Scoped:
             def cursor(self,*a,**kw):return conn.cursor(*a,**kw)
@@ -70,7 +83,7 @@ def main():
             request=str(uuid.uuid4())
             cur.execute("INSERT INTO operations_requests(request_id,actor_subject,action,target,request_digest,state) VALUES(%s,'ci-maintainer','REBUILD_PROJECTION',%s,%s,'RUNNING')",(request,result["transaction_id"],"a"*64))
             cur.execute("UPDATE operations_requests SET state='COMPLETED',completed_at=NOW(),result='{}' WHERE request_id=%s",(request,))
-            cur.execute("SELECT version FROM schema_migrations ORDER BY version");assert cur.fetchall()==[(1,),(2,)]
+            cur.execute("SELECT version FROM schema_migrations ORDER BY version");assert cur.fetchall()==[(i,) for i in range(1,7)]
             cur.execute("SELECT has_table_privilege(current_user,%s,'DELETE')",(name+".operations_requests",));assert cur.fetchone()==(False,)
             probes.append("api_role_durable_operations_receipt_and_schema_version_without_financial_write")
             cur.execute("RESET ROLE")
@@ -84,6 +97,9 @@ def main():
         conn.rollback()
         with conn.cursor() as cur:cur.execute(sql.SQL("DROP SCHEMA IF EXISTS {} CASCADE").format(sql.Identifier(name)))
         conn.commit();conn.close()
+        if old_registry is None:os.environ.pop('FINTRUST_AUTH_FILE',None)
+        else:os.environ['FINTRUST_AUTH_FILE']=old_registry
+        registry_dir.cleanup()
     output=ROOT/"docs/EVIDENCE/12-e2e/release1-closure/postgres16-roles.json";output.parent.mkdir(parents=True,exist_ok=True)
     output.write_text(json.dumps(evidence,indent=2)+"\n",encoding="utf-8");print(json.dumps(evidence,indent=2))
     return 0

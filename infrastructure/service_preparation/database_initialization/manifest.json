@@ -88,9 +88,9 @@
   "artifacts": {
     "preflight": {
       "filename": "fintrust-migration-preflight.zip",
-      "byte_size": 20673673,
-      "sha256": "fdc7160a3fd47433e41b4ef50cfcd12f7e0e58074aeca8eaf6beb46bf37f81ac",
-      "sha256_base64": "/ccWCj/UdDPkG071DPzRL34OWAdK7Kjq9r60a/N/gaw=",
+      "byte_size": 20677451,
+      "sha256": "e977a8efb11200a3c6d5ecd3b5bf428566a9dfb9d7f59a71db817a5104275d12",
+      "sha256_base64": "6Xeo77ESAKPG1ezTtb9ChWap37nX9Zpx24F6UQQnXRI=",
       "phase": "preflight",
       "runtime": "python3.12",
       "architecture": "x86_64",
@@ -105,11 +105,13 @@
         "migration_runner/contract.py": "f40cc817fca1ad2645613114666e27f636706cdd324869e9a395ee8df6dc7623",
         "migration_runner/common.py": "861acc13622915cff95f3bef2048e7a27b9a2eaaa94fd5f227a9a0b18a49ef53",
         "migration_runner/sql_binding.py": "cb1f77e5f7dbbd9f63d691628830ee9801ad2f1ce7077e7a3107b4438c0d5512",
-        "migration_runner/preflight_entry.py": "963aa0150c95cac494dcd8059bf06a2b23f3a587b2978bab51904eff15d37de5",
+        "migration_runner/preflight_entry.py": "fbc51f0a68c486363e76d3b5d48240cd9335b6a6528ebecad214d1a0bdbbd6d9",
         "migration_runner/admin.py": "a50d5e675f9968afe756e62f90ca444f348222fc1984436d7f1389e7284fe6b7",
         "sql/preflight/001_transaction_identity_catalog.sql": "c09012f47cc8956845a02b98a9525c843c457fb33a2b48bff8184c001e1e4943",
         "sql/preflight/001_transaction_identity_data.sql": "862c530b5feb5a5150164003e55d9ca9735b283aa1a7de33a254f20568fbf001",
         "migration_runner/release1_preflight.py": "e42439e263b94c042b323654bbcaf5e31b4c85267cfb9720696598936f2ce5a9",
+        "migration_runner/iam.py": "d48c65dee939645ae58d235ea554df161fb2b0b911a4591f42781b55d904201e",
+        "migration_runner/workflow_catalog.py": "793737eced47e1e5790c595f897f2a22260bc503b0eb7759b3ed205c19a2f4cc",
         "sql/preflight/002_release1_catalog.sql": "77944ea23ea8a4aad33e513489a65affbe20e8293b5075c641acb59775cbaaba",
         "certs/global-bundle.pem": "fe45bbebf92ad3e27a583bbb2ddd1553c521ed4d49af5514dc0a40372ea5395c"
       },
@@ -121,9 +123,11 @@
           "migration_runner.common",
           "migration_runner.config",
           "migration_runner.contract",
+          "migration_runner.iam",
           "migration_runner.preflight_entry",
           "migration_runner.release1_preflight",
-          "migration_runner.sql_binding"
+          "migration_runner.sql_binding",
+          "migration_runner.workflow_catalog"
         ],
         "handler_imported": true,
         "native_loaded": true,
@@ -794,5 +798,5 @@
     }
   },
   "ca_sha256": "fe45bbebf92ad3e27a583bbb2ddd1553c521ed4d49af5514dc0a40372ea5395c",
-  "postgres16_rehearsal_sha256": "5bc68ee8cdc4849f9838b27d41945d9f1e3197538f71fe535a5d2dfb793768e9"
+  "postgres16_rehearsal_sha256": "5aa1ca61f3702552929d27757af0cb214c50c538304138911838d6680bbdae12"
 }

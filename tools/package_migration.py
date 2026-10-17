@@ -71,7 +71,7 @@ def build(phase,out,ca,dependency_archive=None):
             subprocess.run([sys.executable,"-m","pip","install","--disable-pip-version-check","--no-compile","--platform","manylinux2014_x86_64","--implementation","cp","--python-version","3.12","--only-binary=:all:","--no-deps","--target",str(package),"-r",str(ROOT/"requirements-migration.txt")],check=True)
         modules=["__init__.py","config.py","contract.py","common.py","sql_binding.py",phase+"_entry.py","iam.py" if phase in {"iam","iam002","iam_extensions"} else "admin.py"]
         sources=["migration_runner/"+n for n in modules]+["sql/preflight/001_transaction_identity_catalog.sql","sql/preflight/001_transaction_identity_data.sql"]
-        if phase=="preflight":sources += ["migration_runner/release1_preflight.py","sql/preflight/002_release1_catalog.sql"]
+        if phase=="preflight":sources += ["migration_runner/release1_preflight.py","migration_runner/iam.py","migration_runner/workflow_catalog.py","sql/preflight/002_release1_catalog.sql"]
         if phase=="base":sources += ["migration_runner/base.py","sql/schema.sql"]
         if phase=="demo_reference":sources += ["migration_runner/demo_reference.py"]
         if phase=="runtime":sources += ["migration_runner/runtime.py","migration_runner/extension_catalog.py",

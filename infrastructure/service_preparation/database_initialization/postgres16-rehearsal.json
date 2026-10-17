@@ -2120,6 +2120,4955 @@
       }
     },
     {
+      "operation": "preflight_workflows",
+      "result": {
+        "assessment": {
+          "state": "correct",
+          "issues": [],
+          "base_valid": true
+        },
+        "database": "fintrust",
+        "user": "fintrust_migrate_dev",
+        "version": "16.15 (Ubuntu 16.15-0ubuntu0.24.04.1)",
+        "ssl": false,
+        "tables": [
+          {
+            "name": "accounts",
+            "kind": "r",
+            "owner": "fintrust_admin",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "alerts",
+            "kind": "r",
+            "owner": "fintrust_admin",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "alerts_alert_id_seq",
+            "kind": "S",
+            "owner": "fintrust_admin",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "batch_reconciliation",
+            "kind": "v",
+            "owner": "fintrust_workflow_owner",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "correction_outbox",
+            "kind": "r",
+            "owner": "fintrust_workflow_owner",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "customers",
+            "kind": "r",
+            "owner": "fintrust_admin",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "ingestion_attempts",
+            "kind": "r",
+            "owner": "fintrust_workflow_owner",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "ingestion_batches",
+            "kind": "r",
+            "owner": "fintrust_workflow_owner",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "ingestion_records",
+            "kind": "r",
+            "owner": "fintrust_workflow_owner",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "operations_requests",
+            "kind": "r",
+            "owner": "fintrust_workflow_owner",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "processed_transactions",
+            "kind": "r",
+            "owner": "fintrust_admin",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "projection_outbox",
+            "kind": "r",
+            "owner": "fintrust_workflow_owner",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "quarantine_cases",
+            "kind": "r",
+            "owner": "fintrust_workflow_owner",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "quarantine_corrections",
+            "kind": "r",
+            "owner": "fintrust_workflow_owner",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "quarantine_workflow",
+            "kind": "v",
+            "owner": "fintrust_workflow_owner",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "risk_events",
+            "kind": "r",
+            "owner": "fintrust_admin",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "risk_events_risk_event_id_seq",
+            "kind": "S",
+            "owner": "fintrust_admin",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "risk_review_history",
+            "kind": "r",
+            "owner": "fintrust_workflow_owner",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "risk_reviews",
+            "kind": "r",
+            "owner": "fintrust_workflow_owner",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "schema_migrations",
+            "kind": "r",
+            "owner": "fintrust_workflow_owner",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "transactions",
+            "kind": "r",
+            "owner": "fintrust_transactions_owner",
+            "rls": false,
+            "force_rls": false
+          }
+        ],
+        "columns": [
+          {
+            "table": "accounts",
+            "name": "account_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "88a6e91ebb38b1a408b4e463a08a8c19fe90a07e4f7446cf858645c84110d450"
+          },
+          {
+            "table": "accounts",
+            "name": "customer_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "accounts",
+            "name": "account_type",
+            "type": "character varying(30)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "accounts",
+            "name": "balance",
+            "type": "numeric(15,2)",
+            "not_null": true,
+            "default_sha256": "561b2814d3c09e62a92442c946307918f7f63f833c84876c08bd4c406767e53b"
+          },
+          {
+            "table": "accounts",
+            "name": "status",
+            "type": "character varying(20)",
+            "not_null": true,
+            "default_sha256": "cd44bc8129bf90f5195026fbb37465ecc4c9f2f1c35e5cf6caf892726c685355"
+          },
+          {
+            "table": "accounts",
+            "name": "opened_at",
+            "type": "timestamp with time zone",
+            "not_null": true,
+            "default_sha256": "28a4dae0461e17af56e979c2095abfbe0bfc45fe9ca8abf3144338a518a1bb8f"
+          },
+          {
+            "table": "alerts",
+            "name": "alert_id",
+            "type": "bigint",
+            "not_null": true,
+            "default_sha256": "e6a8521c856de5dcdf7365a575f8634215981ce33bb7aed12685c25f6aa9dd09"
+          },
+          {
+            "table": "alerts",
+            "name": "risk_event_id",
+            "type": "bigint",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "alerts",
+            "name": "severity",
+            "type": "character varying(20)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "alerts",
+            "name": "message",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "alerts",
+            "name": "sent_at",
+            "type": "timestamp with time zone",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "alerts",
+            "name": "delivery_key",
+            "type": "bigint",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "alerts",
+            "name": "delivery_state",
+            "type": "character varying(10)",
+            "not_null": true,
+            "default_sha256": "beb6acf9a91d2c42bd90a091726c9c09bf77ebfef6376431c480bc227ff0d9b2"
+          },
+          {
+            "table": "alerts",
+            "name": "provider_message_id",
+            "type": "text",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "batch_reconciliation",
+            "name": "batch_id",
+            "type": "uuid",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "batch_reconciliation",
+            "name": "rows_received",
+            "type": "integer",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "batch_reconciliation",
+            "name": "publication_complete",
+            "type": "boolean",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "batch_reconciliation",
+            "name": "file_failure_code",
+            "type": "text",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "batch_reconciliation",
+            "name": "recorded",
+            "type": "bigint",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "batch_reconciliation",
+            "name": "accepted",
+            "type": "bigint",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "batch_reconciliation",
+            "name": "quarantined",
+            "type": "bigint",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "batch_reconciliation",
+            "name": "duplicate",
+            "type": "bigint",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "batch_reconciliation",
+            "name": "failed_technical",
+            "type": "bigint",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "batch_reconciliation",
+            "name": "pending",
+            "type": "bigint",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "batch_reconciliation",
+            "name": "counts_consistent",
+            "type": "boolean",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "batch_reconciliation",
+            "name": "status",
+            "type": "text",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "correction_outbox",
+            "name": "correction_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "correction_outbox",
+            "name": "envelope",
+            "type": "jsonb",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "correction_outbox",
+            "name": "state",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "2babd42b33f728b3f09f5f0b51090c83796c9de6c77b790a24e98ffd7df38c5d"
+          },
+          {
+            "table": "correction_outbox",
+            "name": "attempts",
+            "type": "integer",
+            "not_null": true,
+            "default_sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+          },
+          {
+            "table": "correction_outbox",
+            "name": "last_error_type",
+            "type": "text",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "correction_outbox",
+            "name": "completed_at",
+            "type": "timestamp with time zone",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "customers",
+            "name": "customer_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "88a6e91ebb38b1a408b4e463a08a8c19fe90a07e4f7446cf858645c84110d450"
+          },
+          {
+            "table": "customers",
+            "name": "full_name",
+            "type": "character varying(150)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "customers",
+            "name": "id_number",
+            "type": "character varying(20)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "customers",
+            "name": "kyc_status",
+            "type": "character varying(20)",
+            "not_null": true,
+            "default_sha256": "aee29c7c36eede1c9e40442cc90d3b1039d93e021dc57c10a211a5c82d08dcfd"
+          },
+          {
+            "table": "customers",
+            "name": "created_at",
+            "type": "timestamp with time zone",
+            "not_null": true,
+            "default_sha256": "28a4dae0461e17af56e979c2095abfbe0bfc45fe9ca8abf3144338a518a1bb8f"
+          },
+          {
+            "table": "ingestion_attempts",
+            "name": "attempt_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "ingestion_attempts",
+            "name": "batch_id",
+            "type": "uuid",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "ingestion_attempts",
+            "name": "source_bucket",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "ingestion_attempts",
+            "name": "source_file",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "ingestion_attempts",
+            "name": "source_version",
+            "type": "text",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "ingestion_attempts",
+            "name": "source_etag",
+            "type": "text",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "ingestion_attempts",
+            "name": "received_at",
+            "type": "timestamp with time zone",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "ingestion_attempts",
+            "name": "status",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "ingestion_attempts",
+            "name": "error_code",
+            "type": "text",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "ingestion_batches",
+            "name": "batch_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "ingestion_batches",
+            "name": "source_system",
+            "type": "character varying(100)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "ingestion_batches",
+            "name": "source_bucket",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "ingestion_batches",
+            "name": "file_sha256",
+            "type": "character(64)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "ingestion_batches",
+            "name": "received_at",
+            "type": "timestamp with time zone",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "ingestion_batches",
+            "name": "rows_received",
+            "type": "integer",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "ingestion_batches",
+            "name": "publication_complete",
+            "type": "boolean",
+            "not_null": true,
+            "default_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+          },
+          {
+            "table": "ingestion_batches",
+            "name": "file_failure_code",
+            "type": "text",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "ingestion_records",
+            "name": "batch_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "ingestion_records",
+            "name": "source_row",
+            "type": "integer",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "ingestion_records",
+            "name": "source_attempt_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "ingestion_records",
+            "name": "disposition",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "ingestion_records",
+            "name": "candidate_digest",
+            "type": "character(64)",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "ingestion_records",
+            "name": "canonical_tx_id",
+            "type": "uuid",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "ingestion_records",
+            "name": "reason_code",
+            "type": "text",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "ingestion_records",
+            "name": "updated_at",
+            "type": "timestamp with time zone",
+            "not_null": true,
+            "default_sha256": "28a4dae0461e17af56e979c2095abfbe0bfc45fe9ca8abf3144338a518a1bb8f"
+          },
+          {
+            "table": "operations_requests",
+            "name": "request_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "operations_requests",
+            "name": "actor_subject",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "operations_requests",
+            "name": "action",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "operations_requests",
+            "name": "target",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "operations_requests",
+            "name": "request_digest",
+            "type": "character(64)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "operations_requests",
+            "name": "state",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "operations_requests",
+            "name": "result",
+            "type": "jsonb",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "operations_requests",
+            "name": "created_at",
+            "type": "timestamp with time zone",
+            "not_null": true,
+            "default_sha256": "28a4dae0461e17af56e979c2095abfbe0bfc45fe9ca8abf3144338a518a1bb8f"
+          },
+          {
+            "table": "operations_requests",
+            "name": "completed_at",
+            "type": "timestamp with time zone",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "processed_transactions",
+            "name": "tx_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "processed_transactions",
+            "name": "fingerprint",
+            "type": "character(64)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "processed_transactions",
+            "name": "result",
+            "type": "jsonb",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "processed_transactions",
+            "name": "processed_at",
+            "type": "timestamp with time zone",
+            "not_null": true,
+            "default_sha256": "28a4dae0461e17af56e979c2095abfbe0bfc45fe9ca8abf3144338a518a1bb8f"
+          },
+          {
+            "table": "projection_outbox",
+            "name": "tx_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "projection_outbox",
+            "name": "state",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "2babd42b33f728b3f09f5f0b51090c83796c9de6c77b790a24e98ffd7df38c5d"
+          },
+          {
+            "table": "projection_outbox",
+            "name": "completed_at",
+            "type": "timestamp with time zone",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_cases",
+            "name": "quarantine_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_cases",
+            "name": "batch_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_cases",
+            "name": "source_row",
+            "type": "integer",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_cases",
+            "name": "reason_code",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_cases",
+            "name": "reason_detail",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_cases",
+            "name": "validation_errors",
+            "type": "jsonb",
+            "not_null": true,
+            "default_sha256": "3fad7390b7bffb3cf2f50703d5e74be1cd9c8738608b6702cfea68f9d98e02bb"
+          },
+          {
+            "table": "quarantine_cases",
+            "name": "candidate_account_id",
+            "type": "uuid",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_cases",
+            "name": "safe_payload_key",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_cases",
+            "name": "safe_payload_version",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_cases",
+            "name": "source_reference",
+            "type": "text",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_cases",
+            "name": "quarantined_at",
+            "type": "timestamp with time zone",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_corrections",
+            "name": "correction_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_corrections",
+            "name": "quarantine_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_corrections",
+            "name": "request_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_corrections",
+            "name": "request_digest",
+            "type": "character(64)",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_corrections",
+            "name": "correction_version",
+            "type": "integer",
+            "not_null": true,
+            "default_sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
+          },
+          {
+            "table": "quarantine_corrections",
+            "name": "submitted_by",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_corrections",
+            "name": "submitted_at",
+            "type": "timestamp with time zone",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_corrections",
+            "name": "correction_notes",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_corrections",
+            "name": "corrected_payload_key",
+            "type": "text",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_corrections",
+            "name": "corrected_payload_version",
+            "type": "text",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_corrections",
+            "name": "action",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_corrections",
+            "name": "reprocess_batch_id",
+            "type": "uuid",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_corrections",
+            "name": "reprocess_source_row",
+            "type": "integer",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_workflow",
+            "name": "quarantine_id",
+            "type": "uuid",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_workflow",
+            "name": "batch_id",
+            "type": "uuid",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_workflow",
+            "name": "source_row",
+            "type": "integer",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_workflow",
+            "name": "reason_code",
+            "type": "text",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_workflow",
+            "name": "reason_detail",
+            "type": "text",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_workflow",
+            "name": "validation_errors",
+            "type": "jsonb",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_workflow",
+            "name": "candidate_account_id",
+            "type": "uuid",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_workflow",
+            "name": "safe_payload_key",
+            "type": "text",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_workflow",
+            "name": "safe_payload_version",
+            "type": "text",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_workflow",
+            "name": "source_reference",
+            "type": "text",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_workflow",
+            "name": "quarantined_at",
+            "type": "timestamp with time zone",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_workflow",
+            "name": "correction_id",
+            "type": "uuid",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_workflow",
+            "name": "canonical_tx_id",
+            "type": "uuid",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "quarantine_workflow",
+            "name": "workflow_status",
+            "type": "text",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "risk_events",
+            "name": "risk_event_id",
+            "type": "bigint",
+            "not_null": true,
+            "default_sha256": "4f6b89db3ec44c4e34ad64affdcbdd84b3361aacbd597b49bafb4ce09b6859f6"
+          },
+          {
+            "table": "risk_events",
+            "name": "tx_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "risk_events",
+            "name": "risk_score",
+            "type": "integer",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "risk_events",
+            "name": "reason",
+            "type": "character varying(255)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "risk_events",
+            "name": "created_at",
+            "type": "timestamp with time zone",
+            "not_null": true,
+            "default_sha256": "28a4dae0461e17af56e979c2095abfbe0bfc45fe9ca8abf3144338a518a1bb8f"
+          },
+          {
+            "table": "risk_review_history",
+            "name": "risk_event_id",
+            "type": "bigint",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "risk_review_history",
+            "name": "version",
+            "type": "integer",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "risk_review_history",
+            "name": "request_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "risk_review_history",
+            "name": "request_digest",
+            "type": "character(64)",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "risk_review_history",
+            "name": "before_status",
+            "type": "text",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "risk_review_history",
+            "name": "after_status",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "risk_review_history",
+            "name": "actor_subject",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "risk_review_history",
+            "name": "reviewer_subject",
+            "type": "text",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "risk_review_history",
+            "name": "notes",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "risk_review_history",
+            "name": "resolution_code",
+            "type": "text",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "risk_review_history",
+            "name": "changed_at",
+            "type": "timestamp with time zone",
+            "not_null": true,
+            "default_sha256": "28a4dae0461e17af56e979c2095abfbe0bfc45fe9ca8abf3144338a518a1bb8f"
+          },
+          {
+            "table": "risk_reviews",
+            "name": "risk_event_id",
+            "type": "bigint",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "risk_reviews",
+            "name": "review_status",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "d751799a9b88b3fe6134c46d5ff3b33c9adaf6b49f72b9717b8e8b9bfd629f6d"
+          },
+          {
+            "table": "risk_reviews",
+            "name": "reviewer_subject",
+            "type": "text",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "risk_reviews",
+            "name": "reviewed_by",
+            "type": "text",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "risk_reviews",
+            "name": "reviewed_at",
+            "type": "timestamp with time zone",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "risk_reviews",
+            "name": "review_notes",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "676219f025870b893c0df8670464cfdae5f5cc073c6c44841e35f1805c6b81ce"
+          },
+          {
+            "table": "risk_reviews",
+            "name": "resolution_code",
+            "type": "text",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "risk_reviews",
+            "name": "change_actor",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "risk_reviews",
+            "name": "change_request_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "eea9a3e7c2abe43835e2a6fdf92a7d1e6f145ad6dfbfd243fc5d395e5b390a33"
+          },
+          {
+            "table": "risk_reviews",
+            "name": "request_digest",
+            "type": "character(64)",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "risk_reviews",
+            "name": "version",
+            "type": "integer",
+            "not_null": true,
+            "default_sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
+          },
+          {
+            "table": "risk_reviews",
+            "name": "created_at",
+            "type": "timestamp with time zone",
+            "not_null": true,
+            "default_sha256": "28a4dae0461e17af56e979c2095abfbe0bfc45fe9ca8abf3144338a518a1bb8f"
+          },
+          {
+            "table": "schema_migrations",
+            "name": "version",
+            "type": "integer",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "schema_migrations",
+            "name": "source_sha256",
+            "type": "character(64)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "schema_migrations",
+            "name": "catalog_sha256",
+            "type": "character(64)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "schema_migrations",
+            "name": "applied_at",
+            "type": "timestamp with time zone",
+            "not_null": true,
+            "default_sha256": "28a4dae0461e17af56e979c2095abfbe0bfc45fe9ca8abf3144338a518a1bb8f"
+          },
+          {
+            "table": "transactions",
+            "name": "tx_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "88a6e91ebb38b1a408b4e463a08a8c19fe90a07e4f7446cf858645c84110d450"
+          },
+          {
+            "table": "transactions",
+            "name": "account_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "amount",
+            "type": "numeric(15,2)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "currency",
+            "type": "character(3)",
+            "not_null": true,
+            "default_sha256": "b5c4cbf072a65f7351f88187046fb64ba99d14124b9c2510b1e5b595d7a0cb8f"
+          },
+          {
+            "table": "transactions",
+            "name": "merchant",
+            "type": "character varying(200)",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "tx_date",
+            "type": "timestamp with time zone",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "tx_type",
+            "type": "character varying(30)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "cross_border",
+            "type": "boolean",
+            "not_null": true,
+            "default_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+          },
+          {
+            "table": "transactions",
+            "name": "raw_file",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "source_system",
+            "type": "character varying(100)",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "source_transaction_id",
+            "type": "character varying(200)",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "transaction_fingerprint",
+            "type": "character(64)",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "batch_id",
+            "type": "uuid",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "file_sha256",
+            "type": "character(64)",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "source_row",
+            "type": "integer",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "country",
+            "type": "character(2)",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "constraints": [
+          {
+            "table": "accounts",
+            "name": "accounts_account_type_check",
+            "validated": true,
+            "definition_sha256": "1af2eba58d7e8eb917e4c2eb70f598353dbc6c651a9097958e61de31e3db0a76"
+          },
+          {
+            "table": "accounts",
+            "name": "accounts_customer_id_fkey",
+            "validated": true,
+            "definition_sha256": "88c23b6c1b7080427f2d483034e277fdbf99bf2292ff4820b199d106331d786a"
+          },
+          {
+            "table": "accounts",
+            "name": "accounts_pkey",
+            "validated": true,
+            "definition_sha256": "1547b85ae90fc84fd5a5accd2bd5ad222d2b2f87521a0478dbb059f9629c8064"
+          },
+          {
+            "table": "alerts",
+            "name": "alerts_delivery_key_key",
+            "validated": true,
+            "definition_sha256": "aef5ef1a095ea497bbe0edb060d9aab550b6a2a5ca7578e77c81eb3a1eb30c4d"
+          },
+          {
+            "table": "alerts",
+            "name": "alerts_delivery_state_check",
+            "validated": true,
+            "definition_sha256": "a363e6651f8238f310c119758009d5f144c80790f52147ff7c736c99d1a183ad"
+          },
+          {
+            "table": "alerts",
+            "name": "alerts_pkey",
+            "validated": true,
+            "definition_sha256": "ca8d2c5a05a5e137a766487e87ab8531305f5a8163cffca09bfbd79a6724d065"
+          },
+          {
+            "table": "alerts",
+            "name": "alerts_risk_event_id_fkey",
+            "validated": true,
+            "definition_sha256": "ee0520ca1771fe39db0a0316cef281a1b668147947abc1aeebc00c3d7eb765f8"
+          },
+          {
+            "table": "correction_outbox",
+            "name": "correction_outbox_attempts_check",
+            "validated": true,
+            "definition_sha256": "0a1ed9042c252d666501138dcd84e6d7b7d880a449972989ec28895e773b57dc"
+          },
+          {
+            "table": "correction_outbox",
+            "name": "correction_outbox_correction_id_fkey",
+            "validated": true,
+            "definition_sha256": "c46a767ff3a078270e99c351ac044109399391910c03d091b656739dd59dd1e1"
+          },
+          {
+            "table": "correction_outbox",
+            "name": "correction_outbox_envelope_check",
+            "validated": true,
+            "definition_sha256": "bd3b8d49b54f7166440fc826fdf51507caa94ce6253e14eaf80590d219319c93"
+          },
+          {
+            "table": "correction_outbox",
+            "name": "correction_outbox_pkey",
+            "validated": true,
+            "definition_sha256": "98c0e5b27a450c0e5714698cf9d650c613939102364436068bc51f3b90f4102d"
+          },
+          {
+            "table": "correction_outbox",
+            "name": "correction_outbox_state_check",
+            "validated": true,
+            "definition_sha256": "8a6e38f9b56eecd0b6d66464d47e949ec6198c27dadf6952a1c359821b314afb"
+          },
+          {
+            "table": "customers",
+            "name": "customers_id_number_key",
+            "validated": true,
+            "definition_sha256": "27849ede9188080c7533612a1b80ccc29acce220758f21cbbc06aa56d4b517bd"
+          },
+          {
+            "table": "customers",
+            "name": "customers_kyc_status_check",
+            "validated": true,
+            "definition_sha256": "f00a772b91037b98bfd120714fd0f2a7ba3be1326318a874d7d7739c4829d040"
+          },
+          {
+            "table": "customers",
+            "name": "customers_pkey",
+            "validated": true,
+            "definition_sha256": "cc24b460be558cd9e03d8dfac047b2adccd2a397c18ac43095bfe2b663e1ccf4"
+          },
+          {
+            "table": "ingestion_attempts",
+            "name": "ingestion_attempts_batch_id_attempt_id_key",
+            "validated": true,
+            "definition_sha256": "20b2d508725089ba8655f2cdd1a7a5986c2e975e89f81f6358305d301c0ac410"
+          },
+          {
+            "table": "ingestion_attempts",
+            "name": "ingestion_attempts_batch_id_fkey",
+            "validated": true,
+            "definition_sha256": "ef657ef83676eeb4a9e6317874912b9f384dd8a677b694cc0105a7d32b8f5978"
+          },
+          {
+            "table": "ingestion_attempts",
+            "name": "ingestion_attempts_pkey",
+            "validated": true,
+            "definition_sha256": "2be533aeb4035f98d57d4c210ced67ca6cb8f02884e4b7cc7b26d89af32f25a7"
+          },
+          {
+            "table": "ingestion_attempts",
+            "name": "ingestion_attempts_status_check",
+            "validated": true,
+            "definition_sha256": "2d0a29b67d31381dc062e6b4262197ab5a379993d66e619c2f2c92c172367f5b"
+          },
+          {
+            "table": "ingestion_batches",
+            "name": "batch_total_count",
+            "validated": true,
+            "definition_sha256": "698fc09045e7267eeb19c5b09473ec8c40f237145be8c1cbd97b9dde2451ddc1"
+          },
+          {
+            "table": "ingestion_batches",
+            "name": "ingestion_batches_file_sha256_check",
+            "validated": true,
+            "definition_sha256": "f32998897c41e85a144d8fbed45981b5e479c2c1ff1464f378e475dd19a3726a"
+          },
+          {
+            "table": "ingestion_batches",
+            "name": "ingestion_batches_pkey",
+            "validated": true,
+            "definition_sha256": "fa09fe18cf8009996960df7d8b9ba2776741ed0eff593f60c301817bfcee501a"
+          },
+          {
+            "table": "ingestion_batches",
+            "name": "ingestion_batches_rows_received_check",
+            "validated": true,
+            "definition_sha256": "36d5668eabe8f72e66ff48ca2fd465c48b56ad3a0a836f256232be7711199db2"
+          },
+          {
+            "table": "ingestion_batches",
+            "name": "ingestion_batches_source_bucket_check",
+            "validated": true,
+            "definition_sha256": "7d9808debcdcacea0e8a55bcbd0570615d4195b5057eb0bdb8d46c54964384bb"
+          },
+          {
+            "table": "ingestion_batches",
+            "name": "ingestion_batches_source_bucket_file_sha256_key",
+            "validated": true,
+            "definition_sha256": "7cd09aca6810fce7bf513b7c7e5445760ee7f801c8713954d42952ee6b5bad8b"
+          },
+          {
+            "table": "ingestion_batches",
+            "name": "ingestion_batches_source_system_check",
+            "validated": true,
+            "definition_sha256": "f8349d2c3d3f63e694a62670e6a6c83a0355d629cb1a33715de86b23e38d3dcc"
+          },
+          {
+            "table": "ingestion_records",
+            "name": "batch_record_count",
+            "validated": true,
+            "definition_sha256": "698fc09045e7267eeb19c5b09473ec8c40f237145be8c1cbd97b9dde2451ddc1"
+          },
+          {
+            "table": "ingestion_records",
+            "name": "ingestion_records_batch_id_fkey",
+            "validated": true,
+            "definition_sha256": "ef657ef83676eeb4a9e6317874912b9f384dd8a677b694cc0105a7d32b8f5978"
+          },
+          {
+            "table": "ingestion_records",
+            "name": "ingestion_records_batch_id_source_attempt_id_fkey",
+            "validated": true,
+            "definition_sha256": "94a25404f44ec55e822c4d519232aeb812902b62325ef86f94d7affe2d1e8571"
+          },
+          {
+            "table": "ingestion_records",
+            "name": "ingestion_records_canonical_tx_id_fkey",
+            "validated": true,
+            "definition_sha256": "317a7524bc51c30e961023a71eeb302475ea6e2731a004847e7f5fd497bb4976"
+          },
+          {
+            "table": "ingestion_records",
+            "name": "ingestion_records_check",
+            "validated": true,
+            "definition_sha256": "b20a0bbc027f6f926bb05dc93d72693cbea05908d65b7fc04bdcf44e16b860cb"
+          },
+          {
+            "table": "ingestion_records",
+            "name": "ingestion_records_check1",
+            "validated": true,
+            "definition_sha256": "eacefa7802c1ef448cdcfd71aa67e1d80cd6e6c637f28024a44d4b6c468e2a0b"
+          },
+          {
+            "table": "ingestion_records",
+            "name": "ingestion_records_disposition_check",
+            "validated": true,
+            "definition_sha256": "f8a04448769d02f6bc443d9a73c86c4d367e21fee7de17e3f699842ff6dcf0ec"
+          },
+          {
+            "table": "ingestion_records",
+            "name": "ingestion_records_pkey",
+            "validated": true,
+            "definition_sha256": "2c82faaa9156530ac78e6ba502fdad01acf62c28b4025cf7bc027adf0ccaca0d"
+          },
+          {
+            "table": "ingestion_records",
+            "name": "ingestion_records_source_row_check",
+            "validated": true,
+            "definition_sha256": "ca9119931f3dad9200c8aeba7886f497ed30a509b1554fee77db999c94513f1b"
+          },
+          {
+            "table": "operations_requests",
+            "name": "operations_requests_action_check",
+            "validated": true,
+            "definition_sha256": "e7d8c89675679dbbbed1e58dcb5bfc35543e03893d802332eddfe4646faff93d"
+          },
+          {
+            "table": "operations_requests",
+            "name": "operations_requests_actor_subject_check",
+            "validated": true,
+            "definition_sha256": "820ae225282122132d8f07fb4bbc6e66dfbbb1f897f44de3085794712d6ffaa1"
+          },
+          {
+            "table": "operations_requests",
+            "name": "operations_requests_pkey",
+            "validated": true,
+            "definition_sha256": "9949b7b661468b328e99f2424dd5319365f5f2dacf0876f56e2475e376a9d297"
+          },
+          {
+            "table": "operations_requests",
+            "name": "operations_requests_state_check",
+            "validated": true,
+            "definition_sha256": "549f6b36b693bd912b588a5339ba56e55d462cf4ea1ade3f2041722210ecc9a8"
+          },
+          {
+            "table": "processed_transactions",
+            "name": "processed_transactions_pkey",
+            "validated": true,
+            "definition_sha256": "9e6843cb0a29ff6217ff29457df484a6fabe2f5c28666c0adc834562b014dca0"
+          },
+          {
+            "table": "processed_transactions",
+            "name": "processed_transactions_tx_id_fkey",
+            "validated": true,
+            "definition_sha256": "0ad6746d58af56a20587d999ebf08a4bb1aebf7a7753a120c56c11350dfb6b01"
+          },
+          {
+            "table": "projection_outbox",
+            "name": "projection_outbox_pkey",
+            "validated": true,
+            "definition_sha256": "9e6843cb0a29ff6217ff29457df484a6fabe2f5c28666c0adc834562b014dca0"
+          },
+          {
+            "table": "projection_outbox",
+            "name": "projection_outbox_state_check",
+            "validated": true,
+            "definition_sha256": "8a6e38f9b56eecd0b6d66464d47e949ec6198c27dadf6952a1c359821b314afb"
+          },
+          {
+            "table": "projection_outbox",
+            "name": "projection_outbox_tx_id_fkey",
+            "validated": true,
+            "definition_sha256": "bcff5a931018de0241fbf55dd3e34dab4cbc6b7a805efc89a85830fa5be6d057"
+          },
+          {
+            "table": "quarantine_cases",
+            "name": "quarantine_cases_batch_id_source_row_fkey",
+            "validated": true,
+            "definition_sha256": "52d2ce9440f6fa80db853b0cec5ad3a9df40b1b5ffddcab17139700b807e350f"
+          },
+          {
+            "table": "quarantine_cases",
+            "name": "quarantine_cases_batch_id_source_row_key",
+            "validated": true,
+            "definition_sha256": "79cfca5da22bf5a79660b57be6ce694b18291910dc0b1dd36d023af58f2c8e71"
+          },
+          {
+            "table": "quarantine_cases",
+            "name": "quarantine_cases_pkey",
+            "validated": true,
+            "definition_sha256": "f14551ed812442980c703bcfec2d8ef54a05bd81dcc3db9f59b744e84054fb8e"
+          },
+          {
+            "table": "quarantine_cases",
+            "name": "quarantine_cases_reason_code_check",
+            "validated": true,
+            "definition_sha256": "35347a129fee960da70217e517f8d75afccdfd445128dfbed53d62488a28bfde"
+          },
+          {
+            "table": "quarantine_cases",
+            "name": "quarantine_cases_reason_detail_check",
+            "validated": true,
+            "definition_sha256": "ba9b838233e6d68a79f81c6a6989a59d4f950f56e027a7ef1e3f6c3dcd16c0c6"
+          },
+          {
+            "table": "quarantine_cases",
+            "name": "quarantine_cases_safe_payload_key_check",
+            "validated": true,
+            "definition_sha256": "eaf5803b1f91a4f9490ef47187e51f942ac2274e63af6b6a11502ef727a976ae"
+          },
+          {
+            "table": "quarantine_cases",
+            "name": "quarantine_cases_safe_payload_version_check",
+            "validated": true,
+            "definition_sha256": "6a72b37bd32fedffb1293bb6fd4ed7564a005d627040013c822e5b0c4c828d88"
+          },
+          {
+            "table": "quarantine_cases",
+            "name": "quarantine_cases_validation_errors_check",
+            "validated": true,
+            "definition_sha256": "3eb9c8cff80d39fce585cd8075e0855cba3c09ce9fb12bd9dee2f326dace3ac3"
+          },
+          {
+            "table": "quarantine_corrections",
+            "name": "quarantine_corrections_action_check",
+            "validated": true,
+            "definition_sha256": "fdbcc6bb744a01b0684eac94699b561b6965b0653e850009867ebdf18bcc5366"
+          },
+          {
+            "table": "quarantine_corrections",
+            "name": "quarantine_corrections_check",
+            "validated": true,
+            "definition_sha256": "60d33ccf9f4dc6407729b7893df66cbdd4175e1223d6bfb830dfdb5806a3c9da"
+          },
+          {
+            "table": "quarantine_corrections",
+            "name": "quarantine_corrections_correction_notes_check",
+            "validated": true,
+            "definition_sha256": "77fabdb50d0f354c9381dea9136553dc840b8af18d745893b83bb6277b3a8742"
+          },
+          {
+            "table": "quarantine_corrections",
+            "name": "quarantine_corrections_correction_version_check",
+            "validated": true,
+            "definition_sha256": "353eb80e19411ed663bd31176dad025366c8423323e89400ff599ad6808f944a"
+          },
+          {
+            "table": "quarantine_corrections",
+            "name": "quarantine_corrections_pkey",
+            "validated": true,
+            "definition_sha256": "98c0e5b27a450c0e5714698cf9d650c613939102364436068bc51f3b90f4102d"
+          },
+          {
+            "table": "quarantine_corrections",
+            "name": "quarantine_corrections_quarantine_id_correction_version_key",
+            "validated": true,
+            "definition_sha256": "3df6244a24ef9cee67979f08fd7837b1170bc94d31d26990e801819f9137bdbe"
+          },
+          {
+            "table": "quarantine_corrections",
+            "name": "quarantine_corrections_quarantine_id_fkey",
+            "validated": true,
+            "definition_sha256": "eea996214fd07c907f6c28736ada9160a7bf6fdc04eb4e278096639f7a4d90ca"
+          },
+          {
+            "table": "quarantine_corrections",
+            "name": "quarantine_corrections_reprocess_batch_id_reprocess_source_fkey",
+            "validated": true,
+            "definition_sha256": "2a0dfc1cbc7a757dcb9e5438281e59819d417fb1d1807dd107a640a1b2f8a22e"
+          },
+          {
+            "table": "quarantine_corrections",
+            "name": "quarantine_corrections_request_id_key",
+            "validated": true,
+            "definition_sha256": "42b491790b4db13f17d0eb4e0b48653225c7f678a29518d2e2610e55cb5f2817"
+          },
+          {
+            "table": "quarantine_corrections",
+            "name": "quarantine_corrections_submitted_by_check",
+            "validated": true,
+            "definition_sha256": "e86ec15039a7e2b9bdcedc59bb3528a988c2595bd315ab54f69f1998c59fbf7c"
+          },
+          {
+            "table": "risk_events",
+            "name": "risk_events_pkey",
+            "validated": true,
+            "definition_sha256": "cf3e08dc73e0cd519430b536c18c6f4086a9c813225466f6bf7a1637f1daeb84"
+          },
+          {
+            "table": "risk_events",
+            "name": "risk_events_risk_score_check",
+            "validated": true,
+            "definition_sha256": "2108648b49217da9afe14fdb543ce5ad34a5b13309135d1721946eba48ec7326"
+          },
+          {
+            "table": "risk_events",
+            "name": "risk_events_tx_id_fkey",
+            "validated": true,
+            "definition_sha256": "0ad6746d58af56a20587d999ebf08a4bb1aebf7a7753a120c56c11350dfb6b01"
+          },
+          {
+            "table": "risk_review_history",
+            "name": "risk_review_history_pkey",
+            "validated": true,
+            "definition_sha256": "65b72c17292f2ac73bd6ee24d8f3801310de860f490e28904f9f15977011e55a"
+          },
+          {
+            "table": "risk_review_history",
+            "name": "risk_review_history_request_id_key",
+            "validated": true,
+            "definition_sha256": "42b491790b4db13f17d0eb4e0b48653225c7f678a29518d2e2610e55cb5f2817"
+          },
+          {
+            "table": "risk_review_history",
+            "name": "risk_review_history_risk_event_id_fkey",
+            "validated": true,
+            "definition_sha256": "04e478376c0d84aa832b9abc733b8fb6e17f7da677bfced43388a5805a5adbf9"
+          },
+          {
+            "table": "risk_reviews",
+            "name": "risk_reviews_change_actor_check",
+            "validated": true,
+            "definition_sha256": "547e9a5295117c1fca674df3efa9ded5e28d0c135068a30258b967288eac8619"
+          },
+          {
+            "table": "risk_reviews",
+            "name": "risk_reviews_check",
+            "validated": true,
+            "definition_sha256": "ab97995c21d093407bad77a798cef2c2b6cd286b55db5a3dea50c0647cf0f47d"
+          },
+          {
+            "table": "risk_reviews",
+            "name": "risk_reviews_check1",
+            "validated": true,
+            "definition_sha256": "18cbdb72152f8874133ed9ee718f36379569f6fde6f6b68e13da492c93eb8678"
+          },
+          {
+            "table": "risk_reviews",
+            "name": "risk_reviews_pkey",
+            "validated": true,
+            "definition_sha256": "cf3e08dc73e0cd519430b536c18c6f4086a9c813225466f6bf7a1637f1daeb84"
+          },
+          {
+            "table": "risk_reviews",
+            "name": "risk_reviews_review_status_check",
+            "validated": true,
+            "definition_sha256": "eba777ee2c9da8c212aa4de256d1af2ccca4806c19ed28201f69aedc30a2c1a6"
+          },
+          {
+            "table": "risk_reviews",
+            "name": "risk_reviews_risk_event_id_fkey",
+            "validated": true,
+            "definition_sha256": "ee0520ca1771fe39db0a0316cef281a1b668147947abc1aeebc00c3d7eb765f8"
+          },
+          {
+            "table": "risk_reviews",
+            "name": "risk_reviews_version_check",
+            "validated": true,
+            "definition_sha256": "9ec2418d02ad8d3aff3555ed426b71befbc4fcb332f1c4d461ec8efcec1151e9"
+          },
+          {
+            "table": "schema_migrations",
+            "name": "schema_migrations_pkey",
+            "validated": true,
+            "definition_sha256": "51b255af119395e0411b540c278a3474cac73a349d72c54e27ccb02cd4749b07"
+          },
+          {
+            "table": "schema_migrations",
+            "name": "schema_migrations_version_check",
+            "validated": true,
+            "definition_sha256": "09a1587c709d5af7c36f3954e05afec4c242cf49c4c36b233d18a18a9b7e83b3"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_account_id_fkey",
+            "validated": true,
+            "definition_sha256": "6e59cd644c5bbd54803b3699acc3dec947275b73e1db9d4e73197cf96cebc06c"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_amount_check",
+            "validated": true,
+            "definition_sha256": "5ddec6c010bb05cab4730df9c64e0ba3b0ce5f8e8aaa49704e17c02d4f55bb8d"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_currency_check",
+            "validated": true,
+            "definition_sha256": "3daf8ab369eb6ec5d2333b620c2f3dea349b264ae8ff01a58c945a1d3da1ac84"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_file_sha256_check",
+            "validated": true,
+            "definition_sha256": "f32998897c41e85a144d8fbed45981b5e479c2c1ff1464f378e475dd19a3726a"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_pkey",
+            "validated": true,
+            "definition_sha256": "9e6843cb0a29ff6217ff29457df484a6fabe2f5c28666c0adc834562b014dca0"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_source_identity_check",
+            "validated": true,
+            "definition_sha256": "ef67d9588a571196de633fb2b087f0c53994374181b32db2ad095250014be0e5"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_source_row_check",
+            "validated": true,
+            "definition_sha256": "ca9119931f3dad9200c8aeba7886f497ed30a509b1554fee77db999c94513f1b"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_transaction_fingerprint_check",
+            "validated": true,
+            "definition_sha256": "124b1edd28ea738cea40a1f74726c4b7773ba0454bb985e00e998dd6e85d186a"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_tx_type_check",
+            "validated": true,
+            "definition_sha256": "73c4b33e17b8a433490229ae2990110394f2358018c4ca27da1d00cabd64cee3"
+          }
+        ],
+        "indexes": [
+          {
+            "table": "accounts",
+            "name": "accounts_pkey",
+            "valid": true,
+            "definition_sha256": "040ddebae604d417d122c94955bedb87bf9b0b90c1957b0fee4f3b43464146d5"
+          },
+          {
+            "table": "alerts",
+            "name": "alerts_delivery_key_key",
+            "valid": true,
+            "definition_sha256": "19c32f1abe88cdc030eb88d4d32c7bfe2fe7238a2219f6662be74b5ae432df12"
+          },
+          {
+            "table": "alerts",
+            "name": "alerts_pkey",
+            "valid": true,
+            "definition_sha256": "98bfea7e6d071c32a64559a14e9755b249d215950fd8a70c12ab38f05f93ee6f"
+          },
+          {
+            "table": "quarantine_corrections",
+            "name": "correction_case_time",
+            "valid": true,
+            "definition_sha256": "7a5cf3c507f05ff2159bae0bbeacdd476913812814029f36094c7bc23c1b14dd"
+          },
+          {
+            "table": "correction_outbox",
+            "name": "correction_outbox_pkey",
+            "valid": true,
+            "definition_sha256": "7fed9e151e75d306b154d2a1779508ba42efab9af6ca5a7e6ca10491f8603e77"
+          },
+          {
+            "table": "customers",
+            "name": "customers_id_number_key",
+            "valid": true,
+            "definition_sha256": "fb199bead2f57152de6b3163acc606d346d3cc41480fdc5e10815f2b78d83a38"
+          },
+          {
+            "table": "customers",
+            "name": "customers_pkey",
+            "valid": true,
+            "definition_sha256": "9dab779e815d0fe7530e7390d9b033845aae3ff86adcef8803ca59d3908e1bc3"
+          },
+          {
+            "table": "risk_events",
+            "name": "idx_risk_events_tx_date",
+            "valid": true,
+            "definition_sha256": "f81c5b4d832323a7845e1a7c666e682ab5d85c51a32367ea4aa7c3dbb7ec8a2b"
+          },
+          {
+            "table": "transactions",
+            "name": "idx_tx_account_cursor",
+            "valid": true,
+            "definition_sha256": "c149575abccd77c195b999841f390158c47b5e86648575e00ce64bf5bfe96f11"
+          },
+          {
+            "table": "transactions",
+            "name": "idx_tx_account_date",
+            "valid": true,
+            "definition_sha256": "4a7329a5234bd14d52f7b81542846bbe22072444364e648b267cedd78e414346"
+          },
+          {
+            "table": "transactions",
+            "name": "idx_tx_crossborder",
+            "valid": true,
+            "definition_sha256": "8a2ffa1eb247c73da3801214f82d8d29d78f8b22afa07996ecea57573b64ddce"
+          },
+          {
+            "table": "transactions",
+            "name": "idx_tx_duplicate_charge",
+            "valid": true,
+            "definition_sha256": "f497f34516ab12534f6da517775c60aef89a4b45be403e7d6ce2e36c9f1d7f78"
+          },
+          {
+            "table": "transactions",
+            "name": "idx_tx_high_amount",
+            "valid": true,
+            "definition_sha256": "5f4da9e8f7040fcc09b73d9340ef110c76f24dd313bd1064c95aea40751eca93"
+          },
+          {
+            "table": "transactions",
+            "name": "idx_tx_source_identity",
+            "valid": true,
+            "definition_sha256": "314f22e8ffd8f03af4de9553a7d0eb48402e886687f35174770e66b50e4e827a"
+          },
+          {
+            "table": "ingestion_attempts",
+            "name": "ingestion_attempts_batch_id_attempt_id_key",
+            "valid": true,
+            "definition_sha256": "50246452c580a649efcbd443446ec6e643ac212e9afb66a85109587bd3f5b3b7"
+          },
+          {
+            "table": "ingestion_attempts",
+            "name": "ingestion_attempts_pkey",
+            "valid": true,
+            "definition_sha256": "f2cfc5e33381b86ee47688dc0d936157049c13df10beceeeae0a25f4a244ec1e"
+          },
+          {
+            "table": "ingestion_batches",
+            "name": "ingestion_batches_pkey",
+            "valid": true,
+            "definition_sha256": "2981b6470b6d32976165b79d4cf99ef1b782ce3b48e3c68f027e96369ffd4731"
+          },
+          {
+            "table": "ingestion_batches",
+            "name": "ingestion_batches_source_bucket_file_sha256_key",
+            "valid": true,
+            "definition_sha256": "644125013fa38e0bcd59b955406020819de7e8bcd0e27a22d0ad573ded5c1044"
+          },
+          {
+            "table": "ingestion_records",
+            "name": "ingestion_records_pkey",
+            "valid": true,
+            "definition_sha256": "61c8796f6e5d587c2aa0a8c737ef4413fb9e6de45c451be1177677bc3812640c"
+          },
+          {
+            "table": "ingestion_records",
+            "name": "ingestion_records_tx",
+            "valid": true,
+            "definition_sha256": "b8d40d9855353a2b777936b899c327e42c1f52b8a6ba85e7083e6e0d6559ff6e"
+          },
+          {
+            "table": "operations_requests",
+            "name": "operations_requests_pkey",
+            "valid": true,
+            "definition_sha256": "d64c398307dc9ddcbc1e91008e4d087d531bbb25e1b617bf6b2dc3f7f2729e07"
+          },
+          {
+            "table": "processed_transactions",
+            "name": "processed_transactions_pkey",
+            "valid": true,
+            "definition_sha256": "3d420d4e030668c5354565ffa3d75caedc39fe7219c24c7383508be9fb309a99"
+          },
+          {
+            "table": "projection_outbox",
+            "name": "projection_outbox_pkey",
+            "valid": true,
+            "definition_sha256": "8f76657d84e3e91979704e1c53257ceff69e06b86e5502fcad53a882c166ef39"
+          },
+          {
+            "table": "quarantine_cases",
+            "name": "quarantine_cases_batch_id_source_row_key",
+            "valid": true,
+            "definition_sha256": "c99717165f4f7b5bb800074a68fe60f6450b9800f62ca4acfc30684c772e379d"
+          },
+          {
+            "table": "quarantine_cases",
+            "name": "quarantine_cases_pkey",
+            "valid": true,
+            "definition_sha256": "77330c6b9baf22f32c211e6a864bc0b38b34f294450c821018f710f25328ee03"
+          },
+          {
+            "table": "quarantine_corrections",
+            "name": "quarantine_corrections_pkey",
+            "valid": true,
+            "definition_sha256": "58a44d9a97e25af641a874f5c80c9afde48d3438c2cac795078b03363189aadf"
+          },
+          {
+            "table": "quarantine_corrections",
+            "name": "quarantine_corrections_quarantine_id_correction_version_key",
+            "valid": true,
+            "definition_sha256": "7fc1c0aab59ed35b3c79a0827cb71ffc0e4f0930b885a0dd0feede38d42d5e83"
+          },
+          {
+            "table": "quarantine_corrections",
+            "name": "quarantine_corrections_request_id_key",
+            "valid": true,
+            "definition_sha256": "7266df86ed0b35883d5ffc9fbf0ba8bc40b88e2d22068059a108460179d7f719"
+          },
+          {
+            "table": "quarantine_corrections",
+            "name": "quarantine_one_active_resolution",
+            "valid": true,
+            "definition_sha256": "ef4d572784469bd16847ed56688aaf3accd11edfeb6002117e8b19ba2bb1c099"
+          },
+          {
+            "table": "risk_events",
+            "name": "risk_events_pkey",
+            "valid": true,
+            "definition_sha256": "c1b3ac8fd00a2f0307747f92947ca81aada284e2e6ad4eba049d16036ba76279"
+          },
+          {
+            "table": "risk_review_history",
+            "name": "risk_review_history_pkey",
+            "valid": true,
+            "definition_sha256": "7e06c72a8af95b15643420139aa115ef0355fbe6c6ab4241a3a469b4a696e743"
+          },
+          {
+            "table": "risk_review_history",
+            "name": "risk_review_history_request_id_key",
+            "valid": true,
+            "definition_sha256": "3ace20e268981a627e5817ab608e386c65e9d50bc166961b8962b43d6020d694"
+          },
+          {
+            "table": "risk_reviews",
+            "name": "risk_reviews_pkey",
+            "valid": true,
+            "definition_sha256": "873975e36b04d6ea8b8fc40a55218c32f937c0c97fad412b17fd29995eef797b"
+          },
+          {
+            "table": "risk_reviews",
+            "name": "risk_reviews_queue",
+            "valid": true,
+            "definition_sha256": "51935e6ef73f895e0d0ca1000a8e529ce914de51befcedb2a392be8d77259367"
+          },
+          {
+            "table": "schema_migrations",
+            "name": "schema_migrations_pkey",
+            "valid": true,
+            "definition_sha256": "4a4884b43c85251334d163d5c4c06bc2eda9642773c0416ebe135ff935b10675"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_pkey",
+            "valid": true,
+            "definition_sha256": "0ab33ba6313c468eabce8296439510319bdc4d4e252390060bec69ea459524fd"
+          }
+        ],
+        "roles": [
+          {
+            "name": "rds_iam",
+            "login": false,
+            "inherit": true,
+            "create_db": false,
+            "superuser": false,
+            "bypass_rls": false,
+            "create_role": false
+          },
+          {
+            "name": "rds_superuser",
+            "login": false,
+            "inherit": true,
+            "create_db": false,
+            "superuser": false,
+            "bypass_rls": false,
+            "create_role": false
+          },
+          {
+            "name": "fintrust_admin",
+            "login": true,
+            "inherit": true,
+            "create_db": true,
+            "superuser": false,
+            "bypass_rls": false,
+            "create_role": true
+          },
+          {
+            "name": "fintrust_transactions_owner",
+            "login": false,
+            "inherit": false,
+            "create_db": false,
+            "superuser": false,
+            "bypass_rls": false,
+            "create_role": false
+          },
+          {
+            "name": "fintrust_migrate_dev",
+            "login": true,
+            "inherit": false,
+            "create_db": false,
+            "superuser": false,
+            "bypass_rls": false,
+            "create_role": false
+          },
+          {
+            "name": "fintrust_index_builder",
+            "login": false,
+            "inherit": false,
+            "create_db": false,
+            "superuser": false,
+            "bypass_rls": false,
+            "create_role": false
+          },
+          {
+            "name": "fintrust_workflow_owner",
+            "login": false,
+            "inherit": false,
+            "create_db": false,
+            "superuser": false,
+            "bypass_rls": false,
+            "create_role": false
+          }
+        ],
+        "memberships": [
+          {
+            "set": true,
+            "role": "rds_iam",
+            "admin": false,
+            "member": "fintrust_migrate_dev",
+            "inherit": false
+          },
+          {
+            "set": false,
+            "role": "rds_iam",
+            "admin": true,
+            "member": "fintrust_admin",
+            "inherit": false
+          },
+          {
+            "set": true,
+            "role": "rds_superuser",
+            "admin": false,
+            "member": "fintrust_admin",
+            "inherit": true
+          },
+          {
+            "set": false,
+            "role": "fintrust_transactions_owner",
+            "admin": false,
+            "member": "fintrust_index_builder",
+            "inherit": true
+          },
+          {
+            "set": true,
+            "role": "fintrust_transactions_owner",
+            "admin": false,
+            "member": "fintrust_migrate_dev",
+            "inherit": false
+          },
+          {
+            "set": false,
+            "role": "fintrust_transactions_owner",
+            "admin": false,
+            "member": "fintrust_admin",
+            "inherit": false
+          },
+          {
+            "set": false,
+            "role": "fintrust_transactions_owner",
+            "admin": true,
+            "member": "fintrust_admin",
+            "inherit": false
+          },
+          {
+            "set": false,
+            "role": "fintrust_migrate_dev",
+            "admin": true,
+            "member": "fintrust_admin",
+            "inherit": false
+          },
+          {
+            "set": false,
+            "role": "fintrust_index_builder",
+            "admin": false,
+            "member": "fintrust_admin",
+            "inherit": false
+          },
+          {
+            "set": false,
+            "role": "fintrust_index_builder",
+            "admin": true,
+            "member": "fintrust_admin",
+            "inherit": false
+          },
+          {
+            "set": false,
+            "role": "fintrust_workflow_owner",
+            "admin": false,
+            "member": "fintrust_admin",
+            "inherit": false
+          },
+          {
+            "set": false,
+            "role": "fintrust_workflow_owner",
+            "admin": true,
+            "member": "fintrust_admin",
+            "inherit": false
+          }
+        ],
+        "table_grants": [
+          {
+            "table": "accounts",
+            "acl": null
+          },
+          {
+            "table": "alerts",
+            "acl": null
+          },
+          {
+            "table": "alerts_alert_id_seq",
+            "acl": null
+          },
+          {
+            "table": "batch_reconciliation",
+            "acl": null
+          },
+          {
+            "table": "correction_outbox",
+            "acl": null
+          },
+          {
+            "table": "customers",
+            "acl": null
+          },
+          {
+            "table": "ingestion_attempts",
+            "acl": null
+          },
+          {
+            "table": "ingestion_batches",
+            "acl": null
+          },
+          {
+            "table": "ingestion_records",
+            "acl": null
+          },
+          {
+            "table": "operations_requests",
+            "acl": null
+          },
+          {
+            "table": "processed_transactions",
+            "acl": null
+          },
+          {
+            "table": "projection_outbox",
+            "acl": null
+          },
+          {
+            "table": "quarantine_cases",
+            "acl": null
+          },
+          {
+            "table": "quarantine_corrections",
+            "acl": null
+          },
+          {
+            "table": "quarantine_workflow",
+            "acl": null
+          },
+          {
+            "table": "risk_events",
+            "acl": null
+          },
+          {
+            "table": "risk_events_risk_event_id_seq",
+            "acl": null
+          },
+          {
+            "table": "risk_review_history",
+            "acl": null
+          },
+          {
+            "table": "risk_reviews",
+            "acl": null
+          },
+          {
+            "table": "schema_migrations",
+            "acl": "{fintrust_workflow_owner=arwdDxt/fintrust_workflow_owner,fintrust_migrate_dev=ar/fintrust_workflow_owner}"
+          },
+          {
+            "table": "transactions",
+            "acl": "{fintrust_transactions_owner=r/fintrust_transactions_owner,fintrust_migrate_dev=r/fintrust_transactions_owner}"
+          }
+        ],
+        "column_grants": [
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "currency",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_admin",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "processed_transactions",
+            "column_name": "tx_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_admin",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "customers",
+            "column_name": "customer_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_workflow_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "schema_migrations",
+            "column_name": "catalog_sha256",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "source_row",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "cross_border",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_workflow_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "schema_migrations",
+            "column_name": "version",
+            "privilege_type": "INSERT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "merchant",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_workflow_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "schema_migrations",
+            "column_name": "applied_at",
+            "privilege_type": "INSERT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "raw_file",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "tx_type",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "tx_date",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_admin",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "alerts",
+            "column_name": "alert_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "source_system",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "amount",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "country",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "file_sha256",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "transaction_fingerprint",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "account_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "source_transaction_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_admin",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "risk_events",
+            "column_name": "risk_event_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_workflow_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "schema_migrations",
+            "column_name": "catalog_sha256",
+            "privilege_type": "INSERT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_workflow_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "schema_migrations",
+            "column_name": "source_sha256",
+            "privilege_type": "INSERT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_workflow_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "schema_migrations",
+            "column_name": "source_sha256",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_workflow_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "schema_migrations",
+            "column_name": "applied_at",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_admin",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "accounts",
+            "column_name": "account_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_workflow_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "schema_migrations",
+            "column_name": "version",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "batch_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "tx_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          }
+        ],
+        "grants_sha256": "1a361a73f7f9e2e8ce218ef26eba7072d4acfc1431a0a68036a51b193ce7365c",
+        "counts": {
+          "read_only": "on",
+          "row_counts": {
+            "alerts": 0,
+            "accounts": 0,
+            "customers": 0,
+            "risk_events": 0,
+            "transactions": 0,
+            "processed_transactions": 0
+          },
+          "invalid_file_hash_rows": 0,
+          "invalid_source_row_rows": 0,
+          "invalid_fingerprint_rows": 0,
+          "invalid_source_identity_rows": 0,
+          "duplicate_source_identity_groups": 0
+        },
+        "release1": {
+          "user": "fintrust_migrate_dev",
+          "views": [
+            {
+              "name": "batch_reconciliation",
+              "definition_md5": "c5ba918c08560b588d210f703850d9d8"
+            },
+            {
+              "name": "quarantine_workflow",
+              "definition_md5": "ac205cd483fa0f1251b16a97f37abe91"
+            }
+          ],
+          "columns": [
+            {
+              "name": "account_id",
+              "type": "uuid",
+              "table": "accounts",
+              "not_null": true,
+              "default_md5": "ce2dec2e63c22a5da2490613e27599ba"
+            },
+            {
+              "name": "customer_id",
+              "type": "uuid",
+              "table": "accounts",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "account_type",
+              "type": "character varying(30)",
+              "table": "accounts",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "balance",
+              "type": "numeric(15,2)",
+              "table": "accounts",
+              "not_null": true,
+              "default_md5": "f7ddd489ab0a82567b241b05971cbdb3"
+            },
+            {
+              "name": "status",
+              "type": "character varying(20)",
+              "table": "accounts",
+              "not_null": true,
+              "default_md5": "7fd631269778e603b46f8f5da0e61608"
+            },
+            {
+              "name": "opened_at",
+              "type": "timestamp with time zone",
+              "table": "accounts",
+              "not_null": true,
+              "default_md5": "75230039beb12ce952f24927f2bfa2f2"
+            },
+            {
+              "name": "alert_id",
+              "type": "bigint",
+              "table": "alerts",
+              "not_null": true,
+              "default_md5": "925a77383efde0d073abd6daf7626b6d"
+            },
+            {
+              "name": "risk_event_id",
+              "type": "bigint",
+              "table": "alerts",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "severity",
+              "type": "character varying(20)",
+              "table": "alerts",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "message",
+              "type": "text",
+              "table": "alerts",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "sent_at",
+              "type": "timestamp with time zone",
+              "table": "alerts",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "delivery_key",
+              "type": "bigint",
+              "table": "alerts",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "delivery_state",
+              "type": "character varying(10)",
+              "table": "alerts",
+              "not_null": true,
+              "default_md5": "de88f6c1550dce498de16ecad73e054c"
+            },
+            {
+              "name": "provider_message_id",
+              "type": "text",
+              "table": "alerts",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "batch_id",
+              "type": "uuid",
+              "table": "batch_reconciliation",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "rows_received",
+              "type": "integer",
+              "table": "batch_reconciliation",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "publication_complete",
+              "type": "boolean",
+              "table": "batch_reconciliation",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "file_failure_code",
+              "type": "text",
+              "table": "batch_reconciliation",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "recorded",
+              "type": "bigint",
+              "table": "batch_reconciliation",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "accepted",
+              "type": "bigint",
+              "table": "batch_reconciliation",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "quarantined",
+              "type": "bigint",
+              "table": "batch_reconciliation",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "duplicate",
+              "type": "bigint",
+              "table": "batch_reconciliation",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "failed_technical",
+              "type": "bigint",
+              "table": "batch_reconciliation",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "pending",
+              "type": "bigint",
+              "table": "batch_reconciliation",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "counts_consistent",
+              "type": "boolean",
+              "table": "batch_reconciliation",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "status",
+              "type": "text",
+              "table": "batch_reconciliation",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "correction_id",
+              "type": "uuid",
+              "table": "correction_outbox",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "envelope",
+              "type": "jsonb",
+              "table": "correction_outbox",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "state",
+              "type": "text",
+              "table": "correction_outbox",
+              "not_null": true,
+              "default_md5": "ca873baa1a2b49399e9c4dde6290ba84"
+            },
+            {
+              "name": "attempts",
+              "type": "integer",
+              "table": "correction_outbox",
+              "not_null": true,
+              "default_md5": "cfcd208495d565ef66e7dff9f98764da"
+            },
+            {
+              "name": "last_error_type",
+              "type": "text",
+              "table": "correction_outbox",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "completed_at",
+              "type": "timestamp with time zone",
+              "table": "correction_outbox",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "customer_id",
+              "type": "uuid",
+              "table": "customers",
+              "not_null": true,
+              "default_md5": "ce2dec2e63c22a5da2490613e27599ba"
+            },
+            {
+              "name": "full_name",
+              "type": "character varying(150)",
+              "table": "customers",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "id_number",
+              "type": "character varying(20)",
+              "table": "customers",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "kyc_status",
+              "type": "character varying(20)",
+              "table": "customers",
+              "not_null": true,
+              "default_md5": "649ee735de57d4b53deda7f7049dd9ea"
+            },
+            {
+              "name": "created_at",
+              "type": "timestamp with time zone",
+              "table": "customers",
+              "not_null": true,
+              "default_md5": "75230039beb12ce952f24927f2bfa2f2"
+            },
+            {
+              "name": "attempt_id",
+              "type": "uuid",
+              "table": "ingestion_attempts",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "batch_id",
+              "type": "uuid",
+              "table": "ingestion_attempts",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "source_bucket",
+              "type": "text",
+              "table": "ingestion_attempts",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "source_file",
+              "type": "text",
+              "table": "ingestion_attempts",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "source_version",
+              "type": "text",
+              "table": "ingestion_attempts",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "source_etag",
+              "type": "text",
+              "table": "ingestion_attempts",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "received_at",
+              "type": "timestamp with time zone",
+              "table": "ingestion_attempts",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "status",
+              "type": "text",
+              "table": "ingestion_attempts",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "error_code",
+              "type": "text",
+              "table": "ingestion_attempts",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "batch_id",
+              "type": "uuid",
+              "table": "ingestion_batches",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "source_system",
+              "type": "character varying(100)",
+              "table": "ingestion_batches",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "source_bucket",
+              "type": "text",
+              "table": "ingestion_batches",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "file_sha256",
+              "type": "character(64)",
+              "table": "ingestion_batches",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "received_at",
+              "type": "timestamp with time zone",
+              "table": "ingestion_batches",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "rows_received",
+              "type": "integer",
+              "table": "ingestion_batches",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "publication_complete",
+              "type": "boolean",
+              "table": "ingestion_batches",
+              "not_null": true,
+              "default_md5": "68934a3e9455fa72420237eb05902327"
+            },
+            {
+              "name": "file_failure_code",
+              "type": "text",
+              "table": "ingestion_batches",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "batch_id",
+              "type": "uuid",
+              "table": "ingestion_records",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "source_row",
+              "type": "integer",
+              "table": "ingestion_records",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "source_attempt_id",
+              "type": "uuid",
+              "table": "ingestion_records",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "disposition",
+              "type": "text",
+              "table": "ingestion_records",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "candidate_digest",
+              "type": "character(64)",
+              "table": "ingestion_records",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "canonical_tx_id",
+              "type": "uuid",
+              "table": "ingestion_records",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "reason_code",
+              "type": "text",
+              "table": "ingestion_records",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "updated_at",
+              "type": "timestamp with time zone",
+              "table": "ingestion_records",
+              "not_null": true,
+              "default_md5": "75230039beb12ce952f24927f2bfa2f2"
+            },
+            {
+              "name": "request_id",
+              "type": "uuid",
+              "table": "operations_requests",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "actor_subject",
+              "type": "text",
+              "table": "operations_requests",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "action",
+              "type": "text",
+              "table": "operations_requests",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "target",
+              "type": "text",
+              "table": "operations_requests",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "request_digest",
+              "type": "character(64)",
+              "table": "operations_requests",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "state",
+              "type": "text",
+              "table": "operations_requests",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "result",
+              "type": "jsonb",
+              "table": "operations_requests",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "created_at",
+              "type": "timestamp with time zone",
+              "table": "operations_requests",
+              "not_null": true,
+              "default_md5": "75230039beb12ce952f24927f2bfa2f2"
+            },
+            {
+              "name": "completed_at",
+              "type": "timestamp with time zone",
+              "table": "operations_requests",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "tx_id",
+              "type": "uuid",
+              "table": "processed_transactions",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "fingerprint",
+              "type": "character(64)",
+              "table": "processed_transactions",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "result",
+              "type": "jsonb",
+              "table": "processed_transactions",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "processed_at",
+              "type": "timestamp with time zone",
+              "table": "processed_transactions",
+              "not_null": true,
+              "default_md5": "75230039beb12ce952f24927f2bfa2f2"
+            },
+            {
+              "name": "tx_id",
+              "type": "uuid",
+              "table": "projection_outbox",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "state",
+              "type": "text",
+              "table": "projection_outbox",
+              "not_null": true,
+              "default_md5": "ca873baa1a2b49399e9c4dde6290ba84"
+            },
+            {
+              "name": "completed_at",
+              "type": "timestamp with time zone",
+              "table": "projection_outbox",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "quarantine_id",
+              "type": "uuid",
+              "table": "quarantine_cases",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "batch_id",
+              "type": "uuid",
+              "table": "quarantine_cases",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "source_row",
+              "type": "integer",
+              "table": "quarantine_cases",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "reason_code",
+              "type": "text",
+              "table": "quarantine_cases",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "reason_detail",
+              "type": "text",
+              "table": "quarantine_cases",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "validation_errors",
+              "type": "jsonb",
+              "table": "quarantine_cases",
+              "not_null": true,
+              "default_md5": "8b4b2df56ad0773943ef9179742da01b"
+            },
+            {
+              "name": "candidate_account_id",
+              "type": "uuid",
+              "table": "quarantine_cases",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "safe_payload_key",
+              "type": "text",
+              "table": "quarantine_cases",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "safe_payload_version",
+              "type": "text",
+              "table": "quarantine_cases",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "source_reference",
+              "type": "text",
+              "table": "quarantine_cases",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "quarantined_at",
+              "type": "timestamp with time zone",
+              "table": "quarantine_cases",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "correction_id",
+              "type": "uuid",
+              "table": "quarantine_corrections",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "quarantine_id",
+              "type": "uuid",
+              "table": "quarantine_corrections",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "request_id",
+              "type": "uuid",
+              "table": "quarantine_corrections",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "request_digest",
+              "type": "character(64)",
+              "table": "quarantine_corrections",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "correction_version",
+              "type": "integer",
+              "table": "quarantine_corrections",
+              "not_null": true,
+              "default_md5": "c4ca4238a0b923820dcc509a6f75849b"
+            },
+            {
+              "name": "submitted_by",
+              "type": "text",
+              "table": "quarantine_corrections",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "submitted_at",
+              "type": "timestamp with time zone",
+              "table": "quarantine_corrections",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "correction_notes",
+              "type": "text",
+              "table": "quarantine_corrections",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "corrected_payload_key",
+              "type": "text",
+              "table": "quarantine_corrections",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "corrected_payload_version",
+              "type": "text",
+              "table": "quarantine_corrections",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "action",
+              "type": "text",
+              "table": "quarantine_corrections",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "reprocess_batch_id",
+              "type": "uuid",
+              "table": "quarantine_corrections",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "reprocess_source_row",
+              "type": "integer",
+              "table": "quarantine_corrections",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "quarantine_id",
+              "type": "uuid",
+              "table": "quarantine_workflow",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "batch_id",
+              "type": "uuid",
+              "table": "quarantine_workflow",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "source_row",
+              "type": "integer",
+              "table": "quarantine_workflow",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "reason_code",
+              "type": "text",
+              "table": "quarantine_workflow",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "reason_detail",
+              "type": "text",
+              "table": "quarantine_workflow",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "validation_errors",
+              "type": "jsonb",
+              "table": "quarantine_workflow",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "candidate_account_id",
+              "type": "uuid",
+              "table": "quarantine_workflow",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "safe_payload_key",
+              "type": "text",
+              "table": "quarantine_workflow",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "safe_payload_version",
+              "type": "text",
+              "table": "quarantine_workflow",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "source_reference",
+              "type": "text",
+              "table": "quarantine_workflow",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "quarantined_at",
+              "type": "timestamp with time zone",
+              "table": "quarantine_workflow",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "correction_id",
+              "type": "uuid",
+              "table": "quarantine_workflow",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "canonical_tx_id",
+              "type": "uuid",
+              "table": "quarantine_workflow",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "workflow_status",
+              "type": "text",
+              "table": "quarantine_workflow",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "risk_event_id",
+              "type": "bigint",
+              "table": "risk_events",
+              "not_null": true,
+              "default_md5": "bd6812a2876405ddcff3479655531dee"
+            },
+            {
+              "name": "tx_id",
+              "type": "uuid",
+              "table": "risk_events",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "risk_score",
+              "type": "integer",
+              "table": "risk_events",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "reason",
+              "type": "character varying(255)",
+              "table": "risk_events",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "created_at",
+              "type": "timestamp with time zone",
+              "table": "risk_events",
+              "not_null": true,
+              "default_md5": "75230039beb12ce952f24927f2bfa2f2"
+            },
+            {
+              "name": "risk_event_id",
+              "type": "bigint",
+              "table": "risk_review_history",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "version",
+              "type": "integer",
+              "table": "risk_review_history",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "request_id",
+              "type": "uuid",
+              "table": "risk_review_history",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "request_digest",
+              "type": "character(64)",
+              "table": "risk_review_history",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "before_status",
+              "type": "text",
+              "table": "risk_review_history",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "after_status",
+              "type": "text",
+              "table": "risk_review_history",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "actor_subject",
+              "type": "text",
+              "table": "risk_review_history",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "reviewer_subject",
+              "type": "text",
+              "table": "risk_review_history",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "notes",
+              "type": "text",
+              "table": "risk_review_history",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "resolution_code",
+              "type": "text",
+              "table": "risk_review_history",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "changed_at",
+              "type": "timestamp with time zone",
+              "table": "risk_review_history",
+              "not_null": true,
+              "default_md5": "75230039beb12ce952f24927f2bfa2f2"
+            },
+            {
+              "name": "risk_event_id",
+              "type": "bigint",
+              "table": "risk_reviews",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "review_status",
+              "type": "text",
+              "table": "risk_reviews",
+              "not_null": true,
+              "default_md5": "51db0d03a8e59aa38bbbdebaab92b86d"
+            },
+            {
+              "name": "reviewer_subject",
+              "type": "text",
+              "table": "risk_reviews",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "reviewed_by",
+              "type": "text",
+              "table": "risk_reviews",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "reviewed_at",
+              "type": "timestamp with time zone",
+              "table": "risk_reviews",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "review_notes",
+              "type": "text",
+              "table": "risk_reviews",
+              "not_null": true,
+              "default_md5": "86e751880b3791dd7c2efae188915799"
+            },
+            {
+              "name": "resolution_code",
+              "type": "text",
+              "table": "risk_reviews",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "change_actor",
+              "type": "text",
+              "table": "risk_reviews",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "change_request_id",
+              "type": "uuid",
+              "table": "risk_reviews",
+              "not_null": true,
+              "default_md5": "f3b72bb359a50b640590970a2ab8e514"
+            },
+            {
+              "name": "request_digest",
+              "type": "character(64)",
+              "table": "risk_reviews",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "version",
+              "type": "integer",
+              "table": "risk_reviews",
+              "not_null": true,
+              "default_md5": "c4ca4238a0b923820dcc509a6f75849b"
+            },
+            {
+              "name": "created_at",
+              "type": "timestamp with time zone",
+              "table": "risk_reviews",
+              "not_null": true,
+              "default_md5": "75230039beb12ce952f24927f2bfa2f2"
+            },
+            {
+              "name": "version",
+              "type": "integer",
+              "table": "schema_migrations",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "source_sha256",
+              "type": "character(64)",
+              "table": "schema_migrations",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "catalog_sha256",
+              "type": "character(64)",
+              "table": "schema_migrations",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "applied_at",
+              "type": "timestamp with time zone",
+              "table": "schema_migrations",
+              "not_null": true,
+              "default_md5": "75230039beb12ce952f24927f2bfa2f2"
+            },
+            {
+              "name": "tx_id",
+              "type": "uuid",
+              "table": "transactions",
+              "not_null": true,
+              "default_md5": "ce2dec2e63c22a5da2490613e27599ba"
+            },
+            {
+              "name": "account_id",
+              "type": "uuid",
+              "table": "transactions",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "amount",
+              "type": "numeric(15,2)",
+              "table": "transactions",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "currency",
+              "type": "character(3)",
+              "table": "transactions",
+              "not_null": true,
+              "default_md5": "56c475c89eece75c8bbad1d9f06d49d7"
+            },
+            {
+              "name": "merchant",
+              "type": "character varying(200)",
+              "table": "transactions",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "tx_date",
+              "type": "timestamp with time zone",
+              "table": "transactions",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "tx_type",
+              "type": "character varying(30)",
+              "table": "transactions",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "cross_border",
+              "type": "boolean",
+              "table": "transactions",
+              "not_null": true,
+              "default_md5": "68934a3e9455fa72420237eb05902327"
+            },
+            {
+              "name": "raw_file",
+              "type": "text",
+              "table": "transactions",
+              "not_null": true,
+              "default_md5": null
+            },
+            {
+              "name": "source_system",
+              "type": "character varying(100)",
+              "table": "transactions",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "source_transaction_id",
+              "type": "character varying(200)",
+              "table": "transactions",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "transaction_fingerprint",
+              "type": "character(64)",
+              "table": "transactions",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "batch_id",
+              "type": "uuid",
+              "table": "transactions",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "file_sha256",
+              "type": "character(64)",
+              "table": "transactions",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "source_row",
+              "type": "integer",
+              "table": "transactions",
+              "not_null": false,
+              "default_md5": null
+            },
+            {
+              "name": "country",
+              "type": "character(2)",
+              "table": "transactions",
+              "not_null": false,
+              "default_md5": null
+            }
+          ],
+          "indexes": [
+            {
+              "name": "accounts_pkey",
+              "ready": true,
+              "table": "accounts",
+              "valid": true,
+              "unique": true,
+              "definition_md5": "d2c64e55d3ba7ea597372fc15f227ceb"
+            },
+            {
+              "name": "alerts_delivery_key_key",
+              "ready": true,
+              "table": "alerts",
+              "valid": true,
+              "unique": true,
+              "definition_md5": "fda08a68ca96ef1d4495f72d89b10ff0"
+            },
+            {
+              "name": "alerts_pkey",
+              "ready": true,
+              "table": "alerts",
+              "valid": true,
+              "unique": true,
+              "definition_md5": "e3e89ce350a0e0c36bff1bad02895585"
+            },
+            {
+              "name": "correction_outbox_pkey",
+              "ready": true,
+              "table": "correction_outbox",
+              "valid": true,
+              "unique": true,
+              "definition_md5": "f89ce68be19b5accb14d51662e76af0c"
+            },
+            {
+              "name": "customers_id_number_key",
+              "ready": true,
+              "table": "customers",
+              "valid": true,
+              "unique": true,
+              "definition_md5": "2473f4f29b8b088d8f856d229b4e7160"
+            },
+            {
+              "name": "customers_pkey",
+              "ready": true,
+              "table": "customers",
+              "valid": true,
+              "unique": true,
+              "definition_md5": "96c2236de55c0cc98c15f1d11229b1e6"
+            },
+            {
+              "name": "ingestion_attempts_batch_id_attempt_id_key",
+              "ready": true,
+              "table": "ingestion_attempts",
+              "valid": true,
+              "unique": true,
+              "definition_md5": "8dec89626cc42172d2a412763d013c82"
+            },
+            {
+              "name": "ingestion_attempts_pkey",
+              "ready": true,
+              "table": "ingestion_attempts",
+              "valid": true,
+              "unique": true,
+              "definition_md5": "01a0fb20826d269ce27b623d28431f11"
+            },
+            {
+              "name": "ingestion_batches_pkey",
+              "ready": true,
+              "table": "ingestion_batches",
+              "valid": true,
+              "unique": true,
+              "definition_md5": "f0d9bbd2473f8edfc15de334eb20911f"
+            },
+            {
+              "name": "ingestion_batches_source_bucket_file_sha256_key",
+              "ready": true,
+              "table": "ingestion_batches",
+              "valid": true,
+              "unique": true,
+              "definition_md5": "c7e6408b4f11628a131bcabf9c4384bf"
+            },
+            {
+              "name": "ingestion_records_pkey",
+              "ready": true,
+              "table": "ingestion_records",
+              "valid": true,
+              "unique": true,
+              "definition_md5": "4db06fe07153039917792f0da97f6585"
+            },
+            {
+              "name": "ingestion_records_tx",
+              "ready": true,
+              "table": "ingestion_records",
+              "valid": true,
+              "unique": false,
+              "definition_md5": "651cdd4bd1425010184ac08a3a2dcada"
+            },
+            {
+              "name": "operations_requests_pkey",
+              "ready": true,
+              "table": "operations_requests",
+              "valid": true,
+              "unique": true,
+              "definition_md5": "aa1a481e8e145aa41d6867958073a113"
+            },
+            {
+              "name": "processed_transactions_pkey",
+              "ready": true,
+              "table": "processed_transactions",
+              "valid": true,
+              "unique": true,
+              "definition_md5": "8feb9a1f8b4f327957823a2e8de63b8e"
+            },
+            {
+              "name": "projection_outbox_pkey",
+              "ready": true,
+              "table": "projection_outbox",
+              "valid": true,
+              "unique": true,
+              "definition_md5": "ad87a63f41e7a18a215d89851f6d2a48"
+            },
+            {
+              "name": "quarantine_cases_batch_id_source_row_key",
+              "ready": true,
+              "table": "quarantine_cases",
+              "valid": true,
+              "unique": true,
+              "definition_md5": "f1ae7be71045a20079f47adb642cd4a1"
+            },
+            {
+              "name": "quarantine_cases_pkey",
+              "ready": true,
+              "table": "quarantine_cases",
+              "valid": true,
+              "unique": true,
+              "definition_md5": "e013d84ba53953822b5bd6d49ab81b1b"
+            },
+            {
+              "name": "correction_case_time",
+              "ready": true,
+              "table": "quarantine_corrections",
+              "valid": true,
+              "unique": false,
+              "definition_md5": "2ea12ac22b012e128c220368d2cb9a49"
+            },
+            {
+              "name": "quarantine_corrections_pkey",
+              "ready": true,
+              "table": "quarantine_corrections",
+              "valid": true,
+              "unique": true,
+              "definition_md5": "800a80d3c674a685e7a24e423ab77517"
+            },
+            {
+              "name": "quarantine_corrections_quarantine_id_correction_version_key",
+              "ready": true,
+              "table": "quarantine_corrections",
+              "valid": true,
+              "unique": true,
+              "definition_md5": "ec601372744052ac706c69b78070e0bf"
+            },
+            {
+              "name": "quarantine_corrections_request_id_key",
+              "ready": true,
+              "table": "quarantine_corrections",
+              "valid": true,
+              "unique": true,
+              "definition_md5": "966062825bae3e4be9ebc10beec4443a"
+            },
+            {
+              "name": "quarantine_one_active_resolution",
+              "ready": true,
+              "table": "quarantine_corrections",
+              "valid": true,
+              "unique": true,
+              "definition_md5": "c26a2a292a9210edb80d3cf8fb3246ea"
+            },
+            {
+              "name": "idx_risk_events_tx_date",
+              "ready": true,
+              "table": "risk_events",
+              "valid": true,
+              "unique": false,
+              "definition_md5": "d9b0c691373a9acb800b2a31d04ad170"
+            },
+            {
+              "name": "risk_events_pkey",
+              "ready": true,
+              "table": "risk_events",
+              "valid": true,
+              "unique": true,
+              "definition_md5": "3a6e9fd4764dcc7853c43373e7923687"
+            },
+            {
+              "name": "risk_review_history_pkey",
+              "ready": true,
+              "table": "risk_review_history",
+              "valid": true,
+              "unique": true,
+              "definition_md5": "875f491e299ae5383b796a41dc02ba7f"
+            },
+            {
+              "name": "risk_review_history_request_id_key",
+              "ready": true,
+              "table": "risk_review_history",
+              "valid": true,
+              "unique": true,
+              "definition_md5": "5558ec362e07be00c607f8196805458d"
+            },
+            {
+              "name": "risk_reviews_pkey",
+              "ready": true,
+              "table": "risk_reviews",
+              "valid": true,
+              "unique": true,
+              "definition_md5": "3545c70b5bf99aeb042a4d8c7b99f7db"
+            },
+            {
+              "name": "risk_reviews_queue",
+              "ready": true,
+              "table": "risk_reviews",
+              "valid": true,
+              "unique": false,
+              "definition_md5": "6c5e9f3a3eb2eea617bd1382b43d4d01"
+            },
+            {
+              "name": "schema_migrations_pkey",
+              "ready": true,
+              "table": "schema_migrations",
+              "valid": true,
+              "unique": true,
+              "definition_md5": "e8ec0b5124238c8ef1ee531382d4576c"
+            },
+            {
+              "name": "idx_tx_account_cursor",
+              "ready": true,
+              "table": "transactions",
+              "valid": true,
+              "unique": false,
+              "definition_md5": "0c039f3fb05bc7185239650ddbbbd7be"
+            },
+            {
+              "name": "idx_tx_account_date",
+              "ready": true,
+              "table": "transactions",
+              "valid": true,
+              "unique": false,
+              "definition_md5": "186f04a9fe1e22cd110696f8478e0cb0"
+            },
+            {
+              "name": "idx_tx_crossborder",
+              "ready": true,
+              "table": "transactions",
+              "valid": true,
+              "unique": false,
+              "definition_md5": "106aa6f0e3a636b25ff801d0847a61d7"
+            },
+            {
+              "name": "idx_tx_duplicate_charge",
+              "ready": true,
+              "table": "transactions",
+              "valid": true,
+              "unique": false,
+              "definition_md5": "d66921c1a9d239d4dc1200bb648998c6"
+            },
+            {
+              "name": "idx_tx_high_amount",
+              "ready": true,
+              "table": "transactions",
+              "valid": true,
+              "unique": false,
+              "definition_md5": "ce6f9a4334d2f2e5f2c52aca3e28b133"
+            },
+            {
+              "name": "idx_tx_source_identity",
+              "ready": true,
+              "table": "transactions",
+              "valid": true,
+              "unique": true,
+              "definition_md5": "d7c0df3848a1f15d516059c47e58ec94"
+            },
+            {
+              "name": "transactions_pkey",
+              "ready": true,
+              "table": "transactions",
+              "valid": true,
+              "unique": true,
+              "definition_md5": "4e67109af6598e80ba197121abdeed6d"
+            }
+          ],
+          "objects": [
+            {
+              "acl": null,
+              "rls": false,
+              "kind": "r",
+              "name": "accounts",
+              "owner": "fintrust_admin",
+              "present": true,
+              "force_rls": false,
+              "can_select": false
+            },
+            {
+              "acl": null,
+              "rls": false,
+              "kind": "r",
+              "name": "alerts",
+              "owner": "fintrust_admin",
+              "present": true,
+              "force_rls": false,
+              "can_select": false
+            },
+            {
+              "acl": null,
+              "rls": false,
+              "kind": "v",
+              "name": "batch_reconciliation",
+              "owner": "fintrust_workflow_owner",
+              "present": true,
+              "force_rls": false,
+              "can_select": false
+            },
+            {
+              "acl": null,
+              "rls": false,
+              "kind": "r",
+              "name": "correction_outbox",
+              "owner": "fintrust_workflow_owner",
+              "present": true,
+              "force_rls": false,
+              "can_select": false
+            },
+            {
+              "acl": null,
+              "rls": false,
+              "kind": "r",
+              "name": "customers",
+              "owner": "fintrust_admin",
+              "present": true,
+              "force_rls": false,
+              "can_select": false
+            },
+            {
+              "acl": null,
+              "rls": false,
+              "kind": "r",
+              "name": "ingestion_attempts",
+              "owner": "fintrust_workflow_owner",
+              "present": true,
+              "force_rls": false,
+              "can_select": false
+            },
+            {
+              "acl": null,
+              "rls": false,
+              "kind": "r",
+              "name": "ingestion_batches",
+              "owner": "fintrust_workflow_owner",
+              "present": true,
+              "force_rls": false,
+              "can_select": false
+            },
+            {
+              "acl": null,
+              "rls": false,
+              "kind": "r",
+              "name": "ingestion_records",
+              "owner": "fintrust_workflow_owner",
+              "present": true,
+              "force_rls": false,
+              "can_select": false
+            },
+            {
+              "acl": null,
+              "rls": false,
+              "kind": "r",
+              "name": "operations_requests",
+              "owner": "fintrust_workflow_owner",
+              "present": true,
+              "force_rls": false,
+              "can_select": false
+            },
+            {
+              "acl": null,
+              "rls": false,
+              "kind": "r",
+              "name": "processed_transactions",
+              "owner": "fintrust_admin",
+              "present": true,
+              "force_rls": false,
+              "can_select": false
+            },
+            {
+              "acl": null,
+              "rls": false,
+              "kind": "r",
+              "name": "projection_outbox",
+              "owner": "fintrust_workflow_owner",
+              "present": true,
+              "force_rls": false,
+              "can_select": false
+            },
+            {
+              "acl": null,
+              "rls": false,
+              "kind": "r",
+              "name": "quarantine_cases",
+              "owner": "fintrust_workflow_owner",
+              "present": true,
+              "force_rls": false,
+              "can_select": false
+            },
+            {
+              "acl": null,
+              "rls": false,
+              "kind": "r",
+              "name": "quarantine_corrections",
+              "owner": "fintrust_workflow_owner",
+              "present": true,
+              "force_rls": false,
+              "can_select": false
+            },
+            {
+              "acl": null,
+              "rls": false,
+              "kind": "v",
+              "name": "quarantine_workflow",
+              "owner": "fintrust_workflow_owner",
+              "present": true,
+              "force_rls": false,
+              "can_select": false
+            },
+            {
+              "acl": null,
+              "rls": false,
+              "kind": "r",
+              "name": "risk_events",
+              "owner": "fintrust_admin",
+              "present": true,
+              "force_rls": false,
+              "can_select": false
+            },
+            {
+              "acl": null,
+              "rls": false,
+              "kind": "r",
+              "name": "risk_review_history",
+              "owner": "fintrust_workflow_owner",
+              "present": true,
+              "force_rls": false,
+              "can_select": false
+            },
+            {
+              "acl": null,
+              "rls": false,
+              "kind": "r",
+              "name": "risk_reviews",
+              "owner": "fintrust_workflow_owner",
+              "present": true,
+              "force_rls": false,
+              "can_select": false
+            },
+            {
+              "acl": "{fintrust_workflow_owner=arwdDxt/fintrust_workflow_owner,fintrust_migrate_dev=ar/fintrust_workflow_owner}",
+              "rls": false,
+              "kind": "r",
+              "name": "schema_migrations",
+              "owner": "fintrust_workflow_owner",
+              "present": true,
+              "force_rls": false,
+              "can_select": true
+            },
+            {
+              "acl": "{fintrust_transactions_owner=r/fintrust_transactions_owner,fintrust_migrate_dev=r/fintrust_transactions_owner}",
+              "rls": false,
+              "kind": "r",
+              "name": "transactions",
+              "owner": "fintrust_transactions_owner",
+              "present": true,
+              "force_rls": false,
+              "can_select": true
+            }
+          ],
+          "version": "16.15 (Ubuntu 16.15-0ubuntu0.24.04.1)",
+          "database": "fintrust",
+          "read_only": "on",
+          "constraints": [
+            {
+              "name": "accounts_account_type_check",
+              "type": "c",
+              "table": "accounts",
+              "validated": true,
+              "definition_md5": "e5ec117a4ed46c381c6546149469162f"
+            },
+            {
+              "name": "accounts_customer_id_fkey",
+              "type": "f",
+              "table": "accounts",
+              "validated": true,
+              "definition_md5": "9d848eb6fb898980ead797e5c49ebcc4"
+            },
+            {
+              "name": "accounts_pkey",
+              "type": "p",
+              "table": "accounts",
+              "validated": true,
+              "definition_md5": "76871f5d0c4d61097bef4101eb1c1434"
+            },
+            {
+              "name": "alerts_delivery_key_key",
+              "type": "u",
+              "table": "alerts",
+              "validated": true,
+              "definition_md5": "e8c74653412782dbd850b98c719a63d3"
+            },
+            {
+              "name": "alerts_delivery_state_check",
+              "type": "c",
+              "table": "alerts",
+              "validated": true,
+              "definition_md5": "b13ae4b9d586d862bb54225d6b9a6a35"
+            },
+            {
+              "name": "alerts_pkey",
+              "type": "p",
+              "table": "alerts",
+              "validated": true,
+              "definition_md5": "f9bee8a151e365507b276bed67f1a157"
+            },
+            {
+              "name": "alerts_risk_event_id_fkey",
+              "type": "f",
+              "table": "alerts",
+              "validated": true,
+              "definition_md5": "ada47b7f43293fcdaa7d94df5b637e61"
+            },
+            {
+              "name": "correction_outbox_attempts_check",
+              "type": "c",
+              "table": "correction_outbox",
+              "validated": true,
+              "definition_md5": "57637e3c603a1daa1df1cf72d8847a65"
+            },
+            {
+              "name": "correction_outbox_correction_id_fkey",
+              "type": "f",
+              "table": "correction_outbox",
+              "validated": true,
+              "definition_md5": "8172f863dbe064bf97f7479fcc99f164"
+            },
+            {
+              "name": "correction_outbox_envelope_check",
+              "type": "c",
+              "table": "correction_outbox",
+              "validated": true,
+              "definition_md5": "bd01670e3f759259ee19d699e1881e51"
+            },
+            {
+              "name": "correction_outbox_pkey",
+              "type": "p",
+              "table": "correction_outbox",
+              "validated": true,
+              "definition_md5": "38d65298799b5c23f12c0402caab3b4b"
+            },
+            {
+              "name": "correction_outbox_state_check",
+              "type": "c",
+              "table": "correction_outbox",
+              "validated": true,
+              "definition_md5": "4714c2e2a18b49f4d5dbe726d1beda24"
+            },
+            {
+              "name": "customers_id_number_key",
+              "type": "u",
+              "table": "customers",
+              "validated": true,
+              "definition_md5": "74fea9ecaa316a571ef24f9ee0c576f3"
+            },
+            {
+              "name": "customers_kyc_status_check",
+              "type": "c",
+              "table": "customers",
+              "validated": true,
+              "definition_md5": "25a0de2d10c5f778f978b5f1882ec66f"
+            },
+            {
+              "name": "customers_pkey",
+              "type": "p",
+              "table": "customers",
+              "validated": true,
+              "definition_md5": "17810436179f042b3bee6a0ba05ec751"
+            },
+            {
+              "name": "ingestion_attempts_batch_id_attempt_id_key",
+              "type": "u",
+              "table": "ingestion_attempts",
+              "validated": true,
+              "definition_md5": "331739b12020be9c265dc16802bd581b"
+            },
+            {
+              "name": "ingestion_attempts_batch_id_fkey",
+              "type": "f",
+              "table": "ingestion_attempts",
+              "validated": true,
+              "definition_md5": "881e695457b94aad073c76b3427775fd"
+            },
+            {
+              "name": "ingestion_attempts_pkey",
+              "type": "p",
+              "table": "ingestion_attempts",
+              "validated": true,
+              "definition_md5": "64332ad9ae8e82d85ed24f50b818dbcc"
+            },
+            {
+              "name": "ingestion_attempts_status_check",
+              "type": "c",
+              "table": "ingestion_attempts",
+              "validated": true,
+              "definition_md5": "0157561528a73688605d7724b82a62b5"
+            },
+            {
+              "name": "batch_total_count",
+              "type": "t",
+              "table": "ingestion_batches",
+              "validated": true,
+              "definition_md5": "aac6dc9e89c94dfced18fa2e02f5e5bc"
+            },
+            {
+              "name": "ingestion_batches_file_sha256_check",
+              "type": "c",
+              "table": "ingestion_batches",
+              "validated": true,
+              "definition_md5": "32c21f7659c55aedf4c9a6be5d5811ee"
+            },
+            {
+              "name": "ingestion_batches_pkey",
+              "type": "p",
+              "table": "ingestion_batches",
+              "validated": true,
+              "definition_md5": "98deba4cc2695a35597d1fe8f711ee92"
+            },
+            {
+              "name": "ingestion_batches_rows_received_check",
+              "type": "c",
+              "table": "ingestion_batches",
+              "validated": true,
+              "definition_md5": "0b96242c8dfaebe223370e057bc6aeb5"
+            },
+            {
+              "name": "ingestion_batches_source_bucket_check",
+              "type": "c",
+              "table": "ingestion_batches",
+              "validated": true,
+              "definition_md5": "97d18d518359678a208d2a8def2cb1ae"
+            },
+            {
+              "name": "ingestion_batches_source_bucket_file_sha256_key",
+              "type": "u",
+              "table": "ingestion_batches",
+              "validated": true,
+              "definition_md5": "34acf120f91686da7f50b98f6b0e3b89"
+            },
+            {
+              "name": "ingestion_batches_source_system_check",
+              "type": "c",
+              "table": "ingestion_batches",
+              "validated": true,
+              "definition_md5": "49a018c18dde1b33c5d5fa6411059f85"
+            },
+            {
+              "name": "batch_record_count",
+              "type": "t",
+              "table": "ingestion_records",
+              "validated": true,
+              "definition_md5": "aac6dc9e89c94dfced18fa2e02f5e5bc"
+            },
+            {
+              "name": "ingestion_records_batch_id_fkey",
+              "type": "f",
+              "table": "ingestion_records",
+              "validated": true,
+              "definition_md5": "881e695457b94aad073c76b3427775fd"
+            },
+            {
+              "name": "ingestion_records_batch_id_source_attempt_id_fkey",
+              "type": "f",
+              "table": "ingestion_records",
+              "validated": true,
+              "definition_md5": "365ef2535acc491d4657b9195851db35"
+            },
+            {
+              "name": "ingestion_records_canonical_tx_id_fkey",
+              "type": "f",
+              "table": "ingestion_records",
+              "validated": true,
+              "definition_md5": "b6dd3e3328f008c1b0a5088232e280f7"
+            },
+            {
+              "name": "ingestion_records_check",
+              "type": "c",
+              "table": "ingestion_records",
+              "validated": true,
+              "definition_md5": "3a9fe877c152b91088392c9e912dccb5"
+            },
+            {
+              "name": "ingestion_records_check1",
+              "type": "c",
+              "table": "ingestion_records",
+              "validated": true,
+              "definition_md5": "2dacfbdd8cfe5f9d2f031a2930d1bdad"
+            },
+            {
+              "name": "ingestion_records_disposition_check",
+              "type": "c",
+              "table": "ingestion_records",
+              "validated": true,
+              "definition_md5": "b9880d5726b15ad4c82fd808f4748bfd"
+            },
+            {
+              "name": "ingestion_records_pkey",
+              "type": "p",
+              "table": "ingestion_records",
+              "validated": true,
+              "definition_md5": "48943f22ae57b875d6fa5cfef0cc0330"
+            },
+            {
+              "name": "ingestion_records_source_row_check",
+              "type": "c",
+              "table": "ingestion_records",
+              "validated": true,
+              "definition_md5": "68cfa3187147ec3eb5c01b7fa2486b43"
+            },
+            {
+              "name": "operations_requests_action_check",
+              "type": "c",
+              "table": "operations_requests",
+              "validated": true,
+              "definition_md5": "967ef2b36d5da7238d68483c057c271d"
+            },
+            {
+              "name": "operations_requests_actor_subject_check",
+              "type": "c",
+              "table": "operations_requests",
+              "validated": true,
+              "definition_md5": "dfb6d6d80da0c17d48282d852dec1fbd"
+            },
+            {
+              "name": "operations_requests_pkey",
+              "type": "p",
+              "table": "operations_requests",
+              "validated": true,
+              "definition_md5": "446453b21c6e4a7d1aa48c5b89151eb8"
+            },
+            {
+              "name": "operations_requests_state_check",
+              "type": "c",
+              "table": "operations_requests",
+              "validated": true,
+              "definition_md5": "d3f72dee10b90ab984d43262abcb49d0"
+            },
+            {
+              "name": "processed_transactions_pkey",
+              "type": "p",
+              "table": "processed_transactions",
+              "validated": true,
+              "definition_md5": "82b439da787edc235f70c0606f28252a"
+            },
+            {
+              "name": "processed_transactions_tx_id_fkey",
+              "type": "f",
+              "table": "processed_transactions",
+              "validated": true,
+              "definition_md5": "4eba48d1e2ee0aa92caf205c73f4463b"
+            },
+            {
+              "name": "projection_outbox_pkey",
+              "type": "p",
+              "table": "projection_outbox",
+              "validated": true,
+              "definition_md5": "82b439da787edc235f70c0606f28252a"
+            },
+            {
+              "name": "projection_outbox_state_check",
+              "type": "c",
+              "table": "projection_outbox",
+              "validated": true,
+              "definition_md5": "4714c2e2a18b49f4d5dbe726d1beda24"
+            },
+            {
+              "name": "projection_outbox_tx_id_fkey",
+              "type": "f",
+              "table": "projection_outbox",
+              "validated": true,
+              "definition_md5": "d48a0f5b1b93164d599a943ff3d059e7"
+            },
+            {
+              "name": "quarantine_cases_batch_id_source_row_fkey",
+              "type": "f",
+              "table": "quarantine_cases",
+              "validated": true,
+              "definition_md5": "01d14dcd05d49882e9b1ac3a61c195a3"
+            },
+            {
+              "name": "quarantine_cases_batch_id_source_row_key",
+              "type": "u",
+              "table": "quarantine_cases",
+              "validated": true,
+              "definition_md5": "0246de5af25bbf090276a4674dbd3f81"
+            },
+            {
+              "name": "quarantine_cases_pkey",
+              "type": "p",
+              "table": "quarantine_cases",
+              "validated": true,
+              "definition_md5": "d962412ef0e4b9d183b1dc9b7cab7698"
+            },
+            {
+              "name": "quarantine_cases_reason_code_check",
+              "type": "c",
+              "table": "quarantine_cases",
+              "validated": true,
+              "definition_md5": "52f8f2ce9b7ae7d79e2e921d1f59bfb4"
+            },
+            {
+              "name": "quarantine_cases_reason_detail_check",
+              "type": "c",
+              "table": "quarantine_cases",
+              "validated": true,
+              "definition_md5": "4c1f91887a1b26eacfe324dd472442f1"
+            },
+            {
+              "name": "quarantine_cases_safe_payload_key_check",
+              "type": "c",
+              "table": "quarantine_cases",
+              "validated": true,
+              "definition_md5": "cdae91c5bed80e8033f57ced9f4eab60"
+            },
+            {
+              "name": "quarantine_cases_safe_payload_version_check",
+              "type": "c",
+              "table": "quarantine_cases",
+              "validated": true,
+              "definition_md5": "dfc11be3ec1815ef08792cda649f7604"
+            },
+            {
+              "name": "quarantine_cases_validation_errors_check",
+              "type": "c",
+              "table": "quarantine_cases",
+              "validated": true,
+              "definition_md5": "4e71f319480f53e1be48719c08a16388"
+            },
+            {
+              "name": "quarantine_corrections_action_check",
+              "type": "c",
+              "table": "quarantine_corrections",
+              "validated": true,
+              "definition_md5": "086c68f70232645b567e68233e89e120"
+            },
+            {
+              "name": "quarantine_corrections_check",
+              "type": "c",
+              "table": "quarantine_corrections",
+              "validated": true,
+              "definition_md5": "736d6116ab1e8d90877e77e4f24a05ec"
+            },
+            {
+              "name": "quarantine_corrections_correction_notes_check",
+              "type": "c",
+              "table": "quarantine_corrections",
+              "validated": true,
+              "definition_md5": "e825487e65271fe80c735abad3ce0707"
+            },
+            {
+              "name": "quarantine_corrections_correction_version_check",
+              "type": "c",
+              "table": "quarantine_corrections",
+              "validated": true,
+              "definition_md5": "2d1d5643246a0eec0dc14a1c91d48343"
+            },
+            {
+              "name": "quarantine_corrections_pkey",
+              "type": "p",
+              "table": "quarantine_corrections",
+              "validated": true,
+              "definition_md5": "38d65298799b5c23f12c0402caab3b4b"
+            },
+            {
+              "name": "quarantine_corrections_quarantine_id_correction_version_key",
+              "type": "u",
+              "table": "quarantine_corrections",
+              "validated": true,
+              "definition_md5": "4d6f2aef31b2cbd5f0dcf2a4971bb3b3"
+            },
+            {
+              "name": "quarantine_corrections_quarantine_id_fkey",
+              "type": "f",
+              "table": "quarantine_corrections",
+              "validated": true,
+              "definition_md5": "673234a82d95655ef89795ed93cff529"
+            },
+            {
+              "name": "quarantine_corrections_reprocess_batch_id_reprocess_source_fkey",
+              "type": "f",
+              "table": "quarantine_corrections",
+              "validated": true,
+              "definition_md5": "05727e46b65ff734453f2aedf18094c2"
+            },
+            {
+              "name": "quarantine_corrections_request_id_key",
+              "type": "u",
+              "table": "quarantine_corrections",
+              "validated": true,
+              "definition_md5": "00c1d80c1c37474ea86e15a2b3c68a45"
+            },
+            {
+              "name": "quarantine_corrections_submitted_by_check",
+              "type": "c",
+              "table": "quarantine_corrections",
+              "validated": true,
+              "definition_md5": "81d37c68d21170a4429b6b988e298d3f"
+            },
+            {
+              "name": "risk_events_pkey",
+              "type": "p",
+              "table": "risk_events",
+              "validated": true,
+              "definition_md5": "87203d6932f2082e5456847cc6fe904e"
+            },
+            {
+              "name": "risk_events_risk_score_check",
+              "type": "c",
+              "table": "risk_events",
+              "validated": true,
+              "definition_md5": "e5d85d2910efd901794b0e1c936d84b1"
+            },
+            {
+              "name": "risk_events_tx_id_fkey",
+              "type": "f",
+              "table": "risk_events",
+              "validated": true,
+              "definition_md5": "4eba48d1e2ee0aa92caf205c73f4463b"
+            },
+            {
+              "name": "risk_review_history_pkey",
+              "type": "p",
+              "table": "risk_review_history",
+              "validated": true,
+              "definition_md5": "94f4cbb9599662c6d8ed4f0459f88e1f"
+            },
+            {
+              "name": "risk_review_history_request_id_key",
+              "type": "u",
+              "table": "risk_review_history",
+              "validated": true,
+              "definition_md5": "00c1d80c1c37474ea86e15a2b3c68a45"
+            },
+            {
+              "name": "risk_review_history_risk_event_id_fkey",
+              "type": "f",
+              "table": "risk_review_history",
+              "validated": true,
+              "definition_md5": "3ff24273131903c93a5fb817ced36883"
+            },
+            {
+              "name": "risk_reviews_change_actor_check",
+              "type": "c",
+              "table": "risk_reviews",
+              "validated": true,
+              "definition_md5": "abdd4c3f30567817e22f6bb3dff14587"
+            },
+            {
+              "name": "risk_reviews_check",
+              "type": "c",
+              "table": "risk_reviews",
+              "validated": true,
+              "definition_md5": "26088f325dbf26098de198fe926bae6a"
+            },
+            {
+              "name": "risk_reviews_check1",
+              "type": "c",
+              "table": "risk_reviews",
+              "validated": true,
+              "definition_md5": "2688c7273dba0f4ccf917c236f70a36f"
+            },
+            {
+              "name": "risk_reviews_pkey",
+              "type": "p",
+              "table": "risk_reviews",
+              "validated": true,
+              "definition_md5": "87203d6932f2082e5456847cc6fe904e"
+            },
+            {
+              "name": "risk_reviews_review_status_check",
+              "type": "c",
+              "table": "risk_reviews",
+              "validated": true,
+              "definition_md5": "a9e27346cf5d7f2bcca741e2123192e7"
+            },
+            {
+              "name": "risk_reviews_risk_event_id_fkey",
+              "type": "f",
+              "table": "risk_reviews",
+              "validated": true,
+              "definition_md5": "ada47b7f43293fcdaa7d94df5b637e61"
+            },
+            {
+              "name": "risk_reviews_version_check",
+              "type": "c",
+              "table": "risk_reviews",
+              "validated": true,
+              "definition_md5": "b7af13e592ebcc181814632003fac9ef"
+            },
+            {
+              "name": "schema_migrations_pkey",
+              "type": "p",
+              "table": "schema_migrations",
+              "validated": true,
+              "definition_md5": "c820ea89255a83223217f1d7da6de5eb"
+            },
+            {
+              "name": "schema_migrations_version_check",
+              "type": "c",
+              "table": "schema_migrations",
+              "validated": true,
+              "definition_md5": "191106a67072b02b8ce79512932db7a3"
+            },
+            {
+              "name": "transactions_account_id_fkey",
+              "type": "f",
+              "table": "transactions",
+              "validated": true,
+              "definition_md5": "57899bf73da45cdcca5d9c54037849c1"
+            },
+            {
+              "name": "transactions_amount_check",
+              "type": "c",
+              "table": "transactions",
+              "validated": true,
+              "definition_md5": "ff7f8fc527686422d3a0e8676a5dee99"
+            },
+            {
+              "name": "transactions_currency_check",
+              "type": "c",
+              "table": "transactions",
+              "validated": true,
+              "definition_md5": "4c49096170c6711ff365180ae1b12632"
+            },
+            {
+              "name": "transactions_file_sha256_check",
+              "type": "c",
+              "table": "transactions",
+              "validated": true,
+              "definition_md5": "32c21f7659c55aedf4c9a6be5d5811ee"
+            },
+            {
+              "name": "transactions_pkey",
+              "type": "p",
+              "table": "transactions",
+              "validated": true,
+              "definition_md5": "82b439da787edc235f70c0606f28252a"
+            },
+            {
+              "name": "transactions_source_identity_check",
+              "type": "c",
+              "table": "transactions",
+              "validated": true,
+              "definition_md5": "de78e69d9e3378b5656d7d50b77c860a"
+            },
+            {
+              "name": "transactions_source_row_check",
+              "type": "c",
+              "table": "transactions",
+              "validated": true,
+              "definition_md5": "68cfa3187147ec3eb5c01b7fa2486b43"
+            },
+            {
+              "name": "transactions_transaction_fingerprint_check",
+              "type": "c",
+              "table": "transactions",
+              "validated": true,
+              "definition_md5": "383cec621b34b13460700b08b48cd3fc"
+            },
+            {
+              "name": "transactions_tx_type_check",
+              "type": "c",
+              "table": "transactions",
+              "validated": true,
+              "definition_md5": "addc56edfbb3c7f41616fd9742346191"
+            }
+          ],
+          "trigger_functions": [
+            {
+              "acl": "{fintrust_workflow_owner=X/fintrust_workflow_owner}",
+              "owner": "fintrust_workflow_owner",
+              "table": "ingestion_batches",
+              "enabled": "O",
+              "trigger": "batch_identity_guard",
+              "function": "guard_batch_identity",
+              "definition_md5": "f90f0b2ee4cb4eab3d54508236f35958",
+              "security_definer": false
+            },
+            {
+              "acl": "{fintrust_workflow_owner=X/fintrust_workflow_owner}",
+              "owner": "fintrust_workflow_owner",
+              "table": "ingestion_batches",
+              "enabled": "O",
+              "trigger": "batch_total_count",
+              "function": "check_batch_record_count",
+              "definition_md5": "d70299a233e54888b74f9bf8f106558d",
+              "security_definer": false
+            },
+            {
+              "acl": "{fintrust_workflow_owner=X/fintrust_workflow_owner}",
+              "owner": "fintrust_workflow_owner",
+              "table": "ingestion_records",
+              "enabled": "O",
+              "trigger": "batch_record_count",
+              "function": "check_batch_record_count",
+              "definition_md5": "d70299a233e54888b74f9bf8f106558d",
+              "security_definer": false
+            },
+            {
+              "acl": "{fintrust_workflow_owner=X/fintrust_workflow_owner}",
+              "owner": "fintrust_workflow_owner",
+              "table": "ingestion_records",
+              "enabled": "O",
+              "trigger": "ingestion_record_guard",
+              "function": "guard_ingestion_record",
+              "definition_md5": "aeb302b8309c57e5d2a307ad06bfb0fa",
+              "security_definer": false
+            },
+            {
+              "acl": "{fintrust_workflow_owner=X/fintrust_workflow_owner}",
+              "owner": "fintrust_workflow_owner",
+              "table": "ingestion_records",
+              "enabled": "O",
+              "trigger": "ingestion_record_no_delete",
+              "function": "reject_history_change",
+              "definition_md5": "3ad136702159988122e95056722d7bca",
+              "security_definer": false
+            },
+            {
+              "acl": "{fintrust_workflow_owner=X/fintrust_workflow_owner}",
+              "owner": "fintrust_workflow_owner",
+              "table": "operations_requests",
+              "enabled": "O",
+              "trigger": "operations_receipt_immutable",
+              "function": "guard_operations_receipt",
+              "definition_md5": "4d510717841354eca31968c696659113",
+              "security_definer": false
+            },
+            {
+              "acl": "{fintrust_workflow_owner=X/fintrust_workflow_owner}",
+              "owner": "fintrust_workflow_owner",
+              "table": "quarantine_cases",
+              "enabled": "O",
+              "trigger": "quarantine_evidence_immutable",
+              "function": "reject_history_change",
+              "definition_md5": "3ad136702159988122e95056722d7bca",
+              "security_definer": false
+            },
+            {
+              "acl": "{fintrust_workflow_owner=X/fintrust_workflow_owner}",
+              "owner": "fintrust_workflow_owner",
+              "table": "quarantine_cases",
+              "enabled": "O",
+              "trigger": "quarantine_origin_guard",
+              "function": "guard_quarantine_origin",
+              "definition_md5": "f18f90e0bb6e021c0e9f8bb583768b01",
+              "security_definer": false
+            },
+            {
+              "acl": "{fintrust_workflow_owner=X/fintrust_workflow_owner}",
+              "owner": "fintrust_workflow_owner",
+              "table": "quarantine_corrections",
+              "enabled": "O",
+              "trigger": "correction_evidence_immutable",
+              "function": "reject_history_change",
+              "definition_md5": "3ad136702159988122e95056722d7bca",
+              "security_definer": false
+            },
+            {
+              "acl": "{fintrust_workflow_owner=X/fintrust_workflow_owner}",
+              "owner": "fintrust_workflow_owner",
+              "table": "quarantine_corrections",
+              "enabled": "O",
+              "trigger": "correction_submission_guard",
+              "function": "guard_correction_submission",
+              "definition_md5": "de64fbd2aee54d559cf8e2a75adae40e",
+              "security_definer": false
+            },
+            {
+              "acl": "{fintrust_workflow_owner=X/fintrust_workflow_owner}",
+              "owner": "fintrust_workflow_owner",
+              "table": "risk_review_history",
+              "enabled": "O",
+              "trigger": "review_history_immutable",
+              "function": "reject_history_change",
+              "definition_md5": "3ad136702159988122e95056722d7bca",
+              "security_definer": false
+            },
+            {
+              "acl": "{fintrust_workflow_owner=X/fintrust_workflow_owner}",
+              "owner": "fintrust_workflow_owner",
+              "table": "risk_reviews",
+              "enabled": "O",
+              "trigger": "review_history_record",
+              "function": "record_review_history",
+              "definition_md5": "cf153dd9304884582e03d3fea9155a8e",
+              "security_definer": true
+            },
+            {
+              "acl": "{fintrust_workflow_owner=X/fintrust_workflow_owner}",
+              "owner": "fintrust_workflow_owner",
+              "table": "risk_reviews",
+              "enabled": "O",
+              "trigger": "review_transition_guard",
+              "function": "guard_review_transition",
+              "definition_md5": "fe3fdad6df9d7d27d6fa45e7d1c283fe",
+              "security_definer": false
+            }
+          ],
+          "row_counts": {
+            "schema_migrations": 2,
+            "transactions": 0
+          },
+          "migration_history": [
+            {
+              "version": 1,
+              "source_sha256": "0ff06ca8c43596ac9b8651f4bd851bfb0487343f4c9eccb198849e3e59772bd6",
+              "catalog_sha256": "2ab3bc0855fe455221e28e52c24d6c8891438fc466068317d9c9af44b8e1fa17"
+            },
+            {
+              "version": 2,
+              "source_sha256": "5b2c04440eea244bfce150347dfa1953dd2a7e7ddb6af7e3a66e187d1c912f02",
+              "catalog_sha256": "8fc702db979009801e257accc83e62ce631d89366d38e086a22871ff0eee92ec"
+            }
+          ],
+          "legacy_provenance_null_counts": {
+            "source_reference": 0,
+            "fingerprint": 0,
+            "batch": 0,
+            "file_hash": 0,
+            "row_number": 0
+          }
+        },
+        "workflow_checkpoint": {
+          "version": 2,
+          "catalog_sha256": "8fc702db979009801e257accc83e62ce631d89366d38e086a22871ff0eee92ec",
+          "read_only": true
+        }
+      }
+    },
+    {
       "operation": "bootstrap_extensions",
       "result": {
         "extension_helpers_ready": true,
@@ -2231,5 +7180,5 @@
   "runtime_api_read_update_scope_probe": "PASSED",
   "runtime_report_login_probe": "PASSED",
   "synthetic_runtime_probes_local_only": true,
-  "checked_at": "2026-10-17T16:55:50.473501+00:00"
+  "checked_at": "2026-10-17T18:19:22.061919+00:00"
 }
