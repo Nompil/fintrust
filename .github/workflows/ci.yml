@@ -95,6 +95,7 @@ jobs:
       - name: Run full suite with disposable PostgreSQL
         env:
           FINTRUST_PLAYWRIGHT_MODULE: ${{ github.workspace }}/build/browser-tools/node_modules/playwright
+          FINTRUST_UI_COPY_EVIDENCE: ${{ github.workspace }}/build/full-suite-browser-evidence
         run: |
           export FINTRUST_NODE="$(command -v node)"
           python3.12 -m pytest -q --junitxml=test-results/pytest.xml
@@ -114,6 +115,7 @@ jobs:
             build/linux-verification.txt
             build/release1-candidate/fintrust-release1-linux-py312.manifest.json
             test-results/pytest.xml
+            build/full-suite-browser-evidence/
             docs/EVIDENCE/12-e2e/release1-closure/postgres16-roles.json
             docs/EVIDENCE/12-e2e/release1-lifecycle/browser/
             build/release1-lifecycle/row-results.json
