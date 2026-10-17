@@ -4,13 +4,15 @@
   "probes": [
     "scoring_role_real_worker_commit_hook_and_review",
     "api_role_review_trigger_appends_history_without_direct_insert",
+    "api_correction_batch_deferred_lock_without_financial_write",
     "api_denied_transactions_insert",
     "api_denied_transactions_update",
     "api_denied_transactions_delete",
     "api_denied_risk_events_insert",
     "api_denied_risk_review_history_insert",
     "api_denied_risk_review_history_update",
-    "api_denied_risk_review_history_delete"
+    "api_denied_risk_review_history_delete",
+    "api_role_durable_operations_receipt_and_schema_version_without_financial_write"
   ],
   "rows_preserved": 200,
   "aws_access": false,

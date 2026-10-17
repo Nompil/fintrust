@@ -4,7 +4,7 @@ sys.path.insert(0,'/opt')
 import boto3,psycopg2
 def handler(event,context):
  if event!={'operation':'repair_batch_lock_acl'}:raise ValueError('Unsupported operation')
- secret=json.loads(boto3.client('secretsmanager',region_name='af-south-1').get_secret_value(SecretId='arn:aws:secretsmanager:af-south-1:966467878406:secret:rds!db-e93012ae-0d14-4225-bdc3-988f4d98f72a-BbEGMn')['SecretString'])
+ secret=json.loads(boto3.client('secretsmanager',region_name='af-south-1').get_secret_value(SecretId='arn:aws:secretsmanager:af-south-1:966467878406:secret:rds!db-e93012ae-0d14-4225-bdc3-988f4d98f72a-BbEGMn',VersionStage='AWSCURRENT')['SecretString'])
  assert secret['username']=='fintrust_admin'
  conn=psycopg2.connect(host='fintrust-ledger-dev.cv84aee6u6up.af-south-1.rds.amazonaws.com',port=5432,dbname='fintrust',user=secret['username'],password=secret['password'],sslmode='verify-full',sslrootcert='/opt/certs/global-bundle.pem',connect_timeout=10)
  secret.clear()
