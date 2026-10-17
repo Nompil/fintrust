@@ -1,0 +1,23 @@
+{
+  "status": "OFFLINE_PROPOSAL_NOT_AWS_VALIDATED_NOT_DEPLOYED",
+  "source": "../evidence/ingest-live-template-after-permission.json",
+  "source_is_saved_inventory_not_fresh_read": true,
+  "original_code_key": "deployment/lambda/d645d8949ee5b128b2b5c4c1558dd61a1a5c0fd3cdeace60363b19f70d167d62/fintrust.zip",
+  "proposed_code_key": "deployment/lambda/ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d/fintrust.zip",
+  "template_sha256": "90e1a28bdb9667050c358955a26809dc9cb50d5dfb2ba62bd47d3cff08407a1c",
+  "parameters": {
+    "CodeObjectVersion": "VZCWpaBXZO9pL2XONICW63qQcH4udM02"
+  },
+  "code_sha256": "ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d",
+  "template_changes": [
+    "IngestFunction.Properties.Code.S3Key"
+  ],
+  "reserved_concurrency": 0,
+  "raw_notification_activation": false,
+  "required_before_execution": [
+    "Fresh live template and drift/ownership review",
+    "Current ingest runtime policy read-back",
+    "AWS template validation and reviewed update change set",
+    "Exact staged code/version binding; preserve every other resource and parameter"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "owner_authorization": "Budget may increase if required; do not change the support plan; do everything necessary to make the project work; stop services after presentation.",
+  "supersedes": "Earlier no-paid-endpoint restriction for the bounded private read-only database check",
+  "support_plan_upgrade_authorized": false,
+  "aws_budget_setting_changed": false,
+  "proposed_incremental_operating_allowance_usd": 1,
+  "aws_enforced_spending_cap": false,
+  "endpoint_cleanup_target_hours": 1,
+  "authorized_current_execution_scope": "Temporary scoped operator, exact preflight package staging, one single-AZ private Secrets Manager endpoint, bounded execution role, one qualified synchronous read-only preflight and cleanup",
+  "write_migration_in_current_execution": false,
+  "submission_date_sast": "2026-10-18",
+  "presentation_date_sast": "2026-10-19",
+  "presentation_end_time": null,
+  "shutdown_before_presentation_authorized": false,
+  "financial_data_deletion_authorized": false
+}

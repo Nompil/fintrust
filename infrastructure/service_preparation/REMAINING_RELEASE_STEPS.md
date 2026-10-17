@@ -57,7 +57,13 @@ runner's capacity/security plan or the full integrated-release gates below.
    rolled back normally, the exact stage-tag scope corrected, and temporary
    empty-log cleanup permission removed and verified. The stage is configured
    but does not yet provide a working application.
-6. **Enroll only approved test identities.** Configure each required Cognito
+6. **Align ingest with the release, then enroll approved test identities.** The
+   saved ingest template references the earlier deployment artifact. A disabled,
+   code-key-only proposal is in `ingest_release/`; it preserves the saved
+   resources and binds the already verified consolidated package/version.
+   Freshly read the live ingest template and runtime policy, validate the
+   proposal, and review its exact UPDATE before applying it. This offline
+   proposal changes no live resource or notification. Then configure each required Cognito
    identity, its one approved group, software MFA and approved account scopes.
    No identities or scope records have been created by preparation. Use real
    approved cloud account IDs; do not copy local account assignments blindly.

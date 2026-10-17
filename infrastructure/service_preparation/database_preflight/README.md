@@ -7,6 +7,13 @@ The account still reports total/unreserved concurrency 10. The existing support
 case cannot be read through the AWS Support API on Basic Support; the metadata
 receipt records SubscriptionRequiredException. No support upgrade is proposed.
 
+The owner subsequently authorized a budget increase if needed for this bounded
+check, while explicitly prohibiting a support-plan change. See
+`cost-authorization.json`. Authentication/transport delays stopped the initial
+setup before runtime-role creation or package upload; no endpoint was created.
+The latest terminal/session receipt, rather than the historical operator-session
+status, determines whether a live check has actually started or completed.
+
 This candidate is limited to the fixed `migration_runner.preflight_entry` handler.
 It accepts only the existing `preflight` operation and request UUID. Its fixed
 queries inspect catalog metadata, migration hashes and aggregate row counts in a

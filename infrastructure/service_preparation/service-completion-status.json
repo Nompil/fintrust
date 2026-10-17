@@ -49,7 +49,6 @@
     "AUTHORIZED_USER_AND_ACCOUNT_SCOPE_ENROLLMENT",
     "CLOUD_END_TO_END_AND_FAILURE_PATH_EVIDENCE"
   ],
-  "no_new_nat_interface_endpoint_or_paid_support_authorized": true,
   "application_activation_performed": false,
   "updated_at": "2026-10-17T06:42:44.216264+00:00",
   "latest_safety_verification": {
@@ -110,5 +109,20 @@
       "BaseUrl": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev",
       "ApiId": "qzgzopn8o4"
     }
+  },
+  "no_new_nat_or_paid_support_authorized": true,
+  "temporary_private_endpoint_authorization": {
+    "authorized": true,
+    "scope": "One bounded single-AZ read-only private database check and cleanup",
+    "support_plan_change": false,
+    "live_check_started": false,
+    "cost_setting_changed": false
+  },
+  "presentation": {
+    "submission_sast": "2026-10-18",
+    "presentation_sast": "2026-10-19",
+    "end_time": null,
+    "shutdown_plan": "PRESENTATION_SHUTDOWN.md",
+    "data_deletion_authorized": false
   }
 }
