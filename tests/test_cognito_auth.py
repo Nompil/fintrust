@@ -1,6 +1,7 @@
 """Local-only verification of Cognito JWT checks and application role mapping."""
 import time
 import uuid
+from datetime import datetime, timezone
 
 import jwt
 import pytest
@@ -156,10 +157,13 @@ def test_cognito_roles_keep_existing_separation_of_duties(monkeypatch, group, ac
 
 
 @pytest.mark.parametrize('group_claim', ['Analysts', '[Analysts]', '["Analysts"]', ['Analysts']])
-def test_api_gateway_authorizer_claims_are_trusted_without_jwks(monkeypatch, group_claim):
+@pytest.mark.parametrize('date_claims',[False,True])
+def test_api_gateway_authorizer_claims_are_trusted_without_jwks(monkeypatch, group_claim,date_claims):
     configure(monkeypatch)
     monkeypatch.setenv('AWS_EXECUTION_ENV', 'AWS_Lambda_python3.12')
     gateway = claims(**{'cognito:groups': group_claim, 'scope': 'openid profile'})
+    if date_claims:
+        for name in ('exp','iat'):gateway[name]=datetime.fromtimestamp(gateway[name],timezone.utc).strftime('%a %b %d %H:%M:%S UTC %Y')
     monkeypatch.setattr(cognito_auth, 'verify_access_token', lambda _token: pytest.fail('JWKS lookup must not run in Lambda'))
     token = cognito_auth.set_gateway_claims(gateway)
     try:
@@ -178,6 +182,9 @@ def test_api_gateway_authorizer_claims_are_trusted_without_jwks(monkeypatch, gro
     {'cognito:groups': '["Analysts","Administrators"]'},
     {'cognito:groups': '[UnapprovedGroup]'},
     {'cognito:groups': '[Analysts'},
+    {'exp':'Thu Jan 01 00:00:01 UTC 1970'},
+    {'iat':'Thu Jan 01 00:00:01 GMT 1970'},
+    {'exp':'not a timestamp'},
 ])
 def test_api_gateway_authorizer_claims_fail_closed(monkeypatch, change):
     configure(monkeypatch)
@@ -201,6 +208,14 @@ def test_lambda_cognito_mode_rejects_missing_gateway_claims(monkeypatch):
             cognito_auth.authenticate('token')
     finally:
         cognito_auth.reset_gateway_claims(token)
+
+
+def test_gateway_rejection_diagnostics_do_not_log_claim_values(monkeypatch,caplog):
+    configure(monkeypatch)
+    with pytest.raises(PermissionError):
+        cognito_auth._role_from_gateway_claims(claims(iss='secret-marker-never-log',scope='openid'))
+    assert 'secret-marker-never-log' not in caplog.text
+    assert 'issuer/client/token-use rejected' in caplog.text
 
 
 def test_cognito_stack_and_operator_bootstrap_are_safe_by_default(monkeypatch, capsys):

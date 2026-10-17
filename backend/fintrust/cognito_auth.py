@@ -3,6 +3,7 @@ import os
 import re
 import uuid
 import logging
+from datetime import datetime, timezone
 from contextvars import ContextVar
 from functools import lru_cache
 from time import time
@@ -110,10 +111,21 @@ def _account_scope(subject, username):
             raise PermissionError("Authentication required")
         return normalized
     except PermissionError:
+        logging.getLogger(__name__).warning('Cognito account scope record rejected')
         raise
     except Exception as error:
         logging.getLogger(__name__).warning('Cognito account scope lookup rejected: %s', type(error).__name__)
         raise PermissionError("Authentication required") from None
+
+
+def _gateway_timestamp(value):
+    if type(value) is int:return value
+    if not isinstance(value,str) or len(value)>40:raise ValueError('Unsupported timestamp')
+    if re.fullmatch(r'[0-9]{1,12}',value):return int(value)
+    # REST Cognito authorizers render JWT NumericDate claims as Java UTC dates.
+    if not re.fullmatch(r'[A-Z][a-z]{2} [A-Z][a-z]{2} [0-9]{1,2} [0-9]{2}:[0-9]{2}:[0-9]{2} UTC [0-9]{4}',value):
+        raise ValueError('Unsupported timestamp')
+    return int(datetime.strptime(value,'%a %b %d %H:%M:%S UTC %Y').replace(tzinfo=timezone.utc).timestamp())
 
 
 def _role_from_gateway_claims(claims):
@@ -124,20 +136,25 @@ def _role_from_gateway_claims(claims):
             or claims.get("iss") != cfg["issuer"]
             or claims.get("token_use") != "access"
             or claims.get("client_id") != cfg["client_id"]):
+        logging.getLogger(__name__).warning('Cognito gateway issuer/client/token-use rejected')
         raise PermissionError("Authentication required")
     try:
-        exp = int(claims["exp"])
-        issued = int(claims["iat"])
+        exp = _gateway_timestamp(claims["exp"])
+        issued = _gateway_timestamp(claims["iat"])
     except (KeyError, TypeError, ValueError):
+        logging.getLogger(__name__).warning('Cognito gateway timestamps malformed')
         raise PermissionError("Authentication required") from None
     if exp <= now or issued > now + 60 or not isinstance(claims.get("scope"), str):
+        logging.getLogger(__name__).warning('Cognito gateway lifetime/scope type rejected')
         raise PermissionError("Authentication required")
     if "openid" not in claims["scope"].split():
+        logging.getLogger(__name__).warning('Cognito gateway openid scope rejected')
         raise PermissionError("Authentication required")
     subject = claims.get("sub")
     username = claims.get("username")
     if (not isinstance(subject, str) or not subject or len(subject) > 128
             or not isinstance(username, str) or not username or len(username) > 128):
+        logging.getLogger(__name__).warning('Cognito gateway subject/username shape rejected')
         raise PermissionError("Authentication required")
     raw_groups = claims.get("cognito:groups", "")
     if isinstance(raw_groups, str):
@@ -162,6 +179,7 @@ def authenticate(encoded):
     elif os.getenv("AWS_EXECUTION_ENV"):
         # Cloud Cognito mode is only valid behind API Gateway's authorizer. Never
         # fall back to outbound JWKS access from the private application Lambda.
+        logging.getLogger(__name__).warning('Cognito trusted gateway context missing')
         raise PermissionError("Authentication required")
     else:
         claims, role = verify_access_token(encoded)
