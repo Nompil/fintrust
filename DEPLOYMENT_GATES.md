@@ -206,3 +206,13 @@ execution, trigger, schedule, database statement or email was performed. Storage
 requests and associated usage may incur charges; no USD 10 total-cost guarantee
 is claimed. Function deployment, database/migration/grant gates, approved test
 invocation, enrollment and full cloud E2E remain outstanding.
+
+## Report async deployment permission corrected - 17 October 2026
+
+The report EventInvokeConfig deployment/read permissions now bind the exact
+`fintrust-report-dev:$LATEST` ARN used by the template. The application policy
+was validated through Access Analyzer, installed and read back; the source,
+manifest and installed policy hashes match (`verify_bindings.py`: PASS).
+No runtime invocation or additional service activation is established by this
+IAM correction. Application deployment completion requires its separate live
+receipt; a terminal completion report alone does not clear that gate.

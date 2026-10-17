@@ -106,7 +106,7 @@
         "lambda:UpdateFunctionEventInvokeConfig",
         "lambda:DeleteFunctionEventInvokeConfig"
       ],
-      "Resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-report-dev",
+      "Resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-report-dev:$LATEST",
       "Condition": {
         "StringEquals": {
           "aws:RequestedRegion": "af-south-1"
@@ -124,7 +124,7 @@
       "Action": [
         "lambda:GetFunctionEventInvokeConfig"
       ],
-      "Resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-report-dev",
+      "Resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-report-dev:$LATEST",
       "Condition": {
         "StringEquals": {
           "aws:RequestedRegion": "af-south-1"

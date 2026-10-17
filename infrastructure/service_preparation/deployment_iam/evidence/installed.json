@@ -260,7 +260,7 @@
     },
     "FinTrustApplicationDeployment": {
       "arn": "arn:aws:iam::966467878406:policy/FinTrustApplicationDeployment",
-      "default_version": "v2",
+      "default_version": "v3",
       "document": {
         "Version": "2012-10-17",
         "Statement": [
@@ -369,7 +369,7 @@
               "lambda:UpdateFunctionEventInvokeConfig",
               "lambda:DeleteFunctionEventInvokeConfig"
             ],
-            "Resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-report-dev",
+            "Resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-report-dev:$LATEST",
             "Condition": {
               "StringEquals": {
                 "aws:RequestedRegion": "af-south-1"
@@ -387,7 +387,7 @@
             "Action": [
               "lambda:GetFunctionEventInvokeConfig"
             ],
-            "Resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-report-dev",
+            "Resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-report-dev:$LATEST",
             "Condition": {
               "StringEquals": {
                 "aws:RequestedRegion": "af-south-1"
@@ -1318,8 +1318,8 @@
   "status": "INSTALLED_AND_READ_BACK",
   "api_id": "qzgzopn8o4",
   "workloads_deployed": false,
-  "updated_at": "2026-10-16T21:29:48.311379+00:00",
-  "bundle_manifest_sha256": "e3bdfe061b692f544b139aee5b230dd9954a8a14997e4e2d5cfb29003be6f36e",
+  "updated_at": "2026-10-17T06:02:20.354923+00:00",
+  "bundle_manifest_sha256": "6f329613264aa0279bf3f508c1bdb35b47675de8914e99728d00b9292694ec6b",
   "binding_normalization": {
     "previous_windows_manifest_sha256": "86e3afc5e2a8b6d3d954b4ef6ebff16187c495077c9a86c951304ec14d3763ae",
     "canonical_lf_manifest_sha256": "c11245703e448a2ca5d14278e7eb4e541a657df1fc4baaf9e8cac0e4466c4872",
