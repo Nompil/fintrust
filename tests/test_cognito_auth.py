@@ -155,10 +155,11 @@ def test_cognito_roles_keep_existing_separation_of_duties(monkeypatch, group, ac
             authorize(role, action)
 
 
-def test_api_gateway_authorizer_claims_are_trusted_without_jwks(monkeypatch):
+@pytest.mark.parametrize('group_claim', ['Analysts', '[Analysts]', '["Analysts"]', ['Analysts']])
+def test_api_gateway_authorizer_claims_are_trusted_without_jwks(monkeypatch, group_claim):
     configure(monkeypatch)
     monkeypatch.setenv('AWS_EXECUTION_ENV', 'AWS_Lambda_python3.12')
-    gateway = claims(**{'cognito:groups': 'Analysts', 'scope': 'openid profile'})
+    gateway = claims(**{'cognito:groups': group_claim, 'scope': 'openid profile'})
     monkeypatch.setattr(cognito_auth, 'verify_access_token', lambda _token: pytest.fail('JWKS lookup must not run in Lambda'))
     token = cognito_auth.set_gateway_claims(gateway)
     try:
@@ -173,6 +174,10 @@ def test_api_gateway_authorizer_claims_are_trusted_without_jwks(monkeypatch):
     {'iss': 'https://attacker.invalid'}, {'token_use': 'id'},
     {'client_id': 'other-client'}, {'scope': 'email'}, {'exp': '1'},
     {'cognito:groups': 'Analysts,Administrators'},
+    {'cognito:groups': '[Analysts, Administrators]'},
+    {'cognito:groups': '["Analysts","Administrators"]'},
+    {'cognito:groups': '[UnapprovedGroup]'},
+    {'cognito:groups': '[Analysts'},
 ])
 def test_api_gateway_authorizer_claims_fail_closed(monkeypatch, change):
     configure(monkeypatch)

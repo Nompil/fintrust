@@ -2,6 +2,7 @@
 import os
 import re
 import uuid
+import logging
 from contextvars import ContextVar
 from functools import lru_cache
 from time import time
@@ -110,7 +111,8 @@ def _account_scope(subject, username):
         return normalized
     except PermissionError:
         raise
-    except Exception:
+    except Exception as error:
+        logging.getLogger(__name__).warning('Cognito account scope lookup rejected: %s', type(error).__name__)
         raise PermissionError("Authentication required") from None
 
 
@@ -139,12 +141,16 @@ def _role_from_gateway_claims(claims):
         raise PermissionError("Authentication required")
     raw_groups = claims.get("cognito:groups", "")
     if isinstance(raw_groups, str):
-        groups = [value.strip() for value in raw_groups.split(",") if value.strip()]
+        # REST authorizer context stringifies array claims. Accept only exact
+        # single approved-group representations; never select one of many roles.
+        groups = [group for group in GROUP_ROLES if raw_groups.strip() in
+                  (group, '[' + group + ']', '["' + group + '"]')]
     elif isinstance(raw_groups, list):
         groups = raw_groups
     else:
         groups = []
     if len(groups) != 1 or not isinstance(groups[0], str) or groups[0] not in GROUP_ROLES:
+        logging.getLogger(__name__).warning('Cognito gateway role claim rejected')
         raise PermissionError("Authentication required")
     return claims, GROUP_ROLES[groups[0]]
 
