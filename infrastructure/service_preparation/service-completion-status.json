@@ -7,7 +7,7 @@
   "services": {
     "ses": {
       "configuration": "EMAIL_IDENTITY_VERIFIED_RUNTIME_PERMISSION_PREPARED",
-      "remaining": "Deploy Alert Lambda and verify real email delivery"
+      "remaining": "Alert Lambda is deployed disabled; real email delivery still unverified"
     },
     "cognito": {
       "configuration": "EMPTY_LITE_POOL_CLIENT_DOMAIN_FOUR_GROUPS_READ_BACK",
@@ -15,19 +15,19 @@
     },
     "api_gateway": {
       "configuration": "NON_SERVING_API_IDENTITY_AND_LOGGING_ROLE_READ_BACK",
-      "remaining": "Deploy API Lambda, authorizer, methods and stage; verify authorization and logging"
+      "remaining": "Real API function is deployed; review existing API stack UPDATE for authorizer, methods and stage, then controlled authorization/logging tests"
     },
     "eventbridge": {
-      "configuration": "REPORT_RULE_TARGET_RETRIES_AND_DLQ_PREPARED_NOT_DEPLOYED",
-      "remaining": "Deploy with report function; keep monthly schedule disabled until report validation and cost decision"
+      "configuration": "REPORT_RULE_TARGET_RETRIES_AND_DLQ_DEPLOYED_RULE_DISABLED",
+      "remaining": "Validate one approved report before any schedule activation"
     },
     "cloudwatch": {
-      "configuration": "LOGGING_ROLE_READY_RETENTION_AND_OPTIONAL_ALARM_TEMPLATES_PREPARED",
-      "remaining": "Verify real service logs; paid alarms remain undeployed"
+      "configuration": "FOUR_APPLICATION_LOG_GROUPS_DEPLOYED_RETENTION_14_DAYS_API_LOGGING_ROLE_READY",
+      "remaining": "Actual function/API log delivery untested; paid alarms remain undeployed"
     },
     "lambda": {
-      "configuration": "VERIFIED_PACKAGE_VERSION_STAGED_INGEST_THROTTLED_FOUR_FUNCTIONS_UNDEPLOYED",
-      "remaining": "Reviewed disabled function deployment, migration/capacity decision, scoped test invocation and controlled cloud validation"
+      "configuration": "FIVE_FUNCTIONS_THROTTLED_FOUR_APPLICATION_FUNCTIONS_CREATE_COMPLETE",
+      "remaining": "Database/capacity gates, scoped test invocation and controlled cloud validation"
     },
     "rds": {
       "configuration": "PRIVATE_INSTANCE_AVAILABLE_IAM_AUTH_ENABLED_STANDARD_SSM_SETTINGS_READ_BACK",
@@ -39,7 +39,7 @@
     },
     "s3_sqs": {
       "configuration": "FOUNDATION_BUCKETS_QUEUES_AND_INGEST_PERMISSION_PRESENT",
-      "remaining": "Deploy disabled consumers and prove valid/quarantine/duplicate/failure paths before raw notification activation"
+      "remaining": "Two consumers deployed disabled; valid/quarantine/duplicate/failure paths remain untested; raw notification remains absent"
     }
   },
   "activation_gates": [
@@ -51,7 +51,7 @@
   ],
   "no_new_nat_interface_endpoint_or_paid_support_authorized": true,
   "application_activation_performed": false,
-  "updated_at": "2026-10-16T21:29:27.055392+00:00",
+  "updated_at": "2026-10-17T06:23:14.309824+00:00",
   "latest_safety_verification": {
     "checked_at": "2026-10-16T21:41:53.287968+00:00",
     "status": "PASS_INACTIVE_CONFIGURATION",
@@ -62,7 +62,7 @@
   },
   "remaining_release_checklist": "REMAINING_RELEASE_STEPS.md",
   "shared_capacity_alternative": {
-    "status": "OFFLINE_CHECKS_AND_AWS_TEMPLATE_VALIDATION_PASSED_NOT_DEPLOYED",
+    "status": "DEPLOYED_WITH_ALL_FUNCTIONS_ZERO_MANUAL_TEST_FALSE",
     "candidate": "shared_manual/application-functions-shared-manual.json",
     "guide": "shared_manual/README.md",
     "verification": "shared_manual/offline-verification.json",
@@ -70,7 +70,7 @@
     "per_function_concurrency_cap_provided": false,
     "automatic_pipeline_supported": false,
     "migration_runner_changed": false,
-    "deployed": false
+    "deployed": true
   },
   "artifact_staging": {
     "status": "UPLOADED_VERSION_BYTES_VERIFIED_TEMP_PERMISSION_REMOVED",
@@ -82,5 +82,17 @@
     "exact_version_download_verified": true,
     "temporary_permission_removed": true,
     "evidence": "infrastructure/service_preparation/shared_manual/artifact-staging-live.json"
+  },
+  "application_configuration": {
+    "status": "CREATE_COMPLETE_FUNCTIONS_ZERO_CONSUMERS_AND_REPORTS_DISABLED",
+    "outputs": {
+      "ScoringFunctionArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-scoring-dev",
+      "ReportFunctionArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-report-dev",
+      "ApiAliasArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev:dev",
+      "AlertFunctionArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-alert-dev",
+      "ApiFunctionArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev"
+    },
+    "evidence": "infrastructure/service_preparation/shared_manual/application-disabled-live.json",
+    "runtime_verified": false
   }
 }

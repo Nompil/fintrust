@@ -9,8 +9,9 @@ incur new resource charges. Current service status is in
 A separate [manual shared-capacity candidate](shared_manual/README.md) is now
 locally verified for individual function checks without reserving positive
 slots. It keeps consumers and reports disabled and permits selecting only one
-service at a time. AWS accepted the exact template; deployment is still pending, and the selected
-function has no individual concurrency cap. This does not replace the migration
+service at a time. AWS accepted the exact template and it is now deployed with all functions
+reserved at zero. No test function has been selected; selecting one later
+would remove its individual concurrency cap. This does not replace the migration
 runner's capacity/security plan or the full integrated-release gates below.
 
 1. **Resolve the capacity gate.** Follow existing AWS Support case
@@ -35,7 +36,10 @@ runner's capacity/security plan or the full integrated-release gates below.
    downloaded version passed verification and the temporary permission was
    removed. `CodeKey` and `CodeObjectVersion` are now bound in the deployment
    worksheet. Do not re-upload it or substitute the older ingest version.
-4. **Deploy the four application functions disabled.** Use a reviewed CREATE
+4. **Completed: four application functions deployed disabled.** The live
+   receipt is `shared_manual/application-disabled-live.json`; all four are at
+   zero concurrency, both mappings are disabled and the report rule is disabled.
+   The following describes the safeguards used: a reviewed CREATE
    change set for `fintrust-application-dev`, explicit resource types and
    Project/Environment tags; use the normal deployer role. Preserve the existing
    ingest stack. Keep `EnableFunctions=false`, `EnableConsumers=false` and
@@ -43,8 +47,9 @@ runner's capacity/security plan or the full integrated-release gates below.
    mappings and disabled monthly rule after creation. Before applying the
    report failure queue policy, read its current policy and preserve unrelated
    statements. Do not use CAPABILITY_IAM or an alternative service role.
-5. **Complete the existing API stack.** Obtain the actual API function/alias
-   output, fill `ApiFunctionName`, and review an UPDATE change set for
+5. **Complete the existing API stack.** The actual API function name
+   `fintrust-api-dev` is now bound in `ApiFunctionName` (the template adds the
+   `dev` alias). Review an UPDATE change set for
    `fintrust-api-dev` using `api.json`. Preserve API ID `qzgzopn8o4` and its
    registered `/dev/` callback. The worksheet already contains the actual
    Cognito pool ARN. Check authorizer/method configuration and exact

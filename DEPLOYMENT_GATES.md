@@ -216,3 +216,26 @@ manifest and installed policy hashes match (`verify_bindings.py`: PASS).
 No runtime invocation or additional service activation is established by this
 IAM correction. Application deployment completion requires its separate live
 receipt; a terminal completion report alone does not clear that gate.
+
+## Disabled application stack verified - 17 October 2026
+
+AWS stack `fintrust-application-dev` reached CREATE_COMPLETE. The exact staged
+package checksum was read back on scoring, alert, report and API functions.
+All five functions including ingest remain at reserved concurrency zero; both
+event-source mappings and the monthly EventBridge rule are disabled. Four
+application log groups have 14-day retention. No raw S3 notification or API
+stage exists. No application invocation, SQL, email or automatic processing
+was performed. The live receipt is
+`infrastructure/service_preparation/shared_manual/application-disabled-live.json`.
+
+The deployment worksheet now contains the actual API function name; its
+template adds the dev alias. API configuration, live RDS access/migrations/
+grants, approved enrollment and runtime/end-to-end evidence remain gates.
+
+The next API UPDATE change set `fintrust-api-bound-review-20261017` is prepared
+and reviewed, not executed. It adds 19 resources, with no API replacement and
+no IAM capabilities; the existing API ID and OAuth callback remain bound.
+Receipt: `infrastructure/service_preparation/deployment_iam/evidence/api-update-reviewed.json`.
+Execution would create the public dev stage while the API function remains at
+zero concurrency, so it would not yet provide a working application. External
+API requests/logging can incur usage charges; no request was sent in this review.

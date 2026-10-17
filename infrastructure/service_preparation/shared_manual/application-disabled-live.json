@@ -1,0 +1,1521 @@
+{
+  "account": "966467878406",
+  "region": "af-south-1",
+  "stack": "fintrust-application-dev",
+  "application_invocations": 0,
+  "emails_sent": 0,
+  "sql_executed": false,
+  "consumers_enabled": false,
+  "monthly_reports_enabled": false,
+  "manual_test_enabled": false,
+  "status": "CREATE_COMPLETE_FUNCTIONS_ZERO_CONSUMERS_AND_REPORTS_DISABLED",
+  "artifact_binding_verification": {
+    "artifact_version_bindings": "PASS",
+    "checksum_bindings": "PASS",
+    "temporary_permission_cleanup_receipt": "PASS",
+    "version_id": "VZCWpaBXZO9pL2XONICW63qQcH4udM02",
+    "deployment_ready": false
+  },
+  "template_sha256": "13fbc4c8a845cd15c0b4a5f09eb7322be3214679fdb04985b52f11204c0a5718",
+  "source_version_head": {
+    "AcceptRanges": "bytes",
+    "LastModified": "2026-10-17T02:01:02+00:00",
+    "ContentLength": 26537014,
+    "ETag": "\"42a7f65ffce6b9d8eef7bbf27a7b1d48\"",
+    "VersionId": "VZCWpaBXZO9pL2XONICW63qQcH4udM02",
+    "ContentType": "application/zip",
+    "ServerSideEncryption": "aws:kms",
+    "Metadata": {},
+    "SSEKMSKeyId": "arn:aws:kms:af-south-1:966467878406:key/598a4158-2cc6-4946-af24-512784a276c8",
+    "BucketKeyEnabled": true
+  },
+  "code_checksum_evidence": "Exact version was downloaded and SHA256 verified in artifact-staging-live.json; version identity and size rechecked before deployment",
+  "risk_table_metadata": {
+    "AttributeDefinitions": [
+      {
+        "AttributeName": "account_id",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "score_date",
+        "AttributeType": "S"
+      }
+    ],
+    "TableName": "fintrust-risk-dev",
+    "KeySchema": [
+      {
+        "AttributeName": "account_id",
+        "KeyType": "HASH"
+      },
+      {
+        "AttributeName": "score_date",
+        "KeyType": "RANGE"
+      }
+    ],
+    "TableStatus": "ACTIVE",
+    "CreationDateTime": "2026-10-08T10:19:35.208000+02:00",
+    "ProvisionedThroughput": {
+      "NumberOfDecreasesToday": 0,
+      "ReadCapacityUnits": 0,
+      "WriteCapacityUnits": 0
+    },
+    "TableSizeBytes": 0,
+    "ItemCount": 0,
+    "TableArn": "arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev",
+    "TableId": "a337d620-5415-4944-bb57-638c59020f73",
+    "BillingModeSummary": {
+      "BillingMode": "PAY_PER_REQUEST",
+      "LastUpdateToPayPerRequestDateTime": "2026-10-08T10:19:35.208000+02:00"
+    },
+    "StreamSpecification": {
+      "StreamEnabled": true,
+      "StreamViewType": "NEW_IMAGE"
+    },
+    "LatestStreamLabel": "2026-10-08T08:19:35.208",
+    "LatestStreamArn": "arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev/stream/2026-10-08T08:19:35.208",
+    "DeletionProtectionEnabled": false,
+    "WarmThroughput": {
+      "ReadUnitsPerSecond": 12000,
+      "WriteUnitsPerSecond": 4000,
+      "Status": "ACTIVE"
+    }
+  },
+  "scope_table_metadata": {
+    "AttributeDefinitions": [
+      {
+        "AttributeName": "subject",
+        "AttributeType": "S"
+      }
+    ],
+    "TableName": "imbokodo-dev-user-account-scopes",
+    "KeySchema": [
+      {
+        "AttributeName": "subject",
+        "KeyType": "HASH"
+      }
+    ],
+    "TableStatus": "ACTIVE",
+    "CreationDateTime": "2026-10-16T22:11:04.320000+02:00",
+    "ProvisionedThroughput": {
+      "NumberOfDecreasesToday": 0,
+      "ReadCapacityUnits": 0,
+      "WriteCapacityUnits": 0
+    },
+    "TableSizeBytes": 0,
+    "ItemCount": 0,
+    "TableArn": "arn:aws:dynamodb:af-south-1:966467878406:table/imbokodo-dev-user-account-scopes",
+    "TableId": "f9bceb8e-8284-40b5-a994-120270b8c11a",
+    "BillingModeSummary": {
+      "BillingMode": "PAY_PER_REQUEST",
+      "LastUpdateToPayPerRequestDateTime": "2026-10-16T22:11:04.320000+02:00"
+    },
+    "SSEDescription": {
+      "Status": "ENABLED",
+      "SSEType": "KMS",
+      "KMSMasterKeyArn": "arn:aws:kms:af-south-1:966467878406:key/72e10292-df4d-482e-a707-78729782a1ad"
+    },
+    "DeletionProtectionEnabled": true,
+    "WarmThroughput": {
+      "ReadUnitsPerSecond": 12000,
+      "WriteUnitsPerSecond": 4000,
+      "Status": "ACTIVE"
+    }
+  },
+  "auth_stack": {
+    "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-auth-dev/b18ea4c0-c99d-11f1-a24f-06a634c7705f",
+    "StackName": "fintrust-auth-dev",
+    "ChangeSetId": "arn:aws:cloudformation:af-south-1:966467878406:changeSet/fintrust-auth-config-retry-20261016/e00a116c-204f-44d1-aa25-d7c3cdd23b81",
+    "Description": "Imbokodo workforce Cognito sign-in and application account-scope map; deploy only after approved change review.",
+    "Parameters": [
+      {
+        "ParameterKey": "EnableScopeRecovery",
+        "ParameterValue": "false"
+      },
+      {
+        "ParameterKey": "StageName",
+        "ParameterValue": "dev"
+      },
+      {
+        "ParameterKey": "CallbackUrls",
+        "ParameterValue": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/"
+      },
+      {
+        "ParameterKey": "LogoutUrls",
+        "ParameterValue": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/"
+      },
+      {
+        "ParameterKey": "DomainPrefix",
+        "ParameterValue": "fintrust-966467878406-dev"
+      }
+    ],
+    "CreationTime": "2026-10-16T20:10:55.168000+00:00",
+    "LastUpdatedTime": "2026-10-16T20:11:00.327000+00:00",
+    "RollbackConfiguration": {},
+    "StackStatus": "CREATE_COMPLETE",
+    "DisableRollback": false,
+    "DeploymentConfig": {
+      "Mode": "STANDARD",
+      "DisableRollback": false
+    },
+    "NotificationARNs": [],
+    "Outputs": [
+      {
+        "OutputKey": "UserScopeTable",
+        "OutputValue": "imbokodo-dev-user-account-scopes"
+      },
+      {
+        "OutputKey": "UserPoolId",
+        "OutputValue": "af-south-1_NnmfBS0y9"
+      },
+      {
+        "OutputKey": "AppClientId",
+        "OutputValue": "5beqt819p8bpc3ug5hj65bj6i1"
+      },
+      {
+        "OutputKey": "Issuer",
+        "OutputValue": "https://cognito-idp.af-south-1.amazonaws.com/af-south-1_NnmfBS0y9"
+      },
+      {
+        "OutputKey": "HostedDomain",
+        "OutputValue": "https://fintrust-966467878406-dev.auth.af-south-1.amazoncognito.com"
+      },
+      {
+        "OutputKey": "UserPoolArn",
+        "OutputValue": "arn:aws:cognito-idp:af-south-1:966467878406:userpool/af-south-1_NnmfBS0y9"
+      }
+    ],
+    "Tags": [
+      {
+        "Key": "Project",
+        "Value": "FinTrust"
+      },
+      {
+        "Key": "Environment",
+        "Value": "dev"
+      }
+    ],
+    "EnableTerminationProtection": false,
+    "DriftInformation": {
+      "StackDriftStatus": "NOT_CHECKED"
+    },
+    "LastOperations": [
+      {
+        "OperationType": "CREATE_STACK",
+        "OperationId": "992fb218-5837-4635-bda4-b7dce1cdc444"
+      }
+    ]
+  },
+  "api_stages_before": {
+    "item": []
+  },
+  "queue_attributes_before": {
+    "QueueArn": "arn:aws:sqs:af-south-1:966467878406:fintrust-report-failures-dev"
+  },
+  "ssm_read_back": {
+    "Parameters": [
+      {
+        "Name": "/fintrust/dev/api/db_host",
+        "Type": "String",
+        "Value": "fintrust-ledger-dev.cv84aee6u6up.af-south-1.rds.amazonaws.com",
+        "Version": 1,
+        "LastModifiedDate": "2026-10-16T09:51:22.215000+02:00",
+        "ARN": "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/api/db_host",
+        "DataType": "text"
+      },
+      {
+        "Name": "/fintrust/dev/api/db_name",
+        "Type": "String",
+        "Value": "fintrust",
+        "Version": 1,
+        "LastModifiedDate": "2026-10-16T09:51:25.007000+02:00",
+        "ARN": "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/api/db_name",
+        "DataType": "text"
+      },
+      {
+        "Name": "/fintrust/dev/api/db_user",
+        "Type": "String",
+        "Value": "fintrust_api_dev",
+        "Version": 1,
+        "LastModifiedDate": "2026-10-16T09:51:27.129000+02:00",
+        "ARN": "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/api/db_user",
+        "DataType": "text"
+      },
+      {
+        "Name": "/fintrust/dev/report/db_host",
+        "Type": "String",
+        "Value": "fintrust-ledger-dev.cv84aee6u6up.af-south-1.rds.amazonaws.com",
+        "Version": 1,
+        "LastModifiedDate": "2026-10-16T09:51:13.909000+02:00",
+        "ARN": "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/report/db_host",
+        "DataType": "text"
+      },
+      {
+        "Name": "/fintrust/dev/report/db_name",
+        "Type": "String",
+        "Value": "fintrust",
+        "Version": 1,
+        "LastModifiedDate": "2026-10-16T09:51:17.092000+02:00",
+        "ARN": "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/report/db_name",
+        "DataType": "text"
+      },
+      {
+        "Name": "/fintrust/dev/report/db_user",
+        "Type": "String",
+        "Value": "fintrust_report_dev",
+        "Version": 1,
+        "LastModifiedDate": "2026-10-16T09:51:19.559000+02:00",
+        "ARN": "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/report/db_user",
+        "DataType": "text"
+      },
+      {
+        "Name": "/fintrust/dev/scoring/db_host",
+        "Type": "String",
+        "Value": "fintrust-ledger-dev.cv84aee6u6up.af-south-1.rds.amazonaws.com",
+        "Version": 1,
+        "LastModifiedDate": "2026-10-16T09:51:05.085000+02:00",
+        "ARN": "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/scoring/db_host",
+        "DataType": "text"
+      },
+      {
+        "Name": "/fintrust/dev/scoring/db_name",
+        "Type": "String",
+        "Value": "fintrust",
+        "Version": 1,
+        "LastModifiedDate": "2026-10-16T09:51:08.292000+02:00",
+        "ARN": "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/scoring/db_name",
+        "DataType": "text"
+      },
+      {
+        "Name": "/fintrust/dev/scoring/db_user",
+        "Type": "String",
+        "Value": "fintrust_scoring_dev",
+        "Version": 1,
+        "LastModifiedDate": "2026-10-16T09:51:11.047000+02:00",
+        "ARN": "arn:aws:ssm:af-south-1:966467878406:parameter/fintrust/dev/scoring/db_user",
+        "DataType": "text"
+      }
+    ],
+    "InvalidParameters": []
+  },
+  "ingest_concurrency_before": {
+    "ReservedConcurrentExecutions": 0
+  },
+  "raw_notifications_before": {},
+  "parameters": [
+    {
+      "ParameterKey": "CodeBucket",
+      "ParameterValue": "fintrust-reports-966467878406-af-south-1-dev"
+    },
+    {
+      "ParameterKey": "CodeKey",
+      "ParameterValue": "deployment/lambda/ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d/fintrust.zip"
+    },
+    {
+      "ParameterKey": "CodeSha256",
+      "ParameterValue": "/2Mk1kpdZdqxhSOjDqcrsVlNL6XKf75rg5HFLwPtWJ0="
+    },
+    {
+      "ParameterKey": "QuarantineBucket",
+      "ParameterValue": "fintrust-quarantine-966467878406-af-south-1-dev"
+    },
+    {
+      "ParameterKey": "ReportsBucket",
+      "ParameterValue": "fintrust-reports-966467878406-af-south-1-dev"
+    },
+    {
+      "ParameterKey": "RiskTable",
+      "ParameterValue": "fintrust-risk-dev"
+    },
+    {
+      "ParameterKey": "RiskStreamArn",
+      "ParameterValue": "arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev/stream/2026-10-08T08:19:35.208"
+    },
+    {
+      "ParameterKey": "SesSender",
+      "ParameterValue": "nompilomabuya@outlook.com"
+    },
+    {
+      "ParameterKey": "SesRecipient",
+      "ParameterValue": "nompilomabuya@outlook.com"
+    },
+    {
+      "ParameterKey": "CognitoUserPoolId",
+      "ParameterValue": "af-south-1_NnmfBS0y9"
+    },
+    {
+      "ParameterKey": "CognitoAppClientId",
+      "ParameterValue": "5beqt819p8bpc3ug5hj65bj6i1"
+    },
+    {
+      "ParameterKey": "CognitoDomain",
+      "ParameterValue": "https://fintrust-966467878406-dev.auth.af-south-1.amazoncognito.com"
+    },
+    {
+      "ParameterKey": "CognitoRedirectUri",
+      "ParameterValue": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/"
+    },
+    {
+      "ParameterKey": "CognitoLogoutUri",
+      "ParameterValue": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/"
+    },
+    {
+      "ParameterKey": "CognitoUserScopeTable",
+      "ParameterValue": "imbokodo-dev-user-account-scopes"
+    },
+    {
+      "ParameterKey": "CorsAllowedOrigins",
+      "ParameterValue": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com"
+    },
+    {
+      "ParameterKey": "Stage",
+      "ParameterValue": "dev"
+    },
+    {
+      "ParameterKey": "SubnetIds",
+      "ParameterValue": "subnet-0c2d87e8a83361e30,subnet-0328276227fa30ead"
+    },
+    {
+      "ParameterKey": "SecurityGroupIds",
+      "ParameterValue": "sg-0850bd798bb9505e2"
+    },
+    {
+      "ParameterKey": "EnableConsumers",
+      "ParameterValue": "false"
+    },
+    {
+      "ParameterKey": "ExistingTransactionsArn",
+      "ParameterValue": "arn:aws:sqs:af-south-1:966467878406:fintrust-transactions-dev.fifo"
+    },
+    {
+      "ParameterKey": "ExistingAlertFailuresArn",
+      "ParameterValue": "arn:aws:sqs:af-south-1:966467878406:fintrust-alert-failures-dev"
+    },
+    {
+      "ParameterKey": "ExistingReportFailuresArn",
+      "ParameterValue": "arn:aws:sqs:af-south-1:966467878406:fintrust-report-failures-dev"
+    },
+    {
+      "ParameterKey": "ExistingReportFailuresUrl",
+      "ParameterValue": "https://sqs.af-south-1.amazonaws.com/966467878406/fintrust-report-failures-dev"
+    },
+    {
+      "ParameterKey": "CodeObjectVersion",
+      "ParameterValue": "VZCWpaBXZO9pL2XONICW63qQcH4udM02"
+    },
+    {
+      "ParameterKey": "EnableFunctions",
+      "ParameterValue": "false"
+    },
+    {
+      "ParameterKey": "EnableMonthlyReports",
+      "ParameterValue": "false"
+    },
+    {
+      "ParameterKey": "EnableManualTest",
+      "ParameterValue": "false"
+    },
+    {
+      "ParameterKey": "ManualTestFunction",
+      "ParameterValue": "none"
+    }
+  ],
+  "updated_at": "2026-10-17T06:23:14.309824+00:00",
+  "change_set_creation": {
+    "Id": "arn:aws:cloudformation:af-south-1:966467878406:changeSet/fintrust-application-disabled-20261017/b0f3c13e-06a3-469c-acb5-b119c5505971",
+    "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-application-dev/b1a81f90-c9f2-11f1-886a-0effcbcc9a21"
+  },
+  "reviewed_change_set": {
+    "Changes": [
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "AlertFunction",
+          "ResourceType": "AWS::Lambda::Function",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "AlertLogs",
+          "ResourceType": "AWS::Logs::LogGroup",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "AlertMapping",
+          "ResourceType": "AWS::Lambda::EventSourceMapping",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "ApiAlias",
+          "ResourceType": "AWS::Lambda::Alias",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "ApiFunction",
+          "ResourceType": "AWS::Lambda::Function",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "ApiLogs",
+          "ResourceType": "AWS::Logs::LogGroup",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "ApiVersion",
+          "ResourceType": "AWS::Lambda::Version",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "MonthlySchedule",
+          "ResourceType": "AWS::Events::Rule",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "ReportAsync",
+          "ResourceType": "AWS::Lambda::EventInvokeConfig",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "ReportFunction",
+          "ResourceType": "AWS::Lambda::Function",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "ReportLogs",
+          "ResourceType": "AWS::Logs::LogGroup",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "ReportQueuePolicy",
+          "ResourceType": "AWS::SQS::QueuePolicy",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "ScheduleInvoke",
+          "ResourceType": "AWS::Lambda::Permission",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "ScoringFunction",
+          "ResourceType": "AWS::Lambda::Function",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "ScoringLogs",
+          "ResourceType": "AWS::Logs::LogGroup",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "ScoringMapping",
+          "ResourceType": "AWS::Lambda::EventSourceMapping",
+          "Scope": [],
+          "Details": []
+        }
+      }
+    ],
+    "ChangeSetName": "fintrust-application-disabled-20261017",
+    "ChangeSetId": "arn:aws:cloudformation:af-south-1:966467878406:changeSet/fintrust-application-disabled-20261017/b0f3c13e-06a3-469c-acb5-b119c5505971",
+    "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-application-dev/b1a81f90-c9f2-11f1-886a-0effcbcc9a21",
+    "StackName": "fintrust-application-dev",
+    "Description": null,
+    "Parameters": [
+      {
+        "ParameterKey": "CorsAllowedOrigins",
+        "ParameterValue": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com"
+      },
+      {
+        "ParameterKey": "ExistingTransactionsArn",
+        "ParameterValue": "arn:aws:sqs:af-south-1:966467878406:fintrust-transactions-dev.fifo"
+      },
+      {
+        "ParameterKey": "RiskTable",
+        "ParameterValue": "fintrust-risk-dev"
+      },
+      {
+        "ParameterKey": "CodeKey",
+        "ParameterValue": "deployment/lambda/ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d/fintrust.zip"
+      },
+      {
+        "ParameterKey": "ReportsBucket",
+        "ParameterValue": "fintrust-reports-966467878406-af-south-1-dev"
+      },
+      {
+        "ParameterKey": "QuarantineBucket",
+        "ParameterValue": "fintrust-quarantine-966467878406-af-south-1-dev"
+      },
+      {
+        "ParameterKey": "SubnetIds",
+        "ParameterValue": "subnet-0c2d87e8a83361e30,subnet-0328276227fa30ead"
+      },
+      {
+        "ParameterKey": "SesSender",
+        "ParameterValue": "nompilomabuya@outlook.com"
+      },
+      {
+        "ParameterKey": "Stage",
+        "ParameterValue": "dev"
+      },
+      {
+        "ParameterKey": "ExistingReportFailuresArn",
+        "ParameterValue": "arn:aws:sqs:af-south-1:966467878406:fintrust-report-failures-dev"
+      },
+      {
+        "ParameterKey": "CognitoRedirectUri",
+        "ParameterValue": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/"
+      },
+      {
+        "ParameterKey": "ExistingAlertFailuresArn",
+        "ParameterValue": "arn:aws:sqs:af-south-1:966467878406:fintrust-alert-failures-dev"
+      },
+      {
+        "ParameterKey": "CognitoDomain",
+        "ParameterValue": "https://fintrust-966467878406-dev.auth.af-south-1.amazoncognito.com"
+      },
+      {
+        "ParameterKey": "ManualTestFunction",
+        "ParameterValue": "none"
+      },
+      {
+        "ParameterKey": "CognitoLogoutUri",
+        "ParameterValue": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/"
+      },
+      {
+        "ParameterKey": "EnableFunctions",
+        "ParameterValue": "false"
+      },
+      {
+        "ParameterKey": "EnableMonthlyReports",
+        "ParameterValue": "false"
+      },
+      {
+        "ParameterKey": "RiskStreamArn",
+        "ParameterValue": "arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev/stream/2026-10-08T08:19:35.208"
+      },
+      {
+        "ParameterKey": "ExistingReportFailuresUrl",
+        "ParameterValue": "https://sqs.af-south-1.amazonaws.com/966467878406/fintrust-report-failures-dev"
+      },
+      {
+        "ParameterKey": "CodeSha256",
+        "ParameterValue": "/2Mk1kpdZdqxhSOjDqcrsVlNL6XKf75rg5HFLwPtWJ0="
+      },
+      {
+        "ParameterKey": "SecurityGroupIds",
+        "ParameterValue": "sg-0850bd798bb9505e2"
+      },
+      {
+        "ParameterKey": "EnableManualTest",
+        "ParameterValue": "false"
+      },
+      {
+        "ParameterKey": "CognitoUserPoolId",
+        "ParameterValue": "af-south-1_NnmfBS0y9"
+      },
+      {
+        "ParameterKey": "CodeBucket",
+        "ParameterValue": "fintrust-reports-966467878406-af-south-1-dev"
+      },
+      {
+        "ParameterKey": "CognitoUserScopeTable",
+        "ParameterValue": "imbokodo-dev-user-account-scopes"
+      },
+      {
+        "ParameterKey": "CognitoAppClientId",
+        "ParameterValue": "5beqt819p8bpc3ug5hj65bj6i1"
+      },
+      {
+        "ParameterKey": "SesRecipient",
+        "ParameterValue": "nompilomabuya@outlook.com"
+      },
+      {
+        "ParameterKey": "EnableConsumers",
+        "ParameterValue": "false"
+      },
+      {
+        "ParameterKey": "CodeObjectVersion",
+        "ParameterValue": "VZCWpaBXZO9pL2XONICW63qQcH4udM02"
+      }
+    ],
+    "CreationTime": "2026-10-17T06:19:22.671000+00:00",
+    "ExecutionStatus": "AVAILABLE",
+    "Status": "CREATE_COMPLETE",
+    "StatusReason": null,
+    "NotificationARNs": [],
+    "RollbackConfiguration": {},
+    "Capabilities": [],
+    "Tags": [
+      {
+        "Key": "Project",
+        "Value": "FinTrust"
+      },
+      {
+        "Key": "Environment",
+        "Value": "dev"
+      }
+    ],
+    "ParentChangeSetId": null,
+    "IncludeNestedStacks": false,
+    "RootChangeSetId": null,
+    "OnStackFailure": null,
+    "ImportExistingResources": null,
+    "StackDriftStatus": null,
+    "DeploymentMode": null,
+    "DeploymentConfig": {
+      "Mode": "STANDARD",
+      "DisableRollback": false
+    }
+  },
+  "stack_read_back": {
+    "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-application-dev/b1a81f90-c9f2-11f1-886a-0effcbcc9a21",
+    "StackName": "fintrust-application-dev",
+    "ChangeSetId": "arn:aws:cloudformation:af-south-1:966467878406:changeSet/fintrust-application-disabled-20261017/b0f3c13e-06a3-469c-acb5-b119c5505971",
+    "Description": "FinTrust dev manual shared-capacity test candidate; inactive by default; no automated consumers or reports",
+    "Parameters": [
+      {
+        "ParameterKey": "CorsAllowedOrigins",
+        "ParameterValue": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com"
+      },
+      {
+        "ParameterKey": "ExistingTransactionsArn",
+        "ParameterValue": "arn:aws:sqs:af-south-1:966467878406:fintrust-transactions-dev.fifo"
+      },
+      {
+        "ParameterKey": "RiskTable",
+        "ParameterValue": "fintrust-risk-dev"
+      },
+      {
+        "ParameterKey": "CodeKey",
+        "ParameterValue": "deployment/lambda/ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d/fintrust.zip"
+      },
+      {
+        "ParameterKey": "ReportsBucket",
+        "ParameterValue": "fintrust-reports-966467878406-af-south-1-dev"
+      },
+      {
+        "ParameterKey": "QuarantineBucket",
+        "ParameterValue": "fintrust-quarantine-966467878406-af-south-1-dev"
+      },
+      {
+        "ParameterKey": "SubnetIds",
+        "ParameterValue": "subnet-0c2d87e8a83361e30,subnet-0328276227fa30ead"
+      },
+      {
+        "ParameterKey": "SesSender",
+        "ParameterValue": "nompilomabuya@outlook.com"
+      },
+      {
+        "ParameterKey": "Stage",
+        "ParameterValue": "dev"
+      },
+      {
+        "ParameterKey": "ExistingReportFailuresArn",
+        "ParameterValue": "arn:aws:sqs:af-south-1:966467878406:fintrust-report-failures-dev"
+      },
+      {
+        "ParameterKey": "CognitoRedirectUri",
+        "ParameterValue": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/"
+      },
+      {
+        "ParameterKey": "ExistingAlertFailuresArn",
+        "ParameterValue": "arn:aws:sqs:af-south-1:966467878406:fintrust-alert-failures-dev"
+      },
+      {
+        "ParameterKey": "CognitoDomain",
+        "ParameterValue": "https://fintrust-966467878406-dev.auth.af-south-1.amazoncognito.com"
+      },
+      {
+        "ParameterKey": "ManualTestFunction",
+        "ParameterValue": "none"
+      },
+      {
+        "ParameterKey": "CognitoLogoutUri",
+        "ParameterValue": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/"
+      },
+      {
+        "ParameterKey": "EnableFunctions",
+        "ParameterValue": "false"
+      },
+      {
+        "ParameterKey": "EnableMonthlyReports",
+        "ParameterValue": "false"
+      },
+      {
+        "ParameterKey": "RiskStreamArn",
+        "ParameterValue": "arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev/stream/2026-10-08T08:19:35.208"
+      },
+      {
+        "ParameterKey": "ExistingReportFailuresUrl",
+        "ParameterValue": "https://sqs.af-south-1.amazonaws.com/966467878406/fintrust-report-failures-dev"
+      },
+      {
+        "ParameterKey": "CodeSha256",
+        "ParameterValue": "/2Mk1kpdZdqxhSOjDqcrsVlNL6XKf75rg5HFLwPtWJ0="
+      },
+      {
+        "ParameterKey": "SecurityGroupIds",
+        "ParameterValue": "sg-0850bd798bb9505e2"
+      },
+      {
+        "ParameterKey": "EnableManualTest",
+        "ParameterValue": "false"
+      },
+      {
+        "ParameterKey": "CognitoUserPoolId",
+        "ParameterValue": "af-south-1_NnmfBS0y9"
+      },
+      {
+        "ParameterKey": "CodeBucket",
+        "ParameterValue": "fintrust-reports-966467878406-af-south-1-dev"
+      },
+      {
+        "ParameterKey": "CognitoUserScopeTable",
+        "ParameterValue": "imbokodo-dev-user-account-scopes"
+      },
+      {
+        "ParameterKey": "CognitoAppClientId",
+        "ParameterValue": "5beqt819p8bpc3ug5hj65bj6i1"
+      },
+      {
+        "ParameterKey": "SesRecipient",
+        "ParameterValue": "nompilomabuya@outlook.com"
+      },
+      {
+        "ParameterKey": "EnableConsumers",
+        "ParameterValue": "false"
+      },
+      {
+        "ParameterKey": "CodeObjectVersion",
+        "ParameterValue": "VZCWpaBXZO9pL2XONICW63qQcH4udM02"
+      }
+    ],
+    "CreationTime": "2026-10-17T06:19:22.671000+00:00",
+    "LastUpdatedTime": "2026-10-17T06:19:31.819000+00:00",
+    "RollbackConfiguration": {},
+    "StackStatus": "CREATE_COMPLETE",
+    "DisableRollback": false,
+    "DeploymentConfig": {
+      "Mode": "STANDARD",
+      "DisableRollback": false
+    },
+    "NotificationARNs": [],
+    "Outputs": [
+      {
+        "OutputKey": "ScoringFunctionArn",
+        "OutputValue": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-scoring-dev"
+      },
+      {
+        "OutputKey": "ReportFunctionArn",
+        "OutputValue": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-report-dev"
+      },
+      {
+        "OutputKey": "ApiAliasArn",
+        "OutputValue": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev:dev"
+      },
+      {
+        "OutputKey": "AlertFunctionArn",
+        "OutputValue": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-alert-dev"
+      },
+      {
+        "OutputKey": "ApiFunctionArn",
+        "OutputValue": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev"
+      }
+    ],
+    "Tags": [
+      {
+        "Key": "Project",
+        "Value": "FinTrust"
+      },
+      {
+        "Key": "Environment",
+        "Value": "dev"
+      }
+    ],
+    "EnableTerminationProtection": false,
+    "DriftInformation": {
+      "StackDriftStatus": "NOT_CHECKED"
+    },
+    "LastOperations": [
+      {
+        "OperationType": "CREATE_STACK",
+        "OperationId": "196e1882-f7ae-4023-87e5-19f713e36b58"
+      }
+    ]
+  },
+  "outputs": {
+    "ScoringFunctionArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-scoring-dev",
+    "ReportFunctionArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-report-dev",
+    "ApiAliasArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev:dev",
+    "AlertFunctionArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-alert-dev",
+    "ApiFunctionArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev"
+  },
+  "functions": {
+    "scoring": {
+      "configuration": {
+        "FunctionName": "fintrust-scoring-dev",
+        "FunctionArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-scoring-dev",
+        "Runtime": "python3.12",
+        "Role": "arn:aws:iam::966467878406:role/fintrust-scoring-dev",
+        "Handler": "fintrust.score.lambda_handler",
+        "CodeSize": 26537014,
+        "Description": "",
+        "Timeout": 120,
+        "MemorySize": 256,
+        "LastModified": "2026-10-17T06:19:46.501+0000",
+        "CodeSha256": "/2Mk1kpdZdqxhSOjDqcrsVlNL6XKf75rg5HFLwPtWJ0=",
+        "Version": "$LATEST",
+        "VpcConfig": {
+          "SubnetIds": [
+            "subnet-0c2d87e8a83361e30",
+            "subnet-0328276227fa30ead"
+          ],
+          "SecurityGroupIds": [
+            "sg-0850bd798bb9505e2"
+          ],
+          "VpcId": "vpc-0aba008bb360f5147",
+          "Ipv6AllowedForDualStack": false
+        },
+        "Environment": {
+          "Variables": {
+            "FINTRUST_STAGE": "dev",
+            "DYNAMODB_TABLE": "fintrust-risk-dev",
+            "DB_USER": "fintrust_scoring_dev",
+            "ALERT_DELIVERY_MODE": "stream",
+            "DB_NAME": "fintrust",
+            "DB_AUTH_MODE": "iam",
+            "QUARANTINE_BUCKET": "fintrust-quarantine-966467878406-af-south-1-dev",
+            "DB_HOST": "fintrust-ledger-dev.cv84aee6u6up.af-south-1.rds.amazonaws.com",
+            "FINTRUST_SERVICE": "scoring",
+            "DB_CONFIG_SOURCE": "environment",
+            "DB_SSLROOTCERT": "/var/task/certs/global-bundle.pem"
+          }
+        },
+        "TracingConfig": {
+          "Mode": "PassThrough"
+        },
+        "RevisionId": "aa8bb1b2-d54b-4913-ae09-75a92a4fa35c",
+        "State": "Active",
+        "LastUpdateStatus": "Successful",
+        "PackageType": "Zip",
+        "Architectures": [
+          "x86_64"
+        ],
+        "EphemeralStorage": {
+          "Size": 512
+        },
+        "SnapStart": {
+          "ApplyOn": "None",
+          "OptimizationStatus": "Off"
+        },
+        "RuntimeVersionConfig": {
+          "RuntimeVersionArn": "arn:aws:lambda:af-south-1::runtime:36aeb19f3326e129d9f096dea0a3c6a9ca8dce2610e62d2b2060747602d863ae"
+        },
+        "LoggingConfig": {
+          "LogFormat": "Text",
+          "LogGroup": "/aws/lambda/fintrust-scoring-dev"
+        }
+      },
+      "concurrency": {
+        "ReservedConcurrentExecutions": 0
+      }
+    },
+    "alert": {
+      "configuration": {
+        "FunctionName": "fintrust-alert-dev",
+        "FunctionArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-alert-dev",
+        "Runtime": "python3.12",
+        "Role": "arn:aws:iam::966467878406:role/fintrust-alert-dev",
+        "Handler": "fintrust.alert_delivery.lambda_handler",
+        "CodeSize": 26537014,
+        "Description": "",
+        "Timeout": 30,
+        "MemorySize": 256,
+        "LastModified": "2026-10-17T06:19:46.493+0000",
+        "CodeSha256": "/2Mk1kpdZdqxhSOjDqcrsVlNL6XKf75rg5HFLwPtWJ0=",
+        "Version": "$LATEST",
+        "Environment": {
+          "Variables": {
+            "FINTRUST_STAGE": "dev",
+            "DYNAMODB_TABLE": "fintrust-risk-dev",
+            "SES_SENDER": "nompilomabuya@outlook.com",
+            "SES_RECIPIENT": "nompilomabuya@outlook.com",
+            "FINTRUST_SERVICE": "alert"
+          }
+        },
+        "TracingConfig": {
+          "Mode": "PassThrough"
+        },
+        "RevisionId": "ab939dbd-02de-4e40-8ee7-bb70f40181fd",
+        "State": "Active",
+        "LastUpdateStatus": "Successful",
+        "PackageType": "Zip",
+        "Architectures": [
+          "x86_64"
+        ],
+        "EphemeralStorage": {
+          "Size": 512
+        },
+        "SnapStart": {
+          "ApplyOn": "None",
+          "OptimizationStatus": "Off"
+        },
+        "RuntimeVersionConfig": {
+          "RuntimeVersionArn": "arn:aws:lambda:af-south-1::runtime:36aeb19f3326e129d9f096dea0a3c6a9ca8dce2610e62d2b2060747602d863ae"
+        },
+        "LoggingConfig": {
+          "LogFormat": "Text",
+          "LogGroup": "/aws/lambda/fintrust-alert-dev"
+        }
+      },
+      "concurrency": {
+        "ReservedConcurrentExecutions": 0
+      }
+    },
+    "report": {
+      "configuration": {
+        "FunctionName": "fintrust-report-dev",
+        "FunctionArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-report-dev",
+        "Runtime": "python3.12",
+        "Role": "arn:aws:iam::966467878406:role/fintrust-report-dev",
+        "Handler": "fintrust.report.lambda_handler",
+        "CodeSize": 26537014,
+        "Description": "",
+        "Timeout": 120,
+        "MemorySize": 256,
+        "LastModified": "2026-10-17T06:19:46.359+0000",
+        "CodeSha256": "/2Mk1kpdZdqxhSOjDqcrsVlNL6XKf75rg5HFLwPtWJ0=",
+        "Version": "$LATEST",
+        "VpcConfig": {
+          "SubnetIds": [
+            "subnet-0c2d87e8a83361e30",
+            "subnet-0328276227fa30ead"
+          ],
+          "SecurityGroupIds": [
+            "sg-0850bd798bb9505e2"
+          ],
+          "VpcId": "vpc-0aba008bb360f5147",
+          "Ipv6AllowedForDualStack": false
+        },
+        "Environment": {
+          "Variables": {
+            "FINTRUST_STAGE": "dev",
+            "S3_REPORT_BUCKET": "fintrust-reports-966467878406-af-south-1-dev",
+            "DB_USER": "fintrust_report_dev",
+            "DB_NAME": "fintrust",
+            "DB_AUTH_MODE": "iam",
+            "DB_HOST": "fintrust-ledger-dev.cv84aee6u6up.af-south-1.rds.amazonaws.com",
+            "FINTRUST_SERVICE": "report",
+            "DB_CONFIG_SOURCE": "environment",
+            "DB_SSLROOTCERT": "/var/task/certs/global-bundle.pem"
+          }
+        },
+        "TracingConfig": {
+          "Mode": "PassThrough"
+        },
+        "RevisionId": "f7eea35e-edb2-4187-98ad-32c33432d124",
+        "State": "Active",
+        "LastUpdateStatus": "Successful",
+        "PackageType": "Zip",
+        "Architectures": [
+          "x86_64"
+        ],
+        "EphemeralStorage": {
+          "Size": 512
+        },
+        "SnapStart": {
+          "ApplyOn": "None",
+          "OptimizationStatus": "Off"
+        },
+        "RuntimeVersionConfig": {
+          "RuntimeVersionArn": "arn:aws:lambda:af-south-1::runtime:36aeb19f3326e129d9f096dea0a3c6a9ca8dce2610e62d2b2060747602d863ae"
+        },
+        "LoggingConfig": {
+          "LogFormat": "Text",
+          "LogGroup": "/aws/lambda/fintrust-report-dev"
+        }
+      },
+      "concurrency": {
+        "ReservedConcurrentExecutions": 0
+      }
+    },
+    "api": {
+      "configuration": {
+        "FunctionName": "fintrust-api-dev",
+        "FunctionArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev",
+        "Runtime": "python3.12",
+        "Role": "arn:aws:iam::966467878406:role/fintrust-api-dev",
+        "Handler": "fintrust.api.lambda_handler",
+        "CodeSize": 26537014,
+        "Description": "",
+        "Timeout": 30,
+        "MemorySize": 256,
+        "LastModified": "2026-10-17T06:19:46.371+0000",
+        "CodeSha256": "/2Mk1kpdZdqxhSOjDqcrsVlNL6XKf75rg5HFLwPtWJ0=",
+        "Version": "$LATEST",
+        "VpcConfig": {
+          "SubnetIds": [
+            "subnet-0c2d87e8a83361e30",
+            "subnet-0328276227fa30ead"
+          ],
+          "SecurityGroupIds": [
+            "sg-0850bd798bb9505e2"
+          ],
+          "VpcId": "vpc-0aba008bb360f5147",
+          "Ipv6AllowedForDualStack": false
+        },
+        "Environment": {
+          "Variables": {
+            "CORS_ALLOWED_ORIGINS": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com",
+            "FINTRUST_STAGE": "dev",
+            "DB_USER": "fintrust_api_dev",
+            "DB_NAME": "fintrust",
+            "DB_AUTH_MODE": "iam",
+            "COGNITO_USER_POOL_ID": "af-south-1_NnmfBS0y9",
+            "DB_HOST": "fintrust-ledger-dev.cv84aee6u6up.af-south-1.rds.amazonaws.com",
+            "DB_SSLROOTCERT": "/var/task/certs/global-bundle.pem",
+            "AUTH_MODE": "cognito",
+            "DYNAMODB_TABLE": "fintrust-risk-dev",
+            "COGNITO_DOMAIN": "https://fintrust-966467878406-dev.auth.af-south-1.amazoncognito.com",
+            "COGNITO_USER_SCOPE_TABLE": "imbokodo-dev-user-account-scopes",
+            "COGNITO_REDIRECT_URI": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/",
+            "COGNITO_APP_CLIENT_ID": "5beqt819p8bpc3ug5hj65bj6i1",
+            "COGNITO_LOGOUT_URI": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/",
+            "FINTRUST_SERVICE": "api",
+            "DB_CONFIG_SOURCE": "environment"
+          }
+        },
+        "TracingConfig": {
+          "Mode": "PassThrough"
+        },
+        "RevisionId": "d3cc80b6-d4cd-4e70-9653-c0e3ac72e885",
+        "State": "Active",
+        "LastUpdateStatus": "Successful",
+        "PackageType": "Zip",
+        "Architectures": [
+          "x86_64"
+        ],
+        "EphemeralStorage": {
+          "Size": 512
+        },
+        "SnapStart": {
+          "ApplyOn": "None",
+          "OptimizationStatus": "Off"
+        },
+        "RuntimeVersionConfig": {
+          "RuntimeVersionArn": "arn:aws:lambda:af-south-1::runtime:36aeb19f3326e129d9f096dea0a3c6a9ca8dce2610e62d2b2060747602d863ae"
+        },
+        "LoggingConfig": {
+          "LogFormat": "Text",
+          "LogGroup": "/aws/lambda/fintrust-api-dev"
+        }
+      },
+      "concurrency": {
+        "ReservedConcurrentExecutions": 0
+      }
+    }
+  },
+  "resources": [
+    {
+      "LogicalResourceId": "AlertFunction",
+      "PhysicalResourceId": "fintrust-alert-dev",
+      "ResourceType": "AWS::Lambda::Function",
+      "LastUpdatedTimestamp": "2026-10-17T06:19:53.342000+00:00",
+      "ResourceStatus": "CREATE_COMPLETE",
+      "DriftInformation": {
+        "StackResourceDriftStatus": "NOT_CHECKED"
+      }
+    },
+    {
+      "LogicalResourceId": "AlertLogs",
+      "PhysicalResourceId": "/aws/lambda/fintrust-alert-dev",
+      "ResourceType": "AWS::Logs::LogGroup",
+      "LastUpdatedTimestamp": "2026-10-17T06:19:43.103000+00:00",
+      "ResourceStatus": "CREATE_COMPLETE",
+      "DriftInformation": {
+        "StackResourceDriftStatus": "NOT_CHECKED"
+      }
+    },
+    {
+      "LogicalResourceId": "AlertMapping",
+      "PhysicalResourceId": "a390899f-ad1d-44ed-b1b7-2ea75415e8cf",
+      "ResourceType": "AWS::Lambda::EventSourceMapping",
+      "LastUpdatedTimestamp": "2026-10-17T06:19:55.661000+00:00",
+      "ResourceStatus": "CREATE_COMPLETE",
+      "DriftInformation": {
+        "StackResourceDriftStatus": "NOT_CHECKED"
+      }
+    },
+    {
+      "LogicalResourceId": "ApiAlias",
+      "PhysicalResourceId": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev:dev",
+      "ResourceType": "AWS::Lambda::Alias",
+      "LastUpdatedTimestamp": "2026-10-17T06:22:38.863000+00:00",
+      "ResourceStatus": "CREATE_COMPLETE",
+      "DriftInformation": {
+        "StackResourceDriftStatus": "NOT_CHECKED"
+      }
+    },
+    {
+      "LogicalResourceId": "ApiFunction",
+      "PhysicalResourceId": "fintrust-api-dev",
+      "ResourceType": "AWS::Lambda::Function",
+      "LastUpdatedTimestamp": "2026-10-17T06:22:30.959000+00:00",
+      "ResourceStatus": "CREATE_COMPLETE",
+      "DriftInformation": {
+        "StackResourceDriftStatus": "NOT_CHECKED"
+      }
+    },
+    {
+      "LogicalResourceId": "ApiLogs",
+      "PhysicalResourceId": "/aws/lambda/fintrust-api-dev",
+      "ResourceType": "AWS::Logs::LogGroup",
+      "LastUpdatedTimestamp": "2026-10-17T06:19:42.972000+00:00",
+      "ResourceStatus": "CREATE_COMPLETE",
+      "DriftInformation": {
+        "StackResourceDriftStatus": "NOT_CHECKED"
+      }
+    },
+    {
+      "LogicalResourceId": "ApiVersion",
+      "PhysicalResourceId": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev:1",
+      "ResourceType": "AWS::Lambda::Version",
+      "LastUpdatedTimestamp": "2026-10-17T06:22:32.673000+00:00",
+      "ResourceStatus": "CREATE_COMPLETE",
+      "DriftInformation": {
+        "StackResourceDriftStatus": "NOT_CHECKED"
+      }
+    },
+    {
+      "LogicalResourceId": "MonthlySchedule",
+      "PhysicalResourceId": "fintrust-monthly-dev",
+      "ResourceType": "AWS::Events::Rule",
+      "LastUpdatedTimestamp": "2026-10-17T06:20:54.929000+00:00",
+      "ResourceStatus": "CREATE_COMPLETE",
+      "DriftInformation": {
+        "StackResourceDriftStatus": "NOT_CHECKED"
+      }
+    },
+    {
+      "LogicalResourceId": "ReportAsync",
+      "PhysicalResourceId": "fintrust-report-dev|$LATEST",
+      "ResourceType": "AWS::Lambda::EventInvokeConfig",
+      "LastUpdatedTimestamp": "2026-10-17T06:19:54.851000+00:00",
+      "ResourceStatus": "CREATE_COMPLETE",
+      "DriftInformation": {
+        "StackResourceDriftStatus": "NOT_CHECKED"
+      }
+    },
+    {
+      "LogicalResourceId": "ReportFunction",
+      "PhysicalResourceId": "fintrust-report-dev",
+      "ResourceType": "AWS::Lambda::Function",
+      "LastUpdatedTimestamp": "2026-10-17T06:22:30.609000+00:00",
+      "ResourceStatus": "CREATE_COMPLETE",
+      "DriftInformation": {
+        "StackResourceDriftStatus": "NOT_CHECKED"
+      }
+    },
+    {
+      "LogicalResourceId": "ReportLogs",
+      "PhysicalResourceId": "/aws/lambda/fintrust-report-dev",
+      "ResourceType": "AWS::Logs::LogGroup",
+      "LastUpdatedTimestamp": "2026-10-17T06:19:42.886000+00:00",
+      "ResourceStatus": "CREATE_COMPLETE",
+      "DriftInformation": {
+        "StackResourceDriftStatus": "NOT_CHECKED"
+      }
+    },
+    {
+      "LogicalResourceId": "ReportQueuePolicy",
+      "PhysicalResourceId": "fintrust-application-dev-ReportQueuePolicy-kTzCjpZ9l6pY",
+      "ResourceType": "AWS::SQS::QueuePolicy",
+      "LastUpdatedTimestamp": "2026-10-17T06:21:26.308000+00:00",
+      "ResourceStatus": "CREATE_COMPLETE",
+      "DriftInformation": {
+        "StackResourceDriftStatus": "NOT_CHECKED"
+      }
+    },
+    {
+      "LogicalResourceId": "ScheduleInvoke",
+      "PhysicalResourceId": "fintrust-application-dev-ScheduleInvoke-qxFoW18lhf0S",
+      "ResourceType": "AWS::Lambda::Permission",
+      "LastUpdatedTimestamp": "2026-10-17T06:20:56.591000+00:00",
+      "ResourceStatus": "CREATE_COMPLETE",
+      "DriftInformation": {
+        "StackResourceDriftStatus": "NOT_CHECKED"
+      }
+    },
+    {
+      "LogicalResourceId": "ScoringFunction",
+      "PhysicalResourceId": "fintrust-scoring-dev",
+      "ResourceType": "AWS::Lambda::Function",
+      "LastUpdatedTimestamp": "2026-10-17T06:22:31.197000+00:00",
+      "ResourceStatus": "CREATE_COMPLETE",
+      "DriftInformation": {
+        "StackResourceDriftStatus": "NOT_CHECKED"
+      }
+    },
+    {
+      "LogicalResourceId": "ScoringLogs",
+      "PhysicalResourceId": "/aws/lambda/fintrust-scoring-dev",
+      "ResourceType": "AWS::Logs::LogGroup",
+      "LastUpdatedTimestamp": "2026-10-17T06:19:43.097000+00:00",
+      "ResourceStatus": "CREATE_COMPLETE",
+      "DriftInformation": {
+        "StackResourceDriftStatus": "NOT_CHECKED"
+      }
+    },
+    {
+      "LogicalResourceId": "ScoringMapping",
+      "PhysicalResourceId": "0bec8080-c916-4318-b457-64677307c0ee",
+      "ResourceType": "AWS::Lambda::EventSourceMapping",
+      "LastUpdatedTimestamp": "2026-10-17T06:19:55.542000+00:00",
+      "ResourceStatus": "CREATE_COMPLETE",
+      "DriftInformation": {
+        "StackResourceDriftStatus": "NOT_CHECKED"
+      }
+    }
+  ],
+  "mappings": [
+    {
+      "UUID": "a390899f-ad1d-44ed-b1b7-2ea75415e8cf",
+      "StartingPosition": "TRIM_HORIZON",
+      "BatchSize": 10,
+      "MaximumBatchingWindowInSeconds": 0,
+      "ParallelizationFactor": 1,
+      "EventSourceArn": "arn:aws:dynamodb:af-south-1:966467878406:table/fintrust-risk-dev/stream/2026-10-08T08:19:35.208",
+      "FilterCriteria": {
+        "Filters": [
+          {
+            "Pattern": "{\"eventName\": [\"INSERT\"], \"dynamodb\": {\"NewImage\": {\"score_date\": {\"S\": [{\"prefix\": \"TX#\"}]}, \"risk_level\": {\"S\": [\"High\"]}}}}"
+          }
+        ]
+      },
+      "FunctionArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-alert-dev",
+      "LastModified": "2026-10-17T08:19:00+02:00",
+      "LastProcessingResult": "No records processed",
+      "State": "Disabled",
+      "StateTransitionReason": "User action",
+      "DestinationConfig": {
+        "OnFailure": {
+          "Destination": "arn:aws:sqs:af-south-1:966467878406:fintrust-alert-failures-dev"
+        }
+      },
+      "MaximumRecordAgeInSeconds": 21600,
+      "BisectBatchOnFunctionError": false,
+      "MaximumRetryAttempts": 5,
+      "TumblingWindowInSeconds": 0,
+      "FunctionResponseTypes": [
+        "ReportBatchItemFailures"
+      ],
+      "EventSourceMappingArn": "arn:aws:lambda:af-south-1:966467878406:event-source-mapping:a390899f-ad1d-44ed-b1b7-2ea75415e8cf"
+    },
+    {
+      "UUID": "0bec8080-c916-4318-b457-64677307c0ee",
+      "BatchSize": 5,
+      "MaximumBatchingWindowInSeconds": 0,
+      "EventSourceArn": "arn:aws:sqs:af-south-1:966467878406:fintrust-transactions-dev.fifo",
+      "FunctionArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-scoring-dev",
+      "LastModified": "2026-10-17T08:19:54.545000+02:00",
+      "State": "Disabled",
+      "StateTransitionReason": "USER_INITIATED",
+      "FunctionResponseTypes": [
+        "ReportBatchItemFailures"
+      ],
+      "EventSourceMappingArn": "arn:aws:lambda:af-south-1:966467878406:event-source-mapping:0bec8080-c916-4318-b457-64677307c0ee"
+    }
+  ],
+  "monthly_rule": {
+    "Name": "fintrust-monthly-dev",
+    "Arn": "arn:aws:events:af-south-1:966467878406:rule/fintrust-monthly-dev",
+    "ScheduleExpression": "cron(0 2 1 * ? *)",
+    "State": "DISABLED",
+    "EventBusName": "default",
+    "CreatedBy": "966467878406"
+  },
+  "report_targets": {
+    "Targets": [
+      {
+        "Id": "MonthlyReport",
+        "Arn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-report-dev",
+        "DeadLetterConfig": {
+          "Arn": "arn:aws:sqs:af-south-1:966467878406:fintrust-report-failures-dev"
+        },
+        "RetryPolicy": {
+          "MaximumRetryAttempts": 5,
+          "MaximumEventAgeInSeconds": 21600
+        }
+      }
+    ]
+  },
+  "api_alias": {
+    "AliasArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev:dev",
+    "Name": "dev",
+    "FunctionVersion": "1",
+    "Description": "",
+    "RevisionId": "d42da94a-b2f1-40e0-8df0-5a6d21315d6f"
+  },
+  "report_async": {
+    "LastModified": "2026-10-17T08:19:54.258000+02:00",
+    "FunctionArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-report-dev:$LATEST",
+    "MaximumRetryAttempts": 2,
+    "MaximumEventAgeInSeconds": 21600,
+    "DestinationConfig": {
+      "OnSuccess": {},
+      "OnFailure": {
+        "Destination": "arn:aws:sqs:af-south-1:966467878406:fintrust-report-failures-dev"
+      }
+    }
+  },
+  "logs": [
+    {
+      "logGroupName": "/aws/lambda/fintrust-alert-dev",
+      "creationTime": 1792217975582,
+      "retentionInDays": 14,
+      "metricFilterCount": 0,
+      "arn": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-alert-dev:*",
+      "storedBytes": 0,
+      "logGroupClass": "STANDARD",
+      "logGroupArn": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-alert-dev",
+      "deletionProtectionEnabled": false,
+      "bearerTokenAuthenticationEnabled": false
+    },
+    {
+      "logGroupName": "/aws/lambda/fintrust-api-dev",
+      "creationTime": 1792217975413,
+      "retentionInDays": 14,
+      "metricFilterCount": 0,
+      "arn": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-api-dev:*",
+      "storedBytes": 0,
+      "logGroupClass": "STANDARD",
+      "logGroupArn": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-api-dev",
+      "deletionProtectionEnabled": false,
+      "bearerTokenAuthenticationEnabled": false
+    },
+    {
+      "logGroupName": "/aws/lambda/fintrust-ingest-dev",
+      "creationTime": 1791490487519,
+      "retentionInDays": 14,
+      "metricFilterCount": 0,
+      "arn": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev:*",
+      "storedBytes": 0,
+      "logGroupClass": "STANDARD",
+      "logGroupArn": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-ingest-dev",
+      "deletionProtectionEnabled": false,
+      "bearerTokenAuthenticationEnabled": false
+    },
+    {
+      "logGroupName": "/aws/lambda/fintrust-migration-dev",
+      "creationTime": 1791702913136,
+      "retentionInDays": 14,
+      "metricFilterCount": 0,
+      "arn": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-migration-dev:*",
+      "storedBytes": 535,
+      "logGroupClass": "STANDARD",
+      "logGroupArn": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-migration-dev",
+      "deletionProtectionEnabled": false,
+      "bearerTokenAuthenticationEnabled": false
+    },
+    {
+      "logGroupName": "/aws/lambda/fintrust-report-dev",
+      "creationTime": 1792217975423,
+      "retentionInDays": 14,
+      "metricFilterCount": 0,
+      "arn": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-report-dev:*",
+      "storedBytes": 0,
+      "logGroupClass": "STANDARD",
+      "logGroupArn": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-report-dev",
+      "deletionProtectionEnabled": false,
+      "bearerTokenAuthenticationEnabled": false
+    },
+    {
+      "logGroupName": "/aws/lambda/fintrust-scoring-dev",
+      "creationTime": 1792217975588,
+      "retentionInDays": 14,
+      "metricFilterCount": 0,
+      "arn": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-scoring-dev:*",
+      "storedBytes": 0,
+      "logGroupClass": "STANDARD",
+      "logGroupArn": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-scoring-dev",
+      "deletionProtectionEnabled": false,
+      "bearerTokenAuthenticationEnabled": false
+    }
+  ],
+  "api_stages_after": {
+    "item": []
+  },
+  "raw_notifications_after": {}
+}

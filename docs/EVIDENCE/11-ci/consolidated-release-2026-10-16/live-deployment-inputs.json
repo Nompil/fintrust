@@ -209,7 +209,7 @@
       "LogoutUrls": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/"
     },
     "api.json": {
-      "ApiFunctionName": null,
+      "ApiFunctionName": "fintrust-api-dev",
       "UserPoolArn": "arn:aws:cognito-idp:af-south-1:966467878406:userpool/af-south-1_NnmfBS0y9"
     },
     "api-shell.json": {}
@@ -219,9 +219,7 @@
     "application-functions.json": [],
     "monitoring.json": [],
     "cognito.json": [],
-    "api.json": [
-      "ApiFunctionName"
-    ],
+    "api.json": [],
     "api-shell.json": []
   },
   "activation_flags": {
@@ -250,7 +248,8 @@
     "Stage-path repair supersedes runtime commit 3368f4c; latest code is bound by source_sha256 and the gateway readiness evidence. The approved uploaded version is now verified; function deployment remains separate.",
     "Prepared Cognito has no IAM resources: admin separately installed exact-table API GetItem access. Do not use the historical generic Cognito template.",
     "API identity and empty Cognito/scope configuration deployed and read back. No users, scope assignments, serving API stage or workloads activated. Artifact upload, database gates and end-to-end validation remain outstanding.",
-    "The upload-only cost exception was authorized by the owner. No function, stack, trigger, schedule, SQL or email was executed by staging."
+    "The upload-only cost exception was authorized by the owner. No function, stack, trigger, schedule, SQL or email was executed by staging.",
+    "Four application functions deployed disabled; real API function name bound. This supersedes earlier function-pending notes. Runtime, live database and end-to-end gates remain outstanding."
   ],
   "source_sha256": "2b525f84dfd93f93006f245ee77df5d589d5a3bb056c4bfaf99000b1004ac852",
   "ssm_prerequisites": {
@@ -307,5 +306,17 @@
     "exact_version_download_verified": true,
     "temporary_permission_removed": true,
     "evidence": "infrastructure/service_preparation/shared_manual/artifact-staging-live.json"
+  },
+  "application_configuration": {
+    "status": "CREATE_COMPLETE_FUNCTIONS_ZERO_CONSUMERS_AND_REPORTS_DISABLED",
+    "outputs": {
+      "ScoringFunctionArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-scoring-dev",
+      "ReportFunctionArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-report-dev",
+      "ApiAliasArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev:dev",
+      "AlertFunctionArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-alert-dev",
+      "ApiFunctionArn": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev"
+    },
+    "evidence": "infrastructure/service_preparation/shared_manual/application-disabled-live.json",
+    "runtime_verified": false
   }
 }
