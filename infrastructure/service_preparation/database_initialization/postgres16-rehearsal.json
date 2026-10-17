@@ -1,0 +1,2235 @@
+{
+  "status": "PASSED",
+  "aws_access": false,
+  "cloud_iam_tls_verified": false,
+  "financial_seed_executed": false,
+  "operations": [
+    {
+      "operation": "initialize_base",
+      "result": {
+        "base_initialized": true,
+        "tables": [
+          "customers",
+          "accounts",
+          "transactions",
+          "risk_events",
+          "alerts",
+          "processed_transactions"
+        ],
+        "row_counts": {
+          "alerts": 0,
+          "accounts": 0,
+          "customers": 0,
+          "risk_events": 0,
+          "transactions": 0,
+          "processed_transactions": 0
+        },
+        "seed_executed": false,
+        "identity_migration_applied": false
+      }
+    },
+    {
+      "operation": "bootstrap",
+      "result": {
+        "temporary_login_created": true,
+        "master_used_for_migration": false
+      }
+    },
+    {
+      "operation": "migrate",
+      "result": {
+        "assessment": {
+          "state": "correct",
+          "issues": [],
+          "base_valid": true
+        },
+        "database": "fintrust",
+        "user": "fintrust_transactions_owner",
+        "version": "16.15 (Ubuntu 16.15-0ubuntu0.24.04.1)",
+        "ssl": false,
+        "tables": [
+          {
+            "name": "accounts",
+            "kind": "r",
+            "owner": "fintrust_admin",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "alerts",
+            "kind": "r",
+            "owner": "fintrust_admin",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "alerts_alert_id_seq",
+            "kind": "S",
+            "owner": "fintrust_admin",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "customers",
+            "kind": "r",
+            "owner": "fintrust_admin",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "processed_transactions",
+            "kind": "r",
+            "owner": "fintrust_admin",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "risk_events",
+            "kind": "r",
+            "owner": "fintrust_admin",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "risk_events_risk_event_id_seq",
+            "kind": "S",
+            "owner": "fintrust_admin",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "transactions",
+            "kind": "r",
+            "owner": "fintrust_transactions_owner",
+            "rls": false,
+            "force_rls": false
+          }
+        ],
+        "columns": [
+          {
+            "table": "accounts",
+            "name": "account_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "88a6e91ebb38b1a408b4e463a08a8c19fe90a07e4f7446cf858645c84110d450"
+          },
+          {
+            "table": "accounts",
+            "name": "customer_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "accounts",
+            "name": "account_type",
+            "type": "character varying(30)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "accounts",
+            "name": "balance",
+            "type": "numeric(15,2)",
+            "not_null": true,
+            "default_sha256": "561b2814d3c09e62a92442c946307918f7f63f833c84876c08bd4c406767e53b"
+          },
+          {
+            "table": "accounts",
+            "name": "status",
+            "type": "character varying(20)",
+            "not_null": true,
+            "default_sha256": "cd44bc8129bf90f5195026fbb37465ecc4c9f2f1c35e5cf6caf892726c685355"
+          },
+          {
+            "table": "accounts",
+            "name": "opened_at",
+            "type": "timestamp with time zone",
+            "not_null": true,
+            "default_sha256": "28a4dae0461e17af56e979c2095abfbe0bfc45fe9ca8abf3144338a518a1bb8f"
+          },
+          {
+            "table": "alerts",
+            "name": "alert_id",
+            "type": "bigint",
+            "not_null": true,
+            "default_sha256": "e6a8521c856de5dcdf7365a575f8634215981ce33bb7aed12685c25f6aa9dd09"
+          },
+          {
+            "table": "alerts",
+            "name": "risk_event_id",
+            "type": "bigint",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "alerts",
+            "name": "severity",
+            "type": "character varying(20)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "alerts",
+            "name": "message",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "alerts",
+            "name": "sent_at",
+            "type": "timestamp with time zone",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "alerts",
+            "name": "delivery_key",
+            "type": "bigint",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "alerts",
+            "name": "delivery_state",
+            "type": "character varying(10)",
+            "not_null": true,
+            "default_sha256": "beb6acf9a91d2c42bd90a091726c9c09bf77ebfef6376431c480bc227ff0d9b2"
+          },
+          {
+            "table": "alerts",
+            "name": "provider_message_id",
+            "type": "text",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "customers",
+            "name": "customer_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "88a6e91ebb38b1a408b4e463a08a8c19fe90a07e4f7446cf858645c84110d450"
+          },
+          {
+            "table": "customers",
+            "name": "full_name",
+            "type": "character varying(150)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "customers",
+            "name": "id_number",
+            "type": "character varying(20)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "customers",
+            "name": "kyc_status",
+            "type": "character varying(20)",
+            "not_null": true,
+            "default_sha256": "aee29c7c36eede1c9e40442cc90d3b1039d93e021dc57c10a211a5c82d08dcfd"
+          },
+          {
+            "table": "customers",
+            "name": "created_at",
+            "type": "timestamp with time zone",
+            "not_null": true,
+            "default_sha256": "28a4dae0461e17af56e979c2095abfbe0bfc45fe9ca8abf3144338a518a1bb8f"
+          },
+          {
+            "table": "processed_transactions",
+            "name": "tx_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "processed_transactions",
+            "name": "fingerprint",
+            "type": "character(64)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "processed_transactions",
+            "name": "result",
+            "type": "jsonb",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "processed_transactions",
+            "name": "processed_at",
+            "type": "timestamp with time zone",
+            "not_null": true,
+            "default_sha256": "28a4dae0461e17af56e979c2095abfbe0bfc45fe9ca8abf3144338a518a1bb8f"
+          },
+          {
+            "table": "risk_events",
+            "name": "risk_event_id",
+            "type": "bigint",
+            "not_null": true,
+            "default_sha256": "4f6b89db3ec44c4e34ad64affdcbdd84b3361aacbd597b49bafb4ce09b6859f6"
+          },
+          {
+            "table": "risk_events",
+            "name": "tx_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "risk_events",
+            "name": "risk_score",
+            "type": "integer",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "risk_events",
+            "name": "reason",
+            "type": "character varying(255)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "risk_events",
+            "name": "created_at",
+            "type": "timestamp with time zone",
+            "not_null": true,
+            "default_sha256": "28a4dae0461e17af56e979c2095abfbe0bfc45fe9ca8abf3144338a518a1bb8f"
+          },
+          {
+            "table": "transactions",
+            "name": "tx_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "88a6e91ebb38b1a408b4e463a08a8c19fe90a07e4f7446cf858645c84110d450"
+          },
+          {
+            "table": "transactions",
+            "name": "account_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "amount",
+            "type": "numeric(15,2)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "currency",
+            "type": "character(3)",
+            "not_null": true,
+            "default_sha256": "b5c4cbf072a65f7351f88187046fb64ba99d14124b9c2510b1e5b595d7a0cb8f"
+          },
+          {
+            "table": "transactions",
+            "name": "merchant",
+            "type": "character varying(200)",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "tx_date",
+            "type": "timestamp with time zone",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "tx_type",
+            "type": "character varying(30)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "cross_border",
+            "type": "boolean",
+            "not_null": true,
+            "default_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+          },
+          {
+            "table": "transactions",
+            "name": "raw_file",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "source_system",
+            "type": "character varying(100)",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "source_transaction_id",
+            "type": "character varying(200)",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "transaction_fingerprint",
+            "type": "character(64)",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "batch_id",
+            "type": "uuid",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "file_sha256",
+            "type": "character(64)",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "source_row",
+            "type": "integer",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "country",
+            "type": "character(2)",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "constraints": [
+          {
+            "table": "accounts",
+            "name": "accounts_account_type_check",
+            "validated": true,
+            "definition_sha256": "1af2eba58d7e8eb917e4c2eb70f598353dbc6c651a9097958e61de31e3db0a76"
+          },
+          {
+            "table": "accounts",
+            "name": "accounts_customer_id_fkey",
+            "validated": true,
+            "definition_sha256": "88c23b6c1b7080427f2d483034e277fdbf99bf2292ff4820b199d106331d786a"
+          },
+          {
+            "table": "accounts",
+            "name": "accounts_pkey",
+            "validated": true,
+            "definition_sha256": "1547b85ae90fc84fd5a5accd2bd5ad222d2b2f87521a0478dbb059f9629c8064"
+          },
+          {
+            "table": "alerts",
+            "name": "alerts_delivery_key_key",
+            "validated": true,
+            "definition_sha256": "aef5ef1a095ea497bbe0edb060d9aab550b6a2a5ca7578e77c81eb3a1eb30c4d"
+          },
+          {
+            "table": "alerts",
+            "name": "alerts_delivery_state_check",
+            "validated": true,
+            "definition_sha256": "a363e6651f8238f310c119758009d5f144c80790f52147ff7c736c99d1a183ad"
+          },
+          {
+            "table": "alerts",
+            "name": "alerts_pkey",
+            "validated": true,
+            "definition_sha256": "ca8d2c5a05a5e137a766487e87ab8531305f5a8163cffca09bfbd79a6724d065"
+          },
+          {
+            "table": "alerts",
+            "name": "alerts_risk_event_id_fkey",
+            "validated": true,
+            "definition_sha256": "ee0520ca1771fe39db0a0316cef281a1b668147947abc1aeebc00c3d7eb765f8"
+          },
+          {
+            "table": "customers",
+            "name": "customers_id_number_key",
+            "validated": true,
+            "definition_sha256": "27849ede9188080c7533612a1b80ccc29acce220758f21cbbc06aa56d4b517bd"
+          },
+          {
+            "table": "customers",
+            "name": "customers_kyc_status_check",
+            "validated": true,
+            "definition_sha256": "f00a772b91037b98bfd120714fd0f2a7ba3be1326318a874d7d7739c4829d040"
+          },
+          {
+            "table": "customers",
+            "name": "customers_pkey",
+            "validated": true,
+            "definition_sha256": "cc24b460be558cd9e03d8dfac047b2adccd2a397c18ac43095bfe2b663e1ccf4"
+          },
+          {
+            "table": "processed_transactions",
+            "name": "processed_transactions_pkey",
+            "validated": true,
+            "definition_sha256": "9e6843cb0a29ff6217ff29457df484a6fabe2f5c28666c0adc834562b014dca0"
+          },
+          {
+            "table": "processed_transactions",
+            "name": "processed_transactions_tx_id_fkey",
+            "validated": true,
+            "definition_sha256": "0ad6746d58af56a20587d999ebf08a4bb1aebf7a7753a120c56c11350dfb6b01"
+          },
+          {
+            "table": "risk_events",
+            "name": "risk_events_pkey",
+            "validated": true,
+            "definition_sha256": "cf3e08dc73e0cd519430b536c18c6f4086a9c813225466f6bf7a1637f1daeb84"
+          },
+          {
+            "table": "risk_events",
+            "name": "risk_events_risk_score_check",
+            "validated": true,
+            "definition_sha256": "2108648b49217da9afe14fdb543ce5ad34a5b13309135d1721946eba48ec7326"
+          },
+          {
+            "table": "risk_events",
+            "name": "risk_events_tx_id_fkey",
+            "validated": true,
+            "definition_sha256": "0ad6746d58af56a20587d999ebf08a4bb1aebf7a7753a120c56c11350dfb6b01"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_account_id_fkey",
+            "validated": true,
+            "definition_sha256": "6e59cd644c5bbd54803b3699acc3dec947275b73e1db9d4e73197cf96cebc06c"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_amount_check",
+            "validated": true,
+            "definition_sha256": "5ddec6c010bb05cab4730df9c64e0ba3b0ce5f8e8aaa49704e17c02d4f55bb8d"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_currency_check",
+            "validated": true,
+            "definition_sha256": "3daf8ab369eb6ec5d2333b620c2f3dea349b264ae8ff01a58c945a1d3da1ac84"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_file_sha256_check",
+            "validated": true,
+            "definition_sha256": "f32998897c41e85a144d8fbed45981b5e479c2c1ff1464f378e475dd19a3726a"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_pkey",
+            "validated": true,
+            "definition_sha256": "9e6843cb0a29ff6217ff29457df484a6fabe2f5c28666c0adc834562b014dca0"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_source_identity_check",
+            "validated": true,
+            "definition_sha256": "ef67d9588a571196de633fb2b087f0c53994374181b32db2ad095250014be0e5"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_source_row_check",
+            "validated": true,
+            "definition_sha256": "ca9119931f3dad9200c8aeba7886f497ed30a509b1554fee77db999c94513f1b"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_transaction_fingerprint_check",
+            "validated": true,
+            "definition_sha256": "124b1edd28ea738cea40a1f74726c4b7773ba0454bb985e00e998dd6e85d186a"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_tx_type_check",
+            "validated": true,
+            "definition_sha256": "73c4b33e17b8a433490229ae2990110394f2358018c4ca27da1d00cabd64cee3"
+          }
+        ],
+        "indexes": [
+          {
+            "table": "accounts",
+            "name": "accounts_pkey",
+            "valid": true,
+            "definition_sha256": "040ddebae604d417d122c94955bedb87bf9b0b90c1957b0fee4f3b43464146d5"
+          },
+          {
+            "table": "alerts",
+            "name": "alerts_delivery_key_key",
+            "valid": true,
+            "definition_sha256": "19c32f1abe88cdc030eb88d4d32c7bfe2fe7238a2219f6662be74b5ae432df12"
+          },
+          {
+            "table": "alerts",
+            "name": "alerts_pkey",
+            "valid": true,
+            "definition_sha256": "98bfea7e6d071c32a64559a14e9755b249d215950fd8a70c12ab38f05f93ee6f"
+          },
+          {
+            "table": "customers",
+            "name": "customers_id_number_key",
+            "valid": true,
+            "definition_sha256": "fb199bead2f57152de6b3163acc606d346d3cc41480fdc5e10815f2b78d83a38"
+          },
+          {
+            "table": "customers",
+            "name": "customers_pkey",
+            "valid": true,
+            "definition_sha256": "9dab779e815d0fe7530e7390d9b033845aae3ff86adcef8803ca59d3908e1bc3"
+          },
+          {
+            "table": "risk_events",
+            "name": "idx_risk_events_tx_date",
+            "valid": true,
+            "definition_sha256": "f81c5b4d832323a7845e1a7c666e682ab5d85c51a32367ea4aa7c3dbb7ec8a2b"
+          },
+          {
+            "table": "transactions",
+            "name": "idx_tx_account_cursor",
+            "valid": true,
+            "definition_sha256": "c149575abccd77c195b999841f390158c47b5e86648575e00ce64bf5bfe96f11"
+          },
+          {
+            "table": "transactions",
+            "name": "idx_tx_account_date",
+            "valid": true,
+            "definition_sha256": "4a7329a5234bd14d52f7b81542846bbe22072444364e648b267cedd78e414346"
+          },
+          {
+            "table": "transactions",
+            "name": "idx_tx_crossborder",
+            "valid": true,
+            "definition_sha256": "8a2ffa1eb247c73da3801214f82d8d29d78f8b22afa07996ecea57573b64ddce"
+          },
+          {
+            "table": "transactions",
+            "name": "idx_tx_duplicate_charge",
+            "valid": true,
+            "definition_sha256": "f497f34516ab12534f6da517775c60aef89a4b45be403e7d6ce2e36c9f1d7f78"
+          },
+          {
+            "table": "transactions",
+            "name": "idx_tx_high_amount",
+            "valid": true,
+            "definition_sha256": "5f4da9e8f7040fcc09b73d9340ef110c76f24dd313bd1064c95aea40751eca93"
+          },
+          {
+            "table": "transactions",
+            "name": "idx_tx_source_identity",
+            "valid": true,
+            "definition_sha256": "314f22e8ffd8f03af4de9553a7d0eb48402e886687f35174770e66b50e4e827a"
+          },
+          {
+            "table": "processed_transactions",
+            "name": "processed_transactions_pkey",
+            "valid": true,
+            "definition_sha256": "3d420d4e030668c5354565ffa3d75caedc39fe7219c24c7383508be9fb309a99"
+          },
+          {
+            "table": "risk_events",
+            "name": "risk_events_pkey",
+            "valid": true,
+            "definition_sha256": "c1b3ac8fd00a2f0307747f92947ca81aada284e2e6ad4eba049d16036ba76279"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_pkey",
+            "valid": true,
+            "definition_sha256": "0ab33ba6313c468eabce8296439510319bdc4d4e252390060bec69ea459524fd"
+          }
+        ],
+        "roles": [
+          {
+            "name": "rds_iam",
+            "login": false,
+            "inherit": true,
+            "create_db": false,
+            "superuser": false,
+            "bypass_rls": false,
+            "create_role": false
+          },
+          {
+            "name": "rds_superuser",
+            "login": false,
+            "inherit": true,
+            "create_db": false,
+            "superuser": false,
+            "bypass_rls": false,
+            "create_role": false
+          },
+          {
+            "name": "fintrust_admin",
+            "login": true,
+            "inherit": true,
+            "create_db": true,
+            "superuser": false,
+            "bypass_rls": false,
+            "create_role": true
+          },
+          {
+            "name": "fintrust_transactions_owner",
+            "login": false,
+            "inherit": false,
+            "create_db": false,
+            "superuser": false,
+            "bypass_rls": false,
+            "create_role": false
+          },
+          {
+            "name": "fintrust_migrate_dev",
+            "login": true,
+            "inherit": false,
+            "create_db": false,
+            "superuser": false,
+            "bypass_rls": false,
+            "create_role": false
+          },
+          {
+            "name": "fintrust_index_builder",
+            "login": false,
+            "inherit": false,
+            "create_db": false,
+            "superuser": false,
+            "bypass_rls": false,
+            "create_role": false
+          }
+        ],
+        "memberships": [
+          {
+            "set": true,
+            "role": "rds_iam",
+            "admin": false,
+            "member": "fintrust_migrate_dev",
+            "inherit": false
+          },
+          {
+            "set": false,
+            "role": "rds_iam",
+            "admin": true,
+            "member": "fintrust_admin",
+            "inherit": false
+          },
+          {
+            "set": true,
+            "role": "rds_superuser",
+            "admin": false,
+            "member": "fintrust_admin",
+            "inherit": true
+          },
+          {
+            "set": false,
+            "role": "fintrust_transactions_owner",
+            "admin": false,
+            "member": "fintrust_index_builder",
+            "inherit": true
+          },
+          {
+            "set": true,
+            "role": "fintrust_transactions_owner",
+            "admin": false,
+            "member": "fintrust_migrate_dev",
+            "inherit": false
+          },
+          {
+            "set": false,
+            "role": "fintrust_transactions_owner",
+            "admin": false,
+            "member": "fintrust_admin",
+            "inherit": false
+          },
+          {
+            "set": false,
+            "role": "fintrust_transactions_owner",
+            "admin": true,
+            "member": "fintrust_admin",
+            "inherit": false
+          },
+          {
+            "set": false,
+            "role": "fintrust_migrate_dev",
+            "admin": true,
+            "member": "fintrust_admin",
+            "inherit": false
+          },
+          {
+            "set": false,
+            "role": "fintrust_index_builder",
+            "admin": false,
+            "member": "fintrust_admin",
+            "inherit": false
+          },
+          {
+            "set": false,
+            "role": "fintrust_index_builder",
+            "admin": true,
+            "member": "fintrust_admin",
+            "inherit": false
+          }
+        ],
+        "table_grants": [
+          {
+            "table": "accounts",
+            "acl": null
+          },
+          {
+            "table": "alerts",
+            "acl": null
+          },
+          {
+            "table": "alerts_alert_id_seq",
+            "acl": null
+          },
+          {
+            "table": "customers",
+            "acl": null
+          },
+          {
+            "table": "processed_transactions",
+            "acl": null
+          },
+          {
+            "table": "risk_events",
+            "acl": null
+          },
+          {
+            "table": "risk_events_risk_event_id_seq",
+            "acl": null
+          },
+          {
+            "table": "transactions",
+            "acl": "{fintrust_transactions_owner=r/fintrust_transactions_owner,fintrust_migrate_dev=r/fintrust_transactions_owner}"
+          }
+        ],
+        "column_grants": [
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "currency",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_transactions_owner",
+            "table_name": "transactions",
+            "column_name": "currency",
+            "privilege_type": "SELECT",
+            "is_grantable": "YES"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "source_row",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_transactions_owner",
+            "table_name": "transactions",
+            "column_name": "account_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "YES"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "cross_border",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_admin",
+            "grantee": "fintrust_transactions_owner",
+            "table_name": "processed_transactions",
+            "column_name": "tx_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_transactions_owner",
+            "table_name": "transactions",
+            "column_name": "country",
+            "privilege_type": "SELECT",
+            "is_grantable": "YES"
+          },
+          {
+            "grantor": "fintrust_admin",
+            "grantee": "fintrust_transactions_owner",
+            "table_name": "alerts",
+            "column_name": "alert_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_transactions_owner",
+            "table_name": "transactions",
+            "column_name": "tx_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "YES"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "merchant",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "raw_file",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "tx_type",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_transactions_owner",
+            "table_name": "transactions",
+            "column_name": "batch_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "YES"
+          },
+          {
+            "grantor": "fintrust_admin",
+            "grantee": "fintrust_transactions_owner",
+            "table_name": "accounts",
+            "column_name": "account_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "tx_date",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_transactions_owner",
+            "table_name": "transactions",
+            "column_name": "amount",
+            "privilege_type": "SELECT",
+            "is_grantable": "YES"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "source_system",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "amount",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "country",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_transactions_owner",
+            "table_name": "transactions",
+            "column_name": "tx_date",
+            "privilege_type": "SELECT",
+            "is_grantable": "YES"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "file_sha256",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_transactions_owner",
+            "table_name": "transactions",
+            "column_name": "merchant",
+            "privilege_type": "SELECT",
+            "is_grantable": "YES"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "transaction_fingerprint",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_transactions_owner",
+            "table_name": "transactions",
+            "column_name": "source_system",
+            "privilege_type": "SELECT",
+            "is_grantable": "YES"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_transactions_owner",
+            "table_name": "transactions",
+            "column_name": "transaction_fingerprint",
+            "privilege_type": "SELECT",
+            "is_grantable": "YES"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "account_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_transactions_owner",
+            "table_name": "transactions",
+            "column_name": "source_row",
+            "privilege_type": "SELECT",
+            "is_grantable": "YES"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "source_transaction_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_transactions_owner",
+            "table_name": "transactions",
+            "column_name": "tx_type",
+            "privilege_type": "SELECT",
+            "is_grantable": "YES"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_transactions_owner",
+            "table_name": "transactions",
+            "column_name": "raw_file",
+            "privilege_type": "SELECT",
+            "is_grantable": "YES"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_transactions_owner",
+            "table_name": "transactions",
+            "column_name": "source_transaction_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "YES"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_transactions_owner",
+            "table_name": "transactions",
+            "column_name": "cross_border",
+            "privilege_type": "SELECT",
+            "is_grantable": "YES"
+          },
+          {
+            "grantor": "fintrust_admin",
+            "grantee": "fintrust_transactions_owner",
+            "table_name": "customers",
+            "column_name": "customer_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_transactions_owner",
+            "table_name": "transactions",
+            "column_name": "file_sha256",
+            "privilege_type": "SELECT",
+            "is_grantable": "YES"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "batch_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "tx_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_admin",
+            "grantee": "fintrust_transactions_owner",
+            "table_name": "risk_events",
+            "column_name": "risk_event_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          }
+        ],
+        "grants_sha256": "646b97abd5de8ebf1e093d337a6d06aa67fe8d5ad3495c166bdb0f3ad15e36af",
+        "counts": {
+          "read_only": "off",
+          "row_counts": {
+            "alerts": 0,
+            "accounts": 0,
+            "customers": 0,
+            "risk_events": 0,
+            "transactions": 0,
+            "processed_transactions": 0
+          },
+          "invalid_file_hash_rows": 0,
+          "invalid_source_row_rows": 0,
+          "invalid_fingerprint_rows": 0,
+          "invalid_source_identity_rows": 0,
+          "duplicate_source_identity_groups": 0
+        },
+        "rows_preserved": true,
+        "migration": "001_transaction_identity.sql"
+      }
+    },
+    {
+      "operation": "verify",
+      "result": {
+        "assessment": {
+          "state": "correct",
+          "issues": [],
+          "base_valid": true
+        },
+        "database": "fintrust",
+        "user": "fintrust_migrate_dev",
+        "version": "16.15 (Ubuntu 16.15-0ubuntu0.24.04.1)",
+        "ssl": false,
+        "tables": [
+          {
+            "name": "accounts",
+            "kind": "r",
+            "owner": "fintrust_admin",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "alerts",
+            "kind": "r",
+            "owner": "fintrust_admin",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "alerts_alert_id_seq",
+            "kind": "S",
+            "owner": "fintrust_admin",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "customers",
+            "kind": "r",
+            "owner": "fintrust_admin",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "processed_transactions",
+            "kind": "r",
+            "owner": "fintrust_admin",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "risk_events",
+            "kind": "r",
+            "owner": "fintrust_admin",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "risk_events_risk_event_id_seq",
+            "kind": "S",
+            "owner": "fintrust_admin",
+            "rls": false,
+            "force_rls": false
+          },
+          {
+            "name": "transactions",
+            "kind": "r",
+            "owner": "fintrust_transactions_owner",
+            "rls": false,
+            "force_rls": false
+          }
+        ],
+        "columns": [
+          {
+            "table": "accounts",
+            "name": "account_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "88a6e91ebb38b1a408b4e463a08a8c19fe90a07e4f7446cf858645c84110d450"
+          },
+          {
+            "table": "accounts",
+            "name": "customer_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "accounts",
+            "name": "account_type",
+            "type": "character varying(30)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "accounts",
+            "name": "balance",
+            "type": "numeric(15,2)",
+            "not_null": true,
+            "default_sha256": "561b2814d3c09e62a92442c946307918f7f63f833c84876c08bd4c406767e53b"
+          },
+          {
+            "table": "accounts",
+            "name": "status",
+            "type": "character varying(20)",
+            "not_null": true,
+            "default_sha256": "cd44bc8129bf90f5195026fbb37465ecc4c9f2f1c35e5cf6caf892726c685355"
+          },
+          {
+            "table": "accounts",
+            "name": "opened_at",
+            "type": "timestamp with time zone",
+            "not_null": true,
+            "default_sha256": "28a4dae0461e17af56e979c2095abfbe0bfc45fe9ca8abf3144338a518a1bb8f"
+          },
+          {
+            "table": "alerts",
+            "name": "alert_id",
+            "type": "bigint",
+            "not_null": true,
+            "default_sha256": "e6a8521c856de5dcdf7365a575f8634215981ce33bb7aed12685c25f6aa9dd09"
+          },
+          {
+            "table": "alerts",
+            "name": "risk_event_id",
+            "type": "bigint",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "alerts",
+            "name": "severity",
+            "type": "character varying(20)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "alerts",
+            "name": "message",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "alerts",
+            "name": "sent_at",
+            "type": "timestamp with time zone",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "alerts",
+            "name": "delivery_key",
+            "type": "bigint",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "alerts",
+            "name": "delivery_state",
+            "type": "character varying(10)",
+            "not_null": true,
+            "default_sha256": "beb6acf9a91d2c42bd90a091726c9c09bf77ebfef6376431c480bc227ff0d9b2"
+          },
+          {
+            "table": "alerts",
+            "name": "provider_message_id",
+            "type": "text",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "customers",
+            "name": "customer_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "88a6e91ebb38b1a408b4e463a08a8c19fe90a07e4f7446cf858645c84110d450"
+          },
+          {
+            "table": "customers",
+            "name": "full_name",
+            "type": "character varying(150)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "customers",
+            "name": "id_number",
+            "type": "character varying(20)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "customers",
+            "name": "kyc_status",
+            "type": "character varying(20)",
+            "not_null": true,
+            "default_sha256": "aee29c7c36eede1c9e40442cc90d3b1039d93e021dc57c10a211a5c82d08dcfd"
+          },
+          {
+            "table": "customers",
+            "name": "created_at",
+            "type": "timestamp with time zone",
+            "not_null": true,
+            "default_sha256": "28a4dae0461e17af56e979c2095abfbe0bfc45fe9ca8abf3144338a518a1bb8f"
+          },
+          {
+            "table": "processed_transactions",
+            "name": "tx_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "processed_transactions",
+            "name": "fingerprint",
+            "type": "character(64)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "processed_transactions",
+            "name": "result",
+            "type": "jsonb",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "processed_transactions",
+            "name": "processed_at",
+            "type": "timestamp with time zone",
+            "not_null": true,
+            "default_sha256": "28a4dae0461e17af56e979c2095abfbe0bfc45fe9ca8abf3144338a518a1bb8f"
+          },
+          {
+            "table": "risk_events",
+            "name": "risk_event_id",
+            "type": "bigint",
+            "not_null": true,
+            "default_sha256": "4f6b89db3ec44c4e34ad64affdcbdd84b3361aacbd597b49bafb4ce09b6859f6"
+          },
+          {
+            "table": "risk_events",
+            "name": "tx_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "risk_events",
+            "name": "risk_score",
+            "type": "integer",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "risk_events",
+            "name": "reason",
+            "type": "character varying(255)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "risk_events",
+            "name": "created_at",
+            "type": "timestamp with time zone",
+            "not_null": true,
+            "default_sha256": "28a4dae0461e17af56e979c2095abfbe0bfc45fe9ca8abf3144338a518a1bb8f"
+          },
+          {
+            "table": "transactions",
+            "name": "tx_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "88a6e91ebb38b1a408b4e463a08a8c19fe90a07e4f7446cf858645c84110d450"
+          },
+          {
+            "table": "transactions",
+            "name": "account_id",
+            "type": "uuid",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "amount",
+            "type": "numeric(15,2)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "currency",
+            "type": "character(3)",
+            "not_null": true,
+            "default_sha256": "b5c4cbf072a65f7351f88187046fb64ba99d14124b9c2510b1e5b595d7a0cb8f"
+          },
+          {
+            "table": "transactions",
+            "name": "merchant",
+            "type": "character varying(200)",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "tx_date",
+            "type": "timestamp with time zone",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "tx_type",
+            "type": "character varying(30)",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "cross_border",
+            "type": "boolean",
+            "not_null": true,
+            "default_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+          },
+          {
+            "table": "transactions",
+            "name": "raw_file",
+            "type": "text",
+            "not_null": true,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "source_system",
+            "type": "character varying(100)",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "source_transaction_id",
+            "type": "character varying(200)",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "transaction_fingerprint",
+            "type": "character(64)",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "batch_id",
+            "type": "uuid",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "file_sha256",
+            "type": "character(64)",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "source_row",
+            "type": "integer",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "table": "transactions",
+            "name": "country",
+            "type": "character(2)",
+            "not_null": false,
+            "default_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "constraints": [
+          {
+            "table": "accounts",
+            "name": "accounts_account_type_check",
+            "validated": true,
+            "definition_sha256": "1af2eba58d7e8eb917e4c2eb70f598353dbc6c651a9097958e61de31e3db0a76"
+          },
+          {
+            "table": "accounts",
+            "name": "accounts_customer_id_fkey",
+            "validated": true,
+            "definition_sha256": "88c23b6c1b7080427f2d483034e277fdbf99bf2292ff4820b199d106331d786a"
+          },
+          {
+            "table": "accounts",
+            "name": "accounts_pkey",
+            "validated": true,
+            "definition_sha256": "1547b85ae90fc84fd5a5accd2bd5ad222d2b2f87521a0478dbb059f9629c8064"
+          },
+          {
+            "table": "alerts",
+            "name": "alerts_delivery_key_key",
+            "validated": true,
+            "definition_sha256": "aef5ef1a095ea497bbe0edb060d9aab550b6a2a5ca7578e77c81eb3a1eb30c4d"
+          },
+          {
+            "table": "alerts",
+            "name": "alerts_delivery_state_check",
+            "validated": true,
+            "definition_sha256": "a363e6651f8238f310c119758009d5f144c80790f52147ff7c736c99d1a183ad"
+          },
+          {
+            "table": "alerts",
+            "name": "alerts_pkey",
+            "validated": true,
+            "definition_sha256": "ca8d2c5a05a5e137a766487e87ab8531305f5a8163cffca09bfbd79a6724d065"
+          },
+          {
+            "table": "alerts",
+            "name": "alerts_risk_event_id_fkey",
+            "validated": true,
+            "definition_sha256": "ee0520ca1771fe39db0a0316cef281a1b668147947abc1aeebc00c3d7eb765f8"
+          },
+          {
+            "table": "customers",
+            "name": "customers_id_number_key",
+            "validated": true,
+            "definition_sha256": "27849ede9188080c7533612a1b80ccc29acce220758f21cbbc06aa56d4b517bd"
+          },
+          {
+            "table": "customers",
+            "name": "customers_kyc_status_check",
+            "validated": true,
+            "definition_sha256": "f00a772b91037b98bfd120714fd0f2a7ba3be1326318a874d7d7739c4829d040"
+          },
+          {
+            "table": "customers",
+            "name": "customers_pkey",
+            "validated": true,
+            "definition_sha256": "cc24b460be558cd9e03d8dfac047b2adccd2a397c18ac43095bfe2b663e1ccf4"
+          },
+          {
+            "table": "processed_transactions",
+            "name": "processed_transactions_pkey",
+            "validated": true,
+            "definition_sha256": "9e6843cb0a29ff6217ff29457df484a6fabe2f5c28666c0adc834562b014dca0"
+          },
+          {
+            "table": "processed_transactions",
+            "name": "processed_transactions_tx_id_fkey",
+            "validated": true,
+            "definition_sha256": "0ad6746d58af56a20587d999ebf08a4bb1aebf7a7753a120c56c11350dfb6b01"
+          },
+          {
+            "table": "risk_events",
+            "name": "risk_events_pkey",
+            "validated": true,
+            "definition_sha256": "cf3e08dc73e0cd519430b536c18c6f4086a9c813225466f6bf7a1637f1daeb84"
+          },
+          {
+            "table": "risk_events",
+            "name": "risk_events_risk_score_check",
+            "validated": true,
+            "definition_sha256": "2108648b49217da9afe14fdb543ce5ad34a5b13309135d1721946eba48ec7326"
+          },
+          {
+            "table": "risk_events",
+            "name": "risk_events_tx_id_fkey",
+            "validated": true,
+            "definition_sha256": "0ad6746d58af56a20587d999ebf08a4bb1aebf7a7753a120c56c11350dfb6b01"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_account_id_fkey",
+            "validated": true,
+            "definition_sha256": "6e59cd644c5bbd54803b3699acc3dec947275b73e1db9d4e73197cf96cebc06c"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_amount_check",
+            "validated": true,
+            "definition_sha256": "5ddec6c010bb05cab4730df9c64e0ba3b0ce5f8e8aaa49704e17c02d4f55bb8d"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_currency_check",
+            "validated": true,
+            "definition_sha256": "3daf8ab369eb6ec5d2333b620c2f3dea349b264ae8ff01a58c945a1d3da1ac84"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_file_sha256_check",
+            "validated": true,
+            "definition_sha256": "f32998897c41e85a144d8fbed45981b5e479c2c1ff1464f378e475dd19a3726a"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_pkey",
+            "validated": true,
+            "definition_sha256": "9e6843cb0a29ff6217ff29457df484a6fabe2f5c28666c0adc834562b014dca0"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_source_identity_check",
+            "validated": true,
+            "definition_sha256": "ef67d9588a571196de633fb2b087f0c53994374181b32db2ad095250014be0e5"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_source_row_check",
+            "validated": true,
+            "definition_sha256": "ca9119931f3dad9200c8aeba7886f497ed30a509b1554fee77db999c94513f1b"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_transaction_fingerprint_check",
+            "validated": true,
+            "definition_sha256": "124b1edd28ea738cea40a1f74726c4b7773ba0454bb985e00e998dd6e85d186a"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_tx_type_check",
+            "validated": true,
+            "definition_sha256": "73c4b33e17b8a433490229ae2990110394f2358018c4ca27da1d00cabd64cee3"
+          }
+        ],
+        "indexes": [
+          {
+            "table": "accounts",
+            "name": "accounts_pkey",
+            "valid": true,
+            "definition_sha256": "040ddebae604d417d122c94955bedb87bf9b0b90c1957b0fee4f3b43464146d5"
+          },
+          {
+            "table": "alerts",
+            "name": "alerts_delivery_key_key",
+            "valid": true,
+            "definition_sha256": "19c32f1abe88cdc030eb88d4d32c7bfe2fe7238a2219f6662be74b5ae432df12"
+          },
+          {
+            "table": "alerts",
+            "name": "alerts_pkey",
+            "valid": true,
+            "definition_sha256": "98bfea7e6d071c32a64559a14e9755b249d215950fd8a70c12ab38f05f93ee6f"
+          },
+          {
+            "table": "customers",
+            "name": "customers_id_number_key",
+            "valid": true,
+            "definition_sha256": "fb199bead2f57152de6b3163acc606d346d3cc41480fdc5e10815f2b78d83a38"
+          },
+          {
+            "table": "customers",
+            "name": "customers_pkey",
+            "valid": true,
+            "definition_sha256": "9dab779e815d0fe7530e7390d9b033845aae3ff86adcef8803ca59d3908e1bc3"
+          },
+          {
+            "table": "risk_events",
+            "name": "idx_risk_events_tx_date",
+            "valid": true,
+            "definition_sha256": "f81c5b4d832323a7845e1a7c666e682ab5d85c51a32367ea4aa7c3dbb7ec8a2b"
+          },
+          {
+            "table": "transactions",
+            "name": "idx_tx_account_cursor",
+            "valid": true,
+            "definition_sha256": "c149575abccd77c195b999841f390158c47b5e86648575e00ce64bf5bfe96f11"
+          },
+          {
+            "table": "transactions",
+            "name": "idx_tx_account_date",
+            "valid": true,
+            "definition_sha256": "4a7329a5234bd14d52f7b81542846bbe22072444364e648b267cedd78e414346"
+          },
+          {
+            "table": "transactions",
+            "name": "idx_tx_crossborder",
+            "valid": true,
+            "definition_sha256": "8a2ffa1eb247c73da3801214f82d8d29d78f8b22afa07996ecea57573b64ddce"
+          },
+          {
+            "table": "transactions",
+            "name": "idx_tx_duplicate_charge",
+            "valid": true,
+            "definition_sha256": "f497f34516ab12534f6da517775c60aef89a4b45be403e7d6ce2e36c9f1d7f78"
+          },
+          {
+            "table": "transactions",
+            "name": "idx_tx_high_amount",
+            "valid": true,
+            "definition_sha256": "5f4da9e8f7040fcc09b73d9340ef110c76f24dd313bd1064c95aea40751eca93"
+          },
+          {
+            "table": "transactions",
+            "name": "idx_tx_source_identity",
+            "valid": true,
+            "definition_sha256": "314f22e8ffd8f03af4de9553a7d0eb48402e886687f35174770e66b50e4e827a"
+          },
+          {
+            "table": "processed_transactions",
+            "name": "processed_transactions_pkey",
+            "valid": true,
+            "definition_sha256": "3d420d4e030668c5354565ffa3d75caedc39fe7219c24c7383508be9fb309a99"
+          },
+          {
+            "table": "risk_events",
+            "name": "risk_events_pkey",
+            "valid": true,
+            "definition_sha256": "c1b3ac8fd00a2f0307747f92947ca81aada284e2e6ad4eba049d16036ba76279"
+          },
+          {
+            "table": "transactions",
+            "name": "transactions_pkey",
+            "valid": true,
+            "definition_sha256": "0ab33ba6313c468eabce8296439510319bdc4d4e252390060bec69ea459524fd"
+          }
+        ],
+        "roles": [
+          {
+            "name": "rds_iam",
+            "login": false,
+            "inherit": true,
+            "create_db": false,
+            "superuser": false,
+            "bypass_rls": false,
+            "create_role": false
+          },
+          {
+            "name": "rds_superuser",
+            "login": false,
+            "inherit": true,
+            "create_db": false,
+            "superuser": false,
+            "bypass_rls": false,
+            "create_role": false
+          },
+          {
+            "name": "fintrust_admin",
+            "login": true,
+            "inherit": true,
+            "create_db": true,
+            "superuser": false,
+            "bypass_rls": false,
+            "create_role": true
+          },
+          {
+            "name": "fintrust_transactions_owner",
+            "login": false,
+            "inherit": false,
+            "create_db": false,
+            "superuser": false,
+            "bypass_rls": false,
+            "create_role": false
+          },
+          {
+            "name": "fintrust_migrate_dev",
+            "login": true,
+            "inherit": false,
+            "create_db": false,
+            "superuser": false,
+            "bypass_rls": false,
+            "create_role": false
+          },
+          {
+            "name": "fintrust_index_builder",
+            "login": false,
+            "inherit": false,
+            "create_db": false,
+            "superuser": false,
+            "bypass_rls": false,
+            "create_role": false
+          }
+        ],
+        "memberships": [
+          {
+            "set": true,
+            "role": "rds_iam",
+            "admin": false,
+            "member": "fintrust_migrate_dev",
+            "inherit": false
+          },
+          {
+            "set": false,
+            "role": "rds_iam",
+            "admin": true,
+            "member": "fintrust_admin",
+            "inherit": false
+          },
+          {
+            "set": true,
+            "role": "rds_superuser",
+            "admin": false,
+            "member": "fintrust_admin",
+            "inherit": true
+          },
+          {
+            "set": false,
+            "role": "fintrust_transactions_owner",
+            "admin": false,
+            "member": "fintrust_index_builder",
+            "inherit": true
+          },
+          {
+            "set": true,
+            "role": "fintrust_transactions_owner",
+            "admin": false,
+            "member": "fintrust_migrate_dev",
+            "inherit": false
+          },
+          {
+            "set": false,
+            "role": "fintrust_transactions_owner",
+            "admin": false,
+            "member": "fintrust_admin",
+            "inherit": false
+          },
+          {
+            "set": false,
+            "role": "fintrust_transactions_owner",
+            "admin": true,
+            "member": "fintrust_admin",
+            "inherit": false
+          },
+          {
+            "set": false,
+            "role": "fintrust_migrate_dev",
+            "admin": true,
+            "member": "fintrust_admin",
+            "inherit": false
+          },
+          {
+            "set": false,
+            "role": "fintrust_index_builder",
+            "admin": false,
+            "member": "fintrust_admin",
+            "inherit": false
+          },
+          {
+            "set": false,
+            "role": "fintrust_index_builder",
+            "admin": true,
+            "member": "fintrust_admin",
+            "inherit": false
+          }
+        ],
+        "table_grants": [
+          {
+            "table": "accounts",
+            "acl": null
+          },
+          {
+            "table": "alerts",
+            "acl": null
+          },
+          {
+            "table": "alerts_alert_id_seq",
+            "acl": null
+          },
+          {
+            "table": "customers",
+            "acl": null
+          },
+          {
+            "table": "processed_transactions",
+            "acl": null
+          },
+          {
+            "table": "risk_events",
+            "acl": null
+          },
+          {
+            "table": "risk_events_risk_event_id_seq",
+            "acl": null
+          },
+          {
+            "table": "transactions",
+            "acl": "{fintrust_transactions_owner=r/fintrust_transactions_owner,fintrust_migrate_dev=r/fintrust_transactions_owner}"
+          }
+        ],
+        "column_grants": [
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "currency",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_admin",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "processed_transactions",
+            "column_name": "tx_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_admin",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "customers",
+            "column_name": "customer_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "source_row",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "cross_border",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "merchant",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "raw_file",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "tx_type",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "tx_date",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_admin",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "alerts",
+            "column_name": "alert_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "source_system",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "amount",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "country",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "file_sha256",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "transaction_fingerprint",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "account_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "source_transaction_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_admin",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "risk_events",
+            "column_name": "risk_event_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_admin",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "accounts",
+            "column_name": "account_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "batch_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          },
+          {
+            "grantor": "fintrust_transactions_owner",
+            "grantee": "fintrust_migrate_dev",
+            "table_name": "transactions",
+            "column_name": "tx_id",
+            "privilege_type": "SELECT",
+            "is_grantable": "NO"
+          }
+        ],
+        "grants_sha256": "ac1491551f28dcd2362134f0c62bd2cbfded54025ace59ac8cc3ef88627dd27a",
+        "counts": {
+          "read_only": "on",
+          "row_counts": {
+            "alerts": 0,
+            "accounts": 0,
+            "customers": 0,
+            "risk_events": 0,
+            "transactions": 0,
+            "processed_transactions": 0
+          },
+          "invalid_file_hash_rows": 0,
+          "invalid_source_row_rows": 0,
+          "invalid_fingerprint_rows": 0,
+          "invalid_source_identity_rows": 0,
+          "duplicate_source_identity_groups": 0
+        }
+      }
+    },
+    {
+      "operation": "bootstrap002",
+      "result": {
+        "workflow_helper_ready": true,
+        "migration_executed": false
+      }
+    },
+    {
+      "operation": "migrate002",
+      "result": {
+        "migration": "002",
+        "status": "APPLIED",
+        "rows_preserved": true,
+        "catalog_sha256": "8fc702db979009801e257accc83e62ce631d89366d38e086a22871ff0eee92ec"
+      }
+    },
+    {
+      "operation": "bootstrap_extensions",
+      "result": {
+        "extension_helpers_ready": true,
+        "migration_executed": false
+      }
+    },
+    {
+      "operation": "migrate003",
+      "result": {
+        "migration": "003",
+        "status": "APPLIED",
+        "rows_preserved": true,
+        "catalog_sha256": "7aa3963bc9565d76eb24154cbd60a56bfaac78d77e913b011b243cc16784c82a"
+      }
+    },
+    {
+      "operation": "migrate004",
+      "result": {
+        "migration": "004",
+        "status": "APPLIED",
+        "rows_preserved": true,
+        "catalog_sha256": "a071f007bec007135cf841e5a2924af843770e93090a01aa25379751b94742dd"
+      }
+    },
+    {
+      "operation": "migrate005",
+      "result": {
+        "migration": "005",
+        "status": "APPLIED",
+        "rows_preserved": true,
+        "catalog_sha256": "d66688cc70ce0da69b92575f3732fc6fe5393c335d6dd922b9898f4ce0b85c5c"
+      }
+    },
+    {
+      "operation": "migrate006",
+      "result": {
+        "migration": "006",
+        "status": "APPLIED",
+        "rows_preserved": true,
+        "catalog_sha256": "e5dea79372228596c0a2b2bb95716c81ffdb9b4d4f6a577a4b3db5aaa21674ac"
+      }
+    },
+    {
+      "operation": "verify_extensions",
+      "result": {
+        "status": "VERIFIED",
+        "versions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      }
+    },
+    {
+      "operation": "cleanup_extensions",
+      "result": {
+        "extension_helpers_removed": true,
+        "owner_create_revoked": true
+      }
+    },
+    {
+      "operation": "cleanup002",
+      "result": {
+        "workflow_helper_removed": true,
+        "workflow_owner_create_revoked": true,
+        "persistent_workflow_owner_retained": true
+      }
+    },
+    {
+      "operation": "cleanup",
+      "result": {
+        "temporary_login_removed": true,
+        "persistent_owner_retained": true
+      }
+    },
+    {
+      "operation": "provision_runtime",
+      "result": {
+        "runtime_logins": [
+          "fintrust_scoring_dev",
+          "fintrust_api_dev",
+          "fintrust_report_dev"
+        ],
+        "iam_membership_verified": true,
+        "migration_catalog_preserved": true,
+        "api_financial_writes_denied": true,
+        "scoring_financial_update_delete_denied": true,
+        "financial_data_written": false
+      }
+    },
+    {
+      "operation": "create_demo_reference",
+      "result": {
+        "synthetic_reference_accounts": [
+          "20000000-0000-4000-8000-000000000001",
+          "20000000-0000-4000-8000-000000000002"
+        ],
+        "opening_balances_zero": true,
+        "transaction_rows_created": 0,
+        "real_customer_data_used": false
+      }
+    }
+  ],
+  "temporary_cluster_removed": true,
+  "runtime_worker_login_probe": "PASSED",
+  "runtime_api_read_update_scope_probe": "PASSED",
+  "runtime_report_login_probe": "PASSED",
+  "synthetic_runtime_probes_local_only": true,
+  "checked_at": "2026-10-17T14:41:44.131202+00:00"
+}

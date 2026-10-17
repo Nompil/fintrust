@@ -8,10 +8,11 @@ import uuid
 from datetime import datetime, timezone
 from werkzeug.utils import secure_filename
 from . import workflow_api as api, score
+from .cloud_intake import available
 PREFIX = "quarantine/ui-events/"
 
 def record_upload(principal, filename, action, result, *, reason_code=None, batch_id=None):
-    if os.getenv("FINTRUST_MODE") != "local":
+    if not available():
         raise ValueError("Local intake receipt required")
     event = {"event_id":str(uuid.uuid4()), "filename":secure_filename(filename or "")[:200],
         "actor":principal.subject, "actor_role":principal.role, "accounts":list(principal.accounts),
@@ -25,7 +26,7 @@ def record_upload(principal, filename, action, result, *, reason_code=None, batc
 def upload_history(principal):
     principal.require("read")
     if principal.role == "Maintainer": raise PermissionError("Financial intake history")
-    if os.getenv("FINTRUST_MODE") != "local": raise ValueError("Cloud intake history is separately gated")
+    if not available(): raise ValueError("Intake history is unavailable")
     rows=[]; cursor=None; scanned=0
     while True:
         args={"Bucket":os.environ["QUARANTINE_BUCKET"],"Prefix":PREFIX,"MaxKeys":1000}

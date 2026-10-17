@@ -1,3 +1,4 @@
+from .identity_registry import provisioned
 """Specialist referral metadata inside the existing immutable review history.
 
 Referring never assigns a case. Only the existing Administrator assignment flow
@@ -7,7 +8,7 @@ import hashlib
 import json
 import os
 import uuid
-from .identity_registry import locked_registry, read_registry
+from .identity_registry import locked_registry, read_registry, mutation_guard
 
 FORMAT='fintrust.review-referral.v1'
 ASSIGNMENT_NOTE='Referral does not change assignment. Administrator assignment is separate.'
@@ -15,7 +16,7 @@ ASSIGNMENT_NOTE='Referral does not change assignment. Administrator assignment i
 
 def _eligible(user,account):
     return (user.get('role')=='Risk/Compliance Analyst' and user.get('status','ACTIVE')=='ACTIVE'
-            and bool(user.get('token_sha256')) and str(account) in user.get('accounts',[]))
+            and provisioned(user) and str(account) in user.get('accounts',[]))
 
 
 def target(value,principal,account):
@@ -37,7 +38,7 @@ def options(event,principal):
     from . import workflow_api as api
     principal.require('review')
     if type(event) is not int or event<1:raise ValueError('Invalid review reference')
-    with locked_registry(os.environ['FINTRUST_AUTH_FILE']):
+    with mutation_guard(principal):
         users=read_registry()['principals']
         current=[u for u in users if u['subject']==principal.subject and u['role']==principal.role and u.get('status','ACTIVE')=='ACTIVE']
         if len(current)!=1:raise PermissionError('Identity changed')

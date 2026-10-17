@@ -469,17 +469,17 @@ def quarantine_detail(identifier,principal):
     return enrich(case,principal)
 
 def update_review(event,body,principal):
-    from .identity_registry import locked_registry,read_registry
+    from .identity_registry import locked_registry,read_registry,mutation_guard
     import os
-    with locked_registry(os.environ["FINTRUST_AUTH_FILE"]):
+    with mutation_guard(principal):
         users=[u for u in read_registry()["principals"] if u["subject"]==principal.subject and u["role"]==principal.role and u.get("status","ACTIVE")=="ACTIVE"]
         if len(users)!=1:raise PermissionError("Identity changed")
         return _update_review(event,body,principal)
 
 def correct_case(identifier,body,principal):
-    from .identity_registry import locked_registry,read_registry
+    from .identity_registry import locked_registry,read_registry,mutation_guard
     import os
-    with locked_registry(os.environ["FINTRUST_AUTH_FILE"]):
+    with mutation_guard(principal):
         users=[u for u in read_registry()["principals"] if u["subject"]==principal.subject and u["role"]==principal.role and u.get("status","ACTIVE")=="ACTIVE"]
         if len(users)!=1:raise PermissionError("Identity changed")
         return _correct_case(identifier,body,principal)

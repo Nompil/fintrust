@@ -116,6 +116,8 @@ def retry(body,principal):
 
 def upload_csv(filename,payload,principal):
     principal.require("upload")
+    from .cloud_intake import enabled,upload
+    if enabled():return upload(filename,payload,principal)
     # The synchronous local adapter is explicitly gated. Cloud uses versioned S3
     # intake -> FIFO -> private scoring worker, never an HTTP SQL write shortcut.
     if os.getenv("FINTRUST_MODE")!="local":raise ValueError("Synchronous upload is local-only; cloud intake is separately gated")

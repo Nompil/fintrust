@@ -175,6 +175,9 @@ def process_job(payload):
 
 
 def lambda_handler(event, context):
+    if 'Records' not in event and event.get('source')=='aws.events':
+        from .outbox_tick import run
+        return run(event)
     records = event.get("Records", [])
     if not records:
         raise ValueError("SQS event must contain records")

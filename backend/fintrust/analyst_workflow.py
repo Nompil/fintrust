@@ -1,3 +1,4 @@
+from .identity_registry import provisioned
 """Evidence-backed, read-only Analyst states and configurable review targets.
 
 These projections do not change scoring, assignment, decisions, or stored history.
@@ -167,7 +168,7 @@ def review(row, now=None, history=None, users=None):
     owner=row.get('reviewer_subject'); user=(users or {}).get(owner)
     row['assignment_status']='ASSIGNED' if owner else 'UNASSIGNED'
     row['assignee_label']=(user.get('display_name',owner)+' ('+owner+')') if user else owner or 'Unassigned'
-    row['assignee_active']=bool(user and user.get('status','ACTIVE')=='ACTIVE' and user.get('role')=='Risk/Compliance Analyst' and user.get('token_sha256')) if owner and users is not None else None
+    row['assignee_active']=bool(user and user.get('status','ACTIVE')=='ACTIVE' and user.get('role')=='Risk/Compliance Analyst' and provisioned(user)) if owner and users is not None else None
     if owner and users is not None and not row['assignee_active']:row['assignee_label']+=' [inactive: Admin reassignment required]'
     target=configured['targets'].get('ESCALATED' if status=='ESCALATED' else (level or '').upper()) if status in REVIEW_LABELS else None
     start=(_time(row.get('escalated_at')) if status=='ESCALATED' else created) if status in REVIEW_LABELS else None

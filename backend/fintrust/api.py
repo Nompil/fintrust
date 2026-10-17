@@ -468,6 +468,10 @@ def operations_retry():
 def administration():
     if g.principal.role!="Admin":raise PermissionError("Admin required")
     from .release_contract import VERSION
+    if g.principal.auth_source=='cognito':
+        return jsonify({'data':{'contract_version':VERSION,'identity':'AWS Cognito with server account scopes',
+            'user_management':'Active workforce view; identity and scope changes use the AWS operator workflow',
+            'live_deployment':'AWS development environment'}})
     return jsonify({"data":{"contract_version":VERSION,"identity":"operator-controlled hashed-token registry","user_management":"Local records, role/status governance only; token provisioning remains controlled operator setup","live_deployment":"Separate approval required"}})
 
 @app.get("/v1/upload-history")

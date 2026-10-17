@@ -79,8 +79,8 @@ def add_note(event,body,principal):
     principal.require('review')
     request,digest=api._body(body,{'request_id','expected_version','notes'})
     if type(body['expected_version']) is not int or body['expected_version']<1:raise ValueError('Expected version required')
-    from .identity_registry import locked_registry,read_registry
-    with locked_registry(os.environ['FINTRUST_AUTH_FILE']):
+    from .identity_registry import locked_registry,read_registry,mutation_guard
+    with mutation_guard(principal):
         current=[u for u in read_registry()['principals'] if u['subject']==principal.subject]
         if len(current)!=1 or current[0]['role']!=principal.role or current[0].get('status','ACTIVE')!='ACTIVE':raise PermissionError('Identity changed')
         conn=api.connection()

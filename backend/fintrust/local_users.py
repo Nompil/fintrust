@@ -1,3 +1,4 @@
+from .identity_registry import provisioned
 """Local-only governance of existing hashed-token identities, never password storage."""
 import json, os, re, threading, uuid
 from datetime import datetime, timezone
@@ -13,8 +14,11 @@ def check(principal):
     if not path:raise PermissionError("Identity registry unavailable")
     return Path(path)
 def metadata(p):
-    return {"user_id":user_id(p),"username":p["subject"],"email":p.get("email"),"last_sign_in_at":p.get("last_sign_in_at"),"display_name":p.get("display_name",p["subject"]),"role":p["role"],"status":p.get("status","ACTIVE"),"created_at":p.get("created_at"),"credential_provisioned":bool(p.get("token_sha256"))}
+    return {"user_id":user_id(p),"username":p["subject"],"email":p.get("email"),"last_sign_in_at":p.get("last_sign_in_at"),"display_name":p.get("display_name",p["subject"]),"role":p["role"],"status":p.get("status","ACTIVE"),"created_at":p.get("created_at"),"credential_provisioned":provisioned(p)}
 def listing(principal):
+    if principal.auth_source=='cognito':
+        if principal.role!='Admin':raise PermissionError('Admin required')
+        return [metadata(p) for p in read_registry()['principals'] if set(p['accounts'])<=set(principal.accounts)]
     with locked_registry(check(principal)):
         registry=json.loads(check(principal).read_text(encoding="utf-8"))
         return [metadata(p) for p in registry["principals"] if set(p["accounts"])<=set(principal.accounts)]
@@ -36,7 +40,7 @@ def change(principal,body):
         if len(matches)>1:raise ValueError("Ambiguous registry identity")
         old=matches[0] if matches else None
         if old and not set(old["accounts"])<=set(principal.accounts):raise PermissionError("User outside assigned scope")
-        if old and old["role"]=="Admin" and old.get("status","ACTIVE")=="ACTIVE" and (body["role"]!="Admin" or body["status"]!="ACTIVE") and sum(p["role"]=="Admin" and p.get("status","ACTIVE")=="ACTIVE" and bool(p.get("token_sha256")) for p in users)<=1:raise ValueError("Preserve an active provisioned administrator")
+        if old and old["role"]=="Admin" and old.get("status","ACTIVE")=="ACTIVE" and (body["role"]!="Admin" or body["status"]!="ACTIVE") and sum(p["role"]=="Admin" and p.get("status","ACTIVE")=="ACTIVE" and provisioned(p) for p in users)<=1:raise ValueError("Preserve an active provisioned administrator")
         entry=dict(old) if old else {"subject":body["username"],"accounts":list(principal.accounts),"token_sha256":"","created_at":datetime.now(timezone.utc).isoformat()}
         entry["user_id"]=user_id(entry)
         if "email" in body:entry["email"]=email
@@ -86,7 +90,7 @@ def provision_credential(username,credential):
         registry=read_registry();matches=[u for u in registry['principals'] if u['subject']==username]
         if len(matches)!=1 or matches[0].get('status','ACTIVE')!='ACTIVE':raise PermissionError('An active Admin-created user is required')
         user=matches[0]
-        if user.get('token_sha256'):raise ValueError('Credential already provisioned; reset requires separate controlled approval')
+        if provisioned(user):raise ValueError('Credential already provisioned; reset requires separate controlled approval')
         digest=hashlib.sha256(credential.encode()).hexdigest()
         if any(hmac.compare_digest(u.get('token_sha256',''),digest) for u in registry['principals']):raise ValueError('Credential must be unique')
         user['token_sha256']=digest;user['user_id']=user_id(user)

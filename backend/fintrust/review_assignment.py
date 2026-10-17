@@ -1,9 +1,10 @@
+from .identity_registry import provisioned
 """One owner per review, versioned and audited through existing domain history."""
 import os,uuid
 from datetime import datetime,timezone
 from psycopg2.extras import RealDictCursor
 from . import workflow_api as api
-from .identity_registry import read_registry,locked_registry
+from .identity_registry import read_registry,locked_registry,mutation_guard
 from .local_users import metadata
 def sla_seconds():
     raw=os.getenv('FINTRUST_REVIEW_SLA_SECONDS')
@@ -12,7 +13,7 @@ def sla_seconds():
     return int(raw)
 def candidates(principal):
     principal.require('assign_review')
-    return [metadata(u) for u in read_registry()['principals'] if u['role']=='Risk/Compliance Analyst' and u.get('status','ACTIVE')=='ACTIVE' and u.get('token_sha256') and set(u['accounts'])&set(principal.accounts)]
+    return [metadata(u) for u in read_registry()['principals'] if u['role']=='Risk/Compliance Analyst' and u.get('status','ACTIVE')=='ACTIVE' and provisioned(u) and set(u['accounts'])&set(principal.accounts)]
 def decorate(rows,now=None):
     now=now or datetime.now(timezone.utc);sla=sla_seconds()
     users={u['subject']:u for u in read_registry()['principals']}
@@ -20,7 +21,7 @@ def decorate(rows,now=None):
         owner=row.get('reviewer_subject');user=users.get(owner)
         row['assignment_status']='ASSIGNED' if owner else 'UNASSIGNED'
         row['assignee_label']=(user.get('display_name',owner)+' ('+owner+')') if user else owner or 'Unassigned'
-        row['assignee_active']=bool(user and user.get('status','ACTIVE')=='ACTIVE' and user['role']=='Risk/Compliance Analyst' and user.get('token_sha256')) if owner else None
+        row['assignee_active']=bool(user and user.get('status','ACTIVE')=='ACTIVE' and user['role']=='Risk/Compliance Analyst' and provisioned(user)) if owner else None
         if owner and not row['assignee_active']:row['assignee_label']+=' [inactive: Admin reassignment required]'
         row['age_seconds']=max(0,int((now-row['created_at']).total_seconds()))
         row['sla_seconds']=sla;row['over_sla']=row['age_seconds']>=sla if sla is not None and row['review_status'] in {'OPEN','UNDER_REVIEW','ESCALATED'} else False
@@ -35,7 +36,7 @@ def assign(event,body,principal):
     if principal.role!='Admin' and target!=principal.subject:raise PermissionError('Analysts may claim only themselves')
     # Hold the identity lock through commit: concurrent disable/role changes cannot
     # slip between active-role validation and a new assignment.
-    with locked_registry(os.environ['FINTRUST_AUTH_FILE']):
+    with mutation_guard(principal):
         users=read_registry()['principals']
         current=[u for u in users if u['subject']==principal.subject]
         if len(current)!=1 or current[0]['role']!=principal.role or current[0].get('status','ACTIVE')!='ACTIVE':raise PermissionError('Identity changed')
@@ -56,7 +57,7 @@ def assign(event,body,principal):
                     if row['review_status']=='ESCALATED' and target is None:raise api.Conflict('Escalated review requires a named owner')
                     if target==row['reviewer_subject']:raise api.Conflict('Assignment unchanged')
                     if target:
-                        matches=[u for u in users if u['subject']==target and u['role']=='Risk/Compliance Analyst' and u.get('status','ACTIVE')=='ACTIVE' and u.get('token_sha256') and row['account_id'] in u['accounts']]
+                        matches=[u for u in users if u['subject']==target and u['role']=='Risk/Compliance Analyst' and u.get('status','ACTIVE')=='ACTIVE' and provisioned(u) and row['account_id'] in u['accounts']]
                         if len(matches)!=1:raise PermissionError('Assignee must be an active provisioned scoped Analyst')
                     escalated=row['review_status']=='ESCALATED'
                     status='ESCALATED' if escalated else 'UNDER_REVIEW' if target else 'OPEN'

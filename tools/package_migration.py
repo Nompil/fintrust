@@ -11,7 +11,7 @@ import sys
 import tempfile
 import zipfile
 ROOT=Path(__file__).resolve().parents[1]
-PHASES=("preflight","bootstrap","iam","cleanup","bootstrap002","iam002","cleanup002",
+PHASES=("base","runtime","demo_reference","preflight","bootstrap","iam","cleanup","bootstrap002","iam002","cleanup002",
         "bootstrap_extensions","iam_extensions","cleanup_extensions")
 VERIFIED_APPLICATION_SHA="cf9c18a5f267373e2fc2e22331987bb6dce8e2e65366b2d1f5651bb035dd6654"
 VERIFIED_APPLICATION_SHAS = {VERIFIED_APPLICATION_SHA,
@@ -72,6 +72,10 @@ def build(phase,out,ca,dependency_archive=None):
         modules=["__init__.py","config.py","contract.py","common.py","sql_binding.py",phase+"_entry.py","iam.py" if phase in {"iam","iam002","iam_extensions"} else "admin.py"]
         sources=["migration_runner/"+n for n in modules]+["sql/preflight/001_transaction_identity_catalog.sql","sql/preflight/001_transaction_identity_data.sql"]
         if phase=="preflight":sources += ["migration_runner/release1_preflight.py","sql/preflight/002_release1_catalog.sql"]
+        if phase=="base":sources += ["migration_runner/base.py","sql/schema.sql"]
+        if phase=="demo_reference":sources += ["migration_runner/demo_reference.py"]
+        if phase=="runtime":sources += ["migration_runner/runtime.py","migration_runner/extension_catalog.py",
+            "migration_runner/workflow_catalog.py","infrastructure/rds/permissions.sql","infrastructure/rds/release1_permissions.sql"]
         if phase.endswith("002") or phase.endswith("_extensions"):
             sources += ["migration_runner/workflows.py","migration_runner/workflow_catalog.py","migration_runner/iam.py","sql/migrations/002_operational_workflows.sql"]
             sources=list(dict.fromkeys(sources))

@@ -1,0 +1,22 @@
+{
+  "status": "OFFLINE_PREPARATION_NOT_DEPLOYED",
+  "template_sha256": "75bfe6be38d66cacf01eb14ed5b05bd2586ae89a6ff5d74fd22d5c9e5446ec24",
+  "source_template_sha256": "13fbc4c8a845cd15c0b4a5f09eb7322be3214679fdb04985b52f11204c0a5718",
+  "defaults_disabled": true,
+  "positive_reserved_capacity": false,
+  "regional_shared_limit_last_observed": 10,
+  "sqs_consumer_max_concurrency": 2,
+  "monthly_reports_default_disabled": true,
+  "outbox_rows_per_kind_per_tick": 5,
+  "raw_notification_managed_here": false,
+  "new_paid_interface_endpoints": false,
+  "support_plan_change": false,
+  "activation_requires": [
+    "Live database setup and cleanup complete",
+    "Final immutable code binding and disabled deploy",
+    "Scoped runtime permissions and private endpoint policies read back",
+    "Cloud Cognito enrollment and server account scopes",
+    "Bounded service tests and delivery evidence",
+    "Reviewed shared-capacity activation; raw notification connected last"
+  ]
+}

@@ -37,6 +37,8 @@ def locked_registry(path):
                 if os.name=='nt':msvcrt.locking(lock.fileno(),msvcrt.LK_UNLCK,1)
                 else:fcntl.flock(lock.fileno(),fcntl.LOCK_UN)
 def read_registry():
+    from .cloud_directory import enabled,read
+    if enabled():return read()
     path=os.getenv('FINTRUST_AUTH_FILE')
     if not path:raise PermissionError('Identity registry unavailable')
     with locked_registry(path):return json.loads(Path(path).read_text(encoding='utf8'))
@@ -52,3 +54,18 @@ def write_registry(path,data):
 def user_id(record):
     # Legacy subjects remain stable; display-name/role edits cannot change this ID.
     return record.get('user_id') or str(uuid.uuid5(uuid.NAMESPACE_URL,'fintrust-local-user:'+record['subject']))
+
+def provisioned(record):
+    if record.get('auth_source')=='cognito':
+        return bool(record.get('cognito_sub'))
+    return bool(record.get('token_sha256'))
+
+@contextlib.contextmanager
+def mutation_guard(principal):
+    if principal.auth_source=='cognito':
+        from .cloud_directory import mutation_guard as cloud_guard
+        with cloud_guard(principal):yield
+    else:
+        path=os.getenv('FINTRUST_AUTH_FILE')
+        if not path:raise PermissionError('Identity registry unavailable')
+        with locked_registry(path):yield

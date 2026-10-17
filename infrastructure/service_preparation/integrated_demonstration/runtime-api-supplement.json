@@ -1,0 +1,73 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "StoreScopedVersionedUploads",
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject"
+      ],
+      "Resource": "arn:aws:s3:::fintrust-raw-966467878406-af-south-1-dev/raw/uploads/*"
+    },
+    {
+      "Sid": "ReadAdmissionAndUIReceipts",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:GetObjectVersion"
+      ],
+      "Resource": [
+        "arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev/quarantine/upload-owners/*",
+        "arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev/quarantine/ui-events/*"
+      ]
+    },
+    {
+      "Sid": "WriteImmutableAdmissionAndUIReceipts",
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev/quarantine/upload-owners/*",
+        "arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev/quarantine/ui-events/*"
+      ]
+    },
+    {
+      "Sid": "ListAdmissionAndUIReceipts",
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListBucket"
+      ],
+      "Resource": "arn:aws:s3:::fintrust-quarantine-966467878406-af-south-1-dev",
+      "Condition": {
+        "StringLike": {
+          "s3:prefix": [
+            "quarantine/upload-owners/*",
+            "quarantine/ui-events/*"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "EncryptScopedRawUploads",
+      "Effect": "Allow",
+      "Action": [
+        "kms:GenerateDataKey",
+        "kms:Decrypt"
+      ],
+      "Resource": "arn:aws:kms:af-south-1:966467878406:key/598a4158-2cc6-4946-af24-512784a276c8",
+      "Condition": {
+        "StringEquals": {
+          "kms:ViaService": "s3.af-south-1.amazonaws.com",
+          "kms:CallerAccount": "966467878406"
+        },
+        "StringLike": {
+          "kms:EncryptionContext:aws:s3:arn": [
+            "arn:aws:s3:::fintrust-raw-966467878406-af-south-1-dev",
+            "arn:aws:s3:::fintrust-raw-966467878406-af-south-1-dev/raw/uploads/*"
+          ]
+        }
+      }
+    }
+  ]
+}
