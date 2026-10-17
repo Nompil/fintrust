@@ -1,0 +1,31 @@
+{
+  "status": "LOCAL_CANDIDATE_NOT_DEPLOYED",
+  "aws_changes": false,
+  "template_sha256": "13fbc4c8a845cd15c0b4a5f09eb7322be3214679fdb04985b52f11204c0a5718",
+  "reserved_template_sha256": "5a370dbc6c6347336f2e24e6e4c541e0f7b2bea671663f0703debb3a443f6247",
+  "account": "966467878406",
+  "region": "af-south-1",
+  "stage": "dev",
+  "same_resources_as_reserved_template": true,
+  "defaults": {
+    "EnableManualTest": "false",
+    "ManualTestFunction": "none",
+    "EnableFunctions": "false",
+    "EnableConsumers": "false",
+    "EnableMonthlyReports": "false"
+  },
+  "per_function_cap_when_selected": null,
+  "maximum_selected_function_count": 1,
+  "automatic_consumers_permitted": false,
+  "scheduled_reports_permitted": false,
+  "migration_runner_modified": false,
+  "ingest_modified": false,
+  "live_validation": "AWS_TEMPLATE_ACCEPTED_NOT_DEPLOYED",
+  "remaining_gates": [
+    "Immutable artifact upload/version and disabled deployment",
+    "Approved database access, migrations, IAM/TLS and grants for DB-dependent tests",
+    "Reviewed qualified test invocation permission and inactive upstream paths",
+    "Single operator, sequential synchronous invocation and verified return to concurrency zero",
+    "Separate reviewed capacity strategy for integrated cloud E2E/production"
+  ]
+}

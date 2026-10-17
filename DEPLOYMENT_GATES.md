@@ -147,3 +147,35 @@ The inventory revealed that the DynamoDB gateway policy excluded the new account
 The failed/recovered attempt and successful retry are retained in `deployment_iam/evidence/gateway-account-scope-*.json`; `infrastructure/network-account-scope-update.json` is hash-bound to the receipt and reproducible by the network generator. The full seven-policy bundle was revalidated without findings. Six focused network tests and seven offline preparation checks passed; Windows/Linux policy/template/live-receipt binding verification passed. These are configuration checks, not new full-suite or live end-to-end results.
 
 Current remaining gates are recorded in `infrastructure/service_preparation/service-completion-status.json`. Runtime ZIP/upload state is unchanged. Paid monitoring/schedules and processing remain off. The quota review, private database access/migrations/grants, immutable upload/deployment, approved enrollment and full cloud E2E remain outstanding.
+
+
+## Shared-capacity individual-test candidate - 17 October 2026
+
+The regional limit of 10 blocks the planned positive reserved allocations; it
+does not establish that all unreserved Lambda execution is unavailable. A
+separate `infrastructure/service_preparation/shared_manual/` candidate now
+supports reviewing individual functions against shared capacity. Defaults
+retain zero concurrency for all four functions. Explicit manual selection can
+omit reservation for one function only; the other three remain zero. Consumers
+and scheduled reports are hard-disabled, and no provisioned capacity is added.
+All other resource configuration is preserved. The original reserved template,
+installed IAM, deployed stacks, ingestion and runtime ZIP are unchanged.
+
+Eleven configuration tests passed on Windows and Linux: seven existing checks
+and four candidate checks covering default throttling, every manual selection,
+selection-rule behavior, automatic-path restrictions and preserved resources.
+The manifest binds candidate/base bytes. After deployer authentication was
+renewed, AWS ValidateTemplate accepted this exact candidate with no IAM
+capabilities. The separate receipt records its hash and AWS result. Template
+acceptance is not stack creation or runtime execution. No upload, new
+cost-bearing resource, runtime invocation, email or activation occurred.
+
+This option has no per-function execution cap when selected: one selected
+function could consume the available shared pool. Sequential synchronous tests
+require reviewed invocation permissions, inactive upstream paths and applicable
+database prerequisites. It is not a production rollout or a changed migration
+runner. The private-access/migration/grant gates, artifact/version binding,
+approved enrollment and full cloud E2E remain outstanding; the current migration
+plan still needs its own reviewed capacity decision. Retain the quota support
+case while evaluating this limited alternative. See the candidate guide and
+`offline-verification.json`; do not count the local checks as live AWS evidence.

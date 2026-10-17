@@ -1,0 +1,23 @@
+{
+  "status": "REVIEWED_TARGET_COST_APPROVAL_PENDING_NOT_UPLOADED",
+  "account": "966467878406",
+  "region": "af-south-1",
+  "bucket": "fintrust-reports-966467878406-af-south-1-dev",
+  "key": "deployment/lambda/ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d/fintrust.zip",
+  "source": "build/gateway-ready-candidate/build/consolidation/fintrust-consolidated.zip",
+  "size_bytes": 26537014,
+  "sha256": "ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d",
+  "checksum_sha256_base64": "/2Mk1kpdZdqxhSOjDqcrsVlNL6XKf75rg5HFLwPtWJ0=",
+  "storage_class": "STANDARD",
+  "encryption": "Existing approved bucket KMS key; preserve bucket configuration",
+  "preserve_existing_objects": true,
+  "no_unconditional_overwrite": true,
+  "verification": "Capture actual non-null version; download that exact version and verify bytes/checksum before binding deployment inputs",
+  "iam": "If required, temporary exact-object upload permission on deployer role; admin for IAM only; remove it after staging",
+  "new_bucket": false,
+  "deploy_functions": false,
+  "invoke_functions": false,
+  "activate_triggers": false,
+  "usage_charges_possible": ["S3 Standard object storage and requests", "Existing KMS key requests"],
+  "total_account_budget_guaranteed": false
+}

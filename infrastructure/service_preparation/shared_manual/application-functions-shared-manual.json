@@ -1,0 +1,966 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "FinTrust dev manual shared-capacity test candidate; inactive by default; no automated consumers or reports",
+  "Parameters": {
+    "CodeBucket": {
+      "Type": "String"
+    },
+    "CodeKey": {
+      "Type": "String"
+    },
+    "CodeSha256": {
+      "Type": "String"
+    },
+    "QuarantineBucket": {
+      "Type": "String"
+    },
+    "ReportsBucket": {
+      "Type": "String"
+    },
+    "RiskTable": {
+      "Type": "String"
+    },
+    "RiskStreamArn": {
+      "Type": "String"
+    },
+    "SesSender": {
+      "Type": "String",
+      "Default": "nompilomabuya@outlook.com",
+      "AllowedPattern": "[^\\s@*?]+@[^\\s@*?]+\\.[^\\s@*?]+",
+      "MaxLength": 254
+    },
+    "SesRecipient": {
+      "Type": "String",
+      "Default": "nompilomabuya@outlook.com",
+      "AllowedPattern": "[^\\s@*?]+@[^\\s@*?]+\\.[^\\s@*?]+",
+      "MaxLength": 254
+    },
+    "CognitoUserPoolId": {
+      "Type": "String"
+    },
+    "CognitoAppClientId": {
+      "Type": "String"
+    },
+    "CognitoDomain": {
+      "Type": "String"
+    },
+    "CognitoRedirectUri": {
+      "Type": "String"
+    },
+    "CognitoLogoutUri": {
+      "Type": "String"
+    },
+    "CognitoUserScopeTable": {
+      "Type": "String"
+    },
+    "CorsAllowedOrigins": {
+      "Type": "String"
+    },
+    "Stage": {
+      "Type": "String",
+      "Default": "dev",
+      "AllowedValues": [
+        "dev"
+      ]
+    },
+    "SubnetIds": {
+      "Type": "List<AWS::EC2::Subnet::Id>"
+    },
+    "SecurityGroupIds": {
+      "Type": "List<AWS::EC2::SecurityGroup::Id>"
+    },
+    "EnableConsumers": {
+      "Type": "String",
+      "Default": "false",
+      "AllowedValues": [
+        "false"
+      ]
+    },
+    "ExistingTransactionsArn": {
+      "Type": "String",
+      "AllowedPattern": "arn:[^:]+:sqs:[^:]+:[0-9]{12}:.+"
+    },
+    "ExistingAlertFailuresArn": {
+      "Type": "String",
+      "AllowedPattern": "arn:[^:]+:sqs:[^:]+:[0-9]{12}:.+"
+    },
+    "ExistingReportFailuresArn": {
+      "Type": "String",
+      "AllowedPattern": "arn:[^:]+:sqs:[^:]+:[0-9]{12}:.+"
+    },
+    "ExistingReportFailuresUrl": {
+      "Type": "String",
+      "AllowedPattern": "https://.+"
+    },
+    "CodeObjectVersion": {
+      "Type": "String",
+      "MinLength": 1,
+      "AllowedPattern": "(?!null$)[A-Za-z0-9._+/=-]+"
+    },
+    "EnableFunctions": {
+      "Type": "String",
+      "Default": "false",
+      "AllowedValues": [
+        "false"
+      ]
+    },
+    "EnableMonthlyReports": {
+      "Type": "String",
+      "Default": "false",
+      "AllowedValues": [
+        "false"
+      ],
+      "Description": "Independent report schedule activation after report validation and cost review."
+    },
+    "EnableManualTest": {
+      "Type": "String",
+      "Default": "false",
+      "AllowedValues": [
+        "false",
+        "true"
+      ],
+      "Description": "Explicitly release only the selected test function into shared capacity; not a per-function limit."
+    },
+    "ManualTestFunction": {
+      "Type": "String",
+      "Default": "none",
+      "AllowedValues": [
+        "none",
+        "scoring",
+        "alert",
+        "report",
+        "api"
+      ],
+      "Description": "Select one service for sequential synchronous testing after live prerequisites and invocation permissions are verified."
+    }
+  },
+  "Resources": {
+    "ScoringFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": {
+          "Fn::Sub": "fintrust-scoring-${Stage}"
+        },
+        "Role": {
+          "Fn::Sub": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/fintrust-scoring-${Stage}"
+        },
+        "Runtime": "python3.12",
+        "Handler": "fintrust.score.lambda_handler",
+        "Code": {
+          "S3Bucket": {
+            "Ref": "CodeBucket"
+          },
+          "S3Key": {
+            "Ref": "CodeKey"
+          },
+          "S3ObjectVersion": {
+            "Ref": "CodeObjectVersion"
+          }
+        },
+        "Timeout": 120,
+        "MemorySize": 256,
+        "Environment": {
+          "Variables": {
+            "FINTRUST_SERVICE": "scoring",
+            "FINTRUST_STAGE": {
+              "Ref": "Stage"
+            },
+            "DB_AUTH_MODE": "iam",
+            "DB_CONFIG_SOURCE": "environment",
+            "DB_SSLROOTCERT": "/var/task/certs/global-bundle.pem",
+            "DB_HOST": {
+              "Fn::Sub": "{{resolve:ssm:/fintrust/${Stage}/scoring/db_host}}"
+            },
+            "DB_NAME": {
+              "Fn::Sub": "{{resolve:ssm:/fintrust/${Stage}/scoring/db_name}}"
+            },
+            "DB_USER": {
+              "Fn::Sub": "{{resolve:ssm:/fintrust/${Stage}/scoring/db_user}}"
+            },
+            "DYNAMODB_TABLE": {
+              "Ref": "RiskTable"
+            },
+            "ALERT_DELIVERY_MODE": "stream",
+            "QUARANTINE_BUCKET": {
+              "Ref": "QuarantineBucket"
+            }
+          }
+        },
+        "VpcConfig": {
+          "SubnetIds": {
+            "Ref": "SubnetIds"
+          },
+          "SecurityGroupIds": {
+            "Ref": "SecurityGroupIds"
+          }
+        },
+        "Architectures": [
+          "x86_64"
+        ],
+        "ReservedConcurrentExecutions": {
+          "Fn::If": [
+            "ScoringFunctionManualTestEnabled",
+            {
+              "Ref": "AWS::NoValue"
+            },
+            0
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "Stage"
+            }
+          }
+        ]
+      },
+      "DependsOn": "ScoringLogs"
+    },
+    "ScoringLogs": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Sub": "/aws/lambda/fintrust-scoring-${Stage}"
+        },
+        "RetentionInDays": 14,
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "Stage"
+            }
+          }
+        ]
+      },
+      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "AlertFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": {
+          "Fn::Sub": "fintrust-alert-${Stage}"
+        },
+        "Role": {
+          "Fn::Sub": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/fintrust-alert-${Stage}"
+        },
+        "Runtime": "python3.12",
+        "Handler": "fintrust.alert_delivery.lambda_handler",
+        "Code": {
+          "S3Bucket": {
+            "Ref": "CodeBucket"
+          },
+          "S3Key": {
+            "Ref": "CodeKey"
+          },
+          "S3ObjectVersion": {
+            "Ref": "CodeObjectVersion"
+          }
+        },
+        "Timeout": 30,
+        "MemorySize": 256,
+        "Environment": {
+          "Variables": {
+            "FINTRUST_SERVICE": "alert",
+            "FINTRUST_STAGE": {
+              "Ref": "Stage"
+            },
+            "SES_SENDER": {
+              "Ref": "SesSender"
+            },
+            "SES_RECIPIENT": {
+              "Ref": "SesRecipient"
+            },
+            "DYNAMODB_TABLE": {
+              "Ref": "RiskTable"
+            }
+          }
+        },
+        "Architectures": [
+          "x86_64"
+        ],
+        "ReservedConcurrentExecutions": {
+          "Fn::If": [
+            "AlertFunctionManualTestEnabled",
+            {
+              "Ref": "AWS::NoValue"
+            },
+            0
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "Stage"
+            }
+          }
+        ]
+      },
+      "DependsOn": "AlertLogs"
+    },
+    "AlertLogs": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Sub": "/aws/lambda/fintrust-alert-${Stage}"
+        },
+        "RetentionInDays": 14,
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "Stage"
+            }
+          }
+        ]
+      },
+      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "ReportFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": {
+          "Fn::Sub": "fintrust-report-${Stage}"
+        },
+        "Role": {
+          "Fn::Sub": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/fintrust-report-${Stage}"
+        },
+        "Runtime": "python3.12",
+        "Handler": "fintrust.report.lambda_handler",
+        "Code": {
+          "S3Bucket": {
+            "Ref": "CodeBucket"
+          },
+          "S3Key": {
+            "Ref": "CodeKey"
+          },
+          "S3ObjectVersion": {
+            "Ref": "CodeObjectVersion"
+          }
+        },
+        "Timeout": 120,
+        "MemorySize": 256,
+        "Environment": {
+          "Variables": {
+            "FINTRUST_SERVICE": "report",
+            "FINTRUST_STAGE": {
+              "Ref": "Stage"
+            },
+            "DB_AUTH_MODE": "iam",
+            "DB_CONFIG_SOURCE": "environment",
+            "DB_SSLROOTCERT": "/var/task/certs/global-bundle.pem",
+            "DB_HOST": {
+              "Fn::Sub": "{{resolve:ssm:/fintrust/${Stage}/report/db_host}}"
+            },
+            "DB_NAME": {
+              "Fn::Sub": "{{resolve:ssm:/fintrust/${Stage}/report/db_name}}"
+            },
+            "DB_USER": {
+              "Fn::Sub": "{{resolve:ssm:/fintrust/${Stage}/report/db_user}}"
+            },
+            "S3_REPORT_BUCKET": {
+              "Ref": "ReportsBucket"
+            }
+          }
+        },
+        "VpcConfig": {
+          "SubnetIds": {
+            "Ref": "SubnetIds"
+          },
+          "SecurityGroupIds": {
+            "Ref": "SecurityGroupIds"
+          }
+        },
+        "Architectures": [
+          "x86_64"
+        ],
+        "ReservedConcurrentExecutions": {
+          "Fn::If": [
+            "ReportFunctionManualTestEnabled",
+            {
+              "Ref": "AWS::NoValue"
+            },
+            0
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "Stage"
+            }
+          }
+        ]
+      },
+      "DependsOn": "ReportLogs"
+    },
+    "ReportLogs": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Sub": "/aws/lambda/fintrust-report-${Stage}"
+        },
+        "RetentionInDays": 14,
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "Stage"
+            }
+          }
+        ]
+      },
+      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "ApiFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": {
+          "Fn::Sub": "fintrust-api-${Stage}"
+        },
+        "Role": {
+          "Fn::Sub": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/fintrust-api-${Stage}"
+        },
+        "Runtime": "python3.12",
+        "Handler": "fintrust.api.lambda_handler",
+        "Code": {
+          "S3Bucket": {
+            "Ref": "CodeBucket"
+          },
+          "S3Key": {
+            "Ref": "CodeKey"
+          },
+          "S3ObjectVersion": {
+            "Ref": "CodeObjectVersion"
+          }
+        },
+        "Timeout": 30,
+        "MemorySize": 256,
+        "Environment": {
+          "Variables": {
+            "FINTRUST_SERVICE": "api",
+            "FINTRUST_STAGE": {
+              "Ref": "Stage"
+            },
+            "DB_AUTH_MODE": "iam",
+            "DB_CONFIG_SOURCE": "environment",
+            "DB_SSLROOTCERT": "/var/task/certs/global-bundle.pem",
+            "DB_HOST": {
+              "Fn::Sub": "{{resolve:ssm:/fintrust/${Stage}/api/db_host}}"
+            },
+            "DB_NAME": {
+              "Fn::Sub": "{{resolve:ssm:/fintrust/${Stage}/api/db_name}}"
+            },
+            "DB_USER": {
+              "Fn::Sub": "{{resolve:ssm:/fintrust/${Stage}/api/db_user}}"
+            },
+            "DYNAMODB_TABLE": {
+              "Ref": "RiskTable"
+            },
+            "AUTH_MODE": "cognito",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPoolId"
+            },
+            "COGNITO_APP_CLIENT_ID": {
+              "Ref": "CognitoAppClientId"
+            },
+            "COGNITO_DOMAIN": {
+              "Ref": "CognitoDomain"
+            },
+            "COGNITO_REDIRECT_URI": {
+              "Ref": "CognitoRedirectUri"
+            },
+            "COGNITO_LOGOUT_URI": {
+              "Ref": "CognitoLogoutUri"
+            },
+            "COGNITO_USER_SCOPE_TABLE": {
+              "Ref": "CognitoUserScopeTable"
+            },
+            "CORS_ALLOWED_ORIGINS": {
+              "Ref": "CorsAllowedOrigins"
+            }
+          }
+        },
+        "VpcConfig": {
+          "SubnetIds": {
+            "Ref": "SubnetIds"
+          },
+          "SecurityGroupIds": {
+            "Ref": "SecurityGroupIds"
+          }
+        },
+        "Architectures": [
+          "x86_64"
+        ],
+        "ReservedConcurrentExecutions": {
+          "Fn::If": [
+            "ApiFunctionManualTestEnabled",
+            {
+              "Ref": "AWS::NoValue"
+            },
+            0
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "Stage"
+            }
+          }
+        ]
+      },
+      "DependsOn": "ApiLogs"
+    },
+    "ApiLogs": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Sub": "/aws/lambda/fintrust-api-${Stage}"
+        },
+        "RetentionInDays": 14,
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "Stage"
+            }
+          }
+        ]
+      },
+      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "ScoringMapping": {
+      "Type": "AWS::Lambda::EventSourceMapping",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ScoringFunction"
+        },
+        "EventSourceArn": {
+          "Ref": "ExistingTransactionsArn"
+        },
+        "BatchSize": 5,
+        "Enabled": false,
+        "FunctionResponseTypes": [
+          "ReportBatchItemFailures"
+        ],
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "Stage"
+            }
+          }
+        ]
+      }
+    },
+    "AlertMapping": {
+      "Type": "AWS::Lambda::EventSourceMapping",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "AlertFunction"
+        },
+        "EventSourceArn": {
+          "Ref": "RiskStreamArn"
+        },
+        "StartingPosition": "TRIM_HORIZON",
+        "BatchSize": 10,
+        "Enabled": false,
+        "MaximumRetryAttempts": 5,
+        "MaximumRecordAgeInSeconds": 21600,
+        "FunctionResponseTypes": [
+          "ReportBatchItemFailures"
+        ],
+        "DestinationConfig": {
+          "OnFailure": {
+            "Destination": {
+              "Ref": "ExistingAlertFailuresArn"
+            }
+          }
+        },
+        "FilterCriteria": {
+          "Filters": [
+            {
+              "Pattern": "{\"eventName\": [\"INSERT\"], \"dynamodb\": {\"NewImage\": {\"score_date\": {\"S\": [{\"prefix\": \"TX#\"}]}, \"risk_level\": {\"S\": [\"High\"]}}}}"
+            }
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": {
+              "Ref": "Stage"
+            }
+          }
+        ]
+      }
+    },
+    "ApiVersion": {
+      "Type": "AWS::Lambda::Version",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ApiFunction"
+        },
+        "CodeSha256": {
+          "Ref": "CodeSha256"
+        }
+      }
+    },
+    "ApiAlias": {
+      "Type": "AWS::Lambda::Alias",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ApiFunction"
+        },
+        "Name": {
+          "Ref": "Stage"
+        },
+        "FunctionVersion": {
+          "Fn::GetAtt": [
+            "ApiVersion",
+            "Version"
+          ]
+        }
+      }
+    },
+    "ReportAsync": {
+      "Type": "AWS::Lambda::EventInvokeConfig",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ReportFunction"
+        },
+        "Qualifier": "$LATEST",
+        "MaximumRetryAttempts": 2,
+        "MaximumEventAgeInSeconds": 21600,
+        "DestinationConfig": {
+          "OnFailure": {
+            "Destination": {
+              "Ref": "ExistingReportFailuresArn"
+            }
+          }
+        }
+      }
+    },
+    "MonthlySchedule": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "fintrust-monthly-${Stage}"
+        },
+        "ScheduleExpression": "cron(0 2 1 * ? *)",
+        "State": "DISABLED",
+        "Targets": [
+          {
+            "Id": "MonthlyReport",
+            "Arn": {
+              "Fn::GetAtt": [
+                "ReportFunction",
+                "Arn"
+              ]
+            },
+            "RetryPolicy": {
+              "MaximumRetryAttempts": 5,
+              "MaximumEventAgeInSeconds": 21600
+            },
+            "DeadLetterConfig": {
+              "Arn": {
+                "Ref": "ExistingReportFailuresArn"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ScheduleInvoke": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ReportFunction"
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "events.amazonaws.com",
+        "SourceAccount": {
+          "Ref": "AWS::AccountId"
+        },
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "MonthlySchedule",
+            "Arn"
+          ]
+        }
+      }
+    },
+    "ReportQueuePolicy": {
+      "Type": "AWS::SQS::QueuePolicy",
+      "Properties": {
+        "Queues": [
+          {
+            "Ref": "ExistingReportFailuresUrl"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "events.amazonaws.com"
+              },
+              "Action": "sqs:SendMessage",
+              "Resource": {
+                "Ref": "ExistingReportFailuresArn"
+              },
+              "Condition": {
+                "ArnEquals": {
+                  "aws:SourceArn": {
+                    "Fn::GetAtt": [
+                      "MonthlySchedule",
+                      "Arn"
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "Conditions": {
+    "ConsumersEnabled": {
+      "Fn::And": [
+        {
+          "Condition": "FunctionsEnabled"
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "EnableConsumers"
+            },
+            "true"
+          ]
+        }
+      ]
+    },
+    "FunctionsEnabled": {
+      "Fn::Equals": [
+        {
+          "Ref": "EnableFunctions"
+        },
+        "true"
+      ]
+    },
+    "ReportsEnabled": {
+      "Fn::And": [
+        {
+          "Condition": "FunctionsEnabled"
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "EnableMonthlyReports"
+            },
+            "true"
+          ]
+        }
+      ]
+    },
+    "ScoringFunctionManualTestEnabled": {
+      "Fn::And": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "EnableManualTest"
+            },
+            "true"
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ManualTestFunction"
+            },
+            "scoring"
+          ]
+        }
+      ]
+    },
+    "AlertFunctionManualTestEnabled": {
+      "Fn::And": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "EnableManualTest"
+            },
+            "true"
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ManualTestFunction"
+            },
+            "alert"
+          ]
+        }
+      ]
+    },
+    "ReportFunctionManualTestEnabled": {
+      "Fn::And": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "EnableManualTest"
+            },
+            "true"
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ManualTestFunction"
+            },
+            "report"
+          ]
+        }
+      ]
+    },
+    "ApiFunctionManualTestEnabled": {
+      "Fn::And": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "EnableManualTest"
+            },
+            "true"
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ManualTestFunction"
+            },
+            "api"
+          ]
+        }
+      ]
+    }
+  },
+  "Outputs": {
+    "ScoringFunctionArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "ScoringFunction",
+          "Arn"
+        ]
+      }
+    },
+    "AlertFunctionArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "AlertFunction",
+          "Arn"
+        ]
+      }
+    },
+    "ReportFunctionArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "ReportFunction",
+          "Arn"
+        ]
+      }
+    },
+    "ApiFunctionArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "ApiFunction",
+          "Arn"
+        ]
+      }
+    },
+    "ApiAliasArn": {
+      "Value": {
+        "Ref": "ApiAlias"
+      }
+    }
+  },
+  "Rules": {
+    "ManualTestNeedsSelection": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Or": [
+              {
+                "Fn::Equals": [
+                  {
+                    "Ref": "EnableManualTest"
+                  },
+                  "false"
+                ]
+              },
+              {
+                "Fn::Not": [
+                  {
+                    "Fn::Equals": [
+                      {
+                        "Ref": "ManualTestFunction"
+                      },
+                      "none"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "AssertDescription": "An enabled manual test must select exactly one service."
+        }
+      ]
+    }
+  }
+}

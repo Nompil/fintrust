@@ -6,6 +6,13 @@ incur new resource charges. Current service status is in
 `service-completion-status.json`; source and live configuration receipts are in
 `deployment_iam/evidence/`. Use the prepared templates in this directory.
 
+A separate [manual shared-capacity candidate](shared_manual/README.md) is now
+locally verified for individual function checks without reserving positive
+slots. It keeps consumers and reports disabled and permits selecting only one
+service at a time. AWS accepted the exact template; deployment is still pending, and the selected
+function has no individual concurrency cap. This does not replace the migration
+runner's capacity/security plan or the full integrated-release gates below.
+
 1. **Resolve the capacity gate.** Follow existing AWS Support case
    `179210878300923`. The latest read-back still reports total/unreserved
    concurrency of 10. Obtain AWS's supported minimum target and confirm the

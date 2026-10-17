@@ -60,5 +60,16 @@
     "support_correspondence": "NOT_RECHECKED_CONSOLE_SIGN_IN_REQUIRED",
     "new_aws_changes": false
   },
-  "remaining_release_checklist": "REMAINING_RELEASE_STEPS.md"
+  "remaining_release_checklist": "REMAINING_RELEASE_STEPS.md",
+  "shared_capacity_alternative": {
+    "status": "OFFLINE_CHECKS_AND_AWS_TEMPLATE_VALIDATION_PASSED_NOT_DEPLOYED",
+    "candidate": "shared_manual/application-functions-shared-manual.json",
+    "guide": "shared_manual/README.md",
+    "verification": "shared_manual/offline-verification.json",
+    "positive_reserved_slots_needed_for_selected_individual_test": 0,
+    "per_function_concurrency_cap_provided": false,
+    "automatic_pipeline_supported": false,
+    "migration_runner_changed": false,
+    "deployed": false
+  }
 }

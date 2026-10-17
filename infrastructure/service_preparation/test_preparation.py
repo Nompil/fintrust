@@ -15,6 +15,8 @@ def resolve(value, parameters, conditions):
         return resolve(a, parameters, conditions) == resolve(b, parameters, conditions)
     if 'Fn::And' in value:
         return all(resolve(v, parameters, conditions) for v in value['Fn::And'])
+    if 'Fn::Or' in value:
+        return any(resolve(v, parameters, conditions) for v in value['Fn::Or'])
     if 'Fn::Not' in value:
         return not resolve(value['Fn::Not'][0], parameters, conditions)
     if 'Fn::If' in value:

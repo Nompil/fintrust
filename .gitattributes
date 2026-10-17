@@ -13,3 +13,4 @@ infrastructure/service_preparation/runtime_iam/*.json text eol=lf
 infrastructure/service_preparation/deployment_iam/*.json text eol=lf
 infrastructure/service_preparation/deployment_iam/evidence/*.json text eol=lf
 infrastructure/network-account-scope-update.json text eol=lf
+infrastructure/service_preparation/shared_manual/*.json text eol=lf

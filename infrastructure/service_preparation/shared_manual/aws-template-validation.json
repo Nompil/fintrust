@@ -1,0 +1,138 @@
+{
+  "checked_at": "2026-10-17T01:45:58.336341+00:00",
+  "aws_changes": false,
+  "template_sha256": "13fbc4c8a845cd15c0b4a5f09eb7322be3214679fdb04985b52f11204c0a5718",
+  "status": "AWS_TEMPLATE_ACCEPTED_NOT_DEPLOYED",
+  "result": {
+    "Parameters": [
+      {
+        "ParameterKey": "CorsAllowedOrigins",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "ExistingTransactionsArn",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "RiskTable",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "CodeKey",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "ReportsBucket",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "QuarantineBucket",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "SubnetIds",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "SesSender",
+        "DefaultValue": "nompilomabuya@outlook.com",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "Stage",
+        "DefaultValue": "dev",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "ExistingReportFailuresArn",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "CognitoRedirectUri",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "ExistingAlertFailuresArn",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "CognitoDomain",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "ManualTestFunction",
+        "DefaultValue": "none",
+        "NoEcho": false,
+        "Description": "Select one service for sequential synchronous testing after live prerequisites and invocation permissions are verified."
+      },
+      {
+        "ParameterKey": "CognitoLogoutUri",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "EnableFunctions",
+        "DefaultValue": "false",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "EnableMonthlyReports",
+        "DefaultValue": "false",
+        "NoEcho": false,
+        "Description": "Independent report schedule activation after report validation and cost review."
+      },
+      {
+        "ParameterKey": "RiskStreamArn",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "ExistingReportFailuresUrl",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "CodeSha256",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "SecurityGroupIds",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "EnableManualTest",
+        "DefaultValue": "false",
+        "NoEcho": false,
+        "Description": "Explicitly release only the selected test function into shared capacity; not a per-function limit."
+      },
+      {
+        "ParameterKey": "CognitoUserPoolId",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "CodeBucket",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "CognitoUserScopeTable",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "CognitoAppClientId",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "SesRecipient",
+        "DefaultValue": "nompilomabuya@outlook.com",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "EnableConsumers",
+        "DefaultValue": "false",
+        "NoEcho": false
+      },
+      {
+        "ParameterKey": "CodeObjectVersion",
+        "NoEcho": false
+      }
+    ],
+    "Description": "FinTrust dev manual shared-capacity test candidate; inactive by default; no automated consumers or reports"
+  }
+}
