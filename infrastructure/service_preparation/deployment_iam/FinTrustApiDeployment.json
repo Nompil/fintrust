@@ -29,7 +29,8 @@
       "Resource": [
         "arn:aws:apigateway:af-south-1::/restapis/qzgzopn8o4",
         "arn:aws:apigateway:af-south-1::/restapis/qzgzopn8o4/*",
-        "arn:aws:apigateway:af-south-1::/tags/arn%3Aaws%3Aapigateway%3Aaf-south-1%3A%3A%2Frestapis%2Fqzgzopn8o4"
+        "arn:aws:apigateway:af-south-1::/tags/arn%3Aaws%3Aapigateway%3Aaf-south-1%3A%3A%2Frestapis%2Fqzgzopn8o4",
+        "arn:aws:apigateway:af-south-1::/tags/arn%3Aaws%3Aapigateway%3Aaf-south-1%3A%3A%2Frestapis%2Fqzgzopn8o4%2Fstages%2Fdev"
       ],
       "Condition": {
         "StringEquals": {
@@ -51,7 +52,8 @@
       "Resource": [
         "arn:aws:apigateway:af-south-1::/restapis/qzgzopn8o4",
         "arn:aws:apigateway:af-south-1::/restapis/qzgzopn8o4/*",
-        "arn:aws:apigateway:af-south-1::/tags/arn%3Aaws%3Aapigateway%3Aaf-south-1%3A%3A%2Frestapis%2Fqzgzopn8o4"
+        "arn:aws:apigateway:af-south-1::/tags/arn%3Aaws%3Aapigateway%3Aaf-south-1%3A%3A%2Frestapis%2Fqzgzopn8o4",
+        "arn:aws:apigateway:af-south-1::/tags/arn%3Aaws%3Aapigateway%3Aaf-south-1%3A%3A%2Frestapis%2Fqzgzopn8o4%2Fstages%2Fdev"
       ],
       "Condition": {
         "StringEquals": {

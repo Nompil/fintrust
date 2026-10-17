@@ -47,15 +47,16 @@ runner's capacity/security plan or the full integrated-release gates below.
    mappings and disabled monthly rule after creation. Before applying the
    report failure queue policy, read its current policy and preserve unrelated
    statements. Do not use CAPABILITY_IAM or an alternative service role.
-5. **Complete the existing API stack.** The actual API function name
-   `fintrust-api-dev` is now bound in `ApiFunctionName` (the template adds the
-   `dev` alias). Review an UPDATE change set for
-   `fintrust-api-dev` using `api.json`. Preserve API ID `qzgzopn8o4` and its
-   registered `/dev/` callback. The worksheet already contains the actual
-   Cognito pool ARN. Check authorizer/method configuration and exact
-   callback/logout settings. Browser assets, scoped retrieval and log delivery
-   require controlled function capacity and are tested in step 7. The current
-   shell alone serves no application.
+5. **Completed: API configuration deployed; runtime disabled.** The existing
+   API `qzgzopn8o4` now has a `dev` stage, seven methods, Cognito authorizer,
+   exact-source permission to the `dev` Lambda alias and a 30-day access-log
+   group. Read-back evidence is `deployment_iam/evidence/api-configuration-live.json`.
+   The registered `/dev/` callback is preserved. All functions remain at zero
+   concurrency. No traffic was sent; browser access, authorization, scoped
+   retrieval and log delivery remain untested. The initial tagging failure was
+   rolled back normally, the exact stage-tag scope corrected, and temporary
+   empty-log cleanup permission removed and verified. The stage is configured
+   but does not yet provide a working application.
 6. **Enroll only approved test identities.** Configure each required Cognito
    identity, its one approved group, software MFA and approved account scopes.
    No identities or scope records have been created by preparation. Use real
@@ -85,5 +86,6 @@ migration resources need the recorded same-session cleanup and deletion checks.
 
 The latest read-only safety receipt confirms healthy network/auth/API stacks,
 the reviewed live network template, zero ingest reserved concurrency, no raw
-bucket notification and no API stage. It does not prove migration readiness,
+bucket notification before the API stage was configured. The later API receipt
+confirms the dev stage with all functions still at zero. It does not prove migration readiness,
 current support correspondence, application operation or future cost coverage.

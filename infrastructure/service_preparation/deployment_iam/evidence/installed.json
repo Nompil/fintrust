@@ -951,7 +951,7 @@
     },
     "FinTrustApiDeployment": {
       "arn": "arn:aws:iam::966467878406:policy/FinTrustApiDeployment",
-      "default_version": "v4",
+      "default_version": "v5",
       "document": {
         "Version": "2012-10-17",
         "Statement": [
@@ -983,7 +983,8 @@
             "Resource": [
               "arn:aws:apigateway:af-south-1::/restapis/qzgzopn8o4",
               "arn:aws:apigateway:af-south-1::/restapis/qzgzopn8o4/*",
-              "arn:aws:apigateway:af-south-1::/tags/arn%3Aaws%3Aapigateway%3Aaf-south-1%3A%3A%2Frestapis%2Fqzgzopn8o4"
+              "arn:aws:apigateway:af-south-1::/tags/arn%3Aaws%3Aapigateway%3Aaf-south-1%3A%3A%2Frestapis%2Fqzgzopn8o4",
+              "arn:aws:apigateway:af-south-1::/tags/arn%3Aaws%3Aapigateway%3Aaf-south-1%3A%3A%2Frestapis%2Fqzgzopn8o4%2Fstages%2Fdev"
             ],
             "Condition": {
               "StringEquals": {
@@ -1005,7 +1006,8 @@
             "Resource": [
               "arn:aws:apigateway:af-south-1::/restapis/qzgzopn8o4",
               "arn:aws:apigateway:af-south-1::/restapis/qzgzopn8o4/*",
-              "arn:aws:apigateway:af-south-1::/tags/arn%3Aaws%3Aapigateway%3Aaf-south-1%3A%3A%2Frestapis%2Fqzgzopn8o4"
+              "arn:aws:apigateway:af-south-1::/tags/arn%3Aaws%3Aapigateway%3Aaf-south-1%3A%3A%2Frestapis%2Fqzgzopn8o4",
+              "arn:aws:apigateway:af-south-1::/tags/arn%3Aaws%3Aapigateway%3Aaf-south-1%3A%3A%2Frestapis%2Fqzgzopn8o4%2Fstages%2Fdev"
             ],
             "Condition": {
               "StringEquals": {
@@ -1318,8 +1320,8 @@
   "status": "INSTALLED_AND_READ_BACK",
   "api_id": "qzgzopn8o4",
   "workloads_deployed": false,
-  "updated_at": "2026-10-17T06:02:20.354923+00:00",
-  "bundle_manifest_sha256": "6f329613264aa0279bf3f508c1bdb35b47675de8914e99728d00b9292694ec6b",
+  "updated_at": "2026-10-17T06:36:30.081074+00:00",
+  "bundle_manifest_sha256": "cf349b2348ae52c8a5e0a8a3ae7a2c4402d3c0b316abb725de26099f14260c49",
   "binding_normalization": {
     "previous_windows_manifest_sha256": "86e3afc5e2a8b6d3d954b4ef6ebff16187c495077c9a86c951304ec14d3763ae",
     "canonical_lf_manifest_sha256": "c11245703e448a2ca5d14278e7eb4e541a657df1fc4baaf9e8cac0e4466c4872",

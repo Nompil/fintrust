@@ -171,9 +171,10 @@ def generate(api_id=None):
         api = [entry for entry in api if entry['Sid'] != 'CreateNamedRegionalApiOnly']
         base = f'arn:aws:apigateway:{REGION}::/restapis/{api_id}'
         tag = f'arn:aws:apigateway:{REGION}::/tags/{quote(base, safe="")}'
+        stage_tag = f'arn:aws:apigateway:{REGION}::/tags/{quote(base + "/stages/dev", safe="")}'
         api += [stmt('ManageOnlyBoundApi', ['apigateway:POST', 'apigateway:PUT', 'apigateway:PATCH', 'apigateway:DELETE'],
-                     [base, base + '/*', tag], via=True),
-                stmt('ReadOnlyBoundApi', ['apigateway:GET'], [base, base + '/*', tag])]
+                     [base, base + '/*', tag, stage_tag], via=True),
+                stmt('ReadOnlyBoundApi', ['apigateway:GET'], [base, base + '/*', tag, stage_tag])]
     else:
         # CloudFormation must read its newly generated API ID before it can
         # return outputs. Bootstrap grants metadata reads, never API mutations.

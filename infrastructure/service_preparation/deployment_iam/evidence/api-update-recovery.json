@@ -1,0 +1,64 @@
+{
+  "status": "UPDATE_ROLLBACK_COMPLETE_EXISTING_API_PRESERVED_NEW_EMPTY_LOG_ABSENT",
+  "data_deleted": false,
+  "existing_api_preserved": true,
+  "resource_skip_used": false,
+  "new_empty_log_group_deleted": false,
+  "updated_at": "2026-10-17T06:39:07.140196+00:00",
+  "last_stack_status": "UPDATE_ROLLBACK_COMPLETE",
+  "stack_read_back": {
+    "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+    "StackName": "fintrust-api-dev",
+    "Description": "Temporary first phase for the FinTrust API stack: reserve its stable API ID before registering the Cognito OAuth callback.",
+    "Parameters": [
+      {
+        "ParameterKey": "StageName",
+        "ParameterValue": "dev"
+      }
+    ],
+    "CreationTime": "2026-10-16T17:57:08.676000+00:00",
+    "LastUpdatedTime": "2026-10-17T06:32:28.470000+00:00",
+    "RollbackConfiguration": {},
+    "StackStatus": "UPDATE_ROLLBACK_COMPLETE",
+    "DisableRollback": false,
+    "DeploymentConfig": {
+      "Mode": "STANDARD",
+      "DisableRollback": false
+    },
+    "NotificationARNs": [],
+    "Outputs": [
+      {
+        "OutputKey": "CallbackUrl",
+        "OutputValue": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/"
+      },
+      {
+        "OutputKey": "ApiId",
+        "OutputValue": "qzgzopn8o4"
+      }
+    ],
+    "Tags": [
+      {
+        "Key": "Project",
+        "Value": "FinTrust"
+      },
+      {
+        "Key": "Environment",
+        "Value": "dev"
+      }
+    ],
+    "EnableTerminationProtection": false,
+    "DriftInformation": {
+      "StackDriftStatus": "NOT_CHECKED"
+    },
+    "LastOperations": [
+      {
+        "OperationType": "ROLLBACK",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68"
+      },
+      {
+        "OperationType": "UPDATE_STACK",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341"
+      }
+    ]
+  }
+}

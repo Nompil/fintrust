@@ -1,0 +1,190 @@
+{
+  "name": "FinTrustApiEmptyLogCleanup",
+  "arn": "arn:aws:iam::966467878406:policy/FinTrustApiEmptyLogCleanup",
+  "before": [
+    {
+      "PolicyName": "FinTrustIdentityDeployment",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustIdentityDeployment"
+    },
+    {
+      "PolicyName": "FinTrustMonitoringDeployment",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustMonitoringDeployment"
+    },
+    {
+      "PolicyName": "FinTrustApiDeployment",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustApiDeployment"
+    },
+    {
+      "PolicyName": "FinTrustStage2S3",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustStage2S3"
+    },
+    {
+      "PolicyName": "FinTrustStage4DynamoDB",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustStage4DynamoDB"
+    },
+    {
+      "PolicyName": "FinTrustRemainingCloudFormation",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustRemainingCloudFormation"
+    },
+    {
+      "PolicyName": "FinTrustStage5Deployment",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustStage5Deployment"
+    },
+    {
+      "PolicyName": "FinTrustStage4Sqs",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustStage4Sqs"
+    },
+    {
+      "PolicyName": "FinTrustApplicationDeployment",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustApplicationDeployment"
+    },
+    {
+      "PolicyName": "FinTrustStage2CloudFormation",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustStage2CloudFormation"
+    },
+    {
+      "PolicyName": "FinTrustQuotaSupport",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustQuotaSupport"
+    },
+    {
+      "PolicyName": "FinTrustStage3Rds",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustStage3Rds"
+    },
+    {
+      "PolicyName": "FinTrustStage3Secret",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustStage3Secret"
+    },
+    {
+      "PolicyName": "FinTrustStage2Kms",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustStage2Kms"
+    },
+    {
+      "PolicyName": "FinTrustStage3CloudFormation",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustStage3CloudFormation"
+    },
+    {
+      "PolicyName": "FinTrustStage5Async",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustStage5Async"
+    },
+    {
+      "PolicyName": "FinTrustStage4CloudFormation",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustStage4CloudFormation"
+    },
+    {
+      "PolicyName": "FinTrustReleaseDependencies",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustReleaseDependencies"
+    },
+    {
+      "PolicyName": "FinTrustConsoleReadOnly",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustConsoleReadOnly"
+    }
+  ],
+  "policy": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "DeleteOnlyNewEmptyApiLogForFailedDeployment",
+        "Effect": "Allow",
+        "Action": "logs:DeleteLogGroup",
+        "Resource": [
+          "arn:aws:logs:af-south-1:966467878406:log-group:/aws/apigateway/fintrust-dev",
+          "arn:aws:logs:af-south-1:966467878406:log-group:/aws/apigateway/fintrust-dev:*"
+        ],
+        "Condition": {
+          "StringEquals": {
+            "aws:RequestedRegion": "af-south-1"
+          },
+          "DateLessThan": {
+            "aws:CurrentTime": "2026-10-17T07:07:08Z"
+          }
+        }
+      }
+    ]
+  },
+  "expires_at": "2026-10-17T07:07:08Z",
+  "validation": {
+    "findings": []
+  },
+  "attached": false,
+  "created": false,
+  "cleanup_verified": true,
+  "readback_verified": true,
+  "after": [
+    {
+      "PolicyName": "FinTrustIdentityDeployment",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustIdentityDeployment"
+    },
+    {
+      "PolicyName": "FinTrustMonitoringDeployment",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustMonitoringDeployment"
+    },
+    {
+      "PolicyName": "FinTrustApiDeployment",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustApiDeployment"
+    },
+    {
+      "PolicyName": "FinTrustStage2S3",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustStage2S3"
+    },
+    {
+      "PolicyName": "FinTrustStage4DynamoDB",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustStage4DynamoDB"
+    },
+    {
+      "PolicyName": "FinTrustRemainingCloudFormation",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustRemainingCloudFormation"
+    },
+    {
+      "PolicyName": "FinTrustStage5Deployment",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustStage5Deployment"
+    },
+    {
+      "PolicyName": "FinTrustStage4Sqs",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustStage4Sqs"
+    },
+    {
+      "PolicyName": "FinTrustApplicationDeployment",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustApplicationDeployment"
+    },
+    {
+      "PolicyName": "FinTrustStage2CloudFormation",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustStage2CloudFormation"
+    },
+    {
+      "PolicyName": "FinTrustQuotaSupport",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustQuotaSupport"
+    },
+    {
+      "PolicyName": "FinTrustStage3Rds",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustStage3Rds"
+    },
+    {
+      "PolicyName": "FinTrustStage3Secret",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustStage3Secret"
+    },
+    {
+      "PolicyName": "FinTrustStage2Kms",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustStage2Kms"
+    },
+    {
+      "PolicyName": "FinTrustStage3CloudFormation",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustStage3CloudFormation"
+    },
+    {
+      "PolicyName": "FinTrustStage5Async",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustStage5Async"
+    },
+    {
+      "PolicyName": "FinTrustStage4CloudFormation",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustStage4CloudFormation"
+    },
+    {
+      "PolicyName": "FinTrustReleaseDependencies",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustReleaseDependencies"
+    },
+    {
+      "PolicyName": "FinTrustConsoleReadOnly",
+      "PolicyArn": "arn:aws:iam::966467878406:policy/FinTrustConsoleReadOnly"
+    }
+  ]
+}

@@ -249,7 +249,8 @@
     "Prepared Cognito has no IAM resources: admin separately installed exact-table API GetItem access. Do not use the historical generic Cognito template.",
     "API identity and empty Cognito/scope configuration deployed and read back. No users, scope assignments, serving API stage or workloads activated. Artifact upload, database gates and end-to-end validation remain outstanding.",
     "The upload-only cost exception was authorized by the owner. No function, stack, trigger, schedule, SQL or email was executed by staging.",
-    "Four application functions deployed disabled; real API function name bound. This supersedes earlier function-pending notes. Runtime, live database and end-to-end gates remain outstanding."
+    "Four application functions deployed disabled; real API function name bound. This supersedes earlier function-pending notes. Runtime, live database and end-to-end gates remain outstanding.",
+    "API stage/routes/Cognito authorizer and 30-day access-log group deployed and read back. Lambda remains at zero; no test traffic was sent. This supersedes earlier shell-only notes; database/runtime/user-scope gates remain."
   ],
   "source_sha256": "2b525f84dfd93f93006f245ee77df5d589d5a3bb056c4bfaf99000b1004ac852",
   "ssm_prerequisites": {
@@ -284,9 +285,17 @@
   },
   "api_configuration": {
     "api_id": "qzgzopn8o4",
-    "stack_status": "CREATE_COMPLETE",
+    "stack_status": "UPDATE_COMPLETE",
     "callback_url": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/",
-    "serving_stage_created": false
+    "serving_stage_created": true,
+    "status": "UPDATE_COMPLETE_API_CONFIGURED_LAMBDA_ZERO_NO_TEST_TRAFFIC",
+    "runtime_available": false,
+    "evidence": "infrastructure/service_preparation/deployment_iam/evidence/api-configuration-live.json",
+    "outputs": {
+      "CallbackUrl": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/",
+      "BaseUrl": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev",
+      "ApiId": "qzgzopn8o4"
+    }
   },
   "gateway_scope_prerequisite": {
     "status": "UPDATE_COMPLETE_IN_PLACE_POLICY_ONLY",

@@ -1,0 +1,1645 @@
+{
+  "status": "STOPPED_UPDATE_ROLLBACK_COMPLETE_CLEANUP_IN_PROGRESS",
+  "requests_sent": 0,
+  "application_invocations": 0,
+  "emails_sent": 0,
+  "sql_executed": false,
+  "processing_enabled": false,
+  "authorization": "Owner: Do what is best please, in reply to the reviewed API configuration/cost question",
+  "api_id": "qzgzopn8o4",
+  "review_evidence": "api-update-reviewed.json",
+  "reviewed_change_set": {
+    "Changes": [
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "AccessLogs",
+          "ResourceType": "AWS::Logs::LogGroup",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "ApiLambdaPermission",
+          "ResourceType": "AWS::Lambda::Permission",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "AssetsGet",
+          "ResourceType": "AWS::ApiGateway::Method",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "AssetsProxy",
+          "ResourceType": "AWS::ApiGateway::Resource",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "Assets",
+          "ResourceType": "AWS::ApiGateway::Resource",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "AuthConfigEndpoint",
+          "ResourceType": "AWS::ApiGateway::Resource",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "AuthConfigGet",
+          "ResourceType": "AWS::ApiGateway::Method",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "AuthConfig",
+          "ResourceType": "AWS::ApiGateway::Resource",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "CognitoAuthorizer",
+          "ResourceType": "AWS::ApiGateway::Authorizer",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "Deployment",
+          "ResourceType": "AWS::ApiGateway::Deployment",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "HealthGet",
+          "ResourceType": "AWS::ApiGateway::Method",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "Health",
+          "ResourceType": "AWS::ApiGateway::Resource",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "RootGet",
+          "ResourceType": "AWS::ApiGateway::Method",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "Stage",
+          "ResourceType": "AWS::ApiGateway::Stage",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "V1Get",
+          "ResourceType": "AWS::ApiGateway::Method",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "V1Options",
+          "ResourceType": "AWS::ApiGateway::Method",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "V1Post",
+          "ResourceType": "AWS::ApiGateway::Method",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "V1Proxy",
+          "ResourceType": "AWS::ApiGateway::Resource",
+          "Scope": [],
+          "Details": []
+        }
+      },
+      {
+        "Type": "Resource",
+        "ResourceChange": {
+          "Action": "Add",
+          "LogicalResourceId": "V1",
+          "ResourceType": "AWS::ApiGateway::Resource",
+          "Scope": [],
+          "Details": []
+        }
+      }
+    ],
+    "ChangeSetName": "fintrust-api-bound-review-20261017",
+    "ChangeSetId": "arn:aws:cloudformation:af-south-1:966467878406:changeSet/fintrust-api-bound-review-20261017/0cb0885c-e2fc-4adc-a853-a0c4764933e2",
+    "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+    "StackName": "fintrust-api-dev",
+    "Description": null,
+    "Parameters": [
+      {
+        "ParameterKey": "ApiFunctionName",
+        "ParameterValue": "fintrust-api-dev"
+      },
+      {
+        "ParameterKey": "StageName",
+        "ParameterValue": "dev"
+      },
+      {
+        "ParameterKey": "UserPoolArn",
+        "ParameterValue": "arn:aws:cognito-idp:af-south-1:966467878406:userpool/af-south-1_NnmfBS0y9"
+      }
+    ],
+    "CreationTime": "2026-10-17T06:28:26.315000+00:00",
+    "ExecutionStatus": "AVAILABLE",
+    "Status": "CREATE_COMPLETE",
+    "StatusReason": null,
+    "NotificationARNs": [],
+    "RollbackConfiguration": {},
+    "Capabilities": [],
+    "Tags": [
+      {
+        "Key": "Project",
+        "Value": "FinTrust"
+      },
+      {
+        "Key": "Environment",
+        "Value": "dev"
+      }
+    ],
+    "ParentChangeSetId": null,
+    "IncludeNestedStacks": false,
+    "RootChangeSetId": null,
+    "OnStackFailure": null,
+    "ImportExistingResources": null,
+    "StackDriftStatus": null,
+    "DeploymentMode": null,
+    "DeploymentConfig": {
+      "Mode": "STANDARD",
+      "DisableRollback": false
+    }
+  },
+  "template_sha256": "38b1c5f718b9c678a4bb07fe2281216905f880258ba0c918a22291e4b552cb56",
+  "updated_at": "2026-10-17T06:32:57.983168+00:00",
+  "stack_read_back": {
+    "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+    "StackName": "fintrust-api-dev",
+    "Description": "Temporary first phase for the FinTrust API stack: reserve its stable API ID before registering the Cognito OAuth callback.",
+    "Parameters": [
+      {
+        "ParameterKey": "StageName",
+        "ParameterValue": "dev"
+      }
+    ],
+    "CreationTime": "2026-10-16T17:57:08.676000+00:00",
+    "LastUpdatedTime": "2026-10-17T06:32:28.470000+00:00",
+    "RollbackConfiguration": {},
+    "StackStatus": "UPDATE_ROLLBACK_COMPLETE_CLEANUP_IN_PROGRESS",
+    "DisableRollback": false,
+    "DeploymentConfig": {
+      "Mode": "STANDARD",
+      "DisableRollback": false
+    },
+    "NotificationARNs": [],
+    "Outputs": [
+      {
+        "OutputKey": "CallbackUrl",
+        "OutputValue": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/"
+      },
+      {
+        "OutputKey": "ApiId",
+        "OutputValue": "qzgzopn8o4"
+      }
+    ],
+    "Tags": [
+      {
+        "Key": "Project",
+        "Value": "FinTrust"
+      },
+      {
+        "Key": "Environment",
+        "Value": "dev"
+      }
+    ],
+    "EnableTerminationProtection": false,
+    "DriftInformation": {
+      "StackDriftStatus": "NOT_CHECKED"
+    },
+    "LastOperations": [
+      {
+        "OperationType": "ROLLBACK",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68"
+      },
+      {
+        "OperationType": "UPDATE_STACK",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341"
+      }
+    ]
+  },
+  "events": {
+    "StackEvents": [
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "V1-b51a8c6a-90b4-4494-bcba-308b9bafe347",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "V1",
+        "PhysicalResourceId": "bi0htg",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:54.817000+00:00",
+        "ResourceStatus": "DELETE_COMPLETE",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "V1-2e33e8f5-3c44-4132-a7d8-db7a52c62015",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "V1",
+        "PhysicalResourceId": "bi0htg",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:54.149000+00:00",
+        "ResourceStatus": "DELETE_IN_PROGRESS",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AuthConfig-148f5ccc-6b10-4e44-aa19-d5df5dd2e400",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "AuthConfig",
+        "PhysicalResourceId": "50f1c5",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:53.902000+00:00",
+        "ResourceStatus": "DELETE_COMPLETE",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "Assets-9da3a410-419c-42b0-97e9-34c40d3404d2",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "Assets",
+        "PhysicalResourceId": "vfc4sw",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:53.723000+00:00",
+        "ResourceStatus": "DELETE_COMPLETE",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AuthConfig-44c1816b-a08d-4039-a87b-46b5ff09d279",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "AuthConfig",
+        "PhysicalResourceId": "50f1c5",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:53.221000+00:00",
+        "ResourceStatus": "DELETE_IN_PROGRESS",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "Assets-af2aeee9-96a0-4a15-bbd0-d88d6255a677",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "Assets",
+        "PhysicalResourceId": "vfc4sw",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:53.011000+00:00",
+        "ResourceStatus": "DELETE_IN_PROGRESS",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AuthConfigEndpoint-3738bd87-8c5a-4d7e-b6c7-ed90806c68ea",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "AuthConfigEndpoint",
+        "PhysicalResourceId": "eeglek",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:52.925000+00:00",
+        "ResourceStatus": "DELETE_COMPLETE",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "CognitoAuthorizer-33f148f9-c10e-405c-8c6e-a7e7e3909ff9",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "CognitoAuthorizer",
+        "PhysicalResourceId": "mdpzrp",
+        "ResourceType": "AWS::ApiGateway::Authorizer",
+        "Timestamp": "2026-10-17T06:32:52.909000+00:00",
+        "ResourceStatus": "DELETE_COMPLETE",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "V1Proxy-34c0d177-20b8-4bb0-94e4-ac5e5c9a20b6",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "V1Proxy",
+        "PhysicalResourceId": "66fb1u",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:52.851000+00:00",
+        "ResourceStatus": "DELETE_COMPLETE",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "Health-7a9e0381-a10a-4f96-942e-6c65a8233509",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "Health",
+        "PhysicalResourceId": "250ro4",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:52.721000+00:00",
+        "ResourceStatus": "DELETE_COMPLETE",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AssetsProxy-6809c60a-9e2f-4fdf-973c-262cf593aac2",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "AssetsProxy",
+        "PhysicalResourceId": "vkmhus",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:52.714000+00:00",
+        "ResourceStatus": "DELETE_COMPLETE",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "CognitoAuthorizer-5acd51de-7daf-4949-8035-7355b00a410b",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "CognitoAuthorizer",
+        "PhysicalResourceId": "mdpzrp",
+        "ResourceType": "AWS::ApiGateway::Authorizer",
+        "Timestamp": "2026-10-17T06:32:52.233000+00:00",
+        "ResourceStatus": "DELETE_IN_PROGRESS",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "V1Proxy-2be8f92d-5b91-4a94-b053-334530071ab0",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "V1Proxy",
+        "PhysicalResourceId": "66fb1u",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:52.131000+00:00",
+        "ResourceStatus": "DELETE_IN_PROGRESS",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "Health-830b94fc-db2d-441f-9ade-0285dbd2dc34",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "Health",
+        "PhysicalResourceId": "250ro4",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:52.010000+00:00",
+        "ResourceStatus": "DELETE_IN_PROGRESS",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AuthConfigEndpoint-0a038382-2b60-43e1-abe5-6e6243816bbf",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "AuthConfigEndpoint",
+        "PhysicalResourceId": "eeglek",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:51.998000+00:00",
+        "ResourceStatus": "DELETE_IN_PROGRESS",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AssetsProxy-b6977d58-1ff0-4b01-9c51-6ec327219225",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "AssetsProxy",
+        "PhysicalResourceId": "vkmhus",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:51.940000+00:00",
+        "ResourceStatus": "DELETE_IN_PROGRESS",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "V1Post-7e5542cf-681b-4102-8698-91f315e6fbbb",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "V1Post",
+        "PhysicalResourceId": "qzgzopn8o4|66fb1u|POST",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:51.802000+00:00",
+        "ResourceStatus": "DELETE_COMPLETE",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "V1Options-ef1bb828-0581-43af-9550-3a48a442384f",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "V1Options",
+        "PhysicalResourceId": "qzgzopn8o4|66fb1u|OPTIONS",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:51.782000+00:00",
+        "ResourceStatus": "DELETE_COMPLETE",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "HealthGet-e2a9e717-8da3-402d-aa79-04b33edeb2e6",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "HealthGet",
+        "PhysicalResourceId": "qzgzopn8o4|250ro4|GET",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:51.748000+00:00",
+        "ResourceStatus": "DELETE_COMPLETE",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "V1Get-300c5d64-37a9-4a52-8d12-9e549a7d87b2",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "V1Get",
+        "PhysicalResourceId": "qzgzopn8o4|66fb1u|GET",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:51.731000+00:00",
+        "ResourceStatus": "DELETE_COMPLETE",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AuthConfigGet-36f6d27a-310c-47a5-a19c-799236faeb43",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "AuthConfigGet",
+        "PhysicalResourceId": "qzgzopn8o4|eeglek|GET",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:51.722000+00:00",
+        "ResourceStatus": "DELETE_COMPLETE",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "RootGet-175f45b5-00d8-4df4-a7b3-76e7ff5ded34",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "RootGet",
+        "PhysicalResourceId": "qzgzopn8o4|yrj7ojr41j|GET",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:51.711000+00:00",
+        "ResourceStatus": "DELETE_COMPLETE",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AssetsGet-f0861c9d-f186-4228-91aa-9f92b3cf8764",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "AssetsGet",
+        "PhysicalResourceId": "qzgzopn8o4|vkmhus|GET",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:51.684000+00:00",
+        "ResourceStatus": "DELETE_COMPLETE",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AssetsGet-c7587145-7805-4e02-b62d-fa30fb0542e3",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "AssetsGet",
+        "PhysicalResourceId": "qzgzopn8o4|vkmhus|GET",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:51.002000+00:00",
+        "ResourceStatus": "DELETE_IN_PROGRESS",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "RootGet-6e4f3a9c-ca91-4afb-baad-8bc7ac6d0082",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "RootGet",
+        "PhysicalResourceId": "qzgzopn8o4|yrj7ojr41j|GET",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:50.995000+00:00",
+        "ResourceStatus": "DELETE_IN_PROGRESS",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "HealthGet-4ebf502d-464d-4612-bb97-a787377293b4",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "HealthGet",
+        "PhysicalResourceId": "qzgzopn8o4|250ro4|GET",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:50.992000+00:00",
+        "ResourceStatus": "DELETE_IN_PROGRESS",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "V1Post-8ad99e08-572f-4ba7-bb50-3b3fa4059e73",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "V1Post",
+        "PhysicalResourceId": "qzgzopn8o4|66fb1u|POST",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:50.987000+00:00",
+        "ResourceStatus": "DELETE_IN_PROGRESS",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AuthConfigGet-10af9718-921b-4563-b680-ca35cef9ff50",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "AuthConfigGet",
+        "PhysicalResourceId": "qzgzopn8o4|eeglek|GET",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:50.984000+00:00",
+        "ResourceStatus": "DELETE_IN_PROGRESS",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "V1Options-37b3fe19-0732-454a-b198-0c9c0422c389",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "V1Options",
+        "PhysicalResourceId": "qzgzopn8o4|66fb1u|OPTIONS",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:50.979000+00:00",
+        "ResourceStatus": "DELETE_IN_PROGRESS",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "V1Get-a18bc00d-eced-47ed-94c8-6ba6932417b8",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "V1Get",
+        "PhysicalResourceId": "qzgzopn8o4|66fb1u|GET",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:50.960000+00:00",
+        "ResourceStatus": "DELETE_IN_PROGRESS",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "Deployment-b8b201e3-b4ae-4f0e-b118-859da85be28a",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "Deployment",
+        "PhysicalResourceId": "thrngq",
+        "ResourceType": "AWS::ApiGateway::Deployment",
+        "Timestamp": "2026-10-17T06:32:50.710000+00:00",
+        "ResourceStatus": "DELETE_COMPLETE",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AccessLogs-009caefd-3d22-4ca0-b7e7-a8327bc42b00",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "AccessLogs",
+        "PhysicalResourceId": "/aws/apigateway/fintrust-dev",
+        "ResourceType": "AWS::Logs::LogGroup",
+        "Timestamp": "2026-10-17T06:32:50.347000+00:00",
+        "ResourceStatus": "DELETE_FAILED",
+        "ResourceStatusReason": "Resource handler returned message: \"User: arn:aws:sts::966467878406:assumed-role/fintrust-deployer-role/botocore-session-1792217456 is not authorized to perform: logs:DeleteLogGroup on resource: arn:aws:logs:af-south-1:966467878406:log-group:/aws/apigateway/fintrust-dev because no identity-based policy allows the logs:DeleteLogGroup action (Service: CloudWatchLogs, Status Code: 400, Request ID: 64ec4ef4-c059-49ff-843f-66f9d8ec44c0) (SDK Attempt Count: 1)\" (RequestToken: 7bf656b3-049d-5ec7-1533-c61e25a3ccab, HandlerErrorCode: InvalidRequest)",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "Deployment-9000c277-6216-4e8e-9e56-614d478b38b9",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "Deployment",
+        "PhysicalResourceId": "thrngq",
+        "ResourceType": "AWS::ApiGateway::Deployment",
+        "Timestamp": "2026-10-17T06:32:49.891000+00:00",
+        "ResourceStatus": "DELETE_IN_PROGRESS",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AccessLogs-a5b23177-8236-43a9-bea6-8853e1b8e363",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "AccessLogs",
+        "PhysicalResourceId": "/aws/apigateway/fintrust-dev",
+        "ResourceType": "AWS::Logs::LogGroup",
+        "Timestamp": "2026-10-17T06:32:49.891000+00:00",
+        "ResourceStatus": "DELETE_IN_PROGRESS",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "Stage-abdda1db-f8f8-4753-9324-c33d5c167ce4",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "Stage",
+        "PhysicalResourceId": "dev",
+        "ResourceType": "AWS::ApiGateway::Stage",
+        "Timestamp": "2026-10-17T06:32:49.630000+00:00",
+        "ResourceStatus": "DELETE_COMPLETE",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "ApiLambdaPermission-4269a847-8d15-4cc2-ae86-bed880c87cf4",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "ApiLambdaPermission",
+        "PhysicalResourceId": "fintrust-api-dev-ApiLambdaPermission-vJQWRYrgWYhc",
+        "ResourceType": "AWS::Lambda::Permission",
+        "Timestamp": "2026-10-17T06:32:49.562000+00:00",
+        "ResourceStatus": "DELETE_COMPLETE",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "Stage-ecbbf74a-70c6-4b06-9dc1-c229e4c1bcf7",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "Stage",
+        "PhysicalResourceId": "dev",
+        "ResourceType": "AWS::ApiGateway::Stage",
+        "Timestamp": "2026-10-17T06:32:48.910000+00:00",
+        "ResourceStatus": "DELETE_IN_PROGRESS",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "ApiLambdaPermission-d60f8618-81c6-442e-ace0-f2c8cd1754d7",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "ApiLambdaPermission",
+        "PhysicalResourceId": "fintrust-api-dev-ApiLambdaPermission-vJQWRYrgWYhc",
+        "ResourceType": "AWS::Lambda::Permission",
+        "Timestamp": "2026-10-17T06:32:48.904000+00:00",
+        "ResourceStatus": "DELETE_IN_PROGRESS",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "91e80060-c9f4-11f1-8752-0effe183334f",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "fintrust-api-dev",
+        "PhysicalResourceId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "ResourceType": "AWS::CloudFormation::Stack",
+        "Timestamp": "2026-10-17T06:32:48.226000+00:00",
+        "ResourceStatus": "UPDATE_ROLLBACK_COMPLETE_CLEANUP_IN_PROGRESS",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "90fbcba0-c9f4-11f1-98d3-0a8ae006f2bf",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "b1006075-e7f1-4d2a-a19c-abf03a6f9d68",
+        "LogicalResourceId": "fintrust-api-dev",
+        "PhysicalResourceId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "ResourceType": "AWS::CloudFormation::Stack",
+        "Timestamp": "2026-10-17T06:32:46.655000+00:00",
+        "ResourceStatus": "UPDATE_ROLLBACK_IN_PROGRESS",
+        "ResourceStatusReason": "The following resource(s) failed to create: [Stage]. ",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "Stage-CREATE_FAILED-2026-10-17T06:32:46.323Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "Stage",
+        "PhysicalResourceId": "dev",
+        "ResourceType": "AWS::ApiGateway::Stage",
+        "Timestamp": "2026-10-17T06:32:46.323000+00:00",
+        "ResourceStatus": "CREATE_FAILED",
+        "ResourceStatusReason": "Resource handler returned message: \"Encountered a permissions error performing a tagging operation, please add required tag permissions. See https://repost.aws/knowledge-center/cloudformation-tagging-permission-error for how to resolve. Resource handler returned message: \"User: arn:aws:sts::966467878406:assumed-role/fintrust-deployer-role/botocore-session-1792217456 is not authorized to perform: apigateway:PUT on resource: arn:aws:apigateway:af-south-1::/tags/arn%3Aaws%3Aapigateway%3Aaf-south-1%3A%3A%2Frestapis%2Fqzgzopn8o4%2Fstages%2Fdev because no identity-based policy allows the apigateway:PUT action (Service: ApiGateway, Status Code: 403, Request ID: 98f591ea-e679-4f6b-af84-78c6abf3a21e) (SDK Attempt Count: 1)\"\" (RequestToken: ea659fdd-8922-e1a6-509e-1c281a5c4ba9, HandlerErrorCode: UnauthorizedTaggingOperation)",
+        "ResourceProperties": "{\"DeploymentId\":\"thrngq\",\"StageName\":\"dev\",\"RestApiId\":\"qzgzopn8o4\",\"MethodSettings\":[{\"ResourcePath\":\"/*\",\"DataTraceEnabled\":\"false\",\"ThrottlingBurstLimit\":\"20\",\"MetricsEnabled\":\"false\",\"HttpMethod\":\"*\",\"ThrottlingRateLimit\":\"10\"}],\"AccessLogSetting\":{\"Format\":\"{\\\"requestId\\\":\\\"$context.requestId\\\",\\\"status\\\":\\\"$context.status\\\",\\\"method\\\":\\\"$context.httpMethod\\\",\\\"resource\\\":\\\"$context.resourcePath\\\",\\\"latency\\\":\\\"$context.responseLatency\\\"}\",\"DestinationArn\":\"arn:aws:logs:af-south-1:966467878406:log-group:/aws/apigateway/fintrust-dev:*\"}}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "Stage-CREATE_IN_PROGRESS-2026-10-17T06:32:44.953Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "Stage",
+        "PhysicalResourceId": "dev",
+        "ResourceType": "AWS::ApiGateway::Stage",
+        "Timestamp": "2026-10-17T06:32:44.953000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"DeploymentId\":\"thrngq\",\"StageName\":\"dev\",\"RestApiId\":\"qzgzopn8o4\",\"MethodSettings\":[{\"ResourcePath\":\"/*\",\"DataTraceEnabled\":\"false\",\"ThrottlingBurstLimit\":\"20\",\"MetricsEnabled\":\"false\",\"HttpMethod\":\"*\",\"ThrottlingRateLimit\":\"10\"}],\"AccessLogSetting\":{\"Format\":\"{\\\"requestId\\\":\\\"$context.requestId\\\",\\\"status\\\":\\\"$context.status\\\",\\\"method\\\":\\\"$context.httpMethod\\\",\\\"resource\\\":\\\"$context.resourcePath\\\",\\\"latency\\\":\\\"$context.responseLatency\\\"}\",\"DestinationArn\":\"arn:aws:logs:af-south-1:966467878406:log-group:/aws/apigateway/fintrust-dev:*\"}}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "Stage-CREATE_IN_PROGRESS-2026-10-17T06:32:44.403Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "Stage",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::ApiGateway::Stage",
+        "Timestamp": "2026-10-17T06:32:44.403000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"DeploymentId\":\"thrngq\",\"StageName\":\"dev\",\"RestApiId\":\"qzgzopn8o4\",\"MethodSettings\":[{\"ResourcePath\":\"/*\",\"DataTraceEnabled\":\"false\",\"ThrottlingBurstLimit\":\"20\",\"MetricsEnabled\":\"false\",\"HttpMethod\":\"*\",\"ThrottlingRateLimit\":\"10\"}],\"AccessLogSetting\":{\"Format\":\"{\\\"requestId\\\":\\\"$context.requestId\\\",\\\"status\\\":\\\"$context.status\\\",\\\"method\\\":\\\"$context.httpMethod\\\",\\\"resource\\\":\\\"$context.resourcePath\\\",\\\"latency\\\":\\\"$context.responseLatency\\\"}\",\"DestinationArn\":\"arn:aws:logs:af-south-1:966467878406:log-group:/aws/apigateway/fintrust-dev:*\"}}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "Deployment-CREATE_COMPLETE-2026-10-17T06:32:43.944Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "Deployment",
+        "PhysicalResourceId": "thrngq",
+        "ResourceType": "AWS::ApiGateway::Deployment",
+        "Timestamp": "2026-10-17T06:32:43.944000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"RestApiId\":\"qzgzopn8o4\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "Deployment-CREATE_IN_PROGRESS-2026-10-17T06:32:43.521Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "Deployment",
+        "PhysicalResourceId": "thrngq",
+        "ResourceType": "AWS::ApiGateway::Deployment",
+        "Timestamp": "2026-10-17T06:32:43.521000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"RestApiId\":\"qzgzopn8o4\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "Deployment-CREATE_IN_PROGRESS-2026-10-17T06:32:42.471Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "Deployment",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::ApiGateway::Deployment",
+        "Timestamp": "2026-10-17T06:32:42.471000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"RestApiId\":\"qzgzopn8o4\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AuthConfigGet-CREATE_COMPLETE-2026-10-17T06:32:42.190Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "AuthConfigGet",
+        "PhysicalResourceId": "qzgzopn8o4|eeglek|GET",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:42.190000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"Integration\":{\"Type\":\"AWS_PROXY\",\"IntegrationHttpMethod\":\"POST\",\"Uri\":\"arn:aws:apigateway:af-south-1:lambda:path/2015-03-31/functions/arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev:dev/invocations\"},\"ResourceId\":\"eeglek\",\"RestApiId\":\"qzgzopn8o4\",\"AuthorizationType\":\"NONE\",\"HttpMethod\":\"GET\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "V1Options-CREATE_COMPLETE-2026-10-17T06:32:40.421Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "V1Options",
+        "PhysicalResourceId": "qzgzopn8o4|66fb1u|OPTIONS",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:40.421000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"Integration\":{\"Type\":\"AWS_PROXY\",\"IntegrationHttpMethod\":\"POST\",\"Uri\":\"arn:aws:apigateway:af-south-1:lambda:path/2015-03-31/functions/arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev:dev/invocations\"},\"ResourceId\":\"66fb1u\",\"RestApiId\":\"qzgzopn8o4\",\"AuthorizationType\":\"NONE\",\"HttpMethod\":\"OPTIONS\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "HealthGet-CREATE_COMPLETE-2026-10-17T06:32:40.226Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "HealthGet",
+        "PhysicalResourceId": "qzgzopn8o4|250ro4|GET",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:40.226000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"Integration\":{\"Type\":\"AWS_PROXY\",\"IntegrationHttpMethod\":\"POST\",\"Uri\":\"arn:aws:apigateway:af-south-1:lambda:path/2015-03-31/functions/arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev:dev/invocations\"},\"ResourceId\":\"250ro4\",\"RestApiId\":\"qzgzopn8o4\",\"AuthorizationType\":\"NONE\",\"HttpMethod\":\"GET\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AuthConfigGet-CREATE_IN_PROGRESS-2026-10-17T06:32:40.218Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "AuthConfigGet",
+        "PhysicalResourceId": "qzgzopn8o4|eeglek|GET",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:40.218000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"Integration\":{\"Type\":\"AWS_PROXY\",\"IntegrationHttpMethod\":\"POST\",\"Uri\":\"arn:aws:apigateway:af-south-1:lambda:path/2015-03-31/functions/arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev:dev/invocations\"},\"ResourceId\":\"eeglek\",\"RestApiId\":\"qzgzopn8o4\",\"AuthorizationType\":\"NONE\",\"HttpMethod\":\"GET\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AssetsGet-CREATE_COMPLETE-2026-10-17T06:32:40.128Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "AssetsGet",
+        "PhysicalResourceId": "qzgzopn8o4|vkmhus|GET",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:40.128000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"Integration\":{\"Type\":\"AWS_PROXY\",\"IntegrationHttpMethod\":\"POST\",\"Uri\":\"arn:aws:apigateway:af-south-1:lambda:path/2015-03-31/functions/arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev:dev/invocations\"},\"ResourceId\":\"vkmhus\",\"RestApiId\":\"qzgzopn8o4\",\"AuthorizationType\":\"NONE\",\"HttpMethod\":\"GET\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AccessLogs-CREATE_COMPLETE-2026-10-17T06:32:39.494Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "AccessLogs",
+        "PhysicalResourceId": "/aws/apigateway/fintrust-dev",
+        "ResourceType": "AWS::Logs::LogGroup",
+        "Timestamp": "2026-10-17T06:32:39.494000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"RetentionInDays\":\"30\",\"LogGroupName\":\"/aws/apigateway/fintrust-dev\",\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"}]}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AuthConfigGet-CREATE_IN_PROGRESS-2026-10-17T06:32:39.334Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "AuthConfigGet",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:39.334000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"Integration\":{\"Type\":\"AWS_PROXY\",\"IntegrationHttpMethod\":\"POST\",\"Uri\":\"arn:aws:apigateway:af-south-1:lambda:path/2015-03-31/functions/arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev:dev/invocations\"},\"ResourceId\":\"eeglek\",\"RestApiId\":\"qzgzopn8o4\",\"AuthorizationType\":\"NONE\",\"HttpMethod\":\"GET\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AuthConfigEndpoint-CREATE_COMPLETE-2026-10-17T06:32:39.059Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "AuthConfigEndpoint",
+        "PhysicalResourceId": "eeglek",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:39.059000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"ParentId\":\"50f1c5\",\"PathPart\":\"config\",\"RestApiId\":\"qzgzopn8o4\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AuthConfigEndpoint-CREATE_IN_PROGRESS-2026-10-17T06:32:38.529Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "AuthConfigEndpoint",
+        "PhysicalResourceId": "eeglek",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:38.529000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"ParentId\":\"50f1c5\",\"PathPart\":\"config\",\"RestApiId\":\"qzgzopn8o4\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AuthConfigEndpoint-CREATE_IN_PROGRESS-2026-10-17T06:32:37.768Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "AuthConfigEndpoint",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:37.768000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"ParentId\":\"50f1c5\",\"PathPart\":\"config\",\"RestApiId\":\"qzgzopn8o4\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AuthConfig-CREATE_COMPLETE-2026-10-17T06:32:37.475Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "AuthConfig",
+        "PhysicalResourceId": "50f1c5",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:37.475000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"ParentId\":\"bi0htg\",\"PathPart\":\"auth\",\"RestApiId\":\"qzgzopn8o4\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AuthConfig-CREATE_IN_PROGRESS-2026-10-17T06:32:36.806Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "AuthConfig",
+        "PhysicalResourceId": "50f1c5",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:36.806000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"ParentId\":\"bi0htg\",\"PathPart\":\"auth\",\"RestApiId\":\"qzgzopn8o4\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "V1Post-CREATE_COMPLETE-2026-10-17T06:32:36.250Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "V1Post",
+        "PhysicalResourceId": "qzgzopn8o4|66fb1u|POST",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:36.250000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"Integration\":{\"Type\":\"AWS_PROXY\",\"IntegrationHttpMethod\":\"POST\",\"Uri\":\"arn:aws:apigateway:af-south-1:lambda:path/2015-03-31/functions/arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev:dev/invocations\"},\"ResourceId\":\"66fb1u\",\"AuthorizerId\":\"mdpzrp\",\"RestApiId\":\"qzgzopn8o4\",\"AuthorizationScopes\":[\"openid\"],\"AuthorizationType\":\"COGNITO_USER_POOLS\",\"HttpMethod\":\"POST\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "V1Get-CREATE_COMPLETE-2026-10-17T06:32:36.249Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "V1Get",
+        "PhysicalResourceId": "qzgzopn8o4|66fb1u|GET",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:36.249000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"Integration\":{\"Type\":\"AWS_PROXY\",\"IntegrationHttpMethod\":\"POST\",\"Uri\":\"arn:aws:apigateway:af-south-1:lambda:path/2015-03-31/functions/arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev:dev/invocations\"},\"ResourceId\":\"66fb1u\",\"AuthorizerId\":\"mdpzrp\",\"RestApiId\":\"qzgzopn8o4\",\"AuthorizationScopes\":[\"openid\"],\"AuthorizationType\":\"COGNITO_USER_POOLS\",\"HttpMethod\":\"GET\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "V1Post-CREATE_IN_PROGRESS-2026-10-17T06:32:34.484Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "V1Post",
+        "PhysicalResourceId": "qzgzopn8o4|66fb1u|POST",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:34.484000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"Integration\":{\"Type\":\"AWS_PROXY\",\"IntegrationHttpMethod\":\"POST\",\"Uri\":\"arn:aws:apigateway:af-south-1:lambda:path/2015-03-31/functions/arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev:dev/invocations\"},\"ResourceId\":\"66fb1u\",\"AuthorizerId\":\"mdpzrp\",\"RestApiId\":\"qzgzopn8o4\",\"AuthorizationScopes\":[\"openid\"],\"AuthorizationType\":\"COGNITO_USER_POOLS\",\"HttpMethod\":\"POST\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "V1Get-CREATE_IN_PROGRESS-2026-10-17T06:32:34.420Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "V1Get",
+        "PhysicalResourceId": "qzgzopn8o4|66fb1u|GET",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:34.420000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"Integration\":{\"Type\":\"AWS_PROXY\",\"IntegrationHttpMethod\":\"POST\",\"Uri\":\"arn:aws:apigateway:af-south-1:lambda:path/2015-03-31/functions/arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev:dev/invocations\"},\"ResourceId\":\"66fb1u\",\"AuthorizerId\":\"mdpzrp\",\"RestApiId\":\"qzgzopn8o4\",\"AuthorizationScopes\":[\"openid\"],\"AuthorizationType\":\"COGNITO_USER_POOLS\",\"HttpMethod\":\"GET\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "V1Options-CREATE_IN_PROGRESS-2026-10-17T06:32:34.328Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "V1Options",
+        "PhysicalResourceId": "qzgzopn8o4|66fb1u|OPTIONS",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:34.328000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"Integration\":{\"Type\":\"AWS_PROXY\",\"IntegrationHttpMethod\":\"POST\",\"Uri\":\"arn:aws:apigateway:af-south-1:lambda:path/2015-03-31/functions/arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev:dev/invocations\"},\"ResourceId\":\"66fb1u\",\"RestApiId\":\"qzgzopn8o4\",\"AuthorizationType\":\"NONE\",\"HttpMethod\":\"OPTIONS\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "HealthGet-CREATE_IN_PROGRESS-2026-10-17T06:32:34.281Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "HealthGet",
+        "PhysicalResourceId": "qzgzopn8o4|250ro4|GET",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:34.281000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"Integration\":{\"Type\":\"AWS_PROXY\",\"IntegrationHttpMethod\":\"POST\",\"Uri\":\"arn:aws:apigateway:af-south-1:lambda:path/2015-03-31/functions/arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev:dev/invocations\"},\"ResourceId\":\"250ro4\",\"RestApiId\":\"qzgzopn8o4\",\"AuthorizationType\":\"NONE\",\"HttpMethod\":\"GET\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AssetsGet-CREATE_IN_PROGRESS-2026-10-17T06:32:34.212Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "AssetsGet",
+        "PhysicalResourceId": "qzgzopn8o4|vkmhus|GET",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:34.212000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"Integration\":{\"Type\":\"AWS_PROXY\",\"IntegrationHttpMethod\":\"POST\",\"Uri\":\"arn:aws:apigateway:af-south-1:lambda:path/2015-03-31/functions/arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev:dev/invocations\"},\"ResourceId\":\"vkmhus\",\"RestApiId\":\"qzgzopn8o4\",\"AuthorizationType\":\"NONE\",\"HttpMethod\":\"GET\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "V1Post-CREATE_IN_PROGRESS-2026-10-17T06:32:33.729Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "V1Post",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:33.729000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"Integration\":{\"Type\":\"AWS_PROXY\",\"IntegrationHttpMethod\":\"POST\",\"Uri\":\"arn:aws:apigateway:af-south-1:lambda:path/2015-03-31/functions/arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev:dev/invocations\"},\"ResourceId\":\"66fb1u\",\"AuthorizerId\":\"mdpzrp\",\"RestApiId\":\"qzgzopn8o4\",\"AuthorizationScopes\":[\"openid\"],\"AuthorizationType\":\"COGNITO_USER_POOLS\",\"HttpMethod\":\"POST\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "V1Get-CREATE_IN_PROGRESS-2026-10-17T06:32:33.722Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "V1Get",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:33.722000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"Integration\":{\"Type\":\"AWS_PROXY\",\"IntegrationHttpMethod\":\"POST\",\"Uri\":\"arn:aws:apigateway:af-south-1:lambda:path/2015-03-31/functions/arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev:dev/invocations\"},\"ResourceId\":\"66fb1u\",\"AuthorizerId\":\"mdpzrp\",\"RestApiId\":\"qzgzopn8o4\",\"AuthorizationScopes\":[\"openid\"],\"AuthorizationType\":\"COGNITO_USER_POOLS\",\"HttpMethod\":\"GET\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "V1Options-CREATE_IN_PROGRESS-2026-10-17T06:32:33.712Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "V1Options",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:33.712000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"Integration\":{\"Type\":\"AWS_PROXY\",\"IntegrationHttpMethod\":\"POST\",\"Uri\":\"arn:aws:apigateway:af-south-1:lambda:path/2015-03-31/functions/arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev:dev/invocations\"},\"ResourceId\":\"66fb1u\",\"RestApiId\":\"qzgzopn8o4\",\"AuthorizationType\":\"NONE\",\"HttpMethod\":\"OPTIONS\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "HealthGet-CREATE_IN_PROGRESS-2026-10-17T06:32:33.549Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "HealthGet",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:33.549000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"Integration\":{\"Type\":\"AWS_PROXY\",\"IntegrationHttpMethod\":\"POST\",\"Uri\":\"arn:aws:apigateway:af-south-1:lambda:path/2015-03-31/functions/arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev:dev/invocations\"},\"ResourceId\":\"250ro4\",\"RestApiId\":\"qzgzopn8o4\",\"AuthorizationType\":\"NONE\",\"HttpMethod\":\"GET\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AssetsGet-CREATE_IN_PROGRESS-2026-10-17T06:32:33.537Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "AssetsGet",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:33.537000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"Integration\":{\"Type\":\"AWS_PROXY\",\"IntegrationHttpMethod\":\"POST\",\"Uri\":\"arn:aws:apigateway:af-south-1:lambda:path/2015-03-31/functions/arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev:dev/invocations\"},\"ResourceId\":\"vkmhus\",\"RestApiId\":\"qzgzopn8o4\",\"AuthorizationType\":\"NONE\",\"HttpMethod\":\"GET\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "V1Proxy-CREATE_COMPLETE-2026-10-17T06:32:33.436Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "V1Proxy",
+        "PhysicalResourceId": "66fb1u",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:33.436000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"ParentId\":\"bi0htg\",\"PathPart\":\"{proxy+}\",\"RestApiId\":\"qzgzopn8o4\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "Health-CREATE_COMPLETE-2026-10-17T06:32:33.255Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "Health",
+        "PhysicalResourceId": "250ro4",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:33.255000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"ParentId\":\"bi0htg\",\"PathPart\":\"health\",\"RestApiId\":\"qzgzopn8o4\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AssetsProxy-CREATE_COMPLETE-2026-10-17T06:32:33.240Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "AssetsProxy",
+        "PhysicalResourceId": "vkmhus",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:33.240000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"ParentId\":\"vfc4sw\",\"PathPart\":\"{proxy+}\",\"RestApiId\":\"qzgzopn8o4\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "V1Proxy-CREATE_IN_PROGRESS-2026-10-17T06:32:32.975Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "V1Proxy",
+        "PhysicalResourceId": "66fb1u",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:32.975000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"ParentId\":\"bi0htg\",\"PathPart\":\"{proxy+}\",\"RestApiId\":\"qzgzopn8o4\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "RootGet-CREATE_COMPLETE-2026-10-17T06:32:32.871Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "RootGet",
+        "PhysicalResourceId": "qzgzopn8o4|yrj7ojr41j|GET",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:32.871000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"Integration\":{\"Type\":\"AWS_PROXY\",\"IntegrationHttpMethod\":\"POST\",\"Uri\":\"arn:aws:apigateway:af-south-1:lambda:path/2015-03-31/functions/arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev:dev/invocations\"},\"ResourceId\":\"yrj7ojr41j\",\"RestApiId\":\"qzgzopn8o4\",\"AuthorizationType\":\"NONE\",\"HttpMethod\":\"GET\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "Health-CREATE_IN_PROGRESS-2026-10-17T06:32:32.840Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "Health",
+        "PhysicalResourceId": "250ro4",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:32.840000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"ParentId\":\"bi0htg\",\"PathPart\":\"health\",\"RestApiId\":\"qzgzopn8o4\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AssetsProxy-CREATE_IN_PROGRESS-2026-10-17T06:32:32.822Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "AssetsProxy",
+        "PhysicalResourceId": "vkmhus",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:32.822000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"ParentId\":\"vfc4sw\",\"PathPart\":\"{proxy+}\",\"RestApiId\":\"qzgzopn8o4\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "Health-CREATE_IN_PROGRESS-2026-10-17T06:32:32.197Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "Health",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:32.197000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"ParentId\":\"bi0htg\",\"PathPart\":\"health\",\"RestApiId\":\"qzgzopn8o4\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AuthConfig-CREATE_IN_PROGRESS-2026-10-17T06:32:32.190Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "AuthConfig",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:32.190000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"ParentId\":\"bi0htg\",\"PathPart\":\"auth\",\"RestApiId\":\"qzgzopn8o4\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "V1Proxy-CREATE_IN_PROGRESS-2026-10-17T06:32:32.182Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "V1Proxy",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:32.182000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"ParentId\":\"bi0htg\",\"PathPart\":\"{proxy+}\",\"RestApiId\":\"qzgzopn8o4\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AssetsProxy-CREATE_IN_PROGRESS-2026-10-17T06:32:32.111Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "AssetsProxy",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:32.111000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"ParentId\":\"vfc4sw\",\"PathPart\":\"{proxy+}\",\"RestApiId\":\"qzgzopn8o4\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "V1-CREATE_COMPLETE-2026-10-17T06:32:31.910Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "V1",
+        "PhysicalResourceId": "bi0htg",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:31.910000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"ParentId\":\"yrj7ojr41j\",\"PathPart\":\"v1\",\"RestApiId\":\"qzgzopn8o4\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "Assets-CREATE_COMPLETE-2026-10-17T06:32:31.768Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "Assets",
+        "PhysicalResourceId": "vfc4sw",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:31.768000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"ParentId\":\"yrj7ojr41j\",\"PathPart\":\"assets\",\"RestApiId\":\"qzgzopn8o4\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "V1-CREATE_IN_PROGRESS-2026-10-17T06:32:31.469Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "V1",
+        "PhysicalResourceId": "bi0htg",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:31.469000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"ParentId\":\"yrj7ojr41j\",\"PathPart\":\"v1\",\"RestApiId\":\"qzgzopn8o4\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "CognitoAuthorizer-CREATE_COMPLETE-2026-10-17T06:32:31.408Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "CognitoAuthorizer",
+        "PhysicalResourceId": "mdpzrp",
+        "ResourceType": "AWS::ApiGateway::Authorizer",
+        "Timestamp": "2026-10-17T06:32:31.408000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"ProviderARNs\":[\"arn:aws:cognito-idp:af-south-1:966467878406:userpool/af-south-1_NnmfBS0y9\"],\"Type\":\"COGNITO_USER_POOLS\",\"RestApiId\":\"qzgzopn8o4\",\"IdentitySource\":\"method.request.header.Authorization\",\"Name\":\"fintrust-dev-cognito\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "Assets-CREATE_IN_PROGRESS-2026-10-17T06:32:31.348Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "Assets",
+        "PhysicalResourceId": "vfc4sw",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:31.348000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"ParentId\":\"yrj7ojr41j\",\"PathPart\":\"assets\",\"RestApiId\":\"qzgzopn8o4\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "ApiLambdaPermission-CREATE_COMPLETE-2026-10-17T06:32:31.336Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "ApiLambdaPermission",
+        "PhysicalResourceId": "fintrust-api-dev-ApiLambdaPermission-vJQWRYrgWYhc",
+        "ResourceType": "AWS::Lambda::Permission",
+        "Timestamp": "2026-10-17T06:32:31.336000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"FunctionName\":\"fintrust-api-dev:dev\",\"Action\":\"lambda:InvokeFunction\",\"SourceArn\":\"arn:aws:execute-api:af-south-1:966467878406:qzgzopn8o4/dev/*\",\"SourceAccount\":\"966467878406\",\"Principal\":\"apigateway.amazonaws.com\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "RootGet-CREATE_IN_PROGRESS-2026-10-17T06:32:31.183Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "RootGet",
+        "PhysicalResourceId": "qzgzopn8o4|yrj7ojr41j|GET",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:31.183000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"Integration\":{\"Type\":\"AWS_PROXY\",\"IntegrationHttpMethod\":\"POST\",\"Uri\":\"arn:aws:apigateway:af-south-1:lambda:path/2015-03-31/functions/arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev:dev/invocations\"},\"ResourceId\":\"yrj7ojr41j\",\"RestApiId\":\"qzgzopn8o4\",\"AuthorizationType\":\"NONE\",\"HttpMethod\":\"GET\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "CognitoAuthorizer-CREATE_IN_PROGRESS-2026-10-17T06:32:31.011Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "CognitoAuthorizer",
+        "PhysicalResourceId": "mdpzrp",
+        "ResourceType": "AWS::ApiGateway::Authorizer",
+        "Timestamp": "2026-10-17T06:32:31.011000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"ProviderARNs\":[\"arn:aws:cognito-idp:af-south-1:966467878406:userpool/af-south-1_NnmfBS0y9\"],\"Type\":\"COGNITO_USER_POOLS\",\"RestApiId\":\"qzgzopn8o4\",\"IdentitySource\":\"method.request.header.Authorization\",\"Name\":\"fintrust-dev-cognito\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "ApiLambdaPermission-CREATE_IN_PROGRESS-2026-10-17T06:32:30.949Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "ApiLambdaPermission",
+        "PhysicalResourceId": "fintrust-api-dev-ApiLambdaPermission-vJQWRYrgWYhc",
+        "ResourceType": "AWS::Lambda::Permission",
+        "Timestamp": "2026-10-17T06:32:30.949000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"FunctionName\":\"fintrust-api-dev:dev\",\"Action\":\"lambda:InvokeFunction\",\"SourceArn\":\"arn:aws:execute-api:af-south-1:966467878406:qzgzopn8o4/dev/*\",\"SourceAccount\":\"966467878406\",\"Principal\":\"apigateway.amazonaws.com\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AccessLogs-CREATE_IN_PROGRESS-2026-10-17T06:32:30.851Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "AccessLogs",
+        "PhysicalResourceId": "/aws/apigateway/fintrust-dev",
+        "ResourceType": "AWS::Logs::LogGroup",
+        "Timestamp": "2026-10-17T06:32:30.851000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"RetentionInDays\":\"30\",\"LogGroupName\":\"/aws/apigateway/fintrust-dev\",\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"}]}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "V1-CREATE_IN_PROGRESS-2026-10-17T06:32:30.694Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "V1",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:30.694000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"ParentId\":\"yrj7ojr41j\",\"PathPart\":\"v1\",\"RestApiId\":\"qzgzopn8o4\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "Assets-CREATE_IN_PROGRESS-2026-10-17T06:32:30.577Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "Assets",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::ApiGateway::Resource",
+        "Timestamp": "2026-10-17T06:32:30.577000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"ParentId\":\"yrj7ojr41j\",\"PathPart\":\"assets\",\"RestApiId\":\"qzgzopn8o4\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "RootGet-CREATE_IN_PROGRESS-2026-10-17T06:32:30.543Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "RootGet",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::ApiGateway::Method",
+        "Timestamp": "2026-10-17T06:32:30.543000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"Integration\":{\"Type\":\"AWS_PROXY\",\"IntegrationHttpMethod\":\"POST\",\"Uri\":\"arn:aws:apigateway:af-south-1:lambda:path/2015-03-31/functions/arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev:dev/invocations\"},\"ResourceId\":\"yrj7ojr41j\",\"RestApiId\":\"qzgzopn8o4\",\"AuthorizationType\":\"NONE\",\"HttpMethod\":\"GET\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "CognitoAuthorizer-CREATE_IN_PROGRESS-2026-10-17T06:32:30.299Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "CognitoAuthorizer",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::ApiGateway::Authorizer",
+        "Timestamp": "2026-10-17T06:32:30.299000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"ProviderARNs\":[\"arn:aws:cognito-idp:af-south-1:966467878406:userpool/af-south-1_NnmfBS0y9\"],\"Type\":\"COGNITO_USER_POOLS\",\"RestApiId\":\"qzgzopn8o4\",\"IdentitySource\":\"method.request.header.Authorization\",\"Name\":\"fintrust-dev-cognito\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "ApiLambdaPermission-CREATE_IN_PROGRESS-2026-10-17T06:32:30.284Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "ApiLambdaPermission",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::Lambda::Permission",
+        "Timestamp": "2026-10-17T06:32:30.284000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"FunctionName\":\"fintrust-api-dev:dev\",\"Action\":\"lambda:InvokeFunction\",\"SourceArn\":\"arn:aws:execute-api:af-south-1:966467878406:qzgzopn8o4/dev/*\",\"SourceAccount\":\"966467878406\",\"Principal\":\"apigateway.amazonaws.com\"}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "AccessLogs-CREATE_IN_PROGRESS-2026-10-17T06:32:30.282Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "AccessLogs",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::Logs::LogGroup",
+        "Timestamp": "2026-10-17T06:32:30.282000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"RetentionInDays\":\"30\",\"LogGroupName\":\"/aws/apigateway/fintrust-dev\",\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"}]}",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "86239c80-c9f4-11f1-ac82-0a523b7af27d",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "82cef82f-e1bd-4988-b450-5f9b3c17a341",
+        "LogicalResourceId": "fintrust-api-dev",
+        "PhysicalResourceId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "ResourceType": "AWS::CloudFormation::Stack",
+        "Timestamp": "2026-10-17T06:32:28.470000+00:00",
+        "ResourceStatus": "UPDATE_IN_PROGRESS",
+        "ResourceStatusReason": "User Initiated",
+        "ClientRequestToken": "2a877df4-db61-433c-b185-0bd903c1575f"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "073dbe00-c98b-11f1-929f-0effe3419a1d",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "2be08739-b097-4187-90d2-c4e74cbd9e7c",
+        "LogicalResourceId": "fintrust-api-dev",
+        "PhysicalResourceId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "ResourceType": "AWS::CloudFormation::Stack",
+        "Timestamp": "2026-10-16T17:57:18.419000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ClientRequestToken": "27682244-dc2d-4045-8547-19b2c00da0d4"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "Api-CREATE_COMPLETE-2026-10-16T17:57:17.744Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "2be08739-b097-4187-90d2-c4e74cbd9e7c",
+        "LogicalResourceId": "Api",
+        "PhysicalResourceId": "qzgzopn8o4",
+        "ResourceType": "AWS::ApiGateway::RestApi",
+        "Timestamp": "2026-10-16T17:57:17.744000+00:00",
+        "ResourceStatus": "CREATE_COMPLETE",
+        "ResourceProperties": "{\"EndpointConfiguration\":{\"Types\":[\"REGIONAL\"]},\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"}],\"Name\":\"fintrust-dev\"}",
+        "ClientRequestToken": "27682244-dc2d-4045-8547-19b2c00da0d4"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "Api-CREATE_IN_PROGRESS-2026-10-16T17:57:17.183Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "2be08739-b097-4187-90d2-c4e74cbd9e7c",
+        "LogicalResourceId": "Api",
+        "PhysicalResourceId": "qzgzopn8o4",
+        "ResourceType": "AWS::ApiGateway::RestApi",
+        "Timestamp": "2026-10-16T17:57:17.183000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "Resource creation Initiated",
+        "ResourceProperties": "{\"EndpointConfiguration\":{\"Types\":[\"REGIONAL\"]},\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"}],\"Name\":\"fintrust-dev\"}",
+        "ClientRequestToken": "27682244-dc2d-4045-8547-19b2c00da0d4"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "Api-CREATE_IN_PROGRESS-2026-10-16T17:57:14.900Z",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "2be08739-b097-4187-90d2-c4e74cbd9e7c",
+        "LogicalResourceId": "Api",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::ApiGateway::RestApi",
+        "Timestamp": "2026-10-16T17:57:14.900000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"EndpointConfiguration\":{\"Types\":[\"REGIONAL\"]},\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"}],\"Name\":\"fintrust-dev\"}",
+        "ClientRequestToken": "27682244-dc2d-4045-8547-19b2c00da0d4"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "043e87c0-c98b-11f1-8528-0a8f44d9e531",
+        "StackName": "fintrust-api-dev",
+        "OperationId": "2be08739-b097-4187-90d2-c4e74cbd9e7c",
+        "LogicalResourceId": "fintrust-api-dev",
+        "PhysicalResourceId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "ResourceType": "AWS::CloudFormation::Stack",
+        "Timestamp": "2026-10-16T17:57:13.384000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "User Initiated",
+        "ClientRequestToken": "27682244-dc2d-4045-8547-19b2c00da0d4"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "EventId": "016501f0-c98b-11f1-b013-0efff21bb865",
+        "StackName": "fintrust-api-dev",
+        "LogicalResourceId": "fintrust-api-dev",
+        "PhysicalResourceId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-api-dev/01655010-c98b-11f1-b013-0efff21bb865",
+        "ResourceType": "AWS::CloudFormation::Stack",
+        "Timestamp": "2026-10-16T17:57:08.676000+00:00",
+        "ResourceStatus": "REVIEW_IN_PROGRESS",
+        "ResourceStatusReason": "User Initiated"
+      }
+    ]
+  }
+}

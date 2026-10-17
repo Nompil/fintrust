@@ -239,3 +239,33 @@ Receipt: `infrastructure/service_preparation/deployment_iam/evidence/api-update-
 Execution would create the public dev stage while the API function remains at
 zero concurrency, so it would not yet provide a working application. External
 API requests/logging can incur usage charges; no request was sent in this review.
+
+## API configuration deployed and verified - 17 October 2026
+
+The owner authorized the reviewed public-dev-stage configuration with functions
+disabled. `fintrust-api-dev` reached UPDATE_COMPLETE, preserving API ID
+`qzgzopn8o4` and the exact registered callback. Seven methods, Cognito authorizer,
+alias-qualified integration and exact API/stage invoke permission were read back.
+Access logs have 30-day retention; detailed metrics, tracing, caching and payload
+tracing remain disabled. No test traffic, application invocation, SQL or email
+was performed. Five functions remain at zero, both mappings disabled, monthly
+rule disabled and raw S3 notification absent.
+
+The first attempt failed on the encoded dev-stage tag ARN; normal rollback also
+needed permission to remove its new empty API log group. The corrected policy
+adds only that exact stage tag resource, still through CloudFormation. A separate
+exact-log cleanup grant had a 30-minute expiry and was detached/deleted afterward;
+the original attachment set was verified. CloudFormation completed normal
+rollback with no resource skips and removed the empty group itself. Existing
+application/data resources were preserved. Failure/recovery receipts are retained.
+
+Final receipt: `infrastructure/service_preparation/deployment_iam/evidence/api-configuration-live.json`.
+Configured does not mean operational: private RDS access/migrations/grants,
+approved user/account scopes, capacity and cloud E2E remain gates. External API
+requests and logs can incur usage charges even while Lambda is throttled.
+
+Fresh metadata after API verification still reports Lambda total/unreserved
+capacity 10 and five deployed functions. RDS is available, private, IAM-auth
+enabled, deletion-protected, with one-day backups and latest restorable time
+`2026-10-17T06:42:24Z`. This proves no schema, grant or SQL outcome. Receipt:
+`infrastructure/service_preparation/deployment_iam/evidence/remaining-live-gates-20261017.json`.

@@ -63,12 +63,42 @@ def verify():
     assert scope['Action'] in ('dynamodb:GetItem', ['dynamodb:GetItem'])
     assert scope['Resource'] == 'arn:aws:dynamodb:af-south-1:966467878406:table/imbokodo-dev-user-account-scopes'
     assert scope['Condition']['StringEquals']['aws:PrincipalArn'] == 'arn:aws:iam::966467878406:role/fintrust-api-dev'
+    configuration = {}
+    app_path = prep / 'shared_manual/application-disabled-live.json'
+    if app_path.exists():
+        app = read(app_path)
+        assert app['status'] == 'CREATE_COMPLETE_FUNCTIONS_ZERO_CONSUMERS_AND_REPORTS_DISABLED'
+        assert digest(prep / 'shared_manual/application-functions-shared-manual.json') == app['template_sha256']
+        assert app['stack_read_back']['StackStatus'] == 'CREATE_COMPLETE'
+        assert len(app['functions']) == 4 and len(app['mappings']) == 2
+        assert all(f['concurrency']['ReservedConcurrentExecutions'] == 0 for f in app['functions'].values())
+        assert all(m['State'] == 'Disabled' for m in app['mappings'])
+        assert app['monthly_rule']['State'] == 'DISABLED' and not app['raw_notifications_after']
+        configuration['application'] = 'DEPLOYED_DISABLED_RECEIPT_BOUND'
+    api_path = ROOT / 'evidence/api-configuration-live.json'
+    if api_path.exists():
+        configured = read(api_path)
+        assert configured['status'] == 'UPDATE_COMPLETE_API_CONFIGURED_LAMBDA_ZERO_NO_TEST_TRAFFIC'
+        assert digest(prep / 'templates/api.json') == configured['template_sha256']
+        assert configured['outputs']['ApiId'] == manifest['api_id']
+        assert configured['outputs']['CallbackUrl'] == api['outputs']['CallbackUrl']
+        assert configured['stack_read_back']['StackStatus'] == 'UPDATE_COMPLETE'
+        assert configured['access_log_group']['retentionInDays'] == 30
+        assert len(configured['methods']) == 7
+        assert all(c['ReservedConcurrentExecutions'] == 0 for c in configured['concurrency'].values())
+        assert all(m['State'] == 'Disabled' for m in configured['mappings'])
+        assert configured['requests_sent'] == configured['application_invocations'] == configured['emails_sent'] == 0
+        assert not configured['sql_executed'] and not configured['processing_enabled']
+        cleanup = read(ROOT / 'evidence/api-empty-log-cleanup-permission.json')
+        assert cleanup['cleanup_verified'] and not cleanup['attached'] and not cleanup['created']
+        configuration['api'] = 'CONFIGURED_LAMBDA_ZERO_RECEIPT_BOUND'
     return {'source_and_installed_policy_bindings': 'PASS', 'canonical_lf_files': len(manifest['files']),
             'latest_template_aws_validation': 'FOUR_TEMPLATES_ACCEPTED',
             'api_id_bound': manifest['api_id'],
             'empty_cognito_configuration': 'READ_BACK',
             'gateway_scope_read_policy': 'UPDATED_IN_PLACE_READ_BACK',
-            'live_log_read': 'RESOURCE_NOT_FOUND_FOR_UNCREATED_GROUP; DELIVERY_UNTESTED',
+            'historical_log_probe': 'RESOURCE_NOT_FOUND_BEFORE_DEPLOYMENT; DELIVERY_UNTESTED',
+            'latest_configuration_receipts': configuration,
             'deployment_ready': False}
 
 

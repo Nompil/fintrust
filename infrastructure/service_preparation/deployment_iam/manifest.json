@@ -24,8 +24,8 @@
       "sha256": "acdb9006d96eb59c27aa59e7e78b0f076b9b51c330564aa5c615c4f4e27d1d73"
     },
     "FinTrustApiDeployment.json": {
-      "nonwhitespace_characters": 1153,
-      "sha256": "fd3561c173179731a69d6894ffa566608a8d03b8d41e007f2e4de6dbede9461d"
+      "nonwhitespace_characters": 1393,
+      "sha256": "6df180de4e28d87a2ffc0d84c8c5bf64301ce13dfbbc56b3ed44684a88cb3673"
     },
     "FinTrustMonitoringDeployment.json": {
       "nonwhitespace_characters": 5801,

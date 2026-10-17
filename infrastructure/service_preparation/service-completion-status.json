@@ -14,15 +14,15 @@
       "remaining": "Approved user enrollment, MFA setup, account scopes and browser sign-in test"
     },
     "api_gateway": {
-      "configuration": "NON_SERVING_API_IDENTITY_AND_LOGGING_ROLE_READ_BACK",
-      "remaining": "Real API function is deployed; review existing API stack UPDATE for authorizer, methods and stage, then controlled authorization/logging tests"
+      "configuration": "UPDATE_COMPLETE_DEV_STAGE_ROUTES_COGNITO_AUTHORIZER_ALIAS_PERMISSION_LOG_GROUP_READ_BACK_LAMBDA_ZERO",
+      "remaining": "Database/runtime capacity gates, approved user/account-scope enrollment, authorization/browser checks and actual log delivery"
     },
     "eventbridge": {
       "configuration": "REPORT_RULE_TARGET_RETRIES_AND_DLQ_DEPLOYED_RULE_DISABLED",
       "remaining": "Validate one approved report before any schedule activation"
     },
     "cloudwatch": {
-      "configuration": "FOUR_APPLICATION_LOG_GROUPS_DEPLOYED_RETENTION_14_DAYS_API_LOGGING_ROLE_READY",
+      "configuration": "FOUR_FUNCTION_LOG_GROUPS_RETENTION_14_DAYS_API_ACCESS_LOG_GROUP_RETENTION_30_DAYS",
       "remaining": "Actual function/API log delivery untested; paid alarms remain undeployed"
     },
     "lambda": {
@@ -51,14 +51,16 @@
   ],
   "no_new_nat_interface_endpoint_or_paid_support_authorized": true,
   "application_activation_performed": false,
-  "updated_at": "2026-10-17T06:23:14.309824+00:00",
+  "updated_at": "2026-10-17T06:42:44.216264+00:00",
   "latest_safety_verification": {
-    "checked_at": "2026-10-16T21:41:53.287968+00:00",
-    "status": "PASS_INACTIVE_CONFIGURATION",
-    "evidence": "deployment_iam/evidence/post-configuration-safety-check.json",
-    "lambda_total_concurrency": 10,
-    "support_correspondence": "NOT_RECHECKED_CONSOLE_SIGN_IN_REQUIRED",
-    "new_aws_changes": false
+    "checked_at": "2026-10-17T06:42:44.216264+00:00",
+    "status": "API_CONFIGURED_FUNCTIONS_ZERO_CONSUMERS_AND_REPORTS_DISABLED",
+    "evidence": "infrastructure/service_preparation/deployment_iam/evidence/api-configuration-live.json",
+    "test_requests_sent": 0,
+    "application_invocations": 0,
+    "sql_executed": false,
+    "support_correspondence": "NOT_RECHECKED",
+    "temporary_cleanup_permission_removed": true
   },
   "remaining_release_checklist": "REMAINING_RELEASE_STEPS.md",
   "shared_capacity_alternative": {
@@ -94,5 +96,19 @@
     },
     "evidence": "infrastructure/service_preparation/shared_manual/application-disabled-live.json",
     "runtime_verified": false
+  },
+  "api_configuration": {
+    "api_id": "qzgzopn8o4",
+    "stack_status": "UPDATE_COMPLETE",
+    "callback_url": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/",
+    "serving_stage_created": true,
+    "status": "UPDATE_COMPLETE_API_CONFIGURED_LAMBDA_ZERO_NO_TEST_TRAFFIC",
+    "runtime_available": false,
+    "evidence": "infrastructure/service_preparation/deployment_iam/evidence/api-configuration-live.json",
+    "outputs": {
+      "CallbackUrl": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/",
+      "BaseUrl": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev",
+      "ApiId": "qzgzopn8o4"
+    }
   }
 }

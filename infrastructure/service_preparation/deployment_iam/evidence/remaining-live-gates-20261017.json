@@ -1,0 +1,29 @@
+{
+  "checked_at": "2026-10-17T06:45:13.773489+00:00",
+  "sql_executed": false,
+  "secret_retrieved": false,
+  "resources_created": false,
+  "lambda_account_settings": {
+    "AccountLimit": {
+      "TotalCodeSize": 322122547200,
+      "CodeSizeUnzipped": 262144000,
+      "CodeSizeZipped": 52428800,
+      "ConcurrentExecutions": 10,
+      "UnreservedConcurrentExecutions": 10
+    },
+    "AccountUsage": {
+      "TotalCodeSize": 154331632,
+      "FunctionCount": 5
+    }
+  },
+  "rds": {
+    "DBInstanceIdentifier": "fintrust-ledger-dev",
+    "DBInstanceStatus": "available",
+    "EngineVersion": "16.15",
+    "PubliclyAccessible": false,
+    "IAMDatabaseAuthenticationEnabled": true,
+    "BackupRetentionPeriod": 1,
+    "LatestRestorableTime": "2026-10-17T06:42:24+00:00",
+    "DeletionProtection": true
+  }
+}
