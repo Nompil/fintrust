@@ -1,0 +1,20 @@
+{
+  "status": "OFFLINE_CANDIDATE_NOT_DEPLOYED",
+  "aws_changes": false,
+  "sql_executed": false,
+  "phase": "preflight",
+  "per_function_cap_in_shared_mode": false,
+  "endpoint_cost_exception_required": true,
+  "files": {
+    "runner-shared-readonly.json": "6525c0a18689cb6dcbd5d5fbe09d3c73a5de41bc1504ed2905c5964dc6123d65",
+    "network-review.json": "daa2cc85ea493bbfd10a287493dec852f5a6df6f9e05537179b38f6efa66316e"
+  },
+  "sources": {
+    "infrastructure/migration.py": "853884895dfeabf5c019fd87fa80d734fb2284884ea6343a034b859a26280002",
+    "backend/migration_runner/preflight_entry.py": "963aa0150c95cac494dcd8059bf06a2b23f3a587b2978bab51904eff15d37de5",
+    "backend/migration_runner/common.py": "861acc13622915cff95f3bef2048e7a27b9a2eaaa94fd5f227a9a0b18a49ef53",
+    "backend/migration_runner/admin.py": "a50d5e675f9968afe756e62f90ca444f348222fc1984436d7f1389e7284fe6b7",
+    "backend/migration_runner/release1_preflight.py": "e42439e263b94c042b323654bbcaf5e31b4c85267cfb9720696598936f2ce5a9",
+    "sql/preflight/002_release1_catalog.sql": "77944ea23ea8a4aad33e513489a65affbe20e8293b5075c641acb59775cbaaba"
+  }
+}

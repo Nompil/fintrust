@@ -1,0 +1,51 @@
+{
+  "filename": "fintrust-migration-preflight.zip",
+  "byte_size": 20673673,
+  "sha256": "667f1aba96d8deed5033bb4f9ec14b1ac02e8e36b4db04b77f20d9699fdb4d57",
+  "sha256_base64": "Zn8aupbY3u1QM7tPnsFLGsAujja02wS3fyDZaZ/bTVc=",
+  "phase": "preflight",
+  "runtime": "python3.12",
+  "architecture": "x86_64",
+  "target_os": "Linux",
+  "psycopg2_binary": "2.9.13",
+  "linux_execution_verified": true,
+  "postgresql16_execution_verified": true,
+  "handler": "migration_runner.preflight_entry.lambda_handler",
+  "source_binding": {
+    "migration_runner/__init__.py": "31dc56534c23703e9539d3c5899c2ef800ac3c5d89cb4a5fcc8a5f4cb63ce27d",
+    "migration_runner/config.py": "9c25129c15c92aa7a2fbc1ea1e3c520e4962fb94dcaf518b8ae585c64afb0f76",
+    "migration_runner/contract.py": "f40cc817fca1ad2645613114666e27f636706cdd324869e9a395ee8df6dc7623",
+    "migration_runner/common.py": "861acc13622915cff95f3bef2048e7a27b9a2eaaa94fd5f227a9a0b18a49ef53",
+    "migration_runner/sql_binding.py": "cb1f77e5f7dbbd9f63d691628830ee9801ad2f1ce7077e7a3107b4438c0d5512",
+    "migration_runner/preflight_entry.py": "963aa0150c95cac494dcd8059bf06a2b23f3a587b2978bab51904eff15d37de5",
+    "migration_runner/admin.py": "a50d5e675f9968afe756e62f90ca444f348222fc1984436d7f1389e7284fe6b7",
+    "sql/preflight/001_transaction_identity_catalog.sql": "c09012f47cc8956845a02b98a9525c843c457fb33a2b48bff8184c001e1e4943",
+    "sql/preflight/001_transaction_identity_data.sql": "862c530b5feb5a5150164003e55d9ca9735b283aa1a7de33a254f20568fbf001",
+    "migration_runner/release1_preflight.py": "e42439e263b94c042b323654bbcaf5e31b4c85267cfb9720696598936f2ce5a9",
+    "sql/preflight/002_release1_catalog.sql": "77944ea23ea8a4aad33e513489a65affbe20e8293b5075c641acb59775cbaaba",
+    "certs/global-bundle.pem": "fe45bbebf92ad3e27a583bbb2ddd1553c521ed4d49af5514dc0a40372ea5395c"
+  },
+  "dependency_source": "verified application ZIP (read-only subset)",
+  "dependency_archive_sha256": "ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d",
+  "linux_verification": {
+    "modules": [
+      "migration_runner.admin",
+      "migration_runner.common",
+      "migration_runner.config",
+      "migration_runner.contract",
+      "migration_runner.preflight_entry",
+      "migration_runner.release1_preflight",
+      "migration_runner.sql_binding"
+    ],
+    "handler_imported": true,
+    "native_loaded": true,
+    "psycopg2": "2.9.13 (dt dec pq3 ext lo64)",
+    "libpq": 170011,
+    "network_requests": 0,
+    "ca_loaded": true,
+    "python": "3.12.3",
+    "platform": "Linux-6.18.54.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "machine": "x86_64"
+  },
+  "postgresql16_verification_scope": "read-only preflight contracts and catalog SQL; no live migration"
+}

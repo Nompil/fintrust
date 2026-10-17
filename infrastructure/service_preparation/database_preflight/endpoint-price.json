@@ -1,0 +1,79 @@
+{
+  "source": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonVPC/current/af-south-1/index.json",
+  "checked_at": "2026-10-17T06:53:05.460066+00:00",
+  "publication_date": "2026-10-16T22:43:21Z",
+  "prices": [
+    {
+      "sku": "UMXAJ5MJY7C5ZQVQ",
+      "attributes": {
+        "servicecode": "AmazonVPC",
+        "location": "Africa (Cape Town)",
+        "locationType": "AWS Region",
+        "endpointType": "PrivateLink",
+        "group": "VPCE:VpcEndpoint",
+        "groupDescription": "Charge for per GB data processed by VPC Endpoints",
+        "usagetype": "AFS1-VpcEndpoint-Bytes",
+        "operation": "VpcEndpoint",
+        "regionCode": "af-south-1",
+        "servicename": "Amazon Virtual Private Cloud"
+      },
+      "unit": "GB",
+      "description": "$0.01 per GB for upto 1 PB monthly data processed by VPC Endpoints",
+      "price_usd": "0.0100000000"
+    },
+    {
+      "sku": "UMXAJ5MJY7C5ZQVQ",
+      "attributes": {
+        "servicecode": "AmazonVPC",
+        "location": "Africa (Cape Town)",
+        "locationType": "AWS Region",
+        "endpointType": "PrivateLink",
+        "group": "VPCE:VpcEndpoint",
+        "groupDescription": "Charge for per GB data processed by VPC Endpoints",
+        "usagetype": "AFS1-VpcEndpoint-Bytes",
+        "operation": "VpcEndpoint",
+        "regionCode": "af-south-1",
+        "servicename": "Amazon Virtual Private Cloud"
+      },
+      "unit": "GB",
+      "description": "$0.006 per GB for more than 1 PB and less than 5 PB monthly data processed by VPC Endpoints",
+      "price_usd": "0.0060000000"
+    },
+    {
+      "sku": "UMXAJ5MJY7C5ZQVQ",
+      "attributes": {
+        "servicecode": "AmazonVPC",
+        "location": "Africa (Cape Town)",
+        "locationType": "AWS Region",
+        "endpointType": "PrivateLink",
+        "group": "VPCE:VpcEndpoint",
+        "groupDescription": "Charge for per GB data processed by VPC Endpoints",
+        "usagetype": "AFS1-VpcEndpoint-Bytes",
+        "operation": "VpcEndpoint",
+        "regionCode": "af-south-1",
+        "servicename": "Amazon Virtual Private Cloud"
+      },
+      "unit": "GB",
+      "description": "$0.004 per GB for more than 5 PB monthly data processed by VPC Endpoints",
+      "price_usd": "0.0040000000"
+    },
+    {
+      "sku": "8ZMGRUS7QT5EM7NR",
+      "attributes": {
+        "servicecode": "AmazonVPC",
+        "location": "Africa (Cape Town)",
+        "locationType": "AWS Region",
+        "endpointType": "PrivateLink",
+        "group": "VPCE:VpcEndpoint",
+        "groupDescription": "Hourly charge for VPC Endpoints",
+        "usagetype": "AFS1-VpcEndpoint-Hours",
+        "operation": "VpcEndpoint",
+        "regionCode": "af-south-1",
+        "servicename": "Amazon Virtual Private Cloud"
+      },
+      "unit": "Hrs",
+      "description": "$0.01309 per VPC Endpoint Hour",
+      "price_usd": "0.0130900000"
+    }
+  ]
+}

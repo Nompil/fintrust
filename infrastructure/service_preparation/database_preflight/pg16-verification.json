@@ -1,0 +1,15 @@
+{
+  "status": "PASSED",
+  "aws_access": false,
+  "live_rds_access": false,
+  "temporary_cluster_removed": true,
+  "artifact_sha256": "667f1aba96d8deed5033bb4f9ec14b1ac02e8e36b4db04b77f20d9699fdb4d57",
+  "verified_scope": "read-only preflight contracts and catalog SQL; no live migration",
+  "tests": {
+    "tests": 65,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "checked_at": "2026-10-17T06:56:32.599145+00:00"
+}

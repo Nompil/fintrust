@@ -269,3 +269,29 @@ capacity 10 and five deployed functions. RDS is available, private, IAM-auth
 enabled, deletion-protected, with one-day backups and latest restorable time
 `2026-10-17T06:42:24Z`. This proves no schema, grant or SQL outcome. Receipt:
 `infrastructure/service_preparation/deployment_iam/evidence/remaining-live-gates-20261017.json`.
+
+## Read-only database preflight alternative prepared - 17 October 2026
+
+A preflight-only candidate can use shared Lambda capacity without requesting a
+positive reserved slot. It is disabled by default and leaves canonical write
+phase templates unchanged. It provides no per-function concurrency cap when
+released. No AWS resource, secret read, SQL or invocation was performed.
+
+AWS accepted the exact network and runner templates. The 20,673,673-byte
+preflight ZIP was built from current bound sources and verified dependency
+bytes; SHA256 `667f1aba96d8deed5033bb4f9ec14b1ac02e8e36b4db04b77f20d9699fdb4d57`.
+Linux Python 3.12 native imports passed. The disposable PostgreSQL 16 run passed
+65 tests with no failures/errors/skips, and its temporary cluster was removed.
+This is local verification, not a live RDS handshake or migration result.
+
+The private route still requires a temporary charged Secrets Manager endpoint,
+a separate scoped operator (existing endpoint Deny preserved), actual-endpoint
+IAM binding/validation, exact artifact staging and cleanup verification. The
+owner's no-paid-endpoint constraint remains in force. The prepared decision is
+one read-only inspection with a USD 1 incremental operating allowance and
+one-hour endpoint cleanup target, not an AWS-enforced cost cap. No data-changing
+phase is included. See `infrastructure/service_preparation/database_preflight/README.md`.
+
+Fresh metadata still reports Lambda capacity 10. Support DescribeCases returned
+SubscriptionRequiredException on Basic Support; no upgrade or new case was
+made. Preserve case 179210878300923; its current correspondence is unverified.

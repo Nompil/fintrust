@@ -15,7 +15,8 @@ PHASES=("preflight","bootstrap","iam","cleanup","bootstrap002","iam002","cleanup
         "bootstrap_extensions","iam_extensions","cleanup_extensions")
 VERIFIED_APPLICATION_SHA="cf9c18a5f267373e2fc2e22331987bb6dce8e2e65366b2d1f5651bb035dd6654"
 VERIFIED_APPLICATION_SHAS = {VERIFIED_APPLICATION_SHA,
-    "44e73618102d5b1caa963ed0cfd30fd0ac8c6f1de6f3c1ffbbbbe7e9fbead335"}
+    "44e73618102d5b1caa963ed0cfd30fd0ac8c6f1de6f3c1ffbbbbe7e9fbead335",
+    "ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d"}
 PREFIXES=("boto3/","botocore/","jmespath/","dateutil/","s3transfer/","urllib3/","psycopg2/","psycopg2_binary.libs/")
 DIST=("boto3-","botocore-","jmespath-","python_dateutil-","s3transfer-","six-","urllib3-","psycopg2_binary-")
 

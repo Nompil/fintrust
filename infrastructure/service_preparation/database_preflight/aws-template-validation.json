@@ -1,0 +1,48 @@
+{
+  "status": "TWO_TEMPLATES_ACCEPTED_NOT_DEPLOYED",
+  "checked_at": "2026-10-17T06:55:54.666316+00:00",
+  "templates": {
+    "network-review.json": {
+      "sha256": "daa2cc85ea493bbfd10a287493dec852f5a6df6f9e05537179b38f6efa66316e",
+      "result": {
+        "Parameters": [],
+        "Description": "REVIEW ONLY: temporary single-AZ Secrets Manager path; no existing DB SG changes"
+      }
+    },
+    "runner-shared-readonly.json": {
+      "sha256": "6525c0a18689cb6dcbd5d5fbe09d3c73a5de41bc1504ed2905c5964dc6123d65",
+      "result": {
+        "Parameters": [
+          {
+            "ParameterKey": "EnableReadOnlyPreflight",
+            "DefaultValue": "false",
+            "NoEcho": false
+          },
+          {
+            "ParameterKey": "EndpointId",
+            "NoEcho": false
+          },
+          {
+            "ParameterKey": "CodeKey",
+            "NoEcho": false
+          },
+          {
+            "ParameterKey": "CodeSha256",
+            "NoEcho": false
+          },
+          {
+            "ParameterKey": "ClientSecurityGroupId",
+            "NoEcho": false
+          },
+          {
+            "ParameterKey": "CodeObjectVersion",
+            "NoEcho": false
+          }
+        ],
+        "Description": "REVIEW ONLY: fixed read-only database preflight; disabled by default; one qualified synchronous request; shared mode has no individual concurrency cap"
+      }
+    }
+  },
+  "resources_created": false,
+  "sql_executed": false
+}
