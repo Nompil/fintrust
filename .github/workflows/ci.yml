@@ -82,7 +82,9 @@ jobs:
       - name: Verify Release 1 PostgreSQL 16 service roles
         run: python3.12 tools/check_release1_roles_pg16.py
       - name: Install scoped browser verification dependency
-        run: npm install --prefix build/browser-tools --no-save --ignore-scripts playwright@1.62.1
+        run: |
+          npm install --prefix build/browser-tools --no-save --ignore-scripts playwright@1.62.1
+          build/browser-tools/node_modules/.bin/playwright install chromium
       - name: Run Release 1 candidate browser gate
         env:
           FINTRUST_NODE: /usr/local/bin/node
