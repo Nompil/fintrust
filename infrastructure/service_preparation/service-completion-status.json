@@ -26,8 +26,8 @@
       "remaining": "Verify real service logs; paid alarms remain undeployed"
     },
     "lambda": {
-      "configuration": "INGEST_PRESENT_THROTTLED_FOUR_MORE_FUNCTIONS_PREPARED",
-      "remaining": "Manual concurrency quota review, immutable artifact upload/version binding, disabled deployment and controlled activation"
+      "configuration": "VERIFIED_PACKAGE_VERSION_STAGED_INGEST_THROTTLED_FOUR_FUNCTIONS_UNDEPLOYED",
+      "remaining": "Reviewed disabled function deployment, migration/capacity decision, scoped test invocation and controlled cloud validation"
     },
     "rds": {
       "configuration": "PRIVATE_INSTANCE_AVAILABLE_IAM_AUTH_ENABLED_STANDARD_SSM_SETTINGS_READ_BACK",
@@ -39,13 +39,13 @@
     },
     "s3_sqs": {
       "configuration": "FOUNDATION_BUCKETS_QUEUES_AND_INGEST_PERMISSION_PRESENT",
-      "remaining": "Bind current artifact, deploy disabled consumers and prove valid/quarantine/duplicate/failure paths before raw notification activation"
+      "remaining": "Deploy disabled consumers and prove valid/quarantine/duplicate/failure paths before raw notification activation"
     }
   },
   "activation_gates": [
     "AWS_SUPPORT_CASE_179210878300923_QUOTA_REVIEW",
     "APPROVED_DATABASE_ACCESS_AND_LIVE_MIGRATIONS_GRANTS",
-    "IMMUTABLE_PACKAGE_UPLOAD_AND_FUNCTION_API_DEPLOYMENT",
+    "FUNCTION_API_DEPLOYMENT_AND_LIVE_VALIDATION",
     "AUTHORIZED_USER_AND_ACCOUNT_SCOPE_ENROLLMENT",
     "CLOUD_END_TO_END_AND_FAILURE_PATH_EVIDENCE"
   ],
@@ -71,5 +71,16 @@
     "automatic_pipeline_supported": false,
     "migration_runner_changed": false,
     "deployed": false
+  },
+  "artifact_staging": {
+    "status": "UPLOADED_VERSION_BYTES_VERIFIED_TEMP_PERMISSION_REMOVED",
+    "bucket": "fintrust-reports-966467878406-af-south-1-dev",
+    "key": "deployment/lambda/ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d/fintrust.zip",
+    "version_id": "VZCWpaBXZO9pL2XONICW63qQcH4udM02",
+    "sha256": "ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d",
+    "size_bytes": 26537014,
+    "exact_version_download_verified": true,
+    "temporary_permission_removed": true,
+    "evidence": "infrastructure/service_preparation/shared_manual/artifact-staging-live.json"
   }
 }

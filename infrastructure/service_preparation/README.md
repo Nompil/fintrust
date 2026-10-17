@@ -10,6 +10,11 @@ remains 10. Application functions, migration execution, email delivery and cloud
 end-to-end checks are still outstanding. No report schedule exists yet, and
 optional paid alarms remain undeployed.
 
+The verified application ZIP is now staged under the owner's upload-only cost
+exception. Its exact S3 version and checksum are bound in the deployment
+worksheet and `shared_manual/artifact-staging-live.json`; temporary upload
+permissions were removed. This did not deploy or invoke any functions.
+
 Latest prerequisite update, 16 October 2026: all nine nonsecret dev database
 settings are installed as Standard String SSM parameters and read back. The live
 database name is `fintrust`; users/grants still require live migration checks.

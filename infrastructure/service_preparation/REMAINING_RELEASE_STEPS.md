@@ -27,13 +27,14 @@ runner's capacity/security plan or the full integrated-release gates below.
    Review live schema/owners/grants and the backup gate before migration DDL.
    Then run the bound migration phases and verify each service's IAM/TLS login
    and privileges. Local PostgreSQL rehearsal is not live RDS evidence.
-3. **Bind the immutable application package.** The current archive is local,
-   SHA256 `ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d`.
-   Its proposed key is `deployment/lambda/<SHA256>/fintrust.zip` in
-   `fintrust-reports-966467878406-af-south-1-dev`. Upload only within the owner's
-   cost decision; retain the actual non-null S3 version and verify that exact
-   version's bytes. Never substitute the older ingest version. Complete
-   `CodeKey` and `CodeObjectVersion` in the deployment worksheet from read-back.
+3. **Package staging is complete.** The current archive has SHA256
+   `ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d`.
+   Its key is `deployment/lambda/<SHA256>/fintrust.zip` in
+   `fintrust-reports-966467878406-af-south-1-dev`, version
+   `VZCWpaBXZO9pL2XONICW63qQcH4udM02`. The owner approved upload only; its exact
+   downloaded version passed verification and the temporary permission was
+   removed. `CodeKey` and `CodeObjectVersion` are now bound in the deployment
+   worksheet. Do not re-upload it or substitute the older ingest version.
 4. **Deploy the four application functions disabled.** Use a reviewed CREATE
    change set for `fintrust-application-dev`, explicit resource types and
    Project/Environment tags; use the normal deployer role. Preserve the existing

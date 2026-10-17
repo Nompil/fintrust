@@ -179,3 +179,30 @@ approved enrollment and full cloud E2E remain outstanding; the current migration
 plan still needs its own reviewed capacity decision. Retain the quota support
 case while evaluating this limited alternative. See the candidate guide and
 `offline-verification.json`; do not count the local checks as live AWS evidence.
+
+
+## Approved package staging completed - 17 October 2026
+
+The owner authorized the bounded upload-only cost exception. One 26,537,014-byte
+verified release package was staged in the existing reports bucket under its
+content-addressed deployment key, using conditional creation rather than
+unconditional overwrite. Bucket location, enabled versioning, KMS encryption
+and absent delivery notifications were checked first; their configuration was
+not changed. Actual S3 version: `VZCWpaBXZO9pL2XONICW63qQcH4udM02`.
+
+That exact version was downloaded and its bytes, size, SHA256, S3 checksum and
+KMS key matched the approved package. The SHA256 remains
+`ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d`. The deployment worksheet now binds
+the real code key/version; it remains an operator worksheet, not approval to
+execute a stack. The temporary exact-object upload grant passed Access Analyzer,
+was read back, detached/deleted after verification, and its absence and original
+role attachment set were verified. Existing policies were preserved. Its
+30-minute expiry was a backup safeguard, not the cleanup mechanism.
+
+Receipt: `infrastructure/service_preparation/shared_manual/artifact-staging-live.json`.
+Admin was used only for IAM/Access Analyzer and the normal deployer role for
+S3/KMS operations. No new bucket, Lambda deployment/invocation, CloudFormation
+execution, trigger, schedule, database statement or email was performed. Storage,
+requests and associated usage may incur charges; no USD 10 total-cost guarantee
+is claimed. Function deployment, database/migration/grant gates, approved test
+invocation, enrollment and full cloud E2E remain outstanding.

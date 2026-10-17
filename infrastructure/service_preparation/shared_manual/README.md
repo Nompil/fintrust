@@ -1,6 +1,12 @@
 # Individual function tests using shared Lambda capacity
 
-**Local candidate only. No upload, deployment or activation has occurred.**
+**The template is not deployed and no function has been activated.**
+Under the owner's separate upload-only authorization, the verified package is
+now staged as S3 version `VZCWpaBXZO9pL2XONICW63qQcH4udM02` in the existing
+deployment bucket. Its exact downloaded bytes match the approved SHA256 and
+the temporary upload grant was removed. See `artifact-staging-live.json` and
+`verify_artifact_binding.py`. Candidate-generation/offline-test manifests retain
+their original snapshot scope; this separate receipt records the later staging.
 This option avoids requesting a positive reserved slot for an individual test.
 It is not a completed cloud rollout, a production capacity strategy or an
 implementation of shared-capacity database migrations.
@@ -29,7 +35,7 @@ asynchronous work before releasing any function.
 
 ## Before any live test
 
-1. Verify the exact package version, artifact hashes and reviewed stack change
+1. Verify the staged package bindings and reviewed stack change
    set. Deployment with defaults must read back zero concurrency for all four
    functions, disabled mappings and a disabled report schedule.
 2. For scoring, report or API tests, first prove the approved private RDS access,
@@ -70,6 +76,10 @@ the automatic-path restrictions, and preservation of all other resource
 configuration. These offline checks do not establish live runtime safety.
 `aws-template-validation.json` separately binds AWS's template acceptance to the
 exact candidate hash; template acceptance is not resource creation or execution.
+
+`python infrastructure/service_preparation/shared_manual/verify_artifact_binding.py`
+checks saved package/version/checksum/worksheet and cleanup receipt bindings
+offline. It does not re-query AWS or prove application runtime behavior.
 
 References: [Lambda concurrency](https://docs.aws.amazon.com/lambda/latest/dg/lambda-concurrency.html),
 [CloudFormation Lambda configuration](https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-lambda-function.html).

@@ -33,8 +33,12 @@ instead of the prepared cost-gated templates.
 `build_policies.py` is offline. Its manifest records per-document SHA256 and
 nonwhitespace sizes, exact stack resource types and the approved runtime ZIP
 SHA256. All managed documents must stay below 6,144 nonwhitespace characters.
-The code key is a proposed content-addressed destination, not proof of upload.
-An actual immutable S3 version still needs verification before function creation.
+The bundle's historical `proposed_code_key_not_uploaded` field records the
+preparation snapshot. A later owner-approved upload staged and verified that
+exact key/version; see `../shared_manual/artifact-staging-live.json` and the
+deployment worksheet. Staging did not create or invoke functions. The six
+permanent policy documents were not changed to upload the package; the separate
+temporary exact-object staging grant was removed after byte verification.
 Generated JSON uses explicit LF newlines, with matching Git attributes, so the
 hashes survive Windows/Linux checkouts. `verify_bindings.py` checks policy,
 template and runtime-file hashes against both their manifests and the installed

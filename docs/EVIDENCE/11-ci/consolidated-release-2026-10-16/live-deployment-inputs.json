@@ -4,7 +4,7 @@
   "region": "af-south-1",
   "runtime_release_commit": "29ad78ee03b1ce02b1f94e7f908a8b8a37b76a89",
   "artifact_sha256": "ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d",
-  "artifact_uploaded": false,
+  "artifact_uploaded": true,
   "aws_changes": true,
   "existing_outputs": {
     "network": {
@@ -168,7 +168,7 @@
     "ses-identities.json": {},
     "application-functions.json": {
       "CodeBucket": "fintrust-reports-966467878406-af-south-1-dev",
-      "CodeKey": null,
+      "CodeKey": "deployment/lambda/ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d/fintrust.zip",
       "CodeSha256": "/2Mk1kpdZdqxhSOjDqcrsVlNL6XKf75rg5HFLwPtWJ0=",
       "QuarantineBucket": "fintrust-quarantine-966467878406-af-south-1-dev",
       "ReportsBucket": "fintrust-reports-966467878406-af-south-1-dev",
@@ -192,7 +192,7 @@
       "ExistingAlertFailuresArn": "arn:aws:sqs:af-south-1:966467878406:fintrust-alert-failures-dev",
       "ExistingReportFailuresArn": "arn:aws:sqs:af-south-1:966467878406:fintrust-report-failures-dev",
       "ExistingReportFailuresUrl": "https://sqs.af-south-1.amazonaws.com/966467878406/fintrust-report-failures-dev",
-      "CodeObjectVersion": null
+      "CodeObjectVersion": "VZCWpaBXZO9pL2XONICW63qQcH4udM02"
     },
     "monitoring.json": {
       "DbInstanceIdentifier": "fintrust-ledger-dev",
@@ -216,10 +216,7 @@
   },
   "unresolved_parameters": {
     "ses-identities.json": [],
-    "application-functions.json": [
-      "CodeKey",
-      "CodeObjectVersion"
-    ],
+    "application-functions.json": [],
     "monitoring.json": [],
     "cognito.json": [],
     "api.json": [
@@ -247,12 +244,13 @@
   "notes": [
     "Nulls are intentional unresolved inputs; this is not a CloudFormation CLI parameter file.",
     "Monitoring DB identifier is inferred from the recorded template/host, not a fresh RDS DescribeDBInstances result.",
-    "CodeSha256 is bound to the locally verified ZIP; no S3 object key/version is asserted until upload is approved and verified.",
+    "CodeSha256 is bound to the locally verified ZIP; the approved S3 object key/version is bound by the exact-version download receipt.",
     "Runtime roles and nine SSM values are installed; live DB users/grants and migrations remain unverified.",
     "No template deployment or activation is authorized by this worksheet.",
-    "Stage-path repair supersedes runtime commit 3368f4c; latest code is bound by source_sha256 and the gateway readiness evidence. Cloud upload and object version remain unapproved/unverified.",
+    "Stage-path repair supersedes runtime commit 3368f4c; latest code is bound by source_sha256 and the gateway readiness evidence. The approved uploaded version is now verified; function deployment remains separate.",
     "Prepared Cognito has no IAM resources: admin separately installed exact-table API GetItem access. Do not use the historical generic Cognito template.",
-    "API identity and empty Cognito/scope configuration deployed and read back. No users, scope assignments, serving API stage or workloads activated. Artifact upload, database gates and end-to-end validation remain outstanding."
+    "API identity and empty Cognito/scope configuration deployed and read back. No users, scope assignments, serving API stage or workloads activated. Artifact upload, database gates and end-to-end validation remain outstanding.",
+    "The upload-only cost exception was authorized by the owner. No function, stack, trigger, schedule, SQL or email was executed by staging."
   ],
   "source_sha256": "2b525f84dfd93f93006f245ee77df5d589d5a3bb056c4bfaf99000b1004ac852",
   "ssm_prerequisites": {
@@ -298,5 +296,16 @@
     "risk_table_statement_preserved": true,
     "network_outputs_unchanged": true,
     "evidence": "infrastructure/service_preparation/deployment_iam/evidence/gateway-account-scope-live.json"
+  },
+  "artifact_staging": {
+    "status": "UPLOADED_VERSION_BYTES_VERIFIED_TEMP_PERMISSION_REMOVED",
+    "bucket": "fintrust-reports-966467878406-af-south-1-dev",
+    "key": "deployment/lambda/ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d/fintrust.zip",
+    "version_id": "VZCWpaBXZO9pL2XONICW63qQcH4udM02",
+    "sha256": "ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d",
+    "size_bytes": 26537014,
+    "exact_version_download_verified": true,
+    "temporary_permission_removed": true,
+    "evidence": "infrastructure/service_preparation/shared_manual/artifact-staging-live.json"
   }
 }

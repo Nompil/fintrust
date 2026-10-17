@@ -1,0 +1,131 @@
+{
+  "account": "966467878406",
+  "region": "af-south-1",
+  "bucket": "fintrust-reports-966467878406-af-south-1-dev",
+  "key": "deployment/lambda/ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d/fintrust.zip",
+  "owner_authorization": "User continued after recommendation to approve upload only, 17 October 2026",
+  "deploy_functions": false,
+  "invoke_functions": false,
+  "activate_triggers": false,
+  "new_bucket": false,
+  "expected_sha256": "ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d",
+  "size_bytes": 26537014,
+  "temporary_policy_arn": "arn:aws:iam::966467878406:policy/FinTrustReleaseObjectUpload",
+  "status": "PREFLIGHT",
+  "temporary_policy_created": false,
+  "temporary_policy_attached": false,
+  "temporary_policy_document": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "UploadOneBoundObject",
+        "Effect": "Allow",
+        "Action": [
+          "s3:PutObject"
+        ],
+        "Resource": "arn:aws:s3:::fintrust-reports-966467878406-af-south-1-dev/deployment/lambda/ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d/fintrust.zip",
+        "Condition": {
+          "StringEquals": {
+            "aws:RequestedRegion": "af-south-1",
+            "s3:x-amz-server-side-encryption": "aws:kms",
+            "s3:x-amz-server-side-encryption-aws-kms-key-id": "arn:aws:kms:af-south-1:966467878406:key/598a4158-2cc6-4946-af24-512784a276c8"
+          },
+          "DateLessThan": {
+            "aws:CurrentTime": "2026-10-17T02:26:40Z"
+          }
+        }
+      },
+      {
+        "Sid": "InspectOnlyBoundObject",
+        "Effect": "Allow",
+        "Action": [
+          "s3:GetObject",
+          "s3:GetObjectVersion"
+        ],
+        "Resource": "arn:aws:s3:::fintrust-reports-966467878406-af-south-1-dev/deployment/lambda/ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d/fintrust.zip",
+        "Condition": {
+          "StringEquals": {
+            "aws:RequestedRegion": "af-south-1"
+          },
+          "DateLessThan": {
+            "aws:CurrentTime": "2026-10-17T02:26:40Z"
+          }
+        }
+      },
+      {
+        "Sid": "CheckReportsNotificationOnly",
+        "Effect": "Allow",
+        "Action": [
+          "s3:GetBucketNotification"
+        ],
+        "Resource": "arn:aws:s3:::fintrust-reports-966467878406-af-south-1-dev",
+        "Condition": {
+          "StringEquals": {
+            "aws:RequestedRegion": "af-south-1"
+          },
+          "DateLessThan": {
+            "aws:CurrentTime": "2026-10-17T02:26:40Z"
+          }
+        }
+      },
+      {
+        "Sid": "GenerateKeyOnlyViaS3",
+        "Effect": "Allow",
+        "Action": [
+          "kms:GenerateDataKey"
+        ],
+        "Resource": "arn:aws:kms:af-south-1:966467878406:key/598a4158-2cc6-4946-af24-512784a276c8",
+        "Condition": {
+          "StringEquals": {
+            "aws:RequestedRegion": "af-south-1",
+            "kms:ViaService": "s3.af-south-1.amazonaws.com",
+            "kms:CallerAccount": "966467878406",
+            "kms:EncryptionContext:aws:s3:arn": [
+              "arn:aws:s3:::fintrust-reports-966467878406-af-south-1-dev/deployment/lambda/ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d/fintrust.zip",
+              "arn:aws:s3:::fintrust-reports-966467878406-af-south-1-dev"
+            ]
+          },
+          "DateLessThan": {
+            "aws:CurrentTime": "2026-10-17T02:26:40Z"
+          }
+        }
+      }
+    ]
+  },
+  "permission_expires_at": "2026-10-17T02:26:40Z",
+  "policy_validation": {
+    "findings": []
+  },
+  "attachment_count_before": 19,
+  "attached_policy_quota": 20,
+  "updated_at": "2026-10-17T01:57:50.457230+00:00",
+  "temporary_policy_read_back_matches": true,
+  "bucket_notifications_before": {},
+  "bucket_versioning_before": {
+    "Status": "Enabled"
+  },
+  "bucket_encryption_before": {
+    "ServerSideEncryptionConfiguration": {
+      "Rules": [
+        {
+          "ApplyServerSideEncryptionByDefault": {
+            "SSEAlgorithm": "aws:kms",
+            "KMSMasterKeyID": "arn:aws:kms:af-south-1:966467878406:key/598a4158-2cc6-4946-af24-512784a276c8"
+          },
+          "BucketKeyEnabled": true,
+          "BlockedEncryptionTypes": {
+            "EncryptionType": [
+              "SSE-C"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "bucket_location_before": {
+    "LocationConstraint": "af-south-1"
+  },
+  "attachment_count_after": 19,
+  "temporary_permission_removal_verified": true,
+  "failure_before_write": "HeadObject returned 403; no PutObject was attempted; temporary grant cleanup verified"
+}
