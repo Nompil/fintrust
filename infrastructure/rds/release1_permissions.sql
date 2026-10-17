@@ -26,6 +26,9 @@ GRANT SELECT,INSERT ON operations_requests TO fintrust_workflow_api;
 GRANT UPDATE(state,result,completed_at) ON operations_requests TO fintrust_workflow_api;
 GRANT EXECUTE ON FUNCTION public.guard_operations_receipt() TO fintrust_workflow_api;
 GRANT UPDATE(quarantine_id) ON quarantine_cases TO fintrust_workflow_api;
+-- The deferred batch-count trigger takes a row lock when API corrections create
+-- a new batch. The immutable identity trigger still rejects batch_id changes.
+GRANT UPDATE(batch_id) ON ingestion_batches TO fintrust_workflow_api;
 -- Trigger writes history under a dedicated non-login role, never under browser/API authority.
 GRANT INSERT ON risk_review_history TO fintrust_workflows_owner;
 ALTER FUNCTION public.record_review_history() OWNER TO fintrust_workflows_owner;

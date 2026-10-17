@@ -6,7 +6,7 @@ from .extension_catalog import _catalog_for_version
 
 PERMISSIONS = {
  'infrastructure/rds/permissions.sql': '97dcb480ffb15ea16d5099eae69ddde328ab25313fb6ec76c897a2f9776b5770',
- 'infrastructure/rds/release1_permissions.sql': 'f3d344a22b641e9943d42598fe321269051b036c046d2e74bf99175f7d0ca52d'}
+ 'infrastructure/rds/release1_permissions.sql': '3b9ff4abaf0cff2210078918c727cc30726e278fcdba391dd7580ad8ee002a8f'}
 HISTORY = (
  '0ff06ca8c43596ac9b8651f4bd851bfb0487343f4c9eccb198849e3e59772bd6',
  '5b2c04440eea244bfce150347dfa1953dd2a7e7ddb6af7e3a66e187d1c912f02',

@@ -75,6 +75,11 @@ def main():
         response=workflow_api.update_review(result["risk_event_id"],{"request_id":str(uuid.uuid4()),"expected_version":1,"status":"UNDER_REVIEW","notes":"PG16 service-role proof","resolution_code":None},auth.Principal("ci-analyst","Risk/Compliance Analyst",(account,)))
         assert response["version"]==2;probes.append("api_role_review_trigger_appends_history_without_direct_insert")
         with conn.cursor() as cur:
+            # Corrections create a batch under the API role. Its deferred count
+            # trigger takes FOR UPDATE even when the batch has no rows yet.
+            cur.execute("INSERT INTO ingestion_batches(batch_id,source_system,source_bucket,file_sha256,received_at,rows_received,publication_complete) VALUES(%s,'ci-permission','synthetic-input',%s,NOW(),0,TRUE)",(str(uuid.uuid4()),'b'*64))
+            cur.execute('SET CONSTRAINTS ALL IMMEDIATE')
+            probes.append('api_correction_batch_deferred_lock_without_financial_write')
             for table,privilege in [("transactions","INSERT"),("transactions","UPDATE"),("transactions","DELETE"),("risk_events","INSERT"),("risk_review_history","INSERT"),("risk_review_history","UPDATE"),("risk_review_history","DELETE")]:
                 cur.execute("SELECT has_table_privilege(current_user,%s,%s)",(name+"."+table,privilege));assert cur.fetchone()==(False,)
                 probes.append("api_denied_"+table+"_"+privilege.lower())
