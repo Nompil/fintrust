@@ -91,7 +91,11 @@ jobs:
           export FINTRUST_NODE="$(command -v node)"
           python3.12 tools/run_release1_browser.py
       - name: Run full suite with disposable PostgreSQL
-        run: python3.12 -m pytest -q --junitxml=test-results/pytest.xml
+        env:
+          FINTRUST_PLAYWRIGHT_MODULE: ${{ github.workspace }}/build/browser-tools/node_modules/playwright
+        run: |
+          export FINTRUST_NODE="$(command -v node)"
+          python3.12 -m pytest -q --junitxml=test-results/pytest.xml
       - name: Record release gate evidence
         if: always()
         env:
