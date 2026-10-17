@@ -240,9 +240,9 @@
     },
     "iam": {
       "filename": "fintrust-migration-iam.zip",
-      "byte_size": 20671961,
-      "sha256": "ac17e05d0f6c01dee58527e5dbde5c4bd7ab95527c8aa5d996134d2cb63be828",
-      "sha256_base64": "rBfgXQ9sAd7lhSfl295cS9erlVJ8iqXZlhNNLLY76Cg=",
+      "byte_size": 20672469,
+      "sha256": "f60b511935d187dec24b92ffbee27e7b22d0239bc04dd2939fc035aa39c0fef6",
+      "sha256_base64": "9gtRGTXRh97CS5L/vuJ+eyLQI5vATdKTn8A1qjnA/vY=",
       "phase": "iam",
       "runtime": "python3.12",
       "architecture": "x86_64",
@@ -257,7 +257,7 @@
         "migration_runner/contract.py": "f40cc817fca1ad2645613114666e27f636706cdd324869e9a395ee8df6dc7623",
         "migration_runner/common.py": "861acc13622915cff95f3bef2048e7a27b9a2eaaa94fd5f227a9a0b18a49ef53",
         "migration_runner/sql_binding.py": "cb1f77e5f7dbbd9f63d691628830ee9801ad2f1ce7077e7a3107b4438c0d5512",
-        "migration_runner/iam_entry.py": "85212a26cfb0ff672a9688e7ae8e124561f517a12d47b229d9265ecaec43f7d7",
+        "migration_runner/iam_entry.py": "9a830970643ba0392fbd4d41eecbf8115d8cec6daaf471394209a642bf6888da",
         "migration_runner/iam.py": "d48c65dee939645ae58d235ea554df161fb2b0b911a4591f42781b55d904201e",
         "sql/preflight/001_transaction_identity_catalog.sql": "c09012f47cc8956845a02b98a9525c843c457fb33a2b48bff8184c001e1e4943",
         "sql/preflight/001_transaction_identity_data.sql": "862c530b5feb5a5150164003e55d9ca9735b283aa1a7de33a254f20568fbf001",
@@ -794,5 +794,5 @@
     }
   },
   "ca_sha256": "fe45bbebf92ad3e27a583bbb2ddd1553c521ed4d49af5514dc0a40372ea5395c",
-  "postgres16_rehearsal_sha256": "f7e8edb59d1103f4a297908238bdcb0da573b505a4523e9e46151601037b8cf8"
+  "postgres16_rehearsal_sha256": "5bc68ee8cdc4849f9838b27d41945d9f1e3197538f71fe535a5d2dfb793768e9"
 }

@@ -610,7 +610,15 @@
           }
         ],
         "ScalingConfig": {
-          "MaximumConcurrency": 2
+          "Fn::If": [
+            "ConsumersEnabled",
+            {
+              "MaximumConcurrency": 2
+            },
+            {
+              "Ref": "AWS::NoValue"
+            }
+          ]
         }
       }
     },

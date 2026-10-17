@@ -1,0 +1,23 @@
+{
+  "status": "DEPLOYED_DISABLED_VERIFIED_DATABASE_SETUP_IN_PROGRESS",
+  "source_commit": "464aa2eba30e04afb46e7892f8e35bbf78ca6473",
+  "artifact_sha256": "81f69a719bded13b3b0ade513a59fdcc8e04773e039854b16083fc73e6c08bf1",
+  "artifact_key": "deployment/lambda/81f69a719bded13b3b0ade513a59fdcc8e04773e039854b16083fc73e6c08bf1/fintrust.zip",
+  "artifact_version_id": "1QsccukC5gqlZPPJcRw50Y1tEjKadCDW",
+  "source_templates_sha256": {
+    "network": "3b2ef5259400a1c6c9f02d5dbc7c649862f7e21d5ed9178da81b12ff60cf87b0",
+    "ingest": "3d05aefb26be597e2912645e6ae7ad865496bee68f5639fb20aea52cc76575dd",
+    "application": "13fbc4c8a845cd15c0b4a5f09eb7322be3214679fdb04985b52f11204c0a5718",
+    "api": "38b1c5f718b9c678a4bb07fe2281216905f880258ba0c918a22291e4b552cb56"
+  },
+  "candidates_sha256": {
+    "network-final-update.json": "8381540a33b4302e4700230fd47c9c82c11e3ca029cee2bc725929cc8352fa27",
+    "ingest-final-update.json": "0d54f8b8b23e24b00c190c64a8c99fa432d6006f7ff7a56cb54e9eebb435b13d",
+    "api-final-update.json": "a83b6d81149d1110d3110c1e9483d113d516a59657aade522c662d5ade626a11",
+    "application-functions.json": "2bb0fc7422864664d76e1982c078cb50d74bf72cf299438d322c4092eb12fecc"
+  },
+  "database_gates_required": true,
+  "defaults_disabled": true,
+  "raw_notification_connected": false,
+  "support_plan_changed": false
+}

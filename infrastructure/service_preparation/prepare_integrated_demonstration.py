@@ -13,7 +13,8 @@ def render():
         cond=name+'Available'
         data['Conditions'][cond]={'Fn::Or':[{'Condition':'FunctionsEnabled'},{'Condition':name+'ManualTestEnabled'}]}
         data['Resources'][name]['Properties']['ReservedConcurrentExecutions']={'Fn::If':[cond,{'Ref':'AWS::NoValue'},0]}
-    data['Resources']['ScoringMapping']['Properties'].update(Enabled={'Fn::If':['ConsumersEnabled',True,False]},BatchSize=1,ScalingConfig={'MaximumConcurrency':2})
+    data['Resources']['ScoringMapping']['Properties'].update(Enabled={'Fn::If':['ConsumersEnabled',True,False]},BatchSize=1,
+        ScalingConfig={'Fn::If':['ConsumersEnabled',{'MaximumConcurrency':2},{'Ref':'AWS::NoValue'}]})
     data['Resources']['AlertMapping']['Properties']['Enabled']={'Fn::If':['ConsumersEnabled',True,False]}
     data['Resources']['MonthlySchedule']['Properties']['State']={'Fn::If':['ReportsEnabled','ENABLED','DISABLED']}
     env=data['Resources']['ApiFunction']['Properties']['Environment']['Variables']

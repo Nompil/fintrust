@@ -1,6 +1,6 @@
 {
   "status": "OFFLINE_PREPARATION_NOT_DEPLOYED",
-  "template_sha256": "75bfe6be38d66cacf01eb14ed5b05bd2586ae89a6ff5d74fd22d5c9e5446ec24",
+  "template_sha256": "2bb0fc7422864664d76e1982c078cb50d74bf72cf299438d322c4092eb12fecc",
   "source_template_sha256": "13fbc4c8a845cd15c0b4a5f09eb7322be3214679fdb04985b52f11204c0a5718",
   "defaults_disabled": true,
   "positive_reserved_capacity": false,

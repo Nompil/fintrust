@@ -1,0 +1,345 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "FinTrust ten standard-metric console alarms; no custom metrics, dashboards, SNS or remediation",
+  "Parameters": {
+    "Stage": {
+      "Type": "String",
+      "Default": "dev",
+      "AllowedValues": [
+        "dev",
+        "staging",
+        "prod"
+      ]
+    },
+    "EnableAlarms": {
+      "Type": "String",
+      "Default": "false",
+      "AllowedValues": [
+        "false",
+        "true"
+      ],
+      "Description": "Creating alarms may incur charges. Keep false until billing allowance is verified."
+    },
+    "DbInstanceIdentifier": {
+      "Type": "String",
+      "MinLength": 1
+    },
+    "TransactionsQueueName": {
+      "Type": "String",
+      "MinLength": 1,
+      "Description": "Actual existing queue name from verified messaging inventory."
+    },
+    "TransactionDlqName": {
+      "Type": "String",
+      "MinLength": 1,
+      "Description": "Actual existing queue name from verified messaging inventory."
+    },
+    "IngestFailuresName": {
+      "Type": "String",
+      "MinLength": 1,
+      "Description": "Actual existing queue name from verified messaging inventory."
+    },
+    "AlertFailuresName": {
+      "Type": "String",
+      "MinLength": 1,
+      "Description": "Actual existing queue name from verified messaging inventory."
+    },
+    "ReportFailuresName": {
+      "Type": "String",
+      "MinLength": 1,
+      "Description": "Actual existing queue name from verified messaging inventory."
+    }
+  },
+  "Conditions": {
+    "AlarmsEnabled": {
+      "Fn::Equals": [
+        {
+          "Ref": "EnableAlarms"
+        },
+        "true"
+      ]
+    }
+  },
+  "Resources": {
+    "IngestErrors": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Condition": "AlarmsEnabled",
+      "Properties": {
+        "AlarmName": {
+          "Fn::Sub": "fintrust-ingesterrors-${Stage}"
+        },
+        "AlarmDescription": "FinTrust operator-visible alarm; no automatic remediation or notifications.",
+        "Namespace": "AWS/Lambda",
+        "MetricName": "Errors",
+        "Dimensions": [
+          {
+            "Name": "FunctionName",
+            "Value": {
+              "Fn::Sub": "fintrust-ingest-${Stage}"
+            }
+          }
+        ],
+        "Statistic": "Sum",
+        "Period": 300,
+        "EvaluationPeriods": 2,
+        "DatapointsToAlarm": 2,
+        "Threshold": 0,
+        "ComparisonOperator": "GreaterThanThreshold",
+        "TreatMissingData": "notBreaching",
+        "ActionsEnabled": false
+      }
+    },
+    "ScoringErrors": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Condition": "AlarmsEnabled",
+      "Properties": {
+        "AlarmName": {
+          "Fn::Sub": "fintrust-scoringerrors-${Stage}"
+        },
+        "AlarmDescription": "FinTrust operator-visible alarm; no automatic remediation or notifications.",
+        "Namespace": "AWS/Lambda",
+        "MetricName": "Errors",
+        "Dimensions": [
+          {
+            "Name": "FunctionName",
+            "Value": {
+              "Fn::Sub": "fintrust-scoring-${Stage}"
+            }
+          }
+        ],
+        "Statistic": "Sum",
+        "Period": 300,
+        "EvaluationPeriods": 2,
+        "DatapointsToAlarm": 2,
+        "Threshold": 0,
+        "ComparisonOperator": "GreaterThanThreshold",
+        "TreatMissingData": "notBreaching",
+        "ActionsEnabled": false
+      }
+    },
+    "AlertErrors": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Condition": "AlarmsEnabled",
+      "Properties": {
+        "AlarmName": {
+          "Fn::Sub": "fintrust-alerterrors-${Stage}"
+        },
+        "AlarmDescription": "FinTrust operator-visible alarm; no automatic remediation or notifications.",
+        "Namespace": "AWS/Lambda",
+        "MetricName": "Errors",
+        "Dimensions": [
+          {
+            "Name": "FunctionName",
+            "Value": {
+              "Fn::Sub": "fintrust-alert-${Stage}"
+            }
+          }
+        ],
+        "Statistic": "Sum",
+        "Period": 300,
+        "EvaluationPeriods": 2,
+        "DatapointsToAlarm": 2,
+        "Threshold": 0,
+        "ComparisonOperator": "GreaterThanThreshold",
+        "TreatMissingData": "notBreaching",
+        "ActionsEnabled": false
+      }
+    },
+    "ApiErrors": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Condition": "AlarmsEnabled",
+      "Properties": {
+        "AlarmName": {
+          "Fn::Sub": "fintrust-apierrors-${Stage}"
+        },
+        "AlarmDescription": "FinTrust operator-visible alarm; no automatic remediation or notifications.",
+        "Namespace": "AWS/Lambda",
+        "MetricName": "Errors",
+        "Dimensions": [
+          {
+            "Name": "FunctionName",
+            "Value": {
+              "Fn::Sub": "fintrust-api-${Stage}"
+            }
+          }
+        ],
+        "Statistic": "Sum",
+        "Period": 300,
+        "EvaluationPeriods": 2,
+        "DatapointsToAlarm": 2,
+        "Threshold": 0,
+        "ComparisonOperator": "GreaterThanThreshold",
+        "TreatMissingData": "notBreaching",
+        "ActionsEnabled": false
+      }
+    },
+    "ReportErrors": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Condition": "AlarmsEnabled",
+      "Properties": {
+        "AlarmName": {
+          "Fn::Sub": "fintrust-reporterrors-${Stage}"
+        },
+        "AlarmDescription": "FinTrust operator-visible alarm; no automatic remediation or notifications.",
+        "Namespace": "AWS/Lambda",
+        "MetricName": "Errors",
+        "Dimensions": [
+          {
+            "Name": "FunctionName",
+            "Value": {
+              "Fn::Sub": "fintrust-report-${Stage}"
+            }
+          }
+        ],
+        "Statistic": "Sum",
+        "Period": 300,
+        "EvaluationPeriods": 2,
+        "DatapointsToAlarm": 2,
+        "Threshold": 0,
+        "ComparisonOperator": "GreaterThanThreshold",
+        "TreatMissingData": "notBreaching",
+        "ActionsEnabled": false
+      }
+    },
+    "TransactionDlqNameVisible": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Condition": "AlarmsEnabled",
+      "Properties": {
+        "AlarmName": {
+          "Fn::Sub": "fintrust-transactiondlqnamevisible-${Stage}"
+        },
+        "AlarmDescription": "FinTrust operator-visible alarm; no automatic remediation or notifications.",
+        "Namespace": "AWS/SQS",
+        "MetricName": "ApproximateNumberOfMessagesVisible",
+        "Dimensions": [
+          {
+            "Name": "QueueName",
+            "Value": {
+              "Ref": "TransactionDlqName"
+            }
+          }
+        ],
+        "Statistic": "Maximum",
+        "Period": 300,
+        "EvaluationPeriods": 2,
+        "DatapointsToAlarm": 2,
+        "Threshold": 0,
+        "ComparisonOperator": "GreaterThanThreshold",
+        "TreatMissingData": "notBreaching",
+        "ActionsEnabled": false
+      }
+    },
+    "IngestFailuresNameVisible": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Condition": "AlarmsEnabled",
+      "Properties": {
+        "AlarmName": {
+          "Fn::Sub": "fintrust-ingestfailuresnamevisible-${Stage}"
+        },
+        "AlarmDescription": "FinTrust operator-visible alarm; no automatic remediation or notifications.",
+        "Namespace": "AWS/SQS",
+        "MetricName": "ApproximateNumberOfMessagesVisible",
+        "Dimensions": [
+          {
+            "Name": "QueueName",
+            "Value": {
+              "Ref": "IngestFailuresName"
+            }
+          }
+        ],
+        "Statistic": "Maximum",
+        "Period": 300,
+        "EvaluationPeriods": 2,
+        "DatapointsToAlarm": 2,
+        "Threshold": 0,
+        "ComparisonOperator": "GreaterThanThreshold",
+        "TreatMissingData": "notBreaching",
+        "ActionsEnabled": false
+      }
+    },
+    "AlertFailuresNameVisible": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Condition": "AlarmsEnabled",
+      "Properties": {
+        "AlarmName": {
+          "Fn::Sub": "fintrust-alertfailuresnamevisible-${Stage}"
+        },
+        "AlarmDescription": "FinTrust operator-visible alarm; no automatic remediation or notifications.",
+        "Namespace": "AWS/SQS",
+        "MetricName": "ApproximateNumberOfMessagesVisible",
+        "Dimensions": [
+          {
+            "Name": "QueueName",
+            "Value": {
+              "Ref": "AlertFailuresName"
+            }
+          }
+        ],
+        "Statistic": "Maximum",
+        "Period": 300,
+        "EvaluationPeriods": 2,
+        "DatapointsToAlarm": 2,
+        "Threshold": 0,
+        "ComparisonOperator": "GreaterThanThreshold",
+        "TreatMissingData": "notBreaching",
+        "ActionsEnabled": false
+      }
+    },
+    "ReportFailuresNameVisible": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Condition": "AlarmsEnabled",
+      "Properties": {
+        "AlarmName": {
+          "Fn::Sub": "fintrust-reportfailuresnamevisible-${Stage}"
+        },
+        "AlarmDescription": "FinTrust operator-visible alarm; no automatic remediation or notifications.",
+        "Namespace": "AWS/SQS",
+        "MetricName": "ApproximateNumberOfMessagesVisible",
+        "Dimensions": [
+          {
+            "Name": "QueueName",
+            "Value": {
+              "Ref": "ReportFailuresName"
+            }
+          }
+        ],
+        "Statistic": "Maximum",
+        "Period": 300,
+        "EvaluationPeriods": 2,
+        "DatapointsToAlarm": 2,
+        "Threshold": 0,
+        "ComparisonOperator": "GreaterThanThreshold",
+        "TreatMissingData": "notBreaching",
+        "ActionsEnabled": false
+      }
+    },
+    "DatabaseCpu": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Condition": "AlarmsEnabled",
+      "Properties": {
+        "AlarmName": {
+          "Fn::Sub": "fintrust-databasecpu-${Stage}"
+        },
+        "AlarmDescription": "FinTrust operator-visible alarm; no automatic remediation or notifications.",
+        "Namespace": "AWS/RDS",
+        "MetricName": "CPUUtilization",
+        "Dimensions": [
+          {
+            "Name": "DBInstanceIdentifier",
+            "Value": {
+              "Ref": "DbInstanceIdentifier"
+            }
+          }
+        ],
+        "Statistic": "Average",
+        "Period": 300,
+        "EvaluationPeriods": 2,
+        "DatapointsToAlarm": 2,
+        "Threshold": 80,
+        "ComparisonOperator": "GreaterThanThreshold",
+        "TreatMissingData": "notBreaching",
+        "ActionsEnabled": false
+      }
+    }
+  }
+}
