@@ -7,6 +7,7 @@
   "endpoint_cost_exception_required": true,
   "files": {
     "runner-shared-readonly.json": "6525c0a18689cb6dcbd5d5fbe09d3c73a5de41bc1504ed2905c5964dc6123d65",
+    "runner-existing-logs-readonly.json": "c945824a239110c090876210cfd84053ed545ea913e8fadc96b48f5702e3c70d",
     "network-review.json": "daa2cc85ea493bbfd10a287493dec852f5a6df6f9e05537179b38f6efa66316e"
   },
   "sources": {

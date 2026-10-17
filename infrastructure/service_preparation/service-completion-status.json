@@ -30,8 +30,8 @@
       "remaining": "Database/capacity gates, scoped test invocation and controlled cloud validation"
     },
     "rds": {
-      "configuration": "PRIVATE_INSTANCE_AVAILABLE_IAM_AUTH_ENABLED_STANDARD_SSM_SETTINGS_READ_BACK",
-      "remaining": "Approved private access, live read-only preflight, backup gate, migrations and per-service IAM/TLS/grant checks"
+      "configuration": "PRIVATE_RDS_READ_ONLY_TLS_VERIFIED_EXPECTED_APPLICATION_BASE_TABLES_AND_RUNTIME_ROLES_ABSENT",
+      "remaining": "Guarded base-schema initialization, ordered migrations 001-006, runtime IAM/TLS/grant verification; preserve the local ledger"
     },
     "dynamodb": {
       "configuration": "RISK_AND_EMPTY_SCOPE_TABLES_PRESENT_API_GATEWAY_ENDPOINT_READ_PATH_FIXED",
@@ -50,7 +50,7 @@
     "CLOUD_END_TO_END_AND_FAILURE_PATH_EVIDENCE"
   ],
   "application_activation_performed": false,
-  "updated_at": "2026-10-17T06:42:44.216264+00:00",
+  "updated_at": "2026-10-17T13:03:10.180210+00:00",
   "latest_safety_verification": {
     "checked_at": "2026-10-17T06:42:44.216264+00:00",
     "status": "API_CONFIGURED_FUNCTIONS_ZERO_CONSUMERS_AND_REPORTS_DISABLED",
@@ -124,5 +124,29 @@
     "end_time": null,
     "shutdown_plan": "PRESENTATION_SHUTDOWN.md",
     "data_deletion_authorized": false
+  },
+  "live_database_preflight": {
+    "status": "READ_ONLY_VERIFIED_MISSING_BASE_CLEANUP_COMPLETE",
+    "checked_at": "2026-10-17T12:40:53.584040+00:00",
+    "database": "fintrust",
+    "postgresql_version": "16.15",
+    "tls_verified": true,
+    "assessment": {
+      "state": "missing-base",
+      "issues": [
+        "base_tables_missing"
+      ],
+      "base_valid": false
+    },
+    "expected_base_tables_observed": 0,
+    "sql_write_executed": false,
+    "invocation_count": 1,
+    "cleanup_complete": true,
+    "temporary_endpoint_absence_verified": true,
+    "source_receipt": "database_preflight/live-session.json",
+    "source_receipt_sha256": "67c0121b9b3ff887f7883dd5a5808234ae8ae2ddb6f3735adeb85bf301d202d1",
+    "next_gate": "GUARDED_BASE_SCHEMA_INITIALIZATION_THEN_MIGRATIONS_001_TO_006_AND_RUNTIME_IAM_TLS_GRANTS",
+    "deployment_ready": false,
+    "local_ledger_modified": false
   }
 }

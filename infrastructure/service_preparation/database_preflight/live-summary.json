@@ -1,0 +1,24 @@
+{
+  "status": "READ_ONLY_VERIFIED_MISSING_BASE_CLEANUP_COMPLETE",
+  "checked_at": "2026-10-17T12:40:53.584040+00:00",
+  "database": "fintrust",
+  "postgresql_version": "16.15",
+  "tls_verified": true,
+  "assessment": {
+    "state": "missing-base",
+    "issues": [
+      "base_tables_missing"
+    ],
+    "base_valid": false
+  },
+  "expected_base_tables_observed": 0,
+  "sql_write_executed": false,
+  "invocation_count": 1,
+  "cleanup_complete": true,
+  "temporary_endpoint_absence_verified": true,
+  "source_receipt": "database_preflight/live-session.json",
+  "source_receipt_sha256": "67c0121b9b3ff887f7883dd5a5808234ae8ae2ddb6f3735adeb85bf301d202d1",
+  "next_gate": "GUARDED_BASE_SCHEMA_INITIALIZATION_THEN_MIGRATIONS_001_TO_006_AND_RUNTIME_IAM_TLS_GRANTS",
+  "deployment_ready": false,
+  "local_ledger_modified": false
+}

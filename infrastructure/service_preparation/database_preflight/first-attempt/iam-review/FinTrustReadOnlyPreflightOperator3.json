@@ -1,0 +1,175 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "TagLogs",
+      "Effect": "Allow",
+      "Action": [
+        "logs:TagResource"
+      ],
+      "Resource": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-migration-dev",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "aws:RequestTag/Project": "FinTrust",
+          "aws:RequestTag/Environment": "dev",
+          "aws:RequestTag/Purpose": "temporary-migration"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        },
+        "DateLessThan": {
+          "aws:CurrentTime": "2026-10-17T12:01:05Z"
+        }
+      }
+    },
+    {
+      "Sid": "Retention",
+      "Effect": "Allow",
+      "Action": [
+        "logs:PutRetentionPolicy"
+      ],
+      "Resource": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-migration-dev:*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "ForAnyValue:StringEquals": {
+          "aws:CalledVia": [
+            "cloudformation.amazonaws.com"
+          ]
+        },
+        "DateLessThan": {
+          "aws:CurrentTime": "2026-10-17T12:01:05Z"
+        }
+      }
+    },
+    {
+      "Sid": "ReadLogGroups",
+      "Effect": "Allow",
+      "Action": [
+        "logs:DescribeLogGroups"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "DateLessThan": {
+          "aws:CurrentTime": "2026-10-17T12:01:05Z"
+        }
+      }
+    },
+    {
+      "Sid": "ReadLogTags",
+      "Effect": "Allow",
+      "Action": [
+        "logs:ListTagsForResource"
+      ],
+      "Resource": "arn:aws:logs:af-south-1:966467878406:log-group:/aws/lambda/fintrust-migration-dev",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "DateLessThan": {
+          "aws:CurrentTime": "2026-10-17T12:01:05Z"
+        }
+      }
+    },
+    {
+      "Sid": "ReadCapacityAndPrivateDatabase",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:GetAccountSettings",
+        "rds:DescribeDBInstances"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "DateLessThan": {
+          "aws:CurrentTime": "2026-10-17T12:01:05Z"
+        }
+      }
+    },
+    {
+      "Sid": "RecoverOnlyTemporaryStacks",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:ContinueUpdateRollback"
+      ],
+      "Resource": [
+        "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-migration-network-dev/*",
+        "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-migration-runner-dev/*"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "DateLessThan": {
+          "aws:CurrentTime": "2026-10-17T12:01:05Z"
+        }
+      }
+    },
+    {
+      "Sid": "StageOnlyVerifiedPreflight",
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject",
+        "s3:GetObjectVersion"
+      ],
+      "Resource": "arn:aws:s3:::fintrust-reports-966467878406-af-south-1-dev/deployment/migration/667f1aba96d8deed5033bb4f9ec14b1ac02e8e36b4db04b77f20d9699fdb4d57/fintrust-migration-preflight.zip",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "DateLessThan": {
+          "aws:CurrentTime": "2026-10-17T12:01:05Z"
+        }
+      }
+    },
+    {
+      "Sid": "ReadDeploymentBucketMetadata",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetBucketLocation",
+        "s3:GetBucketVersioning"
+      ],
+      "Resource": "arn:aws:s3:::fintrust-reports-966467878406-af-south-1-dev",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "DateLessThan": {
+          "aws:CurrentTime": "2026-10-17T12:01:05Z"
+        }
+      }
+    },
+    {
+      "Sid": "EncryptDecryptOnlyPreflightViaS3",
+      "Effect": "Allow",
+      "Action": [
+        "kms:GenerateDataKey",
+        "kms:Decrypt"
+      ],
+      "Resource": "arn:aws:kms:af-south-1:966467878406:key/598a4158-2cc6-4946-af24-512784a276c8",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1",
+          "kms:ViaService": "s3.af-south-1.amazonaws.com",
+          "kms:CallerAccount": "966467878406",
+          "kms:EncryptionContext:aws:s3:arn": [
+            "arn:aws:s3:::fintrust-reports-966467878406-af-south-1-dev",
+            "arn:aws:s3:::fintrust-reports-966467878406-af-south-1-dev/deployment/migration/667f1aba96d8deed5033bb4f9ec14b1ac02e8e36b4db04b77f20d9699fdb4d57/fintrust-migration-preflight.zip"
+          ]
+        },
+        "DateLessThan": {
+          "aws:CurrentTime": "2026-10-17T12:01:05Z"
+        }
+      }
+    }
+  ]
+}

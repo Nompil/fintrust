@@ -13,7 +13,8 @@ def read(path):
 def verify():
     manifest = read(ROOT / 'manifest.json')
     acceptance = read(ROOT / 'aws-template-validation.json')
-    assert acceptance['status'] == 'TWO_TEMPLATES_ACCEPTED_NOT_DEPLOYED'
+    assert acceptance['status'] in ('TWO_TEMPLATES_ACCEPTED_NOT_DEPLOYED',
+                                     'THREE_TEMPLATES_ACCEPTED_NOT_DEPLOYED')
     for name, expected in manifest['files'].items():
         assert b'\r\n' not in (ROOT / name).read_bytes()
         assert hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == expected

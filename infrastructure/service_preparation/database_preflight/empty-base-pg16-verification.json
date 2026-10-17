@@ -1,0 +1,15 @@
+{
+  "status": "PASSED",
+  "aws_access": false,
+  "live_rds_access": false,
+  "seed_executed": false,
+  "base_sql_sha256": "ac2f9c2b5bb25fbe718e117b29a63610808ddac31a48c6828416d79b7ad09c13",
+  "probes": [
+    "nonempty_schema_refused_existing_data_preserved",
+    "six_base_tables_created_without_seed_as_non_superuser",
+    "repeat_bootstrap_refused"
+  ],
+  "temporary_cluster_removed": true,
+  "postgresql_version_num": 160015,
+  "checked_at": "2026-10-17T12:48:23.920680+00:00"
+}

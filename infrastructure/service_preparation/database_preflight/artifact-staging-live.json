@@ -1,0 +1,54 @@
+{
+  "status": "EXACT_PREFLIGHT_VERSION_DOWNLOADED_BYTES_VERIFIED",
+  "sha256": "667f1aba96d8deed5033bb4f9ec14b1ac02e8e36b4db04b77f20d9699fdb4d57",
+  "bucket": "fintrust-reports-966467878406-af-south-1-dev",
+  "key": "deployment/migration/667f1aba96d8deed5033bb4f9ec14b1ac02e8e36b4db04b77f20d9699fdb4d57/fintrust-migration-preflight.zip",
+  "size_bytes": 20673673,
+  "operator_identity": "arn:aws:sts::966467878406:assumed-role/fintrust-readonly-preflight-operator-dev/FinTrustReadOnlyPreflight",
+  "resources_deployed": false,
+  "sql_executed": false,
+  "secret_read": false,
+  "application_concurrency": {
+    "ingest": {
+      "ReservedConcurrentExecutions": 0
+    },
+    "scoring": {
+      "ReservedConcurrentExecutions": 0
+    },
+    "alert": {
+      "ReservedConcurrentExecutions": 0
+    },
+    "report": {
+      "ReservedConcurrentExecutions": 0
+    },
+    "api": {
+      "ReservedConcurrentExecutions": 0
+    }
+  },
+  "updated_at": "2026-10-17T10:04:47.003443+00:00",
+  "put": {
+    "ETag": "\"f1ec571c0b09375f6339bfac52b4f0d2\"",
+    "ChecksumSHA256": "Zn8aupbY3u1QM7tPnsFLGsAujja02wS3fyDZaZ/bTVc=",
+    "ChecksumType": "FULL_OBJECT",
+    "ServerSideEncryption": "aws:kms",
+    "VersionId": "CFIsm3UnZGGXEvpn3hhIlq3N94P9knI5",
+    "SSEKMSKeyId": "arn:aws:kms:af-south-1:966467878406:key/598a4158-2cc6-4946-af24-512784a276c8",
+    "BucketKeyEnabled": true
+  },
+  "get_result": {
+    "AcceptRanges": "bytes",
+    "LastModified": "2026-10-17T10:03:44+00:00",
+    "ContentLength": 20673673,
+    "ETag": "\"f1ec571c0b09375f6339bfac52b4f0d2\"",
+    "ChecksumSHA256": "Zn8aupbY3u1QM7tPnsFLGsAujja02wS3fyDZaZ/bTVc=",
+    "ChecksumType": "FULL_OBJECT",
+    "VersionId": "CFIsm3UnZGGXEvpn3hhIlq3N94P9knI5",
+    "ContentType": "binary/octet-stream",
+    "ServerSideEncryption": "aws:kms",
+    "Metadata": {},
+    "SSEKMSKeyId": "arn:aws:kms:af-south-1:966467878406:key/598a4158-2cc6-4946-af24-512784a276c8",
+    "BucketKeyEnabled": true
+  },
+  "version_id": "CFIsm3UnZGGXEvpn3hhIlq3N94P9knI5",
+  "exact_version_bytes_verified": true
+}

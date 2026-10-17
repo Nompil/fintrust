@@ -1,5 +1,5 @@
 {
-  "status": "TWO_TEMPLATES_ACCEPTED_NOT_DEPLOYED",
+  "status": "THREE_TEMPLATES_ACCEPTED_NOT_DEPLOYED",
   "checked_at": "2026-10-17T06:55:54.666316+00:00",
   "templates": {
     "network-review.json": {
@@ -41,6 +41,41 @@
         ],
         "Description": "REVIEW ONLY: fixed read-only database preflight; disabled by default; one qualified synchronous request; shared mode has no individual concurrency cap"
       }
+    },
+    "runner-existing-logs-readonly.json": {
+      "sha256": "c945824a239110c090876210cfd84053ed545ea913e8fadc96b48f5702e3c70d",
+      "result": {
+        "Parameters": [
+          {
+            "ParameterKey": "EnableReadOnlyPreflight",
+            "DefaultValue": "false",
+            "NoEcho": false
+          },
+          {
+            "ParameterKey": "EndpointId",
+            "NoEcho": false
+          },
+          {
+            "ParameterKey": "CodeKey",
+            "NoEcho": false
+          },
+          {
+            "ParameterKey": "CodeSha256",
+            "NoEcho": false
+          },
+          {
+            "ParameterKey": "ClientSecurityGroupId",
+            "NoEcho": false
+          },
+          {
+            "ParameterKey": "CodeObjectVersion",
+            "NoEcho": false
+          }
+        ],
+        "Description": "REVIEW ONLY: fixed read-only database preflight; disabled by default; one qualified synchronous request; shared mode has no individual concurrency cap"
+      },
+      "evidence_source": "Successful direct AWS CLI validate-template response for this exact file, 2026-10-17; same parameters/description, no capabilities",
+      "resources_created": false
     }
   },
   "resources_created": false,

@@ -1,0 +1,531 @@
+{
+  "status": "STOPPED_INSPECT_RECEIPT_AND_CLEANUP",
+  "sql_write_executed": false,
+  "lambda_invocations_attempted": 0,
+  "endpoint_created": true,
+  "cost_authorized": true,
+  "support_plan_changed": false,
+  "application_activation": false,
+  "cleanup_complete": true,
+  "updated_at": "2026-10-17T10:11:28.794274+00:00",
+  "application_safety": {
+    "ingest": {
+      "ReservedConcurrentExecutions": 0
+    },
+    "scoring": {
+      "ReservedConcurrentExecutions": 0
+    },
+    "alert": {
+      "ReservedConcurrentExecutions": 0
+    },
+    "report": {
+      "ReservedConcurrentExecutions": 0
+    },
+    "api": {
+      "ReservedConcurrentExecutions": 0
+    }
+  },
+  "cleanup_simulation": [
+    {
+      "action": "ec2:DeleteVpcEndpoints",
+      "result": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "ec2:DeleteVpcEndpoints",
+            "EvalResourceName": "arn:aws:ec2:af-south-1:966467878406:vpc-endpoint/vpce-00000000000000000",
+            "EvalDecision": "allowed",
+            "MatchedStatements": [
+              {
+                "SourcePolicyId": "PolicyInputList.2",
+                "SourcePolicyType": "IAM Policy",
+                "StartPosition": {
+                  "Line": 1,
+                  "Column": 1647
+                },
+                "EndPosition": {
+                  "Line": 1,
+                  "Column": 2112
+                }
+              }
+            ],
+            "MissingContextValues": [],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:ec2:af-south-1:966467878406:vpc-endpoint/vpce-00000000000000000",
+                "EvalResourceDecision": "allowed",
+                "MatchedStatements": [
+                  {
+                    "SourcePolicyId": "PolicyInputList.2",
+                    "SourcePolicyType": "IAM Policy",
+                    "StartPosition": {
+                      "Line": 1,
+                      "Column": 1647
+                    },
+                    "EndPosition": {
+                      "Line": 1,
+                      "Column": 2112
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "action": "ec2:DeleteSecurityGroup",
+      "result": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "ec2:DeleteSecurityGroup",
+            "EvalResourceName": "arn:aws:ec2:af-south-1:966467878406:security-group/sg-00000000000000000",
+            "EvalDecision": "allowed",
+            "MatchedStatements": [
+              {
+                "SourcePolicyId": "PolicyInputList.2",
+                "SourcePolicyType": "IAM Policy",
+                "StartPosition": {
+                  "Line": 1,
+                  "Column": 1038
+                },
+                "EndPosition": {
+                  "Line": 1,
+                  "Column": 1647
+                }
+              }
+            ],
+            "MissingContextValues": [],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:ec2:af-south-1:966467878406:security-group/sg-00000000000000000",
+                "EvalResourceDecision": "allowed",
+                "MatchedStatements": [
+                  {
+                    "SourcePolicyId": "PolicyInputList.2",
+                    "SourcePolicyType": "IAM Policy",
+                    "StartPosition": {
+                      "Line": 1,
+                      "Column": 1038
+                    },
+                    "EndPosition": {
+                      "Line": 1,
+                      "Column": 1647
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "action": "lambda:DeleteFunction",
+      "result": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "lambda:DeleteFunction",
+            "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-migration-dev",
+            "EvalDecision": "allowed",
+            "MatchedStatements": [
+              {
+                "SourcePolicyId": "PolicyInputList.2",
+                "SourcePolicyType": "IAM Policy",
+                "StartPosition": {
+                  "Line": 1,
+                  "Column": 3583
+                },
+                "EndPosition": {
+                  "Line": 1,
+                  "Column": 4179
+                }
+              }
+            ],
+            "MissingContextValues": [],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-migration-dev",
+                "EvalResourceDecision": "allowed",
+                "MatchedStatements": [
+                  {
+                    "SourcePolicyId": "PolicyInputList.2",
+                    "SourcePolicyType": "IAM Policy",
+                    "StartPosition": {
+                      "Line": 1,
+                      "Column": 3583
+                    },
+                    "EndPosition": {
+                      "Line": 1,
+                      "Column": 4179
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "action": "cloudformation:DeleteStack",
+      "result": {
+        "EvaluationResults": [
+          {
+            "EvalActionName": "cloudformation:DeleteStack",
+            "EvalResourceName": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-migration-network-dev/00000000-0000-0000-0000-000000000000",
+            "EvalDecision": "allowed",
+            "MatchedStatements": [
+              {
+                "SourcePolicyId": "PolicyInputList.1",
+                "SourcePolicyType": "IAM Policy",
+                "StartPosition": {
+                  "Line": 1,
+                  "Column": 2898
+                },
+                "EndPosition": {
+                  "Line": 1,
+                  "Column": 3340
+                }
+              }
+            ],
+            "MissingContextValues": [],
+            "EvalDecisionDetails": {},
+            "ResourceSpecificResults": [
+              {
+                "EvalResourceName": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-migration-network-dev/00000000-0000-0000-0000-000000000000",
+                "EvalResourceDecision": "allowed",
+                "MatchedStatements": [
+                  {
+                    "SourcePolicyId": "PolicyInputList.1",
+                    "SourcePolicyType": "IAM Policy",
+                    "StartPosition": {
+                      "Line": 1,
+                      "Column": 2898
+                    },
+                    "EndPosition": {
+                      "Line": 1,
+                      "Column": 3340
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "database_metadata": {
+    "DBInstanceStatus": "available",
+    "PubliclyAccessible": false,
+    "LatestRestorableTime": "2026-10-17T10:02:29+00:00",
+    "BackupRetentionPeriod": 1,
+    "DeletionProtection": true,
+    "MasterUserSecret": {
+      "SecretArn": "arn:aws:secretsmanager:af-south-1:966467878406:secret:rds!db-e93012ae-0d14-4225-bdc3-988f4d98f72a-BbEGMn",
+      "SecretStatus": "active",
+      "KmsKeyId": "arn:aws:kms:af-south-1:966467878406:key/c68acc77-115b-4da5-80be-9ea69291da19"
+    }
+  },
+  "owned_stacks": {
+    "fintrust-migration-network-dev": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-migration-network-dev/4e715bb0-ca12-11f1-b5f6-0efff94484c9",
+    "fintrust-migration-runner-dev": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-migration-runner-dev/80900420-ca12-11f1-826e-06ffd4dc9bd7"
+  },
+  "change_sets": [
+    {
+      "stack": "fintrust-migration-network-dev",
+      "review": {
+        "Changes": [
+          {
+            "Type": "Resource",
+            "ResourceChange": {
+              "Action": "Add",
+              "LogicalResourceId": "ClientSecurityGroup",
+              "ResourceType": "AWS::EC2::SecurityGroup",
+              "Scope": [],
+              "Details": []
+            }
+          },
+          {
+            "Type": "Resource",
+            "ResourceChange": {
+              "Action": "Add",
+              "LogicalResourceId": "EndpointIngress",
+              "ResourceType": "AWS::EC2::SecurityGroupIngress",
+              "Scope": [],
+              "Details": []
+            }
+          },
+          {
+            "Type": "Resource",
+            "ResourceChange": {
+              "Action": "Add",
+              "LogicalResourceId": "EndpointSecurityGroup",
+              "ResourceType": "AWS::EC2::SecurityGroup",
+              "Scope": [],
+              "Details": []
+            }
+          },
+          {
+            "Type": "Resource",
+            "ResourceChange": {
+              "Action": "Add",
+              "LogicalResourceId": "SecretsEndpoint",
+              "ResourceType": "AWS::EC2::VPCEndpoint",
+              "Scope": [],
+              "Details": []
+            }
+          }
+        ],
+        "ChangeSetName": "fintrust-migration-network-readonly-8e32256fe0",
+        "ChangeSetId": "arn:aws:cloudformation:af-south-1:966467878406:changeSet/fintrust-migration-network-readonly-8e32256fe0/32eb06c1-87ab-47a9-b247-9796f2e3b85b",
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-migration-network-dev/4e715bb0-ca12-11f1-b5f6-0efff94484c9",
+        "StackName": "fintrust-migration-network-dev",
+        "Description": null,
+        "Parameters": null,
+        "CreationTime": "2026-10-17T10:05:39.998000+00:00",
+        "ExecutionStatus": "AVAILABLE",
+        "Status": "CREATE_COMPLETE",
+        "StatusReason": null,
+        "NotificationARNs": [],
+        "RollbackConfiguration": {},
+        "Capabilities": [],
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": "dev"
+          },
+          {
+            "Key": "Purpose",
+            "Value": "temporary-migration"
+          }
+        ],
+        "ParentChangeSetId": null,
+        "IncludeNestedStacks": false,
+        "RootChangeSetId": null,
+        "OnStackFailure": null,
+        "ImportExistingResources": null,
+        "StackDriftStatus": null,
+        "DeploymentMode": null,
+        "DeploymentConfig": {
+          "Mode": "STANDARD",
+          "DisableRollback": false
+        }
+      }
+    },
+    {
+      "stack": "fintrust-migration-runner-dev",
+      "review": {
+        "Changes": [
+          {
+            "Type": "Resource",
+            "ResourceChange": {
+              "Action": "Add",
+              "LogicalResourceId": "RunnerLogs",
+              "ResourceType": "AWS::Logs::LogGroup",
+              "Scope": [],
+              "Details": []
+            }
+          },
+          {
+            "Type": "Resource",
+            "ResourceChange": {
+              "Action": "Add",
+              "LogicalResourceId": "RunnerVersion",
+              "ResourceType": "AWS::Lambda::Version",
+              "Scope": [],
+              "Details": []
+            }
+          },
+          {
+            "Type": "Resource",
+            "ResourceChange": {
+              "Action": "Add",
+              "LogicalResourceId": "Runner",
+              "ResourceType": "AWS::Lambda::Function",
+              "Scope": [],
+              "Details": []
+            }
+          }
+        ],
+        "ChangeSetName": "fintrust-migration-runner-readonly-04fb88a554",
+        "ChangeSetId": "arn:aws:cloudformation:af-south-1:966467878406:changeSet/fintrust-migration-runner-readonly-04fb88a554/f4b3e6d0-f586-4ce4-95b7-c1460a2ab6ac",
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-migration-runner-dev/80900420-ca12-11f1-826e-06ffd4dc9bd7",
+        "StackName": "fintrust-migration-runner-dev",
+        "Description": null,
+        "Parameters": [
+          {
+            "ParameterKey": "EnableReadOnlyPreflight",
+            "ParameterValue": "false"
+          },
+          {
+            "ParameterKey": "EndpointId",
+            "ParameterValue": "vpce-026f204656ecd3166"
+          },
+          {
+            "ParameterKey": "CodeKey",
+            "ParameterValue": "deployment/migration/667f1aba96d8deed5033bb4f9ec14b1ac02e8e36b4db04b77f20d9699fdb4d57/fintrust-migration-preflight.zip"
+          },
+          {
+            "ParameterKey": "CodeSha256",
+            "ParameterValue": "Zn8aupbY3u1QM7tPnsFLGsAujja02wS3fyDZaZ/bTVc="
+          },
+          {
+            "ParameterKey": "ClientSecurityGroupId",
+            "ParameterValue": "sg-0b7b1582d4c697222"
+          },
+          {
+            "ParameterKey": "CodeObjectVersion",
+            "ParameterValue": "CFIsm3UnZGGXEvpn3hhIlq3N94P9knI5"
+          }
+        ],
+        "CreationTime": "2026-10-17T10:07:04.086000+00:00",
+        "ExecutionStatus": "AVAILABLE",
+        "Status": "CREATE_COMPLETE",
+        "StatusReason": null,
+        "NotificationARNs": [],
+        "RollbackConfiguration": {},
+        "Capabilities": [],
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "FinTrust"
+          },
+          {
+            "Key": "Environment",
+            "Value": "dev"
+          },
+          {
+            "Key": "Purpose",
+            "Value": "temporary-migration"
+          }
+        ],
+        "ParentChangeSetId": null,
+        "IncludeNestedStacks": false,
+        "RootChangeSetId": null,
+        "OnStackFailure": null,
+        "ImportExistingResources": null,
+        "StackDriftStatus": null,
+        "DeploymentMode": null,
+        "DeploymentConfig": {
+          "Mode": "STANDARD",
+          "DisableRollback": false
+        }
+      }
+    }
+  ],
+  "endpoint_billing_window_started_at": "2026-10-17T10:05:44.801860+00:00",
+  "network_execution_attempted": true,
+  "network_outputs": {
+    "EndpointId": "vpce-026f204656ecd3166",
+    "ClientSecurityGroupId": "sg-0b7b1582d4c697222"
+  },
+  "failure_events": {
+    "StackEvents": [
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-migration-runner-dev/80900420-ca12-11f1-826e-06ffd4dc9bd7",
+        "EventId": "892ac660-ca12-11f1-acf3-0a32fb38dacf",
+        "StackName": "fintrust-migration-runner-dev",
+        "OperationId": "4db2e1ba-1f99-4d06-b7dc-65be6728309a",
+        "LogicalResourceId": "fintrust-migration-runner-dev",
+        "PhysicalResourceId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-migration-runner-dev/80900420-ca12-11f1-826e-06ffd4dc9bd7",
+        "ResourceType": "AWS::CloudFormation::Stack",
+        "Timestamp": "2026-10-17T10:07:18.457000+00:00",
+        "ResourceStatus": "ROLLBACK_COMPLETE",
+        "ClientRequestToken": "c6120b02-d930-44f4-b4d3-c38bf3597a2d"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-migration-runner-dev/80900420-ca12-11f1-826e-06ffd4dc9bd7",
+        "EventId": "RunnerLogs-DELETE_SKIPPED-2026-10-17T10:07:18.210Z",
+        "StackName": "fintrust-migration-runner-dev",
+        "OperationId": "4db2e1ba-1f99-4d06-b7dc-65be6728309a",
+        "LogicalResourceId": "RunnerLogs",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::Logs::LogGroup",
+        "Timestamp": "2026-10-17T10:07:18.210000+00:00",
+        "ResourceStatus": "DELETE_SKIPPED",
+        "ResourceProperties": "{\"RetentionInDays\":\"14\",\"LogGroupName\":\"/aws/lambda/fintrust-migration-dev\",\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"temporary-migration\",\"Key\":\"Purpose\"}]}",
+        "ClientRequestToken": "c6120b02-d930-44f4-b4d3-c38bf3597a2d"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-migration-runner-dev/80900420-ca12-11f1-826e-06ffd4dc9bd7",
+        "EventId": "88192f50-ca12-11f1-baf3-0a84b8c15425",
+        "StackName": "fintrust-migration-runner-dev",
+        "OperationId": "4db2e1ba-1f99-4d06-b7dc-65be6728309a",
+        "LogicalResourceId": "fintrust-migration-runner-dev",
+        "PhysicalResourceId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-migration-runner-dev/80900420-ca12-11f1-826e-06ffd4dc9bd7",
+        "ResourceType": "AWS::CloudFormation::Stack",
+        "Timestamp": "2026-10-17T10:07:16.656000+00:00",
+        "ResourceStatus": "ROLLBACK_IN_PROGRESS",
+        "ResourceStatusReason": "The following resource(s) failed to create: [RunnerLogs]. Rollback requested by user.",
+        "ClientRequestToken": "c6120b02-d930-44f4-b4d3-c38bf3597a2d"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-migration-runner-dev/80900420-ca12-11f1-826e-06ffd4dc9bd7",
+        "EventId": "RunnerLogs-CREATE_FAILED-2026-10-17T10:07:16.383Z",
+        "StackName": "fintrust-migration-runner-dev",
+        "OperationId": "f35d81bf-06fb-4766-a164-d4337fd888c7",
+        "LogicalResourceId": "RunnerLogs",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::Logs::LogGroup",
+        "Timestamp": "2026-10-17T10:07:16.383000+00:00",
+        "ResourceStatus": "CREATE_FAILED",
+        "ResourceStatusReason": "Resource handler returned message: \"Resource of type 'AWS::Logs::LogGroup' with identifier '{\"/properties/LogGroupName\":\"/aws/lambda/fintrust-migration-dev\"}' already exists.\" (RequestToken: 4dcae689-e3cd-fe56-5e45-bb2f7ab22ed8, HandlerErrorCode: AlreadyExists)",
+        "ResourceProperties": "{\"RetentionInDays\":\"14\",\"LogGroupName\":\"/aws/lambda/fintrust-migration-dev\",\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"temporary-migration\",\"Key\":\"Purpose\"}]}",
+        "ClientRequestToken": "c6120b02-d930-44f4-b4d3-c38bf3597a2d"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-migration-runner-dev/80900420-ca12-11f1-826e-06ffd4dc9bd7",
+        "EventId": "RunnerLogs-CREATE_IN_PROGRESS-2026-10-17T10:07:15.659Z",
+        "StackName": "fintrust-migration-runner-dev",
+        "OperationId": "f35d81bf-06fb-4766-a164-d4337fd888c7",
+        "LogicalResourceId": "RunnerLogs",
+        "PhysicalResourceId": "",
+        "ResourceType": "AWS::Logs::LogGroup",
+        "Timestamp": "2026-10-17T10:07:15.659000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceProperties": "{\"RetentionInDays\":\"14\",\"LogGroupName\":\"/aws/lambda/fintrust-migration-dev\",\"Tags\":[{\"Value\":\"FinTrust\",\"Key\":\"Project\"},{\"Value\":\"dev\",\"Key\":\"Environment\"},{\"Value\":\"temporary-migration\",\"Key\":\"Purpose\"}]}",
+        "ClientRequestToken": "c6120b02-d930-44f4-b4d3-c38bf3597a2d"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-migration-runner-dev/80900420-ca12-11f1-826e-06ffd4dc9bd7",
+        "EventId": "86977150-ca12-11f1-8fb8-06ad0d11b63d",
+        "StackName": "fintrust-migration-runner-dev",
+        "OperationId": "f35d81bf-06fb-4766-a164-d4337fd888c7",
+        "LogicalResourceId": "fintrust-migration-runner-dev",
+        "PhysicalResourceId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-migration-runner-dev/80900420-ca12-11f1-826e-06ffd4dc9bd7",
+        "ResourceType": "AWS::CloudFormation::Stack",
+        "Timestamp": "2026-10-17T10:07:14.132000+00:00",
+        "ResourceStatus": "CREATE_IN_PROGRESS",
+        "ResourceStatusReason": "User Initiated",
+        "ClientRequestToken": "c6120b02-d930-44f4-b4d3-c38bf3597a2d"
+      },
+      {
+        "StackId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-migration-runner-dev/80900420-ca12-11f1-826e-06ffd4dc9bd7",
+        "EventId": "808fb600-ca12-11f1-826e-06ffd4dc9bd7",
+        "StackName": "fintrust-migration-runner-dev",
+        "LogicalResourceId": "fintrust-migration-runner-dev",
+        "PhysicalResourceId": "arn:aws:cloudformation:af-south-1:966467878406:stack/fintrust-migration-runner-dev/80900420-ca12-11f1-826e-06ffd4dc9bd7",
+        "ResourceType": "AWS::CloudFormation::Stack",
+        "Timestamp": "2026-10-17T10:07:04.086000+00:00",
+        "ResourceStatus": "REVIEW_IN_PROGRESS",
+        "ResourceStatusReason": "User Initiated"
+      }
+    ]
+  },
+  "error": "Stack fintrust-migration-runner-dev: ROLLBACK_IN_PROGRESS",
+  "master_secret_permission_revoked": true,
+  "temporary_endpoint_absence_verified": true,
+  "endpoint_billing_window_ended_at": "2026-10-17T10:10:06.139777+00:00",
+  "temporary_stacks_absent": true,
+  "original_deployer_attachments_restored": true,
+  "temporary_iam_removed": true
+}

@@ -1,0 +1,15 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "sts:AssumeRole",
+      "Resource": "arn:aws:iam::966467878406:role/fintrust-readonly-preflight-operator-dev",
+      "Condition": {
+        "DateLessThan": {
+          "aws:CurrentTime": "2026-10-17T12:01:05Z"
+        }
+      }
+    }
+  ]
+}

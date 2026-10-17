@@ -1,0 +1,126 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ReadOnlyApplicationSafety",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:GetFunctionConcurrency"
+      ],
+      "Resource": [
+        "arn:aws:lambda:af-south-1:966467878406:function:fintrust-ingest-dev",
+        "arn:aws:lambda:af-south-1:966467878406:function:fintrust-scoring-dev",
+        "arn:aws:lambda:af-south-1:966467878406:function:fintrust-alert-dev",
+        "arn:aws:lambda:af-south-1:966467878406:function:fintrust-report-dev",
+        "arn:aws:lambda:af-south-1:966467878406:function:fintrust-api-dev"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "DateLessThan": {
+          "aws:CurrentTime": "2026-10-17T14:31:00Z"
+        }
+      }
+    },
+    {
+      "Sid": "ReadOnlyConsumerSafety",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:GetEventSourceMapping"
+      ],
+      "Resource": [
+        "arn:aws:lambda:af-south-1:966467878406:event-source-mapping:a390899f-ad1d-44ed-b1b7-2ea75415e8cf",
+        "arn:aws:lambda:af-south-1:966467878406:event-source-mapping:0bec8080-c916-4318-b457-64677307c0ee"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "DateLessThan": {
+          "aws:CurrentTime": "2026-10-17T14:31:00Z"
+        }
+      }
+    },
+    {
+      "Sid": "ReadOnlyReportSchedule",
+      "Effect": "Allow",
+      "Action": [
+        "events:DescribeRule"
+      ],
+      "Resource": "arn:aws:events:af-south-1:966467878406:rule/fintrust-monthly-dev",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "DateLessThan": {
+          "aws:CurrentTime": "2026-10-17T14:31:00Z"
+        }
+      }
+    },
+    {
+      "Sid": "ReadOnlyRawDeliverySafety",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetBucketNotification"
+      ],
+      "Resource": "arn:aws:s3:::fintrust-raw-966467878406-af-south-1-dev",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "DateLessThan": {
+          "aws:CurrentTime": "2026-10-17T14:31:00Z"
+        }
+      }
+    },
+    {
+      "Sid": "ReadOnlyRunnerCodeSigning",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:GetFunctionCodeSigningConfig"
+      ],
+      "Resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-migration-dev",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "DateLessThan": {
+          "aws:CurrentTime": "2026-10-17T14:31:00Z"
+        }
+      }
+    },
+    {
+      "Sid": "ReadOnlyMasterSecretMetadata",
+      "Effect": "Allow",
+      "Action": [
+        "secretsmanager:DescribeSecret"
+      ],
+      "Resource": "arn:aws:secretsmanager:af-south-1:966467878406:secret:rds!db-e93012ae-0d14-4225-bdc3-988f4d98f72a-BbEGMn",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "DateLessThan": {
+          "aws:CurrentTime": "2026-10-17T14:31:00Z"
+        }
+      }
+    },
+    {
+      "Sid": "EmergencyThrottleOnlyRunner",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:PutFunctionConcurrency"
+      ],
+      "Resource": "arn:aws:lambda:af-south-1:966467878406:function:fintrust-migration-dev",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "af-south-1"
+        },
+        "DateLessThan": {
+          "aws:CurrentTime": "2026-10-17T14:31:00Z"
+        }
+      }
+    }
+  ]
+}

@@ -29,6 +29,15 @@ class PreflightBoundaryTests(unittest.TestCase):
             self.assertEqual(doc['Resources']['Runner']['Properties']['ReservedConcurrentExecutions'], 0)
             self.assertNotIn('EnableReadOnlyPreflight', doc['Parameters'])
 
+    def test_existing_log_group_is_preserved_outside_runner_stack(self):
+        candidate = template(reuse_existing_logs=True)
+        expected = template()
+        del expected['Resources']['RunnerLogs']
+        del expected['Resources']['Runner']['DependsOn']
+        self.assertEqual(candidate, expected)
+        self.assertEqual(set(candidate['Resources']), {'Runner', 'RunnerVersion'})
+        self.assertEqual(candidate['Parameters']['EnableReadOnlyPreflight']['Default'], 'false')
+
     def test_network_is_single_az_without_existing_database_edits(self):
         doc = migration.network_template()
         self.assertEqual(len(doc['Resources']), 4)

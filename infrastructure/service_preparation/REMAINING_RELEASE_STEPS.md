@@ -21,13 +21,22 @@ runner's capacity/security plan or the full integrated-release gates below.
    support or remove throttles as a workaround.
 2. **Approve and prove database access.** Follow
    `../PRIVATE_RDS_MIGRATION_PLAN.md` and `../PRIVATE_RDS_RUNNER.md` against the
-   consolidated release evidence. The proposed temporary private endpoint has
-   a charge and remains unapproved. Do not recreate it under the USD 10 budget
-   merely to proceed. Start with the fixed read-only preflight; preserve the
+   consolidated release evidence. The owner has approved the bounded read-only
+   check and temporary private endpoint cost exception, recorded in
+   `database_preflight/cost-authorization.json`. Authentication is still required;
+   approval does not establish that the check ran. The prepared controller removes
+   its temporary endpoint after the check and records cleanup evidence. Start
+   with the fixed read-only preflight; preserve the
    private RDS instance, existing financial records and administrative recovery.
    Review live schema/owners/grants and the backup gate before migration DDL.
    Then run the bound migration phases and verify each service's IAM/TLS login
    and privileges. Local PostgreSQL rehearsal is not live RDS evidence.
+   **Live update, 17 October:** the single read-only request succeeded over
+   verified TLS on PostgreSQL 16.15. It found the expected application base
+   tables and runtime roles absent (`missing-base`). Guarded base initialization
+   must precede migrations. See `database_preflight/live-summary.json` and
+   `database_preflight/DATABASE_INITIALIZATION_NEXT.md`; the summary records
+   cleanup separately from query success. No live schema writes occurred.
 3. **Package staging is complete.** The current archive has SHA256
    `ff6324d64a5d65dab18523a30ea72bb1594d2fa5ca7fbe6b8391c52f03ed589d`.
    Its key is `deployment/lambda/<SHA256>/fintrust.zip` in
