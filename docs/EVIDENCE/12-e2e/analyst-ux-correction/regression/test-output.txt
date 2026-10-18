@@ -32,7 +32,7 @@ E
 E     Node.js v24.19.0
 E
 E   assert 1 == 0
-E    +  where 1 = CompletedProcess(args=['C:\\Users\\Nompilo\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\no...lTypeScript (node:internal/process/execution:295:3)\n    at node:internal/main/eval_string:71:3\n\nNode.js v24.19.0\n').returncode
+E    +  where 1 = CompletedProcess(args=['C:\\Users\\Nompilo\\.cache\\runtime-tools\\primary-runtime\\dependencies\\node\\bin\\no...lTypeScript (node:internal/process/execution:295:3)\n    at node:internal/main/eval_string:71:3\n\nNode.js v24.19.0\n').returncode
 =========================== short test summary info ===========================
 FAILED tests/test_analyst_workflow_priority.py::test_role_navigation_preserves_auditor_evidence_priority
 1 failed, 823 passed, 1 skipped in 391.95s (0:06:31)

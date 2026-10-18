@@ -46,7 +46,7 @@
   "csv_files": {
     "A": "fintrust_e2e_mixed_transactions.csv",
     "B": "fintrust_e2e_companion_transactions_B.csv",
-    "location": "external ChatGPT downloads, not in repository",
+    "location": "externally supplied downloads, not in repository",
     "executed": false,
     "current_tests": "supplied scenario rows, no invented file path"
   },

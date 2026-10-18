@@ -11,3 +11,5 @@ A separate history path check found no committed private-key files, local databa
 AWS account/resource identifiers and dated console evidence are retained to trace the case-study deployment; these identifiers do not grant access. Application passwords, authentication tokens, MFA codes and recovery secrets must not be added. Repository visibility does not grant access to the live application or the AWS account.
 
 This is a publication review, not an independent security certification. Public source and dated evidence should be read alongside the live runbook's capacity, authentication, email delivery and hosting limitations.
+
+Machine-specific runtime directory labels in historical text logs are normalized in the current documentation. The original test counts, failure outcomes, timestamps and deployment verification results are retained. Earlier Git revisions remain the historical record.

@@ -330,7 +330,7 @@ PostgreSQL16. No CI rerun/push or package rebuild occurred. Evidence records exa
 final counts and environment; no failed attempt is labelled successful.
 
 CSV A: fintrust_e2e_mixed_transactions.csv. CSV B:
-fintrust_e2e_companion_transactions_B.csv. Both are external ChatGPT downloads,
+fintrust_e2e_companion_transactions_B.csv. Both are externally supplied downloads,
 not present in the repository. Tests currently use scenario rows, not claimed
 CSV execution. Later import the actual files into a reviewed location, preserve
 bytes/hashes, identify fixture account IDs, freeze receipt clock and expected row
