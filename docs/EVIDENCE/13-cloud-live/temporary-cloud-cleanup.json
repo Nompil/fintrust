@@ -1,0 +1,17 @@
+{
+  "status": "TEMPORARY_CLOUD_SETUP_FULLY_REMOVED_LIVE_APPLICATION_PRESERVED",
+  "recorded_at": "2026-10-18T01:05:31.213206+00:00",
+  "temporary_stacks_deleted": 10,
+  "all_recorded_temporary_stacks_delete_complete": true,
+  "owned_temporary_endpoints_removed": 5,
+  "temporary_repair_iam_and_layer_removed": true,
+  "temporary_operator_roles_and_credential_caches_removed": true,
+  "audit_logs_and_artifact_versions_retained": true,
+  "financial_data_deleted": false,
+  "permanent_workload_resources_changed": false,
+  "public_availability_after_cleanup": {
+    "/": 200,
+    "/v1/health": 200,
+    "/v1/auth/config": 200
+  }
+}

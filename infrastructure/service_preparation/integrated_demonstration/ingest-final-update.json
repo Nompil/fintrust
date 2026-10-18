@@ -46,7 +46,7 @@
         "Handler": "fintrust.ingest.lambda_handler",
         "Code": {
           "S3Bucket": "fintrust-reports-966467878406-af-south-1-dev",
-          "S3Key": "deployment/lambda/81f69a719bded13b3b0ade513a59fdcc8e04773e039854b16083fc73e6c08bf1/fintrust.zip",
+          "S3Key": "deployment/lambda/3210140c5dbc4241a058e32e7cc10be74cbba9658c003bfadb86e7838065c663/fintrust.zip",
           "S3ObjectVersion": {
             "Ref": "CodeObjectVersion"
           }

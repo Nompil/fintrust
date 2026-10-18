@@ -41,5 +41,7 @@
   "support_plan_changed": false,
   "transaction_email_inbox_delivery_verified": false,
   "administrator_first_login_not_verified": true,
-  "cloud_user_provisioning_is_operator_managed": true
+  "cloud_user_provisioning_is_operator_managed": true,
+  "temporary_setup_cleanup_complete": true,
+  "public_availability_after_cleanup_verified": true
 }
