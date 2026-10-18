@@ -1,6 +1,18 @@
 # FinTrust
 Transaction Monitoring & Risk Alert Platform
 
+## Submission and live demonstration — 18 October 2026
+
+**[Open Imbokodo Bank on AWS](https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/)** · [Demonstration guide](docs/CLOUD_DEMONSTRATION_RUNBOOK.md) · [Final live evidence](docs/EVIDENCE/13-cloud-live/)
+
+This branch contains the consolidated presentation release. The application is hosted on API Gateway and Lambda in Cape Town (`af-south-1`), with Cognito sign-in and a private PostgreSQL ledger. Demonstration data is fictional. Evaluators can read this repository without an AWS account; application access requires a separately provisioned account. Passwords and MFA codes are never published here.
+
+Verified live workflows include analyst sign-in, CSV ingestion, stored transactions, risk scoring, review decisions, quarantine correction recovery and scheduled report generation. The final demonstration ledger contains four transactions. The October report is a three-transaction snapshot created before the correction. Temporary setup endpoints, repair stacks and operator permissions were removed.
+
+Known limits: cloud user creation uses an AWS operator workflow; the administrator's user-management page is read-only. SES recorded receiving-server deliveries, but Outlook Inbox placement of transaction alerts remains unconfirmed. Regional Lambda capacity is shared at ten concurrent executions; this is a controlled demonstration, not production load certification. Hosting is temporary and will be stopped after the presentation to control costs.
+
+For assessment, start with the demonstration guide and final live evidence above. Older screenshots, PDFs and progress records retain their original dates and describe earlier checkpoints; they do not override the final live verification.
+
 ## Business Problem
 Imbokodo Bank is a **fictional case-study client**. The operations team needs to reconcile transaction files, investigate risk and retain source evidence. Invalid data and valid high-risk transactions need separate outcomes.
 
@@ -65,17 +77,17 @@ Open Administration > Users to create named records and manage role/status. Enro
 ```powershell
 py tools/provision_local_user.py --username analyst03 --registry .env.release1-auth.json
 ```
-Use a unique random credential of at least 32 characters; never put it in commands, Git or evidence. Enrollment preserves role/account scope and refuses credential replacement. Production authentication remains a separate deployment gate. Disabled users cannot sign in; Admin explicitly reassigns unresolved reviews. Optional `FINTRUST_REVIEW_SLA_SECONDS` configures queue deadlines; none is assumed by default.
+Use a unique random credential of at least 32 characters; never put it in commands, Git or evidence. Enrollment preserves role/account scope and refuses credential replacement. This section describes local authentication; the cloud application uses Cognito. Disabled users cannot sign in; Admin explicitly reassigns unresolved reviews. Optional `FINTRUST_REVIEW_SLA_SECONDS` configures queue deadlines; none is assumed by default.
 
 ## Testing
 ```powershell
 py tools/local.py test
 py tools/local.py test --database
 ```
-Latest implementation `c35e41b`: **811 regression passed / 1 expected administrator-only skip; 19 focused and 82 affected tests passed; workbench, investigation, multi-user and CSV scenario browser gates passed**. [Recorded results](docs/EVIDENCE/12-e2e/analyst-workbench/verification-summary.json).
+The Linux verification workflow builds the Lambda package, verifies production imports, runs PostgreSQL 16 service-role checks, browser gates and the full regression suite. [Successful release verification at `ab5302d`](https://github.com/Nompil/fintrust/actions/runs/39067872212) includes the correction batch-lock regression. Later submission updates document live results and cleanup; they do not represent a new deployment. Historical test counts remain in their dated evidence records.
 
 ## Current Status
-[Project Progress](docs/FinTrust_Project_Progress.pdf) is the living status/history record. AWS foundation stages have historical DEPLOYED evidence. Complete current-release integration, live schema bootstrap and the fresh Linux artifact gate remain PENDING VERIFICATION. The Analyst workbench is LOCAL VERIFIED. Next: navigation polish and the end-to-end scenario pack. AI remains PLANNED.
+The AWS demonstration is deployed. Use the [cloud demonstration runbook](docs/CLOUD_DEMONSTRATION_RUNBOOK.md) for its verified state, remaining limitations, presentation sequence and shutdown plan. [Project Progress](docs/FinTrust_Project_Progress.pdf) preserves earlier implementation history. AI remains planned and is not part of the demonstrated product.
 
 ## Full Project Documentation
 [Project Master](docs/FinTrust_Project_Master.pdf) explains business rules, architecture, data, security, cost and limits. Editable sources are [Master](docs/source/project-master.json) and [Progress](docs/source/project-progress.json); regenerate both with `python tools/build_project_docs.py` (ReportLab and PyMuPDF required). [Documentation inventory](docs/source/documentation-inventory.json) records each disposition. Update these sources instead of creating new status documents. Active operational contracts remain in place; superseded narrative is under `docs/archive/`.
@@ -85,4 +97,4 @@ Latest implementation `c35e41b`: **811 regression passed / 1 expected administra
 
 ## Local end-to-end scenario verification
 
-The [20-scenario evidence record](docs/EVIDENCE/12-e2e/scenario-verification/SCENARIO_RESULTS.md) traces input, processing, database state, UI/API evidence, audit and final outcome. The final selected runs passed 125 tests with no failures or skips. Four browser gates cover investigation, multi-user workflows, all three review outcomes and CSV A/B admission/report exports. Each scenario labels direct browser evidence versus API evidence. AWS transports are mocked; live AWS E2E remains separately gated. No product logic, schema or business-rule change was needed.
+The [20-scenario evidence record](docs/EVIDENCE/12-e2e/scenario-verification/SCENARIO_RESULTS.md) traces input, processing, database state, UI/API evidence, audit and final outcome. Those selected local runs passed 125 tests with no failures or skips. Four browser gates cover investigation, multi-user workflows, all three review outcomes and CSV A/B admission/report exports. Each scenario labels browser versus API evidence. These local scenarios mock AWS transports; the separate [live cloud evidence](docs/EVIDENCE/13-cloud-live/) records actual AWS processing and owner-confirmed analyst access.
