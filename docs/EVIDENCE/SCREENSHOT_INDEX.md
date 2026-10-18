@@ -1,0 +1,93 @@
+# Consolidated screenshot index
+
+Byte-identical screenshot copies have been consolidated. Each former capture path below maps to an existing retained image. Historical JSON/XML receipts retain their original capture names and outcomes; use this index or [the SHA-256 map](screenshot-aliases.json) to resolve those names. Identical content is not evidence of an independent new capture.
+
+Only repeated PNG files were removed. Test results, deployment snapshots and unique screenshots are preserved. This reduces duplicate navigation entries; Git already stores identical file content once.
+
+| Former screenshot path | Retained identical image |
+|---|---|
+| `12-e2e/role-workflow-ux/browser/transactions.png` | [12-e2e/clean-start/browser/transactions.png](12-e2e/clean-start/browser/transactions.png) |
+| `12-e2e/system-assurance/browser/transactions.png` | [12-e2e/clean-start/browser/transactions.png](12-e2e/clean-start/browser/transactions.png) |
+| `12-e2e/role-workflow-ux/browser/insights.png` | [12-e2e/clean-start/browser/insights.png](12-e2e/clean-start/browser/insights.png) |
+| `12-e2e/system-assurance/browser/insights.png` | [12-e2e/clean-start/browser/insights.png](12-e2e/clean-start/browser/insights.png) |
+| `12-e2e/role-workflow-ux/browser/quarantine.png` | [12-e2e/clean-start/browser/quarantine.png](12-e2e/clean-start/browser/quarantine.png) |
+| `12-e2e/system-assurance/browser/quarantine.png` | [12-e2e/clean-start/browser/quarantine.png](12-e2e/clean-start/browser/quarantine.png) |
+| `12-e2e/scenario-verification/csv-browser/insights-all-dates.png` | [12-e2e/analyst-workbench/scenario-browser/insights-all-dates.png](12-e2e/analyst-workbench/scenario-browser/insights-all-dates.png) |
+| `12-e2e/system-assurance/browser/insights-all-dates.png` | [12-e2e/role-workflow-ux/browser/insights-all-dates.png](12-e2e/role-workflow-ux/browser/insights-all-dates.png) |
+| `12-e2e/role-workflow-ux/browser/analyst-quarantine-resubmitted.png` | [12-e2e/clean-start/browser/analyst-quarantine-resubmitted.png](12-e2e/clean-start/browser/analyst-quarantine-resubmitted.png) |
+| `12-e2e/system-assurance/browser/analyst-quarantine-resubmitted.png` | [12-e2e/clean-start/browser/analyst-quarantine-resubmitted.png](12-e2e/clean-start/browser/analyst-quarantine-resubmitted.png) |
+| `12-e2e/scenario-verification/csv-browser/analyst01-insights-verified.png` | [12-e2e/analyst-workbench/scenario-browser/analyst01-insights-verified.png](12-e2e/analyst-workbench/scenario-browser/analyst01-insights-verified.png) |
+| `12-e2e/scenario-verification/csv-browser/auditor01-insights-verified.png` | [12-e2e/analyst-workbench/scenario-browser/auditor01-insights-verified.png](12-e2e/analyst-workbench/scenario-browser/auditor01-insights-verified.png) |
+| `12-e2e/repository-hardening/browser/insights-all-dates.png` | [12-e2e/analyst-workflow/browser/insights-all-dates.png](12-e2e/analyst-workflow/browser/insights-all-dates.png) |
+| `12-e2e/repository-hardening/browser/analyst01-insights-verified.png` | [12-e2e/analyst-workflow/browser/analyst01-insights-verified.png](12-e2e/analyst-workflow/browser/analyst01-insights-verified.png) |
+| `12-e2e/repository-hardening/browser/auditor01-insights-verified.png` | [12-e2e/analyst-workflow/browser/auditor01-insights-verified.png](12-e2e/analyst-workflow/browser/auditor01-insights-verified.png) |
+| `12-e2e/presentation-ux-freeze/browser/auditor01-insights-verified.png` | [12-e2e/analyst-workspace/browser/auditor01-insights-verified.png](12-e2e/analyst-workspace/browser/auditor01-insights-verified.png) |
+| `12-e2e/scenario-verification/csv-browser/transactions.png` | [12-e2e/analyst-workbench/scenario-browser/transactions.png](12-e2e/analyst-workbench/scenario-browser/transactions.png) |
+| `12-e2e/presentation-ux-freeze/browser/transactions.png` | [12-e2e/analyst-workspace/browser/transactions.png](12-e2e/analyst-workspace/browser/transactions.png) |
+| `12-e2e/repository-hardening/browser/transactions.png` | [12-e2e/analyst-workflow/browser/transactions.png](12-e2e/analyst-workflow/browser/transactions.png) |
+| `12-e2e/scenario-verification/csv-browser/insights.png` | [12-e2e/analyst-workbench/scenario-browser/insights.png](12-e2e/analyst-workbench/scenario-browser/insights.png) |
+| `12-e2e/repository-hardening/browser/insights.png` | [12-e2e/analyst-workflow/browser/insights.png](12-e2e/analyst-workflow/browser/insights.png) |
+| `12-e2e/presentation-ux-freeze/browser/insights.png` | [12-e2e/analyst-workspace/browser/insights.png](12-e2e/analyst-workspace/browser/insights.png) |
+| `12-e2e/role-workflow-ux/browser/quarantine-detail.png` | [12-e2e/clean-start/browser/quarantine-detail.png](12-e2e/clean-start/browser/quarantine-detail.png) |
+| `12-e2e/system-assurance/browser/quarantine-detail.png` | [12-e2e/clean-start/browser/quarantine-detail.png](12-e2e/clean-start/browser/quarantine-detail.png) |
+| `12-e2e/scenario-verification/csv-browser/quarantine-detail.png` | [12-e2e/analyst-workbench/scenario-browser/quarantine-detail.png](12-e2e/analyst-workbench/scenario-browser/quarantine-detail.png) |
+| `12-e2e/presentation-ux-freeze/browser/quarantine.png` | [12-e2e/analyst-workspace/browser/quarantine.png](12-e2e/analyst-workspace/browser/quarantine.png) |
+| `12-e2e/scenario-verification/csv-browser/quarantine.png` | [12-e2e/analyst-workbench/scenario-browser/quarantine.png](12-e2e/analyst-workbench/scenario-browser/quarantine.png) |
+| `12-e2e/repository-hardening/browser/quarantine.png` | [12-e2e/analyst-workflow/browser/quarantine.png](12-e2e/analyst-workflow/browser/quarantine.png) |
+| `12-e2e/scenario-verification/csv-browser/A-whole-file-replay.png` | [12-e2e/analyst-workbench/scenario-browser/A-whole-file-replay.png](12-e2e/analyst-workbench/scenario-browser/A-whole-file-replay.png) |
+| `12-e2e/repository-hardening/browser/A-whole-file-replay.png` | [12-e2e/analyst-workflow/browser/A-whole-file-replay.png](12-e2e/analyst-workflow/browser/A-whole-file-replay.png) |
+| `12-e2e/analyst-workbench/scenario-browser/release1-transaction-detail.png` | [12-e2e/analyst-workbench/scenario-browser/high-risk-transaction.png](12-e2e/analyst-workbench/scenario-browser/high-risk-transaction.png) |
+| `12-e2e/scenario-verification/csv-browser/release1-transaction-detail.png` | [12-e2e/scenario-verification/csv-browser/high-risk-transaction.png](12-e2e/scenario-verification/csv-browser/high-risk-transaction.png) |
+| `12-e2e/analyst-workflow/browser/release1-transaction-detail.png` | [12-e2e/analyst-workflow/browser/high-risk-transaction.png](12-e2e/analyst-workflow/browser/high-risk-transaction.png) |
+| `12-e2e/repository-hardening/browser/release1-transaction-detail.png` | [12-e2e/repository-hardening/browser/high-risk-transaction.png](12-e2e/repository-hardening/browser/high-risk-transaction.png) |
+| `12-e2e/presentation-readiness/browser/release1-transaction-detail.png` | [12-e2e/presentation-readiness/browser/high-risk-transaction.png](12-e2e/presentation-readiness/browser/high-risk-transaction.png) |
+| `12-e2e/role-workflow-ux/browser/ingestion-batches.png` | [12-e2e/clean-start/browser/ingestion-batches.png](12-e2e/clean-start/browser/ingestion-batches.png) |
+| `12-e2e/system-assurance/browser/ingestion-batches.png` | [12-e2e/clean-start/browser/ingestion-batches.png](12-e2e/clean-start/browser/ingestion-batches.png) |
+| `12-e2e/role-workflow-ux/browser/A-whole-file-replay.png` | [12-e2e/clean-start/browser/A-whole-file-replay.png](12-e2e/clean-start/browser/A-whole-file-replay.png) |
+| `12-e2e/system-assurance/browser/A-whole-file-replay.png` | [12-e2e/clean-start/browser/A-whole-file-replay.png](12-e2e/clean-start/browser/A-whole-file-replay.png) |
+| `12-e2e/analyst-workspace/browser/release1-transaction-detail.png` | [12-e2e/analyst-workspace/browser/high-risk-transaction.png](12-e2e/analyst-workspace/browser/high-risk-transaction.png) |
+| `12-e2e/presentation-ux-freeze/browser/release1-transaction-detail.png` | [12-e2e/presentation-ux-freeze/browser/high-risk-transaction.png](12-e2e/presentation-ux-freeze/browser/high-risk-transaction.png) |
+| `12-e2e/system-assurance/browser/release1-transaction-detail.png` | [12-e2e/system-assurance/browser/high-risk-transaction.png](12-e2e/system-assurance/browser/high-risk-transaction.png) |
+| `12-e2e/role-workflow-ux/browser/release1-transaction-detail.png` | [12-e2e/role-workflow-ux/browser/high-risk-transaction.png](12-e2e/role-workflow-ux/browser/high-risk-transaction.png) |
+| `12-e2e/clean-start/browser/release1-transaction-detail.png` | [12-e2e/clean-start/browser/high-risk-transaction.png](12-e2e/clean-start/browser/high-risk-transaction.png) |
+| `12-e2e/role-workflow-ux/browser/B-upload-warning.png` | [12-e2e/clean-start/browser/B-upload-warning.png](12-e2e/clean-start/browser/B-upload-warning.png) |
+| `12-e2e/system-assurance/browser/B-upload-warning.png` | [12-e2e/clean-start/browser/B-upload-warning.png](12-e2e/clean-start/browser/B-upload-warning.png) |
+| `12-e2e/role-workflow-ux/browser/invalid-file-rejection.png` | [12-e2e/clean-start/browser/invalid-file-rejection.png](12-e2e/clean-start/browser/invalid-file-rejection.png) |
+| `12-e2e/system-assurance/browser/invalid-file-rejection.png` | [12-e2e/clean-start/browser/invalid-file-rejection.png](12-e2e/clean-start/browser/invalid-file-rejection.png) |
+| `12-e2e/repository-hardening/browser/analyst-quarantine-resubmitted.png` | [12-e2e/analyst-workflow/browser/analyst-quarantine-resubmitted.png](12-e2e/analyst-workflow/browser/analyst-quarantine-resubmitted.png) |
+| `12-e2e/role-workflow-ux/browser/A-upload-warning.png` | [12-e2e/clean-start/browser/A-upload-warning.png](12-e2e/clean-start/browser/A-upload-warning.png) |
+| `12-e2e/system-assurance/browser/A-upload-warning.png` | [12-e2e/clean-start/browser/A-upload-warning.png](12-e2e/clean-start/browser/A-upload-warning.png) |
+| `12-e2e/scenario-verification/csv-browser/B-upload-warning.png` | [12-e2e/analyst-workbench/scenario-browser/B-upload-warning.png](12-e2e/analyst-workbench/scenario-browser/B-upload-warning.png) |
+| `12-e2e/scenario-verification/csv-browser/analyst-quarantine-resubmitted.png` | [12-e2e/analyst-workbench/scenario-browser/analyst-quarantine-resubmitted.png](12-e2e/analyst-workbench/scenario-browser/analyst-quarantine-resubmitted.png) |
+| `12-e2e/repository-hardening/browser/B-upload-warning.png` | [12-e2e/analyst-workflow/browser/B-upload-warning.png](12-e2e/analyst-workflow/browser/B-upload-warning.png) |
+| `12-e2e/analyst-ux-correction/full-browser/release1-transaction-detail.png` | [12-e2e/analyst-ux-correction/full-browser/high-risk-transaction.png](12-e2e/analyst-ux-correction/full-browser/high-risk-transaction.png) |
+| `12-e2e/role-workflow-ux/browser/api-unavailable.png` | [12-e2e/clean-start/browser/api-unavailable.png](12-e2e/clean-start/browser/api-unavailable.png) |
+| `12-e2e/system-assurance/browser/api-unavailable.png` | [12-e2e/clean-start/browser/api-unavailable.png](12-e2e/clean-start/browser/api-unavailable.png) |
+| `12-e2e/workflow-continuity/investigation/quarantine-revalidated-accepted.png` | [12-e2e/workflow-continuity/investigation/quarantine-correction-submitted.png](12-e2e/workflow-continuity/investigation/quarantine-correction-submitted.png) |
+| `12-e2e/scenario-verification/investigation/quarantine-split-detail.png` | [12-e2e/analyst-workbench/investigation/quarantine-split-detail.png](12-e2e/analyst-workbench/investigation/quarantine-split-detail.png) |
+| `12-e2e/scenario-verification/csv-browser/overview.png` | [12-e2e/analyst-workbench/scenario-browser/overview.png](12-e2e/analyst-workbench/scenario-browser/overview.png) |
+| `12-e2e/scenario-verification/multi-user/quarantine-recovery-detail.png` | [12-e2e/analyst-workbench/multi-user/quarantine-recovery-detail.png](12-e2e/analyst-workbench/multi-user/quarantine-recovery-detail.png) |
+| `12-e2e/scenario-verification/csv-browser/A-upload-warning.png` | [12-e2e/analyst-workbench/scenario-browser/A-upload-warning.png](12-e2e/analyst-workbench/scenario-browser/A-upload-warning.png) |
+| `12-e2e/repository-hardening/browser/A-upload-warning.png` | [12-e2e/analyst-workflow/browser/A-upload-warning.png](12-e2e/analyst-workflow/browser/A-upload-warning.png) |
+| `12-e2e/scenario-verification/csv-browser/analyst-transactions-risk-overview.png` | [12-e2e/analyst-workbench/scenario-browser/analyst-transactions-risk-overview.png](12-e2e/analyst-workbench/scenario-browser/analyst-transactions-risk-overview.png) |
+| `12-e2e/presentation-readiness/browser/ingestion-batches.png` | [12-e2e/presentation-readiness/browser/A-whole-file-replay.png](12-e2e/presentation-readiness/browser/A-whole-file-replay.png) |
+| `12-e2e/workflow-continuity/full-browser/release1-transaction-detail.png` | [12-e2e/workflow-continuity/full-browser/high-risk-transaction.png](12-e2e/workflow-continuity/full-browser/high-risk-transaction.png) |
+| `12-e2e/repository-hardening/browser/quarantine-detail.png` | [12-e2e/analyst-workflow/browser/quarantine-detail.png](12-e2e/analyst-workflow/browser/quarantine-detail.png) |
+| `12-e2e/presentation-ux-freeze/browser/quarantine-detail.png` | [12-e2e/analyst-workspace/browser/quarantine-detail.png](12-e2e/analyst-workspace/browser/quarantine-detail.png) |
+| `12-e2e/release1-lifecycle/browser/ingestion-batches.png` | [12-e2e/release1-lifecycle/browser/A-whole-file-replay.png](12-e2e/release1-lifecycle/browser/A-whole-file-replay.png) |
+| `12-e2e/system-assurance/browser/administration.png` | [12-e2e/role-workflow-ux/browser/administration.png](12-e2e/role-workflow-ux/browser/administration.png) |
+| `12-e2e/scenario-verification/csv-browser/invalid-file-rejection.png` | [12-e2e/analyst-workbench/scenario-browser/invalid-file-rejection.png](12-e2e/analyst-workbench/scenario-browser/invalid-file-rejection.png) |
+| `12-e2e/presentation-ux-freeze/browser/administration.png` | [12-e2e/analyst-workspace/browser/administration.png](12-e2e/analyst-workspace/browser/administration.png) |
+| `12-e2e/repository-hardening/browser/invalid-file-rejection.png` | [12-e2e/analyst-workflow/browser/invalid-file-rejection.png](12-e2e/analyst-workflow/browser/invalid-file-rejection.png) |
+| `12-e2e/repository-hardening/browser/administration.png` | [12-e2e/analyst-workflow/browser/administration.png](12-e2e/analyst-workflow/browser/administration.png) |
+| `12-e2e/analyst-workspace/browser/session-expired.png` | [12-e2e/analyst-workflow/browser/session-expired.png](12-e2e/analyst-workflow/browser/session-expired.png) |
+| `12-e2e/repository-hardening/browser/session-expired.png` | [12-e2e/analyst-workflow/browser/session-expired.png](12-e2e/analyst-workflow/browser/session-expired.png) |
+| `12-e2e/presentation-ux-freeze/browser/ingestion-batches.png` | [12-e2e/analyst-workspace/browser/ingestion-batches.png](12-e2e/analyst-workspace/browser/ingestion-batches.png) |
+| `12-e2e/scenario-verification/csv-browser/ingestion-batches.png` | [12-e2e/analyst-workbench/scenario-browser/ingestion-batches.png](12-e2e/analyst-workbench/scenario-browser/ingestion-batches.png) |
+| `12-e2e/analyst-workbench/scenario-browser/session-expired.png` | [12-e2e/analyst-ux-correction/full-browser/session-expired.png](12-e2e/analyst-ux-correction/full-browser/session-expired.png) |
+| `12-e2e/scenario-verification/csv-browser/session-expired.png` | [12-e2e/analyst-ux-correction/full-browser/session-expired.png](12-e2e/analyst-ux-correction/full-browser/session-expired.png) |
+| `12-e2e/repository-hardening/browser/ingestion-batches.png` | [12-e2e/analyst-workflow/browser/ingestion-batches.png](12-e2e/analyst-workflow/browser/ingestion-batches.png) |
+| `12-e2e/repository-hardening/browser/api-unavailable.png` | [12-e2e/analyst-workflow/browser/api-unavailable.png](12-e2e/analyst-workflow/browser/api-unavailable.png) |
+| `12-e2e/scenario-verification/csv-browser/api-unavailable.png` | [12-e2e/analyst-workbench/scenario-browser/api-unavailable.png](12-e2e/analyst-workbench/scenario-browser/api-unavailable.png) |
+| `12-e2e/scenario-verification/multi-user/admin-review-assignment.png` | [12-e2e/analyst-workbench/multi-user/admin-review-assignment.png](12-e2e/analyst-workbench/multi-user/admin-review-assignment.png) |
+| `12-e2e/scenario-verification/multi-user/auditor-quarantine-mobile.png` | [12-e2e/analyst-workbench/multi-user/auditor-quarantine-mobile.png](12-e2e/analyst-workbench/multi-user/auditor-quarantine-mobile.png) |

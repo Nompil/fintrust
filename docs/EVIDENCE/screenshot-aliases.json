@@ -1,0 +1,519 @@
+{
+  "operation": "Consolidate byte-identical historical screenshot copies",
+  "groups": 72,
+  "removed_copies": 85,
+  "repeated_working_tree_bytes": 9133343,
+  "note": "Historical receipt filenames describe original captures. Resolve consolidated paths with this map. Hashes and outcomes are unchanged; this does not assert an independent capture for identical evidence. Git stores identical blobs once, so this is navigation cleanup, not a claim of Git storage savings.",
+  "aliases": [
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/role-workflow-ux/browser/transactions.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/clean-start/browser/transactions.png",
+      "sha256": "66ce001031dd836464fa02e42e80b1e5e2f14cb5319300cb9396b2f467d39a45",
+      "bytes": 179560
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/system-assurance/browser/transactions.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/clean-start/browser/transactions.png",
+      "sha256": "66ce001031dd836464fa02e42e80b1e5e2f14cb5319300cb9396b2f467d39a45",
+      "bytes": 179560
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/role-workflow-ux/browser/insights.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/clean-start/browser/insights.png",
+      "sha256": "486c63aaa37c5e46376d3676802c871c7d9bc15c60745361de036d69f3097bcb",
+      "bytes": 148834
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/system-assurance/browser/insights.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/clean-start/browser/insights.png",
+      "sha256": "486c63aaa37c5e46376d3676802c871c7d9bc15c60745361de036d69f3097bcb",
+      "bytes": 148834
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/role-workflow-ux/browser/quarantine.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/clean-start/browser/quarantine.png",
+      "sha256": "4ab64ca00b3e3a3de36cd9c1a5559b069e08ca2ea4897d5bb53eccaa0d87efb6",
+      "bytes": 129789
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/system-assurance/browser/quarantine.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/clean-start/browser/quarantine.png",
+      "sha256": "4ab64ca00b3e3a3de36cd9c1a5559b069e08ca2ea4897d5bb53eccaa0d87efb6",
+      "bytes": 129789
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/scenario-verification/csv-browser/insights-all-dates.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workbench/scenario-browser/insights-all-dates.png",
+      "sha256": "d872faea41a741ef3c5f6beab9d4a3ea516f8eee853aab8891b2031aaf676e19",
+      "bytes": 235480
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/system-assurance/browser/insights-all-dates.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/role-workflow-ux/browser/insights-all-dates.png",
+      "sha256": "c4ae4c676c4e223abdc11aa84587ccf83b2add7504c6c6d8c809320bd28a2f70",
+      "bytes": 230214
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/role-workflow-ux/browser/analyst-quarantine-resubmitted.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/clean-start/browser/analyst-quarantine-resubmitted.png",
+      "sha256": "926281038e690ab05a7922642408dfb55949a099b00c0f4ed0ede98302191940",
+      "bytes": 114855
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/system-assurance/browser/analyst-quarantine-resubmitted.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/clean-start/browser/analyst-quarantine-resubmitted.png",
+      "sha256": "926281038e690ab05a7922642408dfb55949a099b00c0f4ed0ede98302191940",
+      "bytes": 114855
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/scenario-verification/csv-browser/analyst01-insights-verified.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workbench/scenario-browser/analyst01-insights-verified.png",
+      "sha256": "88cc393b9c964d8929259551043ea6d8c8b78ab6902c5cde42dd26326d2f175b",
+      "bytes": 229501
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/scenario-verification/csv-browser/auditor01-insights-verified.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workbench/scenario-browser/auditor01-insights-verified.png",
+      "sha256": "8a50c4e75923b290e0dfc3e029709fbe4a197ace38b332bd084501f57bce7253",
+      "bytes": 228848
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/repository-hardening/browser/insights-all-dates.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workflow/browser/insights-all-dates.png",
+      "sha256": "ea37e8d4dabb5902b237a6078030a426370fc56704daa29470b5ca22c33fa79d",
+      "bytes": 228465
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/repository-hardening/browser/analyst01-insights-verified.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workflow/browser/analyst01-insights-verified.png",
+      "sha256": "a392d6e8499091a28e985c6f33fad4391caa98fc3a515f6fafc3d0110475293e",
+      "bytes": 222667
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/repository-hardening/browser/auditor01-insights-verified.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workflow/browser/auditor01-insights-verified.png",
+      "sha256": "c9a8c99b40c06af11936e650b7a49f7ca75f7b05c90cf7e183386204f0e1348d",
+      "bytes": 221913
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/browser/auditor01-insights-verified.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workspace/browser/auditor01-insights-verified.png",
+      "sha256": "58e7a8b159c797eeb5f69322e4c4e9f490b160e8c7b4df39e0c41512943112bd",
+      "bytes": 221776
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/scenario-verification/csv-browser/transactions.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workbench/scenario-browser/transactions.png",
+      "sha256": "2cee07a587e3222b10a5496d08c68b979be2a02421aef1f90935cd2f66be3324",
+      "bytes": 193546
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/browser/transactions.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workspace/browser/transactions.png",
+      "sha256": "0023dc5ad0954be99d071169ffc407d5f1cafb41c8e599aecfdb068063669ef7",
+      "bytes": 184669
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/repository-hardening/browser/transactions.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workflow/browser/transactions.png",
+      "sha256": "2560bbd9e745f7a118df640384b374353bcb4f11a8203e9cf813fac53d5ad03a",
+      "bytes": 184220
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/scenario-verification/csv-browser/insights.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workbench/scenario-browser/insights.png",
+      "sha256": "1443a0b0f84ff290ccdfc73a952f870540f424f5b8638f12b062681fadeef4f1",
+      "bytes": 151932
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/repository-hardening/browser/insights.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workflow/browser/insights.png",
+      "sha256": "3bcdae436675d79ca781332b9f5cfb12a24708c7238896f6cbc4a91ee87f64ba",
+      "bytes": 147041
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/browser/insights.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workspace/browser/insights.png",
+      "sha256": "e39d23d2c69b19d71e6c246500380b4fc514980904a29a2554aee73173eaea11",
+      "bytes": 146358
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/role-workflow-ux/browser/quarantine-detail.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/clean-start/browser/quarantine-detail.png",
+      "sha256": "d8bae82073bf3d740a22d773f79223133f2663941a619a967d62d915de074b38",
+      "bytes": 72528
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/system-assurance/browser/quarantine-detail.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/clean-start/browser/quarantine-detail.png",
+      "sha256": "d8bae82073bf3d740a22d773f79223133f2663941a619a967d62d915de074b38",
+      "bytes": 72528
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/scenario-verification/csv-browser/quarantine-detail.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workbench/scenario-browser/quarantine-detail.png",
+      "sha256": "5a6bb3ac510cd99142d83a1856108947c1f80933b89df4ccfcad382290356440",
+      "bytes": 135436
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/browser/quarantine.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workspace/browser/quarantine.png",
+      "sha256": "8a3f791e4aa41f383f521866229cbf42539df9fc101bb5f906653ff04c75f720",
+      "bytes": 132493
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/scenario-verification/csv-browser/quarantine.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workbench/scenario-browser/quarantine.png",
+      "sha256": "29eb3743127ede41d2c8bbc2a60d852fe8d45ddc4c5b778d6a02d0950fa687fd",
+      "bytes": 129535
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/repository-hardening/browser/quarantine.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workflow/browser/quarantine.png",
+      "sha256": "abcc5fca2737e5f2140c84201709ab9e19ad763e5d1213ba7f6694dbc2801834",
+      "bytes": 129410
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/scenario-verification/csv-browser/A-whole-file-replay.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workbench/scenario-browser/A-whole-file-replay.png",
+      "sha256": "899c6a701bfb5035b95ad83799ec13bb98ab55b5ef897d3feca6522a631f2f4e",
+      "bytes": 128193
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/repository-hardening/browser/A-whole-file-replay.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workflow/browser/A-whole-file-replay.png",
+      "sha256": "d13e8492cc87754c93bf0b84ad05da61844c5e8435fdf0742b789f4bf72a51c1",
+      "bytes": 127741
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/analyst-workbench/scenario-browser/release1-transaction-detail.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workbench/scenario-browser/high-risk-transaction.png",
+      "sha256": "bc2db4f568c88408a5ce9dfa3593034acbcc0e0b119566f80a4feab6d9dd73b1",
+      "bytes": 126587
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/scenario-verification/csv-browser/release1-transaction-detail.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/scenario-verification/csv-browser/high-risk-transaction.png",
+      "sha256": "a83a88d9afa431d1415074fbd50f1b2cecf1b6bedd0836a4bc0591d78f742e8b",
+      "bytes": 126513
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/analyst-workflow/browser/release1-transaction-detail.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workflow/browser/high-risk-transaction.png",
+      "sha256": "4d3e67fb525800cd2a4f806c765796b76755691837c1d0c74a03cb9cb5ef079f",
+      "bytes": 125291
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/repository-hardening/browser/release1-transaction-detail.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/repository-hardening/browser/high-risk-transaction.png",
+      "sha256": "263e8d5f6118e880d0737d6ede22afaa5675e29b6f4fd4a2a5051803cb199aa0",
+      "bytes": 125225
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/release1-transaction-detail.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/high-risk-transaction.png",
+      "sha256": "2f7d99b542596daf70e669dee4fe2122fe507ebe7471f5bfa8a6265f2765a7ad",
+      "bytes": 123360
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/role-workflow-ux/browser/ingestion-batches.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/clean-start/browser/ingestion-batches.png",
+      "sha256": "d1cd36929f015790ca9bc826ff8622e19f9648e02a4bfa051e8d9683f58258ee",
+      "bytes": 60692
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/system-assurance/browser/ingestion-batches.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/clean-start/browser/ingestion-batches.png",
+      "sha256": "d1cd36929f015790ca9bc826ff8622e19f9648e02a4bfa051e8d9683f58258ee",
+      "bytes": 60692
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/role-workflow-ux/browser/A-whole-file-replay.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/clean-start/browser/A-whole-file-replay.png",
+      "sha256": "04044a3006803f6929b9866fd60e61ab876b84633050c01245e53c652d0c0b00",
+      "bytes": 58734
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/system-assurance/browser/A-whole-file-replay.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/clean-start/browser/A-whole-file-replay.png",
+      "sha256": "04044a3006803f6929b9866fd60e61ab876b84633050c01245e53c652d0c0b00",
+      "bytes": 58734
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/analyst-workspace/browser/release1-transaction-detail.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workspace/browser/high-risk-transaction.png",
+      "sha256": "fc31f20ba15a28400ef13d29999dda9fdb7f065241692c27c5d33aa5ef8294e6",
+      "bytes": 116916
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/browser/release1-transaction-detail.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/browser/high-risk-transaction.png",
+      "sha256": "ded14ec30048d7ed0eca25bc7ca4e7b750095a5289d69261d8455faa76e80894",
+      "bytes": 116798
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/system-assurance/browser/release1-transaction-detail.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/system-assurance/browser/high-risk-transaction.png",
+      "sha256": "e6190867fe8068ee2336cea6c806432f039a644d858acbfe8a17bd0e9ef12fed",
+      "bytes": 113114
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/role-workflow-ux/browser/release1-transaction-detail.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/role-workflow-ux/browser/high-risk-transaction.png",
+      "sha256": "6b02696268db86a7e3ddf617f38baaefba2d58e684fcd7459505005985fcae80",
+      "bytes": 113106
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/clean-start/browser/release1-transaction-detail.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/clean-start/browser/high-risk-transaction.png",
+      "sha256": "2f72e9fb31f96f5522b8d11f846ae60d89263cccdbb367c824e6a0c33fcf1885",
+      "bytes": 113073
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/role-workflow-ux/browser/B-upload-warning.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/clean-start/browser/B-upload-warning.png",
+      "sha256": "99f5aef3026c890de21be5ed4409b260f80ab8851b02a8706bbc7b99f871bd25",
+      "bytes": 56331
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/system-assurance/browser/B-upload-warning.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/clean-start/browser/B-upload-warning.png",
+      "sha256": "99f5aef3026c890de21be5ed4409b260f80ab8851b02a8706bbc7b99f871bd25",
+      "bytes": 56331
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/role-workflow-ux/browser/invalid-file-rejection.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/clean-start/browser/invalid-file-rejection.png",
+      "sha256": "08014c12b63d0764d72abf8581df35ca0f89a8fc42d08ac904db1cacbe4c0c59",
+      "bytes": 55223
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/system-assurance/browser/invalid-file-rejection.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/clean-start/browser/invalid-file-rejection.png",
+      "sha256": "08014c12b63d0764d72abf8581df35ca0f89a8fc42d08ac904db1cacbe4c0c59",
+      "bytes": 55223
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/repository-hardening/browser/analyst-quarantine-resubmitted.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workflow/browser/analyst-quarantine-resubmitted.png",
+      "sha256": "0ccae84e54fada147eaae8f475a9507e4e73987eec1f2ccc23feaecc3d7885e4",
+      "bytes": 108373
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/role-workflow-ux/browser/A-upload-warning.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/clean-start/browser/A-upload-warning.png",
+      "sha256": "683ef23e6b45aacdfb7ea37c5dd079c608210e0b0d8f745d8f8cb09ccd5c8d47",
+      "bytes": 53602
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/system-assurance/browser/A-upload-warning.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/clean-start/browser/A-upload-warning.png",
+      "sha256": "683ef23e6b45aacdfb7ea37c5dd079c608210e0b0d8f745d8f8cb09ccd5c8d47",
+      "bytes": 53602
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/scenario-verification/csv-browser/B-upload-warning.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workbench/scenario-browser/B-upload-warning.png",
+      "sha256": "7bc3bedf2d8c160ba34ea3ec82206ed05f74a6359ccce34893a2449761a82283",
+      "bytes": 106703
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/scenario-verification/csv-browser/analyst-quarantine-resubmitted.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workbench/scenario-browser/analyst-quarantine-resubmitted.png",
+      "sha256": "c67177b36e69daf91e83d5a633860db3e8104c9d95e8f511d21cfebcda00f8a4",
+      "bytes": 106641
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/repository-hardening/browser/B-upload-warning.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workflow/browser/B-upload-warning.png",
+      "sha256": "718051a1b99cb39b3a04d6a5153c9020f73681f7732bfad9d898f09ef39b0608",
+      "bytes": 106299
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/analyst-ux-correction/full-browser/release1-transaction-detail.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-ux-correction/full-browser/high-risk-transaction.png",
+      "sha256": "b0401d79c037486ff7782cd3193fb002a4f6a84c8214685fbe576b5b185f0360",
+      "bytes": 100576
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/role-workflow-ux/browser/api-unavailable.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/clean-start/browser/api-unavailable.png",
+      "sha256": "4f440bb5ebc6581d89c7d2caebc7d629121492fe674421d4f6562ee0662da83e",
+      "bytes": 50058
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/system-assurance/browser/api-unavailable.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/clean-start/browser/api-unavailable.png",
+      "sha256": "4f440bb5ebc6581d89c7d2caebc7d629121492fe674421d4f6562ee0662da83e",
+      "bytes": 50058
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/workflow-continuity/investigation/quarantine-revalidated-accepted.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/workflow-continuity/investigation/quarantine-correction-submitted.png",
+      "sha256": "9755997028e6317d59478317a55bac225bae083ec53e766d477bf3f97258300d",
+      "bytes": 98452
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/scenario-verification/investigation/quarantine-split-detail.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workbench/investigation/quarantine-split-detail.png",
+      "sha256": "a14be1c9a642727836f18117d9cf64e725ac1b022e41e14bb881d7c029ea561f",
+      "bytes": 92998
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/scenario-verification/csv-browser/overview.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workbench/scenario-browser/overview.png",
+      "sha256": "3f5dfd02bc7c499b57d54b66cf5e49949d29899ab65b8837092339ca58c0fe0c",
+      "bytes": 89920
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/scenario-verification/multi-user/quarantine-recovery-detail.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workbench/multi-user/quarantine-recovery-detail.png",
+      "sha256": "8d21f8468d844165c077c6331178ed112eeab7f5cf7bd5df6a988d7478367b08",
+      "bytes": 89318
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/scenario-verification/csv-browser/A-upload-warning.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workbench/scenario-browser/A-upload-warning.png",
+      "sha256": "bd6a106b6d307220c7b4a82e2784e89f93134e7e3aaef0bc8e1b7284a4a4b279",
+      "bytes": 84789
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/repository-hardening/browser/A-upload-warning.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workflow/browser/A-upload-warning.png",
+      "sha256": "755be067829d62ed1eebd3640ff8bf6c0c4e90bb28bd423d5ec5f5c6e71c3591",
+      "bytes": 84363
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/scenario-verification/csv-browser/analyst-transactions-risk-overview.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workbench/scenario-browser/analyst-transactions-risk-overview.png",
+      "sha256": "f20256c31a7e979a8dd11037084cd9c7651c3877c50ec0c0729faa9ed2c7c2aa",
+      "bytes": 82572
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/ingestion-batches.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/presentation-readiness/browser/A-whole-file-replay.png",
+      "sha256": "bbc5fe21b1036d6ecfc07e6eeacfed08d3412ea7f3777d85b18100cdbc897b73",
+      "bytes": 81739
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/workflow-continuity/full-browser/release1-transaction-detail.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/workflow-continuity/full-browser/high-risk-transaction.png",
+      "sha256": "dfeb1c058cf766134d30596fedc67c216b1b8b7eb4392bdd428dd3ad9d899b2f",
+      "bytes": 78435
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/repository-hardening/browser/quarantine-detail.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workflow/browser/quarantine-detail.png",
+      "sha256": "e04f6809b1ec12e575630e4447c9864287a1f59d306ca55469a4e2841eafda60",
+      "bytes": 77542
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/browser/quarantine-detail.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workspace/browser/quarantine-detail.png",
+      "sha256": "7c216c3bd4d0599471f25089257ccffd415a7378fe7d12da20f19f4b6bb59375",
+      "bytes": 73718
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/release1-lifecycle/browser/ingestion-batches.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/release1-lifecycle/browser/A-whole-file-replay.png",
+      "sha256": "b1516f8333333308346a5959256e546cd97d7913237ebd5f8c4f3894dba1c9d8",
+      "bytes": 72434
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/system-assurance/browser/administration.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/role-workflow-ux/browser/administration.png",
+      "sha256": "792682563582ac721aaa85907b7b7eb8d25db28704da3c370b3e136dfdda1ba6",
+      "bytes": 70017
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/scenario-verification/csv-browser/invalid-file-rejection.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workbench/scenario-browser/invalid-file-rejection.png",
+      "sha256": "3b064493e5b7195daaaa17f5258d97e08892d528ffdef6ae2a1274be52b7edaa",
+      "bytes": 69949
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/browser/administration.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workspace/browser/administration.png",
+      "sha256": "6d9316bb9a0f5495deae99e8fb74a4b5406ab23d601858f50b3067438ed2a963",
+      "bytes": 69791
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/repository-hardening/browser/invalid-file-rejection.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workflow/browser/invalid-file-rejection.png",
+      "sha256": "8de8ca5811e91cc03a6cb97f4ae0628507eb20b3efc93dcab055c6f75479b7f4",
+      "bytes": 69234
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/repository-hardening/browser/administration.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workflow/browser/administration.png",
+      "sha256": "dbb7d675b14abce8c0c73c2a0e1aa4be7f7e52646cea0d17675da3fcb52b6dbb",
+      "bytes": 68728
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/analyst-workspace/browser/session-expired.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workflow/browser/session-expired.png",
+      "sha256": "52bc25baacbcca9437bad157c17994159146a612376d024a9dbcdb33d9d1f6f9",
+      "bytes": 29266
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/repository-hardening/browser/session-expired.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workflow/browser/session-expired.png",
+      "sha256": "52bc25baacbcca9437bad157c17994159146a612376d024a9dbcdb33d9d1f6f9",
+      "bytes": 29266
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/presentation-ux-freeze/browser/ingestion-batches.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workspace/browser/ingestion-batches.png",
+      "sha256": "359ea0703dee2b730e75a01117705ee67d2eadf6b9b8d96e304f1b55f5be73ad",
+      "bytes": 58404
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/scenario-verification/csv-browser/ingestion-batches.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workbench/scenario-browser/ingestion-batches.png",
+      "sha256": "6c75493449d71d8e54b874afdc5ba8e14ff1f2df763ad504fd3ec63c6766922c",
+      "bytes": 58347
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/analyst-workbench/scenario-browser/session-expired.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-ux-correction/full-browser/session-expired.png",
+      "sha256": "9f33f6e4286c9d7b2da1f70b0d1af798e38dbe37a8de82d40dff707662944670",
+      "bytes": 28990
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/scenario-verification/csv-browser/session-expired.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-ux-correction/full-browser/session-expired.png",
+      "sha256": "9f33f6e4286c9d7b2da1f70b0d1af798e38dbe37a8de82d40dff707662944670",
+      "bytes": 28990
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/repository-hardening/browser/ingestion-batches.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workflow/browser/ingestion-batches.png",
+      "sha256": "3160f514ab1354c75678cff23395e98b70940fecdf51c586ca6774da223d8d3e",
+      "bytes": 57236
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/repository-hardening/browser/api-unavailable.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workflow/browser/api-unavailable.png",
+      "sha256": "0a0490ea4a883b1eca44ff1d055348e5d450022ef94bc2ba81f340ca5d2fd026",
+      "bytes": 53503
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/scenario-verification/csv-browser/api-unavailable.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workbench/scenario-browser/api-unavailable.png",
+      "sha256": "693e970eba6f80f3eaa49315d3297cf0ccd74506ea364e978b5cf16459951603",
+      "bytes": 52652
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/scenario-verification/multi-user/admin-review-assignment.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workbench/multi-user/admin-review-assignment.png",
+      "sha256": "0911efd418346aa4b1b1216febe760ead280d0846e5c51ab8823cfb7c2b8f8fd",
+      "bytes": 47396
+    },
+    {
+      "original_path": "docs/EVIDENCE/12-e2e/scenario-verification/multi-user/auditor-quarantine-mobile.png",
+      "retained_path": "docs/EVIDENCE/12-e2e/analyst-workbench/multi-user/auditor-quarantine-mobile.png",
+      "sha256": "4587de788d23389682a1a6b9c2a4a863a762a28c7047b9f4c8fc0c45ae8b6d0a",
+      "bytes": 36869
+    }
+  ]
+}

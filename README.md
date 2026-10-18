@@ -95,6 +95,8 @@ The AWS demonstration is deployed. Use the [cloud demonstration runbook](docs/CL
 ## Evidence
 [docs/EVIDENCE/](docs/EVIDENCE/) preserves sanitized tests, historical AWS checks, failures and recovery. Local/mock success is not live deployment evidence.
 
+Repeated screenshots are consolidated in the [screenshot index](docs/EVIDENCE/SCREENSHOT_INDEX.md); historical capture names resolve through its SHA-256 alias map.
+
 ## Local end-to-end scenario verification
 
 The [20-scenario evidence record](docs/EVIDENCE/12-e2e/scenario-verification/SCENARIO_RESULTS.md) traces input, processing, database state, UI/API evidence, audit and final outcome. Those selected local runs passed 125 tests with no failures or skips. Four browser gates cover investigation, multi-user workflows, all three review outcomes and CSV A/B admission/report exports. Each scenario labels browser versus API evidence. These local scenarios mock AWS transports; the separate [live cloud evidence](docs/EVIDENCE/13-cloud-live/) records actual AWS processing and owner-confirmed analyst access.

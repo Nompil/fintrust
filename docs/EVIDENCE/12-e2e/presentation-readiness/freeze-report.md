@@ -37,7 +37,7 @@ This document and the following files are frozen by one local commit: `Finalize 
 - `docs/EVIDENCE/12-e2e/presentation-readiness/browser/browser-result.json`
 - `docs/EVIDENCE/12-e2e/presentation-readiness/browser/duplicate-occurrences.png`
 - `docs/EVIDENCE/12-e2e/presentation-readiness/browser/high-risk-transaction.png`
-- `docs/EVIDENCE/12-e2e/presentation-readiness/browser/ingestion-batches.png`
+- `docs/EVIDENCE/12-e2e/presentation-readiness/browser/ingestion-batches.png` — [consolidated identical image](browser/A-whole-file-replay.png)
 - `docs/EVIDENCE/12-e2e/presentation-readiness/browser/insights-all-dates.png`
 - `docs/EVIDENCE/12-e2e/presentation-readiness/browser/insights.png`
 - `docs/EVIDENCE/12-e2e/presentation-readiness/browser/invalid-file-rejection.png`
@@ -49,7 +49,7 @@ This document and the following files are frozen by one local commit: `Finalize 
 - `docs/EVIDENCE/12-e2e/presentation-readiness/browser/rejected-uploads-history.png`
 - `docs/EVIDENCE/12-e2e/presentation-readiness/browser/release1-auditor-review-queue.png`
 - `docs/EVIDENCE/12-e2e/presentation-readiness/browser/release1-maintainer-operations.png`
-- `docs/EVIDENCE/12-e2e/presentation-readiness/browser/release1-transaction-detail.png`
+- `docs/EVIDENCE/12-e2e/presentation-readiness/browser/release1-transaction-detail.png` — [consolidated identical image](browser/high-risk-transaction.png)
 - `docs/EVIDENCE/12-e2e/presentation-readiness/browser/report-current-page.csv`
 - `docs/EVIDENCE/12-e2e/presentation-readiness/browser/report-current-page.json`
 - `docs/EVIDENCE/12-e2e/presentation-readiness/browser/review-queue.png`

@@ -1,5 +1,13 @@
 # Verification evidence
 
+## Submission checkpoint — 18 October 2026
+
+Start with the [live cloud verification](13-cloud-live/) and [cloud demonstration guide](../CLOUD_DEMONSTRATION_RUNBOOK.md). They record the deployed presentation release, owner-confirmed analyst access, correction recovery, report generation, monitoring and completed temporary-resource cleanup. The dated register below describes earlier preparation checkpoints and is retained as history.
+
+Repeated screenshots are consolidated in the [screenshot index](SCREENSHOT_INDEX.md), with a [SHA-256 alias map](screenshot-aliases.json). Historical receipts retain original capture names; the index links each removed duplicate to its byte-identical retained image. Unique screenshots, test results and deployment snapshots are preserved.
+
+## Historical preparation register
+
 This register points to recorded checks and identifies missing proof. Prepared commands and expected results are not execution evidence. Do not commit credentials, customer records, account-sensitive exports or generated Lambda packages here.
 
 | Item | Evidence available | Limit / next evidence |
