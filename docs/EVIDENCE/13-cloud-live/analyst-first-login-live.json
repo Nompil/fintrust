@@ -1,0 +1,15 @@
+{
+  "status": "USER_CONFIRMED_ANALYST_LOGIN_AND_STORED_CLOUD_LEDGER",
+  "recorded_at": "2026-10-18T00:33:32.696495+00:00",
+  "application_url": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/",
+  "analyst_username": "nompilo-analyst",
+  "administrator_username": "nompilo",
+  "invitation_emails_received_user_confirmed": true,
+  "personal_passwords_chosen_privately": true,
+  "passwords_stored": false,
+  "analyst_identity_and_transaction_rows_visible_user_confirmed": true,
+  "administrator_first_login_not_verified": true,
+  "mandatory_authenticator_configuration_verified": true,
+  "individual_mfa_enrolment_not_assumed": true,
+  "full_correction_flow_still_pending": true
+}

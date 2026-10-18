@@ -2,9 +2,9 @@
 
 Application: https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/
 
-Use **Sign in with Imbokodo**. The owner username is **nompilo**. Once the verified invitation is sent, use the temporary password from the Cognito email, choose a personal password, and enroll an authenticator on the AWS page. Keep passwords and MFA codes out of project files and chat. Sign out at the end of the demonstration. Tokens are held in browser memory, so refreshing the page can require signing in again.
+Use **Sign in with Imbokodo**. The administrator username is **nompilo**, and the analyst username is **nompilo-analyst**. Both invitations reached the owner's mailbox. The owner subsequently chose personal passwords in a private terminal; the original temporary invitation passwords are no longer the login passwords. The owner confirmed that the analyst username and stored transaction rows are visible in the cloud app. Mandatory authenticator MFA is configured on Cognito. Keep passwords and MFA codes out of project files and chat. Sign out at the end of the demonstration. Tokens are held in browser memory, so refreshing the page can require signing in again.
 
-Current checkpoint: cloud API authentication, ingestion, ledger storage, scoring, SES acceptance, review decisions and an actual EventBridge report run passed. Correction recovery is still blocked by a database permission repair. The owner's invitation has not been sent. These remaining checks must pass before declaring the full demonstration ready.
+Current checkpoint: cloud API authentication, real owner analyst login, ingestion, ledger storage, scoring, SES acceptance, review decisions, correction recovery and an actual EventBridge report run passed. Final live configuration read-back passed. The corrected fictional row was processed through EventBridge and raised the cloud ledger from three to four transactions. Temporary paid endpoints and master-secret access were removed. Remaining temporary stack/IAM cleanup is tracked separately and does not disable the application.
 
 ## Demonstration path
 
@@ -13,9 +13,11 @@ Current checkpoint: cloud API authentication, ingestion, ledger storage, scoring
 3. Open Processing History to inspect the upload's accepted, quarantined and duplicate row counts. Pending means rows whose final processing outcome has not yet been recorded; it is separate from a review awaiting investigation.
 4. Open Quarantined Rows. Inspect the original source evidence before submitting a correction. The EventBridge recovery worker runs every minute; a correction can take a little longer than one tick.
 5. Open Review Queue. SLA is the review's configured deadline. Due soon and overdue are calculated against that deadline; an overdue review is still available for investigation. Historical demonstration timestamps can already be overdue.
-6. Inspect the generated October CSV/JSON report in the existing reports bucket under `monthly/2026-10/`. An actual EventBridge invocation generated the verified report. The original monthly schedule is 02:00 UTC on the first of each month; it remains disabled pending the correction and final release checks.
+6. Inspect the generated October CSV/JSON report in the existing reports bucket under `monthly/2026-10/`. An actual EventBridge invocation generated the verified report. That report is a three-transaction snapshot generated before the correction; the live ledger now has four transactions. The original monthly schedule is enabled for 02:00 UTC on the first of each month. The report is a point-in-time export, not a live ledger view.
 
-The live evidence distinguishes SES accepting a message from confirmation that it reached the recipient's inbox. Check Outlook's junk folder if necessary.
+The live evidence distinguishes SES accepting a message from confirmation that it reached the recipient's inbox. Built-in SES account counters recorded two sends and two receiving-server deliveries with no bounces or rejections, and the recipient is not currently suppressed. These aggregate counters do not prove per-message Inbox placement. The owner reported no transaction alert email. Search all Outlook folders for the subject `FinTrust high-risk transaction`; both sender and recipient are the owner's Outlook address. DKIM signing is not configured for that email-address identity, and no per-message delivery-event destination was configured for those original sends.
+
+Cloud user provisioning remains an AWS operator workflow. The cloud administrator user-management view is read-only; it cannot create Cognito users. Clearer future invitation wording has passed AWS template validation but has not been applied to the live user pool. Current users should use their privately chosen personal passwords rather than the old invitation passwords.
 
 ## Capacity and cost
 

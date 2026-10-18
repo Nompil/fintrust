@@ -1,0 +1,84 @@
+{
+  "status": "LIVE_CLOUD_PRODUCT_GATES_PASSED",
+  "checked_at": "2026-10-18T00:44:46.046050+00:00",
+  "database_gate": {
+    "database_verified": true,
+    "temporary_cleanup_complete": true
+  },
+  "correction_acl_repair": {
+    "verified": true,
+    "master_access_revoked": true,
+    "paid_endpoint_removed": true
+  },
+  "cloud-api-probe": "PASSED",
+  "cloud-pipeline-probe": "PASSED",
+  "cloud-report-probe": "PASSED",
+  "functions": {
+    "fintrust-api-dev": {
+      "exact_code_verified": true,
+      "shared_capacity": true
+    },
+    "fintrust-ingest-dev": {
+      "exact_code_verified": true,
+      "shared_capacity": true
+    },
+    "fintrust-scoring-dev": {
+      "exact_code_verified": true,
+      "shared_capacity": true
+    },
+    "fintrust-alert-dev": {
+      "exact_code_verified": true,
+      "shared_capacity": true
+    },
+    "fintrust-report-dev": {
+      "exact_code_verified": true,
+      "shared_capacity": true
+    }
+  },
+  "queues": {
+    "fintrust-transactions-dev.fifo": {
+      "ApproximateNumberOfMessages": "0",
+      "ApproximateNumberOfMessagesNotVisible": "0",
+      "ApproximateNumberOfMessagesDelayed": "0"
+    },
+    "fintrust-transactions-dlq-dev.fifo": {
+      "ApproximateNumberOfMessages": "0",
+      "ApproximateNumberOfMessagesNotVisible": "0",
+      "ApproximateNumberOfMessagesDelayed": "0"
+    },
+    "fintrust-ingest-failures-dev": {
+      "ApproximateNumberOfMessages": "0",
+      "ApproximateNumberOfMessagesNotVisible": "0",
+      "ApproximateNumberOfMessagesDelayed": "0"
+    },
+    "fintrust-alert-failures-dev": {
+      "ApproximateNumberOfMessages": "0",
+      "ApproximateNumberOfMessagesNotVisible": "0",
+      "ApproximateNumberOfMessagesDelayed": "0"
+    },
+    "fintrust-report-failures-dev": {
+      "ApproximateNumberOfMessages": "0",
+      "ApproximateNumberOfMessagesNotVisible": "0",
+      "ApproximateNumberOfMessagesDelayed": "0"
+    }
+  },
+  "event_sources_enabled": true,
+  "raw_notification_verified": true,
+  "standard_alarms": 10,
+  "alarm_states": {
+    "fintrust-alerterrors-dev": "OK",
+    "fintrust-alertfailuresnamevisible-dev": "OK",
+    "fintrust-apierrors-dev": "OK",
+    "fintrust-databasecpu-dev": "OK",
+    "fintrust-ingesterrors-dev": "OK",
+    "fintrust-ingestfailuresnamevisible-dev": "OK",
+    "fintrust-reporterrors-dev": "OK",
+    "fintrust-reportfailuresnamevisible-dev": "OK",
+    "fintrust-scoringerrors-dev": "OK",
+    "fintrust-transactiondlqnamevisible-dev": "OK"
+  },
+  "transaction_alert_inbox_delivery_verified": false,
+  "administrator_first_login_pending": true,
+  "analyst_first_login_and_ledger_user_verified": true,
+  "cognito_invitation_delivery_user_verified": true
+}

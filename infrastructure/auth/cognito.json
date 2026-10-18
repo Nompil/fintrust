@@ -16,7 +16,7 @@
         "UserPoolTier":"LITE",
         "UsernameConfiguration":{"CaseSensitive":false},
         "AutoVerifiedAttributes":["email"],
-        "AdminCreateUserConfig":{"AllowAdminCreateUserOnly":true,"InviteMessageTemplate":{"EmailSubject":"Imbokodo Bank account invitation","EmailMessage":"Your Imbokodo Bank account is ready. Username: {username}. Temporary password: {####}. Sign in to change it."}},
+        "AdminCreateUserConfig":{"AllowAdminCreateUserOnly":true,"InviteMessageTemplate":{"EmailSubject":"Imbokodo Bank account invitation","EmailMessage":{"Fn::Sub":["Your Imbokodo Bank account is ready.\n\nUsername:\n{username}\n\nTemporary password:\n{####}\n\nSign in at ${ApplicationUrl} to choose your own password and enrol your authenticator. Keep passwords and codes private.",{"ApplicationUrl":{"Fn::Select":[0,{"Ref":"CallbackUrls"}]}}]}}},
         "Policies":{"PasswordPolicy":{"MinimumLength":14,"RequireLowercase":true,"RequireUppercase":true,"RequireNumbers":true,"RequireSymbols":true,"TemporaryPasswordValidityDays":3}},
         "AccountRecoverySetting":{"RecoveryMechanisms":[{"Name":"verified_email","Priority":1}]},
         "MfaConfiguration":"ON",

@@ -1,0 +1,47 @@
+{
+  "status": "SES_SUPPRESSION_AND_BUILT_IN_COUNTERS_READ",
+  "window_start": "2026-10-17T00:22:32.958395+00:00",
+  "window_end": "2026-10-18T00:22:32.958395+00:00",
+  "metrics_are_account_aggregates_not_per_message": true,
+  "mailbox_delivery_verified": false,
+  "resources_created": false,
+  "paid_vdm_enabled": false,
+  "recipient_current_suppression": {
+    "listed": false
+  },
+  "metrics": {
+    "Send": {
+      "sum": 2.0,
+      "datapoints": [
+        {
+          "Timestamp": "2026-10-17T22:22:00+02:00",
+          "Sum": 2.0,
+          "Unit": "Count"
+        }
+      ]
+    },
+    "Delivery": {
+      "sum": 2.0,
+      "datapoints": [
+        {
+          "Timestamp": "2026-10-17T22:22:00+02:00",
+          "Sum": 2.0,
+          "Unit": "Count"
+        }
+      ]
+    },
+    "Bounce": {
+      "sum": 0,
+      "datapoints": []
+    },
+    "Reject": {
+      "sum": 0,
+      "datapoints": []
+    },
+    "Complaint": {
+      "sum": 0,
+      "datapoints": []
+    }
+  },
+  "temporary_read_permission_removed": true
+}

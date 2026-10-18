@@ -1,0 +1,7 @@
+{
+  "status": "FUTURE_INVITATION_WORDING_VALIDATED_NOT_DEPLOYED",
+  "capabilities": [
+    "CAPABILITY_IAM"
+  ],
+  "live_user_pool_template_changed": false
+}

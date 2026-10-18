@@ -1,0 +1,14 @@
+{
+  "status": "MANDATORY_AUTHENTICATOR_CONFIGURATION_VERIFIED",
+  "configuration": {
+    "SoftwareTokenMfaConfiguration": {
+      "Enabled": true
+    },
+    "MfaConfiguration": "ON",
+    "WebAuthnConfiguration": {
+      "FactorConfiguration": "SINGLE_FACTOR"
+    }
+  },
+  "analyst_login_and_ledger_user_confirmed": true,
+  "individual_mfa_enrolment_not_assumed": true
+}
