@@ -1,0 +1,35 @@
+{
+  "status": "GMAIL_DELIVERY_CONFIRMED_IN_SPAM_AND_APPLICATION_RECIPIENT_UPDATED",
+  "recorded_at": "2026-10-18T18:04:46.291519+00:00",
+  "region": "af-south-1",
+  "diagnostic_test": {
+    "reference": "GMAIL-20261018-01",
+    "provider_message_id": "011601a15021a93b-b240b43b-aef3-40bb-9864-07e70a7f638d-000000",
+    "gmail_verified": true,
+    "user_confirmed_receipt": "Spam",
+    "inbox_placement_verified": false,
+    "sender": "nompilomabuya@outlook.com",
+    "recipient": "nompilomabuya@gmail.com"
+  },
+  "application_update": {
+    "status": "GMAIL_RECIPIENT_STACK_AND_RUNTIME_PERMISSION_VERIFIED",
+    "checked_at": "2026-10-18T18:03:17.897066+00:00",
+    "stack_status": "UPDATE_COMPLETE",
+    "sender": "nompilomabuya@outlook.com",
+    "recipient": "nompilomabuya@gmail.com",
+    "code_sha256": "MhAUDF28QkGgWOMufMEL50y7qWWMADv624bng4BlxmM=",
+    "replaced_resources": 0,
+    "original_alerts_resent": false,
+    "diagnostic_mail_received": "Spam",
+    "new_transaction_alert_test_pending": true
+  },
+  "temporary_setup_policy_removed": true,
+  "deployer_managed_policy_attachments_restored": 19,
+  "sender_domain_owned_by_project": false,
+  "original_outlook_nondelivery_root_cause_confirmed": false,
+  "reliable_inbox_placement_proven": false,
+  "next_verification": "Process one new labelled synthetic high-risk transaction through the live upload workflow and confirm its separate alert arrives at Gmail. Do not replay SENT or UNKNOWN claims.",
+  "support_plan_changed": false,
+  "paid_diagnostics_enabled": false,
+  "new_standing_infrastructure_created": false
+}

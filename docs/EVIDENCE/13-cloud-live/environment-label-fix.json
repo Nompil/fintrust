@@ -1,0 +1,27 @@
+{
+  "status": "AWS_ENVIRONMENT_LABEL_DEPLOYED_AND_PUBLIC_URL_VERIFIED",
+  "checked_at": "2026-10-18T18:38:01.679825+00:00",
+  "url": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/",
+  "artifact": {
+    "status": "PREPARED_AND_BOTH_ENVIRONMENTS_RENDER_VERIFIED",
+    "sha256": "06ee83c52299ea787ee3f8acb3465e2502b23533ad3da961f3923d8e4b2d3a96",
+    "code_sha256_base64": "Bu6DxSKZ6nh+4/iss0ZeJQKyNTOtPalh85I9jkstOpY=",
+    "bytes": 26811510,
+    "previous_live_sha256": "3210140c5dbc4241a058e32e7cc10be74cbba9658c003bfadb86e7838065c663",
+    "changed_archive_entries": [
+      "fintrust/api.py"
+    ],
+    "existing_gateway_and_authentication_tests_passed": 60,
+    "bucket": "fintrust-reports-966467878406-af-south-1-dev",
+    "key": "deployment/lambda/06ee83c52299ea787ee3f8acb3465e2502b23533ad3da961f3923d8e4b2d3a96/fintrust.zip"
+  },
+  "api_alias_version": "6",
+  "cloud_label": "Release 1 \u00b7 AWS Dev",
+  "local_render_verified": true,
+  "public_page_http": 200,
+  "cognito_configuration_http": 200,
+  "unauthenticated_ledger_http": 401,
+  "gmail_alert_recipient_preserved": true,
+  "live_user_login_repeated": false,
+  "temporary_deployment_policy_removed": true
+}

@@ -33,6 +33,9 @@ def workbench_document():
     response = send_from_directory(FRONTEND, "release1.html")
     response.direct_passthrough = False
     html = response.get_data(as_text=True)
+    if os.getenv("AWS_EXECUTION_ENV"):
+        html = html.replace("Release 1 · Local", "Release 1 · AWS Dev")
+        html = html.replace("Local verification", "AWS development")
     html = html.replace("<head>", '<head><meta name="fintrust-api-base" content="' + prefix + '">', 1)
     for attribute in ('href', 'src'):
         html = html.replace(attribute + '="/assets/', attribute + '="' + prefix + '/assets/')

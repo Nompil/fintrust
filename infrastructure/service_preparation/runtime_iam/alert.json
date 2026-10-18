@@ -43,7 +43,10 @@
       "Action": [
         "ses:SendEmail"
       ],
-      "Resource": "arn:aws:ses:af-south-1:966467878406:identity/nompilomabuya@outlook.com",
+      "Resource": [
+        "arn:aws:ses:af-south-1:966467878406:identity/nompilomabuya@outlook.com",
+        "arn:aws:ses:af-south-1:966467878406:identity/nompilomabuya@gmail.com"
+      ],
       "Condition": {
         "StringEquals": {
           "ses:FromAddress": "nompilomabuya@outlook.com",
@@ -51,7 +54,7 @@
         },
         "ForAllValues:StringEquals": {
           "ses:Recipients": [
-            "nompilomabuya@outlook.com"
+            "nompilomabuya@gmail.com"
           ]
         },
         "Null": {
