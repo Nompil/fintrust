@@ -116,6 +116,8 @@ def quarantine(item,errors):
     return {"status":"QUARANTINED","quarantine_id":identity,"validation_errors":errors}
 
 def process_envelope(item):
+    if isinstance(item, dict) and item.get("source_system") == "manual-correction":
+        raise PermissionError("Analyst-edited financial values cannot enter the ledger; a source-system replacement file is required")
     _check(item); register(item)
     if item["kind"]!="ROW": return _process_registered(item)
     _with_connection(lambda cur:lifecycle.resume(cur,item))
@@ -179,23 +181,9 @@ def _process_registered(item):
     return {**result,"status":state["status"],"contract_version":VERSION}
 
 def drain_corrections(limit=10):
+    """Preserve legacy requests for review without executing analyst-edited values."""
     if type(limit) is not int or not 1<=limit<=100: raise ValueError("Bounded drain required")
-    def pending(cur):
-        cur.execute("SELECT correction_id::text,envelope FROM correction_outbox WHERE state='PENDING' ORDER BY correction_id LIMIT %s",(limit,))
-        return cur.fetchall()
-    completed=0
-    for identifier,item in _with_connection(pending):
-        try:
-            process_envelope(item)
-            def finish(cur):
-                cur.execute("UPDATE correction_outbox SET state='COMPLETED',attempts=attempts+1,completed_at=NOW(),last_error_type=NULL WHERE correction_id=%s",(identifier,))
-            _with_connection(finish);completed+=1
-        except Exception as error:
-            def failed(cur):
-                cur.execute("UPDATE correction_outbox SET attempts=attempts+1,last_error_type=%s WHERE correction_id=%s",(type(error).__name__,identifier))
-            _with_connection(failed)
-            raise
-    return {"completed":completed}
+    return {"completed": 0, "paused": True, "reason": "SOURCE_REPLACEMENT_REQUIRED"}
 
 def rebuild_projection(transaction_id):
     identifier=str(uuid.UUID(transaction_id))

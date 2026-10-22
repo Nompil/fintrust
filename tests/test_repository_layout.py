@@ -22,7 +22,7 @@ for name in ['fintrust','migration_runner','src']:
   mod=importlib.import_module(m.name)
   assert Path(mod.__file__).resolve().is_relative_to(Path.cwd()/'backend'),m.name
   count+=1
-for handler in ['fintrust.ingest','fintrust.score','fintrust.alert_delivery','fintrust.api','fintrust.report','migration_runner.preflight_entry']:
+for handler in ['fintrust.ingest','fintrust.score','fintrust.alert_delivery','fintrust.api','fintrust.report','fintrust.cloud_users','migration_runner.preflight_entry']:
  assert callable(importlib.import_module(handler).lambda_handler)
 print('Backend production modules and stable Lambda handlers imported:',count)
 '''
@@ -51,7 +51,7 @@ def test_entry_assets_are_served_from_the_moved_locations():
     client=api.app.test_client()
     html=client.get('/release1').data.decode('utf-8')
     assets=re.findall(r'(?:src|href)="(/assets/[^"?]+)',html)
-    assert set(assets)=={'/assets/imbokodo-mark.svg','/assets/css/release1.css','/assets/js/release1-display.js','/assets/js/release1-workflows.js','/assets/js/release1.js','/assets/js/release1-analyst.js','/assets/js/release1-intake-insights.js','/assets/js/release1-cases.js','/assets/js/release1-dashboard.js','/assets/css/release1-dashboard.css'}
+    assert set(assets)=={'/assets/imbokodo-mark.svg','/assets/css/release1.css','/assets/js/release1-display.js','/assets/js/release1-workflows.js','/assets/js/release1.js','/assets/js/release1-analyst.js','/assets/js/release1-intake-insights.js','/assets/js/release1-cases.js','/assets/js/release1-dashboard.js','/assets/css/release1-dashboard.css','/assets/js/release1-users.js','/assets/js/release1-row-summary.js','/assets/js/release1-session.js'}
     for asset in assets:
         assert client.get(asset).status_code==200,asset
     assert '/assets/js/release1.js' in assets and '/assets/css/release1.css' in assets

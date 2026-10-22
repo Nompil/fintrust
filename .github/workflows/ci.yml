@@ -98,6 +98,7 @@ jobs:
           FINTRUST_UI_COPY_EVIDENCE: ${{ github.workspace }}/build/full-suite-browser-evidence
         run: |
           export FINTRUST_NODE="$(command -v node)"
+          node --test tools/test_cloud_session.cjs
           python3.12 -m pytest -q --junitxml=test-results/pytest.xml
       - name: Record release gate evidence
         if: always()

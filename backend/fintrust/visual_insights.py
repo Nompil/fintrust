@@ -81,7 +81,7 @@ def read(principal,args):
         filters={'from':since.isoformat(),**({'to':until.isoformat()} if until else {}),**({'account_id':args['account_id']} if args.get('account_id') else {})}
         offset=0
         while True:
-            page=api.list_page(kind,scoped,{'limit':100,'offset':offset,**filters})
+            page=api.list_page(kind,scoped,{'limit':100,'offset':offset,**filters},include_provenance=False)
             dest.extend(page['data'])
             if not page['meta']['has_more'] or offset>=100000:break
             offset+=100

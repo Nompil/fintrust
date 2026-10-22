@@ -10,8 +10,10 @@ from werkzeug.utils import secure_filename
 from . import workflow_api as api, score
 from .cloud_intake import available
 PREFIX = "quarantine/ui-events/"
+from .request_cache import request_cached, invalidate
 
 def record_upload(principal, filename, action, result, *, reason_code=None, batch_id=None):
+    invalidate()
     if not available():
         raise ValueError("Local intake receipt required")
     event = {"event_id":str(uuid.uuid4()), "filename":secure_filename(filename or "")[:200],
@@ -23,6 +25,7 @@ def record_upload(principal, filename, action, result, *, reason_code=None, batc
         Body=json.dumps(event).encode(), ContentType="application/json", IfNoneMatch="*")
     return {k:v for k,v in event.items() if k!="accounts"}
 
+@request_cached
 def upload_history(principal):
     principal.require("read")
     if principal.role == "Maintainer": raise PermissionError("Financial intake history")
@@ -33,6 +36,8 @@ def upload_history(principal):
         if cursor: args["ContinuationToken"]=cursor
         listing=score.s3.list_objects_v2(**args)
         for entry in listing.get("Contents",[]):
+            if '/' in entry['Key'][len(PREFIX):]:
+                continue  # Case annotations use separate, case-authorized readers.
             body=score.s3.get_object(Bucket=args["Bucket"],Key=entry["Key"])["Body"]
             try: item=json.loads(body.read())
             finally: body.close()
@@ -81,6 +86,8 @@ def batch_detail(identifier, principal, args):
     batch['filename']=batch.get('original_filename') or batch.get('source_provenance',{}).get('recorded_upload_filename') or batch.get('source_filename')
     batch['actor']=batch.get('submitted_by')
     batch['risk_event_counts']=api.run_risk_counts(identifier,principal)
+    from .row_summary import summary
+    batch['row_summary']=summary(batch,principal)
     total=api._query('SELECT count(*) AS total_count FROM ingestion_records i WHERE '+where,tuple(params))[0]['total_count']
     return {"batch":batch,"rows":rows[:limit],"attempts":attempts,
         "meta":{"count":len(rows[:limit]),"total_count":total,"has_more":len(rows)>limit,"offset":offset,"limit":limit,"filters":{"disposition":disposition} if disposition else {}}}
@@ -103,24 +110,27 @@ def overview(principal):
         FROM risk_review_history h JOIN risk_events r USING(risk_event_id)
         JOIN transactions t USING(tx_id) WHERE t.account_id=ANY(%s::uuid[])
         ORDER BY h.changed_at DESC,h.risk_event_id,h.version DESC LIMIT 6''',(scope,))
-    q=api.list_page("quarantine",principal,{"limit":100})
+    q=api.list_page("quarantine",principal,{"limit":1},include_provenance=False)
     # Counts share list scoping; exact counters are marked bounded when paginated.
-    batches=api.list_page("batches",principal,{"limit":100})
-    data.update({"quarantined_rows":q['meta']['total_count'],"quarantine_requiring_action":api.list_page('quarantine',principal,{'limit':1,'status':'OPEN'})['meta']['total_count'],"duplicate_occurrences":sum(b["duplicate"] for b in batches["data"]),
+    batches=api.list_page("batches",principal,{"limit":100},include_provenance=False)
+    from .case_provenance import enrich
+    recent_batches=enrich(batches['data'][:5],principal,'batches')
+    data.update({"quarantined_rows":q['meta']['total_count'],"quarantine_requiring_action":api.list_page('quarantine',principal,{'limit':1,'status':'OPEN'},include_provenance=False)['meta']['total_count'],"duplicate_occurrences":sum(b["duplicate"] for b in batches["data"]),
         "technical_failures":sum(b["failed_technical"] for b in batches["data"]),
         "partial_failed_batches":sum(b["status"] in ('PARTIAL','FAILED') or (b["rows_received"] is not None and not b["counts_consistent"]) for b in batches["data"]),
-        "rejected_uploads":sum(e["action"]=='UPLOAD_REJECTED' for e in upload_history(principal)),
-        "bounded_counts":q["meta"]["has_more"] or batches["meta"]["has_more"],
-        "recent_batches":batches["data"][:5],
-        "recent_transactions":api.list_page("transactions",principal,{"limit":8})["data"],
-        "attention":api.list_page("reviews",principal,{"limit":8,"queue":"open"})["data"]})
+        "rejected_uploads":None,
+        "rejected_uploads_note":"Open rejected uploads for their recorded history; the dashboard does not scan every receipt.",
+        "bounded_counts":batches["meta"]["has_more"],
+        "recent_batches":recent_batches,
+        "recent_transactions":api.list_page("transactions",principal,{"limit":8},include_provenance=False)["data"],
+        "attention":api.list_page("reviews",principal,{"limit":5,"queue":"open","sort":"priority"},include_provenance=False)["data"]})
     return data
 
 def audit_events(principal, args):
     principal.require("audit")
     limit,offset=api.page_args(args)
     scope=list(principal.accounts)
-    from .upload_ownership import owned_batches
+    from .upload_ownership import owned_unknown_batches as owned_batches
     owned=owned_batches(principal)
     events=[{"timestamp":e["attempted_at"],"actor":e["actor"],"action":e["action"],"resource":e.get("target") or e.get("batch_id") or e["event_id"],"result":e["result"],"actor_role":e.get("actor_role","Not captured"),"details":e.get("notes") or e.get("reason_code") or e["filename"]} for e in upload_history(principal)]
     events+=api._query("SELECT h.changed_at AS timestamp,h.actor_subject AS actor,CASE WHEN h.before_status='OPEN' AND h.after_status='UNDER_REVIEW' THEN 'REVIEW_CLAIMED' WHEN h.before_status=h.after_status AND h.after_status='UNDER_REVIEW' AND h.reviewer_subject=(SELECT previous.reviewer_subject FROM risk_review_history previous WHERE previous.risk_event_id=h.risk_event_id AND previous.version=h.version-1) THEN 'REVIEW_NOTE_ADDED' WHEN h.before_status=h.after_status AND h.after_status IN ('UNDER_REVIEW','ESCALATED') THEN 'REVIEW_REASSIGNED' WHEN h.before_status='UNDER_REVIEW' AND h.after_status='OPEN' THEN 'REVIEW_UNASSIGNED' ELSE 'REVIEW_'||h.after_status END AS action,h.risk_event_id::text AS resource,h.after_status AS result,h.notes AS details,h.version,h.request_id,h.request_digest,h.before_status,h.after_status,h.resolution_code FROM risk_review_history h JOIN risk_events r USING(risk_event_id) JOIN transactions t USING(tx_id) WHERE t.account_id=ANY(%s::uuid[]) ORDER BY h.changed_at DESC LIMIT 1000",(scope,))

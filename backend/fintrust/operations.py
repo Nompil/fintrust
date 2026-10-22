@@ -67,6 +67,8 @@ def retry(body,principal):
     if not isinstance(body,dict) or set(body)!={"request_id","action","target","notes"}:raise ValueError("Exact retry fields required")
     if not isinstance(body["request_id"],str) or not isinstance(body["action"],str):raise ValueError("Text request UUID and action required")
     request=str(uuid.UUID(body["request_id"]));action=body["action"];target=body["target"]
+    if action == "RETRY_CORRECTION":
+        raise PermissionError("Legacy manual corrections are paused. Obtain a replacement file from the source system.")
     if action not in {"REBUILD_PROJECTION","RETRY_CORRECTION","REDRIVE"} or not isinstance(body["notes"],str) or not 1<=len(body["notes"].strip())<=2000:raise ValueError("Valid action and investigation notes required")
     if action=="REDRIVE":
         if os.getenv("FINTRUST_MODE")!="local":raise ValueError("Cloud redrive controller is separately gated")

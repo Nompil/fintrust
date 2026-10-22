@@ -82,7 +82,7 @@ def test_complete_analyst_journeys_browser_database_audit(release_db, people, mo
         browser = json.loads((out / "browser-result.json").read_text())
         assert browser["status"] == "PASSED" and set(browser["scenarios"]) == set("ABCDEFG")
         expected = {"JOURNEY-LOW": (0, "Low", None), "JOURNEY-MEDIUM": (25, "Medium", "CLEARED"),
-                    "JOURNEY-HIGH": (55, "High", "CONFIRMED_RISK"), "JOURNEY-CORRECT": (0, "Low", None)}
+                    "JOURNEY-HIGH": (55, "High", "CONFIRMED_RISK")}
         actual = query("""SELECT t.source_transaction_id,(p.result->>'score')::int,p.result->>'risk_level',w.review_status
             FROM transactions t JOIN processed_transactions p USING(tx_id) LEFT JOIN risk_events r USING(tx_id)
             LEFT JOIN risk_reviews w USING(risk_event_id)
@@ -92,7 +92,7 @@ def test_complete_analyst_journeys_browser_database_audit(release_db, people, mo
         assert query("SELECT workflow_status FROM quarantine_workflow WHERE quarantine_id=%s", (browser["rejected_case"],)) == [("REJECTED",)]
         assert query("SELECT correction_notes,submitted_by,action FROM quarantine_corrections WHERE quarantine_id=%s", (browser["rejected_case"],)) == [("Unrecoverable source evidence; reject without ledger entry", "analyst01", "REJECT")]
         assert query("SELECT reason_code FROM quarantine_cases WHERE quarantine_id=%s", (browser["corrected_case"],)) == [("INVALID_AMOUNT",)]
-        assert query("SELECT submitted_by,action FROM quarantine_corrections WHERE quarantine_id=%s", (browser["corrected_case"],)) == [("analyst01", "RESUBMIT")]
+        assert query("SELECT submitted_by,action FROM quarantine_corrections WHERE quarantine_id=%s", (browser["corrected_case"],)) == []
         for source, outcome in (("JOURNEY-MEDIUM", "CLEARED"), ("JOURNEY-HIGH", "CONFIRMED_RISK")):
             event = query("SELECT risk_event_id FROM risk_events r JOIN transactions t USING(tx_id) WHERE source_transaction_id=%s", (source,))[0][0]
             history = query("SELECT actor_subject,before_status,after_status FROM risk_review_history WHERE risk_event_id=%s ORDER BY version", (event,))
@@ -103,10 +103,10 @@ def test_complete_analyst_journeys_browser_database_audit(release_db, people, mo
         assert query("SELECT review_status,reviewer_subject FROM risk_reviews WHERE risk_event_id=%s", (sla_result["risk_event_id"],)) == [("OPEN", None)]
         run_state = client.get('/v1/batches/' + browser['batch_id'], headers=headers('analyst01')).json['data']['batch']
         assert tuple(run_state[k] for k in ("rows_received", "accepted", "quarantined", "duplicate", "failed_technical", "pending")) == (6, 3, 2, 1, 0, 0)
-        # Original run accounting is retained after a correction creates its own run.
+        # Source-review annotation does not create another processing run or ledger entry.
         assert run_state['counts_consistent']
         audit = client.get('/v1/audit-events?limit=100', headers=headers('auditor01')).json['data']
-        assert {"REVIEW_CLAIMED", "REVIEW_NOTE_ADDED", "REVIEW_CLEARED", "REVIEW_CONFIRMED_RISK", "QUARANTINE_RESUBMIT", "QUARANTINE_REJECT"} <= {e['action'] for e in audit}
+        assert {"REVIEW_CLAIMED", "REVIEW_NOTE_ADDED", "REVIEW_CLEARED", "REVIEW_CONFIRMED_RISK", "QUARANTINE_REJECT"} <= {e['action'] for e in audit}
     finally:
         stop.set()
         correction_thread.join(timeout=10)

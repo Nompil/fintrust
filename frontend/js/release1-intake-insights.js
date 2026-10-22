@@ -40,7 +40,7 @@ function renderProcessingResult(result){
  const metadata=node("dl","");metadata.className="receipt-metadata";
  const receipt=uploadReceipts.get(result.batch_id)||result;
  for(const[label,value]of [["Processing Run",FinTrustDisplay.reference("batch_id",result.batch_id)],["Source file",result.original_filename||result.filename],["Submitted by",receipt.submitted_by||"Not recorded"],["Submitted at",receipt.submitted_at?FinTrustDisplay.time(receipt.submitted_at):"Not recorded"]])metadata.append(node("dt",label),node("dd",value||"Not recorded"));
- card.append(metadata,metricTiles([["Rows received",r.rows_received],["Accepted",r.accepted],["Quarantined",r.quarantined],["Duplicates",r.duplicate],["Failed",r.failed_technical],["Pending",r.pending]],"receipt-counts"));
+ card.append(rowOutcomeSummary(receipt.row_summary||result.row_summary));card.append(metadata,metricTiles([["Rows received",r.rows_received],["Accepted",r.accepted],["Quarantined",r.quarantined],["Duplicates",r.duplicate],["Failed",r.failed_technical],["Pending",r.pending]],"receipt-counts"));
  const parts=[[r.accepted,"accepted"],[r.quarantined,"quarantined"],[r.duplicate,"duplicate"],[r.failed_technical,"failed"],[r.pending,"pending"]].filter(([n])=>Number(n)>0).map(([n,label])=>`${n} ${label}`);
  card.append(dashboardSegments("Recorded processing outcome",[{label:"Accepted",count:r.accepted||0},{label:"Quarantined",count:r.quarantined||0},{label:"Duplicates",count:r.duplicate||0},{label:"Technical failures",count:r.failed_technical||0},{label:"Pending",count:r.pending||0}]));card.append(node("p",r.rows_received==null?"Rows received not recorded.":`${r.rows_received} received = ${parts.length?parts.join(" + "):"0 recorded outcomes"}`));
  const actions=node("div","");actions.className="receipt-actions";actions.setAttribute("aria-label","Processing next actions");
@@ -56,7 +56,19 @@ async function openRunRiskEvents(batch){
 
 async function enrichReceiptMetadata(result){
  const receipt=uploadReceipts.get(result.batch_id);if(!receipt)return;
- try{const data=(await request(`/v1/batches/${result.batch_id}?limit=1`)).data;const b=data.batch;receipt.submitted_by=b.submitted_by||null;receipt.submitted_at=b.submitted_at||null;receipt.risk_event_counts=b.risk_event_counts;if(byId("upload-notice").hidden===false&&byId("upload-notice-message").querySelector(`[data-batch-id="${result.batch_id}"]`))renderProcessingResult(result);}catch(errorValue){if(errorValue.staleSession||errorValue.sessionExpired)return;}
+ const epoch=applicationSessionEpoch,deadline=Date.now()+60000;
+ for(let attempt=0;attempt<20&&Date.now()<deadline;attempt++){
+  if(epoch!==applicationSessionEpoch||!uploadReceipts.has(result.batch_id)||document.hidden)return;
+  try{
+   const data=(await request(`/v1/batches/${result.batch_id}?limit=1`)).data,b=data.batch;
+   if(epoch!==applicationSessionEpoch)return;
+   receipt.submitted_by=b.submitted_by||null;receipt.submitted_at=b.submitted_at||null;receipt.risk_event_counts=b.risk_event_counts;receipt.row_summary=b.row_summary;result.reconciliation=b;
+   const visible=byId("upload-notice").hidden===false&&byId("upload-notice-message").querySelector(`[data-batch-id="${result.batch_id}"]`);
+   if(visible)renderProcessingResult(result);else return;
+   if(b.pending===0&&b.counts_consistent)return;
+  }catch(errorValue){if(errorValue.staleSession||errorValue.sessionExpired||errorValue.httpStatus!==404)return;}
+  await new Promise(resolve=>setTimeout(resolve,2000));
+ }
 }
 
 function renderRecentProcessingRuns(rows){renderCompactProcessingHistory(rows,"Recent Processing Runs");}

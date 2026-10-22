@@ -1,7 +1,7 @@
 """Read-only workforce metadata; it never replaces Cognito authentication.
 
-Only the operator can update these scope-table records. API permission is GetItem
-only. Membership/status is checked against each user's authoritative scope item,
+Operators and the isolated Admin provisioning service update scope records. The
+financial API has GetItem permission only. Membership/status is checked against each user's authoritative scope item,
 so a stale directory entry cannot authorize a disabled or reassigned user.
 """
 import os,uuid

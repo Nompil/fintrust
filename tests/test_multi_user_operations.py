@@ -134,23 +134,18 @@ def test_non_analyst_correction_denied(release_db,people,who):
     assert c.post(f'/v1/quarantine/{case}/corrections',headers=h(who),json={'request_id':str(uuid.uuid4()),'action':'RESUBMIT','notes':'Correction','candidate':row()}).status_code==403
 
 @pytest.mark.parametrize('duplicate',[False,True])
-def test_correction_failed_then_valid_or_duplicate_with_link_and_immutable_history(release_db,people,duplicate):
+
+def test_source_replacement_or_replay_cannot_overwrite_quarantine_history(release_db,people,duplicate):
     c,h,_=people;q=release_db[3];run(feed([row(amount='bad')]))
     case=q('SELECT quarantine_id::text FROM quarantine_cases')[0][0]
     original=q('SELECT safe_payload_key,safe_payload_version,reason_code,reason_detail FROM quarantine_cases WHERE quarantine_id=%s',(case,))
-    path=f'/v1/quarantine/{case}';first=c.get(path,headers=h('analyst01'));assert first.status_code==200 and first.json['data']['recovery_status']=='OPEN'
-    def correct(candidate):return c.post(path+'/corrections',headers=h('analyst01'),json={'request_id':str(uuid.uuid4()),'action':'RESUBMIT','notes':'Correct numeric amount','candidate':candidate})
-    assert correct(row(amount='0')).status_code==202
-    assert c.get(path,headers=h('analyst01')).json['data']['recovery_status']=='CORRECTED'
-    worker.drain_corrections();failed=c.get(path,headers=h('analyst01')).json['data']
-    assert failed['recovery_status']=='REVALIDATION_FAILED' and failed['revalidation_attempts']==1 and failed['correcting_analyst']=='analyst01'
-    if duplicate:run(feed([row()],'raw/other.csv'))
-    assert correct(row()).status_code==202;worker.drain_corrections()
-    response=c.get(path,headers=h('analyst01'));assert response.status_code==200,response.json
-    data=response.json['data'];assert data['recovery_status']=='ACCEPTED' and data['resulting_transaction_id'] and data['revalidation_attempts']==2 and len(data['correction_history'])==2
-    assert data['corrected_values']['amount']==row()['amount'] and data['candidate']['amount']=='bad'
-    assert any(x['event_type']=='REVALIDATION_FAILED' and x['actor_type']=='SYSTEM' for x in data['audit_timeline'])
-    assert any(x['event_type']=='CORRECTION_SUBMITTED' and x['actor_subject']=='analyst01' for x in data['audit_timeline'])
+    path=f'/v1/quarantine/{case}'
+    for candidate in (row(amount='0'),row()):
+        assert c.post(path+'/corrections',headers=h('analyst01'),json={'request_id':str(uuid.uuid4()),'action':'RESUBMIT','notes':'Source review','candidate':candidate}).status_code==403
+    if duplicate:run(feed([row()],'raw/other-source.csv'))
+    replacement=feed([row()],'raw/source-system-replacement.csv');run(replacement);run(replacement)
+    data=c.get(path,headers=h('analyst01')).json['data']
+    assert data['recovery_status']=='OPEN' and data['candidate']['amount']=='bad' and data['correction_history']==[]
     assert q('SELECT safe_payload_key,safe_payload_version,reason_code,reason_detail FROM quarantine_cases WHERE quarantine_id=%s',(case,))==original
     assert q('SELECT count(*) FROM transactions')==[(201,)]
 

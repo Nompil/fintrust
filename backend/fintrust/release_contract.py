@@ -82,7 +82,7 @@ def authorize(role, action):
     permissions={
         "Admin":{"read","audit","operations","assign_review"},
         "Maintainer":{"read","operations","retry"},
-        "Risk/Compliance Analyst":{"read","upload","review","correct","reject_quarantine","assign_review"},
+        "Risk/Compliance Analyst":{"read","upload","review","reject_quarantine","assign_review"},
         "Read-only/Auditor":{"read","audit"},
     }
     if action not in permissions.get(role,set()): raise PermissionError("Action is not authorized")

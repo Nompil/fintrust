@@ -16,15 +16,16 @@ def test_missing_original_preserves_detail_and_blocks_new_correction(release_db,
     before=release_db[3]('SELECT count(*) FROM quarantine_corrections')
     for action in ('RESUBMIT','REJECT'):
         response=c.post(f'/v1/quarantine/{case}/corrections',headers=h('analyst01'),json={'request_id':str(uuid.uuid4()),'action':action,'notes':'Missing original must never be invented','candidate':row() if action=='RESUBMIT' else None})
-        assert response.status_code==409,response.json
+        assert response.status_code==(403 if action=='RESUBMIT' else 409),response.json
     assert release_db[3]('SELECT count(*) FROM quarantine_corrections')==before
 
-def test_missing_correction_preserves_recorded_worker_outcome(release_db,people):
+
+def test_missing_historical_correction_preserves_recorded_worker_outcome(release_db,people):
+    from tests.legacy_quarantine_fixture import historical_correction
     c,h,_=people;run(feed([row(amount='bad')]))
     case=release_db[3]('SELECT quarantine_id FROM quarantine_cases')[0][0]
-    response=c.post(f'/v1/quarantine/{case}/corrections',headers=h('analyst01'),json={'request_id':str(uuid.uuid4()),'action':'RESUBMIT','notes':'Verified synthetic correction','candidate':row(amount='25')});assert response.status_code==202,response.json
-    worker.drain_corrections(limit=10)
-    key,version=release_db[3]('SELECT corrected_payload_key,corrected_payload_version FROM quarantine_corrections')[0];score.s3.delete_object(Bucket='release1-safe',Key=key,VersionId=version)
+    old=historical_correction(release_db,case,row(amount='25'))
+    score.s3.delete_object(Bucket='release1-safe',Key=old['key'],VersionId=old['version'])
     data=c.get(f'/v1/quarantine/{case}',headers=h('analyst01')).json['data']
     assert data['recovery_status']=='ACCEPTED' and data['resulting_transaction_id'] and data['corrected_values'] is None and not data['timeline_complete']
     assert data['correction_history'][0]['submitted_by']=='analyst01'
@@ -44,7 +45,8 @@ def test_provider_outage_does_not_hide_accepted_ledger(release_db,people,monkeyp
     assert investigation.json['data']['alert']['delivery_state']=='UNAVAILABLE' and investigation.json['data']['allowed_actions']['claim']
 
 
-def test_sql_quarantine_recovery_with_reopened_local_evidence(release_db,people,monkeypatch,tmp_path):
+
+def test_source_review_after_reopened_local_evidence_never_edits_original(release_db,people,monkeypatch,tmp_path):
     from tools.local_runtime_store import LocalStore,DurableS3
     c,h,_=people;raw=release_db[4];path=tmp_path/'services.sqlite'
     monkeypatch.setattr(score,'s3',DurableS3(raw,LocalStore(path)))
@@ -54,9 +56,11 @@ def test_sql_quarantine_recovery_with_reopened_local_evidence(release_db,people,
     monkeypatch.setattr(score,'s3',DurableS3(raw,LocalStore(path)))
     detail=c.get(f'/v1/quarantine/{case}',headers=h('analyst01'));assert detail.status_code==200,detail.json
     assert detail.json['data']['candidate']['amount']=='bad' and detail.json['data']['evidence_available']
-    response=c.post(f'/v1/quarantine/{case}/corrections',headers=h('analyst01'),json={'request_id':str(uuid.uuid4()),'action':'RESUBMIT','notes':'Recover using exact persisted original after restart','candidate':row(amount='25',source_transaction_id='AFTER-RESTART')});assert response.status_code==202,response.json
-    worker.drain_corrections(limit=10)
+    assert c.post(f'/v1/quarantine/{case}/corrections',headers=h('analyst01'),json={'request_id':str(uuid.uuid4()),'action':'RESUBMIT','notes':'Manual edit is prohibited','candidate':row(amount='25')}).status_code==403
+    note=c.post(f'/v1/quarantine/{case}/notes',headers=h('analyst01'),json={'request_id':str(uuid.uuid4()),'notes':'Source replacement requested after evidence restart'})
+    assert note.status_code==201,note.json
+    run(feed([row(amount='25',source_transaction_id='AFTER-RESTART')],'raw/replacement-after-restart.csv'))
     detail=c.get(f'/v1/quarantine/{case}',headers=h('analyst01')).json['data']
-    assert detail['recovery_status']=='ACCEPTED' and detail['resulting_transaction_id'] and detail['timeline_complete']
+    assert detail['candidate']['amount']=='bad' and detail['recovery_status']=='OPEN'
+    assert detail['source_review_notes']['data'][0]['actor']=='analyst01'
     assert release_db[3]("SELECT count(*) FROM transactions WHERE source_transaction_id='AFTER-RESTART'")==[(1,)]
-    assert any(e['actor_subject']=='analyst01' and e['actor_type']=='HUMAN' for e in detail['audit_timeline'])

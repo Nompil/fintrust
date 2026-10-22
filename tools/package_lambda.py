@@ -19,7 +19,8 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 HANDLERS = {"ingest": "fintrust.ingest.lambda_handler", "scoring": "fintrust.score.lambda_handler",
             "alert": "fintrust.alert_delivery.lambda_handler", "api": "fintrust.api.lambda_handler",
-            "report": "fintrust.report.lambda_handler"}
+            "report": "fintrust.report.lambda_handler",
+            "user_admin": "fintrust.cloud_users.lambda_handler"}
 
 
 def verify_archive(path):

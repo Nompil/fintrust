@@ -1,6 +1,12 @@
 # FinTrust
 Transaction Monitoring & Risk Alert Platform
 
+## Presentation feedback changes — 22 October 2026
+
+The `work/presentation-feedback-20261022` branch changes quarantine to immutable source review: analysts can annotate or reject a held row, while replacement values must arrive in a new source-system file. Quarantine is a processing outcome, not a finding of fraud. A separate scoped quarantine report preserves that distinction. Upload summaries reconcile accepted Low/Medium/High/unassessed rows with quarantine, duplicates, technical failures and pending rows.
+
+This branch also adds in-memory Cognito token renewal, reduces repeated dashboard evidence reads, and implements scoped Admin user creation through a separate Cognito administration Lambda. Infrastructure preparation and local tests do not establish live deployment. See [feedback verification and release gates](docs/PRESENTATION_FEEDBACK_20261022.md). The dated evidence below describes the earlier release and its historical correction workflow.
+
 ## Submission and live demonstration — 18 October 2026
 
 **[Open Imbokodo Bank on AWS](https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/)** · [Demonstration guide](docs/CLOUD_DEMONSTRATION_RUNBOOK.md) · [Final live evidence](docs/EVIDENCE/13-cloud-live/)
@@ -27,7 +33,7 @@ Upload CSV files, protect transaction identity, quarantine invalid rows, score a
 ## Core Flow
 ```text
 Risk Analyst -> CSV -> input S3 -> ingest parsing -> FIFO candidates
-  -> database-aware validation -> quarantine -> correction / revalidation
+  -> database-aware validation -> quarantine -> source review / new source file
   -> accepted ledger + LOW / MEDIUM / HIGH scoring -> risk event
        -> MEDIUM / HIGH review -> decision
        -> HIGH alert delivery (independent of review)
@@ -38,7 +44,7 @@ Actual processing order is **RECEIVED -> QUEUED -> VALIDATED -> SCORED -> STORED
 ## Users and Roles
 | Role | Accountability |
 |---|---|
-| Risk Analyst | Upload, investigate, correct quarantine and decide scoped reviews |
+| Risk Analyst | Upload, investigate, annotate/reject quarantine and decide scoped reviews |
 | Auditor | Read-only scoped evidence, reports and audit |
 | Administrator | User/account governance and oversight |
 | Maintainer | Technical recovery, separate from financial review decisions |

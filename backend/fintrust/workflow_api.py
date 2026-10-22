@@ -79,7 +79,7 @@ def run_risk_counts(batch,principal):
     result['scope_note']='Cases linked to canonical transactions in this processing run and current assigned-account scope. Duplicate rows can link existing cases; these counts do not imply new case creation.'
     return result
 
-def list_page(kind,principal,args):
+def list_page(kind,principal,args,*,include_provenance=True):
     limit,offset=page_args(args,{"status","account_id",*( {"tx_id","source_id","country","risk_level","batch_id","from","to","to_exclusive","min_amount","max_amount","scenario","review_status","tx_type","cross_border"} if kind=="transactions" else {"batch_id","from","to"} if kind=="batches" else {"queue","scenario","risk_level","assignee","sort","from","to","country","tx_type","cross_border","batch_id"} if kind=="reviews" else {"scenario","risk_level","assignee","sort","from","to","country","tx_type","cross_border","batch_id"} if kind=="risk-events" else {"batch_id","reason_code","from","to"} if kind=="quarantine" else set())})
     scope=list(principal.accounts)
     if args.get("account_id"): scope=[principal.account(args["account_id"])]
@@ -95,7 +95,7 @@ def list_page(kind,principal,args):
     if kind=="audit": principal.require("audit")
     select,where,order=selects[kind];params=[scope];queue_clause='';queue_params=[]
     if kind in {"quarantine","batches"}:
-        from .upload_ownership import owned_batches
+        from .upload_ownership import owned_unknown_batches as owned_batches
         owned=owned_batches(principal)
         if kind=='quarantine':
             where="(q.candidate_account_id=ANY(%s::uuid[]) OR ((%s OR q.batch_id=ANY(%s::uuid[])) AND NOT EXISTS(SELECT 1 FROM accounts a WHERE a.account_id=q.candidate_account_id)))"
@@ -233,7 +233,7 @@ def list_page(kind,principal,args):
                 row["actor"]=events[-1]["actor"] if events else None
         for row in rows:
             row["display_status"]=row["status"] if row["counts_consistent"] else "AWAITING_RECONCILIATION" if row["rows_received"] is None else "RECONCILIATION_FAILED"
-    if kind in {'batches','quarantine','transactions','reviews','risk-events'}:
+    if include_provenance and kind in {'batches','quarantine','transactions','reviews','risk-events'}:
         from .case_provenance import enrich
         enrich(rows,principal,kind)
     meta={"count":len(rows[:limit]),"limit":limit,"offset":offset,"has_more":len(rows)>limit}
@@ -327,18 +327,15 @@ def _update_review(event,body,principal):
     finally: conn.close()
 
 def _correct_case(identifier,body,principal):
+    if isinstance(body, dict) and body.get("action") == "RESUBMIT":
+        raise PermissionError("Transaction values are immutable. Request a replacement file from the source system; analyst-edited resubmission is disabled.")
     identifier=str(uuid.UUID(identifier))
     request,digest=_body(body,{"request_id","action","notes","candidate"})
     action=body["action"]
-    principal.require("reject_quarantine" if action=="REJECT" else "correct")
-    if not isinstance(action,str) or action not in {"RESUBMIT","REJECT"}: raise ValueError("Invalid correction action")
+    principal.require("reject_quarantine")
+    if action != "REJECT": raise ValueError("Only rejection of an immutable quarantined row is permitted")
     candidate=body["candidate"]
     if action=="REJECT" and candidate is not None: raise ValueError("Rejection cannot contain replacement values")
-    if action=="RESUBMIT":
-        if not isinstance(candidate,dict) or set(candidate)-FIELDS or not all(isinstance(v,str) for v in candidate.values()):
-            raise ValueError("Only named transaction candidate fields are allowed")
-        # Corrections must target assigned real accounts; all other validation is repeated by the worker.
-        principal.account(candidate.get("account_id",""))
     conn=connection()
     try:
         with conn:
@@ -352,9 +349,6 @@ def _correct_case(identifier,body,principal):
                 else:
                     from .upload_ownership import owns
                     if not owns(row['batch_id'],principal):raise PermissionError('Unknown-account correction requires original upload ownership')
-                if action=='RESUBMIT':
-                    cur.execute('SELECT 1 FROM accounts WHERE account_id=%s',(candidate['account_id'],))
-                    if not cur.fetchone():raise PermissionError('Corrected account must exist and be assigned')
                 cur.execute("SELECT quarantine_id FROM quarantine_cases WHERE quarantine_id=%s FOR UPDATE",(identifier,))
                 cur.execute("SELECT * FROM quarantine_corrections WHERE request_id=%s",(request,));prior=cur.fetchone()
                 if prior:
@@ -365,32 +359,11 @@ def _correct_case(identifier,body,principal):
                 if read(row['safe_payload_key'],row['safe_payload_version'])[0] is None:
                     raise Conflict('Original evidence required before a new correction or rejection')
                 correction=str(uuid.uuid5(uuid.UUID(identifier),request))
-                envelope=None;key=None;version=None;batch=None
-                if action=="RESUBMIT":
-                    from .release_ingest import envelopes
-                    import os
-                    from .batches import metadata
-                    payload=json.dumps({"correction_id":correction,"candidate":candidate},sort_keys=True).encode()
-                    bucket=os.environ["QUARANTINE_BUCKET"]
-                    key="quarantine/corrections/"+correction+".json"
-                    response=workflow.score.s3.put_object(Bucket=bucket,Key=key,Body=payload,ContentType="application/json")
-                    version=response.get("VersionId")
-                    if not version: raise RuntimeError("Versioned correction evidence required")
-                    b=metadata(bucket,payload)
-                    # Different correction attempts are distinct batch occurrences, even for identical candidate values.
-                    b["batch_id"]=correction
-                    batch=b["batch_id"]
-                    envelope={"schema_version":3,"kind":"ROW","batch":b,"attempt_id":correction,"rows_received":1,
-                              "source_system":"manual-correction","source":{"bucket":bucket,"key":key,"version":version,"etag":None,"row":2},"row":candidate,"parse_error":None}
-                    cur.execute("INSERT INTO ingestion_batches(batch_id,source_system,source_bucket,file_sha256,received_at,rows_received,publication_complete) VALUES(%s,'manual-correction',%s,%s,%s,1,TRUE)",(batch,bucket,b["file_sha256"],b["ingested_at"]))
-                    cur.execute("INSERT INTO ingestion_attempts(attempt_id,batch_id,source_bucket,source_file,source_version,received_at,status) VALUES(%s,%s,%s,%s,%s,%s,'QUEUED')",(correction,batch,bucket,key,version,b["ingested_at"]))
-                    cur.execute("INSERT INTO ingestion_records(batch_id,source_row,source_attempt_id,disposition) VALUES(%s,2,%s,'QUEUED')",(batch,correction))
                 cur.execute("""INSERT INTO quarantine_corrections(correction_id,quarantine_id,request_id,request_digest,submitted_by,submitted_at,correction_notes,
                     corrected_payload_key,corrected_payload_version,action,reprocess_batch_id,reprocess_source_row)
                     VALUES(%s,%s,%s,%s,%s,NOW(),%s,%s,%s,%s,%s,%s)""",
-                    (correction,identifier,request,digest,principal.subject,body["notes"],key,version,action,batch,2 if batch else None))
-                if envelope: cur.execute("INSERT INTO correction_outbox(correction_id,envelope) VALUES(%s,%s)",(correction,Json(envelope)))
-                return {"correction_id":correction,"status":"RESUBMITTED" if envelope else "REJECTED"}
+                    (correction,identifier,request,digest,principal.subject,body["notes"],None,None,action,None,None))
+                return {"correction_id":correction,"status":"REJECTED"}
     finally: conn.close()
 
 

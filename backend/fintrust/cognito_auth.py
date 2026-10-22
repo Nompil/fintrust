@@ -9,6 +9,7 @@ from functools import lru_cache
 from time import time
 
 import jwt
+from botocore.exceptions import BotoCoreError, ClientError
 from jwt import PyJWKClient
 
 GROUP_ROLES = {
@@ -112,6 +113,11 @@ def _account_scope(subject, username):
         return normalized
     except PermissionError:
         logging.getLogger(__name__).warning('Cognito account scope record rejected')
+        raise
+    except (BotoCoreError, ClientError) as error:
+        # A failed authorization-store read must deny access, but must not
+        # mislabel a valid session as invalid and send the user back to login.
+        logging.getLogger(__name__).warning('Cognito scope service unavailable: %s', type(error).__name__)
         raise
     except Exception as error:
         logging.getLogger(__name__).warning('Cognito account scope lookup rejected: %s', type(error).__name__)

@@ -40,20 +40,20 @@ def test_review_actor_and_no_required_alert_before_review(release_db,authenticat
     assert {e['actor_subject'] for e in actions}=={'Risk/Compliance Analyst'}
     assert value['alert_state']=='PENDING'
 
-def test_quarantine_correction_revalidates_new_occurrence_without_overwrite(release_db,authenticated_client):
+
+def test_source_replacement_has_new_occurrence_without_overwriting_quarantine(release_db,authenticated_client):
     q=release_db[3];client,headers=authenticated_client
     item=feed([row(amount='bad')])[0];result=worker.process_envelope(item)
     assert [e[0] for e in events(q,item)]==['RECEIVED','QUEUED','QUARANTINED']
-    path=f"/v1/quarantine/{result['quarantine_id']}/corrections"
-    response=client.post(path,json={'request_id':str(uuid.uuid4()),'action':'RESUBMIT','notes':'Corrected amount','candidate':row()},headers=headers('Risk/Compliance Analyst'))
-    assert response.status_code==202,response.json
-    assert worker.drain_corrections()=={'completed':1}
+    response=client.post(f"/v1/quarantine/{result['quarantine_id']}/corrections",json={'request_id':str(uuid.uuid4()),'action':'RESUBMIT','notes':'Manual edit','candidate':row()},headers=headers('Risk/Compliance Analyst'))
+    assert response.status_code==403
+    assert worker.drain_corrections()['paused']
     original=client.get(f"/v1/ingestion/{item['batch']['batch_id']}/rows/2/lifecycle",headers=headers('Risk/Compliance Analyst')).json['data']
-    assert original['current_state']=='QUARANTINED'
-    human=original['correction_timeline'][0];assert human['event_type']=='CORRECTED' and human['actor_type']=='HUMAN'
-    corrected=client.get(f"/v1/ingestion/{human['reprocess_batch_id']}/rows/2/lifecycle",headers=headers('Risk/Compliance Analyst')).json['data']
-    assert corrected['current_state']=='STORED'
-    assert [e['event_type'] for e in corrected['timeline']]==['RECEIVED','QUEUED','REVALIDATED','SCORED','STORED']
+    assert original['current_state']=='QUARANTINED' and original['correction_timeline']==[]
+    replacement=feed([row()],'raw/source-replacement.csv');run(replacement)
+    current=client.get(f"/v1/ingestion/{replacement[0]['batch']['batch_id']}/rows/2/lifecycle",headers=headers('Risk/Compliance Analyst')).json['data']
+    assert current['current_state']=='STORED'
+    assert [e['event_type'] for e in current['timeline']]==['RECEIVED','QUEUED','VALIDATED','SCORED','STORED']
     assert q('SELECT count(*) FROM transactions')==[(201,)]
 
 def test_technical_failure_retry_recovery_preserves_committed_ledger(release_db,monkeypatch):
@@ -140,10 +140,13 @@ def test_duplicate_occurrence_keeps_original_canonical_identity(release_db,authe
     value=client.get('/v1/transactions/'+results[0]['transaction_id']+'/lifecycle',headers=headers('Read-only/Auditor')).json['data']
     assert len(value['occurrences'])==2 and value['current_state']=='STORED'
 
-def test_corrected_transaction_timeline_includes_human_lineage(release_db,authenticated_client):
-    client,headers=authenticated_client;q=release_db[3];case=worker.process_envelope(feed([row(amount='bad')])[0])['quarantine_id']
-    assert client.post(f'/v1/quarantine/{case}/corrections',json={'request_id':str(uuid.uuid4()),'action':'RESUBMIT','notes':'Fixed','candidate':row()},headers=headers('Risk/Compliance Analyst')).status_code==202
-    worker.drain_corrections();identifier=q("SELECT canonical_tx_id::text FROM ingestion_records WHERE disposition='ACCEPTED'")[0][0]
+
+def test_historical_correction_timeline_retains_original_human_lineage(release_db,authenticated_client):
+    from tests.legacy_quarantine_fixture import historical_correction
+    client,headers=authenticated_client;q=release_db[3]
+    case=worker.process_envelope(feed([row(amount='bad')])[0])['quarantine_id']
+    old=historical_correction(release_db,case,row(),actor='Risk/Compliance Analyst')
+    identifier=q("SELECT canonical_tx_id::text FROM ingestion_records WHERE batch_id=%s AND disposition='ACCEPTED'",(old['batch_id'],))[0][0]
     value=client.get('/v1/transactions/'+identifier+'/lifecycle',headers=headers('Read-only/Auditor')).json['data']
     correction=[e for e in value['timeline'] if e['event_type']=='CORRECTED'][0]
     assert correction['actor_type']=='HUMAN' and correction['actor_subject']=='Risk/Compliance Analyst'

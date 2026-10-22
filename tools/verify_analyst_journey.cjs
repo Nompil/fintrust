@@ -177,18 +177,12 @@ const {chromium} = require(process.env.FINTRUST_PLAYWRIGHT_MODULE);
     }
     let drawer = await quarantineCase(corrected);
     assert.match(await drawer.innerText(), /INVALID_AMOUNT/);
-    await drawer.getByRole('button', {name: 'Correct and resubmit', exact: true}).click();
-    await p.locator('#correction-amount').fill('25.00');
-    await p.locator('#notes').fill('Correct amount after checking immutable original source');
-    await screen('quarantine-correction');
-    await p.locator('#submit-action').click();
-    await drawer.getByText('Correct amount after checking immutable original source', {exact: true}).waitFor();
-    for (let attempt = 0; attempt < 40 && !await drawer.getByRole('button', {name: 'Resulting transaction', exact: true}).count(); attempt++) {
-      await drawer.getByRole('button', {name: 'Refresh recovery outcome', exact: true}).click();
-      await p.waitForTimeout(100);
-    }
-    await drawer.getByRole('button', {name: 'Resulting transaction', exact: true}).waitFor();
-    await screen('quarantine-corrected-result');
+    assert.equal(await drawer.getByRole('button',{name:'Correct and resubmit',exact:true}).count(),0);
+    assert.equal(await p.locator('#correction-amount').count(),0);
+    await drawer.getByLabel('Record a source-review note',{exact:true}).fill('Source replacement requested; original amount remains unchanged');
+    await drawer.getByRole('button',{name:'Save source-review note',exact:true}).click();
+    await p.locator('#investigation-drawer').getByRole('cell',{name:'Source replacement requested; original amount remains unchanged',exact:true}).waitFor();
+    await screen('quarantine-source-review');
     await p.keyboard.press('Escape');
     drawer = await quarantineCase(rejected);
     await drawer.getByRole('button', {name: 'Reject row', exact: true}).click();
@@ -197,7 +191,7 @@ const {chromium} = require(process.env.FINTRUST_PLAYWRIGHT_MODULE);
     await drawer.getByText('Rejected — no ledger entry. Original evidence retained.', {exact: true}).waitFor();
     await screen('quarantine-rejected-evidence');
     await p.keyboard.press('Escape');
-    checks.push('D/E: permitted correction revalidates to ledger; rejection retains source and notes without ledger entry');
+    checks.push('D/E: source-review notes never edit financial values; rejection retains source without a ledger entry');
 
     const low = await transaction('JOURNEY-LOW');
     assert.match(await low.innerText(), /0\s*%/);
@@ -245,7 +239,9 @@ const {chromium} = require(process.env.FINTRUST_PLAYWRIGHT_MODULE);
     assert.match(await p.locator('#content').innerText(), /SAST/);
     const aggregate = await api('/v1/release1/insights?days=all');
     assert.equal(aggregate.data.metrics.reviews_over_sla, 1);
-    assert.equal(aggregate.data.metrics.high_risk_rate, 40);
+    // Two High assessments among four accepted assessed rows. Source-review
+    // annotations do not manufacture a fifth accepted transaction.
+    assert.equal(aggregate.data.metrics.high_risk_rate, 50);
     await p.locator('[data-insights-filter=risk_level]').selectOption('High');
     await p.locator('[data-insights-filter=country]').selectOption('US');
     await p.locator('#insights-days').selectOption('custom');

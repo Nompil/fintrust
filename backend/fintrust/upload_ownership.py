@@ -9,7 +9,9 @@ from botocore.exceptions import ClientError
 from . import score
 from .cloud_intake import available,enabled
 PREFIX='quarantine/upload-owners/'
+from .request_cache import request_cached
 def _key(batch):return PREFIX+str(uuid.UUID(str(batch)))+'.json'
+@request_cached
 def owner(batch):
     if not available():return None
     if enabled():
@@ -28,6 +30,8 @@ def owner(batch):
     if data.get('batch_id')!=str(batch) or data.get('authority')!=authority or not isinstance(data.get('actor'),str):raise ValueError('Invalid ownership evidence')
     return data
 def claim(batch,principal,source):
+    from .request_cache import invalidate
+    invalidate()
     principal.require('upload')
     if not available() or enabled() and principal.auth_source!='cognito':raise PermissionError('Trusted authenticated admission required')
     authority='AUTHENTICATED_COGNITO_ADMISSION' if enabled() else 'AUTHENTICATED_LOCAL_ADMISSION'
@@ -44,6 +48,7 @@ def owns(batch,principal):
     if principal.role!='Risk/Compliance Analyst':return False
     data=owner(batch)
     return bool(data and data['actor']==principal.subject)
+@request_cached
 def owned_batches(principal):
     if principal.role!='Risk/Compliance Analyst' or not available():return []
     result=[];cursor=None;scanned=0
@@ -58,3 +63,16 @@ def owned_batches(principal):
         if not page.get('IsTruncated'):return result
         if scanned>=5000:raise ValueError('Ownership view exceeds bounded local scope')
         cursor=page['NextContinuationToken']
+
+
+@request_cached
+def owned_unknown_batches(principal):
+    """Only unknown-account rows need uploader authority; avoid scanning all receipts."""
+    if principal.role!='Risk/Compliance Analyst' or not available():return []
+    from . import workflow_api
+    candidates=workflow_api._query('''SELECT DISTINCT q.batch_id
+        FROM quarantine_cases q WHERE NOT EXISTS
+        (SELECT 1 FROM accounts a WHERE a.account_id=q.candidate_account_id)
+        ORDER BY q.batch_id LIMIT 5001''')
+    if len(candidates)>5000:raise ValueError('Unknown-account ownership index exceeds the bounded view')
+    return [str(row['batch_id']) for row in candidates if owns(str(row['batch_id']),principal)]

@@ -328,6 +328,16 @@ def workflow_report():
     return jsonify(report(g.principal,request.args))
 
 
+@app.get("/v1/reports/quarantine")
+def workflow_quarantine_report():
+    from .quarantine_report import report
+    from .read_session import read_session
+    from . import db
+    with read_session(db.get_connection):
+        data=report(g.principal,request.args)
+    return jsonify(data)
+
+
 @app.get("/v1/metrics")
 def workflow_metrics():
     from .workflow_api import metrics
@@ -410,12 +420,24 @@ def transition(event):
 @app.get("/v1/quarantine/<identifier>")
 def quarantine_detail(identifier):
     from .workflow_api import quarantine_detail as read
-    return jsonify({"data":read(identifier,g.principal)})
+    from .quarantine_notes import read_notes
+    data=read(identifier,g.principal)
+    try:
+        data['source_review_notes']=read_notes(identifier,g.principal,authorized_case=data)
+    except (ClientError,BotoCoreError,ValueError):
+        data['source_review_notes']={'data':None,'unavailable':True}
+    return jsonify({"data":data})
+
+
+@app.post("/v1/quarantine/<identifier>/notes")
+def quarantine_source_note(identifier):
+    from .quarantine_notes import add_note
+    return jsonify({'data':add_note(identifier,request.get_json(),g.principal)}),201
 
 
 @app.post("/v1/quarantine/<identifier>/corrections")
 def correction(identifier):
-    g.principal.require("correct")
+    g.principal.require("reject_quarantine")
     from .workflow_api import correct_case
     return jsonify({"data":correct_case(identifier,request.get_json(),g.principal)}),202
 
@@ -491,7 +513,11 @@ def upload_history_read():
 @app.get("/v1/batches/<identifier>")
 def batch_detail_read(identifier):
     from .frontend_workflows import batch_detail
-    return jsonify({"data":batch_detail(identifier,g.principal,request.args)})
+    from .read_session import read_session
+    from . import db
+    with read_session(db.get_connection):
+        data=batch_detail(identifier,g.principal,request.args)
+    return jsonify({"data":data})
 
 @app.get("/v1/audit-events")
 def frontend_audit_read():

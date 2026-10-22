@@ -174,19 +174,22 @@ def test_review_api_stale_idempotent_audit_and_ledger_immutable(release_db,authe
     assert client.get("/v1/workflows/reviews?limit=100000",headers=headers("Admin")).status_code==400
     assert client.get("/v1/workflows/reviews?status=OPEN' OR TRUE",headers=headers("Admin")).status_code==400
 
-def test_correction_api_revalidates_deduplicates_and_preserves_original(release_db,authenticated_client):
+
+def test_manual_edit_is_denied_and_source_replacement_preserves_original(release_db,authenticated_client):
     _,_,_,q,_=release_db;client,headers=authenticated_client
     run(feed([row(amount="bad")]))
     case=q("SELECT quarantine_id::text FROM quarantine_cases")[0][0]
-    body={"request_id":str(uuid.uuid4()),"action":"RESUBMIT","notes":"Corrected numeric amount","candidate":row()}
+    original=q("SELECT safe_payload_key,safe_payload_version,reason_code FROM quarantine_cases")
+    body={"request_id":str(uuid.uuid4()),"action":"RESUBMIT","notes":"Changed numeric amount","candidate":row()}
     path=f"/v1/quarantine/{case}/corrections"
-    response=client.post(path,json=body,headers=headers("Risk/Compliance Analyst"));assert response.status_code==202,response.json
-    assert client.post(path,json=body,headers=headers("Risk/Compliance Analyst")).status_code==202
-    assert worker.drain_corrections()=={"completed":1}
-    assert q("SELECT workflow_status FROM quarantine_workflow WHERE quarantine_id=%s",(case,))==[("RESOLVED",)]
-    assert q("SELECT disposition FROM ingestion_records WHERE batch_id=(SELECT batch_id FROM quarantine_cases WHERE quarantine_id=%s)",(case,))==[("QUARANTINED",)]
+    assert client.post(path,json=body,headers=headers("Risk/Compliance Analyst")).status_code==403
+    assert client.post(path,json=body,headers=headers("Admin")).status_code==403
+    assert worker.drain_corrections()['paused']
+    assert q("SELECT count(*) FROM quarantine_corrections")==[(0,)]
+    run(feed([row()],"raw/source-system-replacement.csv"))
+    assert q("SELECT workflow_status FROM quarantine_workflow WHERE quarantine_id=%s",(case,))==[("OPEN",)]
+    assert q("SELECT safe_payload_key,safe_payload_version,reason_code FROM quarantine_cases")==original
     assert q("SELECT count(*) FROM transactions")==[(201,)]
-    assert client.post(path,json={**body,"request_id":str(uuid.uuid4())},headers=headers("Risk/Compliance Analyst")).status_code==409
 
 
 @pytest.mark.parametrize("seconds,expected",[(300,True),(300.000001,False)])
@@ -200,40 +203,38 @@ def test_velocity_closed_five_minute_time_boundary(release_db,seconds,expected):
     assert "HIGH_VELOCITY" not in {x["rule"] for x in results[-3]["triggered_rules"]}
 
 
-def test_correction_still_invalid_and_cross_file_duplicate(release_db,authenticated_client):
+
+def test_replacement_files_are_validated_and_deduplicated_without_manual_edits(release_db,authenticated_client):
     _,_,_,q,_=release_db;client,headers=authenticated_client
     run(feed([row(source_transaction_id="ORIGINAL",amount="bad")]))
-    case=q("SELECT quarantine_id::text FROM quarantine_cases")[0][0];path=f"/v1/quarantine/{case}/corrections"
-    invalid={"request_id":str(uuid.uuid4()),"action":"RESUBMIT","notes":"Still invalid candidate","candidate":row(source_transaction_id="ORIGINAL",amount="0")}
-    assert client.post(path,json=invalid,headers=headers("Risk/Compliance Analyst")).status_code==202
-    worker.drain_corrections()
-    assert q("SELECT workflow_status FROM quarantine_workflow WHERE quarantine_id=%s",(case,))==[("OPEN",)]
-    assert q("SELECT count(*) FROM transactions")==[(200,)]
-    run(feed([row(source_transaction_id="ORIGINAL")],"raw/another.csv"))
-    fixed={**invalid,"request_id":str(uuid.uuid4()),"candidate":row(source_transaction_id="ORIGINAL")}
-    assert client.post(path,json=fixed,headers=headers("Risk/Compliance Analyst")).status_code==202
-    worker.drain_corrections()
-    assert q("SELECT workflow_status FROM quarantine_workflow WHERE quarantine_id=%s",(case,))==[("RESOLVED",)]
-    assert q("SELECT disposition FROM ingestion_records i JOIN quarantine_corrections c ON i.batch_id=c.reprocess_batch_id ORDER BY c.correction_version")==[("QUARANTINED",),("DUPLICATE",)]
+    case=q("SELECT quarantine_id::text FROM quarantine_cases")[0][0]
+    body={"request_id":str(uuid.uuid4()),"action":"RESUBMIT","notes":"Still invalid candidate","candidate":row(source_transaction_id="ORIGINAL",amount="0")}
+    assert client.post(f"/v1/quarantine/{case}/corrections",json=body,headers=headers("Risk/Compliance Analyst")).status_code==403
+    invalid=feed([row(source_transaction_id="ORIGINAL",amount="0")],"raw/invalid-source-replacement.csv")
+    assert run(invalid)[0]['status']=='QUARANTINED'
+    replacement=feed([row(source_transaction_id="ORIGINAL")],"raw/source-replacement.csv");run(replacement);run(replacement)
     assert q("SELECT count(*) FROM transactions")==[(201,)]
+    assert q("SELECT count(*) FROM quarantine_corrections")==[(0,)]
+    assert q("SELECT workflow_status FROM quarantine_workflow WHERE quarantine_id=%s",(case,))==[("OPEN",)]
 
 
-def test_correction_failure_outbox_retries_and_no_sensitive_fields(release_db,authenticated_client,monkeypatch):
+
+def test_source_replacement_projection_retry_preserves_single_ledger_entry(release_db,authenticated_client,monkeypatch):
     _,_,_,q,_=release_db;client,headers=authenticated_client
     run(feed([row(amount="bad")]))
-    case=q("SELECT quarantine_id::text FROM quarantine_cases")[0][0];path=f"/v1/quarantine/{case}/corrections"
-    body={"request_id":str(uuid.uuid4()),"action":"RESUBMIT","notes":"Corrected candidate","candidate":row(email="secret@example.com")}
-    assert client.post(path,json=body,headers=headers("Risk/Compliance Analyst")).status_code==400
-    body["candidate"]=row();assert client.post(path,json=body,headers=headers("Risk/Compliance Analyst")).status_code==202
+    case=q("SELECT quarantine_id::text FROM quarantine_cases")[0][0]
+    body={"request_id":str(uuid.uuid4()),"action":"RESUBMIT","notes":"Changed candidate","candidate":row(email="private@example.test")}
+    assert client.post(f"/v1/quarantine/{case}/corrections",json=body,headers=headers("Risk/Compliance Analyst")).status_code==403
+    assert q("SELECT count(*) FROM correction_outbox")==[(0,)]
     from fintrust import dynamo
     original=dynamo.publish_score
+    item=feed([row()],"raw/source-replacement.csv")[0]
     monkeypatch.setattr(dynamo,"publish_score",lambda *a:(_ for _ in ()).throw(RuntimeError("Injected projection outage")))
-    with pytest.raises(RuntimeError):worker.drain_corrections()
-    assert q("SELECT state,attempts FROM correction_outbox")==[("PENDING",1)]
+    with pytest.raises(RuntimeError):worker.process_envelope(item)
     assert q("SELECT count(*) FROM transactions")==[(201,)]
-    monkeypatch.setattr(dynamo,"publish_score",original);worker.drain_corrections()
-    assert q("SELECT state,attempts FROM correction_outbox")==[("COMPLETED",2)]
+    monkeypatch.setattr(dynamo,"publish_score",original);worker.process_envelope(item)
     assert q("SELECT count(*) FROM transactions")==[(201,)]
+    assert q("SELECT state FROM projection_outbox")==[("COMPLETED",)]
 
 
 @pytest.mark.parametrize("changed",[{"request_id":None},{"request_id":123},{"status":[]},{"resolution_code":{}},{"expected_version":True},{"expected_version":-1}])

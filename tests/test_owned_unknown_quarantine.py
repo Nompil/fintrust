@@ -19,26 +19,25 @@ def admission(release_db,people,monkeypatch):
 def correction(c,h,case,who='analyst01',**changes):
     return c.post(f'/v1/quarantine/{case}/corrections',headers=h(who),json={'request_id':str(uuid.uuid4()),'action':'RESUBMIT','notes':'Verified own-upload account correction','candidate':row(**changes)})
 @pytest.mark.parametrize('missing',[False,True])
-def test_owner_recovers_unknown_or_missing_account_and_audit(release_db,people,admission,missing):
+
+def test_owner_reviews_unknown_or_missing_account_without_changing_source(release_db,people,admission,missing):
     c,h,_=people
-    if missing:
-        response=c.post('/v1/upload',headers=h('analyst01'),data={'file':(io.BytesIO(file_bytes([row(account_id='')])),'missing.csv')})
+    if missing:response=c.post('/v1/upload',headers=h('analyst01'),data={'file':(io.BytesIO(file_bytes([row(account_id='')])),'missing.csv')})
     else:response=admission()
     assert response.status_code==200,response.json
     batch=response.json['data']['batch_id'];case=release_db[3]('SELECT quarantine_id FROM quarantine_cases')[0][0]
-    listing=c.get('/v1/workflows/quarantine',headers=h('analyst01'));assert str(case) in str(listing.json)
     detail=c.get(f'/v1/quarantine/{case}',headers=h('analyst01'));assert detail.status_code==200,detail.json
     assert detail.json['data']['original_uploader']=='analyst01'
     assert c.get(f'/v1/batches/{batch}',headers=h('analyst01')).status_code==200
-    assert c.get(f'/v1/ingestion/{batch}/rows/{release_db[3]("SELECT source_row FROM quarantine_cases WHERE quarantine_id=%s",(case,))[0][0]}/lifecycle',headers=h('analyst01')).status_code==200
-    assert correction(c,h,case).status_code==202
-    worker.drain_corrections(limit=10)
-    recovered=c.get(f'/v1/quarantine/{case}',headers=h('analyst01')).json['data']
-    assert recovered['recovery_status']=='ACCEPTED' and recovered['resulting_transaction_id']
-    assert any(e['actor_subject']=='analyst01' for e in recovered['audit_timeline'])
-    assert any(e['actor']=='analyst01' and e['action']=='QUARANTINE_RESUBMIT' for e in c.get('/v1/audit-events',headers=h('admin01')).json['data'])
+    assert correction(c,h,case).status_code==403
+    note=c.post(f'/v1/quarantine/{case}/notes',headers=h('analyst01'),json={'request_id':str(uuid.uuid4()),'notes':'Request account reference confirmation from the source system'})
+    assert note.status_code==201,note.json
+    rejected=c.post(f'/v1/quarantine/{case}/corrections',headers=h('analyst01'),json={'request_id':str(uuid.uuid4()),'action':'REJECT','candidate':None,'notes':'Original source cannot be accepted; obtain replacement export'})
+    assert rejected.status_code==202,rejected.json
+    assert any(e['actor']=='analyst01' and e['action']=='QUARANTINE_REJECT' for e in c.get('/v1/audit-events',headers=h('admin01')).json['data'])
     original=release_db[3]('SELECT candidate_account_id FROM quarantine_cases WHERE quarantine_id=%s',(case,))[0][0]
     assert original is None if missing else str(original)==UNKNOWN
+    assert release_db[3]('SELECT count(*) FROM transactions')==[(200,)]
     assert c.get('/v1/audit-events',headers=h('analyst01')).status_code==403
 def test_replay_cannot_take_ownership_or_reveal_unknown_row(release_db,people,admission):
     c,h,_=people;first=admission();assert first.status_code==200,first.json
@@ -59,7 +58,7 @@ def test_target_must_be_existing_assigned_account_and_actor_is_not_body_input(re
     c,h,path=people;assert admission().status_code==200
     case=release_db[3]('SELECT quarantine_id FROM quarantine_cases')[0][0]
     assert correction(c,h,case,account_id='20000000-0000-4000-8000-000000000002').status_code==403
-    assert correction(c,h,case,actor='analyst01').status_code==400
+    assert correction(c,h,case,actor='analyst01').status_code==403
     registry=json.loads(path.read_text());registry['principals'][1]['accounts'].append(UNKNOWN);path.write_text(json.dumps(registry))
     assert correction(c,h,case,account_id=UNKNOWN).status_code==403
     assert release_db[3]('SELECT count(*) FROM quarantine_corrections')==[(0,)]

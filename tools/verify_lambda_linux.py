@@ -76,7 +76,7 @@ def verify(path, all_production=False):
                                       "python": platform.python_version(), "platform": platform.platform()}
     manifest["linux_execution_verified"] = True
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
-    print("All five archived handlers imported on Linux CPython 3.12.")
+    print(f"All {len(HANDLERS)} archived handlers imported on Linux CPython 3.12.")
 
 
 if __name__ == "__main__":

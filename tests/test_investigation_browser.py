@@ -23,7 +23,7 @@ def test_investigation_browser(release_db,people,monkeypatch):
         result=subprocess.run([os.environ['FINTRUST_NODE'],str(root/'tools/verify_investigation_ui.cjs'),f'http://127.0.0.1:{server.server_port}',str(out)],capture_output=True,text=True,timeout=180)
         assert result.returncode==0,result.stderr
         assert not worker_errors,worker_errors
-        assert release_db[3]("SELECT count(*) FROM transactions WHERE source_transaction_id='BAD-UI'")[0][0]==1
+        assert release_db[3]("SELECT count(*) FROM transactions WHERE source_transaction_id='BAD-UI'")[0][0]==0
     finally:stop.set();correction_thread.join(timeout=10);server.shutdown();t.join(timeout=10);server.server_close()
 
 
@@ -63,5 +63,5 @@ def test_owned_unknown_account_browser(release_db,people,monkeypatch):
         result=subprocess.run([os.environ['FINTRUST_NODE'],str(root/'tools/verify_owned_quarantine_ui.cjs'),f'http://127.0.0.1:{server.server_port}',str(out)],capture_output=True,text=True,timeout=120)
         assert result.returncode==0,result.stderr
         assert not errors,errors
-        assert release_db[3]("SELECT count(*) FROM transactions WHERE source_transaction_id='REF-001'")==[(1,)]
+        assert release_db[3]("SELECT count(*) FROM transactions WHERE source_transaction_id='REF-001'")==[(0,)]
     finally:stop.set();worker_thread.join(timeout=10);server.shutdown();thread.join(timeout=10);server.server_close()

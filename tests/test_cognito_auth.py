@@ -251,3 +251,23 @@ def test_jwt_crypto_dependencies_are_pinned_for_verification_and_no_deps_lambda_
     assert '-r requirements-runtime.txt' in lambda_lock
     assert all(pin in lambda_lock for pin in (
         'cryptography==50.0.2', 'cffi==2.1.1', 'pycparser==3.11'))
+
+
+@pytest.mark.parametrize('failure', ['throttle', 'timeout'])
+def test_scope_service_failure_denies_access_without_invalidating_login(monkeypatch, failure):
+    import boto3
+    from botocore.exceptions import ClientError, EndpointConnectionError
+    real_scope = cognito_auth._account_scope
+    configure(monkeypatch)
+    monkeypatch.setattr(cognito_auth, '_account_scope', real_scope)
+    error = (ClientError({'Error': {'Code': 'ProvisionedThroughputExceededException', 'Message': 'test'}}, 'GetItem')
+             if failure == 'throttle' else EndpointConnectionError(endpoint_url='https://example.test'))
+    class Table:
+        def get_item(self, **kwargs): raise error
+    class Resource:
+        def Table(self, name): return Table()
+    monkeypatch.setattr(boto3, 'resource', lambda *args, **kwargs: Resource())
+    response = api.app.test_client().get('/v1/session', headers={'Authorization': 'Bearer ' + signed()})
+    assert response.status_code == 503
+    assert response.json['error'] == 'service temporarily unavailable'
+    assert 'example.test' not in response.get_data(as_text=True)

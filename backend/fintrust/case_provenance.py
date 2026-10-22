@@ -1,7 +1,9 @@
 """Read recorded submission lineage without guessing an automated channel."""
 import os
+from .request_cache import request_cached
 
 
+@request_cached
 def source(batch,principal,receipts=None):
     from . import workflow_api as api
     if not batch:return {'submission_channel':'NOT_RECORDED','submitted_by':None,'submitted_at':None,

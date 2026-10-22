@@ -15,7 +15,8 @@ from fintrust.auth import Principal
 
 @pytest.mark.skipif(not os.getenv('FINTRUST_NODE'), reason='Explicit installed Node/Playwright browser gate')
 @pytest.mark.parametrize('prefix', ['', '/dev'])
-def test_cognito_pkce_callback_and_switch_user(monkeypatch, tmp_path, prefix):
+@pytest.mark.parametrize('role', ['Read-only/Auditor', 'Admin'])
+def test_cognito_pkce_callback_and_switch_user(monkeypatch, tmp_path, prefix, role):
     monkeypatch.setenv('AUTH_MODE', 'cognito')
     monkeypatch.setenv('AWS_REGION', 'af-south-1')
     monkeypatch.setenv('COGNITO_USER_POOL_ID', 'af-south-1_TestPool')
@@ -24,9 +25,10 @@ def test_cognito_pkce_callback_and_switch_user(monkeypatch, tmp_path, prefix):
     monkeypatch.setenv('COGNITO_REDIRECT_URI', 'https://workbench.example.test/release1')
     monkeypatch.setenv('COGNITO_LOGOUT_URI', 'https://workbench.example.test/release1')
     monkeypatch.setenv('COGNITO_USER_SCOPE_TABLE', 'synthetic-scopes')
+    username='admin01' if role=='Admin' else 'auditor01'
     monkeypatch.setattr(cognito_auth, 'authenticate', lambda _token: Principal(
-        'auditor01', 'Read-only/Auditor', (), auth_source='cognito',
-        user_id='20000000-0000-4000-8000-000000000001', display_name='auditor01'))
+        username, role, ('20000000-0000-4000-8000-000000000001',) if role=='Admin' else (), auth_source='cognito',
+        user_id='20000000-0000-4000-8000-000000000001', display_name=username))
 
     def gateway(environ, start_response):
         # Reject root requests so the browser must retain the deployed stage
@@ -58,7 +60,7 @@ def test_cognito_pkce_callback_and_switch_user(monkeypatch, tmp_path, prefix):
         output = tmp_path.as_posix()
         result = subprocess.run([
             os.environ['FINTRUST_NODE'], str(root / 'tools/verify_cognito_auth_ui.cjs'),
-            f'http://127.0.0.1:{server.server_port}', output, prefix,
+            f'http://127.0.0.1:{server.server_port}', output, prefix, role,
         ], capture_output=True, text=True, timeout=90)
         assert result.returncode == 0, result.stderr
         assert 'Cognito PKCE authorize/callback/token exchange' in result.stdout
