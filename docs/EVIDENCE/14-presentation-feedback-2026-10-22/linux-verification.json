@@ -1,0 +1,25 @@
+{
+  "status": "PASSED",
+  "timestamp_utc": "2026-10-22T11:01:46.339614+00:00",
+  "commit": "fc7875589edf17a086534ee9a1b4fdb32f1de009",
+  "run_id": "39766764595",
+  "run_url": "https://github.com/Nompil/fintrust/actions/runs/39766764595",
+  "runner": {
+    "os": "Linux",
+    "architecture": "x86_64",
+    "python": "3.12.15",
+    "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39"
+  },
+  "artifact_filename": "fintrust-release1-linux-py312.zip",
+  "artifact_sha256": "1c744305df7f5c8c60c5ac87a3fd2331f7799bcf7a1579c48013b6cbd99c96f0",
+  "artifact_bytes": 26555976,
+  "tests": {
+    "tests": 1181,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 1181
+  },
+  "linux_execution_verified": true,
+  "release_gate_passed": true
+}

@@ -1,13 +1,15 @@
 # FinTrust
 Transaction Monitoring & Risk Alert Platform
 
-## Presentation feedback changes — 22 October 2026
+## Verified cloud update — 22 October 2026
 
-The `work/presentation-feedback-20261022` branch changes quarantine to immutable source review: analysts can annotate or reject a held row, while replacement values must arrive in a new source-system file. Quarantine is a processing outcome, not a finding of fraud. A separate scoped quarantine report preserves that distinction. Upload summaries reconcile accepted Low/Medium/High/unassessed rows with quarantine, duplicates, technical failures and pending rows.
+The deployed update changes quarantine to immutable source review: analysts can annotate or reject a held row, while replacement values must arrive in a new source-system file. Quarantine is a processing outcome, not a finding of fraud. A separate scoped quarantine report preserves that distinction. Upload summaries reconcile accepted Low/Medium/High/unassessed rows with quarantine, duplicates, technical failures and pending rows.
 
-This branch also adds in-memory Cognito token renewal, reduces repeated dashboard evidence reads, and implements scoped Admin user creation through a separate Cognito administration Lambda. Infrastructure preparation and local tests do not establish live deployment. See [feedback verification and release gates](docs/PRESENTATION_FEEDBACK_20261022.md). The dated evidence below describes the earlier release and its historical correction workflow.
+The update also adds in-memory Cognito token renewal, reduces repeated dashboard evidence reads, and implements scoped Admin user creation through a separate Cognito administration Lambda. **1,181 Linux tests passed, with no failures or skips.** Live checks verified login/MFA, token renewal, SSO after reload, source-review notes/rejection/reporting, and an exact ten-row upload: **eight Low, one High, one quarantined**. An owner-approved read-only auditor was created through the live Admin API; its invitation was requested once. All six functions use the tested artifact, and temporary setup/test permissions were removed.
 
-## Submission and live demonstration — 18 October 2026
+See [verified changes and practical limits](docs/PRESENTATION_FEEDBACK_20261022.md), [cloud evidence](docs/EVIDENCE/14-presentation-feedback-2026-10-22/) and the [Linux CI run](https://github.com/Nompil/fintrust/actions/runs/39766764595). The dated evidence below describes the earlier release and its historical correction workflow.
+
+## Historical submission checkpoint — 18 October 2026
 
 **[Open Imbokodo Bank on AWS](https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/)** · [Demonstration guide](docs/CLOUD_DEMONSTRATION_RUNBOOK.md) · [Final live evidence](docs/EVIDENCE/13-cloud-live/)
 

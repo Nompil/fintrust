@@ -1,0 +1,67 @@
+{
+  "status": "PRESENTATION_FEEDBACK_RELEASE_DEPLOYED_VERIFIED_AND_TEMPORARY_ACCESS_REMOVED",
+  "checked_at": "2026-10-22T11:35:55.217606+00:00",
+  "source_commit": "fc7875589edf17a086534ee9a1b4fdb32f1de009",
+  "ci_run_url": "https://github.com/Nompil/fintrust/actions/runs/39766764595",
+  "artifact_sha256": "1c744305df7f5c8c60c5ac87a3fd2331f7799bcf7a1579c48013b6cbd99c96f0",
+  "url": "https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/",
+  "stacks": {
+    "fintrust-api-dev": "UPDATE_COMPLETE",
+    "fintrust-application-dev": "UPDATE_COMPLETE",
+    "fintrust-ingest-dev": "UPDATE_COMPLETE"
+  },
+  "functions": {
+    "fintrust-api-dev": {
+      "exact_code_verified": true,
+      "state": "Active",
+      "shared_regional_capacity": true,
+      "handler": "fintrust.api.lambda_handler"
+    },
+    "fintrust-ingest-dev": {
+      "exact_code_verified": true,
+      "state": "Active",
+      "shared_regional_capacity": true,
+      "handler": "fintrust.ingest.lambda_handler"
+    },
+    "fintrust-scoring-dev": {
+      "exact_code_verified": true,
+      "state": "Active",
+      "shared_regional_capacity": true,
+      "handler": "fintrust.score.lambda_handler"
+    },
+    "fintrust-alert-dev": {
+      "exact_code_verified": true,
+      "state": "Active",
+      "shared_regional_capacity": true,
+      "handler": "fintrust.alert_delivery.lambda_handler"
+    },
+    "fintrust-report-dev": {
+      "exact_code_verified": true,
+      "state": "Active",
+      "shared_regional_capacity": true,
+      "handler": "fintrust.report.lambda_handler"
+    },
+    "fintrust-user-admin-dev": {
+      "exact_code_verified": true,
+      "state": "Active",
+      "shared_regional_capacity": true,
+      "handler": "fintrust.cloud_users.lambda_handler"
+    }
+  },
+  "temporary_policy_removed": true,
+  "baseline_deployer_attachments_restored": 19,
+  "synthetic_test_identities_removed_from_directory": true,
+  "database_migrations": false,
+  "existing_passwords_changed": false,
+  "original_transaction_values_edited": false,
+  "new_paid_network_endpoint": false,
+  "support_plan_changed": false,
+  "quota_changed": false,
+  "new_auditor_username": "nompilo-auditor",
+  "auditor_invitation_mailbox_receipt_verified": false,
+  "deployment_recovery": {
+    "ingest_update": "The first attempt lacked UpdateFunctionCode, and rollback needed read access to the exact previous ZIP. Both scoped permissions were restored. Rollback completed without skipping resources, then the code-only retry passed.",
+    "admin_activation": "CloudFormation needed read-only lookup of the new execution role. The missing lookup was restored, rollback completed with the function disabled, and the reviewed activation retry passed.",
+    "temporary_access": "Creation permissions were retired after resources existed. All temporary policy versions and the policy were deleted after verification."
+  }
+}

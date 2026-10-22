@@ -1,6 +1,8 @@
-# Presentation feedback: implementation and release gates
+# Presentation feedback: verified cloud release
 
-Date: 22 October 2026. This record describes the candidate branch, not a live deployment receipt.
+Verified on 22 October 2026, with final cloud/cleanup checks at 11:35:55 UTC (13:35:55 SAST). [Open the Workbench](https://qzgzopn8o4.execute-api.af-south-1.amazonaws.com/dev/). Detailed receipts are in [the cloud evidence directory](EVIDENCE/14-presentation-feedback-2026-10-22/).
+
+Deployed source: `fc7875589edf17a086534ee9a1b4fdb32f1de009`. Artifact SHA256: `1c744305df7f5c8c60c5ac87a3fd2331f7799bcf7a1579c48013b6cbd99c96f0`. Documentation-only commits may follow this runtime source version.
 
 ## Source integrity and quarantine
 
@@ -30,13 +32,28 @@ Infrastructure generator: `infrastructure/user_administration.py`. New resources
 
 Evidence: `tests/test_cloud_user_creation.py`, Admin scenarios in `tests/test_cognito_auth_browser.py`.
 
-## Required before claiming live completion
+## Completed release verification
 
-1. Complete the regression and browser suites against a disposable PostgreSQL database; retain dated results tied to the release commit.
-2. Verify that exact commit on Linux and package the tested release.
-3. Read the current AWS state; review the specific CloudFormation change set, scoped permissions and costs. Create a new API deployment snapshot for the additional routes.
-4. Update the application and gateway through the reviewed release process. Do not enable legacy correction processing or change regional quotas/support plans.
-5. Verify cloud login and refresh, scoped Admin creation, immutable quarantine review/reporting, row-summary reconciliation and an explicitly synthetic transaction journey. Check permissions before relying on new S3 note paths.
-6. Record actual cloud results and outstanding limits. Prior deployment receipts do not prove these candidate changes are live.
+The [Linux CI run](https://github.com/Nompil/fintrust/actions/runs/39766764595) passed 1,181 pytest cases with zero failures, errors or skips. Five token-session checks and the separate candidate browser gate also passed. The packaged code was bound to the exact source commit and imported on Linux x86_64 / CPython 3.12, with all production modules checked and no external I/O during the import probe. Mocked AWS/isolated SQL tests are distinct from the real cloud checks below.
 
-No infrastructure or application database change is performed by the local regression tests.
+The application, ingest and API stacks reached `UPDATE_COMPLETE`. All six functions, including the isolated Admin function, were active on the same verified artifact and used shared regional capacity. The API alias was verified against that artifact. No database migration or paid network endpoint was introduced; the support plan and regional quota were unchanged.
+
+A disposable synthetic Analyst completed the real Cognito MFA login, obtained a fresh token through the refresh flow, and returned through existing Cognito SSO using a new PKCE authorization code. Live API reads verified stored rows, Overview, Insights, quarantine reporting and batch reconciliation. The legacy value-editing request returned 403 and the original evidence was unchanged. An Analyst was denied the Admin provisioning route.
+
+In that read check, Overview took 0.898 seconds and Insights 0.460 seconds. The first session request took 3.584 seconds. These are single observed requests, not a production latency or load guarantee.
+
+The labelled file `SYNTHETIC-FEEDBACK-20261022-1c49c074.csv`, batch `a9466354-b62c-53b6-94b6-f2a60f64295f`, completed the real cloud intake/queue/scoring/storage journey. It added nine fictional accepted transactions and one quarantine case. Eight records scored 0/Low; the cross-border amount of 200000.01 ZAR scored 55/High (40 amount points plus 15 cross-border points), under `fintrust-r2-rules-2026-10-13`. The exact partition was ten received, eight Low, one High and one quarantined, with zero pending, duplicate, unassessed or technical-failure rows. Existing transaction values were not edited. This file is retained evidence of an already processed test, not a new demonstration upload.
+
+The synthetic quarantine case accepted one append-only note; an identical note replay created no duplicate. Rejection preserved its original values and evidence version, and the separate quarantine report returned the rejected case. Its processing outcome remained quarantined; no amended transaction was submitted.
+
+A disposable synthetic Admin used the protected live API to create `nompilo-auditor` as a read-only Auditor for ACC-0001, with the owner's approved Outlook invitation. Cognito accepted the invitation request, the group and active scope were verified, and the account was in `FORCE_CHANGE_PASSWORD`. Replaying the same request returned its durable result without another invitation. Temporary test identities were removed; the auditor account remains for the owner.
+
+The deployment encountered missing exact-function/previous-artifact permissions for ingest and a missing read-only role lookup during Admin activation. Each rollback was inspected and completed without skipping resources, then a newly reviewed retry succeeded. The temporary policy and all its versions were deleted, restoring exactly the original nineteen deployer attachments. The permanent new Lambda role retains only its required workforce-provisioning permissions.
+
+## Access and remaining boundaries
+
+Refresh the Workbench once to load the new browser code. Use the existing `nompilo` administrator or `nompilo-analyst` credentials. Administrators can open **Administration → Add User**. Processing History contains the per-file row summary. Reports offers a separate quarantined-source-row dataset and exports the authorized current page.
+
+The new auditor's mailbox receipt and first sign-in have not been confirmed. The owner must use its own invitation, choose a password and enroll MFA. No passwords or tokens appear in this evidence. Existing real-user passwords were not changed.
+
+Serverless cold starts and the existing shared quota of ten remain operational constraints; this release is not a production load certification. The synthetic High record can trigger the previously configured alert route, but this release does not claim mailbox placement or alert-delivery confirmation. Cloud creation is available in the Admin UI; existing cloud-user changes/disable operations remain operator-controlled. Historical corrections remain readable, while new manual value resubmissions and pending correction draining stay disabled.

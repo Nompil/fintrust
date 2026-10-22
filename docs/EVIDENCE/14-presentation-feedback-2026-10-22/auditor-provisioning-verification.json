@@ -1,0 +1,17 @@
+{
+  "status": "REAL_CLOUD_ADMIN_CREATION_AND_SCOPED_AUDITOR_VERIFIED",
+  "checked_at": "2026-10-22T11:32:48.609913+00:00",
+  "username": "nompilo-auditor",
+  "role": "Read-only/Auditor",
+  "account_display": "ACC-0001",
+  "request_id": "974376e5-b299-4b5b-bf1e-db3b10c0d9f5",
+  "invitation_requested_once": true,
+  "idempotent_replay_verified": true,
+  "cognito_status": "FORCE_CHANGE_PASSWORD",
+  "directory_active": true,
+  "existing_passwords_changed": false,
+  "temporary_admin_identity_cleaned_up": true,
+  "mailbox_receipt_verified": false,
+  "auditor_first_sign_in_verified": false,
+  "recipient_mailbox": "Owner-approved Outlook mailbox"
+}

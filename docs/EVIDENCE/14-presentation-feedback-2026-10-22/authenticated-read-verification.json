@@ -1,0 +1,92 @@
+{
+  "status": "AUTHENTICATED_LIVE_READ_AND_SESSION_CHECKS_PASSED",
+  "checked_at": "2026-10-22T11:28:11.774538+00:00",
+  "checks": [
+    {
+      "path": "/v1/session",
+      "status": 200,
+      "seconds": 3.584
+    },
+    {
+      "path": "/v1/workflows/transactions?limit=25",
+      "status": 200,
+      "seconds": 1.566
+    },
+    {
+      "path": "/v1/release1/overview",
+      "status": 200,
+      "seconds": 0.898
+    },
+    {
+      "path": "/v1/release1/insights?days=all",
+      "status": 200,
+      "seconds": 0.46
+    },
+    {
+      "path": "/v1/reports/quarantine?limit=100",
+      "status": 200,
+      "seconds": 0.454
+    },
+    {
+      "path": "/v1/workflows/quarantine?limit=10",
+      "status": 200,
+      "seconds": 0.717
+    },
+    {
+      "path": "/v1/quarantine/1db7d7e8-e416-5e04-966f-584f699901ee",
+      "status": 200,
+      "seconds": 1.13
+    },
+    {
+      "path": "/v1/quarantine/1db7d7e8-e416-5e04-966f-584f699901ee",
+      "status": 200,
+      "seconds": 0.649
+    },
+    {
+      "path": "/v1/workflows/batches?limit=10",
+      "status": 200,
+      "seconds": 0.816
+    },
+    {
+      "path": "/v1/batches/7f054886-256c-545f-a7e8-2a3568f7c6d6",
+      "status": 200,
+      "seconds": 0.889
+    },
+    {
+      "path": "/v1/session",
+      "status": 200,
+      "seconds": 0.307
+    },
+    {
+      "path": "/v1/session",
+      "status": 200,
+      "seconds": 0.308
+    }
+  ],
+  "row_summaries": [
+    {
+      "complete": true,
+      "counts_consistent": true,
+      "duplicates": 0,
+      "high": 0,
+      "low": 0,
+      "medium": 1,
+      "pending": 0,
+      "quarantine_note": "Quarantined means not yet accepted: a validation or reference issue requires source review. It is not a finding of fraud or bad data.",
+      "quarantined": 0,
+      "risk_scope": "Accepted source rows only, using their stored scoring version; duplicate rows do not add another assessment.",
+      "rows_received": 1,
+      "technical_failures": 0,
+      "unassessed": 0
+    }
+  ],
+  "quarantine_value_edit_denied": true,
+  "original_quarantine_unchanged": true,
+  "analyst_user_provisioning_denied": true,
+  "real_oauth_refresh_verified": true,
+  "real_sso_reload_verified": true,
+  "synthetic_identity_cleaned_up": true,
+  "existing_passwords_changed": false,
+  "financial_data_changed": false,
+  "emails_sent": false
+}

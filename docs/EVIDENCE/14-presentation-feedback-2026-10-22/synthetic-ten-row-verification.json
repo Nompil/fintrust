@@ -1,0 +1,87 @@
+{
+  "status": "LIVE_TEN_ROW_SCORING_SOURCE_REVIEW_AND_QUARANTINE_REPORT_PASSED",
+  "checked_at": "2026-10-22T11:31:29.663221+00:00",
+  "filename": "SYNTHETIC-FEEDBACK-20261022-1c49c074.csv",
+  "batch_id": "a9466354-b62c-53b6-94b6-f2a60f64295f",
+  "summary": {
+    "complete": true,
+    "counts_consistent": true,
+    "duplicates": 0,
+    "high": 1,
+    "low": 8,
+    "medium": 0,
+    "pending": 0,
+    "quarantine_note": "Quarantined means not yet accepted: a validation or reference issue requires source review. It is not a finding of fraud or bad data.",
+    "quarantined": 1,
+    "risk_scope": "Accepted source rows only, using their stored scoring version; duplicate rows do not add another assessment.",
+    "rows_received": 10,
+    "technical_failures": 0,
+    "unassessed": 0
+  },
+  "scores": [
+    {
+      "source_transaction_id": "FEEDBACK-20261022-1c49c074-LOW-1",
+      "score": 0,
+      "risk_level": "Low",
+      "rule_version": "fintrust-r2-rules-2026-10-13"
+    },
+    {
+      "source_transaction_id": "FEEDBACK-20261022-1c49c074-LOW-2",
+      "score": 0,
+      "risk_level": "Low",
+      "rule_version": "fintrust-r2-rules-2026-10-13"
+    },
+    {
+      "source_transaction_id": "FEEDBACK-20261022-1c49c074-LOW-3",
+      "score": 0,
+      "risk_level": "Low",
+      "rule_version": "fintrust-r2-rules-2026-10-13"
+    },
+    {
+      "source_transaction_id": "FEEDBACK-20261022-1c49c074-LOW-4",
+      "score": 0,
+      "risk_level": "Low",
+      "rule_version": "fintrust-r2-rules-2026-10-13"
+    },
+    {
+      "source_transaction_id": "FEEDBACK-20261022-1c49c074-LOW-5",
+      "score": 0,
+      "risk_level": "Low",
+      "rule_version": "fintrust-r2-rules-2026-10-13"
+    },
+    {
+      "source_transaction_id": "FEEDBACK-20261022-1c49c074-LOW-6",
+      "score": 0,
+      "risk_level": "Low",
+      "rule_version": "fintrust-r2-rules-2026-10-13"
+    },
+    {
+      "source_transaction_id": "FEEDBACK-20261022-1c49c074-LOW-7",
+      "score": 0,
+      "risk_level": "Low",
+      "rule_version": "fintrust-r2-rules-2026-10-13"
+    },
+    {
+      "source_transaction_id": "FEEDBACK-20261022-1c49c074-LOW-8",
+      "score": 0,
+      "risk_level": "Low",
+      "rule_version": "fintrust-r2-rules-2026-10-13"
+    },
+    {
+      "source_transaction_id": "FEEDBACK-20261022-1c49c074-HIGH",
+      "score": 55,
+      "risk_level": "High",
+      "rule_version": "fintrust-r2-rules-2026-10-13"
+    }
+  ],
+  "append_only_note_verified": true,
+  "note_replay_did_not_duplicate": true,
+  "synthetic_quarantine_rejection_reported": true,
+  "original_quarantine_values_preserved": true,
+  "existing_records_edited": false,
+  "synthetic_ledger_rows_added": 9,
+  "synthetic_quarantine_rows_added": 1,
+  "synthetic_identity_cleaned_up": true,
+  "high_risk_alert_may_be_sent_to_previously_configured_recipient": true,
+  "mailbox_delivery_checked": false
+}
