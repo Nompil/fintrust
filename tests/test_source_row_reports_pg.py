@@ -1,6 +1,10 @@
 import uuid
+import pytest
 from datetime import datetime, timedelta, timezone
 from tests.test_release1_end_to_end import release_db, authenticated_client, feed, run, row, ACCOUNT
+from tests.test_frontend_workflows import local_receipts
+
+pytestmark = pytest.mark.usefixtures('local_receipts')
 
 
 def ten_rows():
